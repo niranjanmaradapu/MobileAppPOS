@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "RetailMobilePOS",
+    "slug": "RetailMobilePOS",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "RetailMobilePOS"
+}
