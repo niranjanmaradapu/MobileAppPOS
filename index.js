@@ -1,3 +1,8 @@
+// import { AppRegistry } from 'react-native';
+// import App from './App';
+
+// AppRegistry.registerComponent('Logsin', () => App);
+
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
 
