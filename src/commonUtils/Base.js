@@ -1,0 +1,1 @@
+export const  BASE_URL= process.env.REACT_NATIVE_APP_BASE_URL;

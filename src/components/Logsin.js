@@ -7,24 +7,50 @@ import { Chevron } from 'react-native-shapes';
 import NewSale from './NewSale';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack'
+import LoginService from './services/LoginService';
+import axios from 'axios';
 // import Routes from "./routes";
 // import LeftSideBar from "./leftsidebar";
 
-
-
+const data = [
+    {
+      value: 1,
+      label: "KALAMANDIR RAJAMUNDRY11111"
+    },
+    {
+      value: 2,
+      label: "KALAMANDIR AMALAPURAM"
+    },
+    {
+      value: 3,
+      label: "KALAMANDIR HYDERABAD"
+    }
+  ];
 
 
 class Login extends Component {
-    state = {
-        email: '',
-        password: '',
-        store:'',
+    constructor(props){
+        super(props);
+        this.state = {
+            redirect: false,
+            isAuth: false,
+            userName:'',
+            password:'',
+            dropValue:'',
+            store:0,
+            user:{
+                name:"prasannaaa"
+            },
+            storeNames:[]
+
+          }
+        console.log(process.env.REACT_APP_BASE_URL);
     }
 
 
 
     handleEmail = (text) => {
-        this.setState({ email: text })
+        this.setState({ userName: text })
     }
     handlePassword = (text) => {
         this.setState({ password: text })
@@ -32,24 +58,73 @@ class Login extends Component {
     handleStore = (value) => {
         this.setState({ store: value });
     }
-    login = (email, pass) => {
-        if (this.state.email.length === 0) {
-            alert('You must enter a Usename');
-        } else if (this.state.password.length === 0) {
-            alert('You must enter a Password');
+    
+    
+    login = () => {
+        // if (this.state.userName.length === 0) {
+        //     alert('You must enter a Usename');
+        // } else if (this.state.password.length === 0) {
+        //     alert('You must enter a Password');
+        // }
+        // else if (this.state.storeNames.length === 13) {
+        //     alert('Please select one store');
+        // }
+        // else {
+        //     this.props.navigation.navigate('NewSale')
+        // }
+        // e.preventDefault();
+        const obj={
+            email:"+919493926067",
+            //+ this.state.userName,
+            password:"Mani123",
+            storeName:"kphb"
+            // this.state.dropValue
         }
-        else if (this.state.store.length !== 1) {
-            alert('Please select one store');
+        LoginService.getAuth(obj).then((res) => {
+          
+           if(res.data && res.data.statusCode === 200) {
+                const token = res.data.authResponce.idToken;
+                sessionStorage.setItem('user',JSON.stringify(jwt_decode(token)));
+                sessionStorage.setItem('token', JSON.stringify(token));
+                this.props.history.push("createdeliveryslip");
+            
+            }
+             else{
+                 alert('Invalid Credentials');
+                this.setState({ userName: '',password:'',selectedOption:null })
+            }
         }
-        else {
-            this.props.navigation.navigate('NewSale')
-        }
+        );
     }
 
     
     signUpButtonClicked() {
         alert("Alert Title")
     }
+
+    componentDidMount() {
+       
+        axios.get('http://14.98.164.17:9097/user-store/stores/getstores').then((res) => { 
+          
+            res.data.forEach((ele,index)=>{
+                //console.log('Amma' + LoginService.getStores())
+                console.log('Amma' + ele.storeName)
+              const obj={
+                  value:ele.value,
+                  label:ele.storeName
+              }
+              this.state.storeNames.push(obj)
+              console.log('Amma' + this.state.storeNames)
+            });
+        }); 
+        //this.state.storeNames = data
+    }
+    handleChange=(e)=>{
+        console.log(e);
+        this.setState({ dropValue: e.label });
+    }
+
+    
 
     
 
@@ -110,14 +185,12 @@ class Login extends Component {
                                 Icon={() => {
                                     return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                 }}
-                                    items={[
-                                        { label: '1', value: '1' },
-                                        { label: '2', value: '2' },
-                                        { label: '3', value: '3' },
-                                    ]}
+                                    items={this.state.storeNames}
+
+                                    
                                     onValueChange={this.handleStore}
                                     style={pickerSelectStyles}
-                                    value={this.state.store}
+                                    value={this.state.selectedOption}
                                     useNativeAndroidPickerStyle={true}
 
                                 />
@@ -130,7 +203,7 @@ class Login extends Component {
                             <TouchableOpacity
                                 style={styles.signInButton}
                                 onPress={
-                                    () => this.login(this.state.email, this.state.password,this.props.store)
+                                    () => this.login()
                                 }>
                                 <Text style={styles.signInButtonText}> Sign in </Text>
                             </TouchableOpacity>
@@ -213,9 +286,12 @@ const pickerSelectStyles = StyleSheet.create({
         marginRight: 24,
         marginTop: 2,
         height: 34,
+        width: 400,
+        justifyContent: 'center',
         borderColor: '#AAAAAA',
         borderRadius: 8,
         backgroundColor: 'white',
+        color: 'black',
         borderWidth: 1,
         padding: 10,
         textAlign: 'center',
