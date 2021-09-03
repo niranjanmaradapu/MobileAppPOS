@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, Image, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview } from 'react-native';
+import {View, Image, ImageBackground, Text, ActivityIndicator,TouchableOpacity, TextInput, StyleSheet, Dimensions, scrollview } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 var deviceheight = Dimensions.get('window').height;
 import RNPickerSelect from 'react-native-picker-select';
@@ -9,6 +9,10 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack'
 import LoginService from './services/LoginService';
 import axios from 'axios';
+import jwt_decode from "jwt-decode";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatusBar } from 'expo-status-bar';
+import Loader from './loader';
 // import Routes from "./routes";
 // import LeftSideBar from "./leftsidebar";
 
@@ -47,8 +51,6 @@ class Login extends Component {
         console.log(process.env.REACT_APP_BASE_URL);
     }
 
-
-
     handleEmail = (text) => {
         this.setState({ userName: text })
     }
@@ -60,7 +62,7 @@ class Login extends Component {
     }
     
     
-    login = () => {
+    login(){
         // if (this.state.userName.length === 0) {
         //     alert('You must enter a Usename');
         // } else if (this.state.password.length === 0) {
@@ -70,31 +72,33 @@ class Login extends Component {
         //     alert('Please select one store');
         // }
         // else {
-        //     this.props.navigation.navigate('NewSale')
-        // }
-        // e.preventDefault();
-        const obj={
-            email:"+919493926067",
-            //+ this.state.userName,
-            password:"Mani123",
-            storeName:"kphb"
-            // this.state.dropValue
-        }
-        LoginService.getAuth(obj).then((res) => {
-          
+        const params =  {
+            "email": "+919493926067",// + this.state.userName,
+            "password": "Mani@123",//this.state.password,
+            "storeName":"kphb"
+          }
+          console.log('obj' + params)
+          this.setState({ loading: true })
+        axios.post(LoginService.getAuth(),params).then((res) => {
            if(res.data && res.data.statusCode === 200) {
                 const token = res.data.authResponce.idToken;
-                sessionStorage.setItem('user',JSON.stringify(jwt_decode(token)));
-                sessionStorage.setItem('token', JSON.stringify(token));
-                this.props.history.push("createdeliveryslip");
-            
+                AsyncStorage.setItem('user',JSON.stringify(jwt_decode(token)));
+                AsyncStorage.setItem('@token_key', JSON.stringify(token));
+                console.log(AsyncStorage.getItem('@token_key'))
+                this.props.navigation.navigate('NewSale')
             }
              else{
+                this.setState({ loading: false })
                  alert('Invalid Credentials');
+                 this.emailValueInput.clear()
+                 this.passwordValueInput.clear()
+                // this.state.store.clear()
                 this.setState({ userName: '',password:'',selectedOption:null })
             }
         }
+    
         );
+   // }
     }
 
     
@@ -103,38 +107,36 @@ class Login extends Component {
     }
 
     componentDidMount() {
-       
-        axios.get('http://14.98.164.17:9097/user-store/stores/getstores').then((res) => { 
-          
-            res.data.forEach((ele,index)=>{
-                //console.log('Amma' + LoginService.getStores())
-                console.log('Amma' + ele.storeName)
-              const obj={
-                  value:ele.value,
-                  label:ele.storeName
-              }
-              this.state.storeNames.push(obj)
-              console.log('Amma' + this.state.storeNames)
-            });
+        console.log(LoginService.getAuth())
+        var storeNames = [];
+        axios.get(LoginService.getStores()).then((res) => { 
+            if (res.data) {
+                for (var i = 0; i < res.data.length; i++) {
+                    storeNames.push({
+                       value: res.data[i]['value'],
+                        label: res.data[i]['storeName']
+                    });
+                    console.log('store Name' + this.state.label)
+                }
+            }
+            this.setState({
+                storeNames: storeNames,  
+            })
         }); 
-        //this.state.storeNames = data
     }
-    handleChange=(e)=>{
-        console.log(e);
-        this.setState({ dropValue: e.label });
-    }
-
+   
     
-
-    
-
     render() {
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
-
+                               
                
                     <View style={styles.container}>
+                    {this.state.loading &&
+                    <Loader
+                    loading={this.state.loading} />
+                } 
                         {/* <View style={styles.container}> */}
                         <View style={{ flex: 1.5, marginTop: '5%' }}>
                             <Image source={require('./assets/images/logo.png')} style={styles.logoImage} />
@@ -190,21 +192,15 @@ class Login extends Component {
                                     
                                     onValueChange={this.handleStore}
                                     style={pickerSelectStyles}
-                                    value={this.state.selectedOption}
+                                    value={this.state.store}
                                     useNativeAndroidPickerStyle={true}
 
                                 />
                                 </View>
-                            {this.state.loading &&
-                                <View style={styles.loading}>
-                                    <ActivityIndicator size="large" color="#1D7791" hidesWhenStopped={true} />
-                                </View>
-                            }
+                           
                             <TouchableOpacity
                                 style={styles.signInButton}
-                                onPress={
-                                    () => this.login()
-                                }>
+                                onPress={() => this.login()} >
                                 <Text style={styles.signInButtonText}> Sign in </Text>
                             </TouchableOpacity>
 
@@ -216,6 +212,7 @@ class Login extends Component {
                                 <Text style={{ color: 'black', fontSize: 14 }}>Forgot Password? </Text>
                            
                         </View>
+                      
 
                         <View style={{ flex: 1, marginTop: 10, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row' }}>
 
@@ -306,6 +303,17 @@ const styles = StyleSheet.create({
         height: 130,
 
     },
+    containerForActivity: {
+        flex: 1,
+        backgroundColor: '#623FA0',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      title: {
+        color: 'white',
+        fontSize: 20,
+        margin: 20
+      },
     container: {
         flex: 1,
         justifyContent: 'center',
