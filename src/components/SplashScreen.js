@@ -9,7 +9,9 @@ export default class SplashScreen extends React.Component {
 
       render() {
         return (
+            <View style={styles.container}>
                 <Image source={require('./assets/images/welcomeLogo.png')} style={styles.logoImage} />
+                </View>
         )
 }
 }
@@ -18,10 +20,15 @@ export default class SplashScreen extends React.Component {
 
 const styles = StyleSheet.create({
     logoImage: {
-        top: '35%',
         alignSelf: 'center',
-        width: 250,
-        height: 250,
+        width: 106,
+        height: 114,
+    },
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#0196FD",
     }
 
 })

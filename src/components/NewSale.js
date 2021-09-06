@@ -4,7 +4,7 @@ import {View, Image, ImageBackground, Text, TouchableOpacity, TextInput, StyleSh
 //import Login from './Logsin';
 const image = require('./assets/images/menu.png');
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class NewSale extends Component {
     constructor(props) {
@@ -35,11 +35,27 @@ class NewSale extends Component {
 
 
     render() {
+         AsyncStorage.getItem("tokenkey").then ((value) => {
+            console.log( value)
+        }).catch(() => {
+            console.log('there is error getting token')
+        })
+      AsyncStorage.getItem("user").then ((value) => {
+            console.log( value)
+        }).catch(() => {
+            console.log('there is error getting token')
+        })
+       
+        // if (value !== null) {
+        //   // We have data!!
+        //   console.log(value);
+        //   console.log('Token is : ' + JSON.stringify(value));
+        // }
        // const menu = <Menu onItemSelected={this.onMenuItemSelected} />;
         return (
             <View style={styles.container}>
                  <SafeAreaView style={styles.safeArea}>
-                        <View style={{ flexDirection: 'column', alignItems: 'center', backgroundColor: 'black' }}>
+                        <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#FFFFFF',marginTop:30, }}>
                             <Text style={styles.viewswidth}>New Sale</Text>
                             {/* <Left>
                                 <Button transparent style={{ marginTop: -102, marginLeft: -162, width: 50, height: 50 }} onPress={() => this.props.navigation.openDrawer()}>
@@ -61,17 +77,18 @@ export default NewSale
 
 const styles = StyleSheet.create({
     safeArea: {
-        top: '0%',
-        height: 30,
-        backgroundColor: '#277992'
+        flex: 1,
+        // top: '0%',
+        // height: 30,
+        // backgroundColor:'#0196FD'
     },
     viewswidth: {
-        backgroundColor: '#277992',
-        alignSelf: 'stretch',
+        backgroundColor:'#0196FD',
+        //alignSelf: 'stretch',
         textAlign: 'center',
         fontSize: 24,
         color: '#FFFFFF',
-        padding: 65,
+        height:64,
         fontWeight: 'bold',
     },
     container: {

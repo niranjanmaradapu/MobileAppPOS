@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import {View, Image, ImageBackground, Text, ActivityIndicator,TouchableOpacity, TextInput, StyleSheet, Dimensions, scrollview } from 'react-native';
+import {View, Image, ImageBackground, Text, ActivityIndicator,TouchableOpacity, TextInput, StyleSheet, Dimensions, scrollview, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 var deviceheight = Dimensions.get('window').height;
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import NewSale from './NewSale';
+import SignUp from './SignUp';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack'
 import LoginService from './services/LoginService';
@@ -13,6 +14,8 @@ import jwt_decode from "jwt-decode";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import Loader from './loader';
+var deviceheight = Dimensions.get('window').height;
+import * as Font from 'expo-font';
 // import Routes from "./routes";
 // import LeftSideBar from "./leftsidebar";
 
@@ -58,33 +61,40 @@ class Login extends Component {
         this.setState({ password: text })
     }
     handleStore = (value) => {
+        console.log('dsgsdbdfhdf')
         this.setState({ store: value });
     }
     
     
     login(){
-        // if (this.state.userName.length === 0) {
-        //     alert('You must enter a Usename');
-        // } else if (this.state.password.length === 0) {
-        //     alert('You must enter a Password');
-        // }
-        // else if (this.state.storeNames.length === 13) {
-        //     alert('Please select one store');
-        // }
-        // else {
+        if (this.state.userName.length === 0) {
+            alert('You must enter a Usename');
+        } else if (this.state.password.length === 0) {
+            alert('You must enter a Password');
+        }
+       
+        else if (this.state.store.length === 1) {
+            alert('Please select one store');
+        }
+        else {
         const params =  {
-            "email": "+919493926067",// + this.state.userName,
-            "password": "Mani@123",//this.state.password,
-            "storeName":"kphb"
+            "email":"+91" + this.state.userName, //"+919493926067",
+            "password":this.state.password,// "Mani@1123",//,
+            "storeName":this.state.store,
           }
-          console.log('obj' + params)
+          console.log('obj' + JSON.stringify(params))
           this.setState({ loading: true })
         axios.post(LoginService.getAuth(),params).then((res) => {
            if(res.data && res.data.statusCode === 200) {
                 const token = res.data.authResponce.idToken;
-                AsyncStorage.setItem('user',JSON.stringify(jwt_decode(token)));
-                AsyncStorage.setItem('@token_key', JSON.stringify(token));
-                console.log(AsyncStorage.getItem('@token_key'))
+                AsyncStorage.setItem("user",JSON.stringify(jwt_decode(token))).then (() => {
+                }).catch(() => {
+                    console.log('there is error saving token')
+                })
+                AsyncStorage.setItem("tokenkey", JSON.stringify(token)).then (() => {
+                }).catch(() => {
+                    console.log('there is error saving token')
+                })
                 this.props.navigation.navigate('NewSale')
             }
              else{
@@ -92,18 +102,18 @@ class Login extends Component {
                  alert('Invalid Credentials');
                  this.emailValueInput.clear()
                  this.passwordValueInput.clear()
+                 this.state.store = ""
                 // this.state.store.clear()
                 this.setState({ userName: '',password:'',selectedOption:null })
             }
         }
-    
         );
-   // }
+   }
     }
 
     
     signUpButtonClicked() {
-        alert("Alert Title")
+        this.props.navigation.navigate('SignUp')
     }
 
     componentDidMount() {
@@ -113,15 +123,16 @@ class Login extends Component {
             if (res.data) {
                 for (var i = 0; i < res.data.length; i++) {
                     storeNames.push({
-                       value: res.data[i]['value'],
+                       value:res.data[i]['storeName'],//id
                         label: res.data[i]['storeName']
                     });
-                    console.log('store Name' + this.state.label)
+                   
                 }
             }
             this.setState({
                 storeNames: storeNames,  
             })
+            console.log('store Name' + JSON.stringify(storeNames))
         }); 
     }
    
@@ -130,56 +141,63 @@ class Login extends Component {
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
-                               
-               
                     <View style={styles.container}>
                     {this.state.loading &&
                     <Loader
                     loading={this.state.loading} />
                 } 
-                        {/* <View style={styles.container}> */}
-                        <View style={{ flex: 1.5, marginTop: '5%' }}>
+                <SafeAreaView style={{ flex: 1}}>
+                        <View style={styles.container}>
+                        <View style={{ flex: 1.5, marginTop: '5%',backgroundColor:'#FFFFFF'}}>
                             <Image source={require('./assets/images/logo.png')} style={styles.logoImage} />
                         </View>
-                        <View style={{ flex: 2, justifyContent: 'center', alignSelf: 'center' }}>
+                        <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center',marginTop:50 }}>
                             {/* <Text></Text> */}
-                            <Text style={styles.signInText}> Sign In </Text>
+                            <Text style={styles.signInText}> Welcome </Text>
+                            <Text style={styles.signinContinueText}> Sign in to continue </Text>
                         </View>
 
-                        <View style={{ flex: 0.2 }}>
+                        {/* <View style={{ flex: 0.2 }}>
                             <Text style={styles.getStartedText}> MEMBER LOGIN</Text>
-                        </View>
+                        </View> */}
 
-                        <View style={{ flex: 1 }}>
+                        <View style={{ flex: 1.2}}>
+                        <Text style={styles.signInFieldStyle}> User Name </Text>
                             <TextInput style={styles.input}
                                 underlineColorAndroid="transparent"
                                 placeholder="Username"
-                                placeholderTextColor="#AAAAAA"
-                                textAlignVertical="center"
+                                placeholderTextColor="#001B4A55"
+                               // textAlignVertical="center"
                                 autoCapitalize="none"
                                 onChangeText={this.handleEmail}
                                 ref={inputemail => { this.emailValueInput = inputemail }} />
-
-                            <TextInput style={styles.input}
+                                 
+                                 
+                          <Text style={styles.signInFieldStyle}> Password </Text>
+                            <TextInput style={styles.passwordInput}
                                 underlineColorAndroid="transparent"
                                 placeholder="Password"
                                 secureTextEntry={true}
-                                placeholderTextColor="#AAAAAA"
+                                placeholderTextColor="#001B4A55"
                                 autoCapitalize="none"
                                 onChangeText={this.handlePassword}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
-                                 <View style={{
-                            justifyContent: 'center',
-                            textAlign: 'center',
-                            margin: 13,
-                            height: 40,
-                            borderColor: '#AAAAAA',
-                            borderRadius: 5,
-                            backgroundColor: 'white',
-                            borderWidth: 1
-
+                                
+                             <Text style={styles.signInFieldStyle}> Store </Text>
+                             <View style={{
+                           marginLeft: 30,
+                           marginRight: 30,
+                           height: 40,
+                           marginBottom:5,
+                           borderBottomWidth: 1,
+                           borderBottomColor: '#0196FD',
+                           color:'#001B4A',
+                           fontWeight: 'bold',
+                           fontSize: 16,
                         }} >
-                                 <RNPickerSelect style={styles.spinnerTextalign}
+                                 <RNPickerSelect style={{color:'#001B4A',
+                           fontWeight: 'bold',
+                           fontSize: 16}}
                                 placeholder={{
                                     label: 'Select Store',
                                     value: " ",
@@ -188,8 +206,6 @@ class Login extends Component {
                                     return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                 }}
                                     items={this.state.storeNames}
-
-                                    
                                     onValueChange={this.handleStore}
                                     style={pickerSelectStyles}
                                     value={this.state.store}
@@ -205,27 +221,24 @@ class Login extends Component {
                             </TouchableOpacity>
 
                         </View>
-
                         {/* <View style={{ flex: 0.2, marginTop: 120 }}> */}
-                        <View style={{ flex: 0.2, marginTop: 170, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row' }}>
-                
-                                <Text style={{ color: 'black', fontSize: 14 }}>Forgot Password? </Text>
+                        <View style={{ flex: 0.2, marginTop: 110, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row',backgroundColor:'#FFFFFF' }}>
+                        <Text style={{ fontSize: 13, color: '#8BB0EF' }}> Don't remember the Password? </Text>
+                                <Text style={{ color:'#0196FD', fontSize: 14,textAlign: 'right', }}> Forgot Password? </Text>
                            
                         </View>
-                      
+                        <View style={{ flex: 1, marginTop: 90, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row', backgroundColor:'#FFFFFF' }}>
 
-                        <View style={{ flex: 1, marginTop: 10, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row' }}>
-
-                            <Text style={{ fontSize: 14 }}>Don't have an account?</Text>
-                            
-                                <Text style={{ color: '#1D7791', fontSize: 14 }}> Sign Up! </Text>
-                           
+                            <Text style={{ fontSize: 13, color: '#8BB0EF' }}>Don't have an account?</Text>
+                            <TouchableOpacity  
+                                onPress={() => this.signUpButtonClicked()} >
+                                <Text style={{ color: '#0196FD', fontSize: 14 }}> Create Now </Text>
+                            </TouchableOpacity>
+                            </View>
                         </View>
+                        </SafeAreaView>
                     </View>
-               
-
             </KeyboardAwareScrollView>
-
         )
     }
 }
@@ -237,6 +250,7 @@ const AppNavigator = createStackNavigator(
     {
         Login: Login,
         NewSale: NewSale,
+        SignUp:SignUp,
         // Routes: Routes,
         // LeftSideBar: LeftSideBar,
     },
@@ -263,44 +277,62 @@ export default class Logsin extends React.Component {
 }
 
 
-
-
 const pickerSelectStyles = StyleSheet.create({
+    placeholder :{
+        color:'#456CAF55',
+        fontWeight: "800",
+        fontSize: 16,   
+    },
     inputIOS: {
-        flexDirection: 'row',
+        // flexDirection: 'row',
+        // marginLeft: 0,
+        // marginRight: 0,
+        // marginTop: 2,
+        // height: 34,
+        // borderColor: '#AAAAAA',
+        // backgroundColor: 'white',
+        // color: 'black',
+        // textAlign: 'center',
         marginLeft: 0,
         marginRight: 0,
-        marginTop: 2,
-        height: 34,
-        borderColor: '#AAAAAA',
-        backgroundColor: 'white',
-        color: 'black',
-        textAlign: 'center',
+        height: 40,
+        borderBottomWidth: 1,
+        borderBottomColor: '#456CAF55',
+        color:'#001B4A',
+        fontWeight: 'bold',
+        fontSize: 16,
     },
     inputAndroid: {
-        flexDirection: 'row',
-        marginLeft: 84,
-        marginRight: 24,
-        marginTop: 2,
-        height: 34,
-        width: 400,
-        justifyContent: 'center',
-        borderColor: '#AAAAAA',
-        borderRadius: 8,
-        backgroundColor: 'white',
-        color: 'black',
-        borderWidth: 1,
-        padding: 10,
-        textAlign: 'center',
+        // flexDirection: 'row',
+        // marginLeft: 84,
+        // marginRight: 24,
+        // marginTop: 2,
+        // height: 34,
+        // width: 400,
+        // justifyContent: 'center',
+        // borderColor: '#AAAAAA',
+        // borderRadius: 8,
+        // backgroundColor: 'white',
+        // color: 'black',
+        // borderWidth: 1,
+        // padding: 10,
+        // textAlign: 'center',
+        marginLeft: 0,
+        marginRight: 0,
+        height: 40,
+        borderBottomWidth: 1,
+        borderBottomColor: '#456CAF55',
+        color:'#001B4A',
+        fontWeight: 'bold',
+        fontSize: 16,
     },
 })
 
 const styles = StyleSheet.create({
     logoImage: {
-        top: 100,
         alignSelf: 'center',
         width: 300,
-        height: 130,
+        height: 230,
 
     },
     containerForActivity: {
@@ -314,10 +346,15 @@ const styles = StyleSheet.create({
         fontSize: 20,
         margin: 20
       },
+      imagealign: {
+        marginTop: 18,
+        marginLeft:0,
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
-        height: deviceheight,
+        height: deviceheight+40,
+        backgroundColor:'#FFFFFF'
     },
     ytdImageValue: {
         alignSelf: 'center',
@@ -328,29 +365,75 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
     },
     input: {
-        justifyContent: 'center',
-        textAlign: 'center',
-        margin: 13,
+      //  justifyContent: 'center',
+      //  textAlign: 'center',
+      //  margin: 13,
+        marginLeft: 30,
+        marginRight: 30,
         height: 40,
-        borderColor: '#AAAAAA',
-        borderRadius: 5,
-        backgroundColor: 'white',
-        borderWidth: 1
+        borderBottomWidth: 1,
+        borderBottomColor: '#456CAF55',
+        color:'#001B4A',
+        fontWeight: 'bold',
+        fontSize: 16,
+       // borderColor: '#AAAAAA',
+      //  borderRadius: 5,
+       // backgroundColor: 'white',
+      //  borderWidth: 1
     },
+    passwordInput: {
+        //  justifyContent: 'center',
+        //  textAlign: 'center',
+        //  margin: 13,
+          marginLeft: 30,
+          marginRight: 30,
+          height: 40,
+          marginBottom:5,
+          borderBottomWidth: 1,
+          borderBottomColor: '#0196FD',
+          color:'#001B4A',
+          fontWeight: 'bold',
+          fontSize: 16,
+         // borderColor: '#AAAAAA',
+        //  borderRadius: 5,
+         // backgroundColor: 'white',
+        //  borderWidth: 1
+      },
     signInButton: {
-        backgroundColor: '#1D7791',
-        padding: 10,
-        margin: 15,
-        height: 40,
-        borderRadius: 10,
+        backgroundColor:'#0196FD',
+        justifyContent: 'center',
+        marginLeft: 30,
+        marginRight: 30,
+        marginTop:50,
+        height: 55,
+        borderRadius: 30,
         fontWeight: 'bold',
         // marginBottom:100,
     },
     signInText: {
-        color: 'black',
+        color: '#002C46',
         alignSelf: 'center',
-        fontSize: 30,
-        fontWeight: '600',
+        fontSize: 28,
+        //fontFamily: 'Metropolis-bold',
+        fontWeight: 'bold',
+    },
+
+    signInFieldStyle: {
+        color: '#456CAF55',
+        marginLeft: 30,
+        marginTop:15,
+       // marginBottom:15,
+       // alignSelf: 'center',
+        fontSize: 13,
+       // fontFamily: 'Metropolis-bold',
+        fontWeight: 'normal',
+    },
+    signinContinueText: {
+        color: '#456CAF55',
+        alignSelf: 'center',
+        fontSize: 13,
+       // fontFamily: 'Metropolis-bold',
+        fontWeight: 'normal',
     },
     getStartedText: {
         color: 'black',
@@ -364,5 +447,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    spinnerTextalign: {
+        flex: 9.4,
+        color: '#A2A2A2',
+        justifyContent: 'center',
+        textAlign: "center",
+        color: 'black',
     },
 })

@@ -1,6 +1,5 @@
 import axios from 'axios';
-import { LOGIN_URL } from '../../commonUtils/ApiConstants';
-import { BASE_URL } from '../../commonUtils/Base';
+import base from './Base';
 const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097'
 
 class LoginService {
