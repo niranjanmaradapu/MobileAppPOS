@@ -18,22 +18,6 @@ var deviceheight = Dimensions.get('window').height;
 // import Routes from "./routes";
 // import LeftSideBar from "./leftsidebar";
 
-const data = [
-    {
-      value: 1,
-      label: "KALAMANDIR RAJAMUNDRY11111"
-    },
-    {
-      value: 2,
-      label: "KALAMANDIR AMALAPURAM"
-    },
-    {
-      value: 3,
-      label: "KALAMANDIR HYDERABAD"
-    }
-  ];
-
-
 class SignUp extends Component {
     constructor(props){
         super(props);
@@ -57,9 +41,9 @@ class SignUp extends Component {
                             <Text style={styles.signinContinueText}> Enter your personal Details </Text>
                         </View>
 
-                        {/* <View style={{ flex: 0.2 }}>
-                            <Text style={styles.getStartedText}> MEMBER LOGIN</Text>
-                        </View> */}
+                        <View style={{ flex: 0.2 }}>
+                        
+                        </View>
 
                         <View style={{ flex: 2}}>
                         <Text style={styles.signInFieldStyle}> User Name </Text>
@@ -129,15 +113,6 @@ const pickerSelectStyles = StyleSheet.create({
         fontSize: 16,   
     },
     inputIOS: {
-        // flexDirection: 'row',
-        // marginLeft: 0,
-        // marginRight: 0,
-        // marginTop: 2,
-        // height: 34,
-        // borderColor: '#AAAAAA',
-        // backgroundColor: 'white',
-        // color: 'black',
-        // textAlign: 'center',
         marginLeft: 0,
         marginRight: 0,
         height: 40,
@@ -148,20 +123,6 @@ const pickerSelectStyles = StyleSheet.create({
         fontSize: 16,
     },
     inputAndroid: {
-        // flexDirection: 'row',
-        // marginLeft: 84,
-        // marginRight: 24,
-        // marginTop: 2,
-        // height: 34,
-        // width: 400,
-        // justifyContent: 'center',
-        // borderColor: '#AAAAAA',
-        // borderRadius: 8,
-        // backgroundColor: 'white',
-        // color: 'black',
-        // borderWidth: 1,
-        // padding: 10,
-        // textAlign: 'center',
         marginLeft: 0,
         marginRight: 0,
         height: 40,
@@ -210,26 +171,16 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
     },
     input: {
-      //  justifyContent: 'center',
-      //  textAlign: 'center',
-      //  margin: 13,
         marginLeft: 30,
         marginRight: 30,
         height: 40,
         borderBottomWidth: 1,
         borderBottomColor: '#456CAF55',
         color:'#001B4A',
-        fontWeight: 'bold',
+        fontFamily: "bold",
         fontSize: 16,
-       // borderColor: '#AAAAAA',
-      //  borderRadius: 5,
-       // backgroundColor: 'white',
-      //  borderWidth: 1
     },
     passwordInput: {
-        //  justifyContent: 'center',
-        //  textAlign: 'center',
-        //  margin: 13,
           marginLeft: 30,
           marginRight: 30,
           height: 40,
@@ -237,12 +188,8 @@ const styles = StyleSheet.create({
           borderBottomWidth: 1,
           borderBottomColor: '#0196FD',
           color:'#001B4A',
-          fontWeight: 'bold',
+          fontFamily: "bold",
           fontSize: 16,
-         // borderColor: '#AAAAAA',
-        //  borderRadius: 5,
-         // backgroundColor: 'white',
-        //  borderWidth: 1
       },
     signInButton: {
         backgroundColor:'#0196FD',
@@ -258,27 +205,22 @@ const styles = StyleSheet.create({
     signInText: {
         color: '#002C46',
         alignSelf: 'center',
-        fontSize: 28,
-        //fontFamily: 'Metropolis-bold',
-        fontWeight: 'bold',
+        fontSize: 20,
+        fontFamily: "bold",
     },
 
     signInFieldStyle: {
         color: '#456CAF55',
         marginLeft: 30,
         marginTop:15,
-       // marginBottom:15,
-       // alignSelf: 'center',
-        fontSize: 13,
-       // fontFamily: 'Metropolis-bold',
-        fontWeight: 'normal',
+        fontSize: 12,
+        fontFamily: "regular",
     },
     signinContinueText: {
         color: '#456CAF55',
         alignSelf: 'center',
         fontSize: 13,
-       // fontFamily: 'Metropolis-bold',
-        fontWeight: 'normal',
+        fontFamily: "regular",
     },
     getStartedText: {
         color: 'black',
@@ -290,8 +232,8 @@ const styles = StyleSheet.create({
     signInButtonText: {
         color: 'white',
         alignSelf: 'center',
-        fontWeight: 'bold',
-        fontSize: 16,
+        fontFamily: "regular",
+        fontSize: 14,
     },
     spinnerTextalign: {
         flex: 9.4,

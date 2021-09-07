@@ -15,7 +15,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import Loader from './loader';
 var deviceheight = Dimensions.get('window').height;
-import * as Font from 'expo-font';
 // import Routes from "./routes";
 // import LeftSideBar from "./leftsidebar";
 
@@ -217,22 +216,22 @@ class Login extends Component {
                             <TouchableOpacity
                                 style={styles.signInButton}
                                 onPress={() => this.login()} >
-                                <Text style={styles.signInButtonText}> Sign in </Text>
+                                <Text style={styles.signInButtonText}> SIGN IN </Text>
                             </TouchableOpacity>
 
                         </View>
                         {/* <View style={{ flex: 0.2, marginTop: 120 }}> */}
                         <View style={{ flex: 0.2, marginTop: 110, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row',backgroundColor:'#FFFFFF' }}>
-                        <Text style={{ fontSize: 13, color: '#8BB0EF' }}> Don't remember the Password? </Text>
-                                <Text style={{ color:'#0196FD', fontSize: 14,textAlign: 'right', }}> Forgot Password? </Text>
+                        <Text style={{ fontSize: 13, color: '#8BB0EF',fontFamily: "bold", }}> Don't remember the Password? </Text>
+                                <Text style={{ color:'#0196FD', fontSize: 13,textAlign: 'right',fontFamily: "bold", }}> Forgot Password? </Text>
                            
                         </View>
                         <View style={{ flex: 1, marginTop: 90, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row', backgroundColor:'#FFFFFF' }}>
 
-                            <Text style={{ fontSize: 13, color: '#8BB0EF' }}>Don't have an account?</Text>
+                            <Text style={{ fontSize: 13, color: '#8BB0EF', fontFamily: "bold", }}>Don't have an account?</Text>
                             <TouchableOpacity  
                                 onPress={() => this.signUpButtonClicked()} >
-                                <Text style={{ color: '#0196FD', fontSize: 14 }}> Create Now </Text>
+                                <Text style={{ color: '#0196FD', fontSize: 13,fontFamily: "bold", }}> Create Now </Text>
                             </TouchableOpacity>
                             </View>
                         </View>
@@ -280,8 +279,12 @@ export default class Logsin extends React.Component {
 const pickerSelectStyles = StyleSheet.create({
     placeholder :{
         color:'#456CAF55',
-        fontWeight: "800",
-        fontSize: 16,   
+        fontWeight: 'bold',
+        fontSize: 16, 
+        // transform: [
+        //     { scaleX: 1.5 }, 
+        //     { scaleY: 1.5 },
+        //  ]  
     },
     inputIOS: {
         // flexDirection: 'row',
@@ -293,7 +296,7 @@ const pickerSelectStyles = StyleSheet.create({
         // backgroundColor: 'white',
         // color: 'black',
         // textAlign: 'center',
-        marginLeft: 0,
+        marginLeft: -5,
         marginRight: 0,
         height: 40,
         borderBottomWidth: 1,
@@ -301,6 +304,10 @@ const pickerSelectStyles = StyleSheet.create({
         color:'#001B4A',
         fontWeight: 'bold',
         fontSize: 16,
+        // transform: [
+        //     { scaleX: 1.5 }, 
+        //     { scaleY: 1.5 },
+        //  ]
     },
     inputAndroid: {
         // flexDirection: 'row',
@@ -317,7 +324,7 @@ const pickerSelectStyles = StyleSheet.create({
         // borderWidth: 1,
         // padding: 10,
         // textAlign: 'center',
-        marginLeft: 0,
+        marginLeft: -5,
         marginRight: 0,
         height: 40,
         borderBottomWidth: 1,
@@ -325,6 +332,10 @@ const pickerSelectStyles = StyleSheet.create({
         color:'#001B4A',
         fontWeight: 'bold',
         fontSize: 16,
+        // transform: [
+        //     { scaleX: 1.5 }, 
+        //     { scaleY: 1.5 },
+        //  ]
     },
 })
 
@@ -365,26 +376,16 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
     },
     input: {
-      //  justifyContent: 'center',
-      //  textAlign: 'center',
-      //  margin: 13,
         marginLeft: 30,
         marginRight: 30,
         height: 40,
         borderBottomWidth: 1,
         borderBottomColor: '#456CAF55',
         color:'#001B4A',
-        fontWeight: 'bold',
+        fontFamily: "bold",
         fontSize: 16,
-       // borderColor: '#AAAAAA',
-      //  borderRadius: 5,
-       // backgroundColor: 'white',
-      //  borderWidth: 1
     },
     passwordInput: {
-        //  justifyContent: 'center',
-        //  textAlign: 'center',
-        //  margin: 13,
           marginLeft: 30,
           marginRight: 30,
           height: 40,
@@ -392,12 +393,8 @@ const styles = StyleSheet.create({
           borderBottomWidth: 1,
           borderBottomColor: '#0196FD',
           color:'#001B4A',
-          fontWeight: 'bold',
+          fontFamily: "bold",
           fontSize: 16,
-         // borderColor: '#AAAAAA',
-        //  borderRadius: 5,
-         // backgroundColor: 'white',
-        //  borderWidth: 1
       },
     signInButton: {
         backgroundColor:'#0196FD',
@@ -414,26 +411,21 @@ const styles = StyleSheet.create({
         color: '#002C46',
         alignSelf: 'center',
         fontSize: 28,
-        //fontFamily: 'Metropolis-bold',
-        fontWeight: 'bold',
+        fontFamily: "bold",
     },
 
     signInFieldStyle: {
         color: '#456CAF55',
         marginLeft: 30,
         marginTop:15,
-       // marginBottom:15,
-       // alignSelf: 'center',
-        fontSize: 13,
-       // fontFamily: 'Metropolis-bold',
-        fontWeight: 'normal',
+        fontSize: 12,
+        fontFamily: "regular",
     },
     signinContinueText: {
         color: '#456CAF55',
         alignSelf: 'center',
         fontSize: 13,
-       // fontFamily: 'Metropolis-bold',
-        fontWeight: 'normal',
+        fontFamily: "regular",
     },
     getStartedText: {
         color: 'black',
@@ -445,8 +437,8 @@ const styles = StyleSheet.create({
     signInButtonText: {
         color: 'white',
         alignSelf: 'center',
-        fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 14,
+        fontFamily: "regular",
     },
     spinnerTextalign: {
         flex: 9.4,
