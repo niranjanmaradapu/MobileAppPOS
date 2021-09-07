@@ -147,20 +147,16 @@ class Login extends Component {
                 } 
                 <SafeAreaView style={{ flex: 1}}>
                         <View style={styles.container}>
-                        <View style={{ flex: 1.5, marginTop: '5%',backgroundColor:'#FFFFFF'}}>
+                        <View style={{ flex: 1, marginTop: '5%',backgroundColor:'#FFFFFF'}}>
                             <Image source={require('./assets/images/logo.png')} style={styles.logoImage} />
-                        </View>
-                        <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center',marginTop:50 }}>
+                       
                             {/* <Text></Text> */}
                             <Text style={styles.signInText}> Welcome </Text>
                             <Text style={styles.signinContinueText}> Sign in to continue </Text>
                         </View>
+ 
 
-                        {/* <View style={{ flex: 0.2 }}>
-                            <Text style={styles.getStartedText}> MEMBER LOGIN</Text>
-                        </View> */}
-
-                        <View style={{ flex: 1.2}}>
+                        <View style={{ flex:1.4}}>
                         <Text style={styles.signInFieldStyle}> User Name </Text>
                             <TextInput style={styles.input}
                                 underlineColorAndroid="transparent"
@@ -212,6 +208,13 @@ class Login extends Component {
 
                                 />
                                 </View>
+
+                                      {/* <View style={{ flex: 0.2, marginTop: 120 }}> */}
+                        <View style={{ marginTop: 10, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row', }}>
+                        <Text style={{ fontSize: 13, color: '#8BB0EF',fontFamily: "bold", }}> Don't remember the Password? </Text>
+                                <Text style={{ color:'#0196FD', fontSize: 13,textAlign: 'right',fontFamily: "bold", }}> Forgot Password? </Text>
+                           
+                        </View>
                            
                             <TouchableOpacity
                                 style={styles.signInButton}
@@ -219,21 +222,16 @@ class Login extends Component {
                                 <Text style={styles.signInButtonText}> SIGN IN </Text>
                             </TouchableOpacity>
 
-                        </View>
-                        {/* <View style={{ flex: 0.2, marginTop: 120 }}> */}
-                        <View style={{ flex: 0.2, marginTop: 110, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row',backgroundColor:'#FFFFFF' }}>
-                        <Text style={{ fontSize: 13, color: '#8BB0EF',fontFamily: "bold", }}> Don't remember the Password? </Text>
-                                <Text style={{ color:'#0196FD', fontSize: 13,textAlign: 'right',fontFamily: "bold", }}> Forgot Password? </Text>
-                           
-                        </View>
-                        <View style={{ flex: 1, marginTop: 90, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row', backgroundColor:'#FFFFFF' }}>
+                            <View style={{  marginTop: 20, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row' }}>
 
-                            <Text style={{ fontSize: 13, color: '#8BB0EF', fontFamily: "bold", }}>Don't have an account?</Text>
-                            <TouchableOpacity  
-                                onPress={() => this.signUpButtonClicked()} >
-                                <Text style={{ color: '#0196FD', fontSize: 13,fontFamily: "bold", }}> Create Now </Text>
-                            </TouchableOpacity>
-                            </View>
+<Text style={{ fontSize: 13, color: '#8BB0EF', fontFamily: "bold", }}>Don't have an account?</Text>
+<TouchableOpacity  
+    onPress={() => this.signUpButtonClicked()} >
+    <Text style={{ color: '#0196FD', fontSize: 13,fontFamily: "bold", }}> Create Now </Text>
+</TouchableOpacity>
+</View>
+
+                        </View>
                         </View>
                         </SafeAreaView>
                     </View>
@@ -278,8 +276,8 @@ export default class Logsin extends React.Component {
 
 const pickerSelectStyles = StyleSheet.create({
     placeholder :{
-        color:'#456CAF55',
-        fontWeight: 'bold',
+        color:"#001B4A55",
+        fontFamily: "bold",
         fontSize: 16, 
         // transform: [
         //     { scaleX: 1.5 }, 
@@ -296,42 +294,28 @@ const pickerSelectStyles = StyleSheet.create({
         // backgroundColor: 'white',
         // color: 'black',
         // textAlign: 'center',
-        marginLeft: -5,
+        marginLeft: 0,
         marginRight: 0,
         height: 40,
         borderBottomWidth: 1,
         borderBottomColor: '#456CAF55',
         color:'#001B4A',
-        fontWeight: 'bold',
-        fontSize: 16,
+        fontFamily: "bold",
+        fontSize: 16, 
         // transform: [
         //     { scaleX: 1.5 }, 
         //     { scaleY: 1.5 },
         //  ]
     },
     inputAndroid: {
-        // flexDirection: 'row',
-        // marginLeft: 84,
-        // marginRight: 24,
-        // marginTop: 2,
-        // height: 34,
-        // width: 400,
-        // justifyContent: 'center',
-        // borderColor: '#AAAAAA',
-        // borderRadius: 8,
-        // backgroundColor: 'white',
-        // color: 'black',
-        // borderWidth: 1,
-        // padding: 10,
-        // textAlign: 'center',
         marginLeft: -5,
         marginRight: 0,
         height: 40,
         borderBottomWidth: 1,
         borderBottomColor: '#456CAF55',
         color:'#001B4A',
-        fontWeight: 'bold',
-        fontSize: 16,
+        fontFamily: "bold",
+        fontSize: 16, 
         // transform: [
         //     { scaleX: 1.5 }, 
         //     { scaleY: 1.5 },
@@ -401,7 +385,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: 30,
         marginRight: 30,
-        marginTop:50,
+        marginTop:30,
         height: 55,
         borderRadius: 30,
         fontWeight: 'bold',
@@ -412,6 +396,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         fontSize: 28,
         fontFamily: "bold",
+        marginTop:25,
     },
 
     signInFieldStyle: {
@@ -425,6 +410,7 @@ const styles = StyleSheet.create({
         color: '#456CAF55',
         alignSelf: 'center',
         fontSize: 13,
+        marginTop:5,
         fontFamily: "regular",
     },
     getStartedText: {

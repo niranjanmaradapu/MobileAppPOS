@@ -219,6 +219,7 @@ const styles = StyleSheet.create({
     signinContinueText: {
         color: '#456CAF55',
         alignSelf: 'center',
+        marginTop:5,
         fontSize: 13,
         fontFamily: "regular",
     },
