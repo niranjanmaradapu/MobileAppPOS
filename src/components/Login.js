@@ -216,7 +216,7 @@ class Login extends Component {
                                     onValueChange={this.handleStore}
                                     style={pickerSelectStyles}
                                     value={this.state.store}
-                                    useNativeAndroidPickerStyle={true}
+                                    useNativeAndroidPickerStyle={false}
 
                                 />
                                 </View>
@@ -291,21 +291,8 @@ const pickerSelectStyles = StyleSheet.create({
         color:"#001B4A55",
         fontFamily: "bold",
         fontSize: 16, 
-        // transform: [
-        //     { scaleX: 1.5 }, 
-        //     { scaleY: 1.5 },
-        //  ]  
     },
     inputIOS: {
-        // flexDirection: 'row',
-        // marginLeft: 0,
-        // marginRight: 0,
-        // marginTop: 2,
-        // height: 34,
-        // borderColor: '#AAAAAA',
-        // backgroundColor: 'white',
-        // color: 'black',
-        // textAlign: 'center',
         marginLeft: 0,
         marginRight: 0,
         height: 40,
@@ -314,13 +301,9 @@ const pickerSelectStyles = StyleSheet.create({
         color:'#001B4A',
         fontFamily: "bold",
         fontSize: 16, 
-        // transform: [
-        //     { scaleX: 1.5 }, 
-        //     { scaleY: 1.5 },
-        //  ]
     },
     inputAndroid: {
-        marginLeft: -5,
+        marginLeft: 0,
         marginRight: 0,
         height: 40,
         borderBottomWidth: 1,
@@ -328,10 +311,6 @@ const pickerSelectStyles = StyleSheet.create({
         color:'#001B4A',
         fontFamily: "bold",
         fontSize: 16, 
-        // transform: [
-        //     { scaleX: 1.5 }, 
-        //     { scaleY: 1.5 },
-        //  ]
     },
 })
 

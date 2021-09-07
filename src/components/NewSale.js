@@ -53,8 +53,8 @@ class NewSale extends Component {
         return (
             <View style={styles.container}>
                  <SafeAreaView style={styles.safeArea}>
-                 <View style={{ flexDirection: 'column', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
-                <Text style={styles.viewswidth}>New Sale</Text>
+                 <View style={styles.viewswidth}>
+               <Text style={styles.signUptext}> New Sale </Text>
                 </View>
                 <View style={styles.tablecontainer}>
                 <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
@@ -92,10 +92,14 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        color: '#FFFFFF',
         height:84,
+      },
+      signUptext:{
+        marginTop:40,
         fontFamily: "bold",
-        textAlignVertical: "center",
+        alignSelf:'center',
+        color: '#FFFFFF',
+        fontSize: 20,
       },
       tablecontainer: { 
           flex: 1,

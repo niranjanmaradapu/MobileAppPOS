@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, Image, ImageBackground, Text, ActivityIndicator,TouchableOpacity, TextInput, StyleSheet, Dimensions, scrollview, SafeAreaView } from 'react-native';
+import {View, Image, ImageBackground, Text, ActivityIndicator,TouchableOpacity,TouchableHighlight, TextInput, StyleSheet, Dimensions, scrollview, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
@@ -28,16 +28,13 @@ class SignUp extends Component {
                     loading={this.state.loading} />
                 }  */}
                 <SafeAreaView style={{ flex: 1,backgroundColor:'#FFFFFF'}}>
-               
-                <View style={{ flexDirection: 'column', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
-                <TouchableOpacity onPress={this.handleBackButtonClick}>
-                <Text style={styles.viewswidth}>SIGN UP</Text>
-                <Icons name={'arrow-back'} size={30} color='#ffffff' style={{  position: 'absolute',
+               <View style={styles.viewswidth}>
+               <Text style={styles.signUptext}> Sign Up </Text>
+                <Icons name={'arrow-back'} size={30} color='#ffffff'  onPress={this.handleBackButtonClick} style={{  position: 'absolute',
                 left: 5,
-                top:25}}/>
-                </TouchableOpacity>
-            </View>
-   
+                top:35}}/>
+                </View>
+               
                         <View style={styles.container}>
                         <View style={{ justifyContent: 'center', alignSelf: 'center',marginTop:50 }}>
                             {/* <Text></Text> */}
@@ -156,10 +153,14 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        color: '#FFFFFF',
         height:84,
+      },
+      signUptext:{
+        marginTop:40,
         fontFamily: "bold",
-        textAlignVertical: "center",
+        alignSelf:'center',
+        color: '#FFFFFF',
+        fontSize: 20,
       },
       title: {
         color: 'white',
