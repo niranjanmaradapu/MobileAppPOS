@@ -94,7 +94,19 @@ class Login extends Component {
                 }).catch(() => {
                     console.log('there is error saving token')
                 })
-                this.props.navigation.navigate('NewSale')
+
+                const role = AsyncStorage.getItem("user").then ((value) => {
+                    if(role["cognito:groups"][0] === "super_admin") {
+                       // this.getModel();
+                        this.props.navigation.navigate('NewSale')
+                    } else {
+                    
+                    }
+                    this.props.navigation.navigate('NewSale')
+                }).catch(() => {
+                    console.log('there is error getting token')
+                })
+                
             }
              else{
                 this.setState({ loading: false })

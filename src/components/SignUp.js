@@ -2,25 +2,19 @@ import React, { Component } from 'react'
 import {View, Image, ImageBackground, Text, ActivityIndicator,TouchableOpacity, TextInput, StyleSheet, Dimensions, scrollview, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 var deviceheight = Dimensions.get('window').height;
-import RNPickerSelect from 'react-native-picker-select';
-import { Chevron } from 'react-native-shapes';
-import NewSale from './NewSale';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack'
-import LoginService from './services/LoginService';
-import axios from 'axios';
-import jwt_decode from "jwt-decode";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StatusBar } from 'expo-status-bar';
-import Loader from './loader';
-import * as Font from 'expo-font';
-var deviceheight = Dimensions.get('window').height;
+var deviceWidth = Dimensions.get('window').width;
+import Icons from 'react-native-vector-icons/MaterialIcons';
 // import Routes from "./routes";
 // import LeftSideBar from "./leftsidebar";
 
 class SignUp extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    }
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
      
@@ -34,6 +28,16 @@ class SignUp extends Component {
                     loading={this.state.loading} />
                 }  */}
                 <SafeAreaView style={{ flex: 1,backgroundColor:'#FFFFFF'}}>
+               
+                <View style={{ flexDirection: 'column', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
+                <TouchableOpacity onPress={this.handleBackButtonClick}>
+                <Text style={styles.viewswidth}>SIGN UP</Text>
+                <Icons name={'arrow-back'} size={30} color='#ffffff' style={{  position: 'absolute',
+                left: 5,
+                top:25}}/>
+                </TouchableOpacity>
+            </View>
+   
                         <View style={styles.container}>
                         <View style={{ justifyContent: 'center', alignSelf: 'center',marginTop:50 }}>
                             {/* <Text></Text> */}
@@ -146,6 +150,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#623FA0',
         alignItems: 'center',
         justifyContent: 'center',
+      },
+      viewswidth: {
+        backgroundColor: '#0196FD',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 24,
+        color: '#FFFFFF',
+        height:84,
+        fontFamily: "bold",
+        textAlignVertical: "center",
       },
       title: {
         color: 'white',

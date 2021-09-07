@@ -5,16 +5,25 @@ import {View, Image, ImageBackground, Text, TouchableOpacity, TextInput, StyleSh
 const image = require('./assets/images/menu.png');
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+var deviceWidth = Dimensions.get('window').width;
+import { Table, Row, Rows } from 'react-native-table-component';
+
 
 class NewSale extends Component {
     constructor(props) {
         super(props);
        // this.toggle = this.toggle.bind(this);
        // this.navigate = this.props.navigation.navigate;
-    this.state = {
-     
-    }
+       this.state = {
+        tableHead: ['S.No', 'Product', 'Qty', 'Amount'],
+        tableData: [
+          ['1', 'Perfume', '1', '$200'],
+          ['2', 'Ahsan Attar', '1', '$200'],
+          ['3', 'Hair Gel', '1', '$200'],
+          ['4', 'Towel', '1', '$200']
+        ]
 }
+    }
 
     // onMenuItemSelected = item =>
     // this.setState({
@@ -40,23 +49,19 @@ class NewSale extends Component {
         }).catch(() => {
             console.log('there is error getting token')
         })
-      AsyncStorage.getItem("user").then ((value) => {
-            console.log( value)
-        }).catch(() => {
-            console.log('there is error getting token')
-        })
-       
-        // if (value !== null) {
-        //   // We have data!!
-        //   console.log(value);
-        //   console.log('Token is : ' + JSON.stringify(value));
-        // }
-       // const menu = <Menu onItemSelected={this.onMenuItemSelected} />;
+        const state = this.state;
         return (
             <View style={styles.container}>
                  <SafeAreaView style={styles.safeArea}>
-                        <View style={{ flex: 1, alignItems: 'center', backgroundColor: '#FFFFFF',marginTop:30, }}>
-                            <Text style={styles.viewswidth}>New Sale</Text>
+                 <View style={{ flexDirection: 'column', alignItems: 'center', backgroundColor: '#FFFFFF' }}>
+                <Text style={styles.viewswidth}>New Sale</Text>
+                </View>
+                <View style={styles.tablecontainer}>
+                <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+          <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
+          <Rows data={state.tableData} textStyle={styles.textData}/>
+        </Table>
+        </View>
                             {/* <Left>
                                 <Button transparent style={{ marginTop: -102, marginLeft: -162, width: 50, height: 50 }} onPress={() => this.props.navigation.openDrawer()}>
                                     <Image
@@ -65,7 +70,7 @@ class NewSale extends Component {
                                     />
                                 </Button>
                             </Left> */}
-                        </View>
+                       
                     </SafeAreaView>
             {/* <Text style={{backgroundColor: 'white'}}>New Sale Screen</Text>   */}
             </View>
@@ -83,18 +88,45 @@ const styles = StyleSheet.create({
         // backgroundColor:'#0196FD'
     },
     viewswidth: {
-        backgroundColor:'#0196FD',
-        //alignSelf: 'stretch',
+        backgroundColor: '#0196FD',
+        width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
         color: '#FFFFFF',
-        height:64,
-        fontWeight: 'bold',
-    },
+        height:84,
+        fontFamily: "bold",
+        textAlignVertical: "center",
+      },
+      tablecontainer: { 
+          flex: 1,
+        // width:deviceWidth,
+        //  marginLeft:20,
+        //  marginRight:20,
+         padding: 16, 
+         paddingTop: 30, 
+         backgroundColor: '#fff'
+         },
     container: {
         flex: 1,
         justifyContent: 'center'
     },
+    head: { 
+        height: 40,
+         backgroundColor: '#f1f8ff',
+       
+     },
+    text: { 
+        margin: 6,
+        color:"#0196FD",
+        fontFamily: "bold",
+        fontSize:15,
+    },
+    textData: { 
+        margin: 6,
+        color:"#456CAF55",
+        fontFamily: "bold",
+        fontSize:15,
+    }
 })
 
 
