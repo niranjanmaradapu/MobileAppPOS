@@ -3,6 +3,7 @@ import React from 'react';
 import SplashScreen from './SplashScreen';
 import Login from './Login';
 import NewSale from './NewSale';
+import BottomBar from './BottomTabBar';
 import { StyleSheet, Text, View } from 'react-native';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
@@ -13,6 +14,7 @@ export default class App extends React.Component {
      Font.loadAsync({
     bold: require("./assets/fonts/Metropolis-Bold.otf"),
     regular: require("./assets/fonts/Metropolis-Regular.otf"),
+    semibold: require("./assets/fonts/Metropolis-SemiBold.otf"),
     });
 
     setTimeout(() => {

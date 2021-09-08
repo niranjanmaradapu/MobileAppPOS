@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import Loader from './loader';
 var deviceheight = Dimensions.get('window').height;
+import BottomBar from './BottomTabBar';
 // import Routes from "./routes";
 // import LeftSideBar from "./leftsidebar";
 
@@ -66,20 +67,20 @@ class Login extends Component {
     
     
     login(){
-        if (this.state.userName.length === 0) {
-            alert('You must enter a Usename');
-        } else if (this.state.password.length === 0) {
-            alert('You must enter a Password');
-        }
+        // if (this.state.userName.length === 0) {
+        //     alert('You must enter a Usename');
+        // } else if (this.state.password.length === 0) {
+        //     alert('You must enter a Password');
+        // }
        
-        else if (this.state.store.length === 1) {
-            alert('Please select one store');
-        }
-        else {
+        // else if (this.state.store.length === 1) {
+        //     alert('Please select one store');
+        // }
+        // else {
         const params =  {
-            "email":"+91" + this.state.userName, //"+919493926067",
-            "password":this.state.password,// "Mani@1123",//,
-            "storeName":this.state.store,
+            "email":"+919493926067",//"+91" + this.state.userName, //
+            "password":"Mani@1123",//this.state.password,
+            "storeName":"kphb",//this.state.store,
           }
           console.log('obj' + JSON.stringify(params))
           this.setState({ loading: true })
@@ -95,17 +96,18 @@ class Login extends Component {
                     console.log('there is error saving token')
                 })
 
-                const role = AsyncStorage.getItem("user").then ((value) => {
-                    if(role["cognito:groups"][0] === "super_admin") {
-                       // this.getModel();
-                        this.props.navigation.navigate('NewSale')
-                    } else {
+                // const role = AsyncStorage.getItem("user").then ((value) => {
+                //     if(role["cognito:groups"][0] === "super_admin") {
+                //        // this.getModel();
+                //         this.props.navigation.navigate('NewSale')
+                //     } else {
                     
-                    }
-                    this.props.navigation.navigate('NewSale')
-                }).catch(() => {
-                    console.log('there is error getting token')
-                })
+                //     }
+                this.setState({ loading: false })
+                    this.props.navigation.navigate('BottomBar')
+                // }).catch(() => {
+                //     console.log('there is error getting token')
+                // })
                 
             }
              else{
@@ -119,7 +121,7 @@ class Login extends Component {
             }
         }
         );
-   }
+  // }
     }
 
     
@@ -260,6 +262,7 @@ const AppNavigator = createStackNavigator(
         Login: Login,
         NewSale: NewSale,
         SignUp:SignUp,
+        BottomBar:BottomBar,
         // Routes: Routes,
         // LeftSideBar: LeftSideBar,
     },
