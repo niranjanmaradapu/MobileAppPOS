@@ -22,62 +22,62 @@ class NewSale extends Component {
         flagtwo:false,
         flagthree:false,
         flagfour:false,
-        tableHead: ['S.No','Barcode', 'Product', 'Qty','Price Per Qty', 'Sales Rate'],
+        tableHead: ['S.No','Barcode', 'Product','Price Per Qty','Qty', 'Sales Rate'],
         tableData: [
-          ['01', 'COA238106','Perfume', '1', '₹ 100:00','₹ 100:00'],
-          ['02', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['03', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['04', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['05', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['06', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['07', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['08', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['09', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['10', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['05', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['06', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['07', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['08', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['09', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
-          ['10', 'COA238013','Chocolate', '10', '₹ 20:00', '₹ 200:00'],
+          ['01', 'COA238106','Perfume', '₹ 100:00', '1','₹ 100:00'],
+          ['02', 'COA238013','Chocolate', '₹ 20:00', '10', '₹ 200:00'],
+          ['03', 'COA238013','Chocolate', '₹ 20:00', '10', '₹ 200:00'],
+          ['04', 'COA238013','Chocolate', '₹ 20:00','10', '₹ 200:00'],
+          ['05', 'COA238013','Chocolate', '₹ 20:00', '10', '₹ 200:00'],
+          ['06', 'COA238013','Chocolate', '₹ 20:00', '10', '₹ 200:00'],
+          ['07', 'COA238013','Chocolate', '₹ 20:00','10', '₹ 200:00'],
+          ['08', 'COA238013','Chocolate', '₹ 20:00','10', '₹ 200:00'],
+          ['09', 'COA238013','Chocolate', '₹ 20:00','10', '₹ 200:00'],
+          ['10', 'COA238013','Chocolate', '₹ 20:00','10', '₹ 200:00'],
+          ['11', 'COA238013','Chocolate', '₹ 20:00','10', '₹ 200:00'],
+          ['12', 'COA238013','Chocolate', '₹ 20:00','10', '₹ 200:00'],
+          ['13', 'COA238013','Chocolate', '₹ 20:00','10', '₹ 200:00'],
+          ['14', 'COA238013','Chocolate', '₹ 20:00','10', '₹ 200:00'],
+          ['15', 'COA238013','Chocolate', '₹ 20:00','10', '₹ 200:00'],
+          ['16', 'COA238013','Chocolate', '₹ 20:00','10', '₹ 200:00'],
         
         ]
 }
     }
 
     topbarAction1() {
-      this.state.flagone = true
-      this.state.flagtwo = false
-      this.state.flagthree = false
-      this.state.flagfour = false
+      this.setState({ flagone: true })
+        this.setState({ flagtwo: false })
+        this.setState({ flagthree: false })
+        this.setState({ flagfour: false })
   }
 
   
   topbarAction2() {
-    console.log('2')
-    this.state.flagone = false
-    this.state.flagtwo = true
-    this.state.flagthree = false
-    this.state.flagfour = false
+    this.setState({ flagone: false })
+        this.setState({ flagtwo: true })
+        this.setState({ flagthree: false })
+        this.setState({ flagfour: false })
 }
 
 
 topbarAction3() {
-  this.state.flagone = false
-  this.state.flagtwo = false
-  this.state.flagthree = true
-  this.state.flagfour = false
+  this.setState({ flagone: false })
+  this.setState({ flagtwo: false })
+  this.setState({ flagthree: true })
+  this.setState({ flagfour: false })
 }
 
 
 topbarAction4() {
-  this.state.flagone = false
-  this.state.flagtwo = false
-  this.state.flagthree = false
-  this.state.flagfour = true
+  this.setState({ flagone: false })
+  this.setState({ flagtwo: false })
+  this.setState({ flagthree: false })
+  this.setState({ flagfour: true })
 }
 
     render() {
+      console.log(this.state.flagone)
          AsyncStorage.getItem("tokenkey").then ((value) => {
             console.log( value)
         }).catch(() => {
@@ -103,46 +103,42 @@ topbarAction4() {
                 </View>
 
           <View style = {styles.Topcontainer}>
-         
-         <View style={{backgroundColor:this.state.flagone ?  "#1CA2FF":"#0196FD",
+          <TouchableOpacity  style={{backgroundColor:this.state.flagone ?  "#1CA2FF":"#0196FD",
     alignSelf: "flex-start",
     //marginHorizontal: "1%",
     marginBottom: 6,
     width: "25%",
-    height:45,
-    textAlign: "center"}}>
-
-<TouchableOpacity  style={{backgroundColor:this.state.flagone ?  "#1CA2FF":"#0196FD",
-    alignSelf: "flex-start",
-    //marginHorizontal: "1%",
-    marginBottom: 6,
-    width: "25%",
-    height:45,
+    height:50,
     textAlign: "center",}}
     onPress={() => this.topbarAction1()} >
+          <View style={{backgroundColor:this.state.flagone ?  "#1CA2FF":"#0196FD",
+    alignSelf: "flex-start",
+    //marginHorizontal: "1%",
+    marginBottom: 6,
+    width: "25%",
+    height:50,
+    textAlign: "center"}}>
+
+
  
 <Text  style={{color:this.state.flagone ?  "#FFFFFF":"#BBE3FF",
       marginTop:10,
-      fontFamily: "regular",
-      fontSize: 14, width: 100,}}> NEW SALE </Text> 
+      fontFamily: "regular",textAlign:'center',width:100,
+      fontSize: 14,}}> NEW SALE </Text> 
 
 
-<Image source={require('./assets/images/topSelect.png')}  style={{
+<Image source={this.state.flagone ? require('./assets/images/topSelect.png') : null}  style={{
                 left: 30,marginTop:5,
                 }}/>
-                </TouchableOpacity>
+               
 </View>
-
-
-
-
-
+</TouchableOpacity>
       <TouchableOpacity style={{backgroundColor:this.state.flagtwo ?  "#1CA2FF":"#0196FD",
     alignSelf: "flex-start",
     //marginHorizontal: "1%",
     marginBottom: 6,
     width: "25%",
-    height:45,
+    height:50,
     textAlign: "center",}}
     onPress={() => this.topbarAction2()} >
       <View style = {{backgroundColor:this.state.flagtwo ?  "#1CA2FF":"#0196FD",
@@ -150,32 +146,96 @@ topbarAction4() {
     //marginHorizontal: "1%",
     marginBottom: 6,
     width: "25%",
-    height:45,
+    height:50,
     textAlign: "center",}}>
 
 <Text  style={{color:this.state.flagtwo ?  "#FFFFFF":"#BBE3FF",
       marginTop:10,
       fontFamily: "regular",
-      fontSize: 14, width: 100,}}> ADD CUSTOMER </Text> 
+      fontSize: 14,textAlign:'center',width:100,}}> ADD CUSTOMER </Text> 
+      <Image source={this.state.flagtwo ? require('./assets/images/topSelect.png') : null}  style={{
+                left: 30,marginTop:5,
+                }}/>
       </View>
       </TouchableOpacity>
 
-<View style = {styles.blackbox}>
-
-<TouchableOpacity  
+      <TouchableOpacity style={{backgroundColor:this.state.flagthree ?  "#1CA2FF":"#0196FD",
+    alignSelf: "flex-start",
+    //marginHorizontal: "1%",
+    marginBottom: 6,
+    width: "25%",
+    height:50,
+    textAlign: "center",}}
     onPress={() => this.topbarAction3()} >
-<Text style={styles.buttonLabel}> FIND ITEM </Text>
-</TouchableOpacity>
-</View>
-<View style = {styles.greenbox}>
-<TouchableOpacity  
-    onPress={() => this.topbarAction4()} >
-<Text style={styles.buttonLabel}> PAYMENT DETAILS </Text>
-</TouchableOpacity>
-</View>
-         {/* <View style = {styles.blackbox} />
-         <View style = {styles.greenbox} /> */}
+      <View style = {{backgroundColor:this.state.flagthree ?  "#1CA2FF":"#0196FD",
+    alignSelf: "flex-start",
+    //marginHorizontal: "1%",
+    marginBottom: 6,
+    width: "25%",
+    height:50,
+    textAlign: "center",}}>
+
+<Text  style={{color:this.state.flagthree ?  "#FFFFFF":"#BBE3FF",
+      marginTop:10,
+      fontFamily: "regular",
+      fontSize: 14,textAlign:'center',width:100,}}> FIND ITEM  </Text> 
+      <Image source={this.state.flagthree ? require('./assets/images/topSelect.png') : null}  style={{
+                left: 30,marginTop:5,
+                }}/>
       </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={{backgroundColor:this.state.flagfour ?  "#1CA2FF":"#0196FD",
+    alignSelf: "flex-start",
+    //marginHorizontal: "1%",
+    marginBottom: 6,
+    width: "25%",
+    height:50,
+    textAlign: "center",}}
+    onPress={() => this.topbarAction4()} >
+      <View style = {{backgroundColor:this.state.flagfour ?  "#1CA2FF":"#0196FD",
+    alignSelf: "flex-start",
+    //marginHorizontal: "1%",
+    marginBottom: 6,
+    width: "25%",
+    height:50,
+    textAlign: "center",}}>
+
+<Text  style={{color:this.state.flagfour ?  "#FFFFFF":"#BBE3FF",
+      marginTop:10,
+      fontFamily: "regular",
+      fontSize: 14,textAlign:'center',width:100,}}> PAYMENT DETAILS  </Text> 
+      <Image source={this.state.flagfour ? require('./assets/images/topSelect.png') : null}  style={{
+                left: 30,marginTop:5,
+                }}/>
+      </View>
+      </TouchableOpacity>
+      </View>
+      {this.state.flagthree && (
+      <View style={{ flex:1}}>
+                            <TextInput style={styles.findIteminput}
+                                underlineColorAndroid="transparent"
+                                placeholder="       Find Item"
+                                placeholderTextColor="#0196FD"
+                               // textAlignVertical="center"
+                                autoCapitalize="none"
+                                onChangeText={this.handleEmail}
+                                value={this.state.userName} 
+                                ref={inputemail => { this.emailValueInput = inputemail }} />
+                               <Image source={require('./assets/images/search.png')} style={{  position: 'absolute',
+                left: 35,
+                top:35}}/>      
+                                  <Image source={require('./assets/images/filter.png')} style={{  position: 'absolute',
+                right: 10,
+                top:20,
+                width:50,
+                height:50,
+                borderBottomRightRadius: 10,
+                borderTopRightRadius: 10,
+                backgroundColor:"#0196FD",}} resizeMode={'center'}/>
+                      </View> 
+      )}  
+      {this.state.flagone && (
       <View style={{ flex: 1 }}>
       <TextInput style={styles.input}
                                 underlineColorAndroid="transparent"
@@ -185,17 +245,27 @@ topbarAction4() {
                                 autoCapitalize="none"
                                 onChangeText={this.handleEmail}
                                 ref={inputemail => { this.emailValueInput = inputemail }} />
+                 
                                  <Image source={require('./assets/images/barcode.png')} style={{  position: 'absolute',
                 right: 20,
                 top:25}}/>
-                                  </View>                                    
-                <Text style={styles.saleBillsText}> List Of Sale Items </Text>
+          
+                                  </View>  
+                                   )} 
+                                                                  
+               
+                {this.state.flagone && ( 
+                  
                 <View style={styles.tablecontainer}>
+                   <Text style={styles.saleBillsText}> List Of Sale Items </Text>
                 <Table borderStyle={{borderWidth: 2, borderColor: '#FFFFFF',backgroundColor:"#FAFAFF"}}>
           <Row data={state.tableHead} style={styles.head} textStyle={styles.text}/>
           <Rows data={state.tableData} style={styles.head} textStyle={styles.textData}/>
         </Table>
+      
         </View>
+               )}
+  
                             {/* <Left>
                                 <Button transparent style={{ marginTop: -102, marginLeft: -162, width: 50, height: 50 }} onPress={() => this.props.navigation.openDrawer()}>
                                     <Image
@@ -239,6 +309,18 @@ const styles = StyleSheet.create({
         fontFamily:'regular',
         fontSize:15,
     },
+    findIteminput: {
+      marginLeft: 30,
+      marginRight: 30,
+      marginTop:20,
+      marginBottom:1000,
+      height: 50,
+      backgroundColor:"#DEF1FF",
+      borderRadius:10,
+      color:'#001B4A',
+      fontFamily: "regular",
+      fontSize: 12,
+  },
       signUptext:{
         marginTop:40,
         fontFamily: "regular",
@@ -247,7 +329,8 @@ const styles = StyleSheet.create({
         fontSize: 28,
       },
       saleBillsText:{
-        marginLeft:20,
+        marginLeft:0,
+        marginTop:-20,
         marginBottom:10,
         fontFamily: "bold",
         color: '#0F2851',
@@ -293,7 +376,7 @@ const styles = StyleSheet.create({
       marginRight:0,
       width:'100%',
       backgroundColor: 'grey',
-      height: 45
+      height: 50
    },
    redbox: {
     backgroundColor: "#1CA2FF",

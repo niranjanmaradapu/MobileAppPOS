@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {View, Image, ImageBackground, Text, ActivityIndicator,TouchableOpacity, TextInput, StyleSheet, Dimensions, scrollview, SafeAreaView } from 'react-native';
+import {View, Image, ImageBackground, Text, ActivityIndicator,TouchableOpacity, TextInput, StyleSheet, Dimensions, scrollview, SafeAreaView,Switch } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 var deviceheight = Dimensions.get('window').height;
 import RNPickerSelect from 'react-native-picker-select';
@@ -39,6 +39,7 @@ class Login extends Component {
     constructor(props){
         super(props);
         this.state = {
+            rememberMe: false,
             redirect: false,
             isAuth: false,
             userName:'',
@@ -54,6 +55,47 @@ class Login extends Component {
         console.log(process.env.REACT_APP_BASE_URL);
     }
 
+    toggleRememberMe = value => {
+        this.setState({ rememberMe: value })
+          if (value === true) {
+        //user wants to be remembered.
+          this.rememberUser();
+        } else {
+          this.forgetUser();
+        }
+      }
+
+      rememberUser = async () => { 
+        try {
+          await AsyncStorage.setItem("username",this.state.userName);
+          await AsyncStorage.setItem("password",this.state.password);
+        } catch (error) {
+          // Error saving data
+        }
+        };
+        getRememberedUser = async () => {
+        try {
+          const username = await AsyncStorage.getItem("username");
+          const password = await AsyncStorage.getItem("password");
+          if (username !== null) {
+            // We have username!!
+            console.log(username)
+            this.state.userName = username
+            this.state.password = password
+            return username;
+          }
+        } catch (error) {
+          // Error retrieving data
+        }
+        };
+        forgetUser = async () => {
+          try {
+            await AsyncStorage.removeItem('Longtail-User');
+          } catch (error) {
+           // Error removing
+          }
+        };
+
     handleEmail = (text) => {
         this.setState({ userName: text })
     }
@@ -61,26 +103,25 @@ class Login extends Component {
         this.setState({ password: text })
     }
     handleStore = (value) => {
-        console.log('dsgsdbdfhdf')
         this.setState({ store: value });
     }
     
     
     login(){
-        // if (this.state.userName.length === 0) {
-        //     alert('You must enter a Usename');
-        // } else if (this.state.password.length === 0) {
-        //     alert('You must enter a Password');
-        // }
+        if (this.state.userName.length === 0) {
+            alert('You must enter a Usename');
+        } else if (this.state.password.length === 0) {
+            alert('You must enter a Password');
+        }
        
-        // else if (this.state.store.length === 1) {
-        //     alert('Please select one store');
-        // }
-        // else {
+        else if (this.state.store.length === 1) {
+            alert('Please select one store');
+        }
+        else {
         const params =  {
-            "email":"+919493926067",//"+91" + this.state.userName, //
-            "password":"Mani@1123",//this.state.password,
-            "storeName":"kphb",//this.state.store,
+            "email":"+91" + this.state.userName, //"+919493926067",
+            "password":this.state.password, //"Mani@1123",
+            "storeName":this.state.store,//"kphb",
           }
           console.log('obj' + JSON.stringify(params))
           this.setState({ loading: true })
@@ -121,7 +162,7 @@ class Login extends Component {
             }
         }
         );
-  // }
+   }
     }
 
     
@@ -129,7 +170,7 @@ class Login extends Component {
         this.props.navigation.navigate('SignUp')
     }
 
-    componentDidMount() {
+    async  componentDidMount() {
         console.log(LoginService.getAuth())
         var storeNames = [];
         axios.get(LoginService.getStores()).then((res) => { 
@@ -147,6 +188,11 @@ class Login extends Component {
             })
             console.log('store Name' + JSON.stringify(storeNames))
         }); 
+        console.log('dsgsdgsdg' + username)
+        const username = await this.getRememberedUser();
+        this.setState({ 
+           username: username || "", 
+           rememberMe: username ? true : false });
     }
    
     
@@ -179,9 +225,10 @@ class Login extends Component {
                                // textAlignVertical="center"
                                 autoCapitalize="none"
                                 onChangeText={this.handleEmail}
+                                value={this.state.userName} 
                                 ref={inputemail => { this.emailValueInput = inputemail }} />
                                  
-                                 
+                                
                           <Text style={styles.signInFieldStyle}> Password </Text>
                             <TextInput style={styles.passwordInput}
                                 underlineColorAndroid="transparent"
@@ -190,6 +237,7 @@ class Login extends Component {
                                 placeholderTextColor="#001B4A55"
                                 autoCapitalize="none"
                                 onChangeText={this.handlePassword}
+                                value={this.state.password} 
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
                                 
                              <Text style={styles.signInFieldStyle}> Store </Text>
@@ -223,12 +271,33 @@ class Login extends Component {
                                 />
                                 </View>
 
+                                <View>
+                                <View style={{ flexDirection: "column" }}>
+<Switch trackColor={{true: '#8BB0EF', false: 'grey'}} style={{position: 'absolute',
+                left: 30,
+                top:4,
+                width:30,
+                height:30,color: '#8BB0EF',}}
+  value={this.state.rememberMe}
+  onValueChange={(value) => this.toggleRememberMe(value)}
+  /><Text style={{position: 'absolute',
+  left:90,
+  top:10,
+  width:100,
+  height:20, fontSize: 13, color: '#8BB0EF', fontFamily: "bold",}}>Remember Me</Text>
+                                 <Text style={{ color:'#0196FD', fontSize: 13,fontFamily: "bold",position: 'absolute',
+  right:20,
+  top:10,
+  width:130, }}> Forgot Password? </Text>
+  </View>
+</View>
+
                                       {/* <View style={{ flex: 0.2, marginTop: 120 }}> */}
-                        <View style={{ marginTop: 10, justifyContent: 'center', alignSelf: 'center', flexDirection: 'row', }}>
-                        <Text style={{ fontSize: 13, color: '#8BB0EF',fontFamily: "bold", }}> Don't remember the Password? </Text>
-                                <Text style={{ color:'#0196FD', fontSize: 13,textAlign: 'right',fontFamily: "bold", }}> Forgot Password? </Text>
+                        {/* <View style={{ marginTop: 10, flexDirection: 'row', }}> */}
+                        {/* <Text style={{ fontSize: 13, color: '#8BB0EF',fontFamily: "bold", }}> Don't remember the Password? </Text> */}
+ 
                            
-                        </View>
+                        {/* </View> */}
                            
                             <TouchableOpacity
                                 style={styles.signInButton}
@@ -379,7 +448,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: 30,
         marginRight: 30,
-        marginTop:30,
+        marginTop:50,
         height: 55,
         borderRadius: 30,
         fontWeight: 'bold',
