@@ -281,7 +281,7 @@ class Login extends Component {
   value={this.state.rememberMe}
   onValueChange={(value) => this.toggleRememberMe(value)}
   /><Text style={{position: 'absolute',
-  left:90,
+  left:70,
   top:10,
   width:100,
   height:20, fontSize: 13, color: '#8BB0EF', fontFamily: "bold",}}>Remember Me</Text>

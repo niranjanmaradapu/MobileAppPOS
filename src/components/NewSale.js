@@ -1,6 +1,6 @@
 import React, { Component ,useState} from 'react'
 
-import {View, Image, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview,SafeAreaView, ScrollView} from 'react-native';
+import {View, Image, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview,SafeAreaView, ScrollView,TouchableHighlight} from 'react-native';
 //import Menu from './Menu';
 //import Login from './Logsin';
 const image = require('./assets/images/menu.png');
@@ -10,7 +10,9 @@ var deviceWidth = Dimensions.get('window').width;
 import { Table, Row, Rows } from 'react-native-table-component';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import Constants from 'expo-constants';
-
+import Modal from "react-native-modal";
+import CreateCustomerService from './services/CreateCustomerService';
+import axios from 'axios';
 
 class NewSale extends Component {
     constructor(props) {
@@ -18,6 +20,14 @@ class NewSale extends Component {
        // this.toggle = this.toggle.bind(this);
        // this.navigate = this.props.navigation.navigate;
        this.state = {
+        mobileNumber: "",
+        altMobileNo: "",
+        name: "",
+        gender: "Male",
+        gstNumber: "",
+        dob: "2021-06-21T18:30:00.000Z",
+        address: "", 
+        modalVisible: true,
         flagone:true,
         flagtwo:false,
         flagthree:false,
@@ -45,6 +55,75 @@ class NewSale extends Component {
 }
     }
 
+  //   toggleModal(visible) {
+  //     this.setState({ modalVisible: visible });
+  //  }
+
+   modelCancel() {
+    this.setState({ modalVisible: false });
+ }
+
+ handleMobileNumber = (text) => {
+  this.setState({ mobileNumber: text })
+}
+handleAltNumber = (text) => {
+  this.setState({ altMobileNo: text })
+}
+handlename = (value) => {
+  this.setState({ name: value });
+}
+
+handleGender = (text) => {
+  this.setState({ gender: text })
+}
+handleGstnumber = (text) => {
+  this.setState({ gstNumber: text })
+}
+handledob = (value) => {
+  this.setState({ dob: value });
+}
+
+handleaddress = (value) => {
+  this.setState({ address: value });
+}
+
+
+ modelCreate() {
+  const params =  {
+    "mobileNumber":this.state.mobileNumber, 
+    "altMobileNo":this.state.altMobileNo, 
+    "name":this.state.name,
+    "gender":'Male', 
+    "gstNumber":this.state.gstNumber, 
+    "dob":"2021-06-21T18:30:00.000Z", 
+    "anniversary":"1",
+    "address":this.state.address,
+  }
+  console.log('obj' + JSON.stringify(params))
+  console.log(CreateCustomerService.createCustomer())
+axios.post(CreateCustomerService.createCustomer(),params).then((res) => {
+  console.log(res)
+  if (res.data.statusCode === "OK") {
+  this.setState({ modalVisible: false }); 
+   // toast.success(res.data.body);
+    this.setState({
+        mobileNumber: "",
+        altMobileNo: "",
+        name: "",
+        gender: "Male",
+        gstNumber: "",
+        dob: "",
+        anniversary: "",
+        address: ""
+    })
+       
+    }
+     else{
+       
+    }
+});
+}
+
     topbarAction1() {
       this.setState({ flagone: true })
         this.setState({ flagtwo: false })
@@ -54,6 +133,7 @@ class NewSale extends Component {
 
   
   topbarAction2() {
+    this.setState({ modalVisible: true });
     this.setState({ flagone: false })
         this.setState({ flagtwo: true })
         this.setState({ flagthree: false })
@@ -265,6 +345,114 @@ topbarAction4() {
       
         </View>
                )}
+                {this.state.flagtwo && ( 
+                 <View>
+                 <Modal isVisible={this.state.modalVisible}>
+                   <View style={{ flex: 1 }}>
+                   <View style={{flex: 1,marginLeft:20,marginRight:20,marginTop:50,backgroundColor:"#ffffff",borderRadius:20}}>
+                     <Text style={{color:"#0196FD", fontFamily: "semibold",alignItems:'center',justifyContent:'center',textAlign:'center',marginTop:10,
+        fontSize: 12, }}>Customer Details</Text>
+        <Text style={styles.signInFieldStyle}> Mobile Number* </Text>
+        <TextInput style={styles.input}
+                                underlineColorAndroid="transparent"
+                                placeholder=""
+                                placeholderTextColor="#0F2851"
+                                textAlignVertical="center"
+                                autoCapitalize="none"
+                                onChangeText={this.handleMobileNumber}
+                                ref={inputemail => { this.emailValueInput = inputemail }} />
+
+<Text style={styles.signInFieldStyle}> Alternative Mobile Number </Text>
+        <TextInput style={styles.input}
+                                underlineColorAndroid="transparent"
+                                placeholder=""
+                                placeholderTextColor="#0F2851"
+                                textAlignVertical="center"
+                                autoCapitalize="none"
+                                onChangeText={this.handleAltNumber}
+                                ref={inputemail => { this.emailValueInput = inputemail }} />
+
+<Text style={styles.signInFieldStyle}> Name </Text>
+        <TextInput style={styles.input}
+                                underlineColorAndroid="transparent"
+                                placeholder=""
+                                placeholderTextColor="#0F2851"
+                                textAlignVertical="center"
+                                autoCapitalize="none"
+                                onChangeText={this.handlename}
+                                ref={inputemail => { this.emailValueInput = inputemail }} />
+
+<Text style={styles.signInFieldStyle}> Gender </Text>
+        <TextInput style={styles.input}
+                                underlineColorAndroid="transparent"
+                                placeholder=""
+                                placeholderTextColor="#0F2851"
+                                textAlignVertical="center"
+                                autoCapitalize="none"
+                                onChangeText={this.handleGender}
+                                ref={inputemail => { this.emailValueInput = inputemail }} />
+
+<Text style={styles.signInFieldStyle}> gst Number </Text>
+        <TextInput style={styles.input}
+                                underlineColorAndroid="transparent"
+                                placeholder=""
+                                placeholderTextColor="#0F2851"
+                                textAlignVertical="center"
+                                autoCapitalize="none"
+                                onChangeText={this.handleGstnumber}
+                                ref={inputemail => { this.emailValueInput = inputemail }} />
+
+<Text style={styles.signInFieldStyle}> DOB </Text>
+        <TextInput style={styles.input}
+                                underlineColorAndroid="transparent"
+                                placeholder=""
+                                placeholderTextColor="#0F2851"
+                                textAlignVertical="center"
+                                autoCapitalize="none"
+                                onChangeText={this.handledob}
+                                ref={inputemail => { this.emailValueInput = inputemail }} />
+
+<Text style={styles.signInFieldStyle}> Anniverary </Text>
+        <TextInput style={styles.input}
+                                underlineColorAndroid="transparent"
+                                placeholder=""
+                                placeholderTextColor="#0F2851"
+                                textAlignVertical="center"
+                                autoCapitalize="none"
+                                onChangeText={this.handleEmail}
+                                ref={inputemail => { this.emailValueInput = inputemail }} />
+
+<Text style={styles.signInFieldStyle}> Address </Text>
+        <TextInput style={styles.input}
+                                underlineColorAndroid="transparent"
+                                placeholder=""
+                                placeholderTextColor="#0F2851"
+                                textAlignVertical="center"
+                                autoCapitalize="none"
+                                onChangeText={this.handleaddress}
+                                ref={inputemail => { this.emailValueInput = inputemail }} />
+      <View style = {styles.TopcontainerforModel}>
+<TouchableOpacity
+                                style={{ width: "50%",
+                                height:50,backgroundColor:"#ECF7FF",borderBottomLeftRadius:20,}}
+                                onPress={() => this.modelCancel()} >
+                                <Text style={{textAlign:'center',marginTop:15,color:"#0196FD",  fontSize: 15,
+      fontFamily: "regular",}}> CANCEL </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={{ width: "50%",
+                                height:50,backgroundColor:"#0196FD",borderBottomRightRadius:20,}}
+                                onPress={() => this.modelCreate()} >
+                                <Text style={{textAlign:'center',marginTop:15,color:"#ffffff",  fontSize: 15,
+      fontFamily: "regular",}}> CREATE </Text>
+                            </TouchableOpacity>
+                            </View>
+                     </View>
+                   </View>
+                 </Modal>
+               </View>
+                 )}
   
                             {/* <Left>
                                 <Button transparent style={{ marginTop: -102, marginLeft: -162, width: 50, height: 50 }} onPress={() => this.props.navigation.openDrawer()}>
@@ -300,15 +488,25 @@ const styles = StyleSheet.create({
       },
       input: {
         justifyContent: 'center',
-        margin: 13,
+        margin: 20,
         height: 40,
-        borderColor: '#8F9EB7',
+        marginTop:5,
+        marginBottom:10,
+        borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: 'white',
         borderWidth: 1,
-        fontFamily:'regular',
-        fontSize:15,
+        fontFamily:'semibold',
+        fontSize:10,
     },
+    
+    signInFieldStyle: {
+      color: '#456CAF55',
+      marginLeft: 20,
+      marginTop:5,
+      fontSize: 12,
+      fontFamily: "regular",
+  },
     findIteminput: {
       marginLeft: 30,
       marginRight: 30,
@@ -378,6 +576,17 @@ const styles = StyleSheet.create({
       backgroundColor: 'grey',
       height: 50
    },
+   
+   TopcontainerforModel: {
+    flexDirection: 'row',
+    marginLeft:0,
+    marginRight:0,
+    marginTop:10,
+    width:'100%',
+    backgroundColor: 'grey',
+    borderRadius:20,
+    height: 50
+ },
    redbox: {
     backgroundColor: "#1CA2FF",
     alignSelf: "flex-start",
@@ -473,4 +682,21 @@ const styles = StyleSheet.create({
       marginBottom: 10,
       fontSize: 24,
     },
+
+    //model
+    modelcontainer: {
+      alignItems: 'center',
+      backgroundColor: '#ede3f2',
+      padding: 100
+   },
+   modal: {
+      flex: 1,
+      alignItems: 'center',
+      backgroundColor: '#f7021a',
+      padding: 100
+   },
+   modeltext: {
+      color: '#3f2949',
+      marginTop: 10
+   }
   });

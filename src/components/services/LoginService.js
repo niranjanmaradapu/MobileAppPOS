@@ -1,5 +1,4 @@
-import axios from 'axios';
-import base from './Base';
+// import base from './Base';
 const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097'
 
 class LoginService {
@@ -8,9 +7,6 @@ class LoginService {
     }
     getAuth(){
         return  REACT_NATIVE_APP_BASE_URL+'/user-management/auth/login';
-    }
-    saveData(){
-        return axios.post(BASE_URL+LOGIN_URL.saveData,null);
     }
 }
 export default new LoginService()

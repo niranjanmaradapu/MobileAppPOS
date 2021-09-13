@@ -1,14 +1,10 @@
 import axios from 'axios';
-import { CREATE_CUSTOMER_URL } from '../commonUtils/ApiConstants';
-import { BASE_URL } from '../commonUtils/Base';
+const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097'
 
 class CreateCustomerService {
-    createCustomer(list) {
-        return axios.post(BASE_URL+CREATE_CUSTOMER_URL.createCustomer, list);
-    }
-    posClose(){
-        return axios.get(BASE_URL+CREATE_CUSTOMER_URL.posClose);
-    }
+    createCustomer() {
+        return  REACT_NATIVE_APP_BASE_URL+'/new-sale/newsale/savecustomerdetails';
+    }  
 }
 
 export default new CreateCustomerService()
