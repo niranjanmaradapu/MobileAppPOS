@@ -1,5 +1,4 @@
 import React, { Component ,useState} from 'react'
-
 import {View, Image, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview,SafeAreaView, ScrollView,TouchableHighlight} from 'react-native';
 //import Menu from './Menu';
 //import Login from './Logsin';
@@ -13,7 +12,7 @@ import Constants from 'expo-constants';
 import Modal from "react-native-modal";
 import CreateCustomerService from './services/CreateCustomerService';
 import axios from 'axios';
-import RazorpayCheckout from 'react-native-razorpay';
+//import RazorpayCheckout from 'react-native-razorpay-expokit';
 import NewSaleService from './services/NewSaleService';
 
 
@@ -130,7 +129,7 @@ axios.post(CreateCustomerService.createCustomer(),params).then((res) => {
 pay=()=>{
   console.log(URL);
   const params =  {
-    "amount":"500",
+    "amount":"50",
     "info": "order_request"
   }
    axios.post(NewSaleService.payment(),params).then((res) => {
@@ -152,13 +151,14 @@ pay=()=>{
         theme: {color: '#F37254'}
       }
       console.log(options)
-       RazorpayCheckout.open(options).then((data) => {
-         // handle success
-        alert(`Success: ${data.razorpay_payment_id}`);
-       }).catch((error) => {
-         // handle failure
-         alert(`Error: ${error.code} | ${error.description}`);
-       });
+      // RazorpayCheckout.open(options).then((data) => {
+      //    // handle success
+      //   alert(`Success: ${data.razorpay_payment_id}`);
+      //  }).catch((error) => {
+      //    console.log(error)
+      //    // handle failure
+      //    alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
+      //  });
    }
    )
   
