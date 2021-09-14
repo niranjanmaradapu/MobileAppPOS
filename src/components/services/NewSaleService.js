@@ -1,21 +1,8 @@
-import axios from 'axios';
-import { NEW_SALE_URL } from '../../commonUtils/ApiConstants';
-import { BASE_URL } from '../../commonUtils/Base';
+const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097'
 
-class NewSaleService { 
-    
-    getDeliverySlipDetails(obj){
-        const param = '?dsNumber='+ obj; 
-        return axios.get(BASE_URL+NEW_SALE_URL.getDslipData+param);
-    }
-
-    getMobileData(mobileNumber) {
-        const param = '?mobileNumber='+ mobileNumber;
-        return axios.get(BASE_URL+NEW_SALE_URL.getMobileData+param);
-    }
-
-    saveSale(obj) {
-        return axios.post(BASE_URL+NEW_SALE_URL.saveSale, obj);
-    }
+class NewSaleService {
+payment(){
+    return REACT_NATIVE_APP_BASE_URL+'/paymentgateway/paymentgateway/create_order'
+}
 }
 export default new NewSaleService()

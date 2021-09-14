@@ -13,6 +13,9 @@ import Constants from 'expo-constants';
 import Modal from "react-native-modal";
 import CreateCustomerService from './services/CreateCustomerService';
 import axios from 'axios';
+import RazorpayCheckout from 'react-native-razorpay';
+import NewSaleService from './services/NewSaleService';
+
 
 class NewSale extends Component {
     constructor(props) {
@@ -123,6 +126,45 @@ axios.post(CreateCustomerService.createCustomer(),params).then((res) => {
     }
 });
 }
+
+pay=()=>{
+  console.log(URL);
+  const params =  {
+    "amount":"500",
+    "info": "order_request"
+  }
+   axios.post(NewSaleService.payment(),params).then((res) => {
+     // this.setState({isPayment: false});
+      const data = res.data
+      var options = {
+        description: 'Transaction',
+        image: 'https://i.imgur.com/3g7nmJC.png',
+        currency: data.currency,
+        order_id:data.id,
+        key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
+        amount: data.amount,
+        name: 'OTSI',
+        prefill: {
+          name: "Kadali",
+          email: "kadali@gmail.com",
+          contact: "9999999999",
+        },
+        theme: {color: '#F37254'}
+      }
+      console.log(options)
+       RazorpayCheckout.open(options).then((data) => {
+         // handle success
+        alert(`Success: ${data.razorpay_payment_id}`);
+       }).catch((error) => {
+         // handle failure
+         alert(`Error: ${error.code} | ${error.description}`);
+       });
+   }
+   )
+  
+  
+}
+
 
     topbarAction1() {
       this.setState({ flagone: true })
@@ -335,7 +377,6 @@ topbarAction4() {
                                                                   
                
                 {this.state.flagone && ( 
-                  
                 <View style={styles.tablecontainer}>
                    <Text style={styles.saleBillsText}> List Of Sale Items </Text>
                 <Table borderStyle={{borderWidth: 2, borderColor: '#FFFFFF',backgroundColor:"#FAFAFF"}}>
@@ -345,11 +386,21 @@ topbarAction4() {
       
         </View>
                )}
+
+{this.state.flagfour && ( 
+                 <TouchableOpacity
+                 style={styles.signInButton}
+                 onPress={() => this.pay()} >
+                 <Text style={styles.signInButtonText}> PAY </Text>
+             </TouchableOpacity>
+               )}
+
                 {this.state.flagtwo && ( 
                  <View>
                  <Modal isVisible={this.state.modalVisible}>
-                   <View style={{ flex: 1 }}>
-                   <View style={{flex: 1,marginLeft:20,marginRight:20,marginTop:50,backgroundColor:"#ffffff",borderRadius:20}}>
+                   <View style={{ flex: 1, justifyContent: 'center', //Centered horizontally
+       alignItems: 'center',  }}>
+                   <View style={{ flexDirection: 'column', flex: 0,marginLeft:20,marginRight:20, backgroundColor:"#ffffff",borderRadius:20,}}>
                      <Text style={{color:"#0196FD", fontFamily: "semibold",alignItems:'center',justifyContent:'center',textAlign:'center',marginTop:10,
         fontSize: 12, }}>Customer Details</Text>
         <Text style={styles.signInFieldStyle}> Mobile Number* </Text>
@@ -499,7 +550,23 @@ const styles = StyleSheet.create({
         fontFamily:'semibold',
         fontSize:10,
     },
-    
+    signInButton: {
+      backgroundColor:'#0196FD',
+      justifyContent: 'center',
+      marginLeft: 30,
+      marginRight: 30,
+      marginTop:50,
+      height: 55,
+      borderRadius: 30,
+      fontWeight: 'bold',
+      // marginBottom:100,
+  },
+  signInButtonText: {
+    color: 'white',
+    alignSelf: 'center',
+    fontSize: 14,
+    fontFamily: "regular",
+},
     signInFieldStyle: {
       color: '#456CAF55',
       marginLeft: 20,
@@ -585,7 +652,7 @@ const styles = StyleSheet.create({
     width:'100%',
     backgroundColor: 'grey',
     borderRadius:20,
-    height: 50
+    height: 50,
  },
    redbox: {
     backgroundColor: "#1CA2FF",
