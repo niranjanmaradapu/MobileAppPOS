@@ -1,5 +1,4 @@
 {
-  "expo": {
     "name": "RetailMobilePOS",
     "slug": "RetailMobilePOS",
     "privacy": "public",
@@ -13,8 +12,7 @@
     },
     "ios": {
       "bundleIdentifier": "host.exp.exponent"
-    }
-  },
+    },
   "platforms": [
     "ios",
     "android",

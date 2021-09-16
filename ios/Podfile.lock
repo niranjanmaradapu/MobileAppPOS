@@ -228,6 +228,8 @@ PODS:
   - react-native-razorpay (2.2.7):
     - razorpay-pod
     - React
+  - react-native-safe-area-context (3.3.2):
+    - React-Core
   - react-native-viewpager (5.0.12):
     - React-Core
   - React-RCTActionSheet (0.63.4):
@@ -291,6 +293,8 @@ PODS:
     - React-cxxreact (= 0.63.4)
     - React-jsi (= 0.63.4)
   - RNCAsyncStorage (1.15.7):
+    - React-Core
+  - RNCPicker (1.8.1):
     - React-Core
   - RNGestureHandler (1.10.3):
     - React-Core
@@ -369,6 +373,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-razorpay (from `../node_modules/react-native-razorpay`)
+  - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-viewpager (from `../node_modules/react-native-pager-view`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -381,6 +386,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCPicker (from `../node_modules/@react-native-community/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -453,6 +459,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-razorpay:
     :path: "../node_modules/react-native-razorpay"
+  react-native-safe-area-context:
+    :path: "../node_modules/react-native-safe-area-context"
   react-native-viewpager:
     :path: "../node_modules/react-native-pager-view"
   React-RCTActionSheet:
@@ -477,6 +485,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCPicker:
+    :path: "../node_modules/@react-native-community/picker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNReanimated:
@@ -527,6 +537,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-razorpay: b51c7aafa78ef6d9a702a052cdf47a20148381c2
+  react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-viewpager: 98a850d1c7ac6263122d82618a77062a5f427073
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
@@ -539,6 +550,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
   RNCAsyncStorage: 7102fe8985f889579a3ae148d957bbb3f308122b
+  RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNReanimated: d9da990fc90123f4ffbfdda93d00fc15174863a8
   RNScreens: eb0dfb2d6b21d2d7f980ad46b14eb306d2f1062e

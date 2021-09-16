@@ -11,7 +11,6 @@ class BottomTabBar extends Component {
 
  render() {
       return (
-        <NavigationContainer>
         <Tab.Navigator 
         screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
@@ -40,7 +39,6 @@ class BottomTabBar extends Component {
           <Tab.Screen name="Sales Bill" options={{headerShown: false}} component={NewSale} />
           <Tab.Screen name="Settings" options={{headerShown: false}} component={NewSale} />
         </Tab.Navigator>
-        </NavigationContainer>
       );
   }
 }

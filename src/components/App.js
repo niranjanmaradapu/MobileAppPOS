@@ -1,14 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import SplashScreen from './SplashScreen';
-import Login from './Login';
-import NewSale from './NewSale';
-import BottomBar from './BottomTabBar';
-import { StyleSheet, Text, View } from 'react-native';
+import { AppRegistry, StyleSheet, Text, View } from 'react-native';
 import * as Font from 'expo-font';
-import { AppLoading } from 'expo';
-
-
+import AppRoute from '../Navigation/AppRoute';
 export default class App extends React.Component {
   async componentDidMount() {
      Font.loadAsync({
@@ -16,25 +11,13 @@ export default class App extends React.Component {
     regular: require("./assets/fonts/Metropolis-Regular.otf"),
     semibold: require("./assets/fonts/Metropolis-SemiBold.otf"),
     });
+  }
 
-    setTimeout(() => {
-      this.setState({
-          view: <NewSale />
-      })      
-}, 2500)
-    };
 
-  constructor(props) {
-      super(props);
-      console.log("vinod")
-      this.state = ({
-          view: <SplashScreen />
-      })
-    }
 
 render() {
     return (
-        this.state.view
+      <AppRoute />
     )
 }
 }

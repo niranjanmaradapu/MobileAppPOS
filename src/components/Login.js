@@ -5,7 +5,6 @@ var deviceheight = Dimensions.get('window').height;
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import NewSale from './NewSale';
-import SignUp from './SignUp';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack'
 import LoginService from './services/LoginService';
@@ -35,7 +34,7 @@ const data = [
   ];
 
 
-class Login extends Component {
+export default class Login extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -108,6 +107,7 @@ class Login extends Component {
     
     
     login(){
+        
         if (this.state.userName.length === 0) {
             alert('You must enter a Usename');
         } else if (this.state.password.length === 0) {
@@ -136,7 +136,6 @@ class Login extends Component {
                 }).catch(() => {
                     console.log('there is error saving token')
                 })
-
                 // const role = AsyncStorage.getItem("user").then ((value) => {
                 //     if(role["cognito:groups"][0] === "super_admin") {
                 //        // this.getModel();
@@ -145,7 +144,7 @@ class Login extends Component {
                     
                 //     }
                 this.setState({ loading: false })
-                    this.props.navigation.navigate('BottomBar')
+                this.props.navigation.navigate('HomeNavigation')
                 // }).catch(() => {
                 //     console.log('there is error getting token')
                 // })
@@ -167,7 +166,8 @@ class Login extends Component {
 
     
     signUpButtonClicked() {
-        this.props.navigation.navigate('SignUp')
+        //this.props.navigation.push('LoginAndSignUp', { screen: 'SignUp' });
+        this.props.navigation.navigate('SignUp');
     }
 
     async  componentDidMount() {
@@ -320,40 +320,6 @@ class Login extends Component {
                     </View>
             </KeyboardAwareScrollView>
         )
-    }
-}
-
-
-
-
-const AppNavigator = createStackNavigator(
-    {
-        Login: Login,
-        NewSale: NewSale,
-        SignUp:SignUp,
-        BottomBar:BottomBar,
-        // Routes: Routes,
-        // LeftSideBar: LeftSideBar,
-    },
-    {
-        headerMode: 'none',
-        // navigationOptions: {
-        //     header: null,
-        // },
-    }
-);
-
-const AppContainer = createAppContainer(AppNavigator);
-export default class Logsin extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    TestFunction() {
-        alert('move to next page')
-    }
-
-    render() {
-        return <AppContainer />;
     }
 }
 
