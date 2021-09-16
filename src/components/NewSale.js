@@ -12,7 +12,7 @@ import Constants from 'expo-constants';
 import Modal from "react-native-modal";
 import CreateCustomerService from './services/CreateCustomerService';
 import axios from 'axios';
-//import RazorpayCheckout from 'react-native-razorpay-expokit';
+import RazorpayCheckout from 'react-native-razorpay';
 import NewSaleService from './services/NewSaleService';
 
 
@@ -151,14 +151,14 @@ pay=()=>{
         theme: {color: '#F37254'}
       }
       console.log(options)
-      // RazorpayCheckout.open(options).then((data) => {
-      //    // handle success
-      //   alert(`Success: ${data.razorpay_payment_id}`);
-      //  }).catch((error) => {
-      //    console.log(error)
-      //    // handle failure
-      //    alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
-      //  });
+      RazorpayCheckout.open(options).then((data) => {
+         // handle success
+        alert(`Success: ${data.razorpay_payment_id}`);
+       }).catch((error) => {
+         console.log(error)
+         // handle failure
+         alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
+       });
    }
    )
   

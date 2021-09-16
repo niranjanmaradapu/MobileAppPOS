@@ -19,7 +19,7 @@ export default class App extends React.Component {
 
     setTimeout(() => {
       this.setState({
-          view: <Login />
+          view: <NewSale />
       })      
 }, 2500)
     };
