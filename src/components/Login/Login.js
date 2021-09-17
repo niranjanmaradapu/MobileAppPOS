@@ -4,17 +4,14 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 var deviceheight = Dimensions.get('window').height;
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import NewSale from './NewSale';
-import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack'
-import LoginService from './services/LoginService';
+import LoginService from '../services/LoginService';
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StatusBar } from 'expo-status-bar';
-import Loader from './loader';
+import Loader from '../loader';
 var deviceheight = Dimensions.get('window').height;
-import BottomBar from './BottomTabBar';
+
+
 // import Routes from "./routes";
 // import LeftSideBar from "./leftsidebar";
 
@@ -104,10 +101,10 @@ export default class Login extends Component {
     handleStore = (value) => {
         this.setState({ store: value });
     }
-    
-    
+
+
     login(){
-        
+        this.props.navigation.navigate('HomeNavigation')
         if (this.state.userName.length === 0) {
             alert('You must enter a Usename');
         } else if (this.state.password.length === 0) {
@@ -144,7 +141,7 @@ export default class Login extends Component {
                     
                 //     }
                 this.setState({ loading: false })
-                this.props.navigation.navigate('HomeNavigation')
+                
                 // }).catch(() => {
                 //     console.log('there is error getting token')
                 // })
@@ -208,7 +205,7 @@ export default class Login extends Component {
                 <SafeAreaView style={{ flex: 1}}>
                         <View style={styles.container}>
                         <View style={{ flex: 1, marginTop: '5%',backgroundColor:'#FFFFFF'}}>
-                            <Image source={require('./assets/images/logo.png')} style={styles.logoImage} />
+                            <Image source={require('../assets/images/logo.png')} style={styles.logoImage} />
                        
                             {/* <Text></Text> */}
                             <Text style={styles.signInText}> Welcome </Text>

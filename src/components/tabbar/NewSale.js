@@ -2,7 +2,7 @@ import React, { Component ,useState} from 'react'
 import {View, Image, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview,SafeAreaView, ScrollView,TouchableHighlight} from 'react-native';
 //import Menu from './Menu';
 //import Login from './Logsin';
-const image = require('./assets/images/menu.png');
+
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 var deviceWidth = Dimensions.get('window').width;
@@ -10,10 +10,12 @@ import { Table, Row, Rows } from 'react-native-table-component';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import Constants from 'expo-constants';
 import Modal from "react-native-modal";
-import CreateCustomerService from './services/CreateCustomerService';
+import CreateCustomerService from '../services/CreateCustomerService';
 import axios from 'axios';
 import RazorpayCheckout from 'react-native-razorpay';
-import NewSaleService from './services/NewSaleService';
+import NewSaleService from '../services/NewSaleService';
+import { DrawerActions } from '@react-navigation/native';
+
 
 
 class NewSale extends Component {
@@ -164,7 +166,9 @@ pay=()=>{
   
   
 }
-
+menuAction() {
+  this.props.navigation.dispatch(DrawerActions.openDrawer())
+}
 
     topbarAction1() {
       this.setState({ flagone: true })
@@ -212,12 +216,14 @@ topbarAction4() {
                  <SafeAreaView style={styles.safeArea}>
                  <View style={styles.viewswidth}>
                <Text style={styles.signUptext}> Home </Text>
-               <Image source={require('./assets/images/menu.png')} style={{position: 'absolute',
+               <TouchableOpacity style={{position: 'absolute',
                 left: 20,
                 top:50,
                 width:20,
-                height:20,}}/>
-                 <Image source={require('./assets/images/filter.png')} style={{position: 'absolute',
+                height:20,}} onPress={() => this.menuAction()}>
+               <Image source={require('../assets/images/menu.png')} />
+                </TouchableOpacity>
+                 <Image source={require('../assets/images/filter.png')} style={{position: 'absolute',
                 right: 20,
                 top:50,
                 width:20,
@@ -249,7 +255,7 @@ topbarAction4() {
       fontSize: 14,}}> NEW SALE </Text> 
 
 
-<Image source={this.state.flagone ? require('./assets/images/topSelect.png') : null}  style={{
+<Image source={this.state.flagone ? require('../assets/images/topSelect.png') : null}  style={{
                 left: 30,marginTop:5,
                 }}/>
                
@@ -275,7 +281,7 @@ topbarAction4() {
       marginTop:10,
       fontFamily: "regular",
       fontSize: 14,textAlign:'center',width:100,}}> ADD CUSTOMER </Text> 
-      <Image source={this.state.flagtwo ? require('./assets/images/topSelect.png') : null}  style={{
+      <Image source={this.state.flagtwo ? require('../assets/images/topSelect.png') : null}  style={{
                 left: 30,marginTop:5,
                 }}/>
       </View>
@@ -301,7 +307,7 @@ topbarAction4() {
       marginTop:10,
       fontFamily: "regular",
       fontSize: 14,textAlign:'center',width:100,}}> FIND ITEM  </Text> 
-      <Image source={this.state.flagthree ? require('./assets/images/topSelect.png') : null}  style={{
+      <Image source={this.state.flagthree ? require('../assets/images/topSelect.png') : null}  style={{
                 left: 30,marginTop:5,
                 }}/>
       </View>
@@ -327,7 +333,7 @@ topbarAction4() {
       marginTop:10,
       fontFamily: "regular",
       fontSize: 14,textAlign:'center',width:100,}}> PAYMENT DETAILS  </Text> 
-      <Image source={this.state.flagfour ? require('./assets/images/topSelect.png') : null}  style={{
+      <Image source={this.state.flagfour ? require('../assets/images/topSelect.png') : null}  style={{
                 left: 30,marginTop:5,
                 }}/>
       </View>
@@ -344,10 +350,10 @@ topbarAction4() {
                                 onChangeText={this.handleEmail}
                                 value={this.state.userName} 
                                 ref={inputemail => { this.emailValueInput = inputemail }} />
-                               <Image source={require('./assets/images/search.png')} style={{  position: 'absolute',
+                               <Image source={require('../assets/images/search.png')} style={{  position: 'absolute',
                 left: 35,
                 top:35}}/>      
-                                  <Image source={require('./assets/images/filter.png')} style={{  position: 'absolute',
+                                  <Image source={require('../assets/images/filter.png')} style={{  position: 'absolute',
                 right: 10,
                 top:20,
                 width:50,
@@ -368,7 +374,7 @@ topbarAction4() {
                                 onChangeText={this.handleEmail}
                                 ref={inputemail => { this.emailValueInput = inputemail }} />
                  
-                                 <Image source={require('./assets/images/barcode.png')} style={{  position: 'absolute',
+                                 <Image source={require('../assets/images/barcode.png')} style={{  position: 'absolute',
                 right: 20,
                 top:25}}/>
           

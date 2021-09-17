@@ -1,7 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
+
 import React from 'react';
-import SplashScreen from './SplashScreen';
-import { AppRegistry, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet} from 'react-native';
 import * as Font from 'expo-font';
 import AppRoute from '../Navigation/AppRoute';
 export default class App extends React.Component {
