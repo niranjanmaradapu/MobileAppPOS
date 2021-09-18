@@ -48,6 +48,7 @@ export default class App extends React.Component {
             ["BAR1", "Dress", 3, 1230, 400, 830, 5218, "2021-09-01T18:52:42.212074", "2021-09-01T18:53:04.270367"],
             (sqlTxn, res) => {
               console.log(`added successfully`);
+              getProducts()
             },
             error => {
               console.log("error on adding category " + error.message);
@@ -59,32 +60,32 @@ export default class App extends React.Component {
       
 
       
-    // const getProducts = () => {
-    //   db.transaction(txn => {
-    //     txn.executeSql(
-    //       `SELECT * FROM tbl_item`,
-    //       [],
-    //       (sqlTxn, res) => {
+    const getProducts = () => {
+      db.transaction(txn => {
+        txn.executeSql(
+          `SELECT * FROM tbl_item`,
+          [],
+          (sqlTxn, res) => {
 
-    //         let len = res.rows.length;
+            let len = res.rows.length;
 
-    //         if (len > 0) {
-    //           let results = [];
-    //           for (let i = 0; i < len; i++) {
-    //             let item = res.rows.item(i);
-    //             results.push({ item });
-    //           }
-    //           console.log(JSON.stringify(results));
+            if (len > 0) {
+              let results = [];
+              for (let i = 0; i < len; i++) {
+                let item = res.rows.item(i);
+                results.push({ item });
+              }
+              console.log(JSON.stringify(results));
 
-    //           setCategories(results);
-    //         }
-    //       },
-    //       error => {
-    //         console.log("error on getting categories " + error.message);
-    //       },
-    //     );
-    //   });
-    // };
+              setCategories(results);
+            }
+          },
+          error => {
+            console.log("error on getting categories " + error.message);
+          },
+        );
+      });
+    };
   }
 
 

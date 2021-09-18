@@ -76,249 +76,239 @@ class NewSale extends Component {
           if (len > 0) {
             for (let i = 0; i < len; i++) {
               let item = res.rows.item(i)
-              let sno =  String(this.state.tableData.length+1)
+              let sno = String(this.state.tableData.length + 1)
               let barcode = item["barcode"]
               let itemDesc = item["itemDesc"]
               let netAmount = String(item["netAmount"])
               let qty = String(item["qty"])
               let totalAmount = String(item["netAmount"])
               console.log(JSON.stringify(barcode))
-          this.state.tableData.push([sno,barcode,itemDesc,netAmount,qty,totalAmount])
-        }
-      }
+              this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, totalAmount])
+            }
+          }
           console.log(JSON.stringify(this.state.tableData))
-    },
-      error => {
-        console.log("error on search category " + error.message);
-      },
-    );
-  });
-}
-
-modelCancel() {
-  this.setState({ modalVisible: false });
-}
-
-handleMobileNumber = (text) => {
-  this.setState({ mobileNumber: text })
-}
-handleAltNumber = (text) => {
-  this.setState({ altMobileNo: text })
-}
-handlename = (value) => {
-  this.setState({ name: value });
-}
-
-handleGender = (text) => {
-  this.setState({ gender: text })
-}
-handleGstnumber = (text) => {
-  this.setState({ gstNumber: text })
-}
-handledob = (value) => {
-  this.setState({ dob: value });
-}
-
-handleaddress = (value) => {
-  this.setState({ address: value });
-}
-
-handleBarCode = (text) => {
-  this.setState({ barcodeId: text })
-  this.componentDidMount()
-}
-
-
-modelCreate() {
-  const params = {
-    "mobileNumber": this.state.mobileNumber,
-    "altMobileNo": this.state.altMobileNo,
-    "name": this.state.name,
-    "gender": 'Male',
-    "gstNumber": this.state.gstNumber,
-    "dob": "2021-06-21T18:30:00.000Z",
-    "anniversary": "1",
-    "address": this.state.address,
-  }
-  console.log('obj' + JSON.stringify(params))
-  console.log(CreateCustomerService.createCustomer())
-  axios.post(CreateCustomerService.createCustomer(), params).then((res) => {
-    console.log(res)
-    if (res.data.statusCode === "OK") {
-      this.setState({ modalVisible: false });
-      // toast.success(res.data.body);
-      this.setState({
-        mobileNumber: "",
-        altMobileNo: "",
-        name: "",
-        gender: "Male",
-        gstNumber: "",
-        dob: "",
-        anniversary: "",
-        address: ""
-      })
-
-    }
-    else {
-
-    }
-  });
-}
-
-pay = () => {
-  console.log(URL);
-  const params = {
-    "amount": "50",
-    "info": "order_request"
-  }
-  axios.post(NewSaleService.payment(), params).then((res) => {
-    // this.setState({isPayment: false});
-    const data = res.data
-    var options = {
-      description: 'Transaction',
-      image: 'https://i.imgur.com/3g7nmJC.png',
-      currency: data.currency,
-      order_id: data.id,
-      key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
-      amount: data.amount,
-      name: 'OTSI',
-      prefill: {
-        name: "Kadali",
-        email: "kadali@gmail.com",
-        contact: "9999999999",
-      },
-      theme: { color: '#F37254' }
-    }
-    console.log(options)
-    RazorpayCheckout.open(options).then((data) => {
-      // handle success
-      alert(`Success: ${data.razorpay_payment_id}`);
-    }).catch((error) => {
-      console.log(error)
-      // handle failure
-      alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
+        },
+        error => {
+          console.log("error on search category " + error.message);
+        },
+      );
     });
   }
-  )
+
+  modelCancel() {
+    this.setState({ modalVisible: false });
+  }
+
+  handleMobileNumber = (text) => {
+    this.setState({ mobileNumber: text })
+  }
+  handleAltNumber = (text) => {
+    this.setState({ altMobileNo: text })
+  }
+  handlename = (value) => {
+    this.setState({ name: value });
+  }
+
+  handleGender = (text) => {
+    this.setState({ gender: text })
+  }
+  handleGstnumber = (text) => {
+    this.setState({ gstNumber: text })
+  }
+  handledob = (value) => {
+    this.setState({ dob: value });
+  }
+
+  handleaddress = (value) => {
+    this.setState({ address: value });
+  }
+
+  handleBarCode = (text) => {
+    this.setState({ barcodeId: text })
+    this.componentDidMount()
+  }
 
 
-}
-menuAction() {
-  this.props.navigation.dispatch(DrawerActions.openDrawer())
-}
+  modelCreate() {
+    const params = {
+      "mobileNumber": this.state.mobileNumber,
+      "altMobileNo": this.state.altMobileNo,
+      "name": this.state.name,
+      "gender": 'Male',
+      "gstNumber": this.state.gstNumber,
+      "dob": "2021-06-21T18:30:00.000Z",
+      "anniversary": "1",
+      "address": this.state.address,
+    }
+    console.log('obj' + JSON.stringify(params))
+    console.log(CreateCustomerService.createCustomer())
+    axios.post(CreateCustomerService.createCustomer(), params).then((res) => {
+      console.log(res)
+      if (res.data.statusCode === "OK") {
+        this.setState({ modalVisible: false });
+        // toast.success(res.data.body);
+        this.setState({
+          mobileNumber: "",
+          altMobileNo: "",
+          name: "",
+          gender: "Male",
+          gstNumber: "",
+          dob: "",
+          anniversary: "",
+          address: ""
+        })
 
-topbarAction1() {
-  this.setState({ flagone: true })
-  this.setState({ flagtwo: false })
-  this.setState({ flagthree: false })
-  this.setState({ flagfour: false })
-}
+      }
+      else {
+
+      }
+    });
+  }
+
+  pay = () => {
+    console.log(URL);
+    const params = {
+      "amount": "50",
+      "info": "order_request"
+    }
+    axios.post(NewSaleService.payment(), params).then((res) => {
+      // this.setState({isPayment: false});
+      const data = res.data
+      var options = {
+        description: 'Transaction',
+        image: 'https://i.imgur.com/3g7nmJC.png',
+        currency: data.currency,
+        order_id: data.id,
+        key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
+        amount: data.amount,
+        name: 'OTSI',
+        prefill: {
+          name: "Kadali",
+          email: "kadali@gmail.com",
+          contact: "9999999999",
+        },
+        theme: { color: '#F37254' }
+      }
+      console.log(options)
+      RazorpayCheckout.open(options).then((data) => {
+        // handle success
+        alert(`Success: ${data.razorpay_payment_id}`);
+      }).catch((error) => {
+        console.log(error)
+        // handle failure
+        alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
+      });
+    }
+    )
 
 
-topbarAction2() {
-  this.setState({ modalVisible: true });
-  this.setState({ flagone: false })
-  this.setState({ flagtwo: true })
-  this.setState({ flagthree: false })
-  this.setState({ flagfour: false })
-}
+  }
+  menuAction() {
+    this.props.navigation.dispatch(DrawerActions.openDrawer())
+  }
+
+  topbarAction1() {
+    this.setState({ flagone: true })
+    this.setState({ flagtwo: false })
+    this.setState({ flagthree: false })
+    this.setState({ flagfour: false })
+  }
 
 
-topbarAction3() {
-  this.setState({ flagone: false })
-  this.setState({ flagtwo: false })
-  this.setState({ flagthree: true })
-  this.setState({ flagfour: false })
-}
+  topbarAction2() {
+    this.setState({ modalVisible: true });
+    this.setState({ flagone: false })
+    this.setState({ flagtwo: true })
+    this.setState({ flagthree: false })
+    this.setState({ flagfour: false })
+  }
 
 
-topbarAction4() {
-  this.setState({ flagone: false })
-  this.setState({ flagtwo: false })
-  this.setState({ flagthree: false })
-  this.setState({ flagfour: true })
-}
+  topbarAction3() {
+    this.setState({ flagone: false })
+    this.setState({ flagtwo: false })
+    this.setState({ flagthree: true })
+    this.setState({ flagfour: false })
+  }
 
-render() {
-  console.log(this.state.flagone)
-  AsyncStorage.getItem("tokenkey").then((value) => {
-    console.log(value)
-  }).catch(() => {
-    console.log('there is error getting token')
-  })
-  const state = this.state;
-  return (
-    <ScrollView>
-      <View style={styles.container}>
-        <SafeAreaView style={styles.safeArea}>
-          <View style={styles.viewswidth}>
-            <Text style={styles.signUptext}> Home </Text>
-            <TouchableOpacity style={{
-              position: 'absolute',
-              left: 20,
-              top: 50,
-              width: 20,
-              height: 20,
-            }} onPress={() => this.menuAction()}>
-              <Image source={require('../assets/images/menu.png')} />
-            </TouchableOpacity>
-            <Image source={require('../assets/images/filter.png')} style={{
-              position: 'absolute',
-              right: 20,
-              top: 50,
-              width: 20,
-              height: 20,
-            }} />
-          </View>
 
-          <View style={styles.Topcontainer}>
-            <TouchableOpacity style={{
-              backgroundColor: this.state.flagone ? "#1CA2FF" : "#0196FD",
-              alignSelf: "flex-start",
-              //marginHorizontal: "1%",
-              marginBottom: 6,
-              width: "25%",
-              height: 50,
-              textAlign: "center",
-            }}
-              onPress={() => this.topbarAction1()} >
-              <View style={{
+  topbarAction4() {
+    this.setState({ flagone: false })
+    this.setState({ flagtwo: false })
+    this.setState({ flagthree: false })
+    this.setState({ flagfour: true })
+  }
+
+  render() {
+    console.log(this.state.flagone)
+    AsyncStorage.getItem("tokenkey").then((value) => {
+      console.log(value)
+    }).catch(() => {
+      console.log('there is error getting token')
+    })
+    const state = this.state;
+    return (
+      <ScrollView>
+        <View style={styles.container}>
+          <SafeAreaView style={styles.safeArea}>
+            <View style={styles.viewswidth}>
+              <Text style={styles.signUptext}> Home </Text>
+              <TouchableOpacity style={{
+                position: 'absolute',
+                left: 20,
+                top: 50,
+                width: 20,
+                height: 20,
+              }} onPress={() => this.menuAction()}>
+                <Image source={require('../assets/images/menu.png')} />
+              </TouchableOpacity>
+              <Image source={require('../assets/images/filter.png')} style={{
+                position: 'absolute',
+                right: 20,
+                top: 50,
+                width: 20,
+                height: 20,
+              }} />
+            </View>
+
+            <View style={styles.Topcontainer}>
+              <TouchableOpacity style={{
                 backgroundColor: this.state.flagone ? "#1CA2FF" : "#0196FD",
                 alignSelf: "flex-start",
                 //marginHorizontal: "1%",
                 marginBottom: 6,
                 width: "25%",
                 height: 50,
-                textAlign: "center"
-              }}>
+                textAlign: "center",
+              }}
+                onPress={() => this.topbarAction1()} >
+                <View style={{
+                  backgroundColor: this.state.flagone ? "#1CA2FF" : "#0196FD",
+                  alignSelf: "flex-start",
+                  //marginHorizontal: "1%",
+                  marginBottom: 6,
+                  width: "25%",
+                  height: 50,
+                  textAlign: "center"
+                }}>
 
 
 
-                <Text style={{
-                  color: this.state.flagone ? "#FFFFFF" : "#BBE3FF",
-                  marginTop: 10,
-                  fontFamily: "regular", textAlign: 'center', width: 100,
-                  fontSize: 14,
-                }}> NEW SALE </Text>
+                  <Text style={{
+                    color: this.state.flagone ? "#FFFFFF" : "#BBE3FF",
+                    marginTop: 10,
+                    fontFamily: "regular", textAlign: 'center', width: 100,
+                    fontSize: 14,
+                  }}> NEW SALE </Text>
 
 
-                <Image source={this.state.flagone ? require('../assets/images/topSelect.png') : null} style={{
-                  left: 30, marginTop: 5,
-                }} />
+                  <Image source={this.state.flagone ? require('../assets/images/topSelect.png') : null} style={{
+                    left: 30, marginTop: 5,
+                  }} />
 
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={{
-              backgroundColor: this.state.flagtwo ? "#1CA2FF" : "#0196FD",
-              alignSelf: "flex-start",
-              //marginHorizontal: "1%",
-              marginBottom: 6,
-              width: "25%",
-              height: 50,
-              textAlign: "center",
-            }}
-              onPress={() => this.topbarAction2()} >
-              <View style={{
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={{
                 backgroundColor: this.state.flagtwo ? "#1CA2FF" : "#0196FD",
                 alignSelf: "flex-start",
                 //marginHorizontal: "1%",
@@ -326,31 +316,31 @@ render() {
                 width: "25%",
                 height: 50,
                 textAlign: "center",
-              }}>
+              }}
+                onPress={() => this.topbarAction2()} >
+                <View style={{
+                  backgroundColor: this.state.flagtwo ? "#1CA2FF" : "#0196FD",
+                  alignSelf: "flex-start",
+                  //marginHorizontal: "1%",
+                  marginBottom: 6,
+                  width: "25%",
+                  height: 50,
+                  textAlign: "center",
+                }}>
 
-                <Text style={{
-                  color: this.state.flagtwo ? "#FFFFFF" : "#BBE3FF",
-                  marginTop: 10,
-                  fontFamily: "regular",
-                  fontSize: 14, textAlign: 'center', width: 100,
-                }}> ADD CUSTOMER </Text>
-                <Image source={this.state.flagtwo ? require('../assets/images/topSelect.png') : null} style={{
-                  left: 30, marginTop: 5,
-                }} />
-              </View>
-            </TouchableOpacity>
+                  <Text style={{
+                    color: this.state.flagtwo ? "#FFFFFF" : "#BBE3FF",
+                    marginTop: 10,
+                    fontFamily: "regular",
+                    fontSize: 14, textAlign: 'center', width: 100,
+                  }}> ADD CUSTOMER </Text>
+                  <Image source={this.state.flagtwo ? require('../assets/images/topSelect.png') : null} style={{
+                    left: 30, marginTop: 5,
+                  }} />
+                </View>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={{
-              backgroundColor: this.state.flagthree ? "#1CA2FF" : "#0196FD",
-              alignSelf: "flex-start",
-              //marginHorizontal: "1%",
-              marginBottom: 6,
-              width: "25%",
-              height: 50,
-              textAlign: "center",
-            }}
-              onPress={() => this.topbarAction3()} >
-              <View style={{
+              <TouchableOpacity style={{
                 backgroundColor: this.state.flagthree ? "#1CA2FF" : "#0196FD",
                 alignSelf: "flex-start",
                 //marginHorizontal: "1%",
@@ -358,31 +348,31 @@ render() {
                 width: "25%",
                 height: 50,
                 textAlign: "center",
-              }}>
+              }}
+                onPress={() => this.topbarAction3()} >
+                <View style={{
+                  backgroundColor: this.state.flagthree ? "#1CA2FF" : "#0196FD",
+                  alignSelf: "flex-start",
+                  //marginHorizontal: "1%",
+                  marginBottom: 6,
+                  width: "25%",
+                  height: 50,
+                  textAlign: "center",
+                }}>
 
-                <Text style={{
-                  color: this.state.flagthree ? "#FFFFFF" : "#BBE3FF",
-                  marginTop: 10,
-                  fontFamily: "regular",
-                  fontSize: 14, textAlign: 'center', width: 100,
-                }}> FIND ITEM  </Text>
-                <Image source={this.state.flagthree ? require('../assets/images/topSelect.png') : null} style={{
-                  left: 30, marginTop: 5,
-                }} />
-              </View>
-            </TouchableOpacity>
+                  <Text style={{
+                    color: this.state.flagthree ? "#FFFFFF" : "#BBE3FF",
+                    marginTop: 10,
+                    fontFamily: "regular",
+                    fontSize: 14, textAlign: 'center', width: 100,
+                  }}> FIND ITEM  </Text>
+                  <Image source={this.state.flagthree ? require('../assets/images/topSelect.png') : null} style={{
+                    left: 30, marginTop: 5,
+                  }} />
+                </View>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={{
-              backgroundColor: this.state.flagfour ? "#1CA2FF" : "#0196FD",
-              alignSelf: "flex-start",
-              //marginHorizontal: "1%",
-              marginBottom: 6,
-              width: "25%",
-              height: 50,
-              textAlign: "center",
-            }}
-              onPress={() => this.topbarAction4()} >
-              <View style={{
+              <TouchableOpacity style={{
                 backgroundColor: this.state.flagfour ? "#1CA2FF" : "#0196FD",
                 alignSelf: "flex-start",
                 //marginHorizontal: "1%",
@@ -390,211 +380,221 @@ render() {
                 width: "25%",
                 height: 50,
                 textAlign: "center",
-              }}>
-
-                <Text style={{
-                  color: this.state.flagfour ? "#FFFFFF" : "#BBE3FF",
-                  marginTop: 10,
-                  fontFamily: "regular",
-                  fontSize: 14, textAlign: 'center', width: 100,
-                }}> PAYMENT DETAILS  </Text>
-                <Image source={this.state.flagfour ? require('../assets/images/topSelect.png') : null} style={{
-                  left: 30, marginTop: 5,
-                }} />
-              </View>
-            </TouchableOpacity>
-          </View>
-          {this.state.flagthree && (
-            <View style={{ flex: 1 }}>
-              <TextInput style={styles.findIteminput}
-                underlineColorAndroid="transparent"
-                placeholder="       Find Item"
-                placeholderTextColor="#0196FD"
-                // textAlignVertical="center"
-                autoCapitalize="none"
-                onChangeText={this.handleEmail}
-                value={this.state.userName}
-                ref={inputemail => { this.emailValueInput = inputemail }} />
-              <Image source={require('../assets/images/search.png')} style={{
-                position: 'absolute',
-                left: 35,
-                top: 35
-              }} />
-              <Image source={require('../assets/images/filter.png')} style={{
-                position: 'absolute',
-                right: 10,
-                top: 20,
-                width: 50,
-                height: 50,
-                borderBottomRightRadius: 10,
-                borderTopRightRadius: 10,
-                backgroundColor: "#0196FD",
-              }} resizeMode={'center'} />
-            </View>
-          )}
-          {this.state.flagone && (
-            <View style={{ flex: 1 }}>
-              <TextInput style={styles.input}
-                underlineColorAndroid="transparent"
-                placeholder="  SCan Barcode"
-                placeholderTextColor="#8F9EB7"
-                textAlignVertical="center"
-                autoCapitalize="none"
-                onChangeText={this.handleBarCode}
-                ref={inputemail => { this.emailValueInput = inputemail }} />
-
-              <Image source={require('../assets/images/barcode.png')} style={{
-                position: 'absolute',
-                right: 20,
-                top: 25
-              }} />
-
-            </View>
-          )}
-
-
-          {this.state.flagone && (
-            <View style={styles.tablecontainer}>
-              <Text style={styles.saleBillsText}> List Of Sale Items </Text>
-              <Table borderStyle={{ borderWidth: 2, borderColor: '#FFFFFF', backgroundColor: "#FAFAFF" }}>
-                <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
-                <Rows data={this.state.tableData} style={styles.head} textStyle={styles.textData} />
-              </Table>
-
-            </View>
-          )}
-
-          {this.state.flagfour && (
-            <TouchableOpacity
-              style={styles.signInButton}
-              onPress={() => this.pay()} >
-              <Text style={styles.signInButtonText}> PAY </Text>
-            </TouchableOpacity>
-          )}
-
-          {this.state.flagtwo && (
-            <View>
-              <Modal isVisible={this.state.modalVisible}>
+              }}
+                onPress={() => this.topbarAction4()} >
                 <View style={{
-                  flex: 1, justifyContent: 'center', //Centered horizontally
-                  alignItems: 'center',
+                  backgroundColor: this.state.flagfour ? "#1CA2FF" : "#0196FD",
+                  alignSelf: "flex-start",
+                  //marginHorizontal: "1%",
+                  marginBottom: 6,
+                  width: "25%",
+                  height: 50,
+                  textAlign: "center",
                 }}>
-                  <View style={{ flexDirection: 'column', flex: 0, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", borderRadius: 20, }}>
-                    <Text style={{
-                      color: "#0196FD", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                      fontSize: 12,
-                    }}>Customer Details</Text>
-                    <Text style={styles.signInFieldStyle}> Mobile Number* </Text>
-                    <TextInput style={styles.input}
-                      underlineColorAndroid="transparent"
-                      placeholder=""
-                      placeholderTextColor="#0F2851"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      onChangeText={this.handleMobileNumber}
-                      ref={inputemail => { this.emailValueInput = inputemail }} />
 
-                    <Text style={styles.signInFieldStyle}> Alternative Mobile Number </Text>
-                    <TextInput style={styles.input}
-                      underlineColorAndroid="transparent"
-                      placeholder=""
-                      placeholderTextColor="#0F2851"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      onChangeText={this.handleAltNumber}
-                      ref={inputemail => { this.emailValueInput = inputemail }} />
+                  <Text style={{
+                    color: this.state.flagfour ? "#FFFFFF" : "#BBE3FF",
+                    marginTop: 10,
+                    fontFamily: "regular",
+                    fontSize: 14, textAlign: 'center', width: 100,
+                  }}> PAYMENT DETAILS  </Text>
+                  <Image source={this.state.flagfour ? require('../assets/images/topSelect.png') : null} style={{
+                    left: 30, marginTop: 5,
+                  }} />
+                </View>
+              </TouchableOpacity>
+            </View>
+            {this.state.flagthree && (
+              <View style={{ flex: 1 }}>
+                <TextInput style={styles.findIteminput}
+                  underlineColorAndroid="transparent"
+                  placeholder="       Find Item"
+                  placeholderTextColor="#0196FD"
+                  // textAlignVertical="center"
+                  autoCapitalize="none"
+                  onChangeText={this.handleEmail}
+                  value={this.state.userName}
+                  ref={inputemail => { this.emailValueInput = inputemail }} />
+                <Image source={require('../assets/images/search.png')} style={{
+                  position: 'absolute',
+                  left: 35,
+                  top: 35
+                }} />
+                <Image source={require('../assets/images/filter.png')} style={{
+                  position: 'absolute',
+                  right: 10,
+                  top: 20,
+                  width: 50,
+                  height: 50,
+                  borderBottomRightRadius: 10,
+                  borderTopRightRadius: 10,
+                  backgroundColor: "#0196FD",
+                }} resizeMode={'center'} />
+              </View>
+            )}
+            {this.state.flagone && (
+              <View style={{ flex: 1 }}>
+                <TextInput style={styles.input}
+                  underlineColorAndroid="transparent"
+                  placeholder="  SCan Barcode"
+                  placeholderTextColor="#8F9EB7"
+                  textAlignVertical="center"
+                  autoCapitalize="none"
+                  onChangeText={this.handleBarCode}
+                  ref={inputemail => { this.emailValueInput = inputemail }} />
 
-                    <Text style={styles.signInFieldStyle}> Name </Text>
-                    <TextInput style={styles.input}
-                      underlineColorAndroid="transparent"
-                      placeholder=""
-                      placeholderTextColor="#0F2851"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      onChangeText={this.handlename}
-                      ref={inputemail => { this.emailValueInput = inputemail }} />
+                <Image source={require('../assets/images/barcode.png')} style={{
+                  position: 'absolute',
+                  right: 20,
+                  top: 25
+                }} />
 
-                    <Text style={styles.signInFieldStyle}> Gender </Text>
-                    <TextInput style={styles.input}
-                      underlineColorAndroid="transparent"
-                      placeholder=""
-                      placeholderTextColor="#0F2851"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      onChangeText={this.handleGender}
-                      ref={inputemail => { this.emailValueInput = inputemail }} />
+              </View>
+            )}
 
-                    <Text style={styles.signInFieldStyle}> gst Number </Text>
-                    <TextInput style={styles.input}
-                      underlineColorAndroid="transparent"
-                      placeholder=""
-                      placeholderTextColor="#0F2851"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      onChangeText={this.handleGstnumber}
-                      ref={inputemail => { this.emailValueInput = inputemail }} />
 
-                    <Text style={styles.signInFieldStyle}> DOB </Text>
-                    <TextInput style={styles.input}
-                      underlineColorAndroid="transparent"
-                      placeholder=""
-                      placeholderTextColor="#0F2851"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      onChangeText={this.handledob}
-                      ref={inputemail => { this.emailValueInput = inputemail }} />
+            {this.state.flagone && (
+              <View style={styles.tablecontainer}>
+                <Text style={styles.saleBillsText}> List Of Sale Items </Text>
+                <Table borderStyle={{ borderWidth: 2, borderColor: '#FFFFFF', backgroundColor: "#FAFAFF" }}>
+                  <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
+                  <Rows data={this.state.tableData} style={styles.head} textStyle={styles.textData} />
+                </Table>
 
-                    <Text style={styles.signInFieldStyle}> Anniverary </Text>
-                    <TextInput style={styles.input}
-                      underlineColorAndroid="transparent"
-                      placeholder=""
-                      placeholderTextColor="#0F2851"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      onChangeText={this.handleEmail}
-                      ref={inputemail => { this.emailValueInput = inputemail }} />
+              </View>
+            )}
 
-                    <Text style={styles.signInFieldStyle}> Address </Text>
-                    <TextInput style={styles.input}
-                      underlineColorAndroid="transparent"
-                      placeholder=""
-                      placeholderTextColor="#0F2851"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      onChangeText={this.handleaddress}
-                      ref={inputemail => { this.emailValueInput = inputemail }} />
-                    <View style={styles.TopcontainerforModel}>
-                      <TouchableOpacity
-                        style={{
-                          width: "50%",
-                          height: 50, backgroundColor: "#ECF7FF", borderBottomLeftRadius: 20,
-                        }}
-                        onPress={() => this.modelCancel()} >
-                        <Text style={{
-                          textAlign: 'center', marginTop: 15, color: "#0196FD", fontSize: 15,
-                          fontFamily: "regular",
-                        }}> CANCEL </Text>
-                      </TouchableOpacity>
+            {this.state.flagfour && (
+              <TouchableOpacity
+                style={styles.signInButton}
+                onPress={() => this.pay()} >
+                <Text style={styles.signInButtonText}> PAY </Text>
+              </TouchableOpacity>
+            )}
 
-                      <TouchableOpacity
-                        style={{
-                          width: "50%",
-                          height: 50, backgroundColor: "#0196FD", borderBottomRightRadius: 20,
-                        }}
-                        onPress={() => this.modelCreate()} >
-                        <Text style={{
-                          textAlign: 'center', marginTop: 15, color: "#ffffff", fontSize: 15,
-                          fontFamily: "regular",
-                        }}> CREATE </Text>
-                      </TouchableOpacity>
+            {this.state.flagtwo && (
+              <View>
+                <Modal isVisible={this.state.modalVisible}>
+                  <View style={{
+                    flex: 1, justifyContent: 'center', //Centered horizontally
+                    alignItems: 'center',
+                  }}>
+                    <View style={{ flexDirection: 'column', flex: 0, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", borderRadius: 20, }}>
+                      <Text style={{
+                        color: "#0196FD", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 12,
+                      }}>Customer Details</Text>
+                      <Text style={styles.signInFieldStyle}> Mobile Number* </Text>
+                      <TextInput style={styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder=""
+                        placeholderTextColor="#0F2851"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        onChangeText={this.handleMobileNumber}
+                        ref={inputemail => { this.emailValueInput = inputemail }} />
+
+                      <Text style={styles.signInFieldStyle}> Alternative Mobile Number </Text>
+                      <TextInput style={styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder=""
+                        placeholderTextColor="#0F2851"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        onChangeText={this.handleAltNumber}
+                        ref={inputemail => { this.emailValueInput = inputemail }} />
+
+                      <Text style={styles.signInFieldStyle}> Name </Text>
+                      <TextInput style={styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder=""
+                        placeholderTextColor="#0F2851"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        onChangeText={this.handlename}
+                        ref={inputemail => { this.emailValueInput = inputemail }} />
+
+                      <Text style={styles.signInFieldStyle}> Gender </Text>
+                      <TextInput style={styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder=""
+                        placeholderTextColor="#0F2851"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        onChangeText={this.handleGender}
+                        ref={inputemail => { this.emailValueInput = inputemail }} />
+
+                      <Text style={styles.signInFieldStyle}> gst Number </Text>
+                      <TextInput style={styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder=""
+                        placeholderTextColor="#0F2851"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        onChangeText={this.handleGstnumber}
+                        ref={inputemail => { this.emailValueInput = inputemail }} />
+
+                      <Text style={styles.signInFieldStyle}> DOB </Text>
+                      <TextInput style={styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder=""
+                        placeholderTextColor="#0F2851"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        onChangeText={this.handledob}
+                        ref={inputemail => { this.emailValueInput = inputemail }} />
+
+                      <Text style={styles.signInFieldStyle}> Anniverary </Text>
+                      <TextInput style={styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder=""
+                        placeholderTextColor="#0F2851"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        onChangeText={this.handleEmail}
+                        ref={inputemail => { this.emailValueInput = inputemail }} />
+
+                      <Text style={styles.signInFieldStyle}> Address </Text>
+                      <TextInput style={styles.input}
+                        underlineColorAndroid="transparent"
+                        placeholder=""
+                        placeholderTextColor="#0F2851"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        onChangeText={this.handleaddress}
+                        ref={inputemail => { this.emailValueInput = inputemail }} />
+                      <View style={styles.TopcontainerforModel}>
+                        <TouchableOpacity
+                          style={{
+                            width: "50%",
+                            height: 50, backgroundColor: "#ECF7FF", borderBottomLeftRadius: 20,
+                          }}
+                          onPress={() => this.modelCancel()} >
+                          <Text style={{
+                            textAlign: 'center', marginTop: 15, color: "#0196FD", fontSize: 15,
+                            fontFamily: "regular",
+                          }}> CANCEL </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={{
+                            width: "50%",
+                            height: 50, backgroundColor: "#0196FD", borderBottomRightRadius: 20,
+                          }}
+                          onPress={() => this.modelCreate()} >
+                          <Text style={{
+                            textAlign: 'center', marginTop: 15, color: "#ffffff", fontSize: 15,
+                            fontFamily: "regular",
+                          }}> CREATE </Text>
+                        </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
-                </View>
-              </Modal>
-            </View>
-          )}
+                </Modal>
+              </View>
+            )}
 
-          {/* <Left>
+            {/* <Left>
                                 <Button transparent style={{ marginTop: -102, marginLeft: -162, width: 50, height: 50 }} onPress={() => this.props.navigation.openDrawer()}>
                                     <Image
                                         source={image}
@@ -603,12 +603,12 @@ render() {
                                 </Button>
                             </Left> */}
 
-        </SafeAreaView>
-        {/* <Text style={{backgroundColor: 'white'}}>New Sale Screen</Text>   */}
-      </View>
-    </ScrollView>
-  )
-}
+          </SafeAreaView>
+          {/* <Text style={{backgroundColor: 'white'}}>New Sale Screen</Text>   */}
+        </View>
+      </ScrollView>
+    )
+  }
 }
 export default NewSale
 
