@@ -5,7 +5,7 @@ import { View, Image, Animated, ImageBackground, Text, TouchableOpacity, TextInp
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 var deviceWidth = Dimensions.get('window').width;
-import { Table, Row, Rows } from 'react-native-table-component';
+import { Table, TableWrapper, Row, Cell, Rows } from 'react-native-table-component';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import Constants from 'expo-constants';
 import Modal from "react-native-modal";
@@ -15,6 +15,8 @@ import RazorpayCheckout from 'react-native-razorpay';
 import NewSaleService from '../services/NewSaleService';
 import { DrawerActions } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
+import RNPickerSelect from 'react-native-picker-select';
+import { Chevron } from 'react-native-shapes';
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 
@@ -29,6 +31,10 @@ class NewSale extends Component {
       mobileNumber: "",
       altMobileNo: "",
       name: "",
+      totalQty: 0,
+      qty: [false],
+      quantity: '',
+      totalAmount: 0,
       gender: "Male",
       gstNumber: "",
       dob: "2021-06-21T18:30:00.000Z",
@@ -56,7 +62,6 @@ class NewSale extends Component {
         // ['14', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
         // ['15', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
         // ['16', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-
       ]
     }
   }
@@ -65,10 +70,16 @@ class NewSale extends Component {
   //     this.setState({ modalVisible: visible });
   //  }
   async componentDidMount() {
+    this.barcodeDBStore()
+
+  }
+
+  barcodeDBStore = () => {
+    console.log('---------------------------------------------------');
     db.transaction(txn => {
       txn.executeSql(
         'SELECT * FROM tbl_item where item_id = ?',
-        [Number(this.state.barcodeId)],
+        [this.state.barcodeId],
         (sqlTxn, res) => {
           console.log("search category" + JSON.stringify(res.rows.length));
           let results = [];
@@ -82,11 +93,15 @@ class NewSale extends Component {
               let netAmount = String(item["netAmount"])
               let qty = String(item["qty"])
               let totalAmount = String(item["netAmount"])
-              console.log(JSON.stringify(barcode))
-              this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, totalAmount])
+              console.log(JSON.stringify(item))
+              this.state.quantity = qty
+              this.state.totalQty = this.state.totalQty + item["qty"]
+              this.state.totalAmount = this.state.totalAmount + item["netAmount"]
+              this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
             }
           }
-          console.log(JSON.stringify(this.state.tableData))
+          console.log(JSON.stringify(this.state.tableData.length))
+          console.log(JSON.stringify(totalQty))
         },
         error => {
           console.log("error on search category " + error.message);
@@ -125,7 +140,13 @@ class NewSale extends Component {
 
   handleBarCode = (text) => {
     this.setState({ barcodeId: text })
-    this.componentDidMount()
+    
+     this.barcodeDBStore()
+  }
+
+  handleQty = (text) => {
+    this.setState({ quantity: text })
+    // this.componentDidMount()
   }
 
 
@@ -166,11 +187,11 @@ class NewSale extends Component {
   }
 
   pay = () => {
-    console.log(URL);
     const params = {
-      "amount": "50",
+      "amount": this.state.totalAmount,
       "info": "order_request"
     }
+    console.log(NewSaleService.payment());
     axios.post(NewSaleService.payment(), params).then((res) => {
       // this.setState({isPayment: false});
       const data = res.data
@@ -239,6 +260,16 @@ class NewSale extends Component {
     this.setState({ flagfour: true })
   }
 
+  _alertIndex(index) {
+    //     const some_array = [...this.state.qty]
+    // some_array[index] = this.state.quantity
+    // //this.setState({some_array:some_array})
+    // //    this.state.qty[index] = this.state.quantity
+    //     this.setState({ some_array: some_array })
+    //     console.log(some_array)
+    //    // Alert.alert(`This is row ${index + 1}`);
+  }
+
   render() {
     console.log(this.state.flagone)
     AsyncStorage.getItem("tokenkey").then((value) => {
@@ -247,6 +278,45 @@ class NewSale extends Component {
       console.log('there is error getting token')
     })
     const state = this.state;
+
+    const element = (data, index) => (
+      //   // <TouchableOpacity onPress={() => this._alertIndex(index)}>
+      //   //   <View style={styles.btn}>
+      //   //     <Text style={styles.btnText}>button</Text>
+      //   //   </View>
+      //   // </TouchableOpacity>
+
+      <TextInput style={styles.btn}
+        underlineColorAndroid="transparent"
+        placeholder=""
+        placeholderTextColor="#48596B"
+        color="#48596B"
+        ref={index}
+        textAlign={'center'}
+        textAlignVertical="center"
+        value={this.state.quantity}
+        autoCapitalize="none"
+        //   onSubmitEditing={value => {
+        //     this.setState({ value })
+        //     if (value) index.current.focus(); //assumption is TextInput ref is input_2
+        //  }}
+        onChangeText={this.handleQty}
+      // value={this.state.quantity}
+      // onFocus={() => this._alertIndex(index)}
+
+      // ref={inputemail => { this.emailValueInput = inputemail }}
+      />
+    );
+
+
+    // const element = (data, index) => (
+    //   <TouchableOpacity onPress={() => this._alertIndex(index)}>
+    //     <View style={styles.btn}>
+    //       <Text style={styles.btnText}>button</Text>
+    //     </View>
+    //   </TouchableOpacity>
+    // );
+
     return (
       <ScrollView>
         <View style={styles.container}>
@@ -277,7 +347,7 @@ class NewSale extends Component {
                 alignSelf: "flex-start",
                 //marginHorizontal: "1%",
                 marginBottom: 6,
-                width: "25%",
+                width: "33.3%",
                 height: 50,
                 textAlign: "center",
               }}
@@ -287,18 +357,16 @@ class NewSale extends Component {
                   alignSelf: "flex-start",
                   //marginHorizontal: "1%",
                   marginBottom: 6,
-                  width: "25%",
+                  width: "33.3%",
                   height: 50,
-                  textAlign: "center"
                 }}>
-
-
 
                   <Text style={{
                     color: this.state.flagone ? "#FFFFFF" : "#BBE3FF",
                     marginTop: 10,
-                    fontFamily: "regular", textAlign: 'center', width: 100,
-                    fontSize: 14,
+                    fontFamily: "regular", width: 100,
+                    fontSize: 14, justifyContent: 'center',
+                    alignItems: 'center',
                   }}> NEW SALE </Text>
 
 
@@ -313,7 +381,7 @@ class NewSale extends Component {
                 alignSelf: "flex-start",
                 //marginHorizontal: "1%",
                 marginBottom: 6,
-                width: "25%",
+                width: "33.3%",
                 height: 50,
                 textAlign: "center",
               }}
@@ -323,7 +391,7 @@ class NewSale extends Component {
                   alignSelf: "flex-start",
                   //marginHorizontal: "1%",
                   marginBottom: 6,
-                  width: "25%",
+                  width: "33.3%",
                   height: 50,
                   textAlign: "center",
                 }}>
@@ -345,7 +413,7 @@ class NewSale extends Component {
                 alignSelf: "flex-start",
                 //marginHorizontal: "1%",
                 marginBottom: 6,
-                width: "25%",
+                width: "33.3%",
                 height: 50,
                 textAlign: "center",
               }}
@@ -355,7 +423,7 @@ class NewSale extends Component {
                   alignSelf: "flex-start",
                   //marginHorizontal: "1%",
                   marginBottom: 6,
-                  width: "25%",
+                  width: "33.3%",
                   height: 50,
                   textAlign: "center",
                 }}>
@@ -372,7 +440,7 @@ class NewSale extends Component {
                 </View>
               </TouchableOpacity>
 
-              <TouchableOpacity style={{
+              {/* <TouchableOpacity style={{
                 backgroundColor: this.state.flagfour ? "#1CA2FF" : "#0196FD",
                 alignSelf: "flex-start",
                 //marginHorizontal: "1%",
@@ -402,7 +470,7 @@ class NewSale extends Component {
                     left: 30, marginTop: 5,
                   }} />
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             {this.state.flagthree && (
               <View style={{ flex: 1 }}>
@@ -432,21 +500,49 @@ class NewSale extends Component {
                 }} resizeMode={'center'} />
               </View>
             )}
+            {/* {this.state.flagone && (
+<RNPickerSelect style={{color:'#001B4A',
+              fontWeight: 'bold',
+              fontSize: 16}}
+                   placeholder={{
+                       label: 'Select Qty',
+                       value: " ",
+                   }}
+                   Icon={() => {
+                       return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                   }}
+                        items={[
+                         { label: 'Kg', value: 'kg' },
+                         { label: 'Litre', value: 'litre' },
+                     ]}
+                       onValueChange={(value) => console.log(value)}
+                       style={pickerSelectStyles}
+                       value={this.state.store}
+                       useNativeAndroidPickerStyle={false}
+
+                   />
+  )} */}
             {this.state.flagone && (
+
               <View style={{ flex: 1 }}>
                 <TextInput style={styles.input}
                   underlineColorAndroid="transparent"
-                  placeholder="  SCan Barcode"
+                  placeholder="Scan Barcode"
                   placeholderTextColor="#8F9EB7"
                   textAlignVertical="center"
+                  keyboardType={'default'}
                   autoCapitalize="none"
-                  onChangeText={this.handleBarCode}
-                  ref={inputemail => { this.emailValueInput = inputemail }} />
+                  onChangeText={(text) => this.handleBarCode(text)}
+                ///  onSubmitEditing={this.barcodeDBStore}
+     
+                  // value={this.state.username}
+               //   ref={inputemail => { this.emailValueInput = inputemail }}
+                   />
 
                 <Image source={require('../assets/images/barcode.png')} style={{
                   position: 'absolute',
-                  right: 20,
-                  top: 25
+                  right: 28,
+                  top: 15,
                 }} />
 
               </View>
@@ -456,12 +552,123 @@ class NewSale extends Component {
             {this.state.flagone && (
               <View style={styles.tablecontainer}>
                 <Text style={styles.saleBillsText}> List Of Sale Items </Text>
+                {/* <TouchableOpacity style={{
+                  backgroundColor: this.state.flagfour ? "#1CA2FF" : "#0196FD",
+                  position: 'absolute',
+                  right: 5,
+                  top: 4,
+                  marginBottom: 8,
+                  width: 50,
+                  height: 25,
+                  textAlign: "center",
+                  borderRadius: 12,
+                }}
+                  onPress={() => this.pay()} > */}
+                {/* <View style={{
+                    backgroundColor: this.state.flagfour ? "#1CA2FF" : "#0196FD",
+                    position: 'absolute',
+                    right: 5,
+                    top: 4,
+                    marginBottom: 8,
+                    width: 50,
+                    height: 25,
+                    textAlign: "center",
+                    borderRadius: 12,
+                  }}> */}
+                <Text style={{
+                  color: "#FFFFFF",
+                  marginTop: 5,
+                  fontFamily: "regular",
+                  fontSize: 14, textAlign: 'center', width: 50,
+                }}> PAY </Text>
+
+                <Image source={this.state.flagfour ? require('../assets/images/topSelect.png') : null} style={{
+                  left: 30, marginTop: 5,
+                }} />
+                {/* </TouchableOpacity> */}
                 <Table borderStyle={{ borderWidth: 2, borderColor: '#FFFFFF', backgroundColor: "#FAFAFF" }}>
                   <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
-                  <Rows data={this.state.tableData} style={styles.head} textStyle={styles.textData} />
+                  {/* <Rows data={this.state.tableData} style={styles.head} textStyle={styles.textData} /> */}
+                  {/* {
+                    state.tableData.map((rowData, index) => (
+                      <TableWrapper key={index} style={styles.head} textStyle={styles.textData}>
+                        {
+                          rowData.map((cellData, cellIndex) => (
+                            <Cell key={cellIndex} data={cellIndex === 4 ? element(cellData, index) : cellData} textStyle={styles.textData} />
+                          ))
+                        }
+                      </TableWrapper>
+                    ))
+                  } */}
+                  {state.tableData.map((rowData, index) => (
+                    <TableWrapper key={index} style={styles.row} textStyle={styles.textData}>
+                      {
+                        rowData.map((cellData, cellIndex) => (
+                          <Cell key={cellIndex} data={cellIndex === 4 ? element(cellData, index) : cellData} textStyle={styles.textData} />
+                        ))
+                      }
+                    </TableWrapper>
+                  ))
+                  }
                 </Table>
 
+                {this.state.tableData.length != 0 && (
+                  <View style={styles.TopcontainerforItems}>
+                    <TouchableOpacity
+                      style={styles.qty}
+                    >
+                      <Text style={styles.signInButtonText}>  {this.state.totalQty} Qty </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.itemscount}
+                    >
+                      <Text style={styles.signInButtonText}>  {this.state.tableData.length} Items </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.itemDetail}
+
+                    >
+                      <Text style={{
+                        color: "#0196FD", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 12, position: 'absolute', marginTop: 0
+                      }}>
+                        Tax : ₹0.00 </Text>
+                      <Text style={{
+                        color: "#0196FD", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 12, position: 'absolute', marginTop: 15
+                      }}>
+                        Discount : ₹0.00 </Text>
+                      <Text style={{
+                        color: "#0196FD", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 12, position: 'absolute', marginTop: 30
+                      }}>
+                        Total Amount :   ₹{this.state.totalAmount}.00 </Text>
+
+                    </TouchableOpacity>
+                  </View>
+                )}
+
+                {this.state.tableData.length != 0 && (
+                  <View style={styles.TopcontainerforPay}>
+                    <TouchableOpacity
+                      style={styles.signInButton}
+                    >
+                      <Text style={styles.signInButtonText}> Pay Cash </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.signInButtonRight}
+                      onPress={() => this.pay()} >
+                      <Text style={styles.signInButtonText}> Pay Card </Text>
+                    </TouchableOpacity>
+
+                  </View>
+                )}
               </View>
+
+
+
             )}
 
             {this.state.flagfour && (
@@ -613,6 +820,39 @@ class NewSale extends Component {
 export default NewSale
 
 
+const pickerSelectStyles = StyleSheet.create({
+  placeholder: {
+    color: "#001B4A55",
+    fontFamily: "bold",
+    fontSize: 16,
+  },
+  inputIOS: {
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 10,
+    height: 40,
+    backgroundColor: '#ffffff',
+    borderBottomColor: '#456CAF55',
+    color: '#001B4A',
+    fontFamily: "bold",
+    fontSize: 16,
+    borderRadius: 3,
+  },
+  inputAndroid: {
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 10,
+    height: 40,
+    backgroundColor: '#ffffff',
+    borderBottomColor: '#456CAF55',
+    color: '#001B4A',
+    fontFamily: "bold",
+    fontSize: 16,
+    borderRadius: 3,
+  },
+})
+
+
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -642,13 +882,65 @@ const styles = StyleSheet.create({
   signInButton: {
     backgroundColor: '#0196FD',
     justifyContent: 'center',
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 50,
-    height: 55,
+    width: '48%',
+    marginLeft: 0,
+    marginTop: 10,
+    height: 40,
     borderRadius: 30,
     fontWeight: 'bold',
+    margin: 10,
+    // alignSelf:'center',
     // marginBottom:100,
+  },
+  qty: {
+    backgroundColor: '#0196FD',
+    justifyContent: 'center',
+    width: '18%',
+    marginTop: 10,
+    height: 40,
+    margin: 5,
+    borderRadius: 5,
+    fontWeight: 'bold',
+  },
+  imagealign: {
+    marginTop: 25,
+    marginRight: 34,
+  },
+  itemscount: {
+    backgroundColor: '#0196FD',
+    justifyContent: 'center',
+    width: '18%',
+    marginLeft: 0,
+    marginTop: 10,
+    height: 40,
+    borderRadius: 5,
+    fontWeight: 'bold',
+    margin: 5,
+    // alignSelf:'center',
+    // marginBottom:100,
+  },
+  itemDetail: {
+    backgroundColor: '#ffffff',
+
+    width: '60%',
+    marginLeft: 0,
+    marginTop: 10,
+    height: 40,
+    borderRadius: 5,
+    fontWeight: 'bold',
+    margin: 5,
+    // alignSelf:'center',
+    // marginBottom:100,
+  },
+  signInButtonRight: {
+    backgroundColor: '#0196FD',
+    justifyContent: 'center',
+    width: '48%',
+    marginTop: 10,
+    height: 40,
+    margin: 10,
+    borderRadius: 30,
+    fontWeight: 'bold',
   },
   signInButtonText: {
     color: 'white',
@@ -674,6 +966,18 @@ const styles = StyleSheet.create({
     color: '#001B4A',
     fontFamily: "regular",
     fontSize: 12,
+  },
+  qtyInput: {
+    width: 50,
+    height: 25,
+    // marginTop: 20,
+    // marginBottom: 1000,
+    // height: 50,
+    // backgroundColor: "#DEF1FF",
+    // borderRadius: 10,
+    // color: '#001B4A',
+    // fontFamily: "regular",
+    // fontSize: 12,
   },
   signUptext: {
     marginTop: 40,
@@ -741,6 +1045,28 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: 'grey',
     borderRadius: 20,
+    height: 50,
+  },
+  TopcontainerforPay: {
+    flexDirection: 'row',
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 10,
+    width: '100%',
+    backgroundColor: '#ffffff',
+    borderColor: 'lightgray',
+    borderRadius: 0,
+    height: 50,
+  },
+  TopcontainerforItems: {
+    flexDirection: 'row',
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 10,
+    width: '100%',
+    backgroundColor: '#ffffff',
+    borderColor: 'lightgray',
+    borderRadius: 0,
     height: 50,
   },
   redbox: {
@@ -854,5 +1180,10 @@ const styles = StyleSheet.create({
   modeltext: {
     color: '#3f2949',
     marginTop: 10
-  }
+  },
+  btn: {
+    width: 40, height: 18, borderWidth: 0.2, borderColor: '#48596B', fontFamily: "regular",
+    fontSize: 10,
+  },
+  btnText: { textAlign: 'center', color: '#fff' }
 });

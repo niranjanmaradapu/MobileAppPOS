@@ -45,7 +45,7 @@ export default class App extends React.Component {
         db.transaction(txn => {
           txn.executeSql(
             'INSERT INTO tbl_item ( barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, lastModified) VALUES (?,?,?,?,?,?,?,?,?)',
-            ["BAR1", "Dress", 3, 1230, 400, 830, 5218, "2021-09-01T18:52:42.212074", "2021-09-01T18:53:04.270367"],
+            ["BAR1", "Dress", 1, 1230, 400, 830, 5218, "2021-09-01T18:52:42.212074", "2021-09-01T18:53:04.270367"],
             (sqlTxn, res) => {
               console.log(`added successfully`);
               getProducts()
