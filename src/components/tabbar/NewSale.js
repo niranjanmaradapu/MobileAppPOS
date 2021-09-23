@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react'
-import { View, Image, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
+import { View, Image, FlatList, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
 //import Menu from './Menu';
 //import Login from './Logsin';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -15,8 +15,7 @@ import RazorpayCheckout from 'react-native-razorpay';
 import NewSaleService from '../services/NewSaleService';
 import { DrawerActions } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
-import RNPickerSelect from 'react-native-picker-select';
-import { Chevron } from 'react-native-shapes';
+import { ListItem, SearchBar } from "react-native-elements";
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 
@@ -31,6 +30,11 @@ class NewSale extends Component {
       mobileNumber: "",
       altMobileNo: "",
       name: "",
+      loading: false,
+      data: [],
+      temp: [],
+      error: null,
+      search: null,
       totalQty: 0,
       qty: [false],
       quantity: '',
@@ -71,8 +75,75 @@ class NewSale extends Component {
   //  }
   async componentDidMount() {
     this.barcodeDBStore()
+    this.getItems()
+  }
+
+  getItems = () => {
+
+    db.transaction(txn => {
+      txn.executeSql(
+        `SELECT * FROM tbl_item`,
+        [],
+        (sqlTxn, res) => {
+          let len = res.rows.length;
+          if (len > 0) {
+            let results = [];
+            for (let i = 0; i < len; i++) {
+              let item = res.rows.item(i)
+              let sno = String(this.state.tableData.length + 1)
+              let barcode = item["barcode"]
+              let itemDesc = item["itemDesc"]
+              let netAmount = String(item["netAmount"])
+              let qty = String(item["qty"])
+              let totalAmount = String(item["netAmount"])
+              console.log(JSON.stringify(item))
+              this.state.quantity = qty
+              this.state.totalQty = this.state.totalQty + item["qty"]
+              this.state.totalAmount = this.state.totalAmount + item["netAmount"]
+              this.state.data.push({ sno, barcode, itemDesc, netAmount, qty, netAmount })
+              this.state.temp.push({ sno, barcode, itemDesc, netAmount, qty, netAmount })
+            }
+            console.log(JSON.stringify(this.state.data));
+          }
+        },
+        error => {
+          console.log("error on getting categories " + error.message);
+        },
+      );
+    });
+  };
+
+
+  setResult = (results) => {
+    console.log('vinod data ---------' + len)
+
 
   }
+
+  renderHeader = () => {
+    return <SearchBar placeholder="Search Here..."
+      lightTheme round editable={true}
+      value={this.state.search}
+      onChangeText={this.updateSearch} />;
+  };
+
+  updateSearch = search => {
+    this.setState({ search }, () => {
+      if ('' == search) {
+        this.setState({
+          data: [...this.state.temp]
+        });
+        return;
+      }
+      this.state.data = this.state.temp.filter(function (item) {
+        return item.itemDesc.includes(search);
+      }).map(function ({ itemDesc, netAmount }) {
+        return { itemDesc, netAmount };
+      });
+    });
+  };
+
+
 
   barcodeDBStore = () => {
     console.log('---------------------------------------------------');
@@ -140,8 +211,8 @@ class NewSale extends Component {
 
   handleBarCode = (text) => {
     this.setState({ barcodeId: text })
-    
-     this.barcodeDBStore()
+
+    this.barcodeDBStore()
   }
 
   handleQty = (text) => {
@@ -439,89 +510,37 @@ class NewSale extends Component {
                   }} />
                 </View>
               </TouchableOpacity>
-
-              {/* <TouchableOpacity style={{
-                backgroundColor: this.state.flagfour ? "#1CA2FF" : "#0196FD",
-                alignSelf: "flex-start",
-                //marginHorizontal: "1%",
-                marginBottom: 6,
-                width: "25%",
-                height: 50,
-                textAlign: "center",
-              }}
-                onPress={() => this.topbarAction4()} >
-                <View style={{
-                  backgroundColor: this.state.flagfour ? "#1CA2FF" : "#0196FD",
-                  alignSelf: "flex-start",
-                  //marginHorizontal: "1%",
-                  marginBottom: 6,
-                  width: "25%",
-                  height: 50,
-                  textAlign: "center",
-                }}>
-
-                  <Text style={{
-                    color: this.state.flagfour ? "#FFFFFF" : "#BBE3FF",
-                    marginTop: 10,
-                    fontFamily: "regular",
-                    fontSize: 14, textAlign: 'center', width: 100,
-                  }}> PAYMENT DETAILS  </Text>
-                  <Image source={this.state.flagfour ? require('../assets/images/topSelect.png') : null} style={{
-                    left: 30, marginTop: 5,
-                  }} />
-                </View>
-              </TouchableOpacity> */}
             </View>
             {this.state.flagthree && (
-              <View style={{ flex: 1 }}>
-                <TextInput style={styles.findIteminput}
-                  underlineColorAndroid="transparent"
-                  placeholder="       Find Item"
-                  placeholderTextColor="#0196FD"
-                  // textAlignVertical="center"
-                  autoCapitalize="none"
-                  onChangeText={this.handleEmail}
-                  value={this.state.userName}
-                  ref={inputemail => { this.emailValueInput = inputemail }} />
-                <Image source={require('../assets/images/search.png')} style={{
-                  position: 'absolute',
-                  left: 35,
-                  top: 35
-                }} />
-                <Image source={require('../assets/images/filter.png')} style={{
-                  position: 'absolute',
-                  right: 10,
-                  top: 20,
-                  width: 50,
-                  height: 50,
-                  borderBottomRightRadius: 10,
-                  borderTopRightRadius: 10,
-                  backgroundColor: "#0196FD",
-                }} resizeMode={'center'} />
-              </View>
+              // this.state.error != null ?
+              //   <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center',  }}>
+              //     <Text>{this.state.error}</Text>
+              //     <Button onPress={
+              //       () => {
+              //         this.getItems();
+              //       }
+              //     } title="Reload" />
+              //   </View> :
+              <View
+    style={{
+      flex: 1,
+      paddingHorizontal: 0,
+      paddingVertical: 0,
+      marginTop: 0
+    }}>
+    <FlatList
+      ListHeaderComponent={this.renderHeader}
+      data={this.state.data}
+      keyExtractor={item => item.email}
+      renderItem={({ item }) => (
+        <Text style={{ fontSize: 22,height:50,marginTop:10,marginLeft:20, }}>
+          Product name: {item.itemDesc}  Price: {item.netAmount}Rs
+        </Text>
+      )}
+    />
+  </View>
             )}
-            {/* {this.state.flagone && (
-<RNPickerSelect style={{color:'#001B4A',
-              fontWeight: 'bold',
-              fontSize: 16}}
-                   placeholder={{
-                       label: 'Select Qty',
-                       value: " ",
-                   }}
-                   Icon={() => {
-                       return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                   }}
-                        items={[
-                         { label: 'Kg', value: 'kg' },
-                         { label: 'Litre', value: 'litre' },
-                     ]}
-                       onValueChange={(value) => console.log(value)}
-                       style={pickerSelectStyles}
-                       value={this.state.store}
-                       useNativeAndroidPickerStyle={false}
 
-                   />
-  )} */}
             {this.state.flagone && (
 
               <View style={{ flex: 1 }}>
@@ -534,10 +553,10 @@ class NewSale extends Component {
                   autoCapitalize="none"
                   onChangeText={(text) => this.handleBarCode(text)}
                 ///  onSubmitEditing={this.barcodeDBStore}
-     
-                  // value={this.state.username}
-               //   ref={inputemail => { this.emailValueInput = inputemail }}
-                   />
+
+                // value={this.state.username}
+                //   ref={inputemail => { this.emailValueInput = inputemail }}
+                />
 
                 <Image source={require('../assets/images/barcode.png')} style={{
                   position: 'absolute',
@@ -552,29 +571,6 @@ class NewSale extends Component {
             {this.state.flagone && (
               <View style={styles.tablecontainer}>
                 <Text style={styles.saleBillsText}> List Of Sale Items </Text>
-                {/* <TouchableOpacity style={{
-                  backgroundColor: this.state.flagfour ? "#1CA2FF" : "#0196FD",
-                  position: 'absolute',
-                  right: 5,
-                  top: 4,
-                  marginBottom: 8,
-                  width: 50,
-                  height: 25,
-                  textAlign: "center",
-                  borderRadius: 12,
-                }}
-                  onPress={() => this.pay()} > */}
-                {/* <View style={{
-                    backgroundColor: this.state.flagfour ? "#1CA2FF" : "#0196FD",
-                    position: 'absolute',
-                    right: 5,
-                    top: 4,
-                    marginBottom: 8,
-                    width: 50,
-                    height: 25,
-                    textAlign: "center",
-                    borderRadius: 12,
-                  }}> */}
                 <Text style={{
                   color: "#FFFFFF",
                   marginTop: 5,

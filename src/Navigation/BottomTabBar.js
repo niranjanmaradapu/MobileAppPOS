@@ -3,6 +3,7 @@ import { Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import NewSale from '../components/tabbar/NewSale';
 import Settings from '../components/tabbar/Settings';
+import ScanBarCode from '../components/tabbar/ScanBarCode';
 
 
  
@@ -35,7 +36,7 @@ class BottomTabBar extends Component {
           })}
         >
           <Tab.Screen name="Home" options={{headerShown: false}} component={NewSale} />
-          <Tab.Screen name="Retail" options={{headerShown: false}} component={NewSale} />
+          <Tab.Screen name="Retail" options={{headerShown: false}} component={ScanBarCode} />
           <Tab.Screen name="Sales Bill" options={{headerShown: false}} component={NewSale} />
           <Tab.Screen name="Settings" options={{headerShown: false}} component={Settings} />
         </Tab.Navigator>

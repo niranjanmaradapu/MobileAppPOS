@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
@@ -45,7 +44,7 @@ export default class App extends React.Component {
         db.transaction(txn => {
           txn.executeSql(
             'INSERT INTO tbl_item ( barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, lastModified) VALUES (?,?,?,?,?,?,?,?,?)',
-            ["BAR1", "Dress", 1, 1230, 400, 830, 5218, "2021-09-01T18:52:42.212074", "2021-09-01T18:53:04.270367"],
+            ["BAR2", "Potato", 1, 20, 0, 30, 5218, "2021-09-01T18:52:42.212074", "2021-09-01T18:53:04.270367"],
             (sqlTxn, res) => {
               console.log(`added successfully`);
               getProducts()
@@ -75,7 +74,7 @@ export default class App extends React.Component {
                 let item = res.rows.item(i);
                 results.push({ item });
               }
-              console.log(JSON.stringify(results));
+            //  console.log(JSON.stringify(results));
 
               setCategories(results);
             }
@@ -109,7 +108,4 @@ const styles = StyleSheet.create({
 
 
 
-
-
-
-
+   
