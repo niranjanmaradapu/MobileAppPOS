@@ -149,7 +149,7 @@ class NewSale extends Component {
     console.log('---------------------------------------------------');
     db.transaction(txn => {
       txn.executeSql(
-        'SELECT * FROM tbl_item where item_id = ?',
+        'SELECT * FROM tbl_item where barcode = ?',
         [this.state.barcodeId],
         (sqlTxn, res) => {
           console.log("search category" + JSON.stringify(res.rows.length));
