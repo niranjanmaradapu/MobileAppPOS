@@ -17,28 +17,32 @@ class BottomTabBar extends Component {
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
   
-              if (route.name === 'Home') {
-                iconName =  focused ? <Image source={require('../components/assets/images/home.png')} /> : <Image source={require('../components/assets/images/home.png')} />
+              if (route.name === 'HOME') {
+                iconName =  focused ? <Image source={require('../components/assets/images/homeRed.png')} /> : <Image source={require('../components/assets/images/homeRed.png')} />
               }
-              else if (route.name === 'Retail') {
-                iconName = focused ? <Image source={require('../components/assets/images/retail.png')} /> : <Image source={require('../components/assets/images/retail.png')} />
+              else if (route.name === 'MARKET') {
+                iconName = focused ? <Image source={require('../components/assets/images/marketRed.png')} /> : <Image source={require('../components/assets/images/marketRed.png')} />
               }
-              else if (route.name === 'Sales Bill') {
-                iconName = focused ? <Image source={require('../components/assets/images/sales.png')} /> : <Image source={require('../components/assets/images/sales.png')} />
-              } else if (route.name === 'Settings') {
-                iconName = focused ? <Image source={require('../components/assets/images/settings.png')} /> : <Image source={require('../components/assets/images/settings.png')} />
+              else if (route.name === 'NEW SALE') {
+                iconName = focused ? <Image source={require('../components/assets/images/newsaleRed1.png')} /> : <Image source={require('../components/assets/images/newsaleRed1.png')} />
+              } else if (route.name === 'PROMO') {
+                iconName = focused ? <Image source={require('../components/assets/images/promoRed.png')} /> : <Image source={require('../components/assets/images/promoRed.png')} />
               }
+             else if (route.name === 'PROFILE') {
+              iconName = focused ? <Image source={require('../components/assets/images/profileRed.png')} /> : <Image source={require('../components/assets/images/profileRed.png')} />
+            }
               return iconName;
             },
-            tabBarActiveTintColor: '#0196FD',
-            tabBarInactiveTintColor: '#48596B',
-            tabBarLabel:() => {return null},
+            tabBarActiveTintColor: '#ED1C24',
+            tabBarInactiveTintColor: '#353C40',
+            // tabBarLabel:() => {return null},
           })}
         >
-          <Tab.Screen name="Home" options={{headerShown: false}} component={NewSale} />
-          <Tab.Screen name="Retail" options={{headerShown: false}} component={ScanBarCode} />
-          <Tab.Screen name="Sales Bill" options={{headerShown: false}} component={NewSale} />
-          <Tab.Screen name="Settings" options={{headerShown: false}} component={Settings} />
+          <Tab.Screen name="HOME"  title='Home' options={{headerShown: false}} component={NewSale}/>
+          <Tab.Screen name="MARKET" options={{headerShown: false}} component={ScanBarCode} />
+          <Tab.Screen name="NEW SALE" options={{headerShown: false}} component={NewSale} />
+          <Tab.Screen name="PROMO" options={{headerShown: false}} component={Settings} />
+          <Tab.Screen name="PROFILE" options={{headerShown: false}} component={Settings} />
         </Tab.Navigator>
       );
   }

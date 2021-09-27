@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import {View, Image, ImageBackground, Text, ActivityIndicator,TouchableOpacity,TouchableHighlight, TextInput, StyleSheet, Dimensions, scrollview, SafeAreaView } from 'react-native';
+import { View, Image, ImageBackground, Text, ActivityIndicator, TouchableOpacity, TouchableHighlight, TextInput, StyleSheet, Dimensions, scrollview, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import RNPickerSelect from 'react-native-picker-select';
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
 import Icons from 'react-native-vector-icons/MaterialIcons';
@@ -17,89 +18,205 @@ class SignUp extends Component {
         return true;
     }
 
-     
+
     render() {
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
-                    {/* <View style={styles.container}>
+                {/* <View style={styles.container}>
                     {this.state.loading &&
                     <Loader
                     loading={this.state.loading} />
                 }  */}
-                <SafeAreaView style={{ flex: 1,backgroundColor:'#FFFFFF'}}>
-               <View style={styles.viewswidth}>
-               <Text style={styles.signUptext}> Sign Up </Text>
-                <Icons name={'arrow-back'} size={30} color='#ffffff'  onPress={this.handleBackButtonClick} style={{  position: 'absolute',
-                left: 5,
-                top:35}}/>
-                </View>
-               
-                        <View style={styles.container}>
-                        <View style={{ justifyContent: 'center', alignSelf: 'center',marginTop:50 }}>
+                <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                    <View style={styles.viewswidth}>
+                    <TouchableOpacity style={{
+                position: 'absolute',
+                left: 10,
+                top: 20,
+                width: 20,
+                height: 20,
+              }} onPress={() => this.handleBackButtonClick()}>
+                <Image source={require('../assets/images/backButton.png')} />
+              </TouchableOpacity>
+              
+                        {/* <Text style={styles.signUptext}> Sign Up </Text>
+                        <Icons name={'arrow-back'} size={30} color='#ffffff' onPress={this.handleBackButtonClick} style={{
+                            position: 'absolute',
+                            left: 5,
+                            top: 35
+                        }} /> */}
+                    </View>
+
+                    <View style={styles.container}>
+                        <View style={{ flex: 1, marginTop: '0%', backgroundColor: '#FFFFFF' }}>
+                            {/* <Image source={require('../assets/images/logo.png')} style={styles.logoImage} /> */}
                             {/* <Text></Text> */}
-                            <Text style={styles.signInText}> Sign Up </Text>
-                            <Text style={styles.signinContinueText}> Enter your personal Details </Text>
+                            <Text style={{
+                                color: "#353C40", fontSize: 20, fontFamily: "bold", marginLeft: 10, marginTop: 20,
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                fontSize: 28,
+                            }}> Create Account </Text>
+
+                            <View style={{ marginTop: 15, marginLeft: 18, flexDirection: 'row' }}>
+
+                                <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> Already have a account /  </Text>
+                                <TouchableOpacity
+                                    onPress={() => this.signUpButtonClicked()} >
+                                    <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> Sign In </Text>
+                                </TouchableOpacity>
+                            </View>
+
+
                         </View>
 
-                        <View style={{ flex: 0.2 }}>
-                        
-                        </View>
 
-                        <View style={{ flex: 2}}>
-                        <Text style={styles.signInFieldStyle}> User Name </Text>
+
+                        <View style={{ flex: 6 }}>
+                            {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
                             <TextInput style={styles.input}
                                 underlineColorAndroid="transparent"
-                                placeholder="Username"
-                                placeholderTextColor="#001B4A55"
-                               // textAlignVertical="center"
+                                placeholder="NAME"
+                                placeholderTextColor="#6F6F6F"
+                                // textAlignVertical="center"
                                 autoCapitalize="none"
                                 onChangeText={this.handleEmail}
+                                // value={this.state.userName}
                                 ref={inputemail => { this.emailValueInput = inputemail }} />
 
-<Text style={styles.signInFieldStyle}> Email </Text>
-                            <TextInput style={styles.input}
-                                underlineColorAndroid="transparent"
-                                placeholder="Email"
-                                placeholderTextColor="#001B4A55"
-                               // textAlignVertical="center"
-                                autoCapitalize="none"
-                                onChangeText={this.handleEmail}
-                                ref={inputemail => { this.emailValueInput = inputemail }} />
-                                 
-                                 
-                          <Text style={styles.signInFieldStyle}> Password </Text>
+
+                            {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
                             <TextInput style={styles.passwordInput}
                                 underlineColorAndroid="transparent"
-                                placeholder="Password"
+                                placeholder="EMAIL"
                                 secureTextEntry={true}
-                                placeholderTextColor="#001B4A55"
+                                placeholderTextColor="#6F6F6F"
                                 autoCapitalize="none"
                                 onChangeText={this.handlePassword}
+                                //value={this.state.password}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
 
-<Text style={styles.signInFieldStyle}> Confirm Password </Text>
                             <TextInput style={styles.passwordInput}
                                 underlineColorAndroid="transparent"
-                                placeholder="Confirm Password"
+                                placeholder="MOBILE NUMBER"
                                 secureTextEntry={true}
-                                placeholderTextColor="#001B4A55"
+                                placeholderTextColor="#6F6F6F"
                                 autoCapitalize="none"
                                 onChangeText={this.handlePassword}
+                                //value={this.state.password}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
-                                
-                             
-                          
+
+<TextInput style={styles.passwordInput}
+                                underlineColorAndroid="transparent"
+                                placeholder="SELECT STORE"
+                                secureTextEntry={true}
+                                placeholderTextColor="#6F6F6F"
+                                autoCapitalize="none"
+                                onChangeText={this.handlePassword}
+                                //value={this.state.password}
+                                ref={inputpassword => { this.passwordValueInput = inputpassword }} />
+
+<TextInput style={styles.passwordInput}
+                                underlineColorAndroid="transparent"
+                                placeholder="CREATE PASSWORD"
+                                secureTextEntry={true}
+                                placeholderTextColor="#6F6F6F"
+                                autoCapitalize="none"
+                                onChangeText={this.handlePassword}
+                                //value={this.state.password}
+                                ref={inputpassword => { this.passwordValueInput = inputpassword }} />
+
+
+<TextInput style={styles.passwordInput}
+                                underlineColorAndroid="transparent"
+                                placeholder="CONFIRM PASSWORD"
+                                secureTextEntry={true}
+                                placeholderTextColor="#6F6F6F"
+                                autoCapitalize="none"
+                                onChangeText={this.handlePassword}
+                                //value={this.state.password}
+                                ref={inputpassword => { this.passwordValueInput = inputpassword }} />
+
+                            {/* <Text style={styles.signInFieldStyle}> Store </Text> */}
+                            {/* <View style={{
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                    height: 50,
+                                    marginBottom: 5,
+                                    borderBottomWidth: 1,
+                                    borderBottomColor: '#0196FD',
+                                    color: '#6F6F6F',
+                                    fontWeight: 'regular',
+                                    fontSize: 14,
+                                }} > */}
+                            {/* <RNPickerSelect style={{
+                                        color: '#6F6F6F',
+                                        fontWeight: 'regular',
+                                        fontSize: 14
+                                    }}
+                                        placeholder={{
+                                            label: 'Select Store',
+                                            value: " ",
+                                        }}
+                                        Icon={() => {
+                                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                        }}
+                                        //items={this.state.storeNames}
+                                        onValueChange={this.handleStore}
+                                        style={pickerSelectStyles}
+                                       // value={this.state.store}
+                                        useNativeAndroidPickerStyle={false}
+
+                                    /> */}
+                            {/* </View> */}
+
+                            {/* <View>
+                                    <View style={{ flexDirection: "column" }}>
+                                       
+
+                                        <View style={{
+                                            position: 'absolute',
+                                            right: 20,
+                                            top: 30, flexDirection: 'row'
+                                        }}>
+
+                                            <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> Forgot password? </Text>
+                                            <TouchableOpacity
+                                                onPress={() => this.signUpButtonClicked()} >
+                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> Reset </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                        {/* <Text style={{
+                                            color: '#0196FD', fontSize: 13, fontFamily: "bold", position: 'absolute',
+                                            right: 20,
+                                            top: 10,
+                                            width: 130,
+                                        }}> Forgot Password? </Text> */}
+                            {/* </View>
+                                </View>  */}
+
+                            {/* <View style={{ flex: 0.2, marginTop: 120 }}> */}
+                            {/* <View style={{ marginTop: 10, flexDirection: 'row', }}> */}
+                            {/* <Text style={{ fontSize: 13, color: '#8BB0EF',fontFamily: "bold", }}> Don't remember the Password? </Text> */}
+
+
+                            {/* </View> */}
                             <TouchableOpacity
                                 style={styles.signInButton}
                                 onPress={() => this.login()} >
                                 <Text style={styles.signInButtonText}> CREATE ACCOUNT </Text>
                             </TouchableOpacity>
 
+                            {/* <TouchableOpacity
+                                    style={styles.signInButton}
+                                    onPress={() => this.login()} >
+                                    <Text style={styles.signInButtonText}> SIGN IN </Text>
+                                </TouchableOpacity> */}
                         </View>
-                        </View>
-                        </SafeAreaView>
-                 
+                    </View>
+                </SafeAreaView>
+
             </KeyboardAwareScrollView>
         )
     }
@@ -108,10 +225,10 @@ class SignUp extends Component {
 export default SignUp
 
 const pickerSelectStyles = StyleSheet.create({
-    placeholder :{
-        color:'#456CAF55',
+    placeholder: {
+        color: '#456CAF55',
         fontWeight: "800",
-        fontSize: 16,   
+        fontSize: 16,
     },
     inputIOS: {
         marginLeft: 0,
@@ -119,7 +236,7 @@ const pickerSelectStyles = StyleSheet.create({
         height: 40,
         borderBottomWidth: 1,
         borderBottomColor: '#456CAF55',
-        color:'#001B4A',
+        color: '#001B4A',
         fontWeight: 'bold',
         fontSize: 16,
     },
@@ -129,7 +246,7 @@ const pickerSelectStyles = StyleSheet.create({
         height: 40,
         borderBottomWidth: 1,
         borderBottomColor: '#456CAF55',
-        color:'#001B4A',
+        color: '#001B4A',
         fontWeight: 'bold',
         fontSize: 16,
     },
@@ -147,35 +264,35 @@ const styles = StyleSheet.create({
         backgroundColor: '#623FA0',
         alignItems: 'center',
         justifyContent: 'center',
-      },
-      viewswidth: {
-        backgroundColor: '#0196FD',
+    },
+    viewswidth: {
+        backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        height:84,
-      },
-      signUptext:{
-        marginTop:40,
+        height: 84,
+    },
+    signUptext: {
+        marginTop: 40,
         fontFamily: "bold",
-        alignSelf:'center',
+        alignSelf: 'center',
         color: '#FFFFFF',
         fontSize: 20,
-      },
-      title: {
+    },
+    title: {
         color: 'white',
         fontSize: 20,
         margin: 20
-      },
-      imagealign: {
+    },
+    imagealign: {
         marginTop: 18,
-        marginLeft:0,
+        marginLeft: 0,
     },
     container: {
         flex: 1,
         justifyContent: 'center',
-        height: deviceheight+40,
-        backgroundColor:'#FFFFFF'
+        height: deviceheight + 40,
+        backgroundColor: '#FFFFFF'
     },
     ytdImageValue: {
         alignSelf: 'center',
@@ -186,34 +303,37 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
     },
     input: {
-        marginLeft: 30,
-        marginRight: 30,
-        height: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: '#456CAF55',
-        color:'#001B4A',
-        fontFamily: "bold",
-        fontSize: 16,
+        marginLeft: 20,
+        marginRight: 20,
+        height: 50,
+        backgroundColor: '#F6F6F6',
+        borderColor: '#F6F6F6',
+        color: '#6F6F6F',
+        fontFamily: "regular",
+        borderWidth: 5,
+        fontSize: 14,
     },
     passwordInput: {
-          marginLeft: 30,
-          marginRight: 30,
-          height: 40,
-          marginBottom:5,
-          borderBottomWidth: 1,
-          borderBottomColor: '#0196FD',
-          color:'#001B4A',
-          fontFamily: "bold",
-          fontSize: 16,
-      },
+        marginLeft: 20,
+        marginRight: 20,
+        height: 50,
+        marginBottom: 5,
+        marginTop: 20,
+        backgroundColor: '#F6F6F6',
+        borderColor: '#F6F6F6',
+        color: '#6F6F6F',
+        fontFamily: "regular",
+        borderWidth: 5,
+        fontSize: 14,
+    },
     signInButton: {
-        backgroundColor:'#0196FD',
+        backgroundColor: '#ED1C24',
         justifyContent: 'center',
-        marginLeft: 30,
-        marginRight: 30,
-        marginTop:50,
-        height: 55,
-        borderRadius: 30,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 30,
+        height: 44,
+        borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
     },
@@ -227,14 +347,14 @@ const styles = StyleSheet.create({
     signInFieldStyle: {
         color: '#456CAF55',
         marginLeft: 30,
-        marginTop:15,
+        marginTop: 15,
         fontSize: 12,
         fontFamily: "regular",
     },
     signinContinueText: {
         color: '#456CAF55',
         alignSelf: 'center',
-        marginTop:5,
+        marginTop: 5,
         fontSize: 13,
         fontFamily: "regular",
     },

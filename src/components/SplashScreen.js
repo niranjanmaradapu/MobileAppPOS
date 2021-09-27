@@ -18,7 +18,7 @@ export default class SplashScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <Image source={require('./assets/images/welcomeLogo.png')} style={styles.logoImage} />
-                <Text style={{ textAlign:'center',color:"#353C40",position: 'absolute',  bottom:70,fontSize:14, fontFamily:"regular",}}> POWERED BY OTSI </Text>
+                <Text style={{ textAlign:'center',color:"#353C40",position: 'absolute',  bottom:70,fontSize:14}}> POWERED BY OTSI </Text>
                 </View>
         )
 }
