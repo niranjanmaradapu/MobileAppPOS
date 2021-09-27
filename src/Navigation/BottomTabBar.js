@@ -24,7 +24,7 @@ class BottomTabBar extends Component {
                 iconName = focused ? <Image source={require('../components/assets/images/marketRed.png')} /> : <Image source={require('../components/assets/images/marketRed.png')} />
               }
               else if (route.name === 'NEW SALE') {
-                iconName = focused ? <Image source={require('../components/assets/images/newsaleRed1.png')} /> : <Image source={require('../components/assets/images/newsaleRed1.png')} />
+                iconName = focused ? <Image  style={{marginTop:-50}} source={require('../components/assets/images/newsaleRed1.png')} /> : <Image style={{marginTop:-50}} source={require('../components/assets/images/newsaleRed1.png')} />
               } else if (route.name === 'PROMO') {
                 iconName = focused ? <Image source={require('../components/assets/images/promoRed.png')} /> : <Image source={require('../components/assets/images/promoRed.png')} />
               }
