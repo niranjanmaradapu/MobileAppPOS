@@ -19,8 +19,8 @@ export default class App extends React.Component {
   }
   async componentDidMount() {
     Font.loadAsync({
-      bold: require("./assets/fonts/Metropolis-Bold.otf"),
-      regular: require("./assets/fonts/Metropolis-Regular.otf"),
+      bold: require("./assets/fonts/ProductSans-Bold.ttf"),
+      regular: require("./assets/fonts/ProductSans-Regular.ttf"),
       semibold: require("./assets/fonts/Metropolis-SemiBold.otf"),
     });
 
