@@ -168,14 +168,14 @@ export default class Login extends Component {
     }
 
     async componentDidMount() {
-        console.log(LoginService.getAuth())
+        console.log(LoginService.getStores())
         var storeNames = [];
         axios.get(LoginService.getStores()).then((res) => {
-            if (res.data) {
-                for (var i = 0; i < res.data.length; i++) {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
                     storeNames.push({
-                        value: res.data[i]['storeName'],//id
-                        label: res.data[i]['storeName']
+                        value: res.data["result"][i]['storeName'],//id
+                        label: res.data["result"][i]['storeName']
                     });
 
                 }
@@ -183,6 +183,7 @@ export default class Login extends Component {
             this.setState({
                 storeNames: storeNames,
             })
+            console.log("stores data----" + JSON.stringify(res.data["result"]))
             console.log('store Name' + JSON.stringify(storeNames))
         });
         console.log('dsgsdgsdg' + username)
@@ -225,7 +226,7 @@ export default class Login extends Component {
                                     <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}>If you are new / </Text>
                                     <TouchableOpacity
                                         onPress={() => this.signUpButtonClicked()} >
-                                        <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold",textDecorationLine: 'underline' }}> Create Account </Text>
+                                        <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> Create Account </Text>
                                     </TouchableOpacity>
                                 </View>
 
@@ -293,9 +294,9 @@ export default class Login extends Component {
 
                                 <View>
                                     <View style={{ flexDirection: "column" }}>
-                                        <Switch trackColor={{ true: '#8BB0EF', false: 'grey' }} style={{
+                                        {/* <Switch trackColor={{ true: '#8BB0EF', false: 'grey' }} style={{
                                             position: 'absolute',
-                                            left: 20,
+                                            left: 30,
                                             top: 25,
                                             width: 30,
                                             height: 30, color: '#8BB0EF',
@@ -308,18 +309,36 @@ export default class Login extends Component {
                                             top: 30,
                                             width: 100,
                                             height: 20, fontSize: 13, color: '#8BB0EF', fontFamily: "bold",
-                                        }}>Remember Me</Text>
+                                        }}>Remember Me</Text> */}
+
+                                        <View style={{
+                                            position: 'absolute',
+                                            left: 20,
+                                            top: 30,alignItems:'center',flexDirection: 'row'
+                                        }}>
+                                            <Switch trackColor={{ true: '#8BB0EF', false: 'grey' }} style={{
+                                           color: '#8BB0EF'
+                                        }}
+                                            value={this.state.rememberMe}
+                                            onValueChange={(value) => this.toggleRememberMe(value)} />
+
+                                            {/* <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> Forgot password? </Text> */}
+                                            <TouchableOpacity
+                                                onPress={() => this.signUpButtonClicked()} >
+                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> Remember Me </Text>
+                                            </TouchableOpacity>
+                                        </View>
 
                                         <View style={{
                                             position: 'absolute',
                                             right: 20,
-                                            top: 30, flexDirection: 'row'
+                                            top: 35,alignItems:'center', flexDirection: 'row'
                                         }}>
 
                                             <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> Forgot password? </Text>
                                             <TouchableOpacity
                                                 onPress={() => this.signUpButtonClicked()} >
-                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold",textDecorationLine: 'underline' }}> Reset </Text>
+                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> Reset </Text>
                                             </TouchableOpacity>
                                         </View>
                                         {/* <Text style={{
@@ -380,6 +399,7 @@ const pickerSelectStyles = StyleSheet.create({
         marginLeft: 0,
         marginRight: 0,
         height: 50,
+        marginTop: 20,
         backgroundColor: '#F6F6F6',
         borderColor: '#F6F6F6',
         color: '#6F6F6F',
