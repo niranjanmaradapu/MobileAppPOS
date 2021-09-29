@@ -11,6 +11,7 @@ const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+    
     // this.toggle = this.toggle.bind(this);
     // this.navigate = this.props.navigation.navigate;
     this.state = {

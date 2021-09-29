@@ -18,11 +18,16 @@ import { openDatabase } from 'react-native-sqlite-storage';
 import { ListItem, SearchBar } from "react-native-elements";
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
+import { RNCamera } from 'react-native-camera';
+import BarcodeMask from 'react-native-barcode-mask';
 
 
 class NewSale extends Component {
   constructor(props) {
     super(props);
+    this.camera = null;
+    this.barcodeCodes = [];
+
     // this.toggle = this.toggle.bind(this);
     // this.navigate = this.props.navigation.navigate;
     this.state = {
@@ -31,7 +36,7 @@ class NewSale extends Component {
       altMobileNo: "",
       name: "",
       loading: false,
-      data: [],
+      arrayData: [],
       temp: [],
       error: null,
       search: null,
@@ -66,9 +71,38 @@ class NewSale extends Component {
         // ['14', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
         // ['15', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
         // ['16', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-      ]
+      ],
+      camera: {
+        type: RNCamera.Constants.Type.back,
+        flashMode: RNCamera.Constants.FlashMode.auto,
+      }
     }
   }
+
+
+  async takePicture() {
+    if (this.camera) {
+      const options = { quality: 0.5, base64: true };
+      const data = await this.camera.takePictureAsync(options);
+      console.log(data.uri);
+    }
+  }
+
+  pendingView() {
+    return (
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'lightgreen',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Text>Waiting</Text>
+      </View>
+    );
+  }
+
 
   //   toggleModal(visible) {
   //     this.setState({ modalVisible: visible });
@@ -79,7 +113,6 @@ class NewSale extends Component {
   }
 
   getItems = () => {
-
     db.transaction(txn => {
       txn.executeSql(
         `SELECT * FROM tbl_item`,
@@ -97,13 +130,13 @@ class NewSale extends Component {
               let qty = String(item["qty"])
               let totalAmount = String(item["netAmount"])
               console.log(JSON.stringify(item))
-              this.state.quantity = qty
-              this.state.totalQty = this.state.totalQty + item["qty"]
-              this.state.totalAmount = this.state.totalAmount + item["netAmount"]
-              this.state.data.push({ sno, barcode, itemDesc, netAmount, qty, netAmount })
-              this.state.temp.push({ sno, barcode, itemDesc, netAmount, qty, netAmount })
+              // this.state.quantity = qty
+              // this.state.totalQty = this.state.totalQty + item["qty"]
+              // this.state.totalAmount = this.state.totalAmount + item["netAmount"]
+              this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+              this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
             }
-            console.log(JSON.stringify(this.state.data));
+            //console.log(JSON.stringify(this.state.data));
           }
         },
         error => {
@@ -119,6 +152,15 @@ class NewSale extends Component {
 
 
   }
+  addAction(text) {
+    console.log('barcode------is' + text)
+    this.setState({ barcodeId: text })
+    this.barcodeDBStore()
+    this.setState({ flagone: true })
+    this.setState({ flagtwo: false })
+    this.setState({ flagthree: false })
+    this.setState({ flagfour: false })
+  }
 
   renderHeader = () => {
     return <SearchBar placeholder="Search Here..."
@@ -131,14 +173,14 @@ class NewSale extends Component {
     this.setState({ search }, () => {
       if ('' == search) {
         this.setState({
-          data: [...this.state.temp]
+          arrayData: [...this.state.temp]
         });
         return;
       }
-      this.state.data = this.state.temp.filter(function (item) {
-        return item.itemDesc.includes(search);
-      }).map(function ({ itemDesc, netAmount }) {
-        return { itemDesc, netAmount };
+      this.state.arrayData = this.state.temp.filter(function (item) {
+        return item.itemdesc.includes(search);
+      }).map(function ({ itemdesc, netamount, barcode, qty }) {
+        return { itemdesc, netamount, barcode, qty };
       });
     });
   };
@@ -169,6 +211,10 @@ class NewSale extends Component {
               this.state.totalQty = this.state.totalQty + item["qty"]
               this.state.totalAmount = this.state.totalAmount + item["netAmount"]
               this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
+              this.setState({ flagone: true })
+              this.setState({ flagtwo: false })
+              this.setState({ flagthree: false })
+              this.setState({ flagfour: false })
             }
           }
           console.log(JSON.stringify(this.state.tableData.length))
@@ -212,8 +258,15 @@ class NewSale extends Component {
   handleBarCode = (text) => {
     this.setState({ barcodeId: text })
 
+
+  }
+
+  endEditing() {
+    console.log("end edited")
     this.barcodeDBStore()
   }
+
+
 
   handleQty = (text) => {
     this.setState({ quantity: text })
@@ -258,21 +311,23 @@ class NewSale extends Component {
   }
 
   pay = () => {
+    //  console.log(this.state.totalAmount)
     const params = {
-      "amount": this.state.totalAmount,
+      "amount": JSON.stringify(this.state.totalAmount),
       "info": "order_request"
     }
-    console.log(NewSaleService.payment());
+
     axios.post(NewSaleService.payment(), params).then((res) => {
       // this.setState({isPayment: false});
-      const data = res.data
+      const data = res.data["result"]
+      console.log('amount is' + JSON.stringify(data.amount));
       var options = {
         description: 'Transaction',
         image: 'https://i.imgur.com/3g7nmJC.png',
-        currency: data.currency,
-        order_id: data.id,
+        currency: JSON.stringify(data.currency),
+        order_id: JSON.stringify(data.id),
         key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
-        amount: data.amount,
+        amount: JSON.stringify(data.amount),
         name: 'OTSI',
         prefill: {
           name: "Kadali",
@@ -331,6 +386,21 @@ class NewSale extends Component {
     this.setState({ flagfour: true })
   }
 
+  refresh() {
+    this.setState({ barcodeId: global.barcodeId })
+    this.barcodeDBStore()
+    this.setState({ flagone: true })
+    this.setState({ flagtwo: false })
+    this.setState({ flagthree: false })
+    this.setState({ flagfour: false })
+  }
+
+  navigateToScanCode() {
+    global.barcodeId = 'something'
+    this.props.navigation.navigate('ScanBarCode', {
+      onGoBack: () => this.refresh(),
+    });
+  }
   _alertIndex(index) {
     //     const some_array = [...this.state.qty]
     // some_array[index] = this.state.quantity
@@ -340,9 +410,38 @@ class NewSale extends Component {
     //     console.log(some_array)
     //    // Alert.alert(`This is row ${index + 1}`);
   }
+  updateQty = (text, index) => {
+    const qtyarr = [...this.state.arrayData];
+    qtyarr[index].qty = text;
+    this.setState({ arrayData: qtyarr })
+  }
+
+  increment = (item, index) => {
+    const qtyarr = [...this.state.arrayData];
+    var additem = parseInt(qtyarr[index].qty) + 1;
+    // var priceFor1 = parseInt(item.netAmount)
+    // var price = priceFor1  * additem;
+    // qtyarr[index].netamount = price.toString()
+    qtyarr[index].qty = additem.toString()
+    this.setState({ arrayData: qtyarr })
+
+  }
+
+  decreament = (item, index) => {
+    const qtyarr = [...this.state.arrayData];
+
+    var additem = parseInt(qtyarr[index].qty) - 1;
+    qtyarr[index].qty = additem.toString()
+    if (qtyarr[index].qty >= 0) {
+      this.setState({ arrayData: qtyarr })
+    }
+
+  }
+
+
 
   render() {
-    console.log(this.state.flagone)
+    console.log(global.barcodeId)
     AsyncStorage.getItem("tokenkey").then((value) => {
       console.log(value)
     }).catch(() => {
@@ -393,7 +492,7 @@ class NewSale extends Component {
         <View style={styles.container}>
           <SafeAreaView style={styles.safeArea}>
             <View style={styles.viewswidth}>
-              <Text style={styles.signUptext}> Home </Text>
+              <Text style={styles.signUptext}> New Sale </Text>
               <TouchableOpacity style={{
                 position: 'absolute',
                 left: 20,
@@ -414,7 +513,7 @@ class NewSale extends Component {
 
             <View style={styles.Topcontainer}>
               <TouchableOpacity style={{
-                backgroundColor: this.state.flagone ? "#1CA2FF" : "#0196FD",
+                backgroundColor: this.state.flagone ? "#1CA2FF" : "#ED1C24",
                 alignSelf: "flex-start",
                 //marginHorizontal: "1%",
                 marginBottom: 6,
@@ -424,7 +523,7 @@ class NewSale extends Component {
               }}
                 onPress={() => this.topbarAction1()} >
                 <View style={{
-                  backgroundColor: this.state.flagone ? "#1CA2FF" : "#0196FD",
+                  backgroundColor: this.state.flagone ? "#1CA2FF" : "#ED1C24",
                   alignSelf: "flex-start",
                   //marginHorizontal: "1%",
                   marginBottom: 6,
@@ -448,7 +547,7 @@ class NewSale extends Component {
                 </View>
               </TouchableOpacity>
               <TouchableOpacity style={{
-                backgroundColor: this.state.flagtwo ? "#1CA2FF" : "#0196FD",
+                backgroundColor: this.state.flagtwo ? "#1CA2FF" : "#ED1C24",
                 alignSelf: "flex-start",
                 //marginHorizontal: "1%",
                 marginBottom: 6,
@@ -458,7 +557,7 @@ class NewSale extends Component {
               }}
                 onPress={() => this.topbarAction2()} >
                 <View style={{
-                  backgroundColor: this.state.flagtwo ? "#1CA2FF" : "#0196FD",
+                  backgroundColor: this.state.flagtwo ? "#1CA2FF" : "#ED1C24",
                   alignSelf: "flex-start",
                   //marginHorizontal: "1%",
                   marginBottom: 6,
@@ -480,7 +579,7 @@ class NewSale extends Component {
               </TouchableOpacity>
 
               <TouchableOpacity style={{
-                backgroundColor: this.state.flagthree ? "#1CA2FF" : "#0196FD",
+                backgroundColor: this.state.flagthree ? "#1CA2FF" : "#ED1C24",
                 alignSelf: "flex-start",
                 //marginHorizontal: "1%",
                 marginBottom: 6,
@@ -490,7 +589,7 @@ class NewSale extends Component {
               }}
                 onPress={() => this.topbarAction3()} >
                 <View style={{
-                  backgroundColor: this.state.flagthree ? "#1CA2FF" : "#0196FD",
+                  backgroundColor: this.state.flagthree ? "#1CA2FF" : "#ED1C24",
                   alignSelf: "flex-start",
                   //marginHorizontal: "1%",
                   marginBottom: 6,
@@ -522,47 +621,151 @@ class NewSale extends Component {
               //     } title="Reload" />
               //   </View> :
               <View
-    style={{
-      flex: 1,
-      paddingHorizontal: 0,
-      paddingVertical: 0,
-      marginTop: 0
-    }}>
-    <FlatList
-      ListHeaderComponent={this.renderHeader}
-      data={this.state.data}
-      keyExtractor={item => item.email}
-      renderItem={({ item }) => (
-        <Text style={{ fontSize: 22,height:50,marginTop:10,marginLeft:20, }}>
-          Product name: {item.itemDesc}  Price: {item.netAmount}Rs
-        </Text>
-      )}
-    />
-  </View>
+                style={{
+                  flex: 1,
+                  paddingHorizontal: 0,
+                  paddingVertical: 0,
+                  marginTop: 0
+                }}>
+                <FlatList
+                  ListHeaderComponent={this.renderHeader}
+                  data={this.state.arrayData}
+                  keyExtractor={item => item.email}
+                  renderItem={({ item, index }) => (
+                    <View style={{
+                      height: 80,
+                      backgroundColor: 'lightgray',
+                      margin: 5, borderRadius: 10,
+                      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                    }}>
+                      <View style={{ flexDirection: 'column', width: '55%' }}>
+                        <Text style={{ fontSize: 15, marginTop: 10, marginLeft: 20, fontFamily: 'bold' }}>
+                          Product name: {item.itemdesc}
+                        </Text>
+                        <Text style={{ fontSize: 15, marginBottom: 0, marginLeft: 20, fontFamily: 'bold' }}>
+                          Price: Rs {(parseInt(item.netamount) * item.qty).toString()}
+                        </Text>
+                        <Text style={{ fontSize: 15, marginBottom: 20, marginLeft: 20, fontFamily: 'regular' }}>
+                          Qty: {item.qty}
+                        </Text>
+                      </View>
+                      <View style={{
+                        flexDirection: 'column',
+                        width: '45%',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}>
+                        <TouchableOpacity
+                          style={{
+                            fontSize: 15, fontFamily: 'regular',
+                            right: 20, bottom: 10,
+                            backgroundColor: '#ED1C24', width: 170, height: 30,
+                            textAlign: 'center', justifyContent: 'center', marginTop: 15, //Centered horizontally
+                            alignItems: 'center', borderRadius: 20
+                          }}
+                          onPress={() => this.addAction(item.barcode)} >
+                          <Text style={{
+                            color: "#ffffff"
+                          }}>
+                            ADD TO NEW SALE
+                          </Text>
+                        </TouchableOpacity>
+                        <View style={{
+                          backgroundColor: 'grey',
+                          flexDirection: 'row',
+                          justifyContent: 'space-around',
+                          alignItems: 'center',
+                          height: 30,
+                          width: 90
+                        }}>
+                          <TouchableOpacity>
+                            <Text onPress={() => this.increment(item, index)}>+</Text>
+                          </TouchableOpacity>
+                          {/* <Text> {item.qty}</Text> */}
+                          <TextInput
+                            style={{
+                              justifyContent: 'center',
+                              margin: 20,
+                              height: 30,
+                              width: 30,
+                              marginTop: 10,
+                              marginBottom: 10,
+                              borderColor: '#8F9EB717',
+                              borderRadius: 3,
+                              backgroundColor: 'white',
+                              borderWidth: 1,
+                              fontFamily: 'semibold',
+                              fontSize: 16
+                            }}
+                            underlineColorAndroid="transparent"
+                            placeholder="0"
+                            placeholderTextColor="#8F9EB7"
+                            textAlignVertical="center"
+                            value={item.qty}
+                            onChangeText={(text) => this.updateQty(text, index)}
+                          />
+                          <TouchableOpacity>
+                            <Text onPress={() => this.decreament(item, index)}>-</Text>
+
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+
+                    </View>
+                  )}
+                />
+              </View>
             )}
 
             {this.state.flagone && (
-
               <View style={{ flex: 1 }}>
+                {/* <RNCamera
+                  ref={ref => {
+                    this.camera = ref;
+                  }}
+                  defaultTouchToFocus
+                  flashMode={this.state.camera.flashMode}
+                  mirrorImage={false}
+                  onBarCodeRead={this.onBarCodeRead.bind(this)}
+                  onFocusChanged={() => { }}
+                  onZoomChanged={() => { }}
+                  barCodeTypes={[RNCamera.Constants.BarCodeType.qr, 'qr']}
+                  permissionDialogTitle={'Permission to use camera'}
+                  permissionDialogMessage={'We need your permission to use your camera phone'}
+                  style={styles.preview}
+                  type={this.state.camera.type}>
+                  <BarcodeMask />
+                </RNCamera> */}
+
+
+                <View style={[styles.overlay, styles.topOverlay]}>
+                  <Text style={styles.scanScreenMessage}>Please place and scan the barcode here</Text>
+                </View>
                 <TextInput style={styles.input}
                   underlineColorAndroid="transparent"
-                  placeholder="Scan Barcode"
+                  placeholder="Enter Barcode"
                   placeholderTextColor="#8F9EB7"
                   textAlignVertical="center"
                   keyboardType={'default'}
                   autoCapitalize="none"
+                  onEndEditing
                   onChangeText={(text) => this.handleBarCode(text)}
+                  onEndEditing={() => this.endEditing()}
                 ///  onSubmitEditing={this.barcodeDBStore}
 
                 // value={this.state.username}
                 //   ref={inputemail => { this.emailValueInput = inputemail }}
                 />
 
-                <Image source={require('../assets/images/barcode.png')} style={{
+                <TouchableOpacity style={{
                   position: 'absolute',
                   right: 28,
                   top: 15,
-                }} />
+                }} onPress={() => this.navigateToScanCode()}>
+                  <Image source={require('../assets/images/barcode.png')} />
+                </TouchableOpacity>
+
+                {/* this.props.navigation.navigate('AuthNavigation') */}
 
               </View>
             )}
@@ -627,17 +830,17 @@ class NewSale extends Component {
 
                     >
                       <Text style={{
-                        color: "#0196FD", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
                         fontSize: 12, position: 'absolute', marginTop: 0
                       }}>
                         Tax : ₹0.00 </Text>
                       <Text style={{
-                        color: "#0196FD", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
                         fontSize: 12, position: 'absolute', marginTop: 15
                       }}>
                         Discount : ₹0.00 </Text>
                       <Text style={{
-                        color: "#0196FD", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
                         fontSize: 12, position: 'absolute', marginTop: 30
                       }}>
                         Total Amount :   ₹{this.state.totalAmount}.00 </Text>
@@ -684,7 +887,7 @@ class NewSale extends Component {
                   }}>
                     <View style={{ flexDirection: 'column', flex: 0, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", borderRadius: 20, }}>
                       <Text style={{
-                        color: "#0196FD", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
                         fontSize: 12,
                       }}>Customer Details</Text>
                       <Text style={styles.signInFieldStyle}> Mobile Number* </Text>
@@ -774,7 +977,7 @@ class NewSale extends Component {
                           }}
                           onPress={() => this.modelCancel()} >
                           <Text style={{
-                            textAlign: 'center', marginTop: 15, color: "#0196FD", fontSize: 15,
+                            textAlign: 'center', marginTop: 15, color: "#ED1C24", fontSize: 15,
                             fontFamily: "regular",
                           }}> CANCEL </Text>
                         </TouchableOpacity>
@@ -782,7 +985,7 @@ class NewSale extends Component {
                         <TouchableOpacity
                           style={{
                             width: "50%",
-                            height: 50, backgroundColor: "#0196FD", borderBottomRightRadius: 20,
+                            height: 50, backgroundColor: "#ED1C24", borderBottomRightRadius: 20,
                           }}
                           onPress={() => this.modelCreate()} >
                           <Text style={{
@@ -856,7 +1059,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FAFAFF'
   },
   viewswidth: {
-    backgroundColor: '#0196FD',
+    backgroundColor: '#ED1C24',
     width: deviceWidth,
     textAlign: 'center',
     fontSize: 24,
@@ -873,10 +1076,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     fontFamily: 'semibold',
-    fontSize: 10,
+    fontSize: 16,
   },
   signInButton: {
-    backgroundColor: '#0196FD',
+    backgroundColor: '#ED1C24',
     justifyContent: 'center',
     width: '48%',
     marginLeft: 0,
@@ -889,7 +1092,7 @@ const styles = StyleSheet.create({
     // marginBottom:100,
   },
   qty: {
-    backgroundColor: '#0196FD',
+    backgroundColor: '#ED1C24',
     justifyContent: 'center',
     width: '18%',
     marginTop: 10,
@@ -903,7 +1106,7 @@ const styles = StyleSheet.create({
     marginRight: 34,
   },
   itemscount: {
-    backgroundColor: '#0196FD',
+    backgroundColor: '#ED1C24',
     justifyContent: 'center',
     width: '18%',
     marginLeft: 0,
@@ -929,7 +1132,7 @@ const styles = StyleSheet.create({
     // marginBottom:100,
   },
   signInButtonRight: {
-    backgroundColor: '#0196FD',
+    backgroundColor: '#ED1C24',
     justifyContent: 'center',
     width: '48%',
     marginTop: 10,
@@ -1013,7 +1216,7 @@ const styles = StyleSheet.create({
   },
   text: {
     margin: 6,
-    color: "#0196FD",
+    color: "#ED1C24",
     fontFamily: "semibold",
     fontSize: 11,
   },
@@ -1076,7 +1279,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   bluebox: {
-    backgroundColor: "#0196FD",
+    backgroundColor: "#ED1C24",
     alignSelf: "flex-start",
     //marginHorizontal: "1%",
     marginBottom: 6,
@@ -1085,7 +1288,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   blackbox: {
-    backgroundColor: "#0196FD",
+    backgroundColor: "#ED1C24",
     alignSelf: "flex-start",
     //marginHorizontal: "1%",
     marginBottom: 6,
@@ -1094,7 +1297,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   greenbox: {
-    backgroundColor: "#0196FD",
+    backgroundColor: "#ED1C24",
     alignSelf: "flex-start",
     //marginHorizontal: "1%",
     marginBottom: 6,
@@ -1128,7 +1331,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 6,
     //borderRadius: 4,
-    backgroundColor: "#0196FD",
+    backgroundColor: "#ED1C24",
     alignSelf: "flex-start",
     //marginHorizontal: "1%",
     marginBottom: 6,
@@ -1139,7 +1342,7 @@ const styles = StyleSheet.create({
   selected: {
     backgroundColor: "#BBE3FF",
     borderWidth: 0,
-    backgroundColor: "#0196FD",
+    backgroundColor: "#ED1C24",
   },
   buttonLabel: {
     textAlign: "center",
@@ -1182,4 +1385,49 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   btnText: { textAlign: 'center', color: '#fff' }
+
+
+  ,
+  preview: {
+    margin: 20,
+    height: 300,
+    marginTop: 5,
+    marginBottom: 10,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  overlay: {
+    position: 'absolute',
+    padding: 16,
+    right: 0,
+    left: 0,
+    alignItems: 'center'
+  },
+  topOverlay: {
+    top: 0,
+    flex: 1,
+    marginLeft: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  bottomOverlay: {
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  enterBarcodeManualButton: {
+    padding: 15,
+    backgroundColor: 'white',
+    borderRadius: 40
+  },
+  scanScreenMessage: {
+    fontSize: 14,
+    color: 'white',
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });

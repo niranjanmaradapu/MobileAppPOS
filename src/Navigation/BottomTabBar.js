@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import NewSale from '../components/tabbar/NewSale';
 import Settings from '../components/tabbar/Settings';
 import ScanBarCode from '../components/tabbar/ScanBarCode';
+import NewSaleNavigation from './NewSaleNavigation';
 
 
  
@@ -38,9 +39,9 @@ class BottomTabBar extends Component {
             // tabBarLabel:() => {return null},
           })}
         >
-          <Tab.Screen name="HOME"  title='Home' options={{headerShown: false}} component={NewSale}/>
-          <Tab.Screen name="MARKET" options={{headerShown: false}} component={ScanBarCode} />
-          <Tab.Screen name="NEW SALE" options={{headerShown: false}} component={NewSale} />
+          <Tab.Screen name="HOME"  title='Home' options={{headerShown: false}} component={Settings}/>
+          <Tab.Screen name="MARKET" options={{headerShown: false}} component={Settings} />
+          <Tab.Screen name="NEW SALE" options={{headerShown: false}} component={NewSaleNavigation} />
           <Tab.Screen name="PROMO" options={{headerShown: false}} component={Settings} />
           <Tab.Screen name="PROFILE" options={{headerShown: false}} component={Settings} />
         </Tab.Navigator>

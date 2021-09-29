@@ -29,7 +29,7 @@ class Settings extends Component {
                 <View style={styles.container}>
                     <SafeAreaView style={styles.safeArea}>
                         <View style={styles.viewswidth}>
-                            <Text style={styles.signUptext}> Settings </Text>
+                            <Text style={styles.signUptext}> Home </Text>
                             <TouchableOpacity style={{
                                 position: 'absolute',
                                 left: 20,

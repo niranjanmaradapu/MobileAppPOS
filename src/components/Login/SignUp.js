@@ -30,16 +30,16 @@ class SignUp extends Component {
                 }  */}
                 <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                     <View style={styles.viewswidth}>
-                    <TouchableOpacity style={{
-                position: 'absolute',
-                left: 10,
-                top: 20,
-                width: 20,
-                height: 20,
-              }} onPress={() => this.handleBackButtonClick()}>
-                <Image source={require('../assets/images/backButton.png')} />
-              </TouchableOpacity>
-              
+                        <TouchableOpacity style={{
+                            position: 'absolute',
+                            left: 10,
+                            top: 20,
+                            width: 20,
+                            height: 20,
+                        }} onPress={() => this.handleBackButtonClick()}>
+                            <Image source={require('../assets/images/backButton.png')} />
+                        </TouchableOpacity>
+
                         {/* <Text style={styles.signUptext}> Sign Up </Text>
                         <Icons name={'arrow-back'} size={30} color='#ffffff' onPress={this.handleBackButtonClick} style={{
                             position: 'absolute',
@@ -107,7 +107,7 @@ class SignUp extends Component {
                                 //value={this.state.password}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
 
-<TextInput style={styles.passwordInput}
+                            <TextInput style={styles.passwordInput}
                                 underlineColorAndroid="transparent"
                                 placeholder="SELECT STORE"
                                 secureTextEntry={true}
@@ -117,7 +117,7 @@ class SignUp extends Component {
                                 //value={this.state.password}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
 
-<TextInput style={styles.passwordInput}
+                            <TextInput style={styles.passwordInput}
                                 underlineColorAndroid="transparent"
                                 placeholder="CREATE PASSWORD"
                                 secureTextEntry={true}
@@ -128,7 +128,7 @@ class SignUp extends Component {
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
 
 
-<TextInput style={styles.passwordInput}
+                            <TextInput style={styles.passwordInput}
                                 underlineColorAndroid="transparent"
                                 placeholder="CONFIRM PASSWORD"
                                 secureTextEntry={true}

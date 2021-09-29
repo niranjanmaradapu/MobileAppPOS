@@ -163,36 +163,45 @@
 //   }
 
 import React, { Component } from 'react';
-import { Button, Text, View,Alert } from 'react-native';
+import { Button, Text, View, Alert, TouchableOpacity, Image } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 
 class ScanBarCode extends Component {
-
   constructor(props) {
     super(props);
     this.camera = null;
     this.barcodeCodes = [];
-
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.state = {
       camera: {
         type: RNCamera.Constants.Type.back,
-	flashMode: RNCamera.Constants.FlashMode.auto,
+        flashMode: RNCamera.Constants.FlashMode.auto,
       }
     };
   }
 
   onBarCodeRead(e) {
-    if(!this.alertPresent){
-      this.alertPresent = true;
-          Alert.alert(
-            "Barcode type is " + e.type,
-            "Barcode value is " + e.data,
-            [
-                 {text: 'OK', onPress: () => this.alertPresent = false},
-            ],
-              {cancelable: false},
-          );
-      }
+    global.barcodeId = e.data
+    this.props.route.params.onGoBack();
+     this.props.navigation.goBack();
+    // if (!this.alertPresent) {
+    //   this.alertPresent = true;
+    //   Alert.alert(
+    //     "Barcode type is " + e.type,
+    //     "Barcode value is " + e.data,
+    //     [
+    //       { text: 'OK', onPress: () => this.alertPresent = false },
+    //     ],
+    //     { cancelable: false },
+    //   );
+    //}
+  }
+
+  handleBackButtonClick() {
+    global.barcodeId = "back clicked"
+    this.props.route.params.onGoBack();
+     this.props.navigation.goBack();
+    return true;
   }
 
   async takePicture() {
@@ -221,32 +230,50 @@ class ScanBarCode extends Component {
   render() {
     return (
       <View style={styles.container}>
+        {/* <TouchableOpacity style={{
+          position: 'absolute',
+          left: 10,
+          top: 20,
+          width: 20,
+          height: 20,
+        }} onPress={() => this.handleBackButtonClick()}>
+          <Image source={require('../assets/images/backButton.png')} />
+        </TouchableOpacity> */}
+
+        {/* <Text style={styles.signUptext}> Sign Up </Text>
+                        <Icons name={'arrow-back'} size={30} color='#ffffff' onPress={this.handleBackButtonClick} style={{
+                            position: 'absolute',
+                            left: 5,
+                            top: 35
+                        }} /> */}
         <RNCamera
-            ref={ref => {
-              this.camera = ref;
-            }}
-            defaultTouchToFocus
-            flashMode={this.state.camera.flashMode}
-            mirrorImage={false}
-            onBarCodeRead={this.onBarCodeRead.bind(this)}
-            onFocusChanged={() => {}}
-            onZoomChanged={() => {}}
-            barCodeTypes={[RNCamera.Constants.BarCodeType.qr, 'qr']}
-            permissionDialogTitle={'Permission to use camera'}
-            permissionDialogMessage={'We need your permission to use your camera phone'}
-            style={styles.preview}
-            type={this.state.camera.type}
+          ref={ref => {
+            this.camera = ref;
+          }}
+          defaultTouchToFocus
+          flashMode={this.state.camera.flashMode}
+          mirrorImage={false}
+          onBarCodeRead={this.onBarCodeRead.bind(this)}
+          onFocusChanged={() => { }}
+          onZoomChanged={() => { }}
+          barCodeTypes={[RNCamera.Constants.BarCodeType.qr, 'qr']}
+          permissionDialogTitle={'Permission to use camera'}
+          permissionDialogMessage={'We need your permission to use your camera phone'}
+          style={styles.preview}
+          type={this.state.camera.type}
         />
         <View style={[styles.overlay, styles.topOverlay]}>
-	  <Text style={styles.scanScreenMessage}>Please scan the barcode.</Text>
-	</View>
-	<View style={[styles.overlay, styles.bottomOverlay]}>
+          <Text style={styles.scanScreenMessage}>Please scan the barcode.</Text>
+        </View>
+        <View style={[styles.overlay, styles.bottomOverlay]}>
           <Button
-            onPress={() => { console.log('scan clicked'); }}
+            onPress={() => {  this.handleBackButtonClick() }}
             style={styles.enterBarcodeManualButton}
-            title="Enter Barcode"
-           />
-	</View>
+            im
+            title="Back"
+          />
+            
+        </View>
       </View>
     );
   }
@@ -256,10 +283,12 @@ const styles = {
   container: {
     flex: 1
   },
+
   preview: {
     flex: 1,
     justifyContent: 'flex-end',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 80,
   },
   overlay: {
     position: 'absolute',
@@ -276,11 +305,11 @@ const styles = {
     alignItems: 'center'
   },
   bottomOverlay: {
-    bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    marginTop: 20,
+    marginLeft:10,
+    backgroundColor: 'ffffff',
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+   
   },
   enterBarcodeManualButton: {
     padding: 15,
@@ -289,6 +318,7 @@ const styles = {
   },
   scanScreenMessage: {
     fontSize: 14,
+    marginTop: 200,
     color: 'white',
     textAlign: 'center',
     alignItems: 'center',
