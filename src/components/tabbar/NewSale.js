@@ -418,6 +418,7 @@ class NewSale extends Component {
 
   navigateToScanCode() {
     global.barcodeId = 'something'
+    this.setState({ barcodeId: global.barcodeId })
     this.props.navigation.navigate('ScanBarCode', {
       onGoBack: () => this.refresh(),
     });
