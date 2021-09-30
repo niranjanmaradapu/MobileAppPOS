@@ -226,11 +226,28 @@ class NewSale extends Component {
               let totalAmount = String(item["netAmount"])
               console.log(JSON.stringify(item))
               this.state.quantity = qty
+            //   if (this.state.tableData.length > 0) {
+            //   for (let i = 0; i < this.state.tableData.length; i++) {
+            //       if(barcode == this.state.tableData[i].barcode){
+            //         const qtyarr = [...this.state.tableData];
+            //         qtyarr[i].netAmount =  String( parseInt(qtyarr[i].netAmount + item["netAmount"]))
+            //         this.setState({ tableData: qtyarr })
+            //       }
+            //       else{
+            //         this.state.totalQty = this.state.totalQty + item["qty"]
+            //         this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * item["qty"])
+            //           this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+            //           }
+            //   }
+            // }
+            // else{
               this.state.totalQty = this.state.totalQty + item["qty"]
               this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * item["qty"])
+              this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+              //}
               //parse this.state.totalAmount + item["netAmount"]
               // this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
-              this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+              
               this.setState({ flagone: true })
               this.setState({ flagtwo: false })
               this.setState({ flagthree: false })
@@ -392,6 +409,10 @@ class NewSale extends Component {
 
 
   topbarAction3() {
+    this.setState({ arrayData: [] })
+    this.setState({ temp: [] })
+    this.setState({ search: null})
+
     this.setState({ flagone: false })
     this.setState({ flagtwo: false })
     this.setState({ flagthree: true })
@@ -456,7 +477,7 @@ class NewSale extends Component {
 
     var additem = parseInt(qtyarr[index].qty) - 1;
     qtyarr[index].qty = additem.toString()
-    if (qtyarr[index].qty >= 0) {
+    if (qtyarr[index].qty > 0) {
       this.setState({ tableData: qtyarr })
     }
     //this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)).toString()
@@ -494,7 +515,7 @@ class NewSale extends Component {
 
     var additem = parseInt(qtyarr[index].qty) - 1;
     qtyarr[index].qty = additem.toString()
-    if (qtyarr[index].qty >= 0) {
+    if (qtyarr[index].qty > 0) {
       this.setState({ arrayData: qtyarr })
     }
 
@@ -924,7 +945,7 @@ class NewSale extends Component {
                               height: 30,
                               width: 80,
                               marginLeft:-80,
-                              marginTop: 30,
+                              marginTop: 40,
                               borderColor: '#8F9EB717',
                               borderRadius: 3,
                               backgroundColor: 'white',

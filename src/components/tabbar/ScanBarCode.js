@@ -329,9 +329,11 @@ class ScanBarCode extends Component {
       ],
         {cancelable: false},
     );
+    if(global.barcodeId == "something"){
     global.barcodeId = e.data
     this.props.route.params.onGoBack();
      this.props.navigation.goBack();
+    }
   }
 
   async takePicture() {
