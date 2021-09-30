@@ -302,6 +302,8 @@
 import React, { Component } from 'react';
 import { Button, Text, View,Alert } from 'react-native';
 import { RNCamera } from 'react-native-camera';
+import BarcodeMask from 'react-native-barcode-mask';
+ 
 
 class ScanBarCode extends Component {
 
@@ -371,8 +373,9 @@ class ScanBarCode extends Component {
             permissionDialogTitle={'Permission to use camera'}
             permissionDialogMessage={'We need your permission to use your camera phone'}
             style={styles.preview}
-            type={this.state.camera.type}
-        />
+            type={this.state.camera.type}>
+            <BarcodeMask />
+            </RNCamera>
         <View style={[styles.overlay, styles.topOverlay]}>
 	  <Text style={styles.scanScreenMessage}>Please scan the barcode.</Text>
 	</View>

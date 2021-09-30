@@ -408,17 +408,19 @@ class NewSale extends Component {
   }
 
   refresh() {
+    //if( global.barcodeId != 'something'){
     this.setState({ barcodeId: global.barcodeId })
     this.barcodeDBStore()
     this.setState({ flagone: true })
     this.setState({ flagtwo: false })
     this.setState({ flagthree: false })
     this.setState({ flagfour: false })
+   // }
   }
 
   navigateToScanCode() {
     global.barcodeId = 'something'
-    this.setState({ barcodeId: global.barcodeId })
+   //this.setState({ barcodeId: global.barcodeId })
     this.props.navigation.navigate('ScanBarCode', {
       onGoBack: () => this.refresh(),
     });
