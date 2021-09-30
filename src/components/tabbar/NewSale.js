@@ -152,14 +152,32 @@ class NewSale extends Component {
 
 
   }
-  addAction(text) {
-    console.log('barcode------is' + text)
-    this.setState({ barcodeId: text })
-    this.barcodeDBStore()
+  addAction = (item, index) => {
+    const qtyarr = [...this.state.arrayData];
+    //this.setState({ barcodeId: text })
+    let sno = String(this.state.tableData.length + 1)
+    let barcode = qtyarr[index].barcode
+    //let barcode = item["barcode"]
+    let itemDesc = qtyarr[index].itemdesc
+    //let itemDesc = item["itemDesc"]
+    let qty = qtyarr[index].qty
+    let netAmount = qtyarr[index].netamount 
+    //let netAmount = String(item["netAmount"])
+    // let qty = String(item["qty"])
+
+    let totalAmount = String(qtyarr[index].netamount)
+    //console.log(JSON.stringify(item))
+    this.state.quantity = qty
+    this.state.totalQty = (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
+    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount) * qty).toString()
+    //this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
+    this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+    // this.barcodeDBStore()
     this.setState({ flagone: true })
     this.setState({ flagtwo: false })
     this.setState({ flagthree: false })
     this.setState({ flagfour: false })
+
   }
 
   renderHeader = () => {
@@ -209,8 +227,10 @@ class NewSale extends Component {
               console.log(JSON.stringify(item))
               this.state.quantity = qty
               this.state.totalQty = this.state.totalQty + item["qty"]
-              this.state.totalAmount = this.state.totalAmount + item["netAmount"]
-              this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
+              this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * item["qty"])
+              //parse this.state.totalAmount + item["netAmount"]
+              // this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
+              this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
               this.setState({ flagone: true })
               this.setState({ flagtwo: false })
               this.setState({ flagthree: false })
@@ -376,6 +396,7 @@ class NewSale extends Component {
     this.setState({ flagtwo: false })
     this.setState({ flagthree: true })
     this.setState({ flagfour: false })
+    this.getItems()
   }
 
 
@@ -401,18 +422,56 @@ class NewSale extends Component {
       onGoBack: () => this.refresh(),
     });
   }
-  _alertIndex(index) {
-    //     const some_array = [...this.state.qty]
-    // some_array[index] = this.state.quantity
-    // //this.setState({some_array:some_array})
-    // //    this.state.qty[index] = this.state.quantity
-    //     this.setState({ some_array: some_array })
-    //     console.log(some_array)
-    //    // Alert.alert(`This is row ${index + 1}`);
+
+  updateQtyForTable = (text, index) => {
+    const qtyarr = [...this.state.tableData];
+    qtyarr[index].qty = text;
+    this.setState({ tableData: qtyarr })
+    // this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(text)).toString()
+    this.state.totalQty = (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
+    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
   }
+
+  incrementForTable = (item, index) => {
+    const qtyarr = [...this.state.tableData];
+    var additem = parseInt(qtyarr[index].qty) + 1;
+    // var priceFor1 = parseInt(item.netAmount)
+    // var price = priceFor1  * additem;
+    // qtyarr[index].netamount = price.toString()
+    qtyarr[index].qty = additem.toString()
+    this.setState({ tableData: qtyarr })
+   // var minumsValue = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
+   //console.log('minusdd' + minumsValue)
+    //this.state.totalQty = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
+   // this.state.totalQty =  (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
+    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
+
+  }
+
+  decreamentForTable = (item, index) => {
+    const qtyarr = [...this.state.tableData];
+
+    var additem = parseInt(qtyarr[index].qty) - 1;
+    qtyarr[index].qty = additem.toString()
+    if (qtyarr[index].qty >= 0) {
+      this.setState({ tableData: qtyarr })
+    }
+    //this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)).toString()
+    this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(qtyarr[index].netamount)).toString()
+
+  }
+
+
+
   updateQty = (text, index) => {
     const qtyarr = [...this.state.arrayData];
     qtyarr[index].qty = text;
+    this.setState({ arrayData: qtyarr })
+  }
+
+  updateQtyValue = (text, index) => {
+    const qtyarr = [...this.state.arrayData];
+    //qtyarr[index].qty = text;
     this.setState({ arrayData: qtyarr })
   }
 
@@ -648,26 +707,49 @@ class NewSale extends Component {
                         <Text style={{ fontSize: 15, marginBottom: 20, marginLeft: 20, fontFamily: 'regular' }}>
                           Qty: {item.qty}
                         </Text>
+                        
                       </View>
+                      <TextInput
+                            style={{
+                              justifyContent: 'center',
+                              height: 30,
+                              width: 80,
+                              marginLeft:-80,
+                              marginTop: 30,
+                              borderColor: '#8F9EB717',
+                              borderRadius: 3,
+                              backgroundColor: 'white',
+                              borderWidth: 1,
+                              fontFamily: 'semibold',
+                              fontSize: 16
+                            }}
+                            underlineColorAndroid="transparent"
+                            placeholder="0"
+                            placeholderTextColor="#8F9EB7"
+
+                            value={'1PC'}
+                            onChangeText={(text) => this.updateQtyValue(text, index)}
+                          />
                       <View style={{
                         flexDirection: 'column',
                         width: '45%',
                         justifyContent: 'space-between',
                         alignItems: 'center'
                       }}>
+                        
                         <TouchableOpacity
                           style={{
                             fontSize: 15, fontFamily: 'regular',
                             right: 20, bottom: 10,
-                            backgroundColor: '#ED1C24', width: 170, height: 30,
+                            backgroundColor: '#ED1C24', width: 60, height: 30,
                             textAlign: 'center', justifyContent: 'center', marginTop: 15, //Centered horizontally
                             alignItems: 'center', borderRadius: 20
                           }}
-                          onPress={() => this.addAction(item.barcode)} >
+                          onPress={() => this.addAction(item, index)} >
                           <Text style={{
                             color: "#ffffff"
                           }}>
-                            ADD TO NEW SALE
+                            ADD
                           </Text>
                         </TouchableOpacity>
                         <View style={{
@@ -700,7 +782,7 @@ class NewSale extends Component {
                             underlineColorAndroid="transparent"
                             placeholder="0"
                             placeholderTextColor="#8F9EB7"
-                            textAlignVertical="center"
+
                             value={item.qty}
                             onChangeText={(text) => this.updateQty(text, index)}
                           />
@@ -785,10 +867,10 @@ class NewSale extends Component {
                   left: 30, marginTop: 5,
                 }} />
                 {/* </TouchableOpacity> */}
-                <Table borderStyle={{ borderWidth: 2, borderColor: '#FFFFFF', backgroundColor: "#FAFAFF" }}>
+                {/* <Table borderStyle={{ borderWidth: 2, borderColor: '#FFFFFF', backgroundColor: "#FAFAFF" }}>
                   <Row data={state.tableHead} style={styles.head} textStyle={styles.text} />
                   {/* <Rows data={this.state.tableData} style={styles.head} textStyle={styles.textData} /> */}
-                  {/* {
+                {/* {
                     state.tableData.map((rowData, index) => (
                       <TableWrapper key={index} style={styles.head} textStyle={styles.textData}>
                         {
@@ -799,7 +881,7 @@ class NewSale extends Component {
                       </TableWrapper>
                     ))
                   } */}
-                  {state.tableData.map((rowData, index) => (
+                {/* {state.tableData.map((rowData, index) => (
                     <TableWrapper key={index} style={styles.row} textStyle={styles.textData}>
                       {
                         rowData.map((cellData, cellIndex) => (
@@ -809,15 +891,125 @@ class NewSale extends Component {
                     </TableWrapper>
                   ))
                   }
-                </Table>
+                </Table>  */}
+
+                <FlatList
+                  // ListHeaderComponent={this.renderHeader}
+                  data={this.state.tableData}
+                  keyExtractor={item => item.email}
+                  renderItem={({ item, index }) => (
+                    <View style={{
+                      height: 80,
+                      backgroundColor: 'lightgray',
+                      margin: 5, borderRadius: 10,
+                      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                    }}>
+                      <View style={{ flexDirection: 'column', width: '55%' }}>
+                        <Text style={{ fontSize: 15, marginTop: 10, marginLeft: 20, fontFamily: 'bold' }}>
+                          Product name: {item.itemdesc}
+                        </Text>
+                        <Text style={{ fontSize: 15, marginBottom: 0, marginLeft: 20, fontFamily: 'bold' }}>
+                          Price: Rs {(parseInt(item.netamount) * item.qty).toString()}
+                        </Text>
+                        <Text style={{ fontSize: 15, marginBottom: 20, marginLeft: 20, fontFamily: 'regular' }}>
+                          Qty: {item.qty}
+                        </Text>
+                      </View>
+                      <TextInput
+                            style={{
+                              justifyContent: 'center',
+                              height: 30,
+                              width: 80,
+                              marginLeft:-80,
+                              marginTop: 30,
+                              borderColor: '#8F9EB717',
+                              borderRadius: 3,
+                              backgroundColor: 'white',
+                              borderWidth: 1,
+                              fontFamily: 'semibold',
+                              fontSize: 16
+                            }}
+                            underlineColorAndroid="transparent"
+                            placeholder="0"
+                            placeholderTextColor="#8F9EB7"
+
+                            value={'1PC'}
+                            onChangeText={(text) => this.updateQtyValue(text, index)}
+                          />
+                      <View style={{
+                        flexDirection: 'column',
+                        width: '45%',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}>
+                        {/* <TouchableOpacity
+                          style={{
+                            fontSize: 15, fontFamily: 'regular',
+                            right: 20, bottom: 10,
+                            backgroundColor: '#ED1C24', width: 170, height: 30,
+                            textAlign: 'center', justifyContent: 'center', marginTop: 15, //Centered horizontally
+                            alignItems: 'center', borderRadius: 20
+                          }}
+                          onPress={() => this.addAction(item, index)} >
+                          <Text style={{
+                            color: "#ffffff"
+                          }}>
+                            ADD TO NEW SALE
+                          </Text>
+                        </TouchableOpacity> */}
+                        <View style={{
+                          backgroundColor: 'grey',
+                          flexDirection: 'row',
+                          justifyContent: 'space-around',
+                          alignItems: 'center',
+                          height: 30,
+                          width: 90
+                        }}>
+                          <TouchableOpacity>
+                            <Text onPress={() => this.incrementForTable(item, index)}>+</Text>
+                          </TouchableOpacity>
+                          {/* <Text> {item.qty}</Text> */}
+                          <TextInput
+                            style={{
+                              justifyContent: 'center',
+                              margin: 20,
+                              height: 30,
+                              width: 30,
+                              marginTop: 10,
+                              marginBottom: 10,
+                              borderColor: '#8F9EB717',
+                              borderRadius: 3,
+                              backgroundColor: 'white',
+                              borderWidth: 1,
+                              fontFamily: 'semibold',
+                              fontSize: 16
+                            }}
+                            underlineColorAndroid="transparent"
+                            placeholder="0"
+                            placeholderTextColor="#8F9EB7"
+                            textAlignVertical="center"
+                            value={item.qty}
+                            onChangeText={(text) => this.updateQtyForTable(text, index)}
+                          />
+                          <TouchableOpacity>
+                            <Text onPress={() => this.decreamentForTable(item, index)}>-</Text>
+
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+
+                    </View>
+                  )}
+                />
+
 
                 {this.state.tableData.length != 0 && (
                   <View style={styles.TopcontainerforItems}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                       style={styles.qty}
                     >
                       <Text style={styles.signInButtonText}>  {this.state.totalQty} Qty </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <TouchableOpacity
                       style={styles.itemscount}
