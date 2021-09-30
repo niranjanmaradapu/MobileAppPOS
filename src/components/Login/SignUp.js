@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, Image, ImageBackground, Text, ActivityIndicator, TouchableOpacity, TouchableHighlight, TextInput, StyleSheet, Dimensions, scrollview, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import RNPickerSelect from 'react-native-picker-select';
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
 import Icons from 'react-native-vector-icons/MaterialIcons';

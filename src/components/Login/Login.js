@@ -10,6 +10,7 @@ import jwt_decode from "jwt-decode";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../loader';
 var deviceheight = Dimensions.get('window').height;
+import I18n, { getLanguages } from 'react-native-i18n';
 
 
 // import Routes from "./routes";
@@ -214,32 +215,32 @@ export default class Login extends Component {
                                     flexDirection: 'column',
                                     justifyContent: 'center',
                                     fontSize: 28,
-                                }}> Hey, </Text>
+                                }}> {I18n.t('Hey')} </Text>
                                 <Text style={{
                                     color: "#353C40", fontSize: 20, fontFamily: "bold", marginLeft: 10, marginTop: 0,
                                     flexDirection: 'column',
-                                    justifyContent: 'center',
+                                    justifyContent: 'center',height:45,
                                     fontSize: 28,
-                                }}> Login Now </Text>
-                                <View style={{ marginTop: 15, marginLeft: 18, flexDirection: 'row' }}>
+                                }}> {I18n.t('Login Now')} </Text>
+                                {/* <View style={{ marginTop: 15, marginLeft: 18, flexDirection: 'row' }}>
 
                                     <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}>If you are new / </Text>
                                     <TouchableOpacity
                                         onPress={() => this.signUpButtonClicked()} >
                                         <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> Create Account </Text>
                                     </TouchableOpacity>
-                                </View>
+                                </View> */}
 
 
                             </View>
 
 
 
-                            <View style={{ flex: 1.4 }}>
+                            <View style={{ flex: 2 }}>
                                 {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
                                 <TextInput style={styles.input}
                                     underlineColorAndroid="transparent"
-                                    placeholder="Username"
+                                    placeholder={I18n.t('Username')}
                                     placeholderTextColor="#6F6F6F"
                                     // textAlignVertical="center"
                                     autoCapitalize="none"
@@ -251,7 +252,7 @@ export default class Login extends Component {
                                 {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
                                 <TextInput style={styles.passwordInput}
                                     underlineColorAndroid="transparent"
-                                    placeholder="Password"
+                                    placeholder={I18n.t('Password')}
                                     secureTextEntry={true}
                                     placeholderTextColor="#6F6F6F"
                                     autoCapitalize="none"
@@ -277,7 +278,7 @@ export default class Login extends Component {
                                         fontSize: 14
                                     }}
                                         placeholder={{
-                                            label: 'Select Store',
+                                            label:I18n.t('Select Store'),
                                             value: " ",
                                         }}
                                         Icon={() => {
@@ -325,7 +326,7 @@ export default class Login extends Component {
                                             {/* <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> Forgot password? </Text> */}
                                             <TouchableOpacity
                                                 onPress={() => this.signUpButtonClicked()} >
-                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> Remember Me </Text>
+                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> {I18n.t('Remember Me')} </Text>
                                             </TouchableOpacity>
                                         </View>
 
@@ -335,10 +336,10 @@ export default class Login extends Component {
                                             top: 35,alignItems:'center', flexDirection: 'row'
                                         }}>
 
-                                            <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> Forgot password? </Text>
+                                            <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> {I18n.t('Forgot password')} </Text>
                                             <TouchableOpacity
                                                 onPress={() => this.signUpButtonClicked()} >
-                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> Reset </Text>
+                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> {I18n.t('Reset')} </Text>
                                             </TouchableOpacity>
                                         </View>
                                         {/* <Text style={{
@@ -359,7 +360,7 @@ export default class Login extends Component {
                                 <TouchableOpacity
                                     style={styles.signInButton}
                                     onPress={() => this.login()} >
-                                    <Text style={styles.signInButtonText}> SIGN IN </Text>
+                                    <Text style={styles.signInButtonText}> {I18n.t('SIGN IN')} </Text>
                                 </TouchableOpacity>
 
                                 {/* <TouchableOpacity
