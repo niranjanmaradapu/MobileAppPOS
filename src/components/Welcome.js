@@ -105,15 +105,17 @@ export default class Welcome extends React.Component {
                 <View style={{ flex: 1, marginTop: 400, width: deviceWidth, height: 200 }}>
                     <Text style={{ color: "#353C4050", fontSize: 16, fontFamily: "bold", marginLeft: 20, marginTop: 20 }}> {I18n.t('Get Started')} </Text>
                     <Text style={{
-                        color: "#353C40", fontSize: 30, fontFamily: "bold", marginLeft: 20, marginTop: 20, flexDirection: 'column',height:90,
+                        color: "#353C40", fontSize: 30, fontFamily: "bold", marginLeft: 20, marginTop: 20, flexDirection: 'column',height:135,
                         justifyContent: 'center'
                     }}> {I18n.t('Lets explore the world Best Retail & Textiles')} </Text>
-                    <TouchableOpacity
+                  
+                </View>
+               
+                <TouchableOpacity
                         style={styles.signInButton}
                         onPress={() => this.letsGoButtonAction()} >
                         <Text style={styles.signInButtonText}> {I18n.t('LET GO')} </Text>
                     </TouchableOpacity>
-                </View>
             </View>
 
         )
@@ -182,9 +184,10 @@ const styles = StyleSheet.create({
     signInButton: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 120,
+        position: 'absolute', 
+        marginLeft:20,
+        width:deviceWidth-40,
+        bottom:30,
         height: 44,
         borderRadius: 10,
         fontWeight: 'bold',
