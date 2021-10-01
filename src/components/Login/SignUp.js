@@ -1,11 +1,8 @@
 import React, { Component } from 'react'
-import { View, Image, ImageBackground, Text, ActivityIndicator, TouchableOpacity, TouchableHighlight, TextInput, StyleSheet, Dimensions, scrollview, SafeAreaView } from 'react-native';
+import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
-import Icons from 'react-native-vector-icons/MaterialIcons';
-// import Routes from "./routes";
-// import LeftSideBar from "./leftsidebar";
 
 class SignUp extends Component {
     constructor(props) {

@@ -1,6 +1,7 @@
 import React from 'react';
-import { StatusBar, StyleSheet, ImageBackground, View, Text, Image, ActivityIndicator,reactN } from 'react-native';
-import AuthNavigation from '../Navigation/AuthNavigation';
+import { StyleSheet, View, Text, Image } from 'react-native';
+
+
 export default class SplashScreen extends React.Component {
     constructor(props) {
         super(props);
@@ -14,14 +15,14 @@ export default class SplashScreen extends React.Component {
         }, 2500);
     }
 
-      render() {
+    render() {
         return (
             <View style={styles.container}>
                 <Image source={require('./assets/images/welcomeLogo.png')} style={styles.logoImage} />
-                <Text style={{ textAlign:'center',color:"#353C40",position: 'absolute',  bottom:70,fontSize:14}}> POWERED BY OTSI </Text>
-                </View>
+                <Text style={{ textAlign: 'center', color: "#353C40", position: 'absolute', bottom: 70, fontSize: 14 }}> POWERED BY OTSI </Text>
+            </View>
         )
-}
+    }
 }
 
 

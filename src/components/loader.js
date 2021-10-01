@@ -17,10 +17,10 @@ const Loader = props => {
       transparent={true}
       animationType={'none'}
       visible={true}
-      onRequestClose={() => {console.log('close modal')}}>
+      onRequestClose={() => { console.log('close modal') }}>
       <View style={styles.modalBackground}>
         <View style={styles.activityIndicatorWrapper}>
-        <ActivityIndicator size="large" color="#1D7791" />
+          <ActivityIndicator size="large" color="#1D7791" />
           {/* <ActivityIndicator
             animating={true} /> */}
         </View>

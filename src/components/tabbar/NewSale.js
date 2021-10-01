@@ -20,6 +20,7 @@ import { ListItem, SearchBar } from "react-native-elements";
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 import { RNCamera } from 'react-native-camera';
 import BarcodeMask from 'react-native-barcode-mask';
+import NetInfo from "@react-native-community/netinfo";
 
 
 class NewSale extends Component {
@@ -161,7 +162,7 @@ class NewSale extends Component {
     let itemDesc = qtyarr[index].itemdesc
     //let itemDesc = item["itemDesc"]
     let qty = qtyarr[index].qty
-    let netAmount = qtyarr[index].netamount 
+    let netAmount = qtyarr[index].netamount
     //let netAmount = String(item["netAmount"])
     // let qty = String(item["qty"])
 
@@ -226,28 +227,28 @@ class NewSale extends Component {
               let totalAmount = String(item["netAmount"])
               console.log(JSON.stringify(item))
               this.state.quantity = qty
-            //   if (this.state.tableData.length > 0) {
-            //   for (let i = 0; i < this.state.tableData.length; i++) {
-            //       if(barcode == this.state.tableData[i].barcode){
-            //         const qtyarr = [...this.state.tableData];
-            //         qtyarr[i].netAmount =  String( parseInt(qtyarr[i].netAmount + item["netAmount"]))
-            //         this.setState({ tableData: qtyarr })
-            //       }
-            //       else{
-            //         this.state.totalQty = this.state.totalQty + item["qty"]
-            //         this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * item["qty"])
-            //           this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
-            //           }
-            //   }
-            // }
-            // else{
+              //   if (this.state.tableData.length > 0) {
+              //   for (let i = 0; i < this.state.tableData.length; i++) {
+              //       if(barcode == this.state.tableData[i].barcode){
+              //         const qtyarr = [...this.state.tableData];
+              //         qtyarr[i].netAmount =  String( parseInt(qtyarr[i].netAmount + item["netAmount"]))
+              //         this.setState({ tableData: qtyarr })
+              //       }
+              //       else{
+              //         this.state.totalQty = this.state.totalQty + item["qty"]
+              //         this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * item["qty"])
+              //           this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+              //           }
+              //   }
+              // }
+              // else{
               this.state.totalQty = this.state.totalQty + item["qty"]
               this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * item["qty"])
               this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
               //}
               //parse this.state.totalAmount + item["netAmount"]
               // this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
-              
+
               this.setState({ flagone: true })
               this.setState({ flagtwo: false })
               this.setState({ flagthree: false })
@@ -348,45 +349,51 @@ class NewSale extends Component {
   }
 
   pay = () => {
-    //  console.log(this.state.totalAmount)
-    const params = {
-      "amount": JSON.stringify(this.state.totalAmount),
-      "info": "order_request"
-    }
+    NetInfo.addEventListener(state => {
+       if (state.isConnected) {
+        //  console.log(this.state.totalAmount)
+        const params = {
+          "amount": JSON.stringify(this.state.totalAmount),
+          "info": "order_request"
+        }
 
-    axios.post(NewSaleService.payment(), params).then((res) => {
-      // this.setState({isPayment: false});
-      const data = res.data["result"]
-      console.log('amount is' + JSON.stringify(data.amount));
-      var options = {
-        description: 'Transaction',
-        image: 'https://i.imgur.com/3g7nmJC.png',
-        currency: JSON.stringify(data.currency),
-        order_id: JSON.stringify(data.id),
-        key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
-        amount: JSON.stringify(data.amount),
-        name: 'OTSI',
-        prefill: {
-          name: "Kadali",
-          email: "kadali@gmail.com",
-          contact: "9999999999",
-        },
-        theme: { color: '#F37254' }
+        axios.post(NewSaleService.payment(), params).then((res) => {
+          // this.setState({isPayment: false});
+          const data = res.data["result"]
+          console.log('amount is' + JSON.stringify(data.amount));
+          var options = {
+            description: 'Transaction',
+            image: 'https://i.imgur.com/3g7nmJC.png',
+            currency: JSON.stringify(data.currency),
+            order_id: JSON.stringify(data.id),
+            key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
+            amount: JSON.stringify(data.amount),
+            name: 'OTSI',
+            prefill: {
+              name: "Kadali",
+              email: "kadali@gmail.com",
+              contact: "9999999999",
+            },
+            theme: { color: '#F37254' }
+          }
+          console.log(options)
+          RazorpayCheckout.open(options).then((data) => {
+            // handle success
+            alert(`Success: ${data.razorpay_payment_id}`);
+          }).catch((error) => {
+            console.log(error)
+            // handle failure
+            alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
+          });
+        }
+        )
       }
-      console.log(options)
-      RazorpayCheckout.open(options).then((data) => {
-        // handle success
-        alert(`Success: ${data.razorpay_payment_id}`);
-      }).catch((error) => {
-        console.log(error)
-        // handle failure
-        alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
-      });
-    }
-    )
-
-
+      else{
+        alert('Please check your Internet Connection');
+      }
+    })
   }
+
   menuAction() {
     this.props.navigation.dispatch(DrawerActions.openDrawer())
   }
@@ -411,7 +418,7 @@ class NewSale extends Component {
   topbarAction3() {
     this.setState({ arrayData: [] })
     this.setState({ temp: [] })
-    this.setState({ search: null})
+    this.setState({ search: null })
 
     this.setState({ flagone: false })
     this.setState({ flagtwo: false })
@@ -431,17 +438,19 @@ class NewSale extends Component {
   refresh() {
     //if( global.barcodeId != 'something'){
     this.setState({ barcodeId: global.barcodeId })
-    this.barcodeDBStore()
+    if (global.barcodeId != 'something') {
+      this.barcodeDBStore()
+    }
     this.setState({ flagone: true })
     this.setState({ flagtwo: false })
     this.setState({ flagthree: false })
     this.setState({ flagfour: false })
-   // }
+    // }
   }
 
   navigateToScanCode() {
     global.barcodeId = 'something'
-   //this.setState({ barcodeId: global.barcodeId })
+    //this.setState({ barcodeId: global.barcodeId })
     this.props.navigation.navigate('ScanBarCode', {
       onGoBack: () => this.refresh(),
     });
@@ -464,10 +473,10 @@ class NewSale extends Component {
     // qtyarr[index].netamount = price.toString()
     qtyarr[index].qty = additem.toString()
     this.setState({ tableData: qtyarr })
-   // var minumsValue = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
-   //console.log('minusdd' + minumsValue)
+    // var minumsValue = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
+    //console.log('minusdd' + minumsValue)
     //this.state.totalQty = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
-   // this.state.totalQty =  (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
+    // this.state.totalQty =  (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
     this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
 
   }
@@ -731,36 +740,36 @@ class NewSale extends Component {
                         <Text style={{ fontSize: 15, marginBottom: 20, marginLeft: 20, fontFamily: 'regular' }}>
                           Qty: {item.qty}
                         </Text>
-                        
+
                       </View>
                       <TextInput
-                            style={{
-                              justifyContent: 'center',
-                              height: 30,
-                              width: 80,
-                              marginLeft:-80,
-                              marginTop: 30,
-                              borderColor: '#8F9EB717',
-                              borderRadius: 3,
-                              backgroundColor: 'white',
-                              borderWidth: 1,
-                              fontFamily: 'semibold',
-                              fontSize: 16
-                            }}
-                            underlineColorAndroid="transparent"
-                            placeholder="0"
-                            placeholderTextColor="#8F9EB7"
+                        style={{
+                          justifyContent: 'center',
+                          height: 30,
+                          width: 80,
+                          marginLeft: -80,
+                          marginTop: 30,
+                          borderColor: '#8F9EB717',
+                          borderRadius: 3,
+                          backgroundColor: 'white',
+                          borderWidth: 1,
+                          fontFamily: 'semibold',
+                          fontSize: 16
+                        }}
+                        underlineColorAndroid="transparent"
+                        placeholder="0"
+                        placeholderTextColor="#8F9EB7"
 
-                            value={'1PC'}
-                            onChangeText={(text) => this.updateQtyValue(text, index)}
-                          />
+                        value={'1PC'}
+                        onChangeText={(text) => this.updateQtyValue(text, index)}
+                      />
                       <View style={{
                         flexDirection: 'column',
                         width: '45%',
                         justifyContent: 'space-between',
                         alignItems: 'center'
                       }}>
-                        
+
                         <TouchableOpacity
                           style={{
                             fontSize: 15, fontFamily: 'regular',
@@ -940,26 +949,26 @@ class NewSale extends Component {
                         </Text>
                       </View>
                       <TextInput
-                            style={{
-                              justifyContent: 'center',
-                              height: 30,
-                              width: 80,
-                              marginLeft:-80,
-                              marginTop: 40,
-                              borderColor: '#8F9EB717',
-                              borderRadius: 3,
-                              backgroundColor: 'white',
-                              borderWidth: 1,
-                              fontFamily: 'semibold',
-                              fontSize: 16
-                            }}
-                            underlineColorAndroid="transparent"
-                            placeholder="0"
-                            placeholderTextColor="#8F9EB7"
+                        style={{
+                          justifyContent: 'center',
+                          height: 30,
+                          width: 80,
+                          marginLeft: -80,
+                          marginTop: 40,
+                          borderColor: '#8F9EB717',
+                          borderRadius: 3,
+                          backgroundColor: 'white',
+                          borderWidth: 1,
+                          fontFamily: 'semibold',
+                          fontSize: 16
+                        }}
+                        underlineColorAndroid="transparent"
+                        placeholder="0"
+                        placeholderTextColor="#8F9EB7"
 
-                            value={'1PC'}
-                            onChangeText={(text) => this.updateQtyValue(text, index)}
-                          />
+                        value={'1PC'}
+                        onChangeText={(text) => this.updateQtyValue(text, index)}
+                      />
                       <View style={{
                         flexDirection: 'column',
                         width: '45%',

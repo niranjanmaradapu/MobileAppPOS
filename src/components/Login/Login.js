@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Image, ImageBackground, Text, ActivityIndicator, TouchableOpacity, TextInput, StyleSheet, Dimensions, scrollview, SafeAreaView, Switch } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, SafeAreaView, Switch } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 var deviceheight = Dimensions.get('window').height;
 import RNPickerSelect from 'react-native-picker-select';
@@ -10,11 +10,8 @@ import jwt_decode from "jwt-decode";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../loader';
 var deviceheight = Dimensions.get('window').height;
-import I18n, { getLanguages } from 'react-native-i18n';
+import I18n from 'react-native-i18n';
 
-
-// import Routes from "./routes";
-// import LeftSideBar from "./leftsidebar";
 
 const data = [
     {
@@ -219,7 +216,7 @@ export default class Login extends Component {
                                 <Text style={{
                                     color: "#353C40", fontSize: 20, fontFamily: "bold", marginLeft: 10, marginTop: 0,
                                     flexDirection: 'column',
-                                    justifyContent: 'center',height:45,
+                                    justifyContent: 'center', height: 45,
                                     fontSize: 28,
                                 }}> {I18n.t('Login Now')} </Text>
                                 {/* <View style={{ marginTop: 15, marginLeft: 18, flexDirection: 'row' }}>
@@ -278,7 +275,7 @@ export default class Login extends Component {
                                         fontSize: 14
                                     }}
                                         placeholder={{
-                                            label:I18n.t('Select Store'),
+                                            label: I18n.t('Select Store'),
                                             value: " ",
                                         }}
                                         Icon={() => {
@@ -315,13 +312,13 @@ export default class Login extends Component {
                                         <View style={{
                                             position: 'absolute',
                                             left: 20,
-                                            top: 30,alignItems:'center',flexDirection: 'row'
+                                            top: 30, alignItems: 'center', flexDirection: 'row'
                                         }}>
                                             <Switch trackColor={{ true: '#8BB0EF', false: 'grey' }} style={{
-                                           color: '#8BB0EF'
-                                        }}
-                                            value={this.state.rememberMe}
-                                            onValueChange={(value) => this.toggleRememberMe(value)} />
+                                                color: '#8BB0EF'
+                                            }}
+                                                value={this.state.rememberMe}
+                                                onValueChange={(value) => this.toggleRememberMe(value)} />
 
                                             {/* <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> Forgot password? </Text> */}
                                             <TouchableOpacity
@@ -333,7 +330,7 @@ export default class Login extends Component {
                                         <View style={{
                                             position: 'absolute',
                                             right: 20,
-                                            top: 35,alignItems:'center', flexDirection: 'row'
+                                            top: 35, alignItems: 'center', flexDirection: 'row'
                                         }}>
 
                                             <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> {I18n.t('Forgot password')} </Text>

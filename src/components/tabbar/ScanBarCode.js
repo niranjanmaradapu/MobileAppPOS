@@ -303,6 +303,7 @@ import React, { Component } from 'react';
 import { Button, Text, View,Alert } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import BarcodeMask from 'react-native-barcode-mask';
+import RNBeep from 'react-native-a-beep';
  
 
 class ScanBarCode extends Component {
@@ -321,15 +322,16 @@ class ScanBarCode extends Component {
   }
 
   onBarCodeRead(e) {
-    Alert.alert(
-      "Barcode type is " + e.type,
-      "Barcode value is " + e.data,
-      [
-           {text: 'OK', onPress: () => this.alertPresent = false},
-      ],
-        {cancelable: false},
-    );
+    // Alert.alert(
+    //   "Barcode type is " + e.type,
+    //   "Barcode value is " + e.data,
+    //   [
+    //        {text: 'OK', onPress: () => this.alertPresent = false},
+    //   ],
+    //     {cancelable: false},
+    // );
     if(global.barcodeId == "something"){
+     {RNBeep.beep()}
     global.barcodeId = e.data
     this.props.route.params.onGoBack();
      this.props.navigation.goBack();

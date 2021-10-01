@@ -1,5 +1,5 @@
-import React, { Component, useState } from 'react'
-import { View, Image, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
+import React, { Component } from 'react'
+import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, ScrollView } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
 import { DrawerActions } from '@react-navigation/native';
 import Constants from 'expo-constants';
@@ -8,8 +8,6 @@ import Constants from 'expo-constants';
 class Settings extends Component {
     constructor(props) {
         super(props);
-        // this.toggle = this.toggle.bind(this);
-        // this.navigate = this.props.navigation.navigate;
         this.state = {
         }
     }
