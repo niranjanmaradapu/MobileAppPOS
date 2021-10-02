@@ -21,6 +21,7 @@ const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 import { RNCamera } from 'react-native-camera';
 import BarcodeMask from 'react-native-barcode-mask';
 import NetInfo from "@react-native-community/netinfo";
+import RNBeep from 'react-native-a-beep';
 
 
 class NewSale extends Component {
@@ -150,35 +151,40 @@ class NewSale extends Component {
 
   setResult = (results) => {
     console.log('vinod data ---------' + len)
-
-
   }
-  addAction = (item, index) => {
-    const qtyarr = [...this.state.arrayData];
-    //this.setState({ barcodeId: text })
-    let sno = String(this.state.tableData.length + 1)
-    let barcode = qtyarr[index].barcode
-    //let barcode = item["barcode"]
-    let itemDesc = qtyarr[index].itemdesc
-    //let itemDesc = item["itemDesc"]
-    let qty = qtyarr[index].qty
-    let netAmount = qtyarr[index].netamount
-    //let netAmount = String(item["netAmount"])
-    // let qty = String(item["qty"])
 
-    let totalAmount = String(qtyarr[index].netamount)
-    //console.log(JSON.stringify(item))
-    this.state.quantity = qty
-    this.state.totalQty = (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
-    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount) * qty).toString()
-    //this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
-    this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
-    // this.barcodeDBStore()
+  addAction = (item, index) => {
+    console.log('vinod data ---------' + item.barcode)
+    this.setState({ barcodeId: item.barcode })
+    this.barcodeDBStore()
     this.setState({ flagone: true })
     this.setState({ flagtwo: false })
     this.setState({ flagthree: false })
     this.setState({ flagfour: false })
+    // const qtyarr = [...this.state.arrayData];
+    // //this.setState({ barcodeId: text })
+    // let sno = String(this.state.tableData.length + 1)
+    // let barcode = qtyarr[index].barcode
+    // //let barcode = item["barcode"]
+    // let itemDesc = qtyarr[index].itemdesc
+    // //let itemDesc = item["itemDesc"]
+    // let qty = qtyarr[index].qty
+    // let netAmount = qtyarr[index].netamount
+    // //let netAmount = String(item["netAmount"])
+    // // let qty = String(item["qty"])
 
+    // let totalAmount = String(qtyarr[index].netamount)
+    // //console.log(JSON.stringify(item))
+    // this.state.quantity = qty
+    // this.state.totalQty = (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
+    // this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount) * qty)
+    // //this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
+    // this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+    // // this.barcodeDBStore()
+    // this.setState({ flagone: true })
+    // this.setState({ flagtwo: false })
+    // this.setState({ flagthree: false })
+    // this.setState({ flagfour: false })
   }
 
   renderHeader = () => {
@@ -213,7 +219,6 @@ class NewSale extends Component {
         'SELECT * FROM tbl_item where barcode = ?',
         [this.state.barcodeId],
         (sqlTxn, res) => {
-          console.log("search category" + JSON.stringify(res.rows.length));
           let results = [];
           let len = res.rows.length;
           if (len > 0) {
@@ -227,34 +232,39 @@ class NewSale extends Component {
               let totalAmount = String(item["netAmount"])
               console.log(JSON.stringify(item))
               this.state.quantity = qty
-              //   if (this.state.tableData.length > 0) {
-              //   for (let i = 0; i < this.state.tableData.length; i++) {
-              //       if(barcode == this.state.tableData[i].barcode){
-              //         const qtyarr = [...this.state.tableData];
-              //         qtyarr[i].netAmount =  String( parseInt(qtyarr[i].netAmount + item["netAmount"]))
-              //         this.setState({ tableData: qtyarr })
-              //       }
-              //       else{
-              //         this.state.totalQty = this.state.totalQty + item["qty"]
-              //         this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * item["qty"])
-              //           this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
-              //           }
-              //   }
-              // }
-              // else{
-              this.state.totalQty = this.state.totalQty + item["qty"]
-              this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * item["qty"])
-              this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
-              //}
+
+              if (this.state.tableData.length > 0) {
+                for (let i = 0; i < this.state.tableData.length; i++) {
+                  if (this.state.barcodeId == this.state.tableData[i].barcode) {
+                    { RNBeep.beep() }
+                    console.log("search category" + JSON.stringify(res.rows.length));
+                    const qtyarr = [...this.state.tableData];
+                    qtyarr[i].qty = String(parseInt(qtyarr[i].qty) + parseInt(item["qty"]))
+                    this.setState({ tableData: qtyarr })
+                    this.setState({ totalAmount: this.state.totalAmount })
+                    return
+                  }
+                  this.state.totalQty = this.state.totalQty + item["qty"]
+                  this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * item["qty"])
+                }
+                { RNBeep.beep() }
+                this.setState({ totalAmount: this.state.totalAmount })
+                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+              }
+              else {
+                { RNBeep.beep() }
+                this.state.totalQty = this.state.totalQty + item["qty"]
+                this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * item["qty"])
+                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+              }
               //parse this.state.totalAmount + item["netAmount"]
               // this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
-
-              this.setState({ flagone: true })
-              this.setState({ flagtwo: false })
-              this.setState({ flagthree: false })
-              this.setState({ flagfour: false })
             }
           }
+          this.setState({ flagone: true })
+          this.setState({ flagtwo: false })
+          this.setState({ flagthree: false })
+          this.setState({ flagfour: false })
           console.log(JSON.stringify(this.state.tableData.length))
           console.log(JSON.stringify(totalQty))
         },
@@ -350,7 +360,7 @@ class NewSale extends Component {
 
   pay = () => {
     NetInfo.addEventListener(state => {
-       if (state.isConnected) {
+      if (state.isConnected) {
         //  console.log(this.state.totalAmount)
         const params = {
           "amount": JSON.stringify(this.state.totalAmount),
@@ -388,7 +398,7 @@ class NewSale extends Component {
         }
         )
       }
-      else{
+      else {
         alert('Please check your Internet Connection');
       }
     })
@@ -419,7 +429,6 @@ class NewSale extends Component {
     this.setState({ arrayData: [] })
     this.setState({ temp: [] })
     this.setState({ search: null })
-
     this.setState({ flagone: false })
     this.setState({ flagtwo: false })
     this.setState({ flagthree: true })
@@ -438,9 +447,7 @@ class NewSale extends Component {
   refresh() {
     //if( global.barcodeId != 'something'){
     this.setState({ barcodeId: global.barcodeId })
-    if (global.barcodeId != 'something') {
-      this.barcodeDBStore()
-    }
+    this.barcodeDBStore()
     this.setState({ flagone: true })
     this.setState({ flagtwo: false })
     this.setState({ flagthree: false })
@@ -483,7 +490,6 @@ class NewSale extends Component {
 
   decreamentForTable = (item, index) => {
     const qtyarr = [...this.state.tableData];
-
     var additem = parseInt(qtyarr[index].qty) - 1;
     qtyarr[index].qty = additem.toString()
     if (qtyarr[index].qty > 0) {
@@ -521,7 +527,6 @@ class NewSale extends Component {
 
   decreament = (item, index) => {
     const qtyarr = [...this.state.arrayData];
-
     var additem = parseInt(qtyarr[index].qty) - 1;
     qtyarr[index].qty = additem.toString()
     if (qtyarr[index].qty > 0) {
