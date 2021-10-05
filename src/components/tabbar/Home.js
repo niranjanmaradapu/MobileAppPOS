@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, ScrollView } from 'react-native';
+import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, ScrollView, FlatList } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
 import { DrawerActions } from '@react-navigation/native';
 import Constants from 'expo-constants';
+const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
+
 // import Pie from 'react-native-pie';
 
 
@@ -24,6 +26,9 @@ class Home extends Component {
 
     render() {
         const state = this.state;
+        renderItem = ({ item, index }) => {
+            if (index === 0) return <ListItem style={styles.firstItem} data={item} />
+        }
         return (
             <ScrollView>
                 <View style={styles.container}>
@@ -40,10 +45,107 @@ class Home extends Component {
                                 <Image source={require('../assets/images/menu.png')} />
                             </TouchableOpacity>
                             {/* total commented this.state.aum*(this.state.sector[0]['energy']/(this.state.aum*2)*100)/100) */}
-                         
+
+
                         </View>
-                        
+
+
+
                     </SafeAreaView>
+                    <FlatList
+                        style={styles.flatList}
+                        horizontal
+                        data={data}
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={({ item, index }) => {
+                            if (item.key === 1) {
+                                return <View style={{
+                                    height: 150,
+                                    width: 220,
+                                    borderWidth: 1,
+                                    backgroundColor: "#00C656",
+                                    borderColor: '#ffffff',
+                                    borderRadius: 10,
+                                    marginLeft: 10,
+                                }}>
+                                    <Image source={require('../assets/images/dailysales.png')} style={{
+                                        marginLeft: 20, marginTop: 20,
+                                    }} />
+                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 16, color: "#ffffff", marginLeft: 20, fontFamily: 'regular' }}>
+                                        Today's Sales
+                                    </Text>
+                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 30, color: "#ffffff", marginLeft: 20, fontFamily: 'bold' }}>
+                                        ₹ 14,221.50
+                                    </Text>
+                                </View>
+                            }
+                            if (item.key === 2) {
+                                return <View style={{
+                                    height: 150,
+                                    width: 220,
+                                    borderWidth: 1,
+                                    backgroundColor: "#0063C6",
+                                    borderColor: '#ffffff',
+                                    borderRadius: 10,
+                                    marginLeft: 10,
+                                }}>
+                                    <Image source={require('../assets/images/dailysales.png')} style={{
+                                        marginLeft: 20, marginTop: 20,
+                                    }} />
+                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 16, color: "#ffffff", marginLeft: 20, fontFamily: 'regular' }}>
+                                        Monthly Sales
+                                    </Text>
+                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 30, color: "#ffffff", marginLeft: 20, fontFamily: 'bold' }}>
+                                        ₹ 50,000.00
+                                    </Text>
+                                </View>
+                            }
+                            if (item.key === 3) {
+                                return <View style={{
+                                    height: 150,
+                                    width: 220,
+                                    borderWidth: 1,
+                                    backgroundColor: "#fc9834",
+                                    borderColor: '#ffffff',
+                                    borderRadius: 10,
+                                    marginLeft: 10,
+                                }}>
+                                    <Image source={require('../assets/images/dailysales.png')} style={{
+                                        marginLeft: 20, marginTop: 20,
+                                    }} />
+                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 16, color: "#ffffff", marginLeft: 20, fontFamily: 'regular' }}>
+                                        This month sales v/s Last month
+                                    </Text>
+                                    <Text style={{ fontSize: 15, marginTop: 0, fontSize: 30, color: "#ffffff", marginLeft: 20, fontFamily: 'bold' }}>
+                                        + 18.75%
+                                    </Text>
+                                </View>
+                            }
+                            if (item.key === 4) {
+                                return <View style={{
+                                    height: 150,
+                                    width: 220,
+                                    borderWidth: 1,
+                                    backgroundColor: "#00C656",
+                                    borderColor: '#ffffff',
+                                    borderRadius: 10,
+                                    marginLeft: 10,
+                                }}>
+                                    <Image source={require('../assets/images/dailysales.png')} style={{
+                                        marginLeft: 20, marginTop: 20,
+                                    }} />
+                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 16, color: "#ffffff", marginLeft: 20, fontFamily: 'regular' }}>
+                                        Today total Orders
+                                    </Text>
+                                    <Text style={{ fontSize: 15, marginTop: 0, fontSize: 30, color: "#ffffff", marginLeft: 20, fontFamily: 'bold' }}>
+                                        55
+                                    </Text>
+                                </View>
+                            }
+                        }}
+                        ListFooterComponent={<View style={{ width: 15 }}></View>}
+                    />
                 </View>
             </ScrollView >
         )
@@ -142,8 +244,29 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: '#FAFAFF'
+        // backgroundColor: '#FAFAFF'
     },
+    flatList: {
+        marginTop: 20
+        // THIS DOESN'T SEEM TO BE WORKING
+        // marginRight: 15   I can't use marginRight because it cuts off the box with whitespace
+    },
+    flatlistbox: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 150,
+        width: 220,
+        borderWidth: 1,
+        backgroundColor: "#00C656",
+        borderColor: '#ffffff',
+        borderRadius: 10,
+        marginLeft: 10,
+        //  paddingHorizontal: 15,
+        // padding:15,
+        // marginRight: 15,
+    },
+
     head: {
         height: 45,
         borderColor: '#FAFAFF',
