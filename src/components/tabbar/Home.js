@@ -2,10 +2,89 @@ import React, { Component } from 'react'
 import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, ScrollView, FlatList } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
 import { DrawerActions } from '@react-navigation/native';
+var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
-import PieChart from 'react-native-pie-chart'
+import Pie from 'react-native-pie-chart'
+import {
+    LineChart,
+    BarChart,
+    PieChart,
+    ProgressChart,
+    ContributionGraph,
+    StackedBarChart
+} from "react-native-chart-kit";
+const datapie = [
+    {
+        name: "vegetables",
+        population: 10,
+        color: "rgba(131, 167, 234, 1)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15
+    },
+    {
+        name: "Dairy",
+        population: 20,
+        color: "#F00",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15
+    },
+    {
+        name: "Loose items",
+        population: 20,
+        color: "#0063C6",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15
+    },
+    {
+        name: "Other",
+        population: 25,
+        color: "#e26a00",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15
+    },
+    {
+        name: "Chacklets",
+        population: 25,
+        color: "rgb(0, 0, 255)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15
+    }
+];
 
+const chartConfig = {
+    backgroundGradientFrom: "#fff",
+    backgroundGradientTo: "#fff",
+    barPercentage: 0.5,
+    height: 5000,
+    fillShadowGradient: `rgba(1, 122, 205, 1)`,
+    fillShadowGradientOpacity: 1,
+    decimalPlaces: 0, // optional, defaults to 2dp
+    color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
+
+    style: {
+        borderRadius: 16,
+        fontFamily: "regular",
+    },
+    propsForBackgroundLines: {
+        strokeWidth: 1,
+        stroke: "#e3e3e3",
+        // strokeDasharray: "0",
+    },
+    propsForLabels: {
+        fontFamily: "regular",
+    },
+};
+
+const dataBar = {
+    labels: ["Loose", "Vegetables", "Packet", "Dal", "Snacks"],
+    datasets: [
+      {
+        data: [0, 100,200,300, 400]
+      }
+    ]
+  };
 
 class Home extends Component {
     constructor(props) {
@@ -147,11 +226,48 @@ class Home extends Component {
                     <View style={{
                         margin: 20,
                         backgroundColor: '#FFFFFF',
-                        height: 420,
+                        height: 280,
                         borderRadius: 10
                     }}>
-                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Sales by category</Text>
-                        <PieChart style={{
+                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Sales % by category</Text>
+                        {/* <PieChart style={{
+                            marginTop: 20,
+                            //   marginLeft: 10,
+                            alignSelf: 'center'
+                        }}
+                            widthAndHeight={widthAndHeight}
+                            series={series}
+                            sliceColor={sliceColor}
+                            doughnut={true}
+                            coverRadius={0.65}
+                            coverFill={'#FFF'}
+                        /> */}
+                        <PieChart
+                            data={datapie}
+                            width={deviceWidth - 60}
+                            height={220}
+                            chartConfig={chartConfig}
+                            accessor="population"
+                            backgroundColor={"transparent"}
+                            paddingLeft={"15"}
+                            center={[0, 0]}
+                            absolute
+                        />
+                        {/* <Text style={{ color: '#F44336', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 10, }}>{"Vegetables and fruits: 10%"}</Text>
+                        <Text style={{ color: '#2196F3', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Dairy: 30%"}</Text>
+                        <Text style={{ color: '#FFEB3B', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Snacks: 10%"}</Text>
+                        <Text style={{ color: '#4CAF50', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Loose Items: 40%"}</Text>
+                        <Text style={{ color: '#FF9800', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Meat & Fish: 20%"}</Text> */}
+                    </View>
+
+                    <View style={{
+                        margin: 20,
+                        backgroundColor: '#FFFFFF',
+                        height: 400,
+                        borderRadius: 10
+                    }}>
+                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Sales % by Time</Text>
+                        <Pie style={{
                             marginTop: 20,
                             //   marginLeft: 10,
                             alignSelf: 'center'
@@ -163,11 +279,32 @@ class Home extends Component {
                             coverRadius={0.65}
                             coverFill={'#FFF'}
                         />
-                        <Text style={{ color: '#F44336', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 10, }}>{"Vegetables and fruits: 10%"}</Text>
-                        <Text style={{ color: '#2196F3', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Dairy: 30%"}</Text>
-                        <Text style={{ color: '#FFEB3B', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Snacks: 10%"}</Text>
-                        <Text style={{ color: '#4CAF50', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Loose Items: 40%"}</Text>
-                        <Text style={{ color: '#FF9800', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Meat & Fish: 20%"}</Text>
+                        <Text style={{ color: '#F44336', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 10, }}>{"7AM-9AM: 10%"}</Text>
+                        <Text style={{ color: '#2196F3', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"9AM-12PM: 30%"}</Text>
+                        <Text style={{ color: '#FFEB3B', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"12PM-4PM: 10%"}</Text>
+                        <Text style={{ color: '#4CAF50', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"4PM-8PM: 40%"}</Text>
+                        <Text style={{ color: '#FF9800', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"8PM-11PM: 20%"}</Text>
+                    </View>
+
+                    <View style={{
+                        margin: 20,
+                        backgroundColor: '#FFFFFF',
+                        height: 350,
+                        borderRadius: 10
+                    }}>
+                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Top 5 sales by category</Text>
+
+                        <BarChart
+                            style={{margin:5}}
+                            data={dataBar}
+                            width={deviceWidth-60}
+                            height={300}
+                            yLabelsOffset={30}
+                            yAxisLabel="₹"
+                            yAxisSuffix="k"
+                            chartConfig={chartConfig}
+                            verticalLabelRotation={30}
+                        />
                     </View>
                 </View>
             </ScrollView >
