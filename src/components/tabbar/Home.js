@@ -4,9 +4,7 @@ var deviceWidth = Dimensions.get('window').width;
 import { DrawerActions } from '@react-navigation/native';
 import Constants from 'expo-constants';
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
-
-// import Pie from 'react-native-pie';
-
+import PieChart from 'react-native-pie-chart'
 
 
 class Home extends Component {
@@ -26,9 +24,9 @@ class Home extends Component {
 
     render() {
         const state = this.state;
-        renderItem = ({ item, index }) => {
-            if (index === 0) return <ListItem style={styles.firstItem} data={item} />
-        }
+        const widthAndHeight = 200
+        const series = [123, 321, 123, 789, 537]
+        const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800']
         return (
             <ScrollView>
                 <View style={styles.container}>
@@ -146,6 +144,31 @@ class Home extends Component {
                         }}
                         ListFooterComponent={<View style={{ width: 15 }}></View>}
                     />
+                    <View style={{
+                        margin: 20,
+                        backgroundColor: '#FFFFFF',
+                        height: 420,
+                        borderRadius: 10
+                    }}>
+                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Sales by category</Text>
+                        <PieChart style={{
+                            marginTop: 20,
+                            //   marginLeft: 10,
+                            alignSelf: 'center'
+                        }}
+                            widthAndHeight={widthAndHeight}
+                            series={series}
+                            sliceColor={sliceColor}
+                            doughnut={true}
+                            coverRadius={0.65}
+                            coverFill={'#FFF'}
+                        />
+                        <Text style={{ color: '#F44336', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 10, }}>{"Vegetables and fruits: 10%"}</Text>
+                        <Text style={{ color: '#2196F3', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Dairy: 30%"}</Text>
+                        <Text style={{ color: '#FFEB3B', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Snacks: 10%"}</Text>
+                        <Text style={{ color: '#4CAF50', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Loose Items: 40%"}</Text>
+                        <Text style={{ color: '#FF9800', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Meat & Fish: 20%"}</Text>
+                    </View>
                 </View>
             </ScrollView >
         )

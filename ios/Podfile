@@ -20,4 +20,6 @@ target 'EasyRetail' do
   # end
 
 
+  pod 'ReactNativeART', :path => '../node_modules/@react-native-community/art'
+
 end
