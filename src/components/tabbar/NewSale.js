@@ -52,6 +52,7 @@ class NewSale extends Component {
       address: "",
       modalVisible: true,
       flagone: true,
+      flagqtyModelOpen: false,
       flagtwo: false,
       flagthree: false,
       flagfour: false,
@@ -514,6 +515,19 @@ class NewSale extends Component {
     this.setState({ arrayData: qtyarr })
   }
 
+  manageQunatity = (item, index) => {
+    
+    this.setState({ flagqtyModelOpen: true })
+    this.setState({ modalVisible: true });
+
+  }
+
+  selectedQty = (item,index) => {
+    console.log('-------ITEM TAPPED')
+    this.setState({ flagqtyModelOpen: false })
+    this.setState({ modalVisible: false });
+ };
+
   increment = (item, index) => {
     const qtyarr = [...this.state.arrayData];
     var additem = parseInt(qtyarr[index].qty) + 1;
@@ -936,51 +950,122 @@ class NewSale extends Component {
                   data={this.state.tableData}
                   keyExtractor={item => item.email}
                   renderItem={({ item, index }) => (
-                    <View style={{
-                      height: 80,
-                      backgroundColor: 'lightgray',
-                      margin: 5, borderRadius: 10,
-                      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-                    }}>
-                      <View style={{ flexDirection: 'column', width: '55%' }}>
-                        <Text style={{ fontSize: 15, marginTop: 10, marginLeft: 20, fontFamily: 'bold' }}>
-                          Product name: {item.itemdesc}
-                        </Text>
-                        <Text style={{ fontSize: 15, marginBottom: 0, marginLeft: 20, fontFamily: 'bold' }}>
-                          Price: Rs {(parseInt(item.netamount) * item.qty).toString()}
-                        </Text>
-                        <Text style={{ fontSize: 15, marginBottom: 20, marginLeft: 20, fontFamily: 'regular' }}>
-                          Qty: {item.qty}
-                        </Text>
-                      </View>
-                      <TextInput
-                        style={{
-                          justifyContent: 'center',
-                          height: 30,
-                          width: 80,
-                          marginLeft: -80,
-                          marginTop: 40,
-                          borderColor: '#8F9EB717',
-                          borderRadius: 3,
-                          backgroundColor: 'white',
-                          borderWidth: 1,
-                          fontFamily: 'semibold',
-                          fontSize: 16
-                        }}
-                        underlineColorAndroid="transparent"
-                        placeholder="0"
-                        placeholderTextColor="#8F9EB7"
-
-                        value={'1PC'}
-                        onChangeText={(text) => this.updateQtyValue(text, index)}
-                      />
                       <View style={{
-                        flexDirection: 'column',
-                        width: '45%',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
+                        height: 80,
+                        backgroundColor: 'lightgray',
+                        margin: 5, borderRadius: 10,
+                        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
                       }}>
-                        {/* <TouchableOpacity
+                        <View style={{ flexDirection: 'column', width: '55%' }}>
+                          <Text style={{ fontSize: 15, marginTop: 10, marginLeft: 20, fontFamily: 'bold' }}>
+                            Product name: {item.itemdesc}
+                          </Text>
+                          <Text style={{ fontSize: 15, marginBottom: 0, marginLeft: 20, fontFamily: 'bold' }}>
+                            Price: Rs {(parseInt(item.netamount) * item.qty).toString()}
+                          </Text>
+                          <Text style={{ fontSize: 15, marginBottom: 20, marginLeft: 20, fontFamily: 'regular' }}>
+                            Qty: {item.qty}
+                          </Text>
+                        </View>
+                        <TouchableOpacity onPress={() =>
+                          this.manageQunatity(item, index)
+
+                        }>
+                          <Text
+                            style={{
+                              justifyContent: 'center',
+                              height: 30,
+                              width: 80,
+                              marginLeft: -80,
+                              marginTop: 40,
+                              borderColor: '#8F9EB717',
+                              borderRadius: 3,
+                              backgroundColor: 'white',
+                              borderWidth: 1,
+                              fontFamily: 'semibold',
+                              fontSize: 16,
+                              borderRadius: 5,
+                            }}>
+                            {item.qty} PC
+                          </Text>
+                        </TouchableOpacity>
+
+                        {this.state.flagqtyModelOpen && (
+                          <View>
+                            <Modal isVisible={this.state.modalVisible}>
+                              <View style={{
+                                flex: 1, justifyContent: 'center', //Centered horizontally
+                                alignItems: 'center',
+                              }}>
+                                <View style={{
+                                  position: 'absolute',
+                                  right: 20,
+                                  left: 20,
+                                  alignItems: 'center',
+                                  justifyContent: 'flex-start',
+                                  backgroundColor: "#ffffff", borderRadius: 20,
+                                }}>
+                                  <Text style={{
+                                    color: "#ED1C24", fontFamily: "semibold", textAlign: 'center', marginTop: 10,
+                                    fontSize: 12,
+                                  }}>{item.itemdesc}</Text>
+                                  <Text style={{
+                                    color: "#ED1C24", fontFamily: "semibold", textAlign: 'center', marginTop: 10,
+                                    fontSize: 12,
+                                  }}> Available Quantitys </Text>
+                                  <FlatList style={{ marginBottom: 20, }}
+                                    // ListHeaderComponent={this.renderHeader}
+                                    data={this.state.tableData}
+                                    keyExtractor={item => item.email}
+                                    renderItem={({ item, index }) => (
+                                      <TouchableOpacity onPress={() => this.selectedQty(item,index)}>
+                                      <View style={{
+                                        height: 80,
+                                        backgroundColor: 'lightgray',
+                                        margin: 5, borderRadius: 10,
+                                        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                                      }}>
+                                        <View style={{ flexDirection: 'row', width: '100%' }}>
+                                          <Text style={{ fontSize: 15, marginTop: 10, marginLeft: 20, fontFamily: 'bold' }}>
+                                            1Pc   :
+                                          </Text>
+                                          <Text style={{
+                                            textAlign: 'center', // <-- the magic
+                                            fontWeight: 'bold',
+                                            fontSize: 15,
+                                            marginTop: 10,
+                                            width: 200,
+                                          }}>
+                                            Rs. 80
+                                          </Text>
+                                          <Text style={{ fontSize: 15, position: "absolute", top: 10, right: 20, fontFamily: 'regular', textDecorationLine: 'line-through' }}>
+                                            Rs. 100
+                                          </Text>
+
+                                        </View>
+
+                                      </View>
+                                      </TouchableOpacity>
+                                    )}
+                                  />
+
+
+
+                                </View>
+                              </View>
+                            </Modal>
+                          </View>
+
+                        )}
+
+
+                        <View style={{
+                          flexDirection: 'column',
+                          width: '45%',
+                          justifyContent: 'space-between',
+                          alignItems: 'center'
+                        }}>
+                          {/* <TouchableOpacity
                           style={{
                             fontSize: 15, fontFamily: 'regular',
                             right: 20, bottom: 10,
@@ -995,242 +1080,243 @@ class NewSale extends Component {
                             ADD TO NEW SALE
                           </Text>
                         </TouchableOpacity> */}
-                        <View style={{
-                          backgroundColor: 'grey',
-                          flexDirection: 'row',
-                          justifyContent: 'space-around',
-                          alignItems: 'center',
-                          height: 30,
-                          width: 90
-                        }}>
-                          <TouchableOpacity>
-                            <Text onPress={() => this.incrementForTable(item, index)}>+</Text>
-                          </TouchableOpacity>
-                          {/* <Text> {item.qty}</Text> */}
-                          <TextInput
-                            style={{
-                              justifyContent: 'center',
-                              margin: 20,
-                              height: 30,
-                              width: 30,
-                              marginTop: 10,
-                              marginBottom: 10,
-                              borderColor: '#8F9EB717',
-                              borderRadius: 3,
-                              backgroundColor: 'white',
-                              borderWidth: 1,
-                              fontFamily: 'semibold',
-                              fontSize: 16
-                            }}
-                            underlineColorAndroid="transparent"
-                            placeholder="0"
-                            placeholderTextColor="#8F9EB7"
-                            textAlignVertical="center"
-                            value={item.qty}
-                            onChangeText={(text) => this.updateQtyForTable(text, index)}
-                          />
-                          <TouchableOpacity>
-                            <Text onPress={() => this.decreamentForTable(item, index)}>-</Text>
+                          <View style={{
+                            backgroundColor: 'grey',
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            alignItems: 'center',
+                            height: 30,
+                            width: 90
+                          }}>
+                            <TouchableOpacity>
+                              <Text onPress={() => this.incrementForTable(item, index)}>+</Text>
+                            </TouchableOpacity>
+                            {/* <Text> {item.qty}</Text> */}
+                            <TextInput
+                              style={{
+                                justifyContent: 'center',
+                                margin: 20,
+                                height: 30,
+                                width: 30,
+                                marginTop: 10,
+                                marginBottom: 10,
+                                borderColor: '#8F9EB717',
+                                borderRadius: 3,
+                                backgroundColor: 'white',
+                                borderWidth: 1,
+                                fontFamily: 'semibold',
+                                fontSize: 16
+                              }}
+                              underlineColorAndroid="transparent"
+                              placeholder="0"
+                              placeholderTextColor="#8F9EB7"
+                              textAlignVertical="center"
+                              value={item.qty}
+                              onChangeText={(text) => this.updateQtyForTable(text, index)}
+                            />
+                            <TouchableOpacity>
+                              <Text onPress={() => this.decreamentForTable(item, index)}>-</Text>
 
-                          </TouchableOpacity>
+                            </TouchableOpacity>
+                          </View>
                         </View>
-                      </View>
 
-                    </View>
+                      </View>
+                      
                   )}
                 />
 
 
-                {this.state.tableData.length != 0 && (
-                  <View style={styles.TopcontainerforItems}>
-                    {/* <TouchableOpacity
+                      {this.state.tableData.length != 0 && (
+                        <View style={styles.TopcontainerforItems}>
+                          {/* <TouchableOpacity
                       style={styles.qty}
                     >
                       <Text style={styles.signInButtonText}>  {this.state.totalQty} Qty </Text>
                     </TouchableOpacity> */}
 
-                    <TouchableOpacity
-                      style={styles.itemscount}
-                    >
-                      <Text style={styles.signInButtonText}>  {this.state.tableData.length} Items </Text>
-                    </TouchableOpacity>
+                          <TouchableOpacity
+                            style={styles.itemscount}
+                          >
+                            <Text style={styles.signInButtonText}>  {this.state.tableData.length} Items </Text>
+                          </TouchableOpacity>
 
-                    <TouchableOpacity
-                      style={styles.itemDetail}
+                          <TouchableOpacity
+                            style={styles.itemDetail}
 
-                    >
-                      <Text style={{
-                        color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                        fontSize: 12, position: 'absolute', marginTop: 0
-                      }}>
-                        Tax : ₹0.00 </Text>
-                      <Text style={{
-                        color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                        fontSize: 12, position: 'absolute', marginTop: 15
-                      }}>
-                        Discount : ₹0.00 </Text>
-                      <Text style={{
-                        color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                        fontSize: 12, position: 'absolute', marginTop: 30
-                      }}>
-                        Total Amount :   ₹{this.state.totalAmount}.00 </Text>
+                          >
+                            <Text style={{
+                              color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                              fontSize: 12, position: 'absolute', marginTop: 0
+                            }}>
+                              Tax : ₹0.00 </Text>
+                            <Text style={{
+                              color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                              fontSize: 12, position: 'absolute', marginTop: 15
+                            }}>
+                              Discount : ₹0.00 </Text>
+                            <Text style={{
+                              color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                              fontSize: 12, position: 'absolute', marginTop: 30
+                            }}>
+                              Total Amount :   ₹{this.state.totalAmount}.00 </Text>
 
-                    </TouchableOpacity>
-                  </View>
-                )}
+                          </TouchableOpacity>
+                        </View>
+                      )}
 
-                {this.state.tableData.length != 0 && (
-                  <View style={styles.TopcontainerforPay}>
+                      {this.state.tableData.length != 0 && (
+                        <View style={styles.TopcontainerforPay}>
+                          <TouchableOpacity
+                            style={styles.signInButton}
+                          >
+                            <Text style={styles.signInButtonText}> Pay Cash </Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={styles.signInButtonRight}
+                            onPress={() => this.pay()} >
+                            <Text style={styles.signInButtonText}> Pay Card </Text>
+                          </TouchableOpacity>
+
+                        </View>
+                      )}
+              </View>
+
+
+
+                  )}
+
+                  {this.state.flagfour && (
                     <TouchableOpacity
                       style={styles.signInButton}
-                    >
-                      <Text style={styles.signInButtonText}> Pay Cash </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.signInButtonRight}
                       onPress={() => this.pay()} >
-                      <Text style={styles.signInButtonText}> Pay Card </Text>
+                      <Text style={styles.signInButtonText}> PAY </Text>
                     </TouchableOpacity>
+                  )}
 
-                  </View>
-                )}
-              </View>
+                  {this.state.flagtwo && (
+                    <View>
+                      <Modal isVisible={this.state.modalVisible}>
+                        <View style={{
+                          flex: 1, justifyContent: 'center', //Centered horizontally
+                          alignItems: 'center',
+                        }}>
+                          <View style={{ flexDirection: 'column', flex: 0, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", borderRadius: 20, }}>
+                            <Text style={{
+                              color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                              fontSize: 12,
+                            }}>Customer Details</Text>
+                            <Text style={styles.signInFieldStyle}> Mobile Number* </Text>
+                            <TextInput style={styles.input}
+                              underlineColorAndroid="transparent"
+                              placeholder=""
+                              placeholderTextColor="#0F2851"
+                              textAlignVertical="center"
+                              autoCapitalize="none"
+                              onChangeText={this.handleMobileNumber}
+                              ref={inputemail => { this.emailValueInput = inputemail }} />
 
+                            <Text style={styles.signInFieldStyle}> Alternative Mobile Number </Text>
+                            <TextInput style={styles.input}
+                              underlineColorAndroid="transparent"
+                              placeholder=""
+                              placeholderTextColor="#0F2851"
+                              textAlignVertical="center"
+                              autoCapitalize="none"
+                              onChangeText={this.handleAltNumber}
+                              ref={inputemail => { this.emailValueInput = inputemail }} />
 
+                            <Text style={styles.signInFieldStyle}> Name </Text>
+                            <TextInput style={styles.input}
+                              underlineColorAndroid="transparent"
+                              placeholder=""
+                              placeholderTextColor="#0F2851"
+                              textAlignVertical="center"
+                              autoCapitalize="none"
+                              onChangeText={this.handlename}
+                              ref={inputemail => { this.emailValueInput = inputemail }} />
 
-            )}
+                            <Text style={styles.signInFieldStyle}> Gender </Text>
+                            <TextInput style={styles.input}
+                              underlineColorAndroid="transparent"
+                              placeholder=""
+                              placeholderTextColor="#0F2851"
+                              textAlignVertical="center"
+                              autoCapitalize="none"
+                              onChangeText={this.handleGender}
+                              ref={inputemail => { this.emailValueInput = inputemail }} />
 
-            {this.state.flagfour && (
-              <TouchableOpacity
-                style={styles.signInButton}
-                onPress={() => this.pay()} >
-                <Text style={styles.signInButtonText}> PAY </Text>
-              </TouchableOpacity>
-            )}
+                            <Text style={styles.signInFieldStyle}> gst Number </Text>
+                            <TextInput style={styles.input}
+                              underlineColorAndroid="transparent"
+                              placeholder=""
+                              placeholderTextColor="#0F2851"
+                              textAlignVertical="center"
+                              autoCapitalize="none"
+                              onChangeText={this.handleGstnumber}
+                              ref={inputemail => { this.emailValueInput = inputemail }} />
 
-            {this.state.flagtwo && (
-              <View>
-                <Modal isVisible={this.state.modalVisible}>
-                  <View style={{
-                    flex: 1, justifyContent: 'center', //Centered horizontally
-                    alignItems: 'center',
-                  }}>
-                    <View style={{ flexDirection: 'column', flex: 0, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", borderRadius: 20, }}>
-                      <Text style={{
-                        color: "#ED1C24", fontFamily: "semibold", alignItems: 'center', justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                        fontSize: 12,
-                      }}>Customer Details</Text>
-                      <Text style={styles.signInFieldStyle}> Mobile Number* </Text>
-                      <TextInput style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder=""
-                        placeholderTextColor="#0F2851"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        onChangeText={this.handleMobileNumber}
-                        ref={inputemail => { this.emailValueInput = inputemail }} />
+                            <Text style={styles.signInFieldStyle}> DOB </Text>
+                            <TextInput style={styles.input}
+                              underlineColorAndroid="transparent"
+                              placeholder=""
+                              placeholderTextColor="#0F2851"
+                              textAlignVertical="center"
+                              autoCapitalize="none"
+                              onChangeText={this.handledob}
+                              ref={inputemail => { this.emailValueInput = inputemail }} />
 
-                      <Text style={styles.signInFieldStyle}> Alternative Mobile Number </Text>
-                      <TextInput style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder=""
-                        placeholderTextColor="#0F2851"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        onChangeText={this.handleAltNumber}
-                        ref={inputemail => { this.emailValueInput = inputemail }} />
+                            <Text style={styles.signInFieldStyle}> Anniverary </Text>
+                            <TextInput style={styles.input}
+                              underlineColorAndroid="transparent"
+                              placeholder=""
+                              placeholderTextColor="#0F2851"
+                              textAlignVertical="center"
+                              autoCapitalize="none"
+                              onChangeText={this.handleEmail}
+                              ref={inputemail => { this.emailValueInput = inputemail }} />
 
-                      <Text style={styles.signInFieldStyle}> Name </Text>
-                      <TextInput style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder=""
-                        placeholderTextColor="#0F2851"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        onChangeText={this.handlename}
-                        ref={inputemail => { this.emailValueInput = inputemail }} />
+                            <Text style={styles.signInFieldStyle}> Address </Text>
+                            <TextInput style={styles.input}
+                              underlineColorAndroid="transparent"
+                              placeholder=""
+                              placeholderTextColor="#0F2851"
+                              textAlignVertical="center"
+                              autoCapitalize="none"
+                              onChangeText={this.handleaddress}
+                              ref={inputemail => { this.emailValueInput = inputemail }} />
+                            <View style={styles.TopcontainerforModel}>
+                              <TouchableOpacity
+                                style={{
+                                  width: "50%",
+                                  height: 50, backgroundColor: "#ECF7FF", borderBottomLeftRadius: 20,
+                                }}
+                                onPress={() => this.modelCancel()} >
+                                <Text style={{
+                                  textAlign: 'center', marginTop: 15, color: "#ED1C24", fontSize: 15,
+                                  fontFamily: "regular",
+                                }}> CANCEL </Text>
+                              </TouchableOpacity>
 
-                      <Text style={styles.signInFieldStyle}> Gender </Text>
-                      <TextInput style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder=""
-                        placeholderTextColor="#0F2851"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        onChangeText={this.handleGender}
-                        ref={inputemail => { this.emailValueInput = inputemail }} />
-
-                      <Text style={styles.signInFieldStyle}> gst Number </Text>
-                      <TextInput style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder=""
-                        placeholderTextColor="#0F2851"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        onChangeText={this.handleGstnumber}
-                        ref={inputemail => { this.emailValueInput = inputemail }} />
-
-                      <Text style={styles.signInFieldStyle}> DOB </Text>
-                      <TextInput style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder=""
-                        placeholderTextColor="#0F2851"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        onChangeText={this.handledob}
-                        ref={inputemail => { this.emailValueInput = inputemail }} />
-
-                      <Text style={styles.signInFieldStyle}> Anniverary </Text>
-                      <TextInput style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder=""
-                        placeholderTextColor="#0F2851"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        onChangeText={this.handleEmail}
-                        ref={inputemail => { this.emailValueInput = inputemail }} />
-
-                      <Text style={styles.signInFieldStyle}> Address </Text>
-                      <TextInput style={styles.input}
-                        underlineColorAndroid="transparent"
-                        placeholder=""
-                        placeholderTextColor="#0F2851"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        onChangeText={this.handleaddress}
-                        ref={inputemail => { this.emailValueInput = inputemail }} />
-                      <View style={styles.TopcontainerforModel}>
-                        <TouchableOpacity
-                          style={{
-                            width: "50%",
-                            height: 50, backgroundColor: "#ECF7FF", borderBottomLeftRadius: 20,
-                          }}
-                          onPress={() => this.modelCancel()} >
-                          <Text style={{
-                            textAlign: 'center', marginTop: 15, color: "#ED1C24", fontSize: 15,
-                            fontFamily: "regular",
-                          }}> CANCEL </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                          style={{
-                            width: "50%",
-                            height: 50, backgroundColor: "#ED1C24", borderBottomRightRadius: 20,
-                          }}
-                          onPress={() => this.modelCreate()} >
-                          <Text style={{
-                            textAlign: 'center', marginTop: 15, color: "#ffffff", fontSize: 15,
-                            fontFamily: "regular",
-                          }}> CREATE </Text>
-                        </TouchableOpacity>
-                      </View>
+                              <TouchableOpacity
+                                style={{
+                                  width: "50%",
+                                  height: 50, backgroundColor: "#ED1C24", borderBottomRightRadius: 20,
+                                }}
+                                onPress={() => this.modelCreate()} >
+                                <Text style={{
+                                  textAlign: 'center', marginTop: 15, color: "#ffffff", fontSize: 15,
+                                  fontFamily: "regular",
+                                }}> CREATE </Text>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        </View>
+                      </Modal>
                     </View>
-                  </View>
-                </Modal>
-              </View>
-            )}
+                  )}
 
-            {/* <Left>
+                  {/* <Left>
                                 <Button transparent style={{ marginTop: -102, marginLeft: -162, width: 50, height: 50 }} onPress={() => this.props.navigation.openDrawer()}>
                                     <Image
                                         source={image}
@@ -1240,165 +1326,166 @@ class NewSale extends Component {
                             </Left> */}
 
           </SafeAreaView>
-          {/* <Text style={{backgroundColor: 'white'}}>New Sale Screen</Text>   */}
-        </View>
+                {/* <Text style={{backgroundColor: 'white'}}>New Sale Screen</Text>   */}
+              </View>
       </ScrollView>
-    )
+          )
   }
 }
-export default NewSale
+          export default NewSale
 
 
-const pickerSelectStyles = StyleSheet.create({
-  placeholder: {
-    color: "#001B4A55",
-    fontFamily: "bold",
-    fontSize: 16,
+          const pickerSelectStyles = StyleSheet.create({
+            placeholder: {
+            color: "#001B4A55",
+          fontFamily: "bold",
+          fontSize: 16,
   },
-  inputIOS: {
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 10,
-    height: 40,
-    backgroundColor: '#ffffff',
-    borderBottomColor: '#456CAF55',
-    color: '#001B4A',
-    fontFamily: "bold",
-    fontSize: 16,
-    borderRadius: 3,
+          inputIOS: {
+            marginLeft: 20,
+          marginRight: 20,
+          marginTop: 10,
+          height: 40,
+          backgroundColor: '#ffffff',
+          borderBottomColor: '#456CAF55',
+          color: '#001B4A',
+          fontFamily: "bold",
+          fontSize: 16,
+          borderRadius: 3,
   },
-  inputAndroid: {
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 10,
-    height: 40,
-    backgroundColor: '#ffffff',
-    borderBottomColor: '#456CAF55',
-    color: '#001B4A',
-    fontFamily: "bold",
-    fontSize: 16,
-    borderRadius: 3,
+          inputAndroid: {
+            marginLeft: 20,
+          marginRight: 20,
+          marginTop: 10,
+          height: 40,
+          backgroundColor: '#ffffff',
+          borderBottomColor: '#456CAF55',
+          color: '#001B4A',
+          fontFamily: "bold",
+          fontSize: 16,
+          borderRadius: 3,
   },
 })
 
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#FAFAFF'
+          const styles = StyleSheet.create({
+            safeArea: {
+            flex: 1,
+          justifyContent: 'center',
+          backgroundColor: '#FAFAFF'
   },
-  viewswidth: {
-    backgroundColor: '#ED1C24',
-    width: deviceWidth,
-    textAlign: 'center',
-    fontSize: 24,
-    height: 84,
+          viewswidth: {
+            backgroundColor: '#ED1C24',
+          width: deviceWidth,
+          textAlign: 'center',
+          fontSize: 24,
+          height: 84,
   },
-  input: {
-    justifyContent: 'center',
-    margin: 20,
-    height: 40,
-    marginTop: 5,
-    marginBottom: 10,
-    borderColor: '#8F9EB717',
-    borderRadius: 3,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    fontFamily: 'semibold',
-    fontSize: 16,
+          input: {
+            justifyContent: 'center',
+          margin: 20,
+          height: 40,
+          marginTop: 5,
+          marginBottom: 10,
+          borderColor: '#8F9EB717',
+          borderRadius: 3,
+          backgroundColor: 'white',
+          borderWidth: 1,
+          fontFamily: 'semibold',
+          fontSize: 16,
   },
-  signInButton: {
-    backgroundColor: '#ED1C24',
-    justifyContent: 'center',
-    width: '48%',
-    marginLeft: 0,
-    marginTop: 10,
-    height: 40,
-    borderRadius: 30,
-    fontWeight: 'bold',
-    margin: 10,
+          signInButton: {
+            backgroundColor: '#ED1C24',
+          justifyContent: 'center',
+          width: '48%',
+          marginLeft: 0,
+          marginTop: 10,
+          height: 40,
+          borderRadius: 30,
+          fontWeight: 'bold',
+          margin: 10,
     // alignSelf:'center',
     // marginBottom:100,
   },
-  qty: {
-    backgroundColor: '#ED1C24',
-    justifyContent: 'center',
-    width: '18%',
-    marginTop: 10,
-    height: 40,
-    margin: 5,
-    borderRadius: 5,
-    fontWeight: 'bold',
+          qty: {
+            backgroundColor: '#ED1C24',
+          justifyContent: 'center',
+          width: '18%',
+          marginTop: 10,
+          height: 40,
+          margin: 5,
+          borderRadius: 5,
+          fontWeight: 'bold',
   },
-  imagealign: {
-    marginTop: 25,
-    marginRight: 34,
+          imagealign: {
+            marginTop: 25,
+          marginRight: 34,
   },
-  itemscount: {
-    backgroundColor: '#ED1C24',
-    justifyContent: 'center',
-    width: '18%',
-    marginLeft: 0,
-    marginTop: 10,
-    height: 40,
-    borderRadius: 5,
-    fontWeight: 'bold',
-    margin: 5,
+          itemscount: {
+            backgroundColor: '#ED1C24',
+          justifyContent: 'center',
+          width: '18%',
+          marginLeft: 0,
+          marginTop: 10,
+          height: 40,
+          borderRadius: 5,
+          fontWeight: 'bold',
+          margin: 5,
     // alignSelf:'center',
     // marginBottom:100,
   },
-  itemDetail: {
-    backgroundColor: '#ffffff',
+          itemDetail: {
+            backgroundColor: '#ffffff',
 
-    width: '60%',
-    marginLeft: 0,
-    marginTop: 10,
-    height: 40,
-    borderRadius: 5,
-    fontWeight: 'bold',
-    margin: 5,
+          width: '60%',
+          marginLeft: 0,
+          marginTop: 10,
+          height: 40,
+          borderRadius: 5,
+          fontWeight: 'bold',
+          margin: 5,
     // alignSelf:'center',
     // marginBottom:100,
   },
-  signInButtonRight: {
-    backgroundColor: '#ED1C24',
-    justifyContent: 'center',
-    width: '48%',
-    marginTop: 10,
-    height: 40,
-    margin: 10,
-    borderRadius: 30,
-    fontWeight: 'bold',
+          signInButtonRight: {
+            backgroundColor: '#ED1C24',
+          justifyContent: 'center',
+          width: '48%',
+          marginTop: 10,
+          height: 40,
+          margin: 10,
+          borderRadius: 30,
+          fontWeight: 'bold',
   },
-  signInButtonText: {
-    color: 'white',
-    alignSelf: 'center',
-    fontSize: 14,
-    fontFamily: "regular",
+          signInButtonText: {
+            color: 'white',
+          alignSelf: 'center',
+          fontSize: 14,
+          fontFamily: "regular",
   },
-  signInFieldStyle: {
-    color: '#456CAF55',
-    marginLeft: 20,
-    marginTop: 5,
-    fontSize: 12,
-    fontFamily: "regular",
+          signInFieldStyle: {
+            color: '#456CAF55',
+          marginLeft: 20,
+          marginTop: 5,
+          fontSize: 12,
+          fontFamily: "regular",
+          textAlign:'center',
   },
-  findIteminput: {
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 20,
-    marginBottom: 1000,
-    height: 50,
-    backgroundColor: "#DEF1FF",
-    borderRadius: 10,
-    color: '#001B4A',
-    fontFamily: "regular",
-    fontSize: 12,
+          findIteminput: {
+            marginLeft: 30,
+          marginRight: 30,
+          marginTop: 20,
+          marginBottom: 1000,
+          height: 50,
+          backgroundColor: "#DEF1FF",
+          borderRadius: 10,
+          color: '#001B4A',
+          fontFamily: "regular",
+          fontSize: 12,
   },
-  qtyInput: {
-    width: 50,
-    height: 25,
+          qtyInput: {
+            width: 50,
+          height: 25,
     // marginTop: 20,
     // marginBottom: 1000,
     // height: 50,
@@ -1408,256 +1495,256 @@ const styles = StyleSheet.create({
     // fontFamily: "regular",
     // fontSize: 12,
   },
-  signUptext: {
-    marginTop: 40,
-    fontFamily: "regular",
-    alignSelf: 'center',
-    color: '#FFFFFF',
-    fontSize: 28,
+          signUptext: {
+            marginTop: 40,
+          fontFamily: "regular",
+          alignSelf: 'center',
+          color: '#FFFFFF',
+          fontSize: 28,
   },
-  saleBillsText: {
-    marginLeft: 0,
-    marginTop: -20,
-    marginBottom: 10,
-    fontFamily: "bold",
-    color: '#0F2851',
-    fontSize: 14,
+          saleBillsText: {
+            marginLeft: 0,
+          marginTop: -20,
+          marginBottom: 10,
+          fontFamily: "bold",
+          color: '#0F2851',
+          fontSize: 14,
   },
-  tablecontainer: {
-    flex: 1,
-    // width:deviceWidth,
-    marginLeft: 20,
-    marginRight: 20,
-    padding: 20,
-    paddingTop: 30,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
+          tablecontainer: {
+            flex: 1,
+          // width:deviceWidth,
+          marginLeft: 20,
+          marginRight: 20,
+          padding: 20,
+          paddingTop: 30,
+          backgroundColor: '#FFFFFF',
+          borderRadius: 10,
   },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: '#FAFAFF'
+          container: {
+            flex: 1,
+          justifyContent: 'center',
+          backgroundColor: '#FAFAFF'
   },
-  head: {
-    height: 45,
-    borderColor: '#FAFAFF',
-    borderWidth: 1,
-    borderRadius: 10,
+          head: {
+            height: 45,
+          borderColor: '#FAFAFF',
+          borderWidth: 1,
+          borderRadius: 10,
   },
-  text: {
-    margin: 6,
-    color: "#ED1C24",
-    fontFamily: "semibold",
-    fontSize: 11,
+          text: {
+            margin: 6,
+          color: "#ED1C24",
+          fontFamily: "semibold",
+          fontSize: 11,
   },
-  textData: {
-    margin: 6,
-    color: "#48596B",
-    fontFamily: "regular",
-    fontSize: 10,
-  },
-
-  Topcontainer: {
-    flexDirection: 'row',
-    marginLeft: 0,
-    marginRight: 0,
-    width: '100%',
-    backgroundColor: 'grey',
-    height: 50
+          textData: {
+            margin: 6,
+          color: "#48596B",
+          fontFamily: "regular",
+          fontSize: 10,
   },
 
-  TopcontainerforModel: {
-    flexDirection: 'row',
-    marginLeft: 0,
-    marginRight: 0,
-    marginTop: 10,
-    width: '100%',
-    backgroundColor: 'grey',
-    borderRadius: 20,
-    height: 50,
-  },
-  TopcontainerforPay: {
-    flexDirection: 'row',
-    marginLeft: 0,
-    marginRight: 0,
-    marginTop: 10,
-    width: '100%',
-    backgroundColor: '#ffffff',
-    borderColor: 'lightgray',
-    borderRadius: 0,
-    height: 50,
-  },
-  TopcontainerforItems: {
-    flexDirection: 'row',
-    marginLeft: 0,
-    marginRight: 0,
-    marginTop: 10,
-    width: '100%',
-    backgroundColor: '#ffffff',
-    borderColor: 'lightgray',
-    borderRadius: 0,
-    height: 50,
-  },
-  redbox: {
-    backgroundColor: "#1CA2FF",
-    alignSelf: "flex-start",
-
-    //marginHorizontal: "1%",
-    marginBottom: 6,
-    width: "25%",
-    height: 45,
-    textAlign: "center",
-  },
-  bluebox: {
-    backgroundColor: "#ED1C24",
-    alignSelf: "flex-start",
-    //marginHorizontal: "1%",
-    marginBottom: 6,
-    width: "25%",
-    height: 45,
-    textAlign: "center",
-  },
-  blackbox: {
-    backgroundColor: "#ED1C24",
-    alignSelf: "flex-start",
-    //marginHorizontal: "1%",
-    marginBottom: 6,
-    width: "25%",
-    height: 45,
-    textAlign: "center",
-  },
-  greenbox: {
-    backgroundColor: "#ED1C24",
-    alignSelf: "flex-start",
-    //marginHorizontal: "1%",
-    marginBottom: 6,
-    width: "25%",
-    height: 45,
-    textAlign: "center",
+          Topcontainer: {
+            flexDirection: 'row',
+          marginLeft: 0,
+          marginRight: 0,
+          width: '100%',
+          backgroundColor: 'grey',
+          height: 50
   },
 
+          TopcontainerforModel: {
+            flexDirection: 'row',
+          marginLeft: 0,
+          marginRight: 0,
+          marginTop: 10,
+          width: '100%',
+          backgroundColor: 'grey',
+          borderRadius: 20,
+          height: 50,
+  },
+          TopcontainerforPay: {
+            flexDirection: 'row',
+          marginLeft: 0,
+          marginRight: 0,
+          marginTop: 10,
+          width: '100%',
+          backgroundColor: '#ffffff',
+          borderColor: 'lightgray',
+          borderRadius: 0,
+          height: 50,
+  },
+          TopcontainerforItems: {
+            flexDirection: 'row',
+          marginLeft: 0,
+          marginRight: 0,
+          marginTop: 10,
+          width: '100%',
+          backgroundColor: '#ffffff',
+          borderColor: 'lightgray',
+          borderRadius: 0,
+          height: 50,
+  },
+          redbox: {
+            backgroundColor: "#1CA2FF",
+          alignSelf: "flex-start",
 
+          //marginHorizontal: "1%",
+          marginBottom: 6,
+          width: "25%",
+          height: 45,
+          textAlign: "center",
+  },
+          bluebox: {
+            backgroundColor: "#ED1C24",
+          alignSelf: "flex-start",
+          //marginHorizontal: "1%",
+          marginBottom: 6,
+          width: "25%",
+          height: 45,
+          textAlign: "center",
+  },
+          blackbox: {
+            backgroundColor: "#ED1C24",
+          alignSelf: "flex-start",
+          //marginHorizontal: "1%",
+          marginBottom: 6,
+          width: "25%",
+          height: 45,
+          textAlign: "center",
+  },
+          greenbox: {
+            backgroundColor: "#ED1C24",
+          alignSelf: "flex-start",
+          //marginHorizontal: "1%",
+          marginBottom: 6,
+          width: "25%",
+          height: 45,
+          textAlign: "center",
+  },
 
 
 
-  tabBar: {
-    flexDirection: 'row',
-    paddingTop: Constants.statusBarHeight,
-  },
-  tabItem: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 16,
-  },
-  box: {
-    width: 50,
-    height: 50,
-  },
-  row: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  button: {
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    //borderRadius: 4,
-    backgroundColor: "#ED1C24",
-    alignSelf: "flex-start",
-    //marginHorizontal: "1%",
-    marginBottom: 6,
-    width: "25%",
-    height: 45,
-    textAlign: "center",
-  },
-  selected: {
-    backgroundColor: "#BBE3FF",
-    borderWidth: 0,
-    backgroundColor: "#ED1C24",
-  },
-  buttonLabel: {
-    textAlign: "center",
-    color: "#BBE3FF",
-    fontFamily: "regular",
-    fontSize: 14,
-  },
-  selectedLabel: {
-    color: "white",
-    textAlign: "center",
-    alignSelf: "center",
-    marginTop: 10,
-    fontFamily: "regular",
-    fontSize: 14,
-  },
-  label: {
-    textAlign: "center",
-    marginBottom: 10,
-    fontSize: 24,
-  },
-
-  //model
-  modelcontainer: {
-    alignItems: 'center',
-    backgroundColor: '#ede3f2',
-    padding: 100
-  },
-  modal: {
-    flex: 1,
-    alignItems: 'center',
-    backgroundColor: '#f7021a',
-    padding: 100
-  },
-  modeltext: {
-    color: '#3f2949',
-    marginTop: 10
-  },
-  btn: {
-    width: 40, height: 18, borderWidth: 0.2, borderColor: '#48596B', fontFamily: "regular",
-    fontSize: 10,
-  },
-  btnText: { textAlign: 'center', color: '#fff' }
 
 
-  ,
-  preview: {
-    margin: 20,
-    height: 300,
-    marginTop: 5,
-    marginBottom: 10,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
+          tabBar: {
+            flexDirection: 'row',
+          paddingTop: Constants.statusBarHeight,
   },
-  overlay: {
-    position: 'absolute',
-    padding: 16,
-    right: 0,
-    left: 0,
-    alignItems: 'center'
+          tabItem: {
+            flex: 1,
+          alignItems: 'center',
+          padding: 16,
   },
-  topOverlay: {
-    top: 0,
-    flex: 1,
-    marginLeft: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+          box: {
+            width: 50,
+          height: 50,
   },
-  bottomOverlay: {
-    bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
+          row: {
+            flexDirection: "row",
+          flexWrap: "wrap",
   },
-  enterBarcodeManualButton: {
-    padding: 15,
-    backgroundColor: 'white',
-    borderRadius: 40
+          button: {
+            paddingHorizontal: 8,
+          paddingVertical: 6,
+          //borderRadius: 4,
+          backgroundColor: "#ED1C24",
+          alignSelf: "flex-start",
+          //marginHorizontal: "1%",
+          marginBottom: 6,
+          width: "25%",
+          height: 45,
+          textAlign: "center",
   },
-  scanScreenMessage: {
-    fontSize: 14,
-    color: 'white',
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center'
+          selected: {
+            backgroundColor: "#BBE3FF",
+          borderWidth: 0,
+          backgroundColor: "#ED1C24",
+  },
+          buttonLabel: {
+            textAlign: "center",
+          color: "#BBE3FF",
+          fontFamily: "regular",
+          fontSize: 14,
+  },
+          selectedLabel: {
+            color: "white",
+          textAlign: "center",
+          alignSelf: "center",
+          marginTop: 10,
+          fontFamily: "regular",
+          fontSize: 14,
+  },
+          label: {
+            textAlign: "center",
+          marginBottom: 10,
+          fontSize: 24,
+  },
+
+          //model
+          modelcontainer: {
+            alignItems: 'center',
+          backgroundColor: '#ede3f2',
+          padding: 100
+  },
+          modal: {
+            flex: 1,
+          alignItems: 'center',
+          backgroundColor: '#f7021a',
+          padding: 100
+  },
+          modeltext: {
+            color: '#3f2949',
+          marginTop: 10
+  },
+          btn: {
+            width: 40, height: 18, borderWidth: 0.2, borderColor: '#48596B', fontFamily: "regular",
+          fontSize: 10,
+  },
+          btnText: {textAlign: 'center', color: '#fff' }
+
+
+          ,
+          preview: {
+            margin: 20,
+          height: 300,
+          marginTop: 5,
+          marginBottom: 10,
+          justifyContent: 'flex-end',
+          alignItems: 'center'
+  },
+          overlay: {
+            position: 'absolute',
+          padding: 16,
+          right: 0,
+          left: 0,
+          alignItems: 'center'
+  },
+          topOverlay: {
+            top: 0,
+          flex: 1,
+          marginLeft: 10,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+  },
+          bottomOverlay: {
+            bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.4)',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center'
+  },
+          enterBarcodeManualButton: {
+            padding: 15,
+          backgroundColor: 'white',
+          borderRadius: 40
+  },
+          scanScreenMessage: {
+            fontSize: 14,
+          color: 'white',
+          textAlign: 'center',
+          alignItems: 'center',
+          justifyContent: 'center'
   }
 });
