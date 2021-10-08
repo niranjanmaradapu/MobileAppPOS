@@ -103,6 +103,7 @@ export default class Login extends Component {
 
     login() {
         this.props.navigation.navigate('HomeNavigation')
+        return
         if (this.state.userName.length === 0) {
             alert('You must enter a Usename');
         } else if (this.state.password.length === 0) {

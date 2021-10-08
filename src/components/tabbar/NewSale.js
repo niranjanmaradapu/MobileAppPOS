@@ -472,8 +472,8 @@ class NewSale extends Component {
       } 
     }
    // this.setState({ tableData: [] })
-   //this.props.navigation.navigate('HomeNavigation')
-     alert(`Please Pay  Rs ${this.state.totalAmount} and inventory updated based on this transaction`);
+   this.props.navigation.navigate('Orders')
+    // alert(`Please Pay  Rs ${this.state.totalAmount} and inventory updated based on this transaction`);
   }
 
   pay = () => {
@@ -487,15 +487,16 @@ class NewSale extends Component {
 
         axios.post(NewSaleService.payment(), params).then((res) => {
           // this.setState({isPayment: false});
-          const data = res.data["result"]
-          console.log('amount is' + JSON.stringify(data.amount));
+         const data = JSON.parse(res.data["result"])
+          
+          //console.log()
           var options = {
             description: 'Transaction',
             image: 'https://i.imgur.com/3g7nmJC.png',
-            currency: JSON.stringify(data.currency),
-            order_id: JSON.stringify(data.id),
+            currency: data.currency,
+            order_id: data.id,
             key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
-            amount: JSON.stringify(data.amount),
+            amount:data.amount,
             name: 'OTSI',
             prefill: {
               name: "Kadali",
