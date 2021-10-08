@@ -588,7 +588,7 @@ class NewSale extends Component {
     global.barcodeId = 'something'
     //this.setState({ barcodeId: global.barcodeId })
     this.props.navigation.navigate('ScanBarCode', {
-      onGoBack: () => this.getBarcode(),
+      onGoBack: () => this.refresh(),
     });
   }
 
@@ -596,7 +596,7 @@ class NewSale extends Component {
     global.barcodeId = 'something'
     //this.setState({ barcodeId: global.barcodeId })
     this.props.navigation.navigate('ScanBarCode', {
-      onGoBack: () => this.refresh(),
+      onGoBack: () => this.getBarcode(),
     });
   }
 
