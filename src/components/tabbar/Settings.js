@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FAFAFF'
     },
     viewswidth: {
-        backgroundColor: '#0196FD',
+        backgroundColor: '#ED1C24',
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,

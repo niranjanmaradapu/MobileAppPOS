@@ -434,45 +434,45 @@ class NewSale extends Component {
   }
 
   payCash = () => {
-      for (let j = 0; j < this.state.tableData.length; j++) {
-        for (let i = 0; i < this.state.arrayData.length; i++) {
-        if(parseInt(this.state.tableData[j].qty) > parseInt(this.state.arrayData[i].qty)){
-          alert(`the quantity for  ${this.state.arrayData[i].itemdesc} is only ${this.state.arrayData[i].qty} available in inventory.Please select qty below ${this.state.arrayData[i].qty} only`);
-        }
-        else if (parseInt(this.state.tableData[j].qty) === parseInt(this.state.arrayData[i].qty)) {
-          db.transaction(txn => {
-            txn.executeSql(
-              'DELETE FROM  tbl_item where barcode=?',
-              [this.state.tableData[i].barcode],
-              (sqlTxn, res) => {
-                console.log("deleted successfully");
+    //   for (let j = 0; j < this.state.tableData.length; j++) {
+    //     for (let i = 0; i < this.state.arrayData.length; i++) {
+    //     if(parseInt(this.state.tableData[j].qty) > parseInt(this.state.arrayData[i].qty)){
+    //       alert(`the quantity for  ${this.state.arrayData[i].itemdesc} is only ${this.state.arrayData[i].qty} available in inventory.Please select qty below ${this.state.arrayData[i].qty} only`);
+    //     }
+    //     else if (parseInt(this.state.tableData[j].qty) === parseInt(this.state.arrayData[i].qty)) {
+    //       db.transaction(txn => {
+    //         txn.executeSql(
+    //           'DELETE FROM  tbl_item where barcode=?',
+    //           [this.state.tableData[i].barcode],
+    //           (sqlTxn, res) => {
+    //             console.log("deleted successfully");
 
-              },
-              error => {
-                console.log("error on search category " + error.message);
-              },
-            );
-          });
-        }
-        else {
-          db.transaction(txn => {
-            txn.executeSql(
-              'UPDATE tbl_item set qty=? where barcode=?',
-              [parseInt(this.state.arrayData[i].qty) - parseInt(this.state.tableData[j].qty), this.state.tableData[i].barcode],
-              (sqlTxn, res) => {
-                console.log("updated successfully");
-                console.log((parseInt(this.state.arrayData[i].qty) - parseInt(this.state.tableData[j].qty)).toString());
-              },
-              error => {
-                console.log("error on search category " + error.message);
-              },
-            );
-          });
-        }
-      } 
-    }
-   // this.setState({ tableData: [] })
-   this.props.navigation.navigate('Orders')
+    //           },
+    //           error => {
+    //             console.log("error on search category " + error.message);
+    //           },
+    //         );
+    //       });
+    //     }
+    //     else {
+    //       db.transaction(txn => {
+    //         txn.executeSql(
+    //           'UPDATE tbl_item set qty=? where barcode=?',
+    //           [parseInt(this.state.arrayData[i].qty) - parseInt(this.state.tableData[j].qty), this.state.tableData[i].barcode],
+    //           (sqlTxn, res) => {
+    //             console.log("updated successfully");
+    //             console.log((parseInt(this.state.arrayData[i].qty) - parseInt(this.state.tableData[j].qty)).toString());
+    //           },
+    //           error => {
+    //             console.log("error on search category " + error.message);
+    //           },
+    //         );
+    //       });
+    //     }
+    //   } 
+    // }
+    this.setState({ tableData: [] })
+   this.props.navigation.navigate('Orders',{total:this.state.totalAmount, payment:'cash'})
     // alert(`Please Pay  Rs ${this.state.totalAmount} and inventory updated based on this transaction`);
   }
 
@@ -509,6 +509,7 @@ class NewSale extends Component {
           RazorpayCheckout.open(options).then((data) => {
             // handle success
             alert(`Success: ${data.razorpay_payment_id}`);
+            this.props.navigation.navigate('Orders',{total:this.state.totalAmount, payment:'RazorPay'})
           }).catch((error) => {
             console.log(error)
             // handle failure
@@ -1575,6 +1576,9 @@ class NewSale extends Component {
                           textAlign: 'center', marginTop: 15, color: "#ffffff", fontSize: 15,
                           fontFamily: "regular",
                         }}> CREATE </Text>
+                        <Text> </Text>
+                        <Text> </Text>
+                        <Text> </Text>
                       </TouchableOpacity>
                     </View>
                   </View>

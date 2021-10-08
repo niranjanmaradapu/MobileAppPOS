@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, ScrollView } from 'react-native';
+import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList, TextInput, SafeAreaView, ScrollView } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
 import { DrawerActions } from '@react-navigation/native';
 import Constants from 'expo-constants';
@@ -9,36 +9,84 @@ class Orders extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            arrayData: [],
+            total:'',
+            payment:''
         }
     }
 
+    componentDidMount() {
+        this.setState({
+            total: this.props.route.params.total,
+            payment: this.props.route.params.payment,
+        });
+        if(this.state.total.length !== 0){
+        this.state.arrayData.push({ totalAmount:this.state.total,paymentType:this.state.payment})
+        }
+      }
 
 
-    menuAction() {
-        this.props.navigation.dispatch(DrawerActions.openDrawer())
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
 
 
     render() {
+       
         const state = this.state;
         return (
             <ScrollView>
                 <View style={styles.container}>
                     <SafeAreaView style={styles.safeArea}>
-                        <View style={styles.viewswidth}>
-                            <Text style={styles.signUptext}> Order History </Text>
-                            <TouchableOpacity style={{
-                                position: 'absolute',
-                                left: 20,
-                                top: 50,
-                                width: 20,
-                                height: 20,
-                            }} onPress={() => this.menuAction()}>
-                                <Image source={require('../assets/images/menu.png')} />
-                            </TouchableOpacity>
-                        </View>
+                        <View style={styles.viewswidth}> 
+                        <Text style={styles.signUptext}> Order History </Text>
+                        <TouchableOpacity style={{
+                            position: 'absolute',
+                            left: 10,
+                            top: 30,
+                            width: 20,
+                            height: 20,
+                        }} onPress={() => this.handleBackButtonClick()}>
+                            <Image source={require('../assets/images/backButton.png')} />
+                        </TouchableOpacity>
+
+                        {/* <Text style={styles.signUptext}> Sign Up </Text>
+                        <Icons name={'arrow-back'} size={30} color='#ffffff' onPress={this.handleBackButtonClick} style={{
+                            position: 'absolute',
+                            left: 5,
+                            top: 35
+                        }} /> */}
+                    </View>
+
                     </SafeAreaView>
+                    <FlatList
+                        ListHeaderComponent={this.renderHeader}
+                        data={this.state.arrayData}
+                        keyExtractor={item => item.email}
+                        renderItem={({ item, index }) => (
+                            <View style={{
+                                height: 80,
+                                backgroundColor: 'lightgray',
+                                margin: 5, borderRadius: 10,
+                                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                            }}>
+                                <View style={{ flexDirection: 'column', width: '55%' }}>
+                                    <Text style={{ fontSize: 15, marginTop: 10, marginLeft: 20, fontFamily: 'bold' }}>
+                                        Order Id: Order# {(JSON.stringify(index+1))}
+                                    </Text>
+                                    <Text style={{ fontSize: 15, marginBottom: 0, marginLeft: 20, fontFamily: 'bold' }}>
+                                        Amount: Rs {item.totalAmount}
+                                    </Text>
+                                    <Text style={{ fontSize: 15, marginBottom: 20, marginLeft: 20, fontFamily: 'regular' }}>
+                                        PaymentType: {item.paymentType}
+                                    </Text>
+
+                                </View>
+                            </View>
+                        )}
+                    />
                 </View>
             </ScrollView>
         )
@@ -54,7 +102,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FAFAFF'
     },
     viewswidth: {
-        backgroundColor: '#0196FD',
+        backgroundColor: '#ED1C24',
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
