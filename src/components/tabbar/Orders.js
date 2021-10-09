@@ -20,9 +20,7 @@ class Orders extends Component {
             total: this.props.route.params.total,
             payment: this.props.route.params.payment,
         });
-        if(this.state.total.length !== 0){
-        this.state.arrayData.push({ totalAmount:this.state.total,paymentType:this.state.payment})
-        }
+        
       }
 
 
@@ -34,7 +32,9 @@ class Orders extends Component {
 
 
     render() {
-       
+        if(this.state.total.length !== 0){
+            this.state.arrayData.push({ totalAmount:this.state.total,paymentType:this.state.payment})
+            }
         const state = this.state;
         return (
             <ScrollView>
@@ -82,6 +82,21 @@ class Orders extends Component {
                                     <Text style={{ fontSize: 15, marginBottom: 20, marginLeft: 20, fontFamily: 'regular' }}>
                                         PaymentType: {item.paymentType}
                                     </Text>
+                                    {/* <TouchableOpacity
+                          style={{
+                            fontSize: 15, fontFamily: 'regular',
+                            right: 20, bottom: 10,
+                            backgroundColor: '#ED1C24', width: 60, height: 30,
+                            textAlign: 'center', justifyContent: 'center', marginTop: 15, //Centered horizontally
+                            alignItems: 'center', borderRadius: 20
+                          }}
+                          onPress={() => this.addAction(item, index)} >
+                          <Text style={{
+                            color: "#ffffff"
+                          }}>
+                            PDF Reciept
+                          </Text>
+                        </TouchableOpacity> */}
 
                                 </View>
                             </View>
