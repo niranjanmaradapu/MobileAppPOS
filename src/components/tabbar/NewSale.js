@@ -203,10 +203,25 @@ class NewSale extends Component {
   }
 
   renderHeader = () => {
-    return <SearchBar placeholder="Search Here..."
+    return <View>
+    <SearchBar  containerStyle={{marginRight:40}} placeholder="Search Here..."
       lightTheme round editable={true}
       value={this.state.search}
-      onChangeText={this.updateSearch} />;
+      onChangeText={this.updateSearch} >
+      </SearchBar>
+
+<TouchableOpacity style={{
+  position: 'absolute',
+  right: 10,
+  top: 20,
+}} onPress={() => this.navigateToImageScanner()}>
+  <Image source={require('../assets/images/barcode.png')} />
+</TouchableOpacity>
+
+{/* this.props.navigation.navigate('AuthNavigation') */}
+
+</View>
+      
   };
 
   updateSearch = search => {
@@ -603,6 +618,10 @@ class NewSale extends Component {
     this.props.navigation.navigate('ScanBarCode', {
       onGoBack: () => this.getBarcode(),
     });
+  }
+
+  navigateToImageScanner(){
+    this.props.navigation.navigate('ImageScanner')
   }
 
   updateQtyForTable = (text, index) => {
