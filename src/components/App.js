@@ -23,6 +23,7 @@ export default class App extends React.Component {
     Font.loadAsync({
       bold: require("./assets/fonts/ProductSans-Bold.ttf"),
       regular: require("./assets/fonts/ProductSans-Regular.ttf"),
+      medium: require("./assets/fonts/ProductSans-Medium.ttf"),
       semibold: require("./assets/fonts/Metropolis-SemiBold.otf"),
     });
 

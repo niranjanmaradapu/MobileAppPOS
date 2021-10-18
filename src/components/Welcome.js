@@ -42,16 +42,7 @@ export default class Welcome extends React.Component {
     }
 
     setLanguage = (value) => {
-        if (value == "English") {
-            I18n.locale = 'en';
-        }
-        else if (value == "Telugu") {
-            I18n.locale = 'te';
-        }
-        else {
-            I18n.locale = 'hi';
-        }
-        this.setState({ language: value });
+      
     }
 
 
@@ -59,7 +50,7 @@ export default class Welcome extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={{
+                {/* <View style={{
                     position: 'absolute',
                     right: 20,
                     top: 20,
@@ -96,8 +87,8 @@ export default class Welcome extends React.Component {
                         value={this.state.language}
                         useNativeAndroidPickerStyle={false}
                     // useNativeAndroidPickerStyle={true}
-                    />
-                </View>
+                    /> */}
+                {/* </View> */}
                 <Image source={require('./assets/images/letsGo.png')} style={styles.logoImage} />
                 <View style={{ flex: 1, marginTop: 450, width: deviceWidth, height: 200 }}>
                     <Text style={{ color: "#353C4050", fontSize: 16, fontFamily: "bold", marginLeft: 20, marginTop: 20 }}> {I18n.t('Get Started')} </Text>
