@@ -20,18 +20,18 @@ class BottomTabBar extends Component {
               let iconName;
   
               if (route.name === 'HOME') {
-                iconName =  focused ? <Image source={require('../components/assets/images/homeRed.png')} /> : <Image source={require('../components/assets/images/homeRed.png')} />
+                iconName =  focused ? <Image source={require('../components/assets/images/homeRed.png')} /> : <Image source={require('../components/assets/images/home.png')} />
               }
               else if (route.name === 'MARKET') {
-                iconName = focused ? <Image source={require('../components/assets/images/marketRed.png')} /> : <Image source={require('../components/assets/images/marketRed.png')} />
+                iconName = focused ? <Image source={require('../components/assets/images/marketRed.png')} /> : <Image source={require('../components/assets/images/market.png')} />
               }
               else if (route.name === 'NEW SALE') {
-                iconName = focused ? <Image  style={{marginTop:-50}} source={require('../components/assets/images/newsaleRed.png')} /> : <Image style={{marginTop:-50}} source={require('../components/assets/images/newsaleRed.png')} />
+                iconName = focused ? <Image  style={{marginTop:-30}} source={require('../components/assets/images/newsaleRed.png')} /> : <Image style={{marginTop:-30}} source={require('../components/assets/images/newsaleRed.png')} />
               } else if (route.name === 'PROMO') {
-                iconName = focused ? <Image source={require('../components/assets/images/promoRed.png')} /> : <Image source={require('../components/assets/images/promoRed.png')} />
+                iconName = focused ? <Image source={require('../components/assets/images/promoRed.png')} /> : <Image source={require('../components/assets/images/promo.png')} />
               }
              else if (route.name === 'PROFILE') {
-              iconName = focused ? <Image source={require('../components/assets/images/profileRed.png')} /> : <Image source={require('../components/assets/images/profileRed.png')} />
+              iconName = focused ? <Image source={require('../components/assets/images/profileRed.png')} /> : <Image source={require('../components/assets/images/profile.png')} />
             }
               return iconName;
             },

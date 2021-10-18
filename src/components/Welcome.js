@@ -99,11 +99,11 @@ export default class Welcome extends React.Component {
                     />
                 </View>
                 <Image source={require('./assets/images/letsGo.png')} style={styles.logoImage} />
-                <View style={{ flex: 1, marginTop: 400, width: deviceWidth, height: 200 }}>
+                <View style={{ flex: 1, marginTop: 450, width: deviceWidth, height: 200 }}>
                     <Text style={{ color: "#353C4050", fontSize: 16, fontFamily: "bold", marginLeft: 20, marginTop: 20 }}> {I18n.t('Get Started')} </Text>
                     <Text style={{
                         color: "#353C40", fontSize: 30, fontFamily: "bold", marginLeft: 20, marginTop: 20, flexDirection: 'column', height: 135,
-                        justifyContent: 'center'
+                        justifyContent: 'center',
                     }}> {I18n.t('Lets explore the world Best Retail & Textiles')} </Text>
 
                 </View>

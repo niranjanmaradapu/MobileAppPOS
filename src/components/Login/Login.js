@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, SafeAreaView, Switch } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions,Image, SafeAreaView, Switch } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 var deviceheight = Dimensions.get('window').height;
 import RNPickerSelect from 'react-native-picker-select';
@@ -369,7 +369,9 @@ export default class Login extends Component {
                             </View>
                         </View>
                     </SafeAreaView>
+                    
                 </View>
+                <Image source={require('../assets/images/Subtraction.png')} style={{position:'absolute',right:0,bottom:40,width:162,height:170}} />
             </KeyboardAwareScrollView>
         )
     }
