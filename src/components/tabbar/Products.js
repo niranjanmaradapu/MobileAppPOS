@@ -172,10 +172,12 @@ class Products extends Component {
         console.log('vinod data ---------' + item.barcode)
         this.setState({ barcodeId: item.barcode })
         this.barcodeDBStore()
-        this.setState({ flagone: true })
-        this.setState({ flagtwo: false })
-        this.setState({ flagthree: false })
-        this.setState({ flagfour: false })
+        this.props.navigation.navigate('NewSaleNavigation')
+        // this.setState({ flagone: true })
+        // this.setState({ flagtwo: false })
+        // this.setState({ flagthree: false })
+        // this.setState({ flagfour: false })
+
         // const qtyarr = [...this.state.arrayData];
         // //this.setState({ barcodeId: text })
         // let sno = String(this.state.tableData.length + 1)

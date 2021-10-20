@@ -391,8 +391,8 @@ class ProductAdd extends Component {
           this.setState({ temp: [] })
           this.setState({ search: null })
           this.getItems()
-         // this.props.navigation.navigate('NewSaleNavigation')
-         this.props.navigation.goBack(null);
+        // this.props.navigation.navigate('NewSale')
+        this.props.navigation.goBack(null);
         return true;
 
         },
