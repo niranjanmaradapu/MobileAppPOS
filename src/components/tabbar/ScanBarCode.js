@@ -300,26 +300,45 @@
 
 
 import React, { Component } from 'react';
-import { Button, Text, View,Alert } from 'react-native';
+import { Button, Text, View, Dimensions, Alert, TouchableOpacity, Image } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import BarcodeMask from 'react-native-barcode-mask';
 import RNBeep from 'react-native-a-beep';
- 
+var deviceWidth = Dimensions.get('window').width;
+
 
 class ScanBarCode extends Component {
 
   constructor(props) {
     super(props);
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.camera = null;
     this.barcodeCodes = [];
 
     this.state = {
+      torchon: RNCamera.Constants.FlashMode.off,
       camera: {
         type: RNCamera.Constants.Type.back,
-	flashMode: RNCamera.Constants.FlashMode.auto,
+        flashMode: RNCamera.Constants.FlashMode.auto,
       }
     };
   }
+
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    return true;
+  }
+
+  handleflashClick() {
+    let tstate = this.state.torchon;
+    if (tstate == RNCamera.Constants.FlashMode.off) {
+      tstate = RNCamera.Constants.FlashMode.torch;
+    } else {
+      tstate = RNCamera.Constants.FlashMode.off;
+    }
+    this.setState({ torchon: tstate })
+  }
+
 
   onBarCodeRead(e) {
     // Alert.alert(
@@ -330,11 +349,11 @@ class ScanBarCode extends Component {
     //   ],
     //     {cancelable: false},
     // );
-    if(global.barcodeId == "something"){
-     {RNBeep.beep()}
-    global.barcodeId = e.data
-    this.props.route.params.onGoBack();
-     this.props.navigation.goBack();
+    if (global.barcodeId == "something") {
+      { RNBeep.beep() }
+      global.barcodeId = e.data
+      this.props.route.params.onGoBack();
+      this.props.navigation.goBack();
     }
   }
 
@@ -364,32 +383,72 @@ class ScanBarCode extends Component {
   render() {
     return (
       <View style={styles.container}>
+        <View style={styles.viewswidth}>
+          <TouchableOpacity style={{
+            position: 'absolute',
+            left: 10,
+            top: 30,
+            width: 40,
+            height: 40,
+          }} onPress={() => this.handleBackButtonClick()}>
+            <Image source={require('../assets/images/backButton.png')} />
+          </TouchableOpacity>
+          <Text style={{
+            position: 'absolute',
+            left: 70,
+            top: 47,
+            width: 300,
+            height: 20,
+            fontFamily: 'bold',
+            fontSize: 18,
+            color: '#353C40'
+          }}> New Sale </Text>
+          {/* <Text style={styles.signUptext}> Sign Up </Text> */}
+
+        </View>
+
         <RNCamera
-            ref={ref => {
-              this.camera = ref;
-            }}
-            defaultTouchToFocus
-            flashMode={this.state.camera.flashMode}
-            mirrorImage={false}
-            onBarCodeRead={this.onBarCodeRead.bind(this)}
-            onFocusChanged={() => {}}
-            onZoomChanged={() => {}}
-            permissionDialogTitle={'Permission to use camera'}
-            permissionDialogMessage={'We need your permission to use your camera phone'}
-            style={styles.preview}
-            type={this.state.camera.type}>
-            <BarcodeMask />
-            </RNCamera>
+          ref={ref => {
+            this.camera = ref;
+          }}
+          defaultTouchToFocus
+          flashMode={this.state.torchon}
+          mirrorImage={false}
+          onBarCodeRead={this.onBarCodeRead.bind(this)}
+          onFocusChanged={() => { }}
+          onZoomChanged={() => { }}
+          permissionDialogTitle={'Permission to use camera'}
+          permissionDialogMessage={'We need your permission to use your camera phone'}
+          style={styles.preview}
+          type={this.state.camera.type}>
+          <BarcodeMask edgeColor={'#82FF71'} />
+        </RNCamera>
+        <TouchableOpacity style={{
+          position: 'absolute',
+          alignSelf: 'center',
+          top: 100,
+          width: 40,
+          height: 40,
+        }} onPress={() => this.handleflashClick()}>
+          {this.state.torchon == RNCamera.Constants.FlashMode.off ? (
+            <Image source={require('../assets/images/flash.png')} />
+          ) : (
+            <Image source={require('../assets/images/flash.png')} />
+          )
+          }
+
+        </TouchableOpacity>
         <View style={[styles.overlay, styles.topOverlay]}>
-	  <Text style={styles.scanScreenMessage}>Please scan the barcode.</Text>
-	</View>
-	<View style={[styles.overlay, styles.bottomOverlay]}>
+
+          {/* <Text style={styles.scanScreenMessage}>Please scan the barcode.</Text> */}
+        </View>
+        {/* <View style={[styles.overlay, styles.bottomOverlay]}>
           <Button
             onPress={() => { console.log('scan clicked'); }}
             style={styles.enterBarcodeManualButton}
-            title="Enter Barcode"
+            title=""
            />
-	</View>
+	</View> */}
       </View>
     );
   }
@@ -417,6 +476,13 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
+  },
+  viewswidth: {
+    backgroundColor: '#ffffff',
+    width: deviceWidth,
+    textAlign: 'center',
+    fontSize: 24,
+    height: 84,
   },
   bottomOverlay: {
     bottom: 0,

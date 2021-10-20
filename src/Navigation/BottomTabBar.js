@@ -5,7 +5,9 @@ import NewSale from '../components/tabbar/NewSale';
 import Settings from '../components/tabbar/Settings';
 import ScanBarCode from '../components/tabbar/ScanBarCode';
 import NewSaleNavigation from './NewSaleNavigation';
-import Home from '../components/tabbar/Home';
+import HomeNav from './HomeNav';
+import ProductsNavigation from './ProductsNavigation';
+
 
 
  
@@ -22,7 +24,7 @@ class BottomTabBar extends Component {
               if (route.name === 'HOME') {
                 iconName =  focused ? <Image source={require('../components/assets/images/homeRed.png')} /> : <Image source={require('../components/assets/images/home.png')} />
               }
-              else if (route.name === 'MARKET') {
+              else if (route.name === 'PRODUCTS') {
                 iconName = focused ? <Image source={require('../components/assets/images/marketRed.png')} /> : <Image source={require('../components/assets/images/market.png')} />
               }
               else if (route.name === 'NEW SALE') {
@@ -40,8 +42,8 @@ class BottomTabBar extends Component {
             // tabBarLabel:() => {return null},
           })}
         >
-          <Tab.Screen name="HOME"  title='Home' options={{headerShown: false}} component={Home}/>
-          <Tab.Screen name="MARKET" options={{headerShown: false}} component={Settings} />
+          <Tab.Screen name="HOME"  title='Home' options={{headerShown: false}} component={HomeNav}/>
+          <Tab.Screen name="PRODUCTS" options={{headerShown: false}} component={ProductsNavigation} />
           <Tab.Screen name="NEW SALE" options={{headerShown: false}} component={NewSaleNavigation} />
           <Tab.Screen name="PROMO" options={{headerShown: false}} component={Settings} />
           <Tab.Screen name="PROFILE" options={{headerShown: false}} component={Settings} />

@@ -5,6 +5,7 @@ import { DrawerActions } from '@react-navigation/native';
 var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
+const dummmydata = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 },{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
 import Pie from 'react-native-pie-chart'
 import {
     LineChart,
@@ -94,6 +95,10 @@ class Home extends Component {
     }
 
 
+    statatics(){
+        this.props.navigation.navigate('Statitics')  
+    }
+
 
     menuAction() {
         this.props.navigation.dispatch(DrawerActions.openDrawer())
@@ -109,7 +114,7 @@ class Home extends Component {
         return (
             <ScrollView>
                 <View style={styles.container}>
-                    <SafeAreaView style={styles.safeArea}>
+                    {/* <SafeAreaView style={styles.safeArea}>
                         <View style={styles.viewswidth}>
                             <Text style={styles.signUptext}> Home </Text>
                             <TouchableOpacity style={{
@@ -124,11 +129,18 @@ class Home extends Component {
                             {/* total commented this.state.aum*(this.state.sector[0]['energy']/(this.state.aum*2)*100)/100) */}
 
 
-                        </View>
+                        {/* </View>
 
 
 
-                    </SafeAreaView>
+                    </SafeAreaView> */} 
+                    <Image
+  style={styles.image}
+source={require('../assets/images/profilepic.png')}
+  resizeMode={"cover"} // <- needs to be "cover" for borderRadius to take effect on Android
+/>
+<Text style={{fontSize:26,fontFamily:'regular',color:'#353C40',marginLeft:10,marginTop:20}}> {('Welcome,')} </Text>
+<Text style={{fontSize:26,fontFamily:'bold',color:'#353C40',marginLeft:10,marginTop:0}}> {('Vinod Magham')} </Text>
                     <FlatList
                         style={styles.flatList}
                         horizontal
@@ -138,174 +150,137 @@ class Home extends Component {
                         renderItem={({ item, index }) => {
                             if (item.key === 1) {
                                 return <View style={{
-                                    height: 150,
-                                    width: 220,
+                                    height: 120,
+                                    width: 250,
                                     borderWidth: 1,
-                                    backgroundColor: "#00C656",
+                                    backgroundColor: "#33D087",
                                     borderColor: '#ffffff',
                                     borderRadius: 10,
                                     marginLeft: 10,
                                 }}>
-                                    <Image source={require('../assets/images/dailysales.png')} style={{
-                                        marginLeft: 20, marginTop: 20,
+                                    <Image source={require('../assets/images/todaysales.png')} style={{
+                                        marginLeft: 20, marginTop: 40,
                                     }} />
-                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 16, color: "#ffffff", marginLeft: 20, fontFamily: 'regular' }}>
+                                    <Text style={{ fontSize: 15,alignItems: 'center',alignSelf:'center',marginTop:-50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
                                         Today's Sales
                                     </Text>
-                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 30, color: "#ffffff", marginLeft: 20, fontFamily: 'bold' }}>
+                                    <Text style={{ fontSize: 15,marginTop:0,marginLeft:80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
                                         ₹ 14,221.50
                                     </Text>
                                 </View>
                             }
                             if (item.key === 2) {
                                 return <View style={{
-                                    height: 150,
-                                    width: 220,
+                                    height: 120,
+                                    width: 250,
                                     borderWidth: 1,
-                                    backgroundColor: "#0063C6",
+                                    backgroundColor: "#37CBE4",
                                     borderColor: '#ffffff',
                                     borderRadius: 10,
                                     marginLeft: 10,
                                 }}>
-                                    <Image source={require('../assets/images/dailysales.png')} style={{
-                                        marginLeft: 20, marginTop: 20,
+                                     <Image source={require('../assets/images/monthlysales.png')} style={{
+                                        marginLeft: 20, marginTop: 40,
                                     }} />
-                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 16, color: "#ffffff", marginLeft: 20, fontFamily: 'regular' }}>
-                                        Monthly Sales
+                                    <Text style={{ fontSize: 15,alignItems: 'center',alignSelf:'center',marginTop:-50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
+                                        Monthly's Sales
                                     </Text>
-                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 30, color: "#ffffff", marginLeft: 20, fontFamily: 'bold' }}>
-                                        ₹ 50,000.00
+                                    <Text style={{ fontSize: 15,marginTop:0,marginLeft:80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
+                                        ₹ 14,221.50
                                     </Text>
                                 </View>
                             }
                             if (item.key === 3) {
                                 return <View style={{
-                                    height: 150,
-                                    width: 220,
+                                    height: 120,
+                                    width: 250,
                                     borderWidth: 1,
                                     backgroundColor: "#fc9834",
                                     borderColor: '#ffffff',
                                     borderRadius: 10,
                                     marginLeft: 10,
                                 }}>
-                                    <Image source={require('../assets/images/dailysales.png')} style={{
-                                        marginLeft: 20, marginTop: 20,
+                                     <Image source={require('../assets/images/monthlysales.png')} style={{
+                                        marginLeft: 20, marginTop: 40,
                                     }} />
-                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 16, color: "#ffffff", marginLeft: 20, fontFamily: 'regular' }}>
-                                        This month sales v/s Last month
+                                    <Text style={{ fontSize: 15,alignItems: 'center',alignSelf:'center',marginTop:-50,marginLeft:60, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
+                                    This month sales v/s Last month
                                     </Text>
-                                    <Text style={{ fontSize: 15, marginTop: 0, fontSize: 30, color: "#ffffff", marginLeft: 20, fontFamily: 'bold' }}>
-                                        + 18.75%
+                                    <Text style={{ fontSize: 15,marginTop:0,marginLeft:60, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
+                                    + 18.75%
                                     </Text>
                                 </View>
+
                             }
                             if (item.key === 4) {
                                 return <View style={{
-                                    height: 150,
-                                    width: 220,
+                                    height: 120,
+                                    width: 250,
                                     borderWidth: 1,
                                     backgroundColor: "#00C656",
                                     borderColor: '#ffffff',
                                     borderRadius: 10,
                                     marginLeft: 10,
                                 }}>
-                                    <Image source={require('../assets/images/dailysales.png')} style={{
-                                        marginLeft: 20, marginTop: 20,
+                                  <Image source={require('../assets/images/monthlysales.png')} style={{
+                                        marginLeft: 20, marginTop: 40,
                                     }} />
-                                    <Text style={{ fontSize: 15, marginTop: 10, fontSize: 16, color: "#ffffff", marginLeft: 20, fontFamily: 'regular' }}>
+                                    <Text style={{ fontSize: 15,alignItems: 'center',alignSelf:'center',marginTop:-50,marginLeft:20, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
                                         Today total Orders
                                     </Text>
-                                    <Text style={{ fontSize: 15, marginTop: 0, fontSize: 30, color: "#ffffff", marginLeft: 20, fontFamily: 'bold' }}>
-                                        55
+                                    <Text style={{ fontSize: 15,marginTop:0,alignItems: 'center',alignSelf:'center', fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
+                                    55
                                     </Text>
                                 </View>
                             }
                         }}
                         ListFooterComponent={<View style={{ width: 15 }}></View>}
                     />
+                     <View style={{height:40,backgroundColor:'#ffffff',width:deviceWidth,marginTop:0,}}>
+                     <TouchableOpacity>
+                            <Text onPress={() => this.statatics()} style={{fontSize:12,fontFamily:'regular',color:'#ED1C24',position:'absolute',right:20,top:20,}}> {('STATISTICS >')} </Text>
+                          </TouchableOpacity>
+                    
+                        </View>
+                    
+                    <View style={{height:50,backgroundColor:'#e6e6e6',width:deviceWidth,marginTop:0,}}>
+                    <Text style={{fontSize:14,fontFamily:'bold',color:'#353C40',marginLeft:10,marginTop:20}}> {('Recent orders')} </Text>
+                    <Text style={{fontSize:12,fontFamily:'regular',color:'#ED1C24',position:'absolute',right:20,top:20,}}> {('SEE ALL >')} </Text>
+                        </View>
+                    <FlatList
+                  ListHeaderComponent={this.renderHeader}
+                  data={dummmydata}
+                  keyExtractor={item => item.email}
+                  renderItem={({ item, index }) => (
                     <View style={{
-                        margin: 20,
-                        backgroundColor: '#FFFFFF',
-                        height: 280,
-                        borderRadius: 10
+                      height: 60,
+                      backgroundColor: 'white',
+                       borderBottomWidth:5,
+                       borderBottomColor:'#e6e6e6',
+                      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
                     }}>
-                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Sales % by category</Text>
-                        {/* <PieChart style={{
-                            marginTop: 20,
-                            //   marginLeft: 10,
-                            alignSelf: 'center'
-                        }}
-                            widthAndHeight={widthAndHeight}
-                            series={series}
-                            sliceColor={sliceColor}
-                            doughnut={true}
-                            coverRadius={0.65}
-                            coverFill={'#FFF'}
-                        /> */}
-                        <PieChart
-                            data={datapie}
-                            width={deviceWidth - 60}
-                            height={220}
-                            chartConfig={chartConfig}
-                            accessor="population"
-                            backgroundColor={"transparent"}
-                            paddingLeft={"15"}
-                            center={[0, 0]}
-                            absolute
-                        />
-                        {/* <Text style={{ color: '#F44336', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 10, }}>{"Vegetables and fruits: 10%"}</Text>
-                        <Text style={{ color: '#2196F3', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Dairy: 30%"}</Text>
-                        <Text style={{ color: '#FFEB3B', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Snacks: 10%"}</Text>
-                        <Text style={{ color: '#4CAF50', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Loose Items: 40%"}</Text>
-                        <Text style={{ color: '#FF9800', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Meat & Fish: 20%"}</Text> */}
-                    </View>
+                      <View style={{ flexDirection: 'column', width: '100%' ,height: 60, }}>
+                      <Image source={require('../assets/images/iconmonstr-credit-card-thin.png')} style={{
+                                       position:'absolute', left: 20, top: 25,
+                                    }} />
+                        <Text style={{ fontSize: 12, marginTop: 16, marginLeft: 60, fontFamily: 'medium',color:"#222222" }}>
+                        Order Id #6123{item.itemdesc}
+                        </Text>
+                        <Text style={{ fontSize: 10, marginLeft: 60, fontFamily: 'regular',color:'#828282', }}>
+                        Today, 10:45AM  
+                        </Text>
+                        <Text style={{fontSize:16,fontFamily:'medium',color:'#FE7C19',position:'absolute',right:20,top:20,}}> {('₹ 14,221.50')} </Text>
+                        {/* <Text style={{ fontSize: 15, marginBottom: 20, marginLeft: 20, fontFamily: 'regular' }}>
+                          Qty: {item.qty}
+                        </Text> */}
 
-                    <View style={{
-                        margin: 20,
-                        backgroundColor: '#FFFFFF',
-                        height: 400,
-                        borderRadius: 10
-                    }}>
-                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Sales % by Time</Text>
-                        <Pie style={{
-                            marginTop: 20,
-                            //   marginLeft: 10,
-                            alignSelf: 'center'
-                        }}
-                            widthAndHeight={widthAndHeight}
-                            series={series}
-                            sliceColor={sliceColor}
-                            doughnut={true}
-                            coverRadius={0.65}
-                            coverFill={'#FFF'}
-                        />
-                        <Text style={{ color: '#F44336', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 10, }}>{"7AM-9AM: 10%"}</Text>
-                        <Text style={{ color: '#2196F3', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"9AM-12PM: 30%"}</Text>
-                        <Text style={{ color: '#FFEB3B', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"12PM-4PM: 10%"}</Text>
-                        <Text style={{ color: '#4CAF50', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"4PM-8PM: 40%"}</Text>
-                        <Text style={{ color: '#FF9800', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"8PM-11PM: 20%"}</Text>
+                      </View>
+                      
+                      
                     </View>
-
-                    <View style={{
-                        margin: 20,
-                        backgroundColor: '#FFFFFF',
-                        height: 350,
-                        borderRadius: 10
-                    }}>
-                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Top 5 sales by category</Text>
-
-                        <BarChart
-                            style={{margin:5}}
-                            data={dataBar}
-                            width={deviceWidth-60}
-                            height={300}
-                            yLabelsOffset={30}
-                            yAxisLabel="₹"
-                            yAxisSuffix="k"
-                            chartConfig={chartConfig}
-                            verticalLabelRotation={30}
-                        />
-                    </View>
+                  )}
+                />
+                   
                 </View>
             </ScrollView >
         )
@@ -320,6 +295,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#FAFAFF'
     },
+        image: {
+          marginTop:40,
+          marginLeft:10,
+          width: 80,
+          height: 80,
+          borderWidth: 0,
+          borderRadius: 40,
+        },
     viewswidth: {
         backgroundColor: '#0196FD',
         width: deviceWidth,

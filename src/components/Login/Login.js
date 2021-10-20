@@ -205,6 +205,7 @@ export default class Login extends Component {
                     }
                     <SafeAreaView style={{ flex: 1 }}>
                         <View style={styles.container}>
+                        <Image source={require('../assets/images/Subtraction.png')} style={{position:'absolute',right:0,bottom:40,width:162,height:170}} />
                             <View style={{ flex: 1, marginTop: '5%', backgroundColor: '#FFFFFF' }}>
                                 {/* <Image source={require('../assets/images/logo.png')} style={styles.logoImage} /> */}
                                 {/* <Text></Text> */}
@@ -353,7 +354,7 @@ export default class Login extends Component {
                                 {/* <View style={{ marginTop: 10, flexDirection: 'row', }}> */}
                                 {/* <Text style={{ fontSize: 13, color: '#8BB0EF',fontFamily: "bold", }}> Don't remember the Password? </Text> */}
 
-
+                                
                                 {/* </View> */}
                                 <TouchableOpacity
                                     style={styles.signInButton}
@@ -368,10 +369,11 @@ export default class Login extends Component {
                                 </TouchableOpacity> */}
                             </View>
                         </View>
+                       
                     </SafeAreaView>
                     
                 </View>
-                <Image source={require('../assets/images/Subtraction.png')} style={{position:'absolute',right:0,bottom:40,width:162,height:170}} />
+                
             </KeyboardAwareScrollView>
         )
     }
