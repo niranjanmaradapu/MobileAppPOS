@@ -28,6 +28,7 @@ import { Alert } from 'react-native';
 class ProductAdd extends Component {
   constructor(props) {
     super(props);
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.camera = null;
     this.barcodeCodes = [];
 
@@ -88,7 +89,10 @@ class ProductAdd extends Component {
       }
     }
   }
-
+  handleBackButtonClick() {
+    this.props.navigation.goBack(null);
+    return true;
+  }
 
   async takePicture() {
     if (this.camera) {
@@ -387,9 +391,9 @@ class ProductAdd extends Component {
           this.setState({ temp: [] })
           this.setState({ search: null })
           this.getItems()
-          this.setState({ flagone: false })
-          this.setState({ flagtwo: false })
-          this.setState({ flagthree: true })
+         // this.props.navigation.navigate('NewSaleNavigation')
+         this.props.navigation.goBack(null);
+        return true;
 
         },
         error => {
