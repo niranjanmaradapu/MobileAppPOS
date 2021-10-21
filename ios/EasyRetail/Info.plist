@@ -22,9 +22,19 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-  <key>NSCameraUsageDescription</key>
-  <string>Access camera</string>
-  <key>NSPhotoLibraryUsageDescription</key>
+<!--  <key>NSCameraUsageDescription</key>-->
+<!--  <string>Access camera</string>-->
+<!--  <key>NSPhotoLibraryUsageDescription</key>-->
+<!--  <key>NSPhotoLibraryAddUsageDescription</key>-->
+<key>NSPhotoLibraryUsageDescription</key>
+
+    <string>EasyRetail would like access to your photo gallery</string>
+
+    <key>NSCameraUsageDescription</key>
+
+    <string>EasyRetail would like to use your camera</string>
+
+    <key>NSPhotoLibraryAddUsageDescription</key>
   <string>Library</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>

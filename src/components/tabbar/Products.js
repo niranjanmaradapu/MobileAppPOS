@@ -35,6 +35,7 @@ class Products extends Component {
         // this.navigate = this.props.navigation.navigate;
         this.state = {
             barcodeId: "",
+            productname: "",
             mobileNumber: "",
             altMobileNo: "",
             name: "",
@@ -589,220 +590,239 @@ class Products extends Component {
 
     refresh() {
         //if( global.barcodeId != 'something'){
-        this.setState({ barcodeId: global.barcodeId })
-        this.barcodeDBStore()
-        this.setState({ flagone: true })
-        this.setState({ flagtwo: false })
-        this.setState({ flagthree: false })
-        this.setState({ flagfour: false })
-        // }
-    }
-
-    getBarcode() {
-        //if( global.barcodeId != 'something'){
-        this.setState({ inventoryBarcodeId: global.barcodeId })
-        this.setState({ flagone: false })
-        this.setState({ flagtwo: true })
-        this.setState({ flagthree: false })
-        // }
-    }
-
-    navigateToScanCode() {
-        global.barcodeId = 'something'
-        //this.setState({ barcodeId: global.barcodeId })
-        this.props.navigation.navigate('ScanBarCode', {
-            onGoBack: () => this.refresh(),
-        });
-    }
-
-    navigateToGetBarCode() {
-        global.barcodeId = 'something'
-        //this.setState({ barcodeId: global.barcodeId })
-        this.props.navigation.navigate('ScanBarCode', {
-            onGoBack: () => this.getBarcode(),
-        });
-    }
-
-    navigateToImageScanner() {
-        this.props.navigation.navigate('ImageScanner')
-    }
-
-    updateQtyForTable = (text, index) => {
-        const qtyarr = [...this.state.tableData];
-        qtyarr[index].qty = text;
-        this.setState({ tableData: qtyarr })
-        // this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(text)).toString()
-        this.state.totalQty = (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
-        this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
-    }
-
-    incrementForTable = (item, index) => {
-        const qtyarr = [...this.state.tableData];
-        var additem = parseInt(qtyarr[index].qty) + 1;
-        // var priceFor1 = parseInt(item.netAmount)
-        // var price = priceFor1  * additem;
-        // qtyarr[index].netamount = price.toString()
-        qtyarr[index].qty = additem.toString()
-        this.setState({ tableData: qtyarr })
-        // var minumsValue = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
-        //console.log('minusdd' + minumsValue)
-        //this.state.totalQty = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
-        // this.state.totalQty =  (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
-        this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
-
-    }
-
-    decreamentForTable = (item, index) => {
-        const qtyarr = [...this.state.tableData];
-        var additem = parseInt(qtyarr[index].qty) - 1;
-        qtyarr[index].qty = additem.toString()
-        if (qtyarr[index].qty > 0) {
-            this.setState({ tableData: qtyarr })
+            console.log(global.productname)
+            
+        this.setState({ search: global.productname })
+        console.log('serach text is' + this.state.search)
+       // {this.updateSearch(global.productname)}
+       search = global.productname 
+       this.setState({ search }, () => {
+        if ('' == search) {
+            this.setState({
+                arrayData: [...this.state.temp]
+            });
+            return;
         }
-        //this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)).toString()
-        this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(qtyarr[index].netamount)).toString()
-
-    }
-
-
-
-    updateQty = (text, index) => {
-        const qtyarr = [...this.state.arrayData];
-        qtyarr[index].qty = text;
-        this.setState({ arrayData: qtyarr })
-    }
-
-    updateQtyValue = (text, index) => {
-        const qtyarr = [...this.state.arrayData];
-        //qtyarr[index].qty = text;
-        this.setState({ arrayData: qtyarr })
-    }
-
-    manageQunatity = (item, index) => {
-
-        this.setState({ flagqtyModelOpen: true })
-        this.setState({ modalVisible: true });
-
-    }
-
-    selectedQty = (item, index) => {
-        console.log('-------ITEM TAPPED')
-        this.setState({ flagqtyModelOpen: false })
-        this.setState({ modalVisible: false });
-    };
-
-    handledeleteaction = (item, index) => {
-        const list = this.state.arrayData;
-        list.splice(index, 1);
-        this.setState({ arrayData: list });
-    }
-
-    increment = (item, index) => {
-        const qtyarr = [...this.state.arrayData];
-        var additem = parseInt(qtyarr[index].qty) + 1;
-
-        // var priceFor1 = parseInt(item.netAmount)
-        // var price = priceFor1  * additem;
-        // qtyarr[index].netamount = price.toString()
-        qtyarr[index].qty = additem.toString()
-        db.transaction(txn => {
-            txn.executeSql(
-                'UPDATE tbl_item set qty=? where barcode=?',
-                [qtyarr[index].qty, item.barcode],
-                (sqlTxn, res) => {
-                    console.log("updated successfully");
-                },
-                error => {
-                    console.log("error on search category " + error.message);
-                },
-            );
+        this.state.arrayData = this.state.temp.filter(function (item) {
+            return item.itemdesc.includes(search);
+        }).map(function ({ itemdesc, netamount, barcode, qty }) {
+            return { itemdesc, netamount, barcode, qty };
         });
-        this.setState({ arrayData: qtyarr })
+    });
+       this.forceUpdate()
+    // this.state.search
+    // }
+}
 
+getBarcode() {
+    //if( global.barcodeId != 'something'){
+    this.setState({ inventoryBarcodeId: global.barcodeId })
+    this.setState({ flagone: false })
+    this.setState({ flagtwo: true })
+    this.setState({ flagthree: false })
+    // }
+}
+
+navigateToScanCode() {
+    global.barcodeId = 'something'
+    //this.setState({ barcodeId: global.barcodeId })
+    this.props.navigation.navigate('ScanBarCode', {
+        onGoBack: () => this.refresh(),
+    });
+}
+
+navigateToGetBarCode() {
+    global.barcodeId = 'something'
+    //this.setState({ barcodeId: global.barcodeId })
+    this.props.navigation.navigate('ScanBarCode', {
+        onGoBack: () => this.getBarcode(),
+    });
+}
+
+navigateToImageScanner() {
+    global.productname = 'something'
+    //this.setState({ barcodeId: global.barcodeId })
+    this.props.navigation.navigate('ImageScanner', {
+        onGoBack: () => this.refresh(),
+    });
+}
+
+updateQtyForTable = (text, index) => {
+    const qtyarr = [...this.state.tableData];
+    qtyarr[index].qty = text;
+    this.setState({ tableData: qtyarr })
+    // this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(text)).toString()
+    this.state.totalQty = (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
+    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
+}
+
+incrementForTable = (item, index) => {
+    const qtyarr = [...this.state.tableData];
+    var additem = parseInt(qtyarr[index].qty) + 1;
+    // var priceFor1 = parseInt(item.netAmount)
+    // var price = priceFor1  * additem;
+    // qtyarr[index].netamount = price.toString()
+    qtyarr[index].qty = additem.toString()
+    this.setState({ tableData: qtyarr })
+    // var minumsValue = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
+    //console.log('minusdd' + minumsValue)
+    //this.state.totalQty = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
+    // this.state.totalQty =  (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
+    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
+
+}
+
+decreamentForTable = (item, index) => {
+    const qtyarr = [...this.state.tableData];
+    var additem = parseInt(qtyarr[index].qty) - 1;
+    qtyarr[index].qty = additem.toString()
+    if (qtyarr[index].qty > 0) {
+        this.setState({ tableData: qtyarr })
     }
+    //this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)).toString()
+    this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(qtyarr[index].netamount)).toString()
 
-    addnew() {
-        this.props.navigation.navigate('ProductAdd')
-    }
-
-    decreament = (item, index) => {
-        const qtyarr = [...this.state.arrayData];
-        var additem = parseInt(qtyarr[index].qty) - 1;
-        qtyarr[index].qty = additem.toString()
-        db.transaction(txn => {
-            txn.executeSql(
-                'UPDATE tbl_item set qty=? where barcode=?',
-                [qtyarr[index].qty, item.barcode],
-                (sqlTxn, res) => {
-                    console.log("updated successfully");
-                },
-                error => {
-                    console.log("error on search category " + error.message);
-                },
-            );
-        });
-        this.setState({ arrayData: qtyarr })
-        if (qtyarr[index].qty > 0) {
-            this.setState({ arrayData: qtyarr })
-        }
-
-    }
+}
 
 
 
-    render() {
-        console.log(global.barcodeId)
-        AsyncStorage.getItem("tokenkey").then((value) => {
-            console.log(value)
-        }).catch(() => {
-            console.log('there is error getting token')
-        })
-        const state = this.state;
+updateQty = (text, index) => {
+    const qtyarr = [...this.state.arrayData];
+    qtyarr[index].qty = text;
+    this.setState({ arrayData: qtyarr })
+}
 
-        const element = (data, index) => (
-            //   // <TouchableOpacity onPress={() => this._alertIndex(index)}>
-            //   //   <View style={styles.btn}>
-            //   //     <Text style={styles.btnText}>button</Text>
-            //   //   </View>
-            //   // </TouchableOpacity>
+updateQtyValue = (text, index) => {
+    const qtyarr = [...this.state.arrayData];
+    //qtyarr[index].qty = text;
+    this.setState({ arrayData: qtyarr })
+}
 
-            <TextInput style={styles.btn}
-                underlineColorAndroid="transparent"
-                placeholder=""
-                placeholderTextColor="#48596B"
-                color="#48596B"
-                ref={index}
-                textAlign={'center'}
-                textAlignVertical="center"
-                value={this.state.quantity}
-                autoCapitalize="none"
-                //   onSubmitEditing={value => {
-                //     this.setState({ value })
-                //     if (value) index.current.focus(); //assumption is TextInput ref is input_2
-                //  }}
-                onChangeText={this.handleQty}
-            // value={this.state.quantity}
-            // onFocus={() => this._alertIndex(index)}
+manageQunatity = (item, index) => {
 
-            // ref={inputemail => { this.emailValueInput = inputemail }}
-            />
+    this.setState({ flagqtyModelOpen: true })
+    this.setState({ modalVisible: true });
+
+}
+
+selectedQty = (item, index) => {
+    console.log('-------ITEM TAPPED')
+    this.setState({ flagqtyModelOpen: false })
+    this.setState({ modalVisible: false });
+};
+
+handledeleteaction = (item, index) => {
+    const list = this.state.arrayData;
+    list.splice(index, 1);
+    this.setState({ arrayData: list });
+}
+
+increment = (item, index) => {
+    const qtyarr = [...this.state.arrayData];
+    var additem = parseInt(qtyarr[index].qty) + 1;
+
+    // var priceFor1 = parseInt(item.netAmount)
+    // var price = priceFor1  * additem;
+    // qtyarr[index].netamount = price.toString()
+    qtyarr[index].qty = additem.toString()
+    db.transaction(txn => {
+        txn.executeSql(
+            'UPDATE tbl_item set qty=? where barcode=?',
+            [qtyarr[index].qty, item.barcode],
+            (sqlTxn, res) => {
+                console.log("updated successfully");
+            },
+            error => {
+                console.log("error on search category " + error.message);
+            },
         );
+    });
+    this.setState({ arrayData: qtyarr })
+
+}
+
+addnew() {
+    this.props.navigation.navigate('ProductAdd')
+}
+
+decreament = (item, index) => {
+    const qtyarr = [...this.state.arrayData];
+    var additem = parseInt(qtyarr[index].qty) - 1;
+    qtyarr[index].qty = additem.toString()
+    db.transaction(txn => {
+        txn.executeSql(
+            'UPDATE tbl_item set qty=? where barcode=?',
+            [qtyarr[index].qty, item.barcode],
+            (sqlTxn, res) => {
+                console.log("updated successfully");
+            },
+            error => {
+                console.log("error on search category " + error.message);
+            },
+        );
+    });
+    this.setState({ arrayData: qtyarr })
+    if (qtyarr[index].qty > 0) {
+        this.setState({ arrayData: qtyarr })
+    }
+
+}
 
 
-        // const element = (data, index) => (
-        //   <TouchableOpacity onPress={() => this._alertIndex(index)}>
-        //     <View style={styles.btn}>
-        //       <Text style={styles.btnText}>button</Text>
-        //     </View>
-        //   </TouchableOpacity>
-        // );
 
-        return (
-            //   <ScrollView>
-            <View style={styles.container}>
-                {/* <SafeAreaView> */}
-                <View style={styles.viewswidth}>
-                    {/* <TouchableOpacity style={{
+render() {
+    console.log(global.barcodeId)
+    AsyncStorage.getItem("tokenkey").then((value) => {
+        console.log(value)
+    }).catch(() => {
+        console.log('there is error getting token')
+    })
+    const state = this.state;
+
+    const element = (data, index) => (
+        //   // <TouchableOpacity onPress={() => this._alertIndex(index)}>
+        //   //   <View style={styles.btn}>
+        //   //     <Text style={styles.btnText}>button</Text>
+        //   //   </View>
+        //   // </TouchableOpacity>
+
+        <TextInput style={styles.btn}
+            underlineColorAndroid="transparent"
+            placeholder=""
+            placeholderTextColor="#48596B"
+            color="#48596B"
+            ref={index}
+            textAlign={'center'}
+            textAlignVertical="center"
+            value={this.state.quantity}
+            autoCapitalize="none"
+            //   onSubmitEditing={value => {
+            //     this.setState({ value })
+            //     if (value) index.current.focus(); //assumption is TextInput ref is input_2
+            //  }}
+            onChangeText={this.handleQty}
+        // value={this.state.quantity}
+        // onFocus={() => this._alertIndex(index)}
+
+        // ref={inputemail => { this.emailValueInput = inputemail }}
+        />
+    );
+
+
+    // const element = (data, index) => (
+    //   <TouchableOpacity onPress={() => this._alertIndex(index)}>
+    //     <View style={styles.btn}>
+    //       <Text style={styles.btnText}>button</Text>
+    //     </View>
+    //   </TouchableOpacity>
+    // );
+
+    return (
+        //   <ScrollView>
+        <View style={styles.container}>
+            {/* <SafeAreaView> */}
+            <View style={styles.viewswidth}>
+                {/* <TouchableOpacity style={{
             position: 'absolute',
             left: 10,
             top: 30,
@@ -811,92 +831,92 @@ class Products extends Component {
           }} onPress={() => this.handleBackButtonClick()}>
             <Image source={require('../assets/images/backButton.png')} />
           </TouchableOpacity> */}
-                    <Text style={{
+                <Text style={{
+                    position: 'absolute',
+                    left: 10,
+                    top: 55,
+                    width: 300,
+                    height: 20,
+                    fontFamily: 'bold',
+                    fontSize: 18,
+                    color: '#353C40'
+                }}> List of Products </Text>
+                <TouchableOpacity
+                    style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ED1C24', borderRadius: 5, width: 105, height: 32, }}
+                    onPress={() => this.addnew()} >
+                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('ADD NEW')} </Text>
+                </TouchableOpacity>
+
+                {/* <Image style={{position:'absolute',left:0,width:30,height:30,top:2}}source={require('../assets/images/backButton.png')} /> */}
+
+
+
+            </View>
+
+
+
+            <View
+                style={{
+                    flex: 1,
+                    paddingHorizontal: 0,
+                    paddingVertical: 0,
+                    marginTop: 0
+                }}>
+                <View>
+                    <SearchBar containerStyle={{ marginRight: 40 }} placeholder="Search products with Name"
+                        //inputStyle={{backgroundColor: '#FBFBFB'}}
+                        lightTheme editable={true}
+                        value={this.state.search}
+                        onChangeText={this.updateSearch} >
+                    </SearchBar>
+
+                    <TouchableOpacity style={{
                         position: 'absolute',
-                        left: 10,
-                        top: 55,
-                        width: 300,
-                        height: 20,
-                        fontFamily: 'bold',
-                        fontSize: 18,
-                        color: '#353C40'
-                    }}> List of Products </Text>
-                    <TouchableOpacity
-                        style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ED1C24', borderRadius: 5, width: 105, height: 32, }}
-                        onPress={() => this.addnew()} >
-                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('ADD NEW')} </Text>
+                        right: 10,
+                        top: 20,
+                    }} onPress={() => this.navigateToImageScanner()}>
+                        <Image source={require('../assets/images/barcode.png')} />
                     </TouchableOpacity>
 
-                    {/* <Image style={{position:'absolute',left:0,width:30,height:30,top:2}}source={require('../assets/images/backButton.png')} /> */}
-
-
+                    {/* this.props.navigation.navigate('AuthNavigation') */}
 
                 </View>
 
+                <FlatList
+                    //  ListHeaderComponent={this.renderHeader}
+                    data={this.state.arrayData}
+                    keyExtractor={item => item.email}
+                    renderItem={({ item, index }) => (
+                        <View style={{
+                            height: 120,
+                            backgroundColor: '#FFFFFF',
+                            borderBottomWidth: 5,
+                            borderBottomColor: '#FBFBFB',
+                            flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                        }}>
+                            <View style={{ flexDirection: 'column', width: '100%', height: 120, }}>
+                                <Image source={require('../assets/images/sample.png')} style={{
+                                    position: 'absolute', left: 20, top: 15, width: 90, height: 90,
+                                }} />
+                                <Text style={{ fontSize: 16, marginTop: 30, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>
+                                    {item.itemdesc}
+                                </Text>
+                                <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                    QUANTITY:
+                                </Text>
+                                <Text style={{ fontSize: 12, marginLeft: 200, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+                                    {item.qty} Pieces
+                                </Text>
+                                <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                    PRICE/EACH:
+                                </Text>
+                                <Text style={{ fontSize: 12, marginLeft: 210, marginTop: -16, fontFamily: 'medium', color: '#ED1C24' }}>
+                                    ₹ {(parseInt(item.netamount)).toString()}
+                                </Text>
 
 
-                <View
-                    style={{
-                        flex: 1,
-                        paddingHorizontal: 0,
-                        paddingVertical: 0,
-                        marginTop: 0
-                    }}>
-                    <View>
-                        <SearchBar containerStyle={{ marginRight: 40 }} placeholder="Search products with Name"
-                            //inputStyle={{backgroundColor: '#FBFBFB'}}
-                            lightTheme editable={true}
-                            value={this.state.search}
-                            onChangeText={this.updateSearch} >
-                        </SearchBar>
-
-                        <TouchableOpacity style={{
-                            position: 'absolute',
-                            right: 10,
-                            top: 20,
-                        }} onPress={() => this.navigateToImageScanner()}>
-                            <Image source={require('../assets/images/barcode.png')} />
-                        </TouchableOpacity>
-
-                        {/* this.props.navigation.navigate('AuthNavigation') */}
-
-                    </View>
-
-                    <FlatList
-                        //  ListHeaderComponent={this.renderHeader}
-                        data={this.state.arrayData}
-                        keyExtractor={item => item.email}
-                        renderItem={({ item, index }) => (
-                            <View style={{
-                                height: 120,
-                                backgroundColor: '#FFFFFF',
-                                borderBottomWidth: 5,
-                                borderBottomColor: '#FBFBFB',
-                                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-                            }}>
-                                <View style={{ flexDirection: 'column', width: '100%', height: 120, }}>
-                                    <Image source={require('../assets/images/sample.png')} style={{
-                                        position: 'absolute', left: 20, top: 15, width: 90, height: 90,
-                                    }} />
-                                    <Text style={{ fontSize: 16, marginTop: 30, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>
-                                        {item.itemdesc}
-                                    </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                        QUANTITY:
-                                    </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 200, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                                        {item.qty} Pieces
-                                    </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                        PRICE/EACH:
-                                    </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 210, marginTop: -16, fontFamily: 'medium', color: '#ED1C24' }}>
-                                        ₹ {(parseInt(item.netamount)).toString()}
-                                    </Text>
-
-
-                                </View>
-                                {/* <TextInput
+                            </View>
+                            {/* <TextInput
                         style={{
                           justifyContent: 'center',
                           height: 30,
@@ -917,69 +937,69 @@ class Products extends Component {
                         value={'1PC'}
                         onChangeText={(text) => this.updateQtyValue(text, index)}
                       /> */}
-                                {/* <View style={{
+                            {/* <View style={{
                         flexDirection: 'column',
                         width: '100%',
                         justifyContent: 'space-between',
                         alignItems: 'center'
                       }}> */}
 
-                                <TouchableOpacity
-                                    style={{
-                                        fontSize: 15, fontFamily: 'regular',
-                                        right: 80, bottom: 10,
-                                        borderColor: '#ED1C24', borderWidth: 1, width: 60, height: 30,
-                                        textAlign: 'center', justifyContent: 'center', marginTop: -10, //Centered horizontally
-                                        alignItems: 'center', borderRadius: 5,
-                                    }}
-                                    onPress={() => this.addAction(item, index)} >
-                                    <Text style={{
-                                        color: "#ED1C24"
-                                    }}>
-                                        + ADD
-                                    </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={{
-                                    position: 'absolute',
-                                    right: 50,
-                                    top: 65,
-                                    width: 30,
-                                    height: 30,
-                                    borderBottomLeftRadius: 5,
-                                    borderTopLeftRadius: 5,
-                                    borderWidth: 1,
-                                    borderColor: "lightgray",
-                                    // borderRadius:5,
-                                }} onPress={() => this.handleeditaction()}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style={{
-                                    position: 'absolute',
-                                    right: 20,
-                                    top: 65,
-                                    width: 30,
-                                    height: 30,
-                                    borderBottomRightRadius: 5,
-                                    borderTopRightRadius: 5,
-                                    borderWidth: 1,
-                                    borderColor: "lightgray",
-                                }} onPress={() => this.handledeleteaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
-                                </TouchableOpacity>
-                                <View style={{
-                                    backgroundColor: 'grey',
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-around',
-                                    alignItems: 'center',
-                                    height: 30,
-                                    width: 90
+                            <TouchableOpacity
+                                style={{
+                                    fontSize: 15, fontFamily: 'regular',
+                                    right: 80, bottom: 10,
+                                    borderColor: '#ED1C24', borderWidth: 1, width: 60, height: 30,
+                                    textAlign: 'center', justifyContent: 'center', marginTop: -10, //Centered horizontally
+                                    alignItems: 'center', borderRadius: 5,
+                                }}
+                                onPress={() => this.addAction(item, index)} >
+                                <Text style={{
+                                    color: "#ED1C24"
                                 }}>
-                                    {/* <TouchableOpacity>
+                                    + ADD
+                                </Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{
+                                position: 'absolute',
+                                right: 50,
+                                top: 65,
+                                width: 30,
+                                height: 30,
+                                borderBottomLeftRadius: 5,
+                                borderTopLeftRadius: 5,
+                                borderWidth: 1,
+                                borderColor: "lightgray",
+                                // borderRadius:5,
+                            }} onPress={() => this.handleeditaction()}>
+                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={{
+                                position: 'absolute',
+                                right: 20,
+                                top: 65,
+                                width: 30,
+                                height: 30,
+                                borderBottomRightRadius: 5,
+                                borderTopRightRadius: 5,
+                                borderWidth: 1,
+                                borderColor: "lightgray",
+                            }} onPress={() => this.handledeleteaction(item, index)}>
+                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                            </TouchableOpacity>
+                            <View style={{
+                                backgroundColor: 'grey',
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                alignItems: 'center',
+                                height: 30,
+                                width: 90
+                            }}>
+                                {/* <TouchableOpacity>
                             <Text onPress={() => this.increment(item, index)}>+</Text>
                           </TouchableOpacity> */}
-                                    {/* <Text> {item.qty}</Text> */}
-                                    {/* <TextInput
+                                {/* <Text> {item.qty}</Text> */}
+                                {/* <TextInput
                             style={{
                               justifyContent: 'center',
                               margin: 20,
@@ -1005,18 +1025,18 @@ class Products extends Component {
                             <Text onPress={() => this.decreament(item, index)}>-</Text>
 
                           </TouchableOpacity> */}
-                                    {/* </View> */}
-                                </View>
-
+                                {/* </View> */}
                             </View>
-                        )}
-                    />
-                </View>
+
+                        </View>
+                    )}
+                />
+            </View>
 
 
 
 
-                {/* <Left>
+            {/* <Left>
                                 <Button transparent style={{ marginTop: -102, marginLeft: -162, width: 50, height: 50 }} onPress={() => this.props.navigation.openDrawer()}>
                                     <Image
                                         source={image}
@@ -1025,12 +1045,12 @@ class Products extends Component {
                                 </Button>
                             </Left> */}
 
-                {/* </SafeAreaView> */}
-                {/* <Text style={{backgroundColor: 'white'}}>New Sale Screen</Text>   */}
-            </View>
-            //   </ScrollView>
-        )
-    }
+            {/* </SafeAreaView> */}
+            {/* <Text style={{backgroundColor: 'white'}}>New Sale Screen</Text>   */}
+        </View>
+        //   </ScrollView>
+    )
+}
 }
 export default Products
 

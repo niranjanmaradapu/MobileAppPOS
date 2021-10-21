@@ -235,6 +235,8 @@ PODS:
     - React-Core
   - react-native-camera/RN (4.2.1):
     - React-Core
+  - react-native-image-picker (4.1.2):
+    - React-Core
   - react-native-netinfo (6.0.2):
     - React-Core
   - react-native-razorpay (2.2.7):
@@ -316,6 +318,15 @@ PODS:
     - React-Core
   - RNI18n (2.0.15):
     - React
+  - RNImageCropPicker (0.36.4):
+    - React-Core
+    - React-RCTImage
+    - RNImageCropPicker/QBImagePickerController (= 0.36.4)
+    - TOCropViewController
+  - RNImageCropPicker/QBImagePickerController (0.36.4):
+    - React-Core
+    - React-RCTImage
+    - TOCropViewController
   - RNReactNativeABeep (1.0.4):
     - React
   - RNReanimated (2.2.0):
@@ -354,6 +365,7 @@ PODS:
     - React
   - RNVectorIcons (8.1.0):
     - React-Core
+  - TOCropViewController (2.6.0)
   - UMAppLoader (2.2.0)
   - UMCore (7.1.1)
   - UMReactNativeAdapter (6.3.5):
@@ -396,6 +408,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-camera (from `../node_modules/react-native-camera`)
+  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-razorpay (from `../node_modules/react-native-razorpay`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -416,6 +429,7 @@ DEPENDENCIES:
   - "RNCPicker (from `../node_modules/@react-native-community/picker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNI18n (from `../node_modules/react-native-i18n`)
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - RNReactNativeABeep (from `../node_modules/react-native-a-beep/ios`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
@@ -431,6 +445,7 @@ SPEC REPOS:
   trunk:
     - boost-for-react-native
     - razorpay-pod
+    - TOCropViewController
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -491,6 +506,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-camera:
     :path: "../node_modules/react-native-camera"
+  react-native-image-picker:
+    :path: "../node_modules/react-native-image-picker"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-razorpay:
@@ -531,6 +548,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNI18n:
     :path: "../node_modules/react-native-i18n"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
   RNReactNativeABeep:
     :path: "../node_modules/react-native-a-beep/ios"
   RNReanimated:
@@ -584,6 +603,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 93bd528844ad21dc07aab1c67cb10abae6df6949
   React-jsinspector: 58aef7155bc9a9683f5b60b35eccea8722a4f53a
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
+  react-native-image-picker: 9c8a2687b69300ad9e95cec5d38f35ab9d32467d
   react-native-netinfo: 92e6e4476eb8bf6fc2d7c0a6ca0a1406f663d73a
   react-native-razorpay: b51c7aafa78ef6d9a702a052cdf47a20148381c2
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
@@ -604,17 +624,19 @@ SPEC CHECKSUMS:
   RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNI18n: e2f7e76389fcc6e84f2c8733ea89b92502351fd8
+  RNImageCropPicker: 73891a709e6fd8a47d32104d942757971f220aee
   RNReactNativeABeep: 48dcc9a3c52ac98a5e2df055d760a36dc5cba754
   RNReanimated: d9da990fc90123f4ffbfdda93d00fc15174863a8
   RNScreens: eb0dfb2d6b21d2d7f980ad46b14eb306d2f1062e
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
+  TOCropViewController: 3105367e808b7d3d886a74ff59bf4804e7d3ab38
   UMAppLoader: 21af63390e55c82e037fb9752d93114a80ecf16e
   UMCore: 2f671796d7439604a1cf8ac7bbe5809cd5c50437
   UMReactNativeAdapter: f808906d586a16cebdc3844d86e1bdb8f114a873
   UMTaskManagerInterface: 2be431101b73604e64fbfffcf759336f9d8fccbb
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
 
-PODFILE CHECKSUM: a255d1ce0d1e357cae5230563b204d5e12a1605b
+PODFILE CHECKSUM: 5665aefd45f3efd6de197ec983670bae4310d881
 
 COCOAPODS: 1.11.2
