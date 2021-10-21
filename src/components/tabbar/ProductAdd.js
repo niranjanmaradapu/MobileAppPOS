@@ -507,10 +507,10 @@ class ProductAdd extends Component {
                 (sqlTxn, res) => {
 
                     console.log(`added successfully`);
-                    this.setState({ arrayData: [] })
-                    this.setState({ temp: [] })
-                    this.setState({ search: null })
-                    this.getItems()
+                    // this.setState({ arrayData: [] })
+                    // this.setState({ temp: [] })
+                    // this.setState({ search: null })
+                    // this.getItems()
                     // this.props.navigation.navigate('NewSale')
                     this.props.navigation.goBack(null);
                     return true;
@@ -1024,7 +1024,7 @@ class ProductAdd extends Component {
                                     placeholderTextColor="#353C4050"
                                     textAlignVertical="center"
                                     autoCapitalize="none"
-                                    value={this.state.inventoryBarcodeId}
+                                    value={this.state.inventoryQuantity}
                                     onChangeText={this.handleInventoryQuantity}
                                     ref={inputemail => { this.emailValueInput = inputemail }} />
 
@@ -1046,7 +1046,7 @@ class ProductAdd extends Component {
                                     placeholderTextColor="#353C4050"
                                     textAlignVertical="center"
                                     autoCapitalize="none"
-                                    value={this.state.inventoryBarcodeId}
+                                    value={this.state.inventoryMRP}
                                     onChangeText={this.handleInventoryMRP}
                                     ref={inputemail => { this.emailValueInput = inputemail }} />
 
@@ -1057,7 +1057,7 @@ class ProductAdd extends Component {
                                     placeholderTextColor="#353C4050"
                                     textAlignVertical="center"
                                     autoCapitalize="none"
-                                    value={this.state.inventoryBarcodeId}
+                                    value={this.state.inventoryDiscount}
                                     onChangeText={this.handleInventoryDiscount}
                                     ref={inputemail => { this.emailValueInput = inputemail }} />
 
