@@ -220,6 +220,7 @@ export default class ImageScanner extends Component {
     }
 }
 
+
     getImageNameByScan() {
         const formData = new FormData();
         formData.append('image', {
