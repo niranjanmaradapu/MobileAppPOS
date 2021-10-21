@@ -66,22 +66,6 @@ class Products extends Component {
             inventoryNetAmount: '',
             tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
             tableData: [
-                // ['01', 'COA238106', 'Perfume', '₹ 100:00', '1', '₹ 100:00'],
-                // ['02', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['03', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['04', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['05', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['06', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['07', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['08', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['09', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['10', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['11', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['12', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['13', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['14', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['15', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-                // ['16', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
             ],
             camera: {
                 type: RNCamera.Constants.Type.back,
@@ -114,10 +98,6 @@ class Products extends Component {
         );
     }
 
-
-    //   toggleModal(visible) {
-    //     this.setState({ modalVisible: visible });
-    //  }
     async componentDidMount() {
         this.barcodeDBStore()
         this.getItems()
@@ -173,36 +153,7 @@ class Products extends Component {
         console.log('vinod data ---------' + item.barcode)
         this.setState({ barcodeId: item.barcode })
         this.barcodeDBStore()
-        this.props.navigation.navigate('NewSaleNavigation')
-        // this.setState({ flagone: true })
-        // this.setState({ flagtwo: false })
-        // this.setState({ flagthree: false })
-        // this.setState({ flagfour: false })
-
-        // const qtyarr = [...this.state.arrayData];
-        // //this.setState({ barcodeId: text })
-        // let sno = String(this.state.tableData.length + 1)
-        // let barcode = qtyarr[index].barcode
-        // //let barcode = item["barcode"]
-        // let itemDesc = qtyarr[index].itemdesc
-        // //let itemDesc = item["itemDesc"]
-        // let qty = qtyarr[index].qty
-        // let netAmount = qtyarr[index].netamount
-        // //let netAmount = String(item["netAmount"])
-        // // let qty = String(item["qty"])
-
-        // let totalAmount = String(qtyarr[index].netamount)
-        // //console.log(JSON.stringify(item))
-        // this.state.quantity = qty
-        // this.state.totalQty = (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
-        // this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount) * qty)
-        // //this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
-        // this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
-        // // this.barcodeDBStore()
-        // this.setState({ flagone: true })
-        // this.setState({ flagtwo: false })
-        // this.setState({ flagthree: false })
-        // this.setState({ flagfour: false })
+        this.props.navigation.navigate('NewSale',{tableData:this.state.tableData,isFromProducts:true, onGoBack: () => this.refreshTableData()},)
     }
 
     renderHeader = () => {
@@ -284,21 +235,22 @@ class Products extends Component {
                                 { RNBeep.beep() }
                                 this.setState({ totalAmount: this.state.totalAmount })
                                 this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+                               // global.tableData = this.state.tableData
+                                
                             }
                             else {
                                 { RNBeep.beep() }
                                 this.state.totalQty = this.state.totalQty + item["qty"]
                                 this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
                                 this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+                                //global.tableData = this.state.tableData
+                               
                             }
                             //parse this.state.totalAmount + item["netAmount"]
                             // this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
                         }
                     }
-                    this.setState({ flagone: true })
-                    this.setState({ flagtwo: false })
-                    this.setState({ flagthree: false })
-                    this.setState({ flagfour: false })
+                   
                     console.log(JSON.stringify(this.state.tableData.length))
                     console.log(JSON.stringify(totalQty))
                 },
@@ -307,6 +259,10 @@ class Products extends Component {
                 },
             );
         });
+    }
+
+    refreshTableData(){
+        this.setState({ tableData: this.state.tableData });
     }
 
     modelCancel() {
@@ -626,7 +582,7 @@ getBarcode() {
 navigateToScanCode() {
     global.barcodeId = 'something'
     //this.setState({ barcodeId: global.barcodeId })
-    this.props.navigation.navigate('ScanBarCode', {
+    this.props.navigation.navigate('ScanBarCode',{isFromNewSale:false, isFromAddProduct:true, 
         onGoBack: () => this.refresh(),
     });
 }
@@ -742,7 +698,15 @@ increment = (item, index) => {
 }
 
 addnew() {
-    this.props.navigation.navigate('ProductAdd')
+    this.props.navigation.navigate('ProductAdd', {
+        onGoBack: () => this.refreshallProducts(),
+    });
+}
+
+refreshallProducts(){
+    this.setState({ arrayData: [] })
+    this.barcodeDBStore()
+    this.getItems()  
 }
 
 decreament = (item, index) => {
@@ -822,15 +786,7 @@ render() {
         <View style={styles.container}>
             {/* <SafeAreaView> */}
             <View style={styles.viewswidth}>
-                {/* <TouchableOpacity style={{
-            position: 'absolute',
-            left: 10,
-            top: 30,
-            width: 40,
-            height: 40,
-          }} onPress={() => this.handleBackButtonClick()}>
-            <Image source={require('../assets/images/backButton.png')} />
-          </TouchableOpacity> */}
+               
                 <Text style={{
                     position: 'absolute',
                     left: 10,

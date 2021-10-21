@@ -487,6 +487,21 @@ class ProductAdd extends Component {
     }
 
     inventoryCreate() {
+        if (this.state.inventoryBarcodeId.length === 0) {
+            alert('Please Enter Barcode by using scan/Mannually');
+        } else if (this.state.inventoryProductName.length === 0) {
+            alert('Please Enter Product name');
+        }
+        else if (this.state.inventoryQuantity.length === 0) {
+            alert('Please Enter Quantity');
+        }
+        else if (this.state.inventoryMRP.length === 0) {
+            alert('Please Enter MRP');
+        }
+        else if (this.state.inventoryDiscount.length === 0) {
+            alert('Please Enter Discount %');
+        }
+        else {
         db.transaction(txn => {
             txn.executeSql(
                 `CREATE TABLE IF NOT EXISTS tbl_item(item_id INTEGER PRIMARY KEY AUTOINCREMENT, barcode VARCHAR(20), itemDesc VARCHAR(20), qty INT(5), mrp INT(30), promoDisc INT(30), netAmount INT(30), salesMan INT(30), createdDate VARCHAR(255),lastModified VARCHAR(255))`,
@@ -512,7 +527,8 @@ class ProductAdd extends Component {
                     // this.setState({ search: null })
                     // this.getItems()
                     // this.props.navigation.navigate('NewSale')
-                    this.props.navigation.goBack(null);
+                    this.props.route.params.onGoBack();
+                    this.props.navigation.goBack();
                     return true;
 
                 },
@@ -522,7 +538,7 @@ class ProductAdd extends Component {
             );
         });
     }
-
+    }
     endEditing() {
         console.log("end edited")
         this.barcodeDBStore()
@@ -736,7 +752,7 @@ class ProductAdd extends Component {
     navigateToGetBarCode() {
         global.barcodeId = 'something'
         //this.setState({ barcodeId: global.barcodeId })
-        this.props.navigation.navigate('ScanBarCode', {
+        this.props.navigation.navigate('ScanBarCode', {isFromNewSale:false, isFromAddProduct:true, 
             onGoBack: () => this.getBarcode(),
         });
     }
@@ -942,9 +958,6 @@ class ProductAdd extends Component {
                     {/* <Text style={styles.signUptext}> Sign Up </Text> */}
 
                 </View>
-
-
-
                 <ScrollView>
                     <View>
 
@@ -956,7 +969,7 @@ class ProductAdd extends Component {
                             <View style={{ flexDirection: 'column', flex: 0, marginLeft: 0, marginTop: 20, marginRight: 0, backgroundColor: "#ffffff", borderRadius: 20, }}>
 
                                 <Image
-                                    style={{ width: 80, height: 80, resizeMode: 'contain', borderRadius: 40, borderColor: 'black', alignSelf: 'center', borderWidth: 1 }}
+                                    style={{ width: 80, height: 80, resizeMode: 'contain', borderRadius: 40, borderColor: '#F2F2F2', alignSelf: 'center', borderWidth: 2 }}
                                     source={this.state.image}
                                 />
                                 <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 10, alignSelf: 'center', top: -20, left: 15 }} onPress={() => this.imageAction()}>
@@ -986,6 +999,7 @@ class ProductAdd extends Component {
 
 
                                 {/* <Text style={styles.signInFieldStyle}> Unique BarCode* </Text> */}
+                                <View style={{marginTop:10,width:deviceWidth}}>
                                 <TextInput style={styles.input}
                                     underlineColorAndroid="transparent"
                                     placeholder="BARCODE"
@@ -999,11 +1013,12 @@ class ProductAdd extends Component {
                                 <TouchableOpacity style={{
                                     position: 'absolute',
                                     right: 28,
-                                    top: 270,
+                                  top:45,
                                 }} onPress={() => this.navigateToGetBarCode()}>
                                     <Image style={{color:'#ED1C24',fontFamily:'regular',fontSize:12,position:'absolute',right:30,}} source={require('../assets/images/addnew.png')} />
                                     <Text style={{color:'#ED1C24',fontFamily:'regular',fontSize:12,position:'absolute',right:0,}}> scan </Text>
                                 </TouchableOpacity>
+                                </View>
 
 
                                 {/* <Text style={styles.signInFieldStyle}> Product Name* </Text> */}
@@ -1018,6 +1033,7 @@ class ProductAdd extends Component {
                                     />
 
                                 {/* <Text style={styles.signInFieldStyle}> Quantity* </Text> */}
+                                <View>
                                 <TextInput style={styles.input}
                                     underlineColorAndroid="transparent"
                                     placeholder="QTY"
@@ -1031,12 +1047,12 @@ class ProductAdd extends Component {
 <TouchableOpacity style={{
                                     position: 'absolute',
                                     right: 28,
-                                    top: 448,
+                                    top: 45,
                                 }} onPress={() => this.navigateToGetBarCode()}>
                                     
                                     <Text style={{color:'#353C4050',fontFamily:'regular',fontSize:14,position:'absolute',right:0,}}> {'Select Unit >'} </Text>
                                 </TouchableOpacity>
-
+                                </View>
 
                                 {/* <Text style={styles.signInFieldStyle}> MRP for 1 item* </Text> */}
                                
@@ -1050,7 +1066,7 @@ class ProductAdd extends Component {
                                     onChangeText={this.handleInventoryMRP}
                                     ref={inputemail => { this.emailValueInput = inputemail }} />
 
-
+<View>
 <TextInput style={styles.input}
                                     underlineColorAndroid="transparent"
                                     placeholder="DISCOUNT"
@@ -1064,32 +1080,29 @@ class ProductAdd extends Component {
  <TouchableOpacity style={{
                                     position: 'absolute',
                                     right: 28,
-                                    top: 625,
+                                    top: 45,
                                 }} onPress={() => this.navigateToGetBarCode()}>
                                       <Text style={{color:'#353C4050',fontFamily:'regular',fontSize:14,position:'absolute',right:0,}}> {'%'} </Text>
  </TouchableOpacity>
                                 
-
-
-                                <View style={styles.TopcontainerforModel}>
+</View>
+ 
 
 
                                     <TouchableOpacity
                                         style={{
-                                            width: "100%",
+                                         margin:20,
                                             height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
                                         }}
-                                        onPress={() => this.inventoryCreate()} >
+                                       >
                                         <Text style={{
                                             textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                            fontFamily: "regular",
-                                        }}> ADD PRODUCT </Text>
-                                        <Text> </Text>
-                                        <Text> </Text>
-                                        <Text> </Text>
+                                            fontFamily: "regular"
+                                        }}  onPress={() => this.inventoryCreate()} > ADD PRODUCT </Text>
+                                        
                                     </TouchableOpacity>
                                 </View>
-                            </View>
+                          
                         </View>
                         {/* </Modal>  */}
 

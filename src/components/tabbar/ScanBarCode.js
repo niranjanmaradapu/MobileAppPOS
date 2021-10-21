@@ -316,6 +316,8 @@ class ScanBarCode extends Component {
     this.barcodeCodes = [];
 
     this.state = {
+      isFromNewSale:false,
+      isFromAddProduct:false,
       torchon: RNCamera.Constants.FlashMode.off,
       camera: {
         type: RNCamera.Constants.Type.back,
@@ -324,6 +326,12 @@ class ScanBarCode extends Component {
     };
   }
 
+  componentDidMount() {
+    this.setState({
+      isFromNewSale: this.props.route.params.isFromNewSale,
+      isFromAddProduct: this.props.route.params.isFromAddProduct,
+    });
+  } 
   handleBackButtonClick() {
     this.props.navigation.goBack(null);
     return true;
@@ -402,7 +410,7 @@ class ScanBarCode extends Component {
             fontFamily: 'bold',
             fontSize: 18,
             color: '#353C40'
-          }}> New Sale </Text>
+          }}> {this.state.isFromNewSale === true ? 'New Sale' : 'Scan & Add Product'} </Text>
           {/* <Text style={styles.signUptext}> Sign Up </Text> */}
 
         </View>
