@@ -498,7 +498,7 @@ class NewSale extends Component {
                 console.log("updated successfully");
                 this.setState({ tableData: [] })
               //  this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'cash' })
-              this.props.navigation.navigate('Home')
+               this.props.navigation.navigate('Home')
                 console.log((parseInt(this.state.arrayData[i].qty) - parseInt(this.state.tableData[j].qty)).toString());
               },
               error => {
@@ -1698,7 +1698,7 @@ class NewSale extends Component {
           }}> New Sale </Text>
           <TouchableOpacity
             style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ED1C24', borderRadius: 5, width: 105, height: 32, }}
-            onPress={() => this.addnew()} >
+            onPress={() => this.navigateToScanCode()} >
             <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('ADD NEW')} </Text>
           </TouchableOpacity>
         </View>)}

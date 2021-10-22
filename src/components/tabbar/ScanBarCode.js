@@ -333,7 +333,8 @@ class ScanBarCode extends Component {
     });
   } 
   handleBackButtonClick() {
-    this.props.navigation.goBack(null);
+   this.props.route.params.onGoBack();
+    this.props.navigation.goBack();
     return true;
   }
 

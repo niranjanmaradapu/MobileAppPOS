@@ -736,12 +736,13 @@ class ProductAdd extends Component {
         // }
     }
 
-    getBarcode() {
-        //if( global.barcodeId != 'something'){
+    refresh() {
+        if( global.barcodeId != 'something'){
         this.setState({ inventoryBarcodeId: global.barcodeId })
-        this.setState({ flagone: false })
-        this.setState({ flagtwo: true })
-        this.setState({ flagthree: false })
+        }
+        // this.setState({ flagone: false })
+        // this.setState({ flagtwo: true })
+        // this.setState({ flagthree: false })
         // }
     }
 
@@ -750,11 +751,17 @@ class ProductAdd extends Component {
     }
 
     navigateToGetBarCode() {
+        console.log('tapped')
         global.barcodeId = 'something'
         //this.setState({ barcodeId: global.barcodeId })
-        this.props.navigation.navigate('ScanBarCode', {isFromNewSale:false, isFromAddProduct:true, 
-            onGoBack: () => this.getBarcode(),
-        });
+        // this.props.navigation.navigate('ScanBarCode', {isFromNewSale:false, isFromAddProduct:true, 
+        //     onGoBack: () => this.refresh(),
+        // });
+
+        this.props.navigation.navigate('ScanBarCode', {
+            isFromNewSale: false, isFromAddProduct: true,
+            onGoBack: () => this.refresh(),
+          });
     }
 
     navigateToImageScanner() {
@@ -1014,6 +1021,7 @@ class ProductAdd extends Component {
                                     position: 'absolute',
                                     right: 28,
                                   top:45,
+                                  width:50,height:50,
                                 }} onPress={() => this.navigateToGetBarCode()}>
                                     <Image style={{color:'#ED1C24',fontFamily:'regular',fontSize:12,position:'absolute',right:30,}} source={require('../assets/images/addnew.png')} />
                                     <Text style={{color:'#ED1C24',fontFamily:'regular',fontSize:12,position:'absolute',right:0,}}> scan </Text>
@@ -1048,7 +1056,7 @@ class ProductAdd extends Component {
                                     position: 'absolute',
                                     right: 28,
                                     top: 45,
-                                }} onPress={() => this.navigateToGetBarCode()}>
+                                }} >
                                     
                                     <Text style={{color:'#353C4050',fontFamily:'regular',fontSize:14,position:'absolute',right:0,}}> {'Select Unit >'} </Text>
                                 </TouchableOpacity>
@@ -1081,7 +1089,9 @@ class ProductAdd extends Component {
                                     position: 'absolute',
                                     right: 28,
                                     top: 45,
-                                }} onPress={() => this.navigateToGetBarCode()}>
+                                }} 
+                                //onPress={() => this.navigateToGetBarCode()}
+                                >
                                       <Text style={{color:'#353C4050',fontFamily:'regular',fontSize:14,position:'absolute',right:0,}}> {'%'} </Text>
  </TouchableOpacity>
                                 
