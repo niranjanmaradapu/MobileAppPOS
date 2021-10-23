@@ -1,28 +1,20 @@
 import React, { Component, useState } from 'react'
-import { View, Image, FlatList, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
-//import Menu from './Menu';
-//import Login from './Logsin';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { View, Image, FlatList, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 var deviceWidth = Dimensions.get('window').width;
-import { Table, TableWrapper, Row, Cell, Rows } from 'react-native-table-component';
-import { TabView, SceneMap } from 'react-native-tab-view';
 import Constants from 'expo-constants';
-import Modal from "react-native-modal";
-import CreateCustomerService from '../services/CreateCustomerService';
-import axios from 'axios';
-import RazorpayCheckout from 'react-native-razorpay';
-import NewSaleService from '../services/NewSaleService';
-import { DrawerActions } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
-import { ListItem, SearchBar } from "react-native-elements";
+import { SearchBar } from "react-native-elements";
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 import { RNCamera } from 'react-native-camera';
-import BarcodeMask from 'react-native-barcode-mask';
 import NetInfo from "@react-native-community/netinfo";
 import RNBeep from 'react-native-a-beep';
 import { Alert } from 'react-native';
+import Modal from "react-native-modal";
+import ImagePicker from 'react-native-image-crop-picker';
+import axios from 'axios';
+import NewSaleService from '../services/NewSaleService';
 
 
 class Products extends Component {
@@ -30,9 +22,6 @@ class Products extends Component {
         super(props);
         this.camera = null;
         this.barcodeCodes = [];
-
-        // this.toggle = this.toggle.bind(this);
-        // this.navigate = this.props.navigation.navigate;
         this.state = {
             barcodeId: "",
             productname: "",
@@ -75,38 +64,19 @@ class Products extends Component {
     }
 
 
-    async takePicture() {
-        if (this.camera) {
-            const options = { quality: 0.5, base64: true };
-            const data = await this.camera.takePictureAsync(options);
-            console.log(data.uri);
-        }
-    }
-
-    pendingView() {
-        return (
-            <View
-                style={{
-                    flex: 1,
-                    backgroundColor: 'lightgreen',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            >
-                <Text>Waiting</Text>
-            </View>
-        );
-    }
-
     async componentDidMount() {
+        // this.setState({ arrayData: [] })
+        // this.setState({ temp: [] })
+        // this.setState({ search: null })
         this.barcodeDBStore()
         this.getItems()
-        if (this.state.barcodeId.length >= 1) {
-            this.inventoryCreate()
-        }
+
     }
 
     getItems = () => {
+        this.setState({ arrayData: [] })
+        this.setState({ temp: [] })
+        this.setState({ search: null })
         db.transaction(txn => {
             txn.executeSql(
                 `SELECT * FROM tbl_item`,
@@ -123,18 +93,16 @@ class Products extends Component {
                             let netAmount = String(item["netAmount"])
                             let qty = String(item["qty"])
                             let totalAmount = String(item["netAmount"])
+                            let image = item['itemImage']
 
-                            // this.state.quantity = qty
-                            // this.state.totalQty = this.state.totalQty + item["qty"]
-                            // this.state.totalAmount = this.state.totalAmount + item["netAmount"]
-                            this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+                            this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
                             if (this.state.arrayData.length === 1) {
                                 this.setState({ arrayData: this.state.arrayData })
                             }
-                            this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+                            this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
 
                         }
-                        //console.log(JSON.stringify(this.state.data));
+                        console.log(this.state.arrayData)
                     }
                 },
                 error => {
@@ -144,40 +112,132 @@ class Products extends Component {
         });
     };
 
-
-    setResult = (results) => {
-        console.log('vinod data ---------' + len)
+    pickSingleWithCamera(cropping, mediaType = 'photo') {
+        ImagePicker.openCamera({
+            cropping: cropping,
+            width: 500,
+            height: 500,
+            includeExif: true,
+            mediaType,
+        })
+            .then((image) => {
+                console.log('received image', image);
+                this.setState({ flagqtyModelOpen: false })
+                this.setState({ modalVisible: false });
+                this.setState({
+                    image: {
+                        uri: image.path,
+                        width: image.width,
+                        height: image.height,
+                        mime: image.mime,
+                    },
+                    images: null,
+                });
+                this.getImageNameByScan()
+            })
+            .catch((e) => {
+                this.setState({ flagqtyModelOpen: false })
+                this.setState({ modalVisible: false });
+                console.log(e);
+                Alert.alert(e.message ? e.message : e);
+            });
     }
+
+
+    pickSingle(cropit, circular = false, mediaType) {
+        ImagePicker.openPicker({
+            width: 500,
+            height: 500,
+            cropping: cropit,
+            cropperCircleOverlay: circular,
+            sortOrder: 'none',
+            compressImageMaxWidth: 1000,
+            compressImageMaxHeight: 1000,
+            compressImageQuality: 1,
+            compressVideoPreset: 'MediumQuality',
+            includeExif: true,
+            cropperStatusBarColor: 'white',
+            cropperToolbarColor: 'white',
+            cropperActiveWidgetColor: 'white',
+            cropperToolbarWidgetColor: '#3498DB',
+        })
+            .then((image) => {
+                console.log('received image', image);
+                this.setState({ flagqtyModelOpen: false })
+                this.setState({ modalVisible: false });
+                this.setState({
+                    image: {
+                        uri: image.path,
+                        width: image.width,
+                        height: image.height,
+                        mime: image.mime,
+                    },
+                    images: null,
+                });
+                this.getImageNameByScan()
+            })
+            .catch((e) => {
+                this.setState({ flagqtyModelOpen: false })
+                this.setState({ modalVisible: false });
+                console.log(e);
+                Alert.alert(e.message ? e.message : e);
+            });
+
+
+    }
+
+
+    getImageNameByScan() {
+        const formData = new FormData();
+        formData.append('image', {
+            uri: this.state.image.uri, name: this.state.image.mime, type: this.state.image.mime
+        });
+        axios({
+            url: NewSaleService.getImageScanning(),
+            method: 'POST',
+            data: formData,
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+            .then(response => {
+                if (response.data) {
+                    console.log("response :", response.data.result[0].name);
+                    console.log("response :", global.productname);
+                    // this.setState({ inventoryProductName: response.data.result[0].name})
+                    // if (global.productname == "something") {
+                    { RNBeep.beep() }
+                    global.productname = response.data.result[0].name
+                    this.refresh()
+                  //    }
+                }
+
+            })
+            .catch(function (error) {
+                console.log(error);
+
+            })
+           
+    }
+
+    cancel(){
+        console.log('clicked')
+        //this.setState({ modalVisible: true });
+        this.setState({ flagqtyModelOpen: false })
+        this.setState({ modalVisible: false });
+    }
+
+
 
     addAction = (item, index) => {
         console.log('vinod data ---------' + item.barcode)
         this.setState({ barcodeId: item.barcode })
         this.barcodeDBStore()
-        this.props.navigation.navigate('NewSale',{tableData:this.state.tableData,isFromProducts:true, onGoBack: () => this.refreshTableData()},)
+        console.log('vinod data ---------' + this.state.tableData)
+        this.props.navigation.navigate('NewSale', { tableData: this.state.tableData, isFromProducts: true, onGoBack: () => this.refreshTableData() },)
     }
 
-    renderHeader = () => {
-        return <View>
-            <SearchBar containerStyle={{ marginRight: 40 }} placeholder="Search products with Name"
-                //inputStyle={{backgroundColor: '#FBFBFB'}}
-                lightTheme editable={true}
-                value={this.state.search}
-                onChangeText={this.updateSearch} >
-            </SearchBar>
-
-            <TouchableOpacity style={{
-                position: 'absolute',
-                right: 10,
-                top: 20,
-            }} onPress={() => this.navigateToImageScanner()}>
-                <Image source={require('../assets/images/barcode.png')} />
-            </TouchableOpacity>
-
-            {/* this.props.navigation.navigate('AuthNavigation') */}
-
-        </View>
-
-    };
 
     updateSearch = search => {
         this.setState({ search }, () => {
@@ -189,8 +249,8 @@ class Products extends Component {
             }
             this.state.arrayData = this.state.temp.filter(function (item) {
                 return item.itemdesc.includes(search);
-            }).map(function ({ itemdesc, netamount, barcode, qty }) {
-                return { itemdesc, netamount, barcode, qty };
+            }).map(function ({ itemdesc, netamount, barcode, qty, image }) {
+                return { itemdesc, netamount, barcode, qty, image };
             });
         });
     };
@@ -215,7 +275,7 @@ class Products extends Component {
                             let netAmount = String(item["netAmount"])
                             let qty = "1"//String(item["qty"])
                             let totalAmount = String(item["netAmount"])
-                            console.log(JSON.stringify(item))
+                            let image = item['itemImage']
                             this.state.quantity = qty
 
                             if (this.state.tableData.length > 0) {
@@ -234,24 +294,19 @@ class Products extends Component {
                                 }
                                 { RNBeep.beep() }
                                 this.setState({ totalAmount: this.state.totalAmount })
-                                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
-                               // global.tableData = this.state.tableData
-                                
+                                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
                             }
                             else {
                                 { RNBeep.beep() }
                                 this.state.totalQty = this.state.totalQty + item["qty"]
                                 this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
-                                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
-                                //global.tableData = this.state.tableData
-                               
+                                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+
                             }
-                            //parse this.state.totalAmount + item["netAmount"]
-                            // this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
                         }
                     }
-                   
-                    console.log(JSON.stringify(this.state.tableData.length))
+
+                    console.log(JSON.stringify(this.state.tableData))
                     console.log(JSON.stringify(totalQty))
                 },
                 error => {
@@ -261,752 +316,267 @@ class Products extends Component {
         });
     }
 
-    refreshTableData(){
+    refreshTableData() {
         this.setState({ tableData: this.state.tableData });
-    }
-
-    modelCancel() {
-        this.setState({ modalVisible: false });
-    }
-
-    handleInventoryBarcode = (text) => {
-        this.setState({ inventoryBarcodeId: text })
-    }
-    handleInventoryProductName = (text) => {
-        this.setState({ inventoryProductName: text })
-    }
-    handleInventoryQuantity = (value) => {
-        this.setState({ inventoryQuantity: value });
-    }
-
-    handleInventoryMRP = (text) => {
-        this.setState({ inventoryMRP: text })
-    }
-    handleInventoryDiscount = (text) => {
-        this.setState({ inventoryDiscount: text })
-        console.log(this.state.inventoryMRP)
-        console.log(text)
-        this.setState({ inventoryNetAmount: (parseInt(this.state.inventoryMRP) - parseInt(text)).toString() })
-    }
-    handleInventoryNetAmount = (text) => {
-        this.setState({ inventoryNetAmount: text });
-    }
-
-    handleMobileNumber = (text) => {
-        this.setState({ mobileNumber: text })
-    }
-    handleAltNumber = (text) => {
-        this.setState({ altMobileNo: text })
-    }
-    handlename = (value) => {
-        this.setState({ name: value });
-    }
-
-    handleGender = (text) => {
-        this.setState({ gender: text })
-    }
-    handleGstnumber = (text) => {
-        this.setState({ gstNumber: text })
-    }
-    handledob = (value) => {
-        this.setState({ dob: value });
-    }
-
-    handleaddress = (value) => {
-        this.setState({ address: value });
-    }
-
-    handleBarCode = (text) => {
-        this.setState({ barcodeId: text })
-
-
-    }
-
-    inventoryCreate() {
-        db.transaction(txn => {
-            txn.executeSql(
-                `CREATE TABLE IF NOT EXISTS tbl_item(item_id INTEGER PRIMARY KEY AUTOINCREMENT, barcode VARCHAR(20), itemDesc VARCHAR(20), qty INT(5), mrp INT(30), promoDisc INT(30), netAmount INT(30), salesMan INT(30), createdDate VARCHAR(255),lastModified VARCHAR(255))`,
-                [],
-                (sqlTxn, res) => {
-                    console.log("table created successfully");
-                },
-                error => {
-                    console.log("error on creating table " + error.message);
-                },
-            );
-        });
-        db.transaction(txn => {
-            txn.executeSql(
-                'INSERT INTO tbl_item ( barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, lastModified) VALUES (?,?,?,?,?,?,?,?,?)',
-                [this.state.inventoryBarcodeId, this.state.inventoryProductName, parseInt(this.state.inventoryQuantity), parseInt(this.state.inventoryMRP), parseInt(this.state.inventoryDiscount), parseInt(this.state.inventoryNetAmount), 0, "2021-09-08T17:34:03.015299", "2021-09-09T00:13:42.671451"],
-                //[, String(getListOfBarcodes[0][0]["itemDesc"]), getListOfBarcodes[0][0]["qty"], , getListOfBarcodes[0][0]['promoDisc'], getListOfBarcodes[0][0]['netAmount'], getListOfBarcodes[0][0]['salesMan'], String(getListOfBarcodes[0][0]['createdDate']), String(getListOfBarcodes[0][0]['lastModified'])],
-                (sqlTxn, res) => {
-
-                    console.log(`added successfully`);
-                    this.setState({ arrayData: [] })
-                    this.setState({ temp: [] })
-                    this.setState({ search: null })
-                    this.getItems()
-                    this.setState({ flagone: false })
-                    this.setState({ flagtwo: false })
-                    this.setState({ flagthree: true })
-
-                },
-                error => {
-                    console.log("error on adding category " + error.message);
-                },
-            );
-        });
-    }
-
-    endEditing() {
-        console.log("end edited")
-        this.barcodeDBStore()
-    }
-
-
-
-    handleQty = (text) => {
-        this.setState({ quantity: text })
-        // this.componentDidMount()
-    }
-
-
-    modelCreate() {
-        const params = {
-            "mobileNumber": this.state.mobileNumber,
-            "altMobileNo": this.state.altMobileNo,
-            "name": this.state.name,
-            "gender": 'Male',
-            "gstNumber": this.state.gstNumber,
-            "dob": "2021-06-21T18:30:00.000Z",
-            "anniversary": "1",
-            "address": this.state.address,
-        }
-        console.log('obj' + JSON.stringify(params))
-        console.log(CreateCustomerService.createCustomer())
-        axios.post(CreateCustomerService.createCustomer(), params).then((res) => {
-            console.log(res)
-            if (res.data.statusCode === "OK") {
-                this.setState({ modalVisible: false });
-                // toast.success(res.data.body);
-                this.setState({
-                    mobileNumber: "",
-                    altMobileNo: "",
-                    name: "",
-                    gender: "Male",
-                    gstNumber: "",
-                    dob: "",
-                    anniversary: "",
-                    address: ""
-                })
-
-            }
-            else {
-
-            }
-        });
-    }
-
-    payCash = () => {
-        for (let j = 0; j < this.state.tableData.length; j++) {
-            for (let i = 0; i < this.state.arrayData.length; i++) {
-                if (parseInt(this.state.tableData[j].qty) > parseInt(this.state.arrayData[i].qty)) {
-                    alert(`the quantity for  ${this.state.arrayData[i].itemdesc} is only ${this.state.arrayData[i].qty} available in inventory.Please select qty below ${this.state.arrayData[i].qty} only`);
-                }
-                else if (parseInt(this.state.tableData[j].qty) === parseInt(this.state.arrayData[i].qty)) {
-                    db.transaction(txn => {
-                        txn.executeSql(
-                            'DELETE FROM  tbl_item where barcode=?',
-                            [this.state.tableData[i].barcode],
-                            (sqlTxn, res) => {
-                                console.log("deleted successfully");
-                                this.setState({ tableData: [] })
-                                this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'cash' })
-                            },
-                            error => {
-                                console.log("error on search category " + error.message);
-                            },
-                        );
-                    });
-                }
-                else {
-                    db.transaction(txn => {
-                        txn.executeSql(
-                            'UPDATE tbl_item set qty=? where barcode=?',
-                            [parseInt(this.state.arrayData[i].qty) - parseInt(this.state.tableData[j].qty), this.state.tableData[i].barcode],
-                            (sqlTxn, res) => {
-                                console.log("updated successfully");
-                                this.setState({ tableData: [] })
-                                this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'cash' })
-                                console.log((parseInt(this.state.arrayData[i].qty) - parseInt(this.state.tableData[j].qty)).toString());
-                            },
-                            error => {
-                                console.log("error on search category " + error.message);
-                            },
-                        );
-                    });
-                }
-            }
-        }
-
-        // alert(`Please Pay  Rs ${this.state.totalAmount} and inventory updated based on this transaction`);
-    }
-
-    pay = () => {
-        NetInfo.addEventListener(state => {
-            if (state.isConnected) {
-                //  console.log(this.state.totalAmount)
-                const params = {
-                    "amount": JSON.stringify(this.state.totalAmount),
-                    "info": "order_request"
-                }
-
-                axios.post(NewSaleService.payment(), params).then((res) => {
-                    // this.setState({isPayment: false});
-                    const data = JSON.parse(res.data["result"])
-
-                    //console.log()
-                    var options = {
-                        description: 'Transaction',
-                        image: 'https://i.imgur.com/3g7nmJC.png',
-                        currency: data.currency,
-                        order_id: data.id,
-                        key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
-                        amount: data.amount,
-                        name: 'OTSI',
-                        prefill: {
-                            name: "Kadali",
-                            email: "kadali@gmail.com",
-                            contact: "9999999999",
-                        },
-                        theme: { color: '#F37254' }
-                    }
-                    console.log(options)
-                    RazorpayCheckout.open(options).then((data) => {
-                        // handle success
-                        this.setState({ tableData: [] })
-                        alert(`Success: ${data.razorpay_payment_id}`);
-                        this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
-                    }).catch((error) => {
-                        console.log(error)
-                        // handle failure
-                        alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
-                    });
-                }
-                )
-            }
-            else {
-                alert('Please check your Internet Connection');
-            }
-        })
-    }
-
-    menuAction() {
-        this.props.navigation.dispatch(DrawerActions.openDrawer())
-    }
-
-    topbarAction1() {
-        this.setState({ flagone: true })
-        this.setState({ flagtwo: false })
-        this.setState({ flagthree: false })
-        this.setState({ flagfour: false })
-    }
-
-
-    topbarAction2() {
-        this.setState({ inventoryBarcodeId: '' });
-        this.setState({ inventoryNetAmount: '' });
-        this.setState({ modalVisible: true });
-        this.setState({ flagone: false })
-        this.setState({ flagtwo: true })
-        this.setState({ flagthree: false })
-        this.setState({ flagfour: false })
-    }
-
-
-    topbarAction3() {
-        this.setState({ arrayData: [] })
-        this.setState({ temp: [] })
-        this.setState({ search: null })
-        this.setState({ flagone: false })
-        this.setState({ flagtwo: false })
-        this.setState({ flagthree: true })
-        this.setState({ flagfour: false })
-        this.getItems()
-    }
-
-
-    topbarAction4() {
-        this.setState({ flagone: false })
-        this.setState({ flagtwo: false })
-        this.setState({ flagthree: false })
-        this.setState({ flagfour: true })
     }
 
     refresh() {
         //if( global.barcodeId != 'something'){
-            console.log(global.productname)
-            
+        console.log(global.productname)
+
         this.setState({ search: global.productname })
         console.log('serach text is' + this.state.search)
-       // {this.updateSearch(global.productname)}
-       search = global.productname 
-       this.setState({ search }, () => {
-        if ('' == search) {
-            this.setState({
-                arrayData: [...this.state.temp]
+
+        // {this.updateSearch(global.productname)}
+        search = global.productname
+        this.setState({ search }, () => {
+            if ('' == search) {
+                this.setState({
+                    arrayData: [...this.state.temp]
+                });
+                return;
+            }
+            this.state.arrayData = this.state.temp.filter(function (item) {
+                return item.itemdesc.includes(search);
+            }).map(function ({ itemdesc, netamount, barcode, qty, image }) {
+                return { itemdesc, netamount, barcode, qty, image };
             });
-            return;
-        }
-        this.state.arrayData = this.state.temp.filter(function (item) {
-            return item.itemdesc.includes(search);
-        }).map(function ({ itemdesc, netamount, barcode, qty }) {
-            return { itemdesc, netamount, barcode, qty };
         });
-    });
-       this.forceUpdate()
-    // this.state.search
-    // }
-}
-
-getBarcode() {
-    //if( global.barcodeId != 'something'){
-    this.setState({ inventoryBarcodeId: global.barcodeId })
-    this.setState({ flagone: false })
-    this.setState({ flagtwo: true })
-    this.setState({ flagthree: false })
-    // }
-}
-
-navigateToScanCode() {
-    global.barcodeId = 'something'
-    //this.setState({ barcodeId: global.barcodeId })
-    this.props.navigation.navigate('ScanBarCode',{isFromNewSale:false, isFromAddProduct:true, 
-        onGoBack: () => this.refresh(),
-    });
-}
-
-navigateToGetBarCode() {
-    global.barcodeId = 'something'
-    //this.setState({ barcodeId: global.barcodeId })
-    this.props.navigation.navigate('ScanBarCode', {
-        onGoBack: () => this.getBarcode(),
-    });
-}
-
-navigateToImageScanner() {
-    global.productname = 'something'
-    //this.setState({ barcodeId: global.barcodeId })
-    this.props.navigation.navigate('ImageScanner', {
-        onGoBack: () => this.refresh(),
-    });
-}
-
-updateQtyForTable = (text, index) => {
-    const qtyarr = [...this.state.tableData];
-    qtyarr[index].qty = text;
-    this.setState({ tableData: qtyarr })
-    // this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(text)).toString()
-    this.state.totalQty = (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
-    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
-}
-
-incrementForTable = (item, index) => {
-    const qtyarr = [...this.state.tableData];
-    var additem = parseInt(qtyarr[index].qty) + 1;
-    // var priceFor1 = parseInt(item.netAmount)
-    // var price = priceFor1  * additem;
-    // qtyarr[index].netamount = price.toString()
-    qtyarr[index].qty = additem.toString()
-    this.setState({ tableData: qtyarr })
-    // var minumsValue = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
-    //console.log('minusdd' + minumsValue)
-    //this.state.totalQty = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
-    // this.state.totalQty =  (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
-    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
-
-}
-
-decreamentForTable = (item, index) => {
-    const qtyarr = [...this.state.tableData];
-    var additem = parseInt(qtyarr[index].qty) - 1;
-    qtyarr[index].qty = additem.toString()
-    if (qtyarr[index].qty > 0) {
-        this.setState({ tableData: qtyarr })
-    }
-    //this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)).toString()
-    this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(qtyarr[index].netamount)).toString()
-
-}
-
-
-
-updateQty = (text, index) => {
-    const qtyarr = [...this.state.arrayData];
-    qtyarr[index].qty = text;
-    this.setState({ arrayData: qtyarr })
-}
-
-updateQtyValue = (text, index) => {
-    const qtyarr = [...this.state.arrayData];
-    //qtyarr[index].qty = text;
-    this.setState({ arrayData: qtyarr })
-}
-
-manageQunatity = (item, index) => {
-
-    this.setState({ flagqtyModelOpen: true })
-    this.setState({ modalVisible: true });
-
-}
-
-selectedQty = (item, index) => {
-    console.log('-------ITEM TAPPED')
-    this.setState({ flagqtyModelOpen: false })
-    this.setState({ modalVisible: false });
-};
-
-handledeleteaction = (item, index) => {
-    const list = this.state.arrayData;
-    list.splice(index, 1);
-    this.setState({ arrayData: list });
-}
-
-increment = (item, index) => {
-    const qtyarr = [...this.state.arrayData];
-    var additem = parseInt(qtyarr[index].qty) + 1;
-
-    // var priceFor1 = parseInt(item.netAmount)
-    // var price = priceFor1  * additem;
-    // qtyarr[index].netamount = price.toString()
-    qtyarr[index].qty = additem.toString()
-    db.transaction(txn => {
-        txn.executeSql(
-            'UPDATE tbl_item set qty=? where barcode=?',
-            [qtyarr[index].qty, item.barcode],
-            (sqlTxn, res) => {
-                console.log("updated successfully");
-            },
-            error => {
-                console.log("error on search category " + error.message);
-            },
-        );
-    });
-    this.setState({ arrayData: qtyarr })
-
-}
-
-addnew() {
-    this.props.navigation.navigate('ProductAdd', {
-        onGoBack: () => this.refreshallProducts(),
-    });
-}
-
-refreshallProducts(){
-    this.setState({ arrayData: [] })
-    this.barcodeDBStore()
-    this.getItems()  
-}
-
-decreament = (item, index) => {
-    const qtyarr = [...this.state.arrayData];
-    var additem = parseInt(qtyarr[index].qty) - 1;
-    qtyarr[index].qty = additem.toString()
-    db.transaction(txn => {
-        txn.executeSql(
-            'UPDATE tbl_item set qty=? where barcode=?',
-            [qtyarr[index].qty, item.barcode],
-            (sqlTxn, res) => {
-                console.log("updated successfully");
-            },
-            error => {
-                console.log("error on search category " + error.message);
-            },
-        );
-    });
-    this.setState({ arrayData: qtyarr })
-    if (qtyarr[index].qty > 0) {
-        this.setState({ arrayData: qtyarr })
+        this.forceUpdate()
+        // this.state.search
+        // }
     }
 
-}
+    getBarcode() {
+        //if( global.barcodeId != 'something'){
+        this.setState({ inventoryBarcodeId: global.barcodeId })
+        // }
+    }
 
+    navigateToGetBarCode() {
+        global.barcodeId = 'something'
+        //this.setState({ barcodeId: global.barcodeId })
+        this.props.navigation.navigate('ScanBarCode', {
+            onGoBack: () => this.getBarcode(),
+        });
+    }
 
+    navigateToImageScanner() {
+        this.setState({ flagqtyModelOpen: true })
+        this.setState({ modalVisible: true });
+        // global.productname = 'something'
+        // //this.setState({ barcodeId: global.barcodeId })
+        // this.props.navigation.navigate('ImageScanner', {
+        //     onGoBack: () => this.refresh(),
+        // });
+    }
 
-render() {
-    console.log(global.barcodeId)
-    AsyncStorage.getItem("tokenkey").then((value) => {
-        console.log(value)
-    }).catch(() => {
-        console.log('there is error getting token')
-    })
-    const state = this.state;
+   
+    handledeleteaction = (item, index) => {
+        const list = this.state.arrayData;
+        list.splice(index, 1);
+        this.setState({ arrayData: list });
+    }
 
-    const element = (data, index) => (
-        //   // <TouchableOpacity onPress={() => this._alertIndex(index)}>
-        //   //   <View style={styles.btn}>
-        //   //     <Text style={styles.btnText}>button</Text>
-        //   //   </View>
-        //   // </TouchableOpacity>
+    addnew() {
+        this.props.navigation.navigate('ProductAdd', {
+            onGoBack: () => this.refreshallProducts(),
+        });
+    }
 
-        <TextInput style={styles.btn}
-            underlineColorAndroid="transparent"
-            placeholder=""
-            placeholderTextColor="#48596B"
-            color="#48596B"
-            ref={index}
-            textAlign={'center'}
-            textAlignVertical="center"
-            value={this.state.quantity}
-            autoCapitalize="none"
-            //   onSubmitEditing={value => {
-            //     this.setState({ value })
-            //     if (value) index.current.focus(); //assumption is TextInput ref is input_2
-            //  }}
-            onChangeText={this.handleQty}
-        // value={this.state.quantity}
-        // onFocus={() => this._alertIndex(index)}
+    refreshallProducts() {
+        this.setState({ arrayData: [] })
+        this.barcodeDBStore()
+        this.getItems()
+    }
 
-        // ref={inputemail => { this.emailValueInput = inputemail }}
-        />
-    );
+   
 
+    render() {
+        return (
+            //   <ScrollView>
+            <View style={styles.container}>
+                {/* <SafeAreaView> */}
+                <View style={styles.viewswidth}>
 
-    // const element = (data, index) => (
-    //   <TouchableOpacity onPress={() => this._alertIndex(index)}>
-    //     <View style={styles.btn}>
-    //       <Text style={styles.btnText}>button</Text>
-    //     </View>
-    //   </TouchableOpacity>
-    // );
-
-    return (
-        //   <ScrollView>
-        <View style={styles.container}>
-            {/* <SafeAreaView> */}
-            <View style={styles.viewswidth}>
-               
-                <Text style={{
-                    position: 'absolute',
-                    left: 10,
-                    top: 55,
-                    width: 300,
-                    height: 20,
-                    fontFamily: 'bold',
-                    fontSize: 18,
-                    color: '#353C40'
-                }}> List of Products </Text>
-                <TouchableOpacity
-                    style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ED1C24', borderRadius: 5, width: 105, height: 32, }}
-                    onPress={() => this.addnew()} >
-                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('ADD NEW')} </Text>
-                </TouchableOpacity>
-
-                {/* <Image style={{position:'absolute',left:0,width:30,height:30,top:2}}source={require('../assets/images/backButton.png')} /> */}
-
-
-
-            </View>
-
-
-
-            <View
-                style={{
-                    flex: 1,
-                    paddingHorizontal: 0,
-                    paddingVertical: 0,
-                    marginTop: 0
-                }}>
-                <View>
-                    <SearchBar containerStyle={{ marginRight: 40 }} placeholder="Search products with Name"
-                        //inputStyle={{backgroundColor: '#FBFBFB'}}
-                        lightTheme editable={true}
-                        value={this.state.search}
-                        onChangeText={this.updateSearch} >
-                    </SearchBar>
-
-                    <TouchableOpacity style={{
+                    <Text style={{
                         position: 'absolute',
-                        right: 10,
-                        top: 20,
-                    }} onPress={() => this.navigateToImageScanner()}>
-                        <Image source={require('../assets/images/barcode.png')} />
+                        left: 10,
+                        top: 55,
+                        width: 300,
+                        height: 20,
+                        fontFamily: 'bold',
+                        fontSize: 18,
+                        color: '#353C40'
+                    }}> List of Products </Text>
+                    <TouchableOpacity
+                        style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ED1C24', borderRadius: 5, width: 105, height: 32, }}
+                        onPress={() => this.addnew()} >
+                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('ADD NEW')} </Text>
                     </TouchableOpacity>
-
-                    {/* this.props.navigation.navigate('AuthNavigation') */}
-
                 </View>
+                <View
+                    style={{
+                        flex: 1,
+                        paddingHorizontal: 0,
+                        paddingVertical: 0,
+                        marginTop: 0
+                    }}>
+                    <View>
+                        <SearchBar containerStyle={{ marginRight: 40 }} placeholder="Search products with Name"
+                            //inputStyle={{backgroundColor: '#FBFBFB'}}
+                            lightTheme editable={true}
+                            value={this.state.search}
+                            onChangeText={this.updateSearch} >
+                        </SearchBar>
 
-                <FlatList
-                    //  ListHeaderComponent={this.renderHeader}
-                    data={this.state.arrayData}
-                    keyExtractor={item => item.email}
-                    renderItem={({ item, index }) => (
-                        <View style={{
-                            height: 120,
-                            backgroundColor: '#FFFFFF',
-                            borderBottomWidth: 5,
-                            borderBottomColor: '#FBFBFB',
-                            flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-                        }}>
-                            <View style={{ flexDirection: 'column', width: '100%', height: 120, }}>
-                                <Image source={require('../assets/images/sample.png')} style={{
-                                    position: 'absolute', left: 20, top: 15, width: 90, height: 90,
-                                }} />
-                                <Text style={{ fontSize: 16, marginTop: 30, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>
-                                    {item.itemdesc}
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                    QUANTITY:
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 200, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                                    {item.qty} Pieces
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                    PRICE/EACH:
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 210, marginTop: -16, fontFamily: 'medium', color: '#ED1C24' }}>
-                                    ₹ {(parseInt(item.netamount)).toString()}
-                                </Text>
+                        <TouchableOpacity style={{
+                            position: 'absolute',
+                            right: 10,
+                            top: 20,
+                        }} onPress={() => this.navigateToImageScanner()}>
+                            <Image source={require('../assets/images/barcode.png')} />
+                        </TouchableOpacity>
 
+                        {/* this.props.navigation.navigate('AuthNavigation') */}
 
-                            </View>
-                            {/* <TextInput
-                        style={{
-                          justifyContent: 'center',
-                          height: 30,
-                          width: 80,
-                          marginLeft: -80,
-                          marginTop: 30,
-                          borderColor: '#8F9EB717',
-                          borderRadius: 3,
-                          backgroundColor: 'white',
-                          borderWidth: 1,
-                          fontFamily: 'semibold',
-                          fontSize: 16
-                        }}
-                        underlineColorAndroid="transparent"
-                        placeholder="0"
-                        placeholderTextColor="#8F9EB7"
+                    </View>
 
-                        value={'1PC'}
-                        onChangeText={(text) => this.updateQtyValue(text, index)}
-                      /> */}
-                            {/* <View style={{
-                        flexDirection: 'column',
-                        width: '100%',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
-                      }}> */}
-
-                            <TouchableOpacity
-                                style={{
-                                    fontSize: 15, fontFamily: 'regular',
-                                    right: 80, bottom: 10,
-                                    borderColor: '#ED1C24', borderWidth: 1, width: 60, height: 30,
-                                    textAlign: 'center', justifyContent: 'center', marginTop: -10, //Centered horizontally
-                                    alignItems: 'center', borderRadius: 5,
-                                }}
-                                onPress={() => this.addAction(item, index)} >
-                                <Text style={{
-                                    color: "#ED1C24"
-                                }}>
-                                    + ADD
-                                </Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={{
-                                position: 'absolute',
-                                right: 50,
-                                top: 65,
-                                width: 30,
-                                height: 30,
-                                borderBottomLeftRadius: 5,
-                                borderTopLeftRadius: 5,
-                                borderWidth: 1,
-                                borderColor: "lightgray",
-                                // borderRadius:5,
-                            }} onPress={() => this.handleeditaction()}>
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={{
+                    {this.state.flagqtyModelOpen && (
+                        <View>
+                          <Modal isVisible={this.state.modalVisible}>
+                            <View style={{
+                              flex: 1, justifyContent: 'center', //Centered horizontally
+                              alignItems: 'center',
+                            }}>
+                              <View style={{
                                 position: 'absolute',
                                 right: 20,
-                                top: 65,
-                                width: 30,
-                                height: 30,
-                                borderBottomRightRadius: 5,
-                                borderTopRightRadius: 5,
-                                borderWidth: 1,
-                                borderColor: "lightgray",
-                            }} onPress={() => this.handledeleteaction(item, index)}>
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
-                            </TouchableOpacity>
-                            <View style={{
-                                backgroundColor: 'grey',
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
+                                left: 20,
                                 alignItems: 'center',
-                                height: 30,
-                                width: 90
-                            }}>
-                                {/* <TouchableOpacity>
-                            <Text onPress={() => this.increment(item, index)}>+</Text>
-                          </TouchableOpacity> */}
-                                {/* <Text> {item.qty}</Text> */}
-                                {/* <TextInput
-                            style={{
-                              justifyContent: 'center',
-                              margin: 20,
-                              height: 30,
-                              width: 30,
-                              marginTop: 10,
-                              marginBottom: 10,
-                              borderColor: '#8F9EB717',
-                              borderRadius: 3,
-                              backgroundColor: 'white',
-                              borderWidth: 1,
-                              fontFamily: 'semibold',
-                              fontSize: 16
-                            }}
-                            underlineColorAndroid="transparent"
-                            placeholder="0"
-                            placeholderTextColor="#8F9EB7"
+                                justifyContent: 'flex-start',
+                                backgroundColor: "#ffffff", borderRadius: 20,
+                              }}>
+                                <TouchableOpacity
+                                    style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
+                                    onPress={() => this.pickSingleWithCamera(true)} >
+                                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Product Image Scan With Camera')} </Text>
+                                </TouchableOpacity>
 
-                            value={item.qty}
-                            onChangeText={(text) => this.updateQty(text, index)}
-                          />
-                          <TouchableOpacity>
-                            <Text onPress={() => this.decreament(item, index)}>-</Text>
+                                <TouchableOpacity
+                                    style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
+                                    onPress={() => this.pickSingle(true)} >
+                                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Product Image Scan With Gallery')} </Text>
+                                </TouchableOpacity>
 
-                          </TouchableOpacity> */}
-                                {/* </View> */}
+                                <TouchableOpacity
+                                    style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center',marginBottom: 20, }}
+                                    onPress={() => this.cancel()} >
+                                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Cancel')} </Text>
+                                </TouchableOpacity>
+                              
+                              </View>
                             </View>
+                          </Modal>
+                        </View>)}
 
-                        </View>
-                    )}
-                />
+                    <FlatList
+                        data={this.state.arrayData}
+                        keyExtractor={item => item.email}
+                        renderItem={({ item, index }) => (
+                            <View style={{
+                                height: 120,
+                                backgroundColor: '#FFFFFF',
+                                borderBottomWidth: 5,
+                                borderBottomColor: '#FBFBFB',
+                                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                            }}>
+                                <View style={{ flexDirection: 'column', width: '100%', height: 120, }}>
+                                    <Image source={{ uri: item.image }} style={{
+                                        position: 'absolute', left: 20, top: 15, width: 90, height: 90, borderwidth: 5, borderColor: "#F6F6F6",
+                                    }} />
+                                    <Text style={{ fontSize: 16, marginTop: 30, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>
+                                        {item.itemdesc}
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                        QUANTITY:
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 200, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+                                        {item.qty} Pieces
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                        PRICE/EACH:
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 210, marginTop: -16, fontFamily: 'medium', color: '#ED1C24' }}>
+                                        ₹ {(parseInt(item.netamount)).toString()}
+                                    </Text>
+
+
+                                </View>
+
+
+                                <TouchableOpacity
+                                    style={{
+                                        fontSize: 15, fontFamily: 'regular',
+                                        right: 80, bottom: 10,
+                                        borderColor: '#ED1C24', borderWidth: 1, width: 60, height: 30,
+                                        textAlign: 'center', justifyContent: 'center', marginTop: -10, //Centered horizontally
+                                        alignItems: 'center', borderRadius: 5,
+                                    }}
+                                    onPress={() => this.addAction(item, index)} >
+                                    <Text style={{
+                                        color: "#ED1C24"
+                                    }}>
+                                        + ADD
+                                    </Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity style={{
+                                    position: 'absolute',
+                                    right: 50,
+                                    top: 65,
+                                    width: 30,
+                                    height: 30,
+                                    borderBottomLeftRadius: 5,
+                                    borderTopLeftRadius: 5,
+                                    borderWidth: 1,
+                                    borderColor: "lightgray",
+                                    // borderRadius:5,
+                                }} onPress={() => this.handleeditaction()}>
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={{
+                                    position: 'absolute',
+                                    right: 20,
+                                    top: 65,
+                                    width: 30,
+                                    height: 30,
+                                    borderBottomRightRadius: 5,
+                                    borderTopRightRadius: 5,
+                                    borderWidth: 1,
+                                    borderColor: "lightgray",
+                                }} onPress={() => this.handledeleteaction(item, index)}>
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                </TouchableOpacity>
+                                <View style={{
+                                    backgroundColor: 'grey',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    alignItems: 'center',
+                                    height: 30,
+                                    width: 90
+                                }}>
+
+                                </View>
+
+                            </View>
+                        )}
+                    />
+                </View>
             </View>
-
-
-
-
-            {/* <Left>
-                                <Button transparent style={{ marginTop: -102, marginLeft: -162, width: 50, height: 50 }} onPress={() => this.props.navigation.openDrawer()}>
-                                    <Image
-                                        source={image}
-                                        style={{ width: 32, height: 32 }}
-                                    />
-                                </Button>
-                            </Left> */}
-
-            {/* </SafeAreaView> */}
-            {/* <Text style={{backgroundColor: 'white'}}>New Sale Screen</Text>   */}
-        </View>
-        //   </ScrollView>
-    )
-}
+            //   </ScrollView>
+        )
+    }
 }
 export default Products
 

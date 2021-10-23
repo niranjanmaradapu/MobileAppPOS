@@ -135,6 +135,7 @@ class NewSale extends Component {
       isFromProducts: this.props.route.params.isFromProducts,
       // isFromAddProduct: this.props.route.params.isFromAddProduct,
     });
+    console.log(this.state.tableData)
   // if (tableData.length === null) {
       this.barcodeDBStore()
       this.getItems()
@@ -161,15 +162,16 @@ class NewSale extends Component {
               let netAmount = String(item["netAmount"])
               let qty = String(item["qty"])
               let totalAmount = String(item["netAmount"])
+              let image = item['itemImage']
 
               // this.state.quantity = qty
               // this.state.totalQty = this.state.totalQty + item["qty"]
               // this.state.totalAmount = this.state.totalAmount + item["netAmount"]
-              this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+              this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount,image:image })
               if (this.state.arrayData.length === 1) {
                 this.setState({ arrayData: this.state.arrayData })
               }
-              this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+              this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount,image:image })
 
             }
             //console.log(JSON.stringify(this.state.data));
@@ -279,6 +281,7 @@ class NewSale extends Component {
               let netAmount = String(item["netAmount"])
               let qty = "1"//String(item["qty"])
               let totalAmount = String(item["netAmount"])
+              let image = item['itemImage']
               console.log(JSON.stringify(item))
               this.state.quantity = qty
 
@@ -298,13 +301,13 @@ class NewSale extends Component {
                 }
                 { RNBeep.beep() }
                 this.setState({ totalAmount: this.state.totalAmount })
-                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount,image:image })
               }
               else {
                 { RNBeep.beep() }
                 this.state.totalQty = this.state.totalQty + item["qty"]
                 this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
-                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount })
+                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount,image:image })
               }
               //parse this.state.totalAmount + item["netAmount"]
               // this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
@@ -1743,7 +1746,7 @@ class NewSale extends Component {
               }}>
 
                 <View style={{ flexDirection: 'column', height: 120, }}>
-                  <Image source={require('../assets/images/sample.png')} style={{
+                <Image source={{uri:item.image}} style={{
                     position: 'absolute', left: 20, top: 15, width: 90, height: 90,
                   }} />
                   <Text style={{ fontSize: 16, marginTop: 10, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>

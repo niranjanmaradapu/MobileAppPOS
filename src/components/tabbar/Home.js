@@ -5,87 +5,7 @@ import { DrawerActions } from '@react-navigation/native';
 var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
-const dummmydata = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 },{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
-import Pie from 'react-native-pie-chart'
-import {
-    LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
-} from "react-native-chart-kit";
-const datapie = [
-    {
-        name: "vegetables",
-        population: 10,
-        color: "rgba(131, 167, 234, 1)",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "Dairy",
-        population: 20,
-        color: "#F00",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "Loose items",
-        population: 20,
-        color: "#0063C6",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "Other",
-        population: 25,
-        color: "#e26a00",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "Chacklets",
-        population: 25,
-        color: "rgb(0, 0, 255)",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    }
-];
-
-const chartConfig = {
-    backgroundGradientFrom: "#fff",
-    backgroundGradientTo: "#fff",
-    barPercentage: 0.5,
-    height: 5000,
-    fillShadowGradient: `rgba(1, 122, 205, 1)`,
-    fillShadowGradientOpacity: 1,
-    decimalPlaces: 0, // optional, defaults to 2dp
-    color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
-    labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
-
-    style: {
-        borderRadius: 16,
-        fontFamily: "regular",
-    },
-    propsForBackgroundLines: {
-        strokeWidth: 1,
-        stroke: "#e3e3e3",
-        // strokeDasharray: "0",
-    },
-    propsForLabels: {
-        fontFamily: "regular",
-    },
-};
-
-const dataBar = {
-    labels: ["Loose", "Vegetables", "Packet", "Dal", "Snacks"],
-    datasets: [
-      {
-        data: [0, 100,200,300, 400]
-      }
-    ]
-  };
+const dummmydata = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }, { key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
 
 class Home extends Component {
     constructor(props) {
@@ -95,8 +15,8 @@ class Home extends Component {
     }
 
 
-    statatics(){
-        this.props.navigation.navigate('Statitics')  
+    statatics() {
+        this.props.navigation.navigate('Statitics')
     }
 
 
@@ -107,40 +27,16 @@ class Home extends Component {
 
 
     render() {
-        const state = this.state;
-        const widthAndHeight = 200
-        const series = [123, 321, 123, 789, 537]
-        const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800']
         return (
             <ScrollView>
                 <View style={styles.container}>
-                    {/* <SafeAreaView style={styles.safeArea}>
-                        <View style={styles.viewswidth}>
-                            <Text style={styles.signUptext}> Home </Text>
-                            <TouchableOpacity style={{
-                                position: 'absolute',
-                                left: 20,
-                                top: 50,
-                                width: 20,
-                                height: 20,
-                            }} onPress={() => this.menuAction()}>
-                                <Image source={require('../assets/images/menu.png')} />
-                            </TouchableOpacity>
-                            {/* total commented this.state.aum*(this.state.sector[0]['energy']/(this.state.aum*2)*100)/100) */}
-
-
-                        {/* </View>
-
-
-
-                    </SafeAreaView> */} 
                     <Image
-  style={styles.image}
-source={require('../assets/images/profilepic.png')}
-  resizeMode={"cover"} // <- needs to be "cover" for borderRadius to take effect on Android
-/>
-<Text style={{fontSize:26,fontFamily:'regular',color:'#353C40',marginLeft:10,marginTop:20}}> {('Welcome,')} </Text>
-<Text style={{fontSize:26,fontFamily:'bold',color:'#353C40',marginLeft:10,marginTop:0}}> {('Vinod Magham')} </Text>
+                        style={styles.image}
+                        source={require('../assets/images/profilepic.png')}
+                        resizeMode={"cover"} // <- needs to be "cover" for borderRadius to take effect on Android
+                    />
+                    <Text style={{ fontSize: 26, fontFamily: 'regular', color: '#353C40', marginLeft: 10, marginTop: 20 }}> {('Welcome,')} </Text>
+                    <Text style={{ fontSize: 26, fontFamily: 'bold', color: '#353C40', marginLeft: 10, marginTop: 0 }}> {('Vinod Magham')} </Text>
                     <FlatList
                         style={styles.flatList}
                         horizontal
@@ -161,10 +57,10 @@ source={require('../assets/images/profilepic.png')}
                                     <Image source={require('../assets/images/todaysales.png')} style={{
                                         marginLeft: 20, marginTop: 40,
                                     }} />
-                                    <Text style={{ fontSize: 15,alignItems: 'center',alignSelf:'center',marginTop:-50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
+                                    <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
                                         Today's Sales
                                     </Text>
-                                    <Text style={{ fontSize: 15,marginTop:0,marginLeft:80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
+                                    <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
                                         ₹ 14,221.50
                                     </Text>
                                 </View>
@@ -179,13 +75,13 @@ source={require('../assets/images/profilepic.png')}
                                     borderRadius: 10,
                                     marginLeft: 10,
                                 }}>
-                                     <Image source={require('../assets/images/monthlysales.png')} style={{
+                                    <Image source={require('../assets/images/monthlysales.png')} style={{
                                         marginLeft: 20, marginTop: 40,
                                     }} />
-                                    <Text style={{ fontSize: 15,alignItems: 'center',alignSelf:'center',marginTop:-50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
+                                    <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
                                         Monthly's Sales
                                     </Text>
-                                    <Text style={{ fontSize: 15,marginTop:0,marginLeft:80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
+                                    <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
                                         ₹ 14,221.50
                                     </Text>
                                 </View>
@@ -200,14 +96,14 @@ source={require('../assets/images/profilepic.png')}
                                     borderRadius: 10,
                                     marginLeft: 10,
                                 }}>
-                                     <Image source={require('../assets/images/monthlysales.png')} style={{
+                                    <Image source={require('../assets/images/monthlysales.png')} style={{
                                         marginLeft: 20, marginTop: 40,
                                     }} />
-                                    <Text style={{ fontSize: 15,alignItems: 'center',alignSelf:'center',marginTop:-50,marginLeft:60, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
-                                    This month sales v/s Last month
+                                    <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, marginLeft: 60, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
+                                        This month sales v/s Last month
                                     </Text>
-                                    <Text style={{ fontSize: 15,marginTop:0,marginLeft:60, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                    + 18.75%
+                                    <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 60, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
+                                        + 18.75%
                                     </Text>
                                 </View>
 
@@ -222,65 +118,58 @@ source={require('../assets/images/profilepic.png')}
                                     borderRadius: 10,
                                     marginLeft: 10,
                                 }}>
-                                  <Image source={require('../assets/images/monthlysales.png')} style={{
+                                    <Image source={require('../assets/images/monthlysales.png')} style={{
                                         marginLeft: 20, marginTop: 40,
                                     }} />
-                                    <Text style={{ fontSize: 15,alignItems: 'center',alignSelf:'center',marginTop:-50,marginLeft:20, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
+                                    <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, marginLeft: 20, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
                                         Today total Orders
                                     </Text>
-                                    <Text style={{ fontSize: 15,marginTop:0,alignItems: 'center',alignSelf:'center', fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                    55
+                                    <Text style={{ fontSize: 15, marginTop: 0, alignItems: 'center', alignSelf: 'center', fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
+                                        55
                                     </Text>
                                 </View>
                             }
                         }}
                         ListFooterComponent={<View style={{ width: 15 }}></View>}
                     />
-                     <View style={{height:40,backgroundColor:'#ffffff',width:deviceWidth,marginTop:0,}}>
-                     <TouchableOpacity>
-                            <Text onPress={() => this.statatics()} style={{fontSize:12,fontFamily:'regular',color:'#ED1C24',position:'absolute',right:20,top:20,}}> {('STATISTICS >')} </Text>
-                          </TouchableOpacity>
+                    <View style={{ height: 40, backgroundColor: '#ffffff', width: deviceWidth, marginTop: 0, }}>
                     
-                        </View>
-                    
-                    <View style={{height:50,backgroundColor:'#e6e6e6',width:deviceWidth,marginTop:0,}}>
-                    <Text style={{fontSize:14,fontFamily:'bold',color:'#353C40',marginLeft:10,marginTop:20}}> {('Recent orders')} </Text>
-                    <Text style={{fontSize:12,fontFamily:'regular',color:'#ED1C24',position:'absolute',right:20,top:20,}}> {('SEE ALL >')} </Text>
-                        </View>
-                    <FlatList
-                  ListHeaderComponent={this.renderHeader}
-                  data={dummmydata}
-                  keyExtractor={item => item.email}
-                  renderItem={({ item, index }) => (
-                    <View style={{
-                      height: 60,
-                      backgroundColor: 'white',
-                       borderBottomWidth:5,
-                       borderBottomColor:'#e6e6e6',
-                      flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-                    }}>
-                      <View style={{ flexDirection: 'column', width: '100%' ,height: 60, }}>
-                      <Image source={require('../assets/images/iconmonstr-credit-card-thin.png')} style={{
-                                       position:'absolute', left: 20, top: 25,
-                                    }} />
-                        <Text style={{ fontSize: 12, marginTop: 16, marginLeft: 60, fontFamily: 'medium',color:"#222222" }}>
-                        Order Id #6123{item.itemdesc}
-                        </Text>
-                        <Text style={{ fontSize: 10, marginLeft: 60, fontFamily: 'regular',color:'#828282', }}>
-                        Today, 10:45AM  
-                        </Text>
-                        <Text style={{fontSize:16,fontFamily:'medium',color:'#FE7C19',position:'absolute',right:20,top:20,}}> {('₹ 14,221.50')} </Text>
-                        {/* <Text style={{ fontSize: 15, marginBottom: 20, marginLeft: 20, fontFamily: 'regular' }}>
-                          Qty: {item.qty}
-                        </Text> */}
-
-                      </View>
-                      
-                      
+                            <Text onPress={() => this.statatics()} style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', position: 'absolute', right: 20, top: 20, }}> {('STATISTICS >')} </Text>
+                        
                     </View>
-                  )}
-                />
-                   
+
+                    <View style={{ height: 50, backgroundColor: '#e6e6e6', width: deviceWidth, marginTop: 0, }}>
+                        <Text style={{ fontSize: 14, fontFamily: 'bold', color: '#353C40', marginLeft: 10, marginTop: 20 }}> {('Recent orders')} </Text>
+                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', position: 'absolute', right: 20, top: 20, }}> {('SEE ALL >')} </Text>
+                    </View>
+                    <FlatList
+                        ListHeaderComponent={this.renderHeader}
+                        data={dummmydata}
+                        keyExtractor={item => item.email}
+                        renderItem={({ item, index }) => (
+                            <View style={{
+                                height: 60,
+                                backgroundColor: 'white',
+                                borderBottomWidth: 5,
+                                borderBottomColor: '#e6e6e6',
+                                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                            }}>
+                                <View style={{ flexDirection: 'column', width: '100%', height: 60, }}>
+                                    <Image source={require('../assets/images/iconmonstr-credit-card-thin.png')} style={{
+                                        position: 'absolute', left: 20, top: 25,
+                                    }} />
+                                    <Text style={{ fontSize: 12, marginTop: 16, marginLeft: 60, fontFamily: 'medium', color: "#222222" }}>
+                                        Order Id #6123{item.itemdesc}
+                                    </Text>
+                                    <Text style={{ fontSize: 10, marginLeft: 60, fontFamily: 'regular', color: '#828282', }}>
+                                        Today, 10:45AM
+                                    </Text>
+                                    <Text style={{ fontSize: 16, fontFamily: 'medium', color: '#FE7C19', position: 'absolute', right: 20, top: 20, }}> {('₹ 14,221.50')} </Text>
+                                </View>
+                            </View>
+                        )}
+                    />
+
                 </View>
             </ScrollView >
         )
@@ -295,14 +184,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#FAFAFF'
     },
-        image: {
-          marginTop:40,
-          marginLeft:10,
-          width: 80,
-          height: 80,
-          borderWidth: 0,
-          borderRadius: 40,
-        },
+    image: {
+        marginTop: 40,
+        marginLeft: 10,
+        width: 80,
+        height: 80,
+        borderWidth: 0,
+        borderRadius: 40,
+    },
     viewswidth: {
         backgroundColor: '#0196FD',
         width: deviceWidth,
@@ -485,11 +374,6 @@ const styles = StyleSheet.create({
         height: 45,
         textAlign: "center",
     },
-
-
-
-
-
     tabBar: {
         flexDirection: 'row',
         paddingTop: Constants.statusBarHeight,

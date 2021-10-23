@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList, TextInput, SafeAreaView, ScrollView } from 'react-native';
+import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, FlatList, SafeAreaView, ScrollView } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
-import { DrawerActions } from '@react-navigation/native';
 import Constants from 'expo-constants';
 
 
@@ -51,13 +50,6 @@ class Orders extends Component {
                         }} onPress={() => this.handleBackButtonClick()}>
                             <Image source={require('../assets/images/backButton.png')} />
                         </TouchableOpacity>
-
-                        {/* <Text style={styles.signUptext}> Sign Up </Text>
-                        <Icons name={'arrow-back'} size={30} color='#ffffff' onPress={this.handleBackButtonClick} style={{
-                            position: 'absolute',
-                            left: 5,
-                            top: 35
-                        }} /> */}
                     </View>
 
                     </SafeAreaView>
@@ -82,22 +74,6 @@ class Orders extends Component {
                                     <Text style={{ fontSize: 15, marginBottom: 20, marginLeft: 20, fontFamily: 'regular' }}>
                                         PaymentType: {item.paymentType}
                                     </Text>
-                                    {/* <TouchableOpacity
-                          style={{
-                            fontSize: 15, fontFamily: 'regular',
-                            right: 20, bottom: 10,
-                            backgroundColor: '#ED1C24', width: 60, height: 30,
-                            textAlign: 'center', justifyContent: 'center', marginTop: 15, //Centered horizontally
-                            alignItems: 'center', borderRadius: 20
-                          }}
-                          onPress={() => this.addAction(item, index)} >
-                          <Text style={{
-                            color: "#ffffff"
-                          }}>
-                            PDF Reciept
-                          </Text>
-                        </TouchableOpacity> */}
-
                                 </View>
                             </View>
                         )}

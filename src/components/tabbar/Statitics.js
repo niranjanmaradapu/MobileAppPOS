@@ -80,11 +80,11 @@ const chartConfig = {
 const dataBar = {
     labels: ["Loose", "Vegetables", "Packet", "Dal", "Snacks"],
     datasets: [
-      {
-        data: [0, 100,200,300, 400]
-      }
+        {
+            data: [0, 100, 200, 300, 400]
+        }
     ]
-  };
+};
 
 class Statitics extends Component {
     constructor(props) {
@@ -97,11 +97,11 @@ class Statitics extends Component {
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
-      }
+    }
 
 
-    statatics(){
-        
+    statatics() {
+
     }
 
 
@@ -118,30 +118,30 @@ class Statitics extends Component {
         const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800']
         return (
             <ScrollView>
-                <View style={styles.container}>  
-                <View style={styles.viewswidth}>
-          <TouchableOpacity style={{
-            position: 'absolute',
-            left: 10,
-            top: 30,
-            width: 40,
-            height: 40,
-          }} onPress={() => this.handleBackButtonClick()}>
-            <Image source={require('../assets/images/backButton.png')} />
-          </TouchableOpacity>
-          <Text style={{
-            position: 'absolute',
-            left: 70,
-            top: 47,
-            width: 300,
-            height: 20,
-            fontFamily: 'bold',
-            fontSize: 18,
-            color: '#353C40'
-          }}> Statistics </Text>
-          {/* <Text style={styles.signUptext}> Sign Up </Text> */}
+                <View style={styles.container}>
+                    <View style={styles.viewswidth}>
+                        <TouchableOpacity style={{
+                            position: 'absolute',
+                            left: 10,
+                            top: 30,
+                            width: 40,
+                            height: 40,
+                        }} onPress={() => this.handleBackButtonClick()}>
+                            <Image source={require('../assets/images/backButton.png')} />
+                        </TouchableOpacity>
+                        <Text style={{
+                            position: 'absolute',
+                            left: 70,
+                            top: 47,
+                            width: 300,
+                            height: 20,
+                            fontFamily: 'bold',
+                            fontSize: 18,
+                            color: '#353C40'
+                        }}> Statistics </Text>
+                        {/* <Text style={styles.signUptext}> Sign Up </Text> */}
 
-        </View>
+                    </View>
 
                     <View style={{
                         margin: 20,
@@ -215,9 +215,9 @@ class Statitics extends Component {
                         <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Top 5 sales by category</Text>
 
                         <BarChart
-                            style={{margin:5}}
+                            style={{ margin: 5 }}
                             data={dataBar}
-                            width={deviceWidth-60}
+                            width={deviceWidth - 60}
                             height={300}
                             yLabelsOffset={30}
                             yAxisLabel="₹"
@@ -240,14 +240,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#FAFAFF'
     },
-        image: {
-          marginTop:40,
-          marginLeft:10,
-          width: 80,
-          height: 80,
-          borderWidth: 0,
-          borderRadius: 40,
-        },
+    image: {
+        marginTop: 40,
+        marginLeft: 10,
+        width: 80,
+        height: 80,
+        borderWidth: 0,
+        borderRadius: 40,
+    },
     viewswidth: {
         backgroundColor: '#ffffff',
         width: deviceWidth,

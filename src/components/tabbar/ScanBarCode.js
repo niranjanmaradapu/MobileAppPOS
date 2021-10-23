@@ -316,8 +316,8 @@ class ScanBarCode extends Component {
     this.barcodeCodes = [];
 
     this.state = {
-      isFromNewSale:false,
-      isFromAddProduct:false,
+      isFromNewSale: false,
+      isFromAddProduct: false,
       torchon: RNCamera.Constants.FlashMode.off,
       camera: {
         type: RNCamera.Constants.Type.back,
@@ -331,9 +331,9 @@ class ScanBarCode extends Component {
       isFromNewSale: this.props.route.params.isFromNewSale,
       isFromAddProduct: this.props.route.params.isFromAddProduct,
     });
-  } 
+  }
   handleBackButtonClick() {
-   this.props.route.params.onGoBack();
+    this.props.route.params.onGoBack();
     this.props.navigation.goBack();
     return true;
   }
@@ -350,14 +350,6 @@ class ScanBarCode extends Component {
 
 
   onBarCodeRead(e) {
-    // Alert.alert(
-    //   "Barcode type is " + e.type,
-    //   "Barcode value is " + e.data,
-    //   [
-    //        {text: 'OK', onPress: () => this.alertPresent = false},
-    //   ],
-    //     {cancelable: false},
-    // );
     if (global.barcodeId == "something") {
       { RNBeep.beep() }
       global.barcodeId = e.data
@@ -449,15 +441,8 @@ class ScanBarCode extends Component {
         </TouchableOpacity>
         <View style={[styles.overlay, styles.topOverlay]}>
 
-          {/* <Text style={styles.scanScreenMessage}>Please scan the barcode.</Text> */}
+
         </View>
-        {/* <View style={[styles.overlay, styles.bottomOverlay]}>
-          <Button
-            onPress={() => { console.log('scan clicked'); }}
-            style={styles.enterBarcodeManualButton}
-            title=""
-           />
-	</View> */}
       </View>
     );
   }
