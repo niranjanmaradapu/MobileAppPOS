@@ -4,12 +4,14 @@ var deviceWidth = Dimensions.get('window').width;
 import I18n, { getLanguages } from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import LoginService from '../services/LoginService';
+import axios from 'axios';
 // Enable fallbacks if you want `en-US`
 // and `en-GB` to fallback to `en`
 I18n.fallbacks = true;
 I18n.defaultLocale = 'en';
 const data = [{ key: "Vijayawada" }, { key: "Kakinada" }, { key: "Anakapalli" }];
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // // Available languages
 // I18n.translations = {
@@ -25,15 +27,40 @@ export default class SelectStore extends React.Component {
             language: 'English',
             languages: [],
             selectedItem: 0,
-        }
+            storeNames: [],
+            }
     }
 
-    componentWillMount() {
-        getLanguages().then(languages => {
-            this.setState({ languages });
+    async componentDidMount() {
+        // getLanguages().then(languages => {
+        //     this.setState({ languages });
+        // });
+
+        const username = await AsyncStorage.getItem("username");
+        console.log(LoginService.getUserStores() + "/" + username)
+        var storeNames = [];
+        axios.get(LoginService.getUserStores() + username).then((res) => {
+            if (res.data["result"]) {
+                // for (var i = 0; i < res.data["result"].length; i++) {
+                //     storeNames.push({
+                //         value: res.data["result"][i]['storeName'],//id
+                //         label: res.data["result"][i]['storeName']
+                //     });
+    
+                // }
+            }
+            this.setState({
+                storeNames: storeNames,
+            })
+            console.log("stores data----" + JSON.stringify(res.data["result"]))
+            console.log('store Name' + JSON.stringify(storeNames))
         });
+        console.log('dsgsdgsdg' + username)
+       // const username = await this.getRememberedUser();
+      
     }
 
+   
     letsGoButtonAction() {
         //this.props.navigation.push('LoginAndSignUp', { screen: 'SignUp' });
         this.props.navigation.navigate('HomeNavigation');

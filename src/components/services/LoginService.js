@@ -6,8 +6,12 @@ class LoginService {
     getStores() {
         return REACT_NATIVE_APP_BASE_URL + '/user-store/stores/getstores';
     }
+    getUserStores() {
+       
+        return REACT_NATIVE_APP_BASE_URL + '/auth/getUserStores/';
+    }
     getAuth() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/login';
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/loginWithTempPass';
     }
 }
 export default new LoginService()
