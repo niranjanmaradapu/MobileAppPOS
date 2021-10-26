@@ -53,11 +53,8 @@ class NewSale extends Component {
       dob: "2021-06-21T18:30:00.000Z",
       address: "",
       modalVisible: true,
-      flagone: true,
       flagqtyModelOpen: false,
-      flagtwo: false,
-      flagthree: false,
-      flagfour: false,
+      fromProducts:false,
       inventoryBarcodeId: '',
       inventoryProductName: '',
       inventoryQuantity: '',
@@ -66,22 +63,6 @@ class NewSale extends Component {
       inventoryNetAmount: '',
       tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
       tableData: [
-        // ['01', 'COA238106', 'Perfume', '₹ 100:00', '1', '₹ 100:00'],
-        // ['02', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['03', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['04', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['05', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['06', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['07', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['08', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['09', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['10', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['11', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['12', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['13', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['14', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['15', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
-        // ['16', 'COA238013', 'Chocolate', '₹ 20:00', '10', '₹ 200:00'],
       ],
       camera: {
         type: RNCamera.Constants.Type.back,
@@ -130,11 +111,26 @@ class NewSale extends Component {
   //     this.setState({ modalVisible: visible });
   //  }
   async componentDidMount() {
-    this.setState({
-      tableData: this.props.route.params.tableData,
-      isFromProducts: this.props.route.params.isFromProducts,
-      // isFromAddProduct: this.props.route.params.isFromAddProduct,
-    });
+    const value = await AsyncStorage.getItem("tableData");
+      console.log(value)
+      this.setState({ tableData: JSON.parse(value)})
+   // if(this.state.isFromProducts === false){
+      this.setState({
+        tableData: this.props.route.params.tableData,
+        isFromProducts: this.props.route.params.isFromProducts,
+        // isFromAddProduct: this.props.route.params.isFromAddProduct,
+      });
+      this.setState({ fromProducts: true })
+   // }
+    //else{
+      
+   // }
+  //if(this.props.route.params.isFromProducts === true){
+    
+   
+    // this.props.route.params.isFromProducts = false
+ // }
+   
     console.log(this.state.tableData)
   // if (tableData.length === null) {
       this.barcodeDBStore()
@@ -294,6 +290,11 @@ class NewSale extends Component {
                     qtyarr[i].qty = String(parseInt(qtyarr[i].qty) + 1) //parseInt(item["qty"]))
                     this.setState({ tableData: qtyarr })
                     this.setState({ totalAmount: this.state.totalAmount })
+                    AsyncStorage.setItem("tableData",JSON.stringify(this.state.tableData)).then(() => {
+                      console.log('table data saved')
+                  }).catch(() => {
+                      console.log('there is error saving token')
+                  })
                     return
                   }
                   this.state.totalQty = this.state.totalQty + item["qty"]
@@ -313,10 +314,11 @@ class NewSale extends Component {
               // this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
             }
           }
-          this.setState({ flagone: true })
-          this.setState({ flagtwo: false })
-          this.setState({ flagthree: false })
-          this.setState({ flagfour: false })
+          AsyncStorage.setItem("tableData",JSON.stringify(this.state.tableData)).then(() => {
+            console.log('table data saved')
+        }).catch(() => {
+            console.log('there is error saving token')
+        })
           console.log(JSON.stringify(this.state.tableData.length))
           console.log(JSON.stringify(totalQty))
         },
@@ -666,6 +668,11 @@ class NewSale extends Component {
     // qtyarr[index].netamount = price.toString()
     qtyarr[index].qty = additem.toString()
     this.setState({ tableData: qtyarr })
+    AsyncStorage.setItem("tableData",JSON.stringify(this.state.tableData)).then(() => {
+      console.log('table data saved')
+  }).catch(() => {
+      console.log('there is error saving token')
+  })
     // var minumsValue = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
     //console.log('minusdd' + minumsValue)
     //this.state.totalQty = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
@@ -682,6 +689,11 @@ class NewSale extends Component {
       qtyarr[index].qty = additem.toString()
       this.setState({ tableData: qtyarr })
     }
+    AsyncStorage.setItem("tableData",JSON.stringify(this.state.tableData)).then(() => {
+      console.log('table data saved')
+  }).catch(() => {
+      console.log('there is error saving token')
+  })
     //this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)).toString()
     this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(qtyarr[index].netamount)).toString()
 
@@ -1841,8 +1853,8 @@ class NewSale extends Component {
               </View>
 
             )}
-
           />
+           {this.state.tableData.length != 0 && (
           <View style={{ width: deviceWidth, height: 220, position: 'absolute', bottom: 0, backgroundColor: '#FFFFFF' }}>
             <Text style={{
               color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, justifyContent: 'center', textAlign: 'center', marginTop: 10,
@@ -1853,7 +1865,7 @@ class NewSale extends Component {
               color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
               fontSize: 14, position: 'absolute',
             }}>
-              55 </Text>
+             55 </Text>
             <Text style={{
               color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, justifyContent: 'center', textAlign: 'center', marginTop: 10,
               fontSize: 14, position: 'absolute',
@@ -1885,7 +1897,7 @@ class NewSale extends Component {
             }}>
               ₹ 1,450.00 </Text>
 
-            {this.state.tableData.length != 0 && (
+           
               <View style={styles.TopcontainerforPay}>
                 <TouchableOpacity
                   style={styles.signInButton}
@@ -1900,8 +1912,9 @@ class NewSale extends Component {
                 </TouchableOpacity>
 
               </View>
-            )}
+           
           </View>
+           )}
         </View>
       </View>
 

@@ -44,7 +44,7 @@ class BottomTabBar extends Component {
         >
           <Tab.Screen name="HOME"  title='Home' options={{headerShown: false}} component={HomeNav}/>
           <Tab.Screen name="PRODUCTS" options={{headerShown: false}} component={ProductsNavigation} />
-          <Tab.Screen name="NEW SALE" options={{headerShown: false}} component={NewSaleNavigation} />
+          <Tab.Screen name="NEW SALE" options={{headerShown: false,unmountOnBlur: true}} component={NewSaleNavigation} />
           <Tab.Screen name="PROMO" options={{headerShown: false}} component={Settings} />
           <Tab.Screen name="PROFILE" options={{headerShown: false}} component={Settings} />
         </Tab.Navigator>
