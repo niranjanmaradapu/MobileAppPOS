@@ -37,17 +37,17 @@ export default class SelectStore extends React.Component {
         // });
 
         const username = await AsyncStorage.getItem("username");
-        console.log(LoginService.getUserStores() + "/" + username)
+       // console.log(LoginService.getUserStores() + "/" + username)
         var storeNames = [];
         axios.get(LoginService.getUserStores() + username).then((res) => {
             if (res.data["result"]) {
-                // for (var i = 0; i < res.data["result"].length; i++) {
-                //     storeNames.push({
-                //         value: res.data["result"][i]['storeName'],//id
-                //         label: res.data["result"][i]['storeName']
-                //     });
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    storeNames.push(
+                        res.data["result"][i]//id
+                       // label: res.data["result"][i]['storeName']
+                    );
     
-                // }
+                }
             }
             this.setState({
                 storeNames: storeNames,
@@ -114,10 +114,10 @@ export default class SelectStore extends React.Component {
                         justifyContent: 'center',
                     }}> {('Select the Store')} </Text>
                     <FlatList
-                        style={{ width: deviceWidth, marginTop: 50, }}
-                        scrollEnabled={false}
+                        style={{ width: deviceWidth, marginTop: 50,  marginBottom: 100,}}
+                        // scrollEnabled={false}
                         ListHeaderComponent={this.renderHeader}
-                        data={data}
+                        data={this.state.storeNames}
                         keyExtractor={item => item.email}
                         renderItem={({ item, index }) => (
                             
@@ -131,7 +131,7 @@ export default class SelectStore extends React.Component {
                                             <Text style={{
                                                 fontSize: 18, marginTop: 30, marginLeft: 20, fontFamily: 'medium', color:this.state.selectedItem === index ? '#ffffff' : '#353C40'
                                             }}>
-                                                {item.key}
+                                                {item}
                                             </Text>
                                             <Image source={this.state.selectedItem === index ? require('../assets/images/langselect.png') : require('../assets/images/langunselect.png')} style={{position:'absolute',right:20,top:30}} />
                                         </View>

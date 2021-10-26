@@ -61,16 +61,25 @@ export default class SelectDomain extends React.Component {
         console.log('-------ITEM TAPPED')
         this.setState({ selectedItem: index })
         if (index == 0) {
-            I18n.locale = 'en';
-            this.setState({ language: "English" });
+            AsyncStorage.setItem("domainDataId",((item.index + 1)).toString()).then(() => {
+                // console.log
+            }).catch(() => {
+                console.log('there is error saving token')
+            })
         }
         else if (index == 1) {
-            I18n.locale = 'hi';
-            this.setState({ language: "Hindi" });
+            AsyncStorage.setItem("domainDataId",((item.index + 1)).toString()).then(() => {
+                // console.log
+            }).catch(() => {
+                console.log('there is error saving token')
+            }) 
         }
         else {
-            I18n.locale = 'te';
-            this.setState({ language: "Telugu" });
+            AsyncStorage.setItem("domainDataId",((item.index + 1)).toString()).then(() => {
+                // console.log
+            }).catch(() => {
+                console.log('there is error saving token')
+            }) 
         }
        
     };
@@ -95,8 +104,7 @@ export default class SelectDomain extends React.Component {
                         keyExtractor={item => item.email}
                         renderItem={({ item, index }) => (
                             
-                            
-                                <TouchableOpacity onPress={() => this.selectedLanguage(item, index)}>
+                               <TouchableOpacity onPress={() => this.selectedLanguage(item, index)}>
                                     <View style={{
                                         borderBottomColor: 'lightgray', borderBottomWidth: 0.6, marginLeft: this.state.selectedItem === index ? 0 : 0, marginRight: this.state.selectedItem === index ? 0 : 0, backgroundColor: this.state.selectedItem === index ? '#ED1C24' : '#ffffff'
                                     }}>

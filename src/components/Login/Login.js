@@ -135,8 +135,6 @@ export default class Login extends Component {
                     }).catch(() => {
                         console.log('there is error saving token')
                     })
-
-
                     console.log("stores data----" + JSON.stringify(jwt_decode(token)["custom:domianId"]))
                     if (jwt_decode(token)["custom:domianId"] === "1,2,3" || jwt_decode(token)["custom:domianId"] === "1,2") {
                         // this.getModel();
@@ -144,14 +142,16 @@ export default class Login extends Component {
                     }
                     else if (jwt_decode(token)["custom:domianId"] === "1") {
                         // this.getModel();
+                        AsyncStorage.setItem("domainDataId","1").then(() => {
+                            // console.log
+                        }).catch(() => {
+                            console.log('there is error saving domainDataId')
+                        })
                         this.props.navigation.navigate('SelectStore')
                     }
                      else {
 
                     }
-                
-
-
                 this.setState({ loading: false })
 
                 // }).catch(() => {
