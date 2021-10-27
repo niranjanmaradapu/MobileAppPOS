@@ -59,29 +59,29 @@ export default class Login extends Component {
         }
     }
 
-    rememberUser = async () => {
-        try {
-            await AsyncStorage.setItem("username", this.state.userName);
-            await AsyncStorage.setItem("password", this.state.password);
-        } catch (error) {
-            // Error saving data
-        }
-    };
-    getRememberedUser = async () => {
-        try {
-            const username = await AsyncStorage.getItem("username");
-            const password = await AsyncStorage.getItem("password");
-            if (username !== null) {
-                // We have username!!
-                console.log(username)
-                this.state.userName = username
-                this.state.password = password
-                return username;
-            }
-        } catch (error) {
-            // Error retrieving data
-        }
-    };
+    // rememberUser = async () => {
+    //     try {
+    //         await AsyncStorage.setItem("username", this.state.userName);
+    //         await AsyncStorage.setItem("password", this.state.password);
+    //     } catch (error) {
+    //         // Error saving data
+    //     }
+    // };
+    // getRememberedUser = async () => {
+    //     try {
+    //         const username = await AsyncStorage.getItem("username");
+    //         const password = await AsyncStorage.getItem("password");
+    //         if (username !== null) {
+    //             // We have username!!
+    //             console.log(username)
+    //             this.state.userName = username
+    //             this.state.password = password
+    //             return username;
+    //         }
+    //     } catch (error) {
+    //         // Error retrieving data
+    //     }
+    // };
     forgetUser = async () => {
         try {
             await AsyncStorage.removeItem('Longtail-User');
@@ -100,6 +100,7 @@ export default class Login extends Component {
         this.setState({ store: value });
     }
 
+   
 
     login() {
         //
@@ -110,7 +111,7 @@ export default class Login extends Component {
         } else if (this.state.password.length === 0) {
             alert('You must enter a Password');
         }
-
+     
         // else if (this.state.store.length === 1) {
         //     alert('Please select one store');
         // }
@@ -120,6 +121,7 @@ export default class Login extends Component {
                 "password": this.state.password, //"Mani@1123",
                 //"storeName": this.state.store,//"kphb",
             }
+            AsyncStorage.setItem("username", this.state.userName);
             console.log(LoginService.getAuth() + JSON.stringify(params))
             this.setState({ loading: true })
             axios.post(LoginService.getAuth(), params).then((res) => {
@@ -201,37 +203,60 @@ export default class Login extends Component {
 }
 
 
-signUpButtonClicked() {
+forgotPassword() {
+    const params = {
+        "username": this.state.userName, //"+919493926067",
+        //"storeName": this.state.store,//"kphb",
+    }
+    AsyncStorage.setItem("username", this.state.userName);
+    console.log(LoginService.forgotPasswordCodeSent() + JSON.stringify(params))
+   // this.setState({ loading: true })
+    axios.post(LoginService.forgotPasswordCodeSent(), null, { params: {
+        "username": this.state.userName
+       }}).then((res) => {
+        if (res.data && res.data["isSuccess"] === "true") {
+      //  this.setState({ loading: false })
+        this.props.navigation.navigate('ForgotPassword',{ username: this.state.userName});
+    }
+        else {
+            this.setState({ loading: false })
+            alert('Invalid Credentials');
+           // this.props.navigation.goBack(null);
+           // this.state.store = ""
+            // this.state.store.clear()
+        }
+    }
+    );
     //this.props.navigation.push('LoginAndSignUp', { screen: 'SignUp' });
-    this.props.navigation.navigate('SignUp');
+   
 }
 
     async componentDidMount() {
-    //this.rememberUser();
-    console.log(LoginService.getStores())
-    var storeNames = [];
-    axios.get(LoginService.getStores()).then((res) => {
-        if (res.data["result"]) {
-            for (var i = 0; i < res.data["result"].length; i++) {
-                storeNames.push({
-                    value: res.data["result"][i]['storeName'],//id
-                    label: res.data["result"][i]['storeName']
-                });
+    // //this.rememberUser();
+    // console.log(LoginService.getStores())
+    // var storeNames = [];
+    // axios.get(LoginService.getStores()).then((res) => {
+    //     if (res.data["result"]) {
+    //         for (var i = 0; i < res.data["result"].length; i++) {
+    //             storeNames.push({
+    //                 value: res.data["result"][i]['storeName'],//id
+    //                 label: res.data["result"][i]['storeName']
+    //             });
 
-            }
-        }
-        this.setState({
-            storeNames: storeNames,
-        })
-        console.log("stores data----" + JSON.stringify(res.data["result"]))
-        console.log('store Name' + JSON.stringify(storeNames))
-    });
-    console.log('dsgsdgsdg' + username)
-    // const username = await this.getRememberedUser();
-    // this.setState({
-    //     username: username || "",
-    //     rememberMe: username ? true : false
+    //         }
+    //     }
+    //     this.setState({
+    //         storeNames: storeNames,
+    //     })
+    //     console.log("stores data----" + JSON.stringify(res.data["result"]))
+    //     console.log('store Name' + JSON.stringify(storeNames))
     // });
+    // console.log('dsgsdgsdg' + username)
+    // // const username = await this.getRememberedUser();
+    // // this.setState({
+    // //     username: username || "",
+    // //     rememberMe: username ? true : false
+    // // });
 }
 
 
@@ -378,7 +403,7 @@ render() {
 
                                         <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> {I18n.t('Forgot password')} </Text>
                                         <TouchableOpacity
-                                            onPress={() => this.signUpButtonClicked()} >
+                                            onPress={() => this.forgotPassword()} >
                                             <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> {I18n.t('Reset')} </Text>
                                         </TouchableOpacity>
                                     </View>

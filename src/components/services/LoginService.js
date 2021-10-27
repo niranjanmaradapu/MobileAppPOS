@@ -7,9 +7,16 @@ class LoginService {
         return REACT_NATIVE_APP_BASE_URL + '/user-store/stores/getstores';
     }
     getUserStores() {
-       
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/getUserStores/';
     }
+    forgotPasswordCodeSent() {
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/forgetPassword';
+    }
+
+    forgotPassword() {
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/confirmforgetPassword';
+    }
+
     getAuth() {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/loginWithTempPass';
     }

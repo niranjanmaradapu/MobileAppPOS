@@ -7,6 +7,7 @@ import SelectStore from '../components/Login/SelectStore';
 import HomeNavigation from './HomeNavigation';
 import Welcome from '../components/Welcome';
 import LanguageSelection from '../components/LanguageSelection';
+import ForgotPassword from '../components/Login/ForgotPassword';
 
 const Stack = createStackNavigator();
 export default class AuthNavigation extends React.Component {
@@ -21,6 +22,7 @@ export default class AuthNavigation extends React.Component {
                 <Stack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
                 <Stack.Screen name="SelectDomain" options={{ headerShown: false }} component={SelectDomain} />
                 <Stack.Screen name="SelectStore" options={{ headerShown: false }} component={SelectStore} />
+                <Stack.Screen name="ForgotPassword" options={{ headerShown: false }} component={ForgotPassword} />
             </Stack.Navigator>
 
         );
