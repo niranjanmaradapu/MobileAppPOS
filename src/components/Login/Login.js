@@ -36,7 +36,7 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'thaninki1234',
+            userName: 'test001',
             password: 'Otsi@1234',
             dropValue: '',
             store: 0,
@@ -147,7 +147,8 @@ export default class Login extends Component {
                         }).catch(() => {
                             console.log('there is error saving domainDataId')
                         })
-                        this.props.navigation.navigate('SelectStore')
+                        this.getstores()
+                        //
                     }
                      else {
 
@@ -173,6 +174,32 @@ export default class Login extends Component {
     }
 }
 
+ async getstores(){
+    const username = await AsyncStorage.getItem("username");
+       // console.log(LoginService.getUserStores() + "/" + username)
+        var storeNames = [];
+        axios.get(LoginService.getUserStores() + username).then((res) => {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    storeNames.push(
+                        res.data["result"][i]//id
+                       // label: res.data["result"][i]['storeName']
+                    );
+    
+                }
+            }
+            this.setState({
+                storeNames: storeNames,
+            })
+            if(this.state.storeNames.length === 1){
+                this.props.navigation.navigate('HomeNavigation')
+            }
+            else{
+                this.props.navigation.navigate('SelectStore')
+            }
+        });
+}
+
 
 signUpButtonClicked() {
     //this.props.navigation.push('LoginAndSignUp', { screen: 'SignUp' });
@@ -180,7 +207,7 @@ signUpButtonClicked() {
 }
 
     async componentDidMount() {
-    this.rememberUser();
+    //this.rememberUser();
     console.log(LoginService.getStores())
     var storeNames = [];
     axios.get(LoginService.getStores()).then((res) => {
@@ -200,11 +227,11 @@ signUpButtonClicked() {
         console.log('store Name' + JSON.stringify(storeNames))
     });
     console.log('dsgsdgsdg' + username)
-    const username = await this.getRememberedUser();
-    this.setState({
-        username: username || "",
-        rememberMe: username ? true : false
-    });
+    // const username = await this.getRememberedUser();
+    // this.setState({
+    //     username: username || "",
+    //     rememberMe: username ? true : false
+    // });
 }
 
 
