@@ -18,6 +18,7 @@ import RNBeep from 'react-native-a-beep';
 import { Alert } from 'react-native';
 import Modal from "react-native-modal";
 import ImagePicker from 'react-native-image-crop-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 class ProductAdd extends Component {
     constructor(props) {
@@ -323,7 +324,8 @@ class ProductAdd extends Component {
                         color: '#353C40'
                     }}> Product details </Text>
                 </View>
-                <ScrollView>
+                <KeyboardAwareScrollView KeyboardAwareScrollView
+                enableOnAndroid={true}>
                     <View>
                         <View style={{
                             flex: 1, justifyContent: 'center', //Centered horizontally
@@ -491,10 +493,8 @@ class ProductAdd extends Component {
                             </View>
 
                         </View>
-
-
                     </View>
-                </ScrollView>
+                    </KeyboardAwareScrollView>
             </View>
 
         )
