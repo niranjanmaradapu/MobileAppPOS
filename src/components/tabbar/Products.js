@@ -42,8 +42,9 @@ class Products extends Component {
             dob: "2021-06-21T18:30:00.000Z",
             address: "",
             modalVisible: true,
-            flagone: true,
             flagqtyModelOpen: false,
+           
+            flagone: true, 
             flagtwo: false,
             flagthree: false,
             flagfour: false,
@@ -390,6 +391,7 @@ class Products extends Component {
         this.getItems()
     }
 
+    
    
 
     render() {

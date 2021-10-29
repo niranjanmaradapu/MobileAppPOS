@@ -24,7 +24,7 @@ class BottomTabBar extends Component {
               if (route.name === 'HOME') {
                 iconName =  focused ? <Image source={require('../components/assets/images/homeRed.png')} /> : <Image source={require('../components/assets/images/home.png')} />
               }
-              else if (route.name === 'PRODUCTS') {
+              else if (route.name === 'KATHABOOK') {
                 iconName = focused ? <Image source={require('../components/assets/images/marketRed.png')} /> : <Image source={require('../components/assets/images/market.png')} />
               }
               else if (route.name === 'NEW SALE') {
@@ -43,7 +43,7 @@ class BottomTabBar extends Component {
           })}
         >
           <Tab.Screen name="HOME"  title='Home' options={{headerShown: false}} component={HomeNav}/>
-          <Tab.Screen name="PRODUCTS" options={{headerShown: false}} component={ProductsNavigation} />
+          <Tab.Screen name="KATHABOOK" options={{headerShown: false}} component={Settings} />
           <Tab.Screen name="NEW SALE" options={{headerShown: false,unmountOnBlur: true}} component={NewSaleNavigation} />
           <Tab.Screen name="PROMO" options={{headerShown: false}} component={Settings} />
           <Tab.Screen name="PROFILE" options={{headerShown: false}} component={Settings} />
