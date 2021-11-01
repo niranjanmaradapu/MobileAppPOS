@@ -2330,6 +2330,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Alert } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Loader from '../loader';
+import { white } from 'react-native-paper/lib/typescript/styles/colors';
 
 
 class NewSale extends Component {
@@ -2522,8 +2523,8 @@ class NewSale extends Component {
       }
       this.state.arrayData = this.state.temp.filter(function (item) {
         return item.itemdesc.includes(search);
-      }).map(function ({ itemdesc, netamount, barcode, qty }) {
-        return { itemdesc, netamount, barcode, qty };
+      }).map(function ({ itemdesc, netamount, barcode, qty,image }) {
+        return { itemdesc, netamount, barcode, qty,image };
       });
     });
   };
@@ -3375,30 +3376,51 @@ class NewSale extends Component {
 
         <View style={styles.Topcontainer}>
           <TouchableOpacity style={{
-            backgroundColor: this.state.flagone ? "#1CA2FF" : "#ED1C24",
-            alignSelf: "flex-start",
-            //marginHorizontal: "1%",
-            marginBottom: 6,
-            width: "33.3%",
-            height: 50,
-            textAlign: "center",
+          borderColor: '#ED1C24',
+          height: 50,
+          width: "33.3%",
+          borderBottomLeftRadius: 5,
+          borderTopLeftRadius: 5,
+          borderLeftWidth: 1,
+          borderTopWidth: 1,
+          borderBottomWidth: 1,
+         backgroundColor: this.state.flagone ?  "#ED1C24" : "#FFFFFF",
+         alignSelf: "flex-start",
+         // //marginHorizontal: "1%",
+         // marginBottom: 6,
+          
           }}
             onPress={() => this.topbarAction1()} >
             <View style={{
-              backgroundColor: this.state.flagone ? "#1CA2FF" : "#ED1C24",
-              alignSelf: "flex-start",
-              //marginHorizontal: "1%",
-              marginBottom: 6,
-              width: "33.3%",
-              height: 50,
+              //   borderColor: '#ED1C24',
+              //   height: 50,
+              //   width: "33.3%",
+              //   borderBottomLeftRadius: 5,
+              //   borderTopLeftRadius: 5,
+              //   borderLeftWidth: 1,
+              //   borderTopWidth: 1,
+              //   borderBottomWidth: 1,
+              //  backgroundColor: this.state.flagone ?  "#ED1C24" : "#FFFFFF",
+              //  alignSelf: "flex-start",
+              //  // //marginHorizontal: "1%",
+              //  // marginBottom: 6,
             }}>
 
               <Text style={{
-                color: this.state.flagone ? "#FFFFFF" : "#BBE3FF",
+               // borderColor: '#ED1C24',
+                height: 28,
+                width: 100, 
+              //   borderBottomLeftRadius: 5,
+              //  borderTopLeftRadius: 5,
+              //   borderBottomWidth: 1,
+              //   borderTopWidth: 1,
+              //   borderRightWidth: 1,
+                color: this.state.flagone ? "#FFFFFF" : "#ED1C24",
                 marginTop: 10,
-                fontFamily: "regular", width: 100,
-                fontSize: 14, justifyContent: 'center',
-                alignItems: 'center',
+                 fontFamily: "regular",
+                fontSize: 14, 
+                textAlign: 'center',
+                 alignItems: 'center',
               }}> NEW SALE </Text>
 
 
@@ -3409,31 +3431,45 @@ class NewSale extends Component {
             </View>
           </TouchableOpacity>
           <TouchableOpacity style={{
-            backgroundColor: this.state.flagtwo ? "#1CA2FF" : "#ED1C24",
-            alignSelf: "flex-start",
-            //marginHorizontal: "1%",
-            marginBottom: 6,
-            width: "33.3%",
-            height: 50,
-            textAlign: "center",
+           borderColor: '#ED1C24',
+           height: 50,
+           width: "33.3%",
+          //  borderBottomLeftRadius: 5,
+          //  borderTopLeftRadius: 5,
+            borderLeftWidth: 1,
+           borderTopWidth: 1,
+           borderBottomWidth: 1,
+          backgroundColor: this.state.flagtwo ?  "#ED1C24" : "#FFFFFF",
+          alignSelf: "flex-start",
           }}
             onPress={() => this.topbarAction2()} >
             <View style={{
-              backgroundColor: this.state.flagtwo ? "#1CA2FF" : "#ED1C24",
-              alignSelf: "flex-start",
-              //marginHorizontal: "1%",
-              marginBottom: 6,
-              width: "33.3%",
-              height: 50,
-              textAlign: "center",
+            //   borderColor: '#ED1C24',
+            //   height: 50,
+            //   width: "33.3%",
+            //   borderBottomLeftRadius: 5,
+            //   borderTopLeftRadius: 5,
+            //   borderBottomWidth: 1,
+            //   borderTopWidth: 1,
+            //   borderLeftWidth: 1,
+            //  backgroundColor: this.state.flagone ?  "#ED1C24" : "#FFFFFF",
+            //  alignSelf: "flex-start",
+            //  // //marginHorizontal: "1%",
+            //  // marginBottom: 6,
+            //   width: "33.3%",
+            //  // height: 50,
             }}>
 
               <Text style={{
-                color: this.state.flagtwo ? "#FFFFFF" : "#BBE3FF",
+                borderColor: '#ED1C24',
+                height: 28,
+                width: 100, 
+                color: this.state.flagtwo ? "#FFFFFF" : "#ED1C24",
                 marginTop: 10,
                 fontFamily: "regular",
                 fontSize: 14, textAlign: 'center', width: 100,
-              }}> ADD Product/Inventory</Text>
+             
+              }}> ADD Product </Text>
               <Image source={this.state.flagtwo ? require('../assets/images/topSelect.png') : null} style={{
                 left: 30, marginTop: 5,
               }} />
@@ -3441,27 +3477,34 @@ class NewSale extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity style={{
-            backgroundColor: this.state.flagthree ? "#1CA2FF" : "#ED1C24",
-            alignSelf: "flex-start",
-            //marginHorizontal: "1%",
-            marginBottom: 6,
-            width: "33.3%",
+            borderColor: '#ED1C24',
             height: 50,
-            textAlign: "center",
+            width: "33.3%",
+            borderBottomRightRadius: 5,
+            borderTopRightRadius: 5,
+             borderRightWidth: 1,
+             borderLeftWidth: 1,
+            borderTopWidth: 1,
+            borderBottomWidth: 1,
+           backgroundColor: this.state.flagthree ?  "#ED1C24" : "#FFFFFF",
+           alignSelf: "flex-start",
           }}
             onPress={() => this.topbarAction3()} >
             <View style={{
-              backgroundColor: this.state.flagthree ? "#1CA2FF" : "#ED1C24",
-              alignSelf: "flex-start",
-              //marginHorizontal: "1%",
-              marginBottom: 6,
-              width: "33.3%",
-              height: 50,
-              textAlign: "center",
+              // backgroundColor: this.state.flagthree ? "#1CA2FF" : "#ED1C24",
+              // alignSelf: "flex-start",
+              // //marginHorizontal: "1%",
+              // marginBottom: 6,
+              // width: "33.3%",
+              // height: 50,
+              // textAlign: "center",
             }}>
 
               <Text style={{
-                color: this.state.flagthree ? "#FFFFFF" : "#BBE3FF",
+                borderColor: '#ED1C24',
+                height: 28,
+                width: 100, 
+                color: this.state.flagthree ? "#FFFFFF" : "#ED1C24",
                 marginTop: 10,
                 fontFamily: "regular",
                 fontSize: 14, textAlign: 'center', width: 100,
@@ -3655,7 +3698,7 @@ class NewSale extends Component {
                   flex: 1,
                   paddingHorizontal: 0,
                   paddingVertical: 0,
-                  marginTop: 0
+                  marginTop: 10,
                 }}>
                 <View>
                   <TextInput style={styles.input}
@@ -3880,7 +3923,7 @@ class NewSale extends Component {
                     flex: 1,
                     paddingHorizontal: 0,
                     paddingVertical: 0,
-                    marginTop: 0
+                    marginTop: 10,
                   }}>
                   <View>
                     <SearchBar containerStyle={{ marginRight: 40 }} placeholder="Search products with Name"
@@ -4263,10 +4306,12 @@ class NewSale extends Component {
           flexDirection: 'row',
         marginLeft: 20,
         marginRight: 20,
+       borderRadius:5,
         marginTop: 20,
+        borderColor:'#ED1C24',
         width: '90%',
-        backgroundColor: 'grey',
-        height: 40,
+        //backgroundColor: '#ffffff',
+        height: 50,
   },
 
         TopcontainerforModel: {
