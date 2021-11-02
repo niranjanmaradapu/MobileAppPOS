@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, Image, SafeAreaView, Switch } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 var deviceheight = Dimensions.get('window').height;
-import RNPickerSelect from 'react-native-picker-select';
-import { Chevron } from 'react-native-shapes';
 import LoginService from '../services/LoginService';
 import axios from 'axios';
 import jwt_decode from "jwt-decode";

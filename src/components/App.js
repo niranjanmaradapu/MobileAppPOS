@@ -27,18 +27,18 @@ export default class App extends React.Component {
       semibold: require("./assets/fonts/Metropolis-SemiBold.otf"),
     });
 
-    db.transaction(txn => {
-                    txn.executeSql(
-                      'DROP TABLE tbl_item',
-                      [],
-                      (sqlTxn, res) => {
-                        console.log(`delteted successfully`);
-                      },
-                      error => {
-                        console.log("error on adding category " + error.message);
-                      },
-                    );
-                  })
+    // db.transaction(txn => {
+    //                 txn.executeSql(
+    //                   'DROP TABLE tbl_item',
+    //                   [],
+    //                   (sqlTxn, res) => {
+    //                     console.log(`delteted successfully`);
+    //                   },
+    //                   error => {
+    //                     console.log("error on adding category " + error.message);
+    //                   },
+    //                 );
+    //               })
 
     //     axios.get(NewSaleService.getAllBarcodes()).then((res) => {
     //       if (res.data["result"]) {
