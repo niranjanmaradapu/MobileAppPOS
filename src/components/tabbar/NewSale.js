@@ -2319,6 +2319,7 @@ import { DrawerActions } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
 import { ListItem, SearchBar } from "react-native-elements";
 // Connction to access the pre-populated db
+
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
 import { RNCamera } from 'react-native-camera';
