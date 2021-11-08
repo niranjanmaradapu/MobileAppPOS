@@ -2355,6 +2355,7 @@ class NewSale extends Component {
       qty: [false],
       quantity: '',
       totalAmount: 0,
+      totalDiscount: 0,
       gender: "Male",
       gstNumber: "",
       dob: "2021-06-21T18:30:00.000Z",
@@ -2423,79 +2424,79 @@ class NewSale extends Component {
     console.log("sync started------>");
     NetInfo.addEventListener(state => {
       if (state.isConnected) {
-    createdb.transaction(txn => {
-      txn.executeSql(
-        `SELECT * FROM create_item`,
-        [],
-        (sqlTxn, res) => {
-          let len = res.rows.length;
-          if (len > 0) {
-            for (let i = 0; i < len; i++) {
-              let item = res.rows.item(i)
-              let barcode = item["barcode"]
-              let promoDisc = item["promoDisc"]
-              let itemDesc = item["itemDesc"]
-              let netAmount = String(item["netAmount"])
-              let qty = String(item["qty"])
-           
-              const params = {
-                //required 
-                "costPrice": netAmount,
-                "name": itemDesc,
-                "listPrice": promoDisc,
-                "stockValue": qty,
-                "uom": "pieces",//this.state.store 
-                "domainDataId": 1,
-                "storeId": 1,
-                "barcodeId": parseInt(barcode),
-                //optional
-                "tyecode": "10",
-                "defaultImage": "",
-                "status": "1",
-                "title": "",
-                "stock": "1",
-                "color": "",
-                "length": 35,
-                "productValidity": "",
-                "empId": 1
-              }
-              console.log('params are' + JSON.stringify(params))
-              axios.post(InventoryService.createProduct(), params).then((res) => {
-                if (res.data && res.data["isSuccess"] === "true") {
-                  createdb.transaction(txn => {
-                                txn.executeSql(
-                                  'DELETE FROM  create_item where barcode=?',
-                                  [barcode],
-                                  (sqlTxn, res) => {
-                                    console.log("deleted successfully");
-                                    this.setState({ tableData: [] })
-                                    // this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'cash' })
-                                    this.props.navigation.navigate('Home')
-                                  },
-                                  error => {
-                                    console.log("error on search category " + error.message);
-                                  },
-                                );
-                              });
+        createdb.transaction(txn => {
+          txn.executeSql(
+            `SELECT * FROM create_item`,
+            [],
+            (sqlTxn, res) => {
+              let len = res.rows.length;
+              if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                  let item = res.rows.item(i)
+                  let barcode = item["barcode"]
+                  let promoDisc = item["promoDisc"]
+                  let itemDesc = item["itemDesc"]
+                  let netAmount = String(item["netAmount"])
+                  let qty = String(item["qty"])
+
+                  const params = {
+                    //required 
+                    "costPrice": netAmount,
+                    "name": itemDesc,
+                    "listPrice": promoDisc,
+                    "stockValue": qty,
+                    "uom": "pieces",//this.state.store 
+                    "domainDataId": 1,
+                    "storeId": 1,
+                    "barcodeId": parseInt(barcode),
+                    //optional
+                    "tyecode": "10",
+                    "defaultImage": "",
+                    "status": "1",
+                    "title": "",
+                    "stock": "1",
+                    "color": "",
+                    "length": 35,
+                    "productValidity": "",
+                    "empId": 1
+                  }
+                  console.log('params are' + JSON.stringify(params))
+                  axios.post(InventoryService.createProduct(), params).then((res) => {
+                    if (res.data && res.data["isSuccess"] === "true") {
+                      createdb.transaction(txn => {
+                        txn.executeSql(
+                          'DELETE FROM  create_item where barcode=?',
+                          [barcode],
+                          (sqlTxn, res) => {
+                            console.log("deleted successfully");
+                            this.setState({ tableData: [] })
+                            // this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'cash' })
+                            this.props.navigation.navigate('Home')
+                          },
+                          error => {
+                            console.log("error on search category " + error.message);
+                          },
+                        );
+                      });
+                    }
+                    else {
+                      //this.setState({ loading: false })
+                      alert("duplicate record already exists");
+                    }
+                  }
+                  );
+
                 }
-                else {
-                  //this.setState({ loading: false })
-                  alert("duplicate record already exists");
-                }
+
               }
-              );
-            
-            }
-          
-          }
-        },
-        error => {
-          console.log("error on getting categories " + error.message);
-        },
-      );
-    });
-  }
-})
+            },
+            error => {
+              console.log("error on getting categories " + error.message);
+            },
+          );
+        });
+      }
+    })
   }
 
   getItems = () => {
@@ -2587,11 +2588,11 @@ class NewSale extends Component {
                         let totalAmount = String(item["netAmount"])
                         let image = item['itemImage']
 
-                        this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                        this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
                         if (this.state.arrayData.length === 1) {
                           this.setState({ arrayData: this.state.arrayData })
                         }
-                        this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                        this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, promoDisc: promoDisc, qty: qty, netamount: netAmount, image: image })
 
                       }
                       console.log(this.state.arrayData)
@@ -2631,11 +2632,11 @@ class NewSale extends Component {
                   let totalAmount = String(item["netAmount"])
                   let image = item['itemImage']
 
-                  this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                  this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
                   if (this.state.arrayData.length === 1) {
                     this.setState({ arrayData: this.state.arrayData })
                   }
-                  this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                  this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
 
                 }
                 console.log(this.state.arrayData)
@@ -2751,6 +2752,7 @@ class NewSale extends Component {
               let barcode = item["barcode"]
               let itemDesc = item["itemDesc"]
               let netAmount = String(item["netAmount"])
+              let promoDisc = item["promoDisc"]
               let qty = "1"//String(item["qty"])
               let totalAmount = String(item["netAmount"])
               let image = item['itemImage']
@@ -2764,21 +2766,28 @@ class NewSale extends Component {
                     const qtyarr = [...this.state.tableData];
                     qtyarr[i].qty = String(parseInt(qtyarr[i].qty) + 1) //parseInt(item["qty"]))
                     this.setState({ tableData: qtyarr })
-                    this.setState({ totalAmount: this.state.totalAmount })
+                    this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
+                    this.setState({ totalAmount: parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1) })
+                    this.setState({ totalDiscount: parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1) })
                     return
                   }
-                  this.state.totalQty = this.state.totalQty + item["qty"]
+                  // this.state.totalQty = this.state.totalQty + item["qty"]
+                  this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
                   this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
+                  this.state.totalDiscount = parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1)
                 }
                 { RNBeep.beep() }
                 this.setState({ totalAmount: this.state.totalAmount })
-                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                this.setState({ totalDiscount: this.state.totalDiscount })
+                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
               }
               else {
                 { RNBeep.beep() }
-                this.state.totalQty = this.state.totalQty + item["qty"]
+                // this.state.totalQty = this.state.totalQty + item["qty"]
+                this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
                 this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
-                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                this.state.totalDiscount = parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1)
+                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
               }
               //parse this.state.totalAmount + item["netAmount"]
               // this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
@@ -2855,6 +2864,10 @@ class NewSale extends Component {
 
   }
 
+
+
+
+
   async inventoryCreate() {
     if (this.state.inventoryBarcodeId.length === 0) {
       alert('Please Enter Barcode by using scan/Mannually');
@@ -2875,7 +2888,7 @@ class NewSale extends Component {
       alert('Please Enter offer price');
     }
     else {
-     // 
+      // 
       // const response = await fetch(this.state.image.uri);
       // const blob = await response.blob();
       // console.log(blob)
@@ -3031,8 +3044,8 @@ class NewSale extends Component {
           // }
         });
       }
-      else{
-        const value =  AsyncStorage.getItem("uomData"); 
+      else {
+        const value = AsyncStorage.getItem("uomData");
         console.log('value is---->' + JSON.stringify(value))
         this.setState({
           uom: value,
@@ -3137,55 +3150,132 @@ class NewSale extends Component {
 
     // alert(`Please Pay  Rs ${this.state.totalAmount} and inventory updated based on this transaction`);
   }
+  // sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount
 
   pay = () => {
-    NetInfo.addEventListener(state => {
-      if (state.isConnected) {
-        //  console.log(this.state.totalAmount)
+    var lineItems = []
+    var lineItemIds = []
+    for (let i = 0; i < this.state.tableData.length; i++) {
+      lineItems.push({
+        itemPrice: this.state.tableData[i].netamount,
+        quantity: this.state.tableData[i].qty,
+        discount: this.state.tableData[i].promoDisc,
+        netValue: this.state.tableData[i].netamount - this.state.tableData[i].promoDisc,
+        barCode: this.state.tableData[i].barcode,
+        domainId: 2,
+      })
+    }
+    this.setState({ loading: true })
+    // const params = lineItems
+    console.log(lineItems);
+    console.log('params are' + JSON.stringify(lineItems))
+    this.setState({ loading: true })
+    axios.post(NewSaleService.saveLineItems(), lineItems).then((res) => {
+      if (res.data && res.data["isSuccess"] === "true") {
+        lineItemIds.push(JSON.parse(res.data["result"]))
+        // 
+        console.log(lineItemIds + `line items saved successfully`);
+        var lineItemIdAdd = []
+        for (let i = 0; i < lineItemIds[0].length; i++) {
+          lineItemIdAdd.push({ lineItemId: lineItemIds[0][i] })
+        }
+        console.log('order line itmes are' + JSON.stringify(lineItemIdAdd))
         const params = {
-          "amount": JSON.stringify(this.state.totalAmount),
-          "info": "order_request"
+          "natureOfSale": "InStore",
+          "domainId": 2,
+          "storeId": 1,
+          "grossAmount": this.state.totalAmount,
+          "totalPromoDisc": this.state.totalDiscount,
+          "taxAmount": 160,
+          "totalManualDisc": 0,
+          "discApprovedBy": null,
+          "discType": null,
+          "approvedBy": 5218,
+          "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
+          "offlineNumber": null,
+          "customerDetails": {
+            "name": "",
+            "mobileNumber": "",
+            "gstNumber": "",
+            "address": "",
+            "gender": "",
+            "altMobileNo": "",
+            "dob": ""
+          },
+          "dlSlip": [],
+          "lineItemsReVo": lineItemIdAdd
         }
 
-        axios.post(NewSaleService.payment(), params).then((res) => {
-          // this.setState({isPayment: false});
-          const data = JSON.parse(res.data["result"])
-
-          //console.log()
-          var options = {
-            description: 'Transaction',
-            image: 'https://i.imgur.com/3g7nmJC.png',
-            currency: data.currency,
-            order_id: data.id,
-            key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
-            amount: data.amount,
-            name: 'OTSI',
-            prefill: {
-              name: "Kadali",
-              email: "kadali@gmail.com",
-              contact: "9999999999",
-            },
-            theme: { color: '#F37254' }
+        axios.post(NewSaleService.createOrder(), params).then((res) => {
+          if (res.data && res.data["isSuccess"] === "true") {
+            //lineItemIds.push(res.data["result"])
+            alert("Order created " + res.data["result"]);
+            this.setState({ loading: false })
+            // console.log(lineItemIds[0] + `line items saved successfully`);
           }
-          console.log(options)
-          RazorpayCheckout.open(options).then((data) => {
-            // handle success
-            this.setState({ tableData: [] })
-            alert(`Success: ${data.razorpay_payment_id}`);
-            this.props.navigation.navigate('Home')
-            //this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
-          }).catch((error) => {
-            console.log(error)
-            // handle failure
-            alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
-          });
+          else {
+            this.setState({ loading: false })
+            alert("duplicate record already exists");
+          }
         }
         )
       }
+
       else {
-        alert('Please check your Internet Connection');
+        this.setState({ loading: false })
+        alert("duplicate record already exists");
       }
-    })
+    }
+    );
+
+
+    // NetInfo.addEventListener(state => {
+    //   if (state.isConnected) {
+    //     //  console.log(this.state.totalAmount)
+    //     const params = {
+    //       "amount": JSON.stringify(this.state.totalAmount),
+    //       "info": "order_request"
+    //     }
+
+    //     axios.post(NewSaleService.payment(), params).then((res) => {
+    //       // this.setState({isPayment: false});
+    //       const data = JSON.parse(res.data["result"])
+
+    //       //console.log()
+    //       var options = {
+    //         description: 'Transaction',
+    //         image: 'https://i.imgur.com/3g7nmJC.png',
+    //         currency: data.currency,
+    //         order_id: data.id,
+    //         key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
+    //         amount: data.amount,
+    //         name: 'OTSI',
+    //         prefill: {
+    //           name: "Kadali",
+    //           email: "kadali@gmail.com",
+    //           contact: "9999999999",
+    //         },
+    //         theme: { color: '#F37254' }
+    //       }
+    //       console.log(options)
+    //       RazorpayCheckout.open(options).then((data) => {
+    //         // handle success
+    //         this.setState({ tableData: [] })
+    //         alert(`Success: ${data.razorpay_payment_id}`);
+    //         this.props.navigation.navigate('Home')
+    //         //this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
+    //       }).catch((error) => {
+    //         console.log(error)
+    //         // handle failure
+    //         alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
+    //       });
+    //     }
+    //     )
+    //   }
+    //   else {
+    //     alert('Please check your Internet Connection');
+    //   }
+    // })
   }
 
   menuAction() {
@@ -3213,7 +3303,7 @@ class NewSale extends Component {
     this.setState({ flagone: false })
     this.setState({ flagtwo: true })
     this.setState({ flagthree: false })
-    this.setState({ flagfour: false }) 
+    this.setState({ flagfour: false })
     this.synccreateInventoryOfflineToOnline()
     this.getUOM()
   }
@@ -3324,8 +3414,9 @@ class NewSale extends Component {
     qtyarr[index].qty = text;
     this.setState({ tableData: qtyarr })
     // this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(text)).toString()
-    this.state.totalQty = (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
+    this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
     this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
+    this.state.totalDiscount = (parseInt(this.state.totalDiscount) + parseInt(qtyarr[index].promoDisc)).toString()
   }
 
   incrementForTable = (item, index) => {
@@ -3336,11 +3427,14 @@ class NewSale extends Component {
     // qtyarr[index].netamount = price.toString()
     qtyarr[index].qty = additem.toString()
     this.setState({ tableData: qtyarr })
+
+    this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
     // var minumsValue = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
     //console.log('minusdd' + minumsValue)
     //this.state.totalQty = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
     // this.state.totalQty =  (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
     this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
+    this.state.totalDiscount = (parseInt(this.state.totalDiscount) + parseInt(qtyarr[index].promoDisc)).toString()
 
   }
 
@@ -3351,8 +3445,11 @@ class NewSale extends Component {
     if (qtyarr[index].qty > 0) {
       this.setState({ tableData: qtyarr })
     }
+
+    this.state.totalQty = (parseInt(this.state.totalQty) - 1).toString()
     //this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)).toString()
     this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(qtyarr[index].netamount)).toString()
+    this.state.totalDiscount = (parseInt(this.state.totalDiscount) - parseInt(qtyarr[index].promoDisc)).toString()
 
   }
 
@@ -3659,6 +3756,16 @@ class NewSale extends Component {
 
   handleUOM = (value) => {
     this.setState({ store: value });
+  }
+
+  handlenewsaledeleteaction = (item, index) => {
+    const list = this.state.tableData;
+    list.splice(index, 1);
+    this.setState({ tableData: list });
+
+    this.state.totalQty = (parseInt(this.state.totalQty) - 1).toString()
+    this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(item.netamount)).toString()
+    this.state.totalDiscount = (parseInt(this.state.totalDiscount) - parseInt(item.promoDisc)).toString()
   }
 
 
@@ -4087,6 +4194,12 @@ class NewSale extends Component {
                   onChangeText={(text) => this.handleBarCode(text)}
                   onEndEditing={() => this.endEditing()}
                 />
+
+                <TouchableOpacity
+                  style={{ position: 'absolute', right: 5, top: 10, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
+                  onPress={() => this.navigateToScanCode()} >
+                  <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Tag Customer')} </Text>
+                </TouchableOpacity>
               </View>
               <FlatList
                 //  ListHeaderComponent={this.renderHeader}
@@ -4110,10 +4223,10 @@ class NewSale extends Component {
 
                     <View style={{ flexDirection: 'column', height: 120, }}>
                       <Image source={require('../assets/images/default.jpeg')}
-                      //source={{ uri: item.image }}
-                       style={{
-                        position: 'absolute', left: 20, top: 15, width: 90, height: 90,
-                      }} />
+                        //source={{ uri: item.image }}
+                        style={{
+                          position: 'absolute', left: 20, top: 15, width: 90, height: 90,
+                        }} />
                       <Text style={{ fontSize: 16, marginTop: 10, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>
                         {item.itemdesc}
                       </Text>
@@ -4129,7 +4242,7 @@ class NewSale extends Component {
                       <Text style={{ fontSize: 12, marginLeft: 205, marginTop: -15, fontFamily: 'medium', color: '#ED1C24' }}>
                         ₹ {(parseInt(item.netamount)).toString()}
                       </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 235, marginTop: -15, fontFamily: 'regular', color: '#808080', textDecorationLine: 'line-through' }}>
+                      <Text style={{ fontSize: 12, marginLeft: 245, marginTop: -15, fontFamily: 'regular', color: '#808080', textDecorationLine: 'line-through' }}>
                         Rs. 100
                       </Text>
                       <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
@@ -4201,6 +4314,19 @@ class NewSale extends Component {
 
                       </TouchableOpacity>
 
+                      <TouchableOpacity style={{
+                        position: 'absolute',
+                        right: 20,
+                        top: -35,
+                        width: 30,
+                        height: 30,
+                        borderRadius: 5,
+                        // borderTopRightRadius: 5,
+                        borderWidth: 1,
+                        borderColor: "lightgray",
+                      }} onPress={() => this.handlenewsaledeleteaction(item, index)}>
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                      </TouchableOpacity>
                     </View>
 
                   </View>
@@ -4218,7 +4344,7 @@ class NewSale extends Component {
                     color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                     fontSize: 14, position: 'absolute',
                   }}>
-                    55 </Text>
+                    {this.state.totalQty} </Text>
                   <Text style={{
                     color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                     fontSize: 14, position: 'absolute',
@@ -4228,7 +4354,7 @@ class NewSale extends Component {
                     color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                     fontSize: 14, position: 'absolute',
                   }}>
-                    ₹ 1,660.00 </Text>
+                    ₹ {this.state.totalAmount} </Text>
                   <Text style={{
                     color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 90, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                     fontSize: 14, position: 'absolute',
@@ -4238,7 +4364,7 @@ class NewSale extends Component {
                     color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 90, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                     fontSize: 14, position: 'absolute',
                   }}>
-                    ₹ 210.00 </Text>
+                    ₹  {this.state.totalDiscount} </Text>
                   <Text style={{
                     color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                     fontSize: 14, position: 'absolute',
@@ -4248,7 +4374,29 @@ class NewSale extends Component {
                     color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                     fontSize: 14, position: 'absolute',
                   }}>
-                    ₹ 1,450.00 </Text>
+                    ₹ {(parseInt(this.state.totalAmount) - parseInt(this.state.totalDiscount)).toString()} </Text>
+
+                  {/* <Text style={{
+                    color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                    fontSize: 14, position: 'absolute',
+                  }}>
+                    Customer Name </Text>
+                  <Text style={{
+                    color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                    fontSize: 14, position: 'absolute',
+                  }}>
+                    - </Text>
+                    <Text style={{
+                    color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                    fontSize: 14, position: 'absolute',
+                  }}>
+                    Customer Mobile Number </Text>
+                  <Text style={{
+                    color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                    fontSize: 14, position: 'absolute',
+                  }}>
+                    - </Text> */}
+
 
 
                   <View style={styles.TopcontainerforPay}>
@@ -4373,10 +4521,10 @@ class NewSale extends Component {
                   }}>
                     <View style={{ flexDirection: 'column', width: '100%', height: 120, }}>
                       <Image source={require('../assets/images/default.jpeg')}
-                      //source={{ uri: item.image }} 
-                      style={{
-                        position: 'absolute', left: 20, top: 15, width: 90, height: 90, borderwidth: 5, borderColor: "#F6F6F6",
-                      }} />
+                        //source={{ uri: item.image }} 
+                        style={{
+                          position: 'absolute', left: 20, top: 15, width: 90, height: 90, borderwidth: 5, borderColor: "#F6F6F6",
+                        }} />
                       <Text style={{ fontSize: 16, marginTop: 30, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>
                         {item.itemdesc}
                       </Text>
@@ -4525,7 +4673,8 @@ const styles = StyleSheet.create({
   },
   input: {
     justifyContent: 'center',
-    margin: 20,
+    marginLeft: 20,
+    marginRight: 100,
     height: 44,
     marginTop: 5,
     marginBottom: 10,
