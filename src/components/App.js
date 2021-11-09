@@ -26,6 +26,7 @@ export default class App extends React.Component {
       medium: require("./assets/fonts/ProductSans-Medium.ttf"),
       semibold: require("./assets/fonts/Metropolis-SemiBold.otf"),
     });
+    
 
     // db.transaction(txn => {
     //                 txn.executeSql(

@@ -60,9 +60,26 @@ export default class SelectStore extends React.Component {
       
     }
 
+    getStoreId = (item) => {
+        const params = {
+            "storeName": item, 
+        }
+        axios.post(LoginService.getStoreIdWithStoreName(), params).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+              AsyncStorage.setItem("storeId",String(res.data["result"][0].id)).then(() => {
+            }).catch(() => {
+                console.log('there is error saving storeId')
+            })
+            }
+            else {
+              alert("id not found");
+            }
+          }
+          )
+    }
+
    
     letsGoButtonAction() {
-        //this.props.navigation.push('LoginAndSignUp', { screen: 'SignUp' });
         this.props.navigation.navigate('HomeNavigation');
     }
 
@@ -86,6 +103,7 @@ export default class SelectStore extends React.Component {
 
     selectedLanguage = (item, index) => {
         console.log('-------ITEM TAPPED')
+        this.getStoreId(item)
         this.setState({ selectedItem: index })
         if (index == 0) {
             I18n.locale = 'en';

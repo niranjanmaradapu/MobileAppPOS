@@ -2333,6 +2333,7 @@ import Loader from '../loader';
 import InventoryService from '../services/InventoryService';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import LoginService from '../services/LoginService';
 
 
 
@@ -2363,6 +2364,7 @@ class NewSale extends Component {
       modalVisible: true,
       flagone: true,
       flagqtyModelOpen: false,
+      flagCustomerOpen: false,
       flagtwo: false,
       flagthree: false,
       flagfour: false,
@@ -2372,6 +2374,12 @@ class NewSale extends Component {
       inventoryMRP: '',
       inventoryDiscount: '',
       inventoryNetAmount: '',
+      customerPhoneNumber:'',
+      customerName:'',
+      customerEmail:'',
+      customerGender:'',
+      customerAddress:'',
+      customerGSTNumber:'',
       tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
       tableData: [],
       uom: [],
@@ -2509,106 +2517,107 @@ class NewSale extends Component {
           if (res.data && res.data["isSuccess"] === "true") {
             let len = res.data["result"].length;
             console.log("get products lenth" + len)
-            if (state.isConnected) {
-              //setInterval(() => {
-              db.transaction(txn => {
-                txn.executeSql(
-                  'DROP TABLE tbl_item',
-                  [],
-                  (sqlTxn, res) => {
-                    console.log(`delteted successfully`);
-                  },
-                  error => {
-                    console.log("error on adding category " + error.message);
-                  },
-                );
-              })
+            //setInterval(() => {
+            db.transaction(txn => {
+              txn.executeSql(
+                'DROP TABLE tbl_item',
+                [],
+                (sqlTxn, res) => {
+                  console.log(`delteted successfully`);
+                },
+                error => {
+                  console.log("error on adding category " + error.message);
+                },
+              );
+            })
 
-              db.transaction(txn => {
-                txn.executeSql(
-                  `CREATE TABLE IF NOT EXISTS tbl_item(item_id INTEGER PRIMARY KEY AUTOINCREMENT, barcode VARCHAR(20), itemDesc VARCHAR(20), qty INT(5), mrp INT(30), promoDisc INT(30), netAmount INT(30), salesMan INT(30), createdDate VARCHAR(255), lastModified VARCHAR(255), itemImage BLOB, uom VARCHAR(255), storeId INT(30), domainDataId INT(30))`,
-                  [],
-                  (sqlTxn, res) => {
-                    console.log("table created successfully");
-                  },
-                  error => {
-                    console.log("error on creating table " + error.message);
-                  },
-                );
-              });
-              if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                  let item = res.data["result"][i]
-                  console.log(item)
-                  let barcode = String(item["barcodeId"])
-                  let itemDesc = String(item["name"])
-                  let qty = item["stockValue"]
-                  let mrp = item['costPrice']
-                  let promoDisc = item['listPrice']
-                  let netAmount = item['costPrice']
-                  let salesMan = item['empId']
-                  let createdDate = String(item['createdDate'])
-                  let lastModified = String(item['lastModified'])
-                  let uom = item["uom"]
-                  let storeId = item["storeId"]
-                  let domainDataId = item["domainDataId"]
-                  db.transaction(txn => {
-                    txn.executeSql(
-                      'INSERT INTO tbl_item ( barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, lastModified,itemImage,uom,storeId,domainDataId) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
-                      [barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, lastModified, uom, storeId, domainDataId],
-                      //[, String(getListOfBarcodes[0][0]["itemDesc"]), getListOfBarcodes[0][0]["qty"], , getListOfBarcodes[0][0]['promoDisc'], getListOfBarcodes[0][0]['netAmount'], getListOfBarcodes[0][0]['salesMan'], String(getListOfBarcodes[0][0]['createdDate']), String(getListOfBarcodes[0][0]['lastModified'])],
-                      (sqlTxn, res) => {
+            db.transaction(txn => {
+              txn.executeSql(
+                `CREATE TABLE IF NOT EXISTS tbl_item(item_id INTEGER PRIMARY KEY AUTOINCREMENT, barcode VARCHAR(20), itemDesc VARCHAR(20), qty INT(5), mrp INT(30), promoDisc INT(30), netAmount INT(30), salesMan INT(30), createdDate VARCHAR(255), lastModified VARCHAR(255), itemImage BLOB, uom VARCHAR(255), storeId INT(30), domainDataId INT(30))`,
+                [],
+                (sqlTxn, res) => {
+                  console.log("table created successfully");
+                },
+                error => {
+                  console.log("error on creating table " + error.message);
+                },
+              );
+            });
+            if (len > 0) {
+              for (let i = 0; i < len; i++) {
+                let item = res.data["result"][i]
+                console.log(item)
+                let barcode = String(item["barcodeId"])
+                let itemDesc = String(item["name"])
+                let qty = item["stockValue"]
+                let mrp = item['costPrice']
+                let promoDisc = item['listPrice']
+                let netAmount = item['costPrice']
+                let salesMan = item['empId']
+                let createdDate = String(item['createdDate'])
+                let lastModified = String(item['lastModified'])
+                let uom = item["uom"]
+                let storeId = item["storeId"]
+                let domainDataId = item["domainDataId"]
+                db.transaction(txn => {
+                  txn.executeSql(
+                    'INSERT INTO tbl_item ( barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, lastModified,itemImage,uom,storeId,domainDataId) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                    [barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, lastModified, uom, storeId, domainDataId],
+                    //[, String(getListOfBarcodes[0][0]["itemDesc"]), getListOfBarcodes[0][0]["qty"], , getListOfBarcodes[0][0]['promoDisc'], getListOfBarcodes[0][0]['netAmount'], getListOfBarcodes[0][0]['salesMan'], String(getListOfBarcodes[0][0]['createdDate']), String(getListOfBarcodes[0][0]['lastModified'])],
+                    (sqlTxn, res) => {
 
-                        console.log(`added successfully`);
-                        getProducts()
-                      },
-                      error => {
-                        console.log("error on adding category " + error.message);
-                      },
-                    );
-                  });
-                }
+                      console.log(`added at insert----`);
+                      db.transaction(txn => {
+                        txn.executeSql(
+                          `SELECT * FROM tbl_item`,
+                          [],
+                          (sqlTxn, res) => {
+                            let len = res.rows.length;
+                            if (len > 0) {
+                              let results = [];
+                              if (this.state.arrayData.length > 0) {
+                                return
+                              }
+                              for (let i = 0; i < len; i++) {
+                                let item = res.rows.item(i)
+
+                                let sno = String(this.state.tableData.length + 1)
+                                let barcode = item["barcode"]
+
+                                let itemDesc = item["itemDesc"]
+                                console.log(barcode + "added to table----");
+                                let netAmount = String(item["netAmount"])
+                                let qty = String(item["qty"])
+                                let totalAmount = String(item["netAmount"])
+                                let image = item['itemImage']
+                                // console.log(res.rows + "added to table----");
+                                this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                                if (this.state.arrayData.length === 1) {
+                                  this.setState({ arrayData: this.state.arrayData })
+                                }
+                                this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, promoDisc: promoDisc, qty: qty, netamount: netAmount, image: image })
+
+                              }
+
+                              console.log(this.state.arrayData)
+                            }
+                            return
+                          },
+                          error => {
+                            console.log("error on getting categories " + error.message);
+                          },
+                        );
+                      });
+                    },
+                    error => {
+                      console.log("error on adding category " + error.message);
+                    },
+                  );
+                });
               }
-
-              db.transaction(txn => {
-                txn.executeSql(
-                  `SELECT * FROM tbl_item`,
-                  [],
-                  (sqlTxn, res) => {
-                    let len = res.rows.length;
-                    if (len > 0) {
-                      let results = [];
-                      for (let i = 0; i < len; i++) {
-                        let item = res.rows.item(i)
-                        let sno = String(this.state.tableData.length + 1)
-                        let barcode = item["barcode"]
-                        let itemDesc = item["itemDesc"]
-                        let netAmount = String(item["netAmount"])
-                        let qty = String(item["qty"])
-                        let totalAmount = String(item["netAmount"])
-                        let image = item['itemImage']
-
-                        this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
-                        if (this.state.arrayData.length === 1) {
-                          this.setState({ arrayData: this.state.arrayData })
-                        }
-                        this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, promoDisc: promoDisc, qty: qty, netamount: netAmount, image: image })
-
-                      }
-                      console.log(this.state.arrayData)
-                    }
-                  },
-                  error => {
-                    console.log("error on getting categories " + error.message);
-                  },
-                );
-              });
-
-
             }
-            else {
 
-            }
+
           }
 
         })
@@ -2734,7 +2743,7 @@ class NewSale extends Component {
     });
   };
 
-
+  
 
   barcodeDBStore = () => {
     console.log('---------------------------------------------------');
@@ -2864,10 +2873,118 @@ class NewSale extends Component {
 
   }
 
+  handleCustomerPhoneNumber = (text) => {
+    this.setState({ customerPhoneNumber: text });
+  }
+
+  handleCustomerName = (text) => {
+    this.setState({ customerName: text });
+  }
+
+  handleCustomerEmail = (text) => {
+    this.setState({ customerEmail: text });
+  }
+
+  handleCustomerAddress = (text) => {
+    this.setState({ customerAddress: text });
+  }
+
+  handleCustomerGSTNumber  = (text) => {
+    this.setState({ customerGSTNumber: text });
+  }
+
+  handlecustomerGender = (text) => {
+    this.setState({ customerGender: text });
+  }
+
+  addCustomer(){
+    var domainId = ""
+   
+    AsyncStorage.getItem("domainDataId").then((value) => {
+      domainId = value
+      console.log(domainId)
+    }).catch(() => {
+      console.log('there is error getting domainDataId')
+    })
+
+    if (this.state.customerPhoneNumber.length != 10) {
+      alert('Please Enter valid mobile number');
+      return
+    }
+    else if (this.state.customerName.length === 0) {
+      alert('Please Enter customer name');
+      return
+    }
+    // else if (this.state.customerGender.length === 0) {
+    //   alert('Please Enter customer gender');
+    //   return
+    // }
+    // else if (this.state.customerAddress.length === 0) {
+    //   alert('Please Enter customer address');
+    //   return
+    // }
+    // else if (this.state.customerGSTNumber.length === 0) {
+    //   alert('Please Enter customer GST Number');
+    //   return
+    // }
+    const params = {
+      "email":this.state.customerEmail,	
+      "phoneNumber":this.state.customerPhoneNumber,
+      "birthDate":"",
+      "gender":this.state.customerGender,
+      "name":this.state.customerName,
+      "username":this.state.customerName,
+      "tempPassword":"Otsi@123",
+      "parentId":"1",
+      "domianId": parseInt(domainId),
+      "address":this.state.customerAddress,
+      "role":{
+          "roleName":"customer"
+      },
+      "stores":[],
+      "clientId":"",
+      "isConfigUser":"",
+      "clientDomain":[]
+      }
+
+    axios.post(LoginService.createUser(), params).then((res) => {
+      if (res.data && res.data["isSuccess"] === "true") {
+        this.setState({ flagCustomerOpen: false })
+        this.setState({ modalVisible: false });
+      }
+      else {
+       
+      }
+    }
+    );
+
+    
+
+   
+  }
+
+  getUserDetails = () => {
+    const params = {
+      "phoneNo": this.state.customerPhoneNumber, 
+  }
+  axios.post(LoginService.getUser(), params).then((res) => {
+    if (res.data && res.data["isSuccess"] === "true") {
+      this.setState({ customerName: res.data["result"][0].userName });
+      //this.setState({ customerEmail: res.data["result"][0].userName });
+      this.setState({ customerGender: res.data["result"][0].gender });
+     // this.setState({ customerAddress: res.data["result"][0].gender });
+      
+      alert("get customer" + JSON.stringify(res.data["result"]));
+    }
+    else {
+      this.setState({ loading: false })
+    }
+  }
+  );
+  }
 
 
-
-
+ 
   async inventoryCreate() {
     if (this.state.inventoryBarcodeId.length === 0) {
       alert('Please Enter Barcode by using scan/Mannually');
@@ -3060,6 +3177,9 @@ class NewSale extends Component {
   endEditing() {
     console.log("end edited")
     this.barcodeDBStore()
+    if(this.state.customerPhoneNumber.length > 0){
+    this.getUserDetails()
+    }
   }
 
 
@@ -3155,6 +3275,21 @@ class NewSale extends Component {
   pay = () => {
     var lineItems = []
     var lineItemIds = []
+    var domainId = ""
+    var storeId = ""
+    AsyncStorage.getItem("domainDataId").then((value) => {
+      domainId = value
+      console.log(domainId)
+    }).catch(() => {
+      console.log('there is error getting domainDataId')
+    })
+
+    AsyncStorage.getItem("storeId").then((value) => {
+      storeId = value
+    }).catch(() => {
+      console.log('there is error getting storeId')
+    })
+
     for (let i = 0; i < this.state.tableData.length; i++) {
       lineItems.push({
         itemPrice: this.state.tableData[i].netamount,
@@ -3162,7 +3297,7 @@ class NewSale extends Component {
         discount: this.state.tableData[i].promoDisc,
         netValue: this.state.tableData[i].netamount - this.state.tableData[i].promoDisc,
         barCode: this.state.tableData[i].barcode,
-        domainId: 2,
+        domainId: domainId,
       })
     }
     this.setState({ loading: true })
@@ -3179,14 +3314,14 @@ class NewSale extends Component {
         for (let i = 0; i < lineItemIds[0].length; i++) {
           lineItemIdAdd.push({ lineItemId: lineItemIds[0][i] })
         }
-        console.log('order line itmes are' + JSON.stringify(lineItemIdAdd))
+
         const params = {
           "natureOfSale": "InStore",
-          "domainId": 2,
-          "storeId": 1,
+          "domainId": parseInt(domainId),
+          "storeId": parseInt(storeId),
           "grossAmount": this.state.totalAmount,
           "totalPromoDisc": this.state.totalDiscount,
-          "taxAmount": 160,
+          "taxAmount": 0,
           "totalManualDisc": 0,
           "discApprovedBy": null,
           "discType": null,
@@ -3194,11 +3329,11 @@ class NewSale extends Component {
           "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
           "offlineNumber": null,
           "customerDetails": {
-            "name": "",
-            "mobileNumber": "",
-            "gstNumber": "",
-            "address": "",
-            "gender": "",
+            "name": this.state.customerName,
+            "mobileNumber": this.state.customerPhoneNumber,
+            "gstNumber": this.state.customerGSTNumber,
+            "address": this.state.customerAddress,
+            "gender": this.state.customerAddress,
             "altMobileNo": "",
             "dob": ""
           },
@@ -3206,12 +3341,12 @@ class NewSale extends Component {
           "lineItemsReVo": lineItemIdAdd
         }
 
+        console.log(params)
+
         axios.post(NewSaleService.createOrder(), params).then((res) => {
           if (res.data && res.data["isSuccess"] === "true") {
-            //lineItemIds.push(res.data["result"])
             alert("Order created " + res.data["result"]);
             this.setState({ loading: false })
-            // console.log(lineItemIds[0] + `line items saved successfully`);
           }
           else {
             this.setState({ loading: false })
@@ -3768,6 +3903,11 @@ class NewSale extends Component {
     this.state.totalDiscount = (parseInt(this.state.totalDiscount) - parseInt(item.promoDisc)).toString()
   }
 
+  tagCustomer() {
+    this.setState({ flagCustomerOpen: true })
+    this.setState({ modalVisible: true });
+  }
+
 
 
 
@@ -3987,6 +4127,9 @@ class NewSale extends Component {
 
                   </TouchableOpacity>
 
+
+
+
                   {this.state.flagqtyModelOpen && (
                     <View>
                       <Modal isVisible={this.state.modalVisible}>
@@ -4029,7 +4172,7 @@ class NewSale extends Component {
                   <Text></Text>
 
                   <View style={{ marginTop: 10, width: deviceWidth }}>
-                    <TextInput style={styles.input}
+                    <TextInput style={styles.phoneinput}
                       underlineColorAndroid="transparent"
                       placeholder="BARCODE"
                       placeholderTextColor="#353C4050"
@@ -4050,7 +4193,7 @@ class NewSale extends Component {
                     </TouchableOpacity>
                   </View>
 
-                  <TextInput style={styles.input}
+                  <TextInput style={styles.phoneinput}
                     underlineColorAndroid="transparent"
                     placeholder="PRODUCT NAME"
                     placeholderTextColor="#353C4050"
@@ -4061,7 +4204,7 @@ class NewSale extends Component {
                   />
 
                   <View>
-                    <TextInput style={styles.input}
+                    <TextInput style={styles.phoneinput}
                       underlineColorAndroid="transparent"
                       placeholder="QTY"
                       placeholderTextColor="#353C4050"
@@ -4117,7 +4260,7 @@ class NewSale extends Component {
                   </View>
 
 
-                  <TextInput style={styles.input}
+                  <TextInput style={styles.phoneinput}
                     underlineColorAndroid="transparent"
                     placeholder="₹ MRP"
                     placeholderTextColor="#353C4050"
@@ -4128,7 +4271,7 @@ class NewSale extends Component {
                     ref={inputemail => { this.emailValueInput = inputemail }} />
 
                   <View>
-                    <TextInput style={styles.input}
+                    <TextInput style={styles.phoneinput}
                       underlineColorAndroid="transparent"
                       placeholder="₹ OFFER PRICE"
                       placeholderTextColor="#353C4050"
@@ -4197,7 +4340,7 @@ class NewSale extends Component {
 
                 <TouchableOpacity
                   style={{ position: 'absolute', right: 5, top: 10, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
-                  onPress={() => this.navigateToScanCode()} >
+                  onPress={() => this.tagCustomer()} >
                   <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Tag Customer')} </Text>
                 </TouchableOpacity>
               </View>
@@ -4418,7 +4561,161 @@ class NewSale extends Component {
               )}
             </View>
           </ScrollView>
+
+
         )}
+
+        {this.state.flagCustomerOpen && (
+          <View>
+            <Modal isVisible={this.state.modalVisible}>
+            <KeyboardAwareScrollView KeyboardAwareScrollView
+            enableOnAndroid={true}>
+        
+             
+              <View style={{
+                flex: 1, justifyContent: 'center', //Centered horizontally
+                alignItems: 'center', color: '#ffffff',
+                borderRadius: 20,borderwidth:10
+              }}>
+                <View style={{  flex: 1, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", marginTop:deviceWidth/2-80}}>
+                <Text style={{
+                        color: "#353C40", fontSize: 18, fontFamily: "semibold", marginLeft: 20, marginTop: 20, height: 20,
+                        justifyContent: 'center',
+                    }}> {'Personal Information'} </Text>
+
+                  <View style={{ marginTop: 0, width: deviceWidth }}>
+                    <TextInput style={styles.createUserinput}
+                      underlineColorAndroid="transparent"
+                      placeholder="MOBILE NUMBER *"
+                      placeholderTextColor="#353C4050"
+                      keyboardType="name-phone-pad"
+                      textAlignVertical="center"
+                      autoCapitalize="none"
+                      value={this.state.customerPhoneNumber}
+                      onChangeText={(text) => this.handleCustomerPhoneNumber(text)}
+                      onEndEditing={() => this.endEditing()}
+                    />
+                  </View>
+                
+
+                  <TextInput style={styles.createUserinput}
+                    underlineColorAndroid="transparent"
+                    placeholder="CUSTOMER NAME *"
+                    placeholderTextColor="#353C4050"
+                    textAlignVertical="center"
+                    autoCapitalize="none"
+                    value={this.state.customerName}
+                    onChangeText={this.handleCustomerName}
+                  />
+
+                  <View>
+                    <TextInput style={styles.createUserinput}
+                      underlineColorAndroid="transparent"
+                      placeholder="EMAIL"
+                      placeholderTextColor="#353C4050"
+                      textAlignVertical="center"
+                      autoCapitalize="none"
+                      value={this.state.customerEmail}
+                      onChangeText={this.handleCustomerEmail}
+                   />
+                  </View>
+
+                  <View style={{
+                    justifyContent: 'center',
+                    margin: 40,
+                    height: 44,
+                    marginTop: 5,
+                    marginBottom: 10,
+                    borderColor: '#8F9EB717',
+                    borderRadius: 3,
+                    backgroundColor: '#FBFBFB',
+                    borderWidth: 1,
+                    fontFamily: 'regular',
+                    paddingLeft: 15,
+                    fontSize: 14,
+                  }} >
+                    <RNPickerSelect style={{
+                      color: '#8F9EB717',
+                      fontWeight: 'regular',
+                      fontSize: 15
+                    }}
+                      placeholder={{
+                        label: 'GENDER',
+                        value: '',
+                      }}
+                      Icon={() => {
+                        return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                      }}
+                      items={[
+                        { label: 'Male', value: 'male' },
+                        { label: 'Female', value: 'female' },
+                    ]}
+                      onValueChange={this.handlecustomerGender}
+                      style={pickerSelectStyles}
+                      value={this.state.customerGender}
+                      useNativeAndroidPickerStyle={false}
+
+                    />
+                  </View>
+
+
+                  <TextInput style={styles.createUserinput}
+                    underlineColorAndroid="transparent"
+                    placeholder="ADDRESS"
+                    placeholderTextColor="#353C4050"
+                    textAlignVertical="center"
+                    autoCapitalize="none"
+                    value={this.state.customerAddress}
+                    onChangeText={this.handleCustomerAddress}
+                    />
+
+<Text style={{
+                        color: "#353C40", fontSize: 18, fontFamily: "semibold", marginLeft: 20, marginTop: 20, height: 20,
+                        justifyContent: 'center',
+                    }}> {'Business Information(optional)'} </Text>
+
+                  <View>
+                    <TextInput style={styles.createUserinput}
+                      underlineColorAndroid="transparent"
+                      placeholder="GST NUMBER"
+                      placeholderTextColor="#353C4050"
+                      textAlignVertical="center"
+                      autoCapitalize="none"
+                      value={this.state.customerGSTNumber}
+                      onChangeText={this.handleCustomerGSTNumber}
+                      />
+                  </View>
+
+
+
+                  <TouchableOpacity
+                    style={{
+                      margin: 20,
+                      height: 50, backgroundColor: "#ED1C24", borderRadius: 5,marginLeft:40,marginRight:40,
+                    }}
+                  >
+                    <Text style={{
+                      textAlign: 'center', margin: 20, color: "#ffffff", fontSize: 15,
+                      fontFamily: "regular",height: 50,
+                    }} onPress={() => this.addCustomer()} > TAG/ADD CUSTOMER </Text>
+
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                              style={{  margin: 20,
+                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5,marginLeft:40,marginRight:40, }}
+                              onPress={() => this.cancel()} >
+                              <Text style={{    textAlign: 'center', margin: 20, color: "#ffffff", fontSize: 15,
+                      fontFamily: "regular",height: 50, }}> {('Cancel')} </Text>
+                            </TouchableOpacity>
+
+                </View>
+
+              </View>
+          
+          </KeyboardAwareScrollView>
+            </Modal>
+          </View>)}
 
 
         {this.state.flagthree && (
@@ -4675,6 +4972,34 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginLeft: 20,
     marginRight: 100,
+    height: 44,
+    marginTop: 5,
+    marginBottom: 10,
+    borderColor: '#8F9EB717',
+    borderRadius: 3,
+    backgroundColor: '#FBFBFB',
+    borderWidth: 1,
+    fontFamily: 'regular',
+    paddingLeft: 15,
+    fontSize: 14,
+  },
+  phoneinput: {
+    justifyContent: 'center',
+    margin: 20,
+    height: 44,
+    marginTop: 5,
+    marginBottom: 10,
+    borderColor: '#8F9EB717',
+    borderRadius: 3,
+    backgroundColor: '#FBFBFB',
+    borderWidth: 1,
+    fontFamily: 'regular',
+    paddingLeft: 15,
+    fontSize: 14,
+  },
+  createUserinput: {
+    justifyContent: 'center',
+    margin: 40,
     height: 44,
     marginTop: 5,
     marginBottom: 10,

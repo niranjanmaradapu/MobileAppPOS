@@ -34,7 +34,7 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'test001',
+            userName: 'config_001',
             password: 'Otsi@1234',
             dropValue: '',
             store: 0,
@@ -135,24 +135,25 @@ export default class Login extends Component {
                     }).catch(() => {
                         console.log('there is error saving token')
                     })
-                    console.log("stores data----" + JSON.stringify(jwt_decode(token)["custom:domianId"]))
-                    if (jwt_decode(token)["custom:domianId"] === "1,2,3" || jwt_decode(token)["custom:domianId"] === "1,2") {
+                    console.log("stores data----" + JSON.stringify(jwt_decode(token)["custom:clientDomians"]))
+                    // if (jwt_decode(token)["custom:clientDomians"] === "1,2,3" || jwt_decode(token)["custom:clientDomians"] === "1,2") {
+                    //     // this.getModel();
+                    //     this.props.navigation.navigate('SelectDomain')
+                    // }
+                    // else if (jwt_decode(token)["custom:clientDomians"] === "3,") {
                         // this.getModel();
-                        this.props.navigation.navigate('SelectDomain')
-                    }
-                    else if (jwt_decode(token)["custom:domianId"] === "1") {
-                        // this.getModel();
-                        AsyncStorage.setItem("domainDataId","1").then(() => {
+                        var domainArray = jwt_decode(token)["custom:clientDomians"].split(',');
+                        AsyncStorage.setItem("domainDataId",domainArray[0]).then(() => {
                             // console.log
                         }).catch(() => {
                             console.log('there is error saving domainDataId')
                         })
                         this.getstores()
                         //
-                    }
-                     else {
+                   // }
+                    // else {
 
-                    }
+                    //}
                 this.setState({ loading: false })
 
                 // }).catch(() => {

@@ -9,6 +9,19 @@ class LoginService {
     getUserStores() {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/getUserStores/';
     }
+
+    getStoreIdWithStoreName() {
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/store/getStoresWithFilter';
+    }
+
+    createUser() {
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/createUser';
+    }
+
+    getUser() {
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/user/getUser';
+    }
+
     forgotPasswordCodeSent() {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/forgetPassword';
     }
