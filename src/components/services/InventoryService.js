@@ -4,13 +4,19 @@ const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097'
 
 class InventoryService {
     createProduct() {
-        return REACT_NATIVE_APP_BASE_URL + '/inventory/inventory/createProduct';
+        return REACT_NATIVE_APP_BASE_URL + '/inventory/inventoryRetail/createBarcode';
     }
-    getAllProducts() {
-        return REACT_NATIVE_APP_BASE_URL + '/inventory/inventory/getAllProducts';
+
+    deleteBarcode(){
+        return REACT_NATIVE_APP_BASE_URL + '/inventory/inventoryRetail/deleteBarcode'; 
     }
+
+    updateBarcode(){
+        return REACT_NATIVE_APP_BASE_URL + '/inventory/inventoryRetail/updateBarcode'; 
+    }
+   
     getAllBarcodes() {
-        return REACT_NATIVE_APP_BASE_URL + '/inventory/inventory/getAllBarcodes';
+        return REACT_NATIVE_APP_BASE_URL + '/inventory/inventoryRetail/getAllBarcodes';
     }
     saveUOM() {
         return REACT_NATIVE_APP_BASE_URL + '/uom/saveUom';

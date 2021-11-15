@@ -1,50 +1,51 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, ScrollView } from 'react-native';
+import React, { Component, useState } from 'react'
+import { View, Image, FlatList, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
-import { DrawerActions } from '@react-navigation/native';
 import Constants from 'expo-constants';
+import { openDatabase } from 'react-native-sqlite-storage';
+// Connction to access the pre-populated db
+const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
+const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
+
+
 
 
 class Settings extends Component {
     constructor(props) {
         super(props);
+        this.camera = null;
+        this.barcodeCodes = [];
         this.state = {
+            barcodeId: "",
+
         }
     }
 
 
-
-    menuAction() {
-        this.props.navigation.dispatch(DrawerActions.openDrawer())
-    }
-
-
-
     render() {
-        const state = this.state;
         return (
-            <ScrollView>
-                <View style={styles.container}>
-                    <SafeAreaView style={styles.safeArea}>
-                        <View style={styles.viewswidth}>
-                            <Text style={styles.signUptext}> Settings </Text>
-                            <TouchableOpacity style={{
-                                position: 'absolute',
-                                left: 20,
-                                top: 50,
-                                width: 20,
-                                height: 20,
-                            }} onPress={() => this.menuAction()}>
-                                <Image source={require('../assets/images/menu.png')} />
-                            </TouchableOpacity>
-                        </View>
-                    </SafeAreaView>
+            <View style={{ flex: 1 }}>
+                <View style={styles.viewswidth}>
+                    <Text style={{
+                        position: 'absolute',
+                        left: 10,
+                        top: 55,
+                        width: 300,
+                        height: 20,
+                        fontFamily: 'bold',
+                        fontSize: 18,
+                        color: '#353C40'
+                    }}> Settings </Text>
+
                 </View>
-            </ScrollView>
+
+            </View>
         )
     }
 }
 export default Settings
+
+
 
 
 const styles = StyleSheet.create({
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FAFAFF'
     },
     viewswidth: {
-        backgroundColor: '#ED1C24',
+        backgroundColor: '#FFFFFF',
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
@@ -62,26 +63,111 @@ const styles = StyleSheet.create({
     },
     input: {
         justifyContent: 'center',
-        margin: 20,
-        height: 40,
+        marginLeft: 20,
+        marginRight: 100,
+        height: 44,
         marginTop: 5,
         marginBottom: 10,
         borderColor: '#8F9EB717',
         borderRadius: 3,
-        backgroundColor: 'white',
+        backgroundColor: '#FBFBFB',
         borderWidth: 1,
-        fontFamily: 'semibold',
-        fontSize: 10,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    phoneinput: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    createUserinput: {
+        justifyContent: 'center',
+        margin: 40,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
     },
     signInButton: {
-        backgroundColor: '#0196FD',
+        backgroundColor: '#ED1C24',
         justifyContent: 'center',
-        marginLeft: 30,
-        marginRight: 30,
-        marginTop: 50,
-        height: 55,
-        borderRadius: 30,
+        width: '46%',
+        marginLeft: 10,
+        marginTop: 10,
+        height: 40,
+        borderRadius: 10,
         fontWeight: 'bold',
+        margin: 5,
+        // alignSelf:'center',
+        // marginBottom:100,
+    },
+    qty: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        width: '18%',
+        marginTop: 10,
+        height: 40,
+        margin: 5,
+        borderRadius: 5,
+        fontWeight: 'bold',
+    },
+    imagealign: {
+        marginTop: 16,
+        marginRight: 20,
+    },
+    itemscount: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        width: '18%',
+        marginLeft: 0,
+        marginTop: 10,
+        height: 40,
+        borderRadius: 5,
+        fontWeight: 'bold',
+        margin: 5,
+        // alignSelf:'center',
+        // marginBottom:100,
+    },
+    itemDetail: {
+        backgroundColor: '#ffffff',
+
+        width: '60%',
+        marginLeft: 0,
+        marginTop: 10,
+        height: 40,
+        borderRadius: 5,
+        fontWeight: 'bold',
+        margin: 5,
+        // alignSelf:'center',
+        // marginBottom:100,
+    },
+    signInButtonRight: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        width: '46%',
+        marginRight: 10,
+        marginTop: 10,
+        height: 40,
+        borderRadius: 10,
+        fontWeight: 'bold',
+        margin: 5,
+        // alignSelf:'center',
         // marginBottom:100,
     },
     signInButtonText: {
@@ -91,11 +177,12 @@ const styles = StyleSheet.create({
         fontFamily: "regular",
     },
     signInFieldStyle: {
-        color: '#456CAF55',
+        color: 'black',
         marginLeft: 20,
         marginTop: 5,
-        fontSize: 12,
+        fontSize: 18,
         fontFamily: "regular",
+        textAlign: 'left',
     },
     findIteminput: {
         marginLeft: 30,
@@ -108,6 +195,18 @@ const styles = StyleSheet.create({
         color: '#001B4A',
         fontFamily: "regular",
         fontSize: 12,
+    },
+    qtyInput: {
+        width: 50,
+        height: 25,
+        // marginTop: 20,
+        // marginBottom: 1000,
+        // height: 50,
+        // backgroundColor: "#DEF1FF",
+        // borderRadius: 10,
+        // color: '#001B4A',
+        // fontFamily: "regular",
+        // fontSize: 12,
     },
     signUptext: {
         marginTop: 40,
@@ -147,7 +246,7 @@ const styles = StyleSheet.create({
     },
     text: {
         margin: 6,
-        color: "#0196FD",
+        color: "#ED1C24",
         fontFamily: "semibold",
         fontSize: 11,
     },
@@ -160,11 +259,14 @@ const styles = StyleSheet.create({
 
     Topcontainer: {
         flexDirection: 'row',
-        marginLeft: 0,
-        marginRight: 0,
-        width: '100%',
-        backgroundColor: 'grey',
-        height: 50
+        marginLeft: 20,
+        marginRight: 20,
+        borderRadius: 5,
+        marginTop: 20,
+        borderColor: '#ED1C24',
+        width: '90%',
+        //backgroundColor: '#ffffff',
+        height: 50,
     },
 
     TopcontainerforModel: {
@@ -175,6 +277,30 @@ const styles = StyleSheet.create({
         width: '100%',
         backgroundColor: 'grey',
         borderRadius: 20,
+        height: 50,
+    },
+    TopcontainerforPay: {
+        flexDirection: 'row',
+        marginLeft: 0,
+        marginRight: 0,
+        // marginTop: 10,
+        width: '100%',
+        backgroundColor: '#ffffff',
+        borderColor: 'lightgray',
+        borderRadius: 0,
+        height: 50,
+        position: 'absolute',
+        bottom: 10,
+    },
+    TopcontainerforItems: {
+        flexDirection: 'row',
+        marginLeft: 0,
+        marginRight: 0,
+        marginTop: 10,
+        width: '100%',
+        backgroundColor: '#ffffff',
+        borderColor: 'lightgray',
+        borderRadius: 0,
         height: 50,
     },
     redbox: {
@@ -188,7 +314,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     bluebox: {
-        backgroundColor: "#0196FD",
+        backgroundColor: "#ED1C24",
         alignSelf: "flex-start",
         //marginHorizontal: "1%",
         marginBottom: 6,
@@ -197,7 +323,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     blackbox: {
-        backgroundColor: "#0196FD",
+        backgroundColor: "#ED1C24",
         alignSelf: "flex-start",
         //marginHorizontal: "1%",
         marginBottom: 6,
@@ -206,7 +332,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     greenbox: {
-        backgroundColor: "#0196FD",
+        backgroundColor: "#ED1C24",
         alignSelf: "flex-start",
         //marginHorizontal: "1%",
         marginBottom: 6,
@@ -240,7 +366,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         paddingVertical: 6,
         //borderRadius: 4,
-        backgroundColor: "#0196FD",
+        backgroundColor: "#ED1C24",
         alignSelf: "flex-start",
         //marginHorizontal: "1%",
         marginBottom: 6,
@@ -251,7 +377,7 @@ const styles = StyleSheet.create({
     selected: {
         backgroundColor: "#BBE3FF",
         borderWidth: 0,
-        backgroundColor: "#0196FD",
+        backgroundColor: "#ED1C24",
     },
     buttonLabel: {
         textAlign: "center",
@@ -288,5 +414,55 @@ const styles = StyleSheet.create({
     modeltext: {
         color: '#3f2949',
         marginTop: 10
+    },
+    btn: {
+        width: 40, height: 18, borderWidth: 0.2, borderColor: '#48596B', fontFamily: "regular",
+        fontSize: 10,
+    },
+    btnText: { textAlign: 'center', color: '#fff' }
+
+
+    ,
+    preview: {
+        margin: 20,
+        height: 300,
+        marginTop: 5,
+        marginBottom: 10,
+        justifyContent: 'flex-end',
+        alignItems: 'center'
+    },
+    overlay: {
+        position: 'absolute',
+        padding: 16,
+        right: 0,
+        left: 0,
+        alignItems: 'center'
+    },
+    topOverlay: {
+        top: 0,
+        flex: 1,
+        marginLeft: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    bottomOverlay: {
+        bottom: 0,
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    enterBarcodeManualButton: {
+        padding: 15,
+        backgroundColor: 'white',
+        borderRadius: 40
+    },
+    scanScreenMessage: {
+        fontSize: 14,
+        color: 'white',
+        textAlign: 'center',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });

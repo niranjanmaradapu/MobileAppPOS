@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import { Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import NewSale from '../components/tabbar/NewSale';
 import Settings from '../components/tabbar/Settings';
-import ScanBarCode from '../components/tabbar/ScanBarCode';
 import NewSaleNavigation from './NewSaleNavigation';
 import HomeNav from './HomeNav';
-import ProductsNavigation from './ProductsNavigation';
+import KathaBook from '../components/tabbar/KathaBook';
+import Promo from '../components/tabbar/Promo';
 
 
 
@@ -43,9 +42,9 @@ class BottomTabBar extends Component {
           })}
         >
           <Tab.Screen name="HOME"  title='Home' options={{headerShown: false}} component={HomeNav}/>
-          <Tab.Screen name="KATHABOOK" options={{headerShown: false}} component={Settings} />
+          <Tab.Screen name="KATHABOOK" options={{headerShown: false}} component={KathaBook} />
           <Tab.Screen name="NEW SALE" options={{headerShown: false,unmountOnBlur: true}} component={NewSaleNavigation} />
-          <Tab.Screen name="PROMO" options={{headerShown: false}} component={Settings} />
+          <Tab.Screen name="PROMO" options={{headerShown: false}} component={Promo} />
           <Tab.Screen name="PROFILE" options={{headerShown: false}} component={Settings} />
         </Tab.Navigator>
       );

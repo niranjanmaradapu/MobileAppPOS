@@ -1,26 +1,25 @@
 import React, { Component } from 'react'
 import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
-import CreateCustomerService from '../services/CreateCustomerService';
 import axios from 'axios';
-import RazorpayCheckout from 'react-native-razorpay';
 import NewSaleService from '../services/NewSaleService';
-import { DrawerActions } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
-import { SearchBar } from "react-native-elements";
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 import { RNCamera } from 'react-native-camera';
-import NetInfo from "@react-native-community/netinfo";
-import RNBeep from 'react-native-a-beep';
 import { Alert } from 'react-native';
 import Modal from "react-native-modal";
 import ImagePicker from 'react-native-image-crop-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import RNPickerSelect from 'react-native-picker-select';
+import { Chevron } from 'react-native-shapes';
+import NetInfo from "@react-native-community/netinfo";
+import InventoryService from '../services/InventoryService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class ProductAdd extends Component {
+
+class ProductEdit extends Component {
     constructor(props) {
         super(props);
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -53,12 +52,19 @@ class ProductAdd extends Component {
             flagtwo: false,
             flagthree: false,
             flagfour: false,
-            inventoryBarcodeId: '',
-            inventoryProductName: '',
-            inventoryQuantity: '',
-            inventoryMRP: '',
-            inventoryDiscount: '',
-            inventoryNetAmount: '',
+           
+            
+          
+            
+            uom: [],
+          
+            productItemId:0,
+            barcodeId:0,
+            productname:"",
+            produtctQty:0,
+            productuom:"",
+            productmrp:"",
+            productofferprice:"",
             tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
             tableData: [
             ],
@@ -68,6 +74,22 @@ class ProductAdd extends Component {
             }
         }
     }
+
+    async componentDidMount() {
+        this.setState({
+            productItemId:this.props.route.params.productItemId,
+            barcodeId:this.props.route.params.barcodeId,
+            productname:this.props.route.params.productname,
+            produtctQty:this.props.route.params.produtctQty,
+            productuom:this.props.route.params.productuom,
+            productmrp:this.props.route.params.productmrp,
+            productofferprice:this.props.route.params.productofferprice,
+        });
+        console.log('sadsadf' + this.state.productuom)
+        this.getUOM()
+    }
+
+
 
     pickSingleWithCamera(cropping, mediaType = 'photo') {
         ImagePicker.openCamera({
@@ -168,7 +190,7 @@ class ProductAdd extends Component {
                 //const productname = response.data.result[0].name
                 if (response.data) {
                     console.log("response :", response.data.result[0].name);
-                    this.setState({ inventoryProductName: response.data.result[0].name })
+                    this.setState({ productname: response.data.result[0].name })
                     this.forceUpdate()
                 }
             })
@@ -177,88 +199,139 @@ class ProductAdd extends Component {
             })
     }
 
+    async getUOM() {
+        NetInfo.addEventListener(state => {
+            if (state.isConnected) {
+                var uom = [];
+
+                axios.get(InventoryService.getUOM()).then((res) => {
+                    if (res.data["result"]) {
+                        for (var i = 0; i < res.data["result"].length; i++) {
+                            console.log('getuom' + res.data["result"][i].uomName)
+                            uom.push({
+                                value: res.data["result"][i].uomName,//id
+                                label: res.data["result"][i].uomName,
+                            });
+
+                        }
+                    }
+                    this.setState({
+                        uom: uom,
+                    })
+                    AsyncStorage.setItem("uomData", JSON.stringify(uom)).then(() => {
+                        console.log('table data saved')
+                    }).catch(() => {
+                        console.log('there is error saving token')
+                    })
+                    console.log(this.state.uom)
+                    // if(this.state.uom.length === 1){
+                    //     //this.props.navigation.navigate('HomeNavigation')
+                    // }
+                    // else{
+                    //     //this.props.navigation.navigate('SelectStore')
+                    // }
+                });
+            }
+            else {
+                const value = AsyncStorage.getItem("uomData");
+                console.log('value is---->' + JSON.stringify(value))
+                this.setState({
+                    uom: value,
+                })
+            }
+        })
+    }
+
 
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
     }
 
+   
+    handleUOM = (value) => {
+        this.setState({ productuom: value });
+    }
+
 
 
     handleInventoryBarcode = (text) => {
-        this.setState({ inventoryBarcodeId: text })
+        this.setState({ barcodeId: text })
     }
     handleInventoryProductName = (text) => {
-        this.setState({ inventoryProductName: text })
+        this.setState({ productname: text })
     }
     handleInventoryQuantity = (value) => {
-        this.setState({ inventoryQuantity: value });
+        this.setState({ produtctQty: value });
     }
 
     handleInventoryMRP = (text) => {
-        this.setState({ inventoryMRP: text })
+        this.setState({ productmrp: text })
     }
     handleInventoryDiscount = (text) => {
-        this.setState({ inventoryDiscount: text })
-        console.log(this.state.inventoryMRP)
-        console.log(text)
-        this.setState({ inventoryNetAmount: (parseInt(this.state.inventoryMRP) - parseInt(text)).toString() })
+        this.setState({ productofferprice: text })
+        // console.log(this.state.inventoryMRP)
+        // console.log(text)
+        // this.setState({ inventoryNetAmount: (parseInt(this.state.inventoryMRP) - parseInt(text)).toString() })
     }
     handleInventoryNetAmount = (text) => {
         this.setState({ inventoryNetAmount: text });
     }
 
 
-    async inventoryCreate() {
-        if (this.state.inventoryBarcodeId.length === 0) {
+    async inventoryUpdate() {
+        if (String(this.state.barcodeId).length === 0) {
             alert('Please Enter Barcode by using scan/Mannually');
-        } else if (this.state.inventoryProductName.length === 0) {
+        } else if (this.state.productname.length === 0) {
             alert('Please Enter Product name');
         }
-        else if (this.state.inventoryQuantity.length === 0) {
+        else if (String(this.state.produtctQty).length === 0) {
             alert('Please Enter Quantity');
         }
-        else if (this.state.inventoryMRP.length === 0) {
+        else if (this.state.productmrp.length === 0) {
             alert('Please Enter MRP');
         }
-        else if (this.state.inventoryDiscount.length === 0) {
+        else if (this.state.productofferprice.length === 0) {
             alert('Please Enter Discount %');
         }
         else {
-            const response = await fetch(this.state.image.uri);
-            const blob = await response.blob();
-            console.log(blob)
-            console.log(blob.size)
-
-            db.transaction(txn => {
-                txn.executeSql(
-                    `CREATE TABLE IF NOT EXISTS tbl_item(item_id INTEGER PRIMARY KEY AUTOINCREMENT, barcode VARCHAR(20), itemDesc VARCHAR(20), qty INT(5), mrp INT(30), promoDisc INT(30), netAmount INT(30), salesMan INT(30), createdDate VARCHAR(255),lastModified VARCHAR(255),itemImage BLOB)`,
-                    [],
-                    (sqlTxn, res) => {
-                        console.log("table created successfully");
-                    },
-                    error => {
-                        console.log("error on creating table " + error.message);
-                    },
-                );
-            });
-            db.transaction(txn => {
-                txn.executeSql(
-                    'INSERT INTO tbl_item ( barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, lastModified,itemImage) VALUES (?,?,?,?,?,?,?,?,?,?)',
-                    [this.state.inventoryBarcodeId, this.state.inventoryProductName, parseInt(this.state.inventoryQuantity), parseInt(this.state.inventoryMRP), parseInt(this.state.inventoryDiscount), parseInt(this.state.inventoryNetAmount), 0, "2021-09-08T17:34:03.015299", "2021-09-09T00:13:42.671451", this.state.image.uri],
-                    (sqlTxn, res) => {
-
-                        console.log(`added successfully`);
-                        this.props.route.params.onGoBack();
-                        this.props.navigation.goBack();
-                        return true;
-
-                    },
-                    error => {
-                        console.log("error on adding category " + error.message);
-                    },
-                );
-            });
+            this.setState({ loading: true })
+            const params = {
+                //required 
+                "productItemId":this.state.productItemId,
+                "costPrice": this.state.productmrp,
+                "name": this.state.productname,
+                "listPrice": this.state.productofferprice,
+                "stockValue":this.state.produtctQty,
+                "uom": "pieces",//this.state.store 
+                "domainDataId": 1,
+                "storeId": 1,
+                "barcodeId": this.state.barcodeId,
+                //optional
+                "tyecode": "10",
+                "defaultImage": "",
+                "status": "1",
+                "title": "",
+                "stock": "1",
+                "color": "",
+                "length": 35,
+                "productValidity": "",
+                "empId": 1
+              }
+              console.log('params are' + JSON.stringify(params))
+              this.setState({ loading: true })
+              axios.put(InventoryService.updateBarcode(), params).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                  this.setState({ loading: false })
+                  this.props.route.params.onGoBack();
+                  this.props.navigation.goBack();
+                }
+                else {
+                 // this.setState({ loading: false })
+                  alert("duplicate record already exists");
+                }
+              }
+              );
         }
     }
 
@@ -268,11 +341,11 @@ class ProductAdd extends Component {
         console.log('search' + this.state.productname)
     }
 
-    refreshGetBarCode() {
-        if (global.barcodeId != 'something') {
-            this.setState({ inventoryBarcodeId: global.barcodeId })
-        }
-    }
+    // refreshGetBarCode() {
+    //     if (global.barcodeId != 'something') {
+    //         this.setState({ inventoryBarcodeId: global.barcodeId })
+    //     }
+    // }
 
 
     navigateToGetBarCode() {
@@ -292,9 +365,9 @@ class ProductAdd extends Component {
     }
 
     imageAction() {
-        console.log('tapped')
-        this.setState({ flagqtyModelOpen: true })
-        this.setState({ modalVisible: true });
+        // console.log('tapped')
+        // this.setState({ flagqtyModelOpen: true })
+        // this.setState({ modalVisible: true });
     }
 
 
@@ -322,10 +395,10 @@ class ProductAdd extends Component {
                         fontFamily: 'bold',
                         fontSize: 18,
                         color: '#353C40'
-                    }}> Product details </Text>
+                    }}> Edit details </Text>
                 </View>
                 <KeyboardAwareScrollView KeyboardAwareScrollView
-                enableOnAndroid={true}>
+                    enableOnAndroid={true}>
                     <View>
                         <View style={{
                             flex: 1, justifyContent: 'center', //Centered horizontally
@@ -390,36 +463,29 @@ class ProductAdd extends Component {
                                 <Text></Text>
 
                                 <View style={{ marginTop: 10, width: deviceWidth }}>
-                                    <TextInput style={styles.input}
+                                    <TextInput style={styles.barcodeinput}
                                         underlineColorAndroid="transparent"
                                         placeholder="BARCODE"
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
-                                        value={this.state.inventoryBarcodeId}
+                                        editable={false} selectTextOnFocus={false}
+                                        value={String(this.state.barcodeId)}
                                         onChangeText={this.handleInventoryBarcode}
                                     />
-
-                                    <TouchableOpacity style={{
-                                        position: 'absolute',
-                                        right: 28,
-                                        top: 45,
-                                        width: 50, height: 50,
-                                    }} onPress={() => this.navigateToGetBarCode()}>
-                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', right: 30, }} source={require('../assets/images/addnew.png')} />
-                                        <Text style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', right: 0, }}> scan </Text>
-                                    </TouchableOpacity>
                                 </View>
 
-                                <TextInput style={styles.input}
-                                    underlineColorAndroid="transparent"
-                                    placeholder="PRODUCT NAME"
-                                    placeholderTextColor="#353C4050"
-                                    textAlignVertical="center"
-                                    autoCapitalize="none"
-                                    value={this.state.inventoryProductName}
-                                    onChangeText={this.handleInventoryProductName}
-                                />
+                                <View>
+                                    <TextInput style={styles.input}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="PRODUCT NAME"
+                                        placeholderTextColor="#353C4050"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.productname}
+                                        onChangeText={this.handleInventoryProductName}
+                                    />
+                                </View>
 
                                 <View>
                                     <TextInput style={styles.input}
@@ -428,18 +494,53 @@ class ProductAdd extends Component {
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
-                                        value={this.state.inventoryQuantity}
+                                        value={String(this.state.produtctQty)}
                                         onChangeText={this.handleInventoryQuantity}
                                         ref={inputemail => { this.emailValueInput = inputemail }} />
 
-                                    <TouchableOpacity style={{
-                                        position: 'absolute',
-                                        right: 28,
-                                        top: 45,
-                                    }} >
+                                    {/* <TouchableOpacity style={{
+                        position: 'absolute',
+                        right: 28,
+                        top: 20,
+                      }} >
 
-                                        <Text style={{ color: '#353C4050', fontFamily: 'regular', fontSize: 14, position: 'absolute', right: 0, }}> {'Select Unit >'} </Text>
-                                    </TouchableOpacity>
+                        <Text style={{ color: '#353C4050', fontFamily: 'regular', fontSize: 14, position: 'absolute', right: 0, }}> {'Select Unit >'} </Text>
+                      </TouchableOpacity> */}
+                                </View>
+
+                                <View style={{
+                                    justifyContent: 'center',
+                                    margin: 20,
+                                    height: 44,
+                                    marginTop: 5,
+                                    marginBottom: 10,
+                                    borderColor: '#8F9EB717',
+                                    borderRadius: 3,
+                                    backgroundColor: '#FBFBFB',
+                                    borderWidth: 1,
+                                    fontFamily: 'regular',
+                                    paddingLeft: 15,
+                                    fontSize: 14,
+                                }} >
+                                    <RNPickerSelect style={{
+                                        color: '#8F9EB717',
+                                        fontWeight: 'regular',
+                                        fontSize: 15
+                                    }}
+                                        placeholder={{
+                                            label: 'SELECT UOM',
+                                         
+                                        }}
+                                        Icon={() => {
+                                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                        }}
+                                        items={this.state.uom}
+                                        onValueChange={this.handleUOM}
+                                        style={pickerSelectStyles}
+                                        value={this.state.productuom}
+                                        useNativeAndroidPickerStyle={false}
+
+                                    />
                                 </View>
 
 
@@ -449,32 +550,23 @@ class ProductAdd extends Component {
                                     placeholderTextColor="#353C4050"
                                     textAlignVertical="center"
                                     autoCapitalize="none"
-                                    value={this.state.inventoryMRP}
+                                    value={this.state.productmrp}
                                     onChangeText={this.handleInventoryMRP}
                                     ref={inputemail => { this.emailValueInput = inputemail }} />
 
                                 <View>
                                     <TextInput style={styles.input}
                                         underlineColorAndroid="transparent"
-                                        placeholder="DISCOUNT"
+                                        placeholder="₹ OFFER PRICE"
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
-                                        value={this.state.inventoryDiscount}
+                                        value={this.state.productofferprice}
                                         onChangeText={this.handleInventoryDiscount}
                                         ref={inputemail => { this.emailValueInput = inputemail }} />
 
-                                    <TouchableOpacity style={{
-                                        position: 'absolute',
-                                        right: 28,
-                                        top: 45,
-                                    }}
-
-                                    >
-                                        <Text style={{ color: '#353C4050', fontFamily: 'regular', fontSize: 14, position: 'absolute', right: 0, }}> {'%'} </Text>
-                                    </TouchableOpacity>
-
                                 </View>
+
 
 
 
@@ -487,54 +579,62 @@ class ProductAdd extends Component {
                                     <Text style={{
                                         textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
                                         fontFamily: "regular"
-                                    }} onPress={() => this.inventoryCreate()} > ADD PRODUCT </Text>
+                                    }} onPress={() => this.inventoryUpdate()} > SAVE </Text>
 
                                 </TouchableOpacity>
                             </View>
 
                         </View>
                     </View>
-                    </KeyboardAwareScrollView>
+                </KeyboardAwareScrollView>
             </View>
 
         )
     }
 }
-export default ProductAdd
+export default ProductEdit
 
 
 const pickerSelectStyles = StyleSheet.create({
     placeholder: {
-        color: "#001B4A55",
-        fontFamily: "bold",
-        fontSize: 16,
+        color: "#353C4050",
+        fontFamily: "regular",
+        fontSize: 15,
     },
     inputIOS: {
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 10,
-        height: 40,
-        backgroundColor: '#ffffff',
-        borderBottomColor: '#456CAF55',
-        color: '#001B4A',
-        fontFamily: "bold",
-        fontSize: 16,
+        justifyContent: 'center',
+        height: 42,
         borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 10,
-        height: 40,
-        backgroundColor: '#ffffff',
-        borderBottomColor: '#456CAF55',
-        color: '#001B4A',
-        fontFamily: "bold",
-        fontSize: 16,
+        justifyContent: 'center',
+        height: 42,
         borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+
+        // marginLeft: 20,
+        // marginRight: 20,
+        // marginTop: 10,
+        // height: 40,
+        // backgroundColor: '#ffffff',
+        // borderBottomColor: '#456CAF55',
+        // color: '#001B4A',
+        // fontFamily: "bold",
+        // fontSize: 16,
+        // borderRadius: 3,
     },
 })
-
 
 const styles = StyleSheet.create({
     safeArea: {
@@ -564,6 +664,22 @@ const styles = StyleSheet.create({
         fontSize: 14,
         paddingLeft: 15
     },
+    barcodeinput: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 50,
+        marginTop: 28,
+        marginBottom: 10,
+        borderColor: '#DCE3F2',
+        borderRadius: 5,
+        color: '#353C40',
+        backgroundColor: '#DCE3F2',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        fontSize: 14,
+        paddingLeft: 15
+    },
+
     signInButton: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
@@ -588,8 +704,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     imagealign: {
-        marginTop: 25,
-        marginRight: 34,
+        marginTop: 16,
+        marginRight: 20,
     },
     itemscount: {
         backgroundColor: '#ED1C24',

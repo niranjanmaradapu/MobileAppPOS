@@ -55,7 +55,7 @@ export default class SelectStore extends React.Component {
             console.log("stores data----" + JSON.stringify(res.data["result"]))
             console.log('store Name' + JSON.stringify(storeNames))
         });
-        console.log('dsgsdgsdg' + username)
+       // console.log('dsgsdgsdg' + username)
        // const username = await this.getRememberedUser();
       
     }
@@ -66,6 +66,7 @@ export default class SelectStore extends React.Component {
         }
         axios.post(LoginService.getStoreIdWithStoreName(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
+                console.log('dsgsdgsdg' + String(res.data["result"][0].id))
               AsyncStorage.setItem("storeId",String(res.data["result"][0].id)).then(() => {
             }).catch(() => {
                 console.log('there is error saving storeId')
