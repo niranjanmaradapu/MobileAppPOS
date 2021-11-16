@@ -2475,12 +2475,12 @@ class NewSale extends Component {
                     "name": itemDesc,
                     "listPrice": promoDisc,
                     "stockValue": qty,
-                    "uom": "pieces",//this.state.store 
+                    "uom": this.state.store,
                     "domainDataId": this.state.domainId,
                     "storeId": this.state.storeId,
                     "barcodeId": parseInt(barcode),
                     //optional
-                    "tyecode": "10",
+                    "tyecode": promoDisc,//"10"
                     "defaultImage": "",
                     "status": "1",
                     "title": "",
@@ -2573,7 +2573,7 @@ class NewSale extends Component {
                 let itemDesc = String(item["name"])
                 let qty = item["stockValue"]
                 let mrp = item['costPrice']
-                let promoDisc = item['listPrice']
+                let promoDisc = item['tyecode']
                 let netAmount = item['costPrice']
                 let salesMan = item['empId']
                 let createdDate = String(item['createdDate'])
@@ -2793,35 +2793,38 @@ class NewSale extends Component {
               let image = item['itemImage']
               this.state.quantity = qty
 
+              this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
+              this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
+              this.state.totalDiscount = parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1)
+
               if (this.state.tableData.length > 0) {
                 for (let i = 0; i < this.state.tableData.length; i++) {
                   if (this.state.barcodeId == this.state.tableData[i].barcode) {
-                    { RNBeep.beep() }
+                     { RNBeep.beep() }
                     console.log("search categoryvinod" + JSON.stringify(res.rows.length));
                     const qtyarr = [...this.state.tableData];
                     qtyarr[i].qty = String(parseInt(qtyarr[i].qty) + 1) //parseInt(item["qty"]))
                     this.setState({ tableData: qtyarr })
-                    this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
-                    this.setState({ totalAmount: parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1) })
-                    this.setState({ totalDiscount: parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1) })
+                    // this.setState({ totalAmount: parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1) })
+                    // this.setState({ totalDiscount: parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1) })
                     return
                   }
                   // this.state.totalQty = this.state.totalQty + item["qty"]
-                  this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
-                  this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
-                  this.state.totalDiscount = parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1)
+                 // this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
+                
+                  
                 }
                 { RNBeep.beep() }
-                this.setState({ totalAmount: this.state.totalAmount })
-                this.setState({ totalDiscount: this.state.totalDiscount })
+                // this.setState({ totalAmount: this.state.totalAmount })
+                // this.setState({ totalDiscount: this.state.totalDiscount })
                 this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
               }
               else {
                 { RNBeep.beep() }
                 // this.state.totalQty = this.state.totalQty + item["qty"]
-                this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
-                this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
-                this.state.totalDiscount = parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1)
+               // this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
+                // this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
+                // this.state.totalDiscount = parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1)
                 this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
               }
               //parse this.state.totalAmount + item["netAmount"]
@@ -2924,8 +2927,6 @@ class NewSale extends Component {
   }
 
   addCustomer(){
-    
-
     if (this.state.customerPhoneNumber.length != 10) {
       alert('Please Enter valid mobile number');
       return
@@ -2946,6 +2947,27 @@ class NewSale extends Component {
     //   alert('Please Enter customer GST Number');
     //   return
     // }
+    // {
+    //   "email":"manideep6067@gmail.com",	
+    //   "phoneNumber":"8466043603",
+    //   "birthDate":"07-03-1995",
+    //   "gender":"male",
+    //   "name":"vinod",
+    //   "username":"Mani_123451",
+    //   "parentId":"1",
+    //   "domianId":"0",
+    //   "address":"Katrenikona",
+    //   "isCustomer":true,
+    //   "isSuperAdmin":false,
+    //   "stores":[
+          
+    //   ],
+    //   "role":{
+    //   },
+    //   "clientId":"",
+    //   "isConfigUser":false,
+    //   "clientDomain":[]
+    //   }
     const params = {
       "email":this.state.customerEmail,	
       "phoneNumber":this.state.customerPhoneNumber,
@@ -2953,16 +2975,16 @@ class NewSale extends Component {
       "gender":this.state.customerGender,
       "name":this.state.customerName,
       "username":this.state.customerName,
-      "tempPassword":"Otsi@123",
       "parentId":"1",
       "domianId": this.state.domainId,
       "address":this.state.customerAddress,
+      "isCustomer":true,
+      "isSuperAdmin":false,
       "role":{
-          "roleName":"customer"
       },
       "stores":[],
       "clientId":"",
-      "isConfigUser":"",
+      "isConfigUser":false,
       "clientDomain":[]
       }
 
@@ -2970,9 +2992,10 @@ class NewSale extends Component {
       if (res.data && res.data["isSuccess"] === "true") {
         this.setState({ flagCustomerOpen: false })
         this.setState({ modalVisible: false });
+        alert("create customer" + JSON.stringify(res.data["result"].body));
       }
       else {
-       
+        alert("create customer" + JSON.stringify(res.data["result"].body));
       }
     }
     );
@@ -3034,15 +3057,13 @@ class NewSale extends Component {
             "name": this.state.inventoryProductName,
             "listPrice": this.state.inventoryDiscount,
             "stockValue": parseInt(this.state.inventoryQuantity),
-            "uom": "pieces",//this.state.store 
-            "domainDataId": 1,//this.state.domainId,
-            "store":{
-              "storeId":1, //this.state.domainId
-            },
+            "uom": this.state.store,
+            "domainDataId": this.state.domainId,
+            "storeId":this.state.storeId,
             "barcodeId": parseInt(this.state.inventoryBarcodeId),
             "isBarcode":true,
             //optional
-            "tyecode": "10",
+            "tyecode": this.state.inventoryDiscount,//"10",
             "defaultImage": "",
             "status": "1",
             "title": "",
@@ -3193,9 +3214,10 @@ class NewSale extends Component {
 
   endEditing() {
     console.log("end edited")
-    this.barcodeDBStore()
     if(this.state.customerPhoneNumber.length > 0){
     this.getUserDetails()
+    }else{
+      this.barcodeDBStore()
     }
   }
 
@@ -3521,7 +3543,7 @@ class NewSale extends Component {
     this.setState({ flagtwo: true })
     this.setState({ flagthree: false })
     this.setState({ flagfour: false })
-    this.synccreateInventoryOfflineToOnline()
+    //this.synccreateInventoryOfflineToOnline()
     this.getUOM()
   }
 
@@ -3622,8 +3644,8 @@ class NewSale extends Component {
 
   navigateToImageScanner() {
     //this.props.navigation.navigate('ImageScanner')
-    this.setState({ flagqtyModelOpen: true })
-    this.setState({ modalVisible: true });
+    // this.setState({ flagqtyModelOpen: true })
+    // this.setState({ modalVisible: true });
   }
 
   updateQtyForTable = (text, index) => {
@@ -4006,9 +4028,9 @@ handleeditaction = (item, index) => {
 
 refreshProductsAfterEdit(){
   this.barcodeDBStore()
-  this.setState({ flagone: false })
-  this.setState({ flagtwo: false })
-  this.setState({ flagthree: true })
+  // this.setState({ flagone: false })
+  // this.setState({ flagtwo: false })
+  // this.setState({ flagthree: true })
 }
 
   onEndReached() {

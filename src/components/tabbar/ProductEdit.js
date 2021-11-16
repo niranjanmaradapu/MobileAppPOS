@@ -52,7 +52,8 @@ class ProductEdit extends Component {
             flagtwo: false,
             flagthree: false,
             flagfour: false,
-           
+            domainId:1,
+           storeId:1,
             
           
             
@@ -76,6 +77,25 @@ class ProductEdit extends Component {
     }
 
     async componentDidMount() {
+        var domainStringId = ""
+        var storeStringId = ""
+        AsyncStorage.getItem("domainDataId").then((value) => {
+          domainStringId = value
+          this.setState({ domainId: parseInt(domainStringId)})
+          console.log("domain data id" + this.state.domainId)
+         
+        }).catch(() => {
+          console.log('there is error getting domainDataId')
+        })
+    
+        AsyncStorage.getItem("storeId").then((value) => {
+          storeStringId = value
+          this.setState({ storeId: parseInt(storeStringId)})
+          console.log(this.state.storeId)
+        }).catch(() => {
+          console.log('there is error getting storeId')
+        })
+
         this.setState({
             productItemId:this.props.route.params.productItemId,
             barcodeId:this.props.route.params.barcodeId,
@@ -301,14 +321,14 @@ class ProductEdit extends Component {
                 "productItemId":this.state.productItemId,
                 "costPrice": this.state.productmrp,
                 "name": this.state.productname,
-                "listPrice": this.state.productofferprice,
+                "listPrice":this.state.productofferprice,
                 "stockValue":this.state.produtctQty,
-                "uom": "pieces",//this.state.store 
-                "domainDataId": 1,
-                "storeId": 1,
+                "uom": this.state.productuom, 
+                "domainDataId": this.state.domainId,
+                "storeId":this.state.storeId,
                 "barcodeId": this.state.barcodeId,
                 //optional
-                "tyecode": "10",
+                "tyecode": this.state.productofferprice,//"10",
                 "defaultImage": "",
                 "status": "1",
                 "title": "",

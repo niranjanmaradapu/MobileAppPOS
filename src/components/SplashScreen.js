@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default class SplashScreen extends React.Component {
@@ -10,8 +11,20 @@ export default class SplashScreen extends React.Component {
     }
 
     componentDidMount() {
+        var phonenumber = ""
+        AsyncStorage.getItem("phone_number").then((value) => {
+            phonenumber = value
+        }).catch(() => {
+          console.log('there is error getting phone numner')
+        })
+        console.log('phone number is' + phonenumber)
         setTimeout(() => {
-            this.props.navigation.navigate('AuthNavigation')
+            if(phonenumber === null){
+                this.props.navigation.navigate('AuthNavigation')
+            }
+            else{
+             this.props.navigation.navigate('HomeNavigation')
+            }
         }, 2500);
     }
 

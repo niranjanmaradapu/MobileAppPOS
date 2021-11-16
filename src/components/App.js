@@ -2,9 +2,10 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
 import AppRoute from '../Navigation/AppRoute';
+import AppRouteAfterLogin from '../Navigation/AppRouteAfterLogin';
 import AuthNavigation from '../Navigation/AuthNavigation';
 import { openDatabase } from 'react-native-sqlite-storage';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
@@ -149,15 +150,9 @@ export default class App extends React.Component {
 
   render() {
    
-    var storeId = ""
    
-    AsyncStorage.getItem("storeId").then((value) => {
-      storeId = value
-    }).catch(() => {
-      console.log('there is error getting storeId')
-    })
     return (
-      storeId !== ""  ? <AppRoute />  :  <AppRoute />
+      <AppRoute />  
      
     )
   }

@@ -34,7 +34,7 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'User_002',
+            userName: 'Mani_123',
             password: 'Otsi@1234',
             dropValue: '',
             store: 0,
@@ -136,6 +136,12 @@ export default class Login extends Component {
                         console.log('there is error saving token')
                     })
                     console.log("stores data----" + JSON.stringify(jwt_decode(token)["custom:clientDomians"]))
+                    console.log("phone number is----" + JSON.stringify(jwt_decode(token)["phone_number"]))
+                    AsyncStorage.setItem("phone_number",jwt_decode(token)["phone_number"]).then(() => {
+                        // console.log
+                    }).catch(() => {
+                        console.log('there is error saving domainDataId')
+                    })
                     // if (jwt_decode(token)["custom:clientDomians"] === "1,2,3" || jwt_decode(token)["custom:clientDomians"] === "1,2") {
                     //     // this.getModel();
                     //     this.props.navigation.navigate('SelectDomain')
