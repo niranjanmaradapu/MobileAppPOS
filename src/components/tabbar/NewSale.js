@@ -2736,6 +2736,7 @@ class NewSale extends Component {
       <SearchBar containerStyle={{ marginRight: 40 }} placeholder="Search Here..."
         lightTheme round editable={true}
         value={this.state.search}
+        autoCapitalize='none'
         onChangeText={this.updateSearch} >
       </SearchBar>
 
@@ -2755,7 +2756,7 @@ class NewSale extends Component {
 
   updateSearch = search => {
     this.setState({ search }, () => {
-      if ('' == search) {
+      if ('' == search.autoCapitalize) {
         this.setState({
           arrayData: [...this.state.temp]
         });
@@ -3012,7 +3013,7 @@ class NewSale extends Component {
   axios.post(LoginService.getUser(), params).then((res) => {
     if (res.data && res.data["isSuccess"] === "true") {
       this.setState({ customerName: res.data["result"][0].userName });
-      //this.setState({ customerEmail: res.data["result"][0].userName });
+      this.setState({ customerEmail: res.data["result"][0].userName });
       this.setState({ customerGender: res.data["result"][0].gender });
      // this.setState({ customerAddress: res.data["result"][0].gender });
       
@@ -4452,12 +4453,12 @@ refreshProductsAfterEdit(){
                     style={{
                       margin: 20,
                       height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                    }}
+                    }} onPress={() => this.inventoryCreate()}
                   >
                     <Text style={{
                       textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
                       fontFamily: "regular"
-                    }} onPress={() => this.inventoryCreate()} > ADD PRODUCT </Text>
+                    }}  > ADD PRODUCT </Text>
 
                   </TouchableOpacity>
                 </View>
@@ -4530,7 +4531,7 @@ refreshProductsAfterEdit(){
                         QUANTITY:
                       </Text>
                       <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                        {item.qty} Pieces
+                        {item.qty} {item.productuom}
                       </Text>
                       <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                         PRICE/EACH:
@@ -4982,7 +4983,7 @@ refreshProductsAfterEdit(){
                         QUANTITY:
                       </Text>
                       <Text style={{ fontSize: 12, marginLeft: 200, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                        {item.qty} Pieces
+                        {item.qty} {item.productuom}
                       </Text>
                       <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                         PRICE/EACH:
@@ -5100,7 +5101,7 @@ const pickerSelectStyles = StyleSheet.create({
     // height: 40,
     // backgroundColor: '#ffffff',
     // borderBottomColor: '#456CAF55',
-    // color: '#001B4A',
+     color: '#001B4A',
     // fontFamily: "bold",
     // fontSize: 16,
     // borderRadius: 3,

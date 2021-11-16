@@ -347,6 +347,7 @@ class ProductEdit extends Component {
                   this.props.navigation.goBack();
                 }
                 else {
+                    this.setState({ loading: false })
                  // this.setState({ loading: false })
                   alert("duplicate record already exists");
                 }
@@ -496,12 +497,13 @@ class ProductEdit extends Component {
                                 </View>
 
                                 <View>
-                                    <TextInput style={styles.input}
+                                    <TextInput style={styles.barcodeinput}
                                         underlineColorAndroid="transparent"
                                         placeholder="PRODUCT NAME"
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
+                                        editable={false} selectTextOnFocus={false}
                                         value={this.state.productname}
                                         onChangeText={this.handleInventoryProductName}
                                     />
@@ -594,12 +596,12 @@ class ProductEdit extends Component {
                                     style={{
                                         margin: 20,
                                         height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                    }}
+                                    }} onPress={() => this.inventoryUpdate()}
                                 >
                                     <Text style={{
                                         textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
                                         fontFamily: "regular"
-                                    }} onPress={() => this.inventoryUpdate()} > SAVE </Text>
+                                    }}  > SAVE </Text>
 
                                 </TouchableOpacity>
                             </View>
@@ -642,6 +644,7 @@ const pickerSelectStyles = StyleSheet.create({
         fontSize: 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
+        color: '#001B4A',
 
         // marginLeft: 20,
         // marginRight: 20,
