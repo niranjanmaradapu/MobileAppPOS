@@ -2588,7 +2588,7 @@ class NewSale extends Component {
                 db.transaction(txn => {
                   txn.executeSql(
                     'INSERT INTO tbl_item ( barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, lastModified,itemImage,uom,storeId,domainDataId) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
-                    [barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, lastModified, uom, storeId, domainDataId],
+                    [barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, productItemid,"", productuomm, storeId, domainDataId],
                     //[, String(getListOfBarcodes[0][0]["itemDesc"]), getListOfBarcodes[0][0]["qty"], , getListOfBarcodes[0][0]['promoDisc'], getListOfBarcodes[0][0]['netAmount'], getListOfBarcodes[0][0]['salesMan'], String(getListOfBarcodes[0][0]['createdDate']), String(getListOfBarcodes[0][0]['lastModified'])],
                     (sqlTxn, res) => {
 
@@ -2614,14 +2614,17 @@ class NewSale extends Component {
                                 console.log(barcode + "added to table----");
                                 let netAmount = String(item["netAmount"])
                                 let qty = String(item["qty"])
+                                let uom = String(item["uom"])
+                                let lastModified = parseInt(item["lastModified"])
                                 let totalAmount = String(item["netAmount"])
                                 let image = item['itemImage']
+                                  console.log('uom are' + lastModified)
                                 // console.log(res.rows + "added to table----");
-                                this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image,productItemId:this.state.productItemId,productuom:this.state.productuom })
+                                this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image,productItemId:lastModified,productuom:uom })
                                 if (this.state.arrayData.length === 1) {
                                   this.setState({ arrayData: this.state.arrayData })
                                 }
-                                this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, promoDisc: promoDisc, qty: qty, netamount: netAmount, image: image })
+                                this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, promoDisc: promoDisc, qty: qty, netamount: netAmount, image: image,productItemId:lastModified,productuom:uom })
 
                               }
 
@@ -2755,17 +2758,18 @@ class NewSale extends Component {
   };
 
   updateSearch = search => {
-    this.setState({ search }, () => {
-      if ('' == search.autoCapitalize) {
+    let text = search.toLowerCase()
+    this.setState({ text }, () => {
+      if ('' == text) {
         this.setState({
           arrayData: [...this.state.temp]
         });
         return;
       }
       this.state.arrayData = this.state.temp.filter(function (item) {
-        return item.itemdesc.includes(search);
-      }).map(function ({ itemdesc, netamount, barcode, qty, image }) {
-        return { itemdesc, netamount, barcode, qty, image };
+        return item.itemdesc.includes(text);
+      }).map(function ({ itemdesc, netamount, barcode, qty, image,productuom }) {
+        return { itemdesc, netamount, barcode, qty, image,productuom };
       });
     });
   };
@@ -2832,6 +2836,11 @@ class NewSale extends Component {
               // this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
             }
           }
+          else{
+            if(this.state.barcodeId.length > 0){
+            alert('No product realted with this barcode')
+            }
+          }
           this.setState({ flagone: true })
           this.setState({ flagtwo: false })
           this.setState({ flagthree: false })
@@ -2840,7 +2849,7 @@ class NewSale extends Component {
           console.log(JSON.stringify(totalQty))
         },
         error => {
-          console.log("error on search category " + error.message);
+          
         },
       );
     });
@@ -3570,8 +3579,9 @@ class NewSale extends Component {
   }
 
   refresh() {
-    //if( global.barcodeId != 'something'){
+    if( global.barcodeId != 'something'){
     this.setState({ barcodeId: global.barcodeId })
+    }
     this.barcodeDBStore()
     this.setState({ flagone: true })
     this.setState({ flagtwo: false })
@@ -3927,6 +3937,7 @@ class NewSale extends Component {
 
   cancel() {
     console.log('clicked')
+    this.setState({ flagCustomerOpen: false })
     //this.setState({ modalVisible: true });
     this.setState({ flagqtyModelOpen: false })
     this.setState({ modalVisible: false });
@@ -4058,6 +4069,13 @@ refreshProductsAfterEdit(){
   }
 
   tagCustomer() {
+    this.setState({ customerEmail: "" })
+    this.setState({ customerPhoneNumber: "" })
+    this.setState({ customerName: "" })
+    this.setState({ customerGender: "" })
+    this.setState({ customerAddress: "" })
+    this.setState({ customerGSTNumber: "" })
+
     this.setState({ flagCustomerOpen: true })
     this.setState({ modalVisible: true });
   }

@@ -57,38 +57,41 @@ class ForgotPassword extends Component {
         else if (this.state.confirmPassword.length === 0) {
             alert('You must enter a confirm password');
         }
-        else if (this.state.confirmPassword === this.state.confirmPassword) {
+        else if (this.state.newPassword !== this.state.confirmPassword) {
             alert('new and confirm passwords are not matched');
         }
+        
         else {
-            const params = {
-                "username": this.state.userName, //"+919493926067",
-                "confirmarionCode": this.state.code, //"Mani@1123",
-                "newPassword": this.state.newPassword,
-                //"storeName": this.state.store,//"kphb",
-            }
-            AsyncStorage.setItem("username", this.state.userName);
-            console.log(LoginService.getAuth() + JSON.stringify(params))
-            this.setState({ loading: true })
-            axios.post(LoginService.forgotPassword(),null, { params: {
-                "username": this.state.userName, //"+919493926067",
-                "confirmarionCode": this.state.code, //"Mani@1123",
-                "newPassword": this.state.newPassword,
-               }}).then((res) => {
-                if (res.data && res.data["isSuccess"] === "true") {
-                this.setState({ loading: false })
-                this.props.navigation.goBack(null);
-            }
-                else {
-                    this.setState({ loading: false })
-                    alert('Invalid Credentials');
-                   // this.props.navigation.goBack(null);
-                   // this.state.store = ""
-                    // this.state.store.clear()
-                }
-            }
-            );
-    }
+            alert('Please enter correct code recieved in mail');
+           // this.props.navigation.goBack(null);
+    //         const params = {
+    //             "username": this.state.userName, //"+919493926067",
+    //             "confirmarionCode": this.state.code, //"Mani@1123",
+    //             "newPassword": this.state.newPassword,
+    //             //"storeName": this.state.store,//"kphb",
+    //         }
+    //         AsyncStorage.setItem("username", this.state.userName);
+    //         console.log(LoginService.getAuth() + JSON.stringify(params))
+    //         this.setState({ loading: true })
+    //         axios.post(LoginService.forgotPassword(),null, { params: {
+    //             "username": this.state.userName, //"+919493926067",
+    //             "confirmarionCode": this.state.code, //"Mani@1123",
+    //             "newPassword": this.state.newPassword,
+    //            }}).then((res) => {
+    //             if (res.data && res.data["isSuccess"] === "true") {
+    //             this.setState({ loading: false })
+    //             this.props.navigation.goBack(null);
+    //         }
+    //             else {
+    //                 this.setState({ loading: false })
+    //                 alert('Invalid Credentials');
+    //                // this.props.navigation.goBack(null);
+    //                // this.state.store = ""
+    //                 // this.state.store.clear()
+    //             }
+    //         }
+    //         );
+     }
     }
 
 
@@ -105,10 +108,15 @@ class ForgotPassword extends Component {
                     <View style={styles.viewswidth}>
                         <TouchableOpacity style={{
                             position: 'absolute',
+                            // left: 10,
+                            // top: 20,
+                            // width: 20,
+                            // height: 20,
+
                             left: 10,
-                            top: 20,
-                            width: 20,
-                            height: 20,
+                            top: 30,
+                            width: 40,
+                            height: 40,
                         }} onPress={() => this.handleBackButtonClick()}>
                             <Image source={require('../assets/images/backButton.png')} />
                         </TouchableOpacity>

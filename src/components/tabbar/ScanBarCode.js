@@ -351,7 +351,7 @@ class ScanBarCode extends Component {
 
   onBarCodeRead(e) {
     if (global.barcodeId == "something") {
-      { RNBeep.beep() }
+      // { RNBeep.beep() }
       global.barcodeId = e.data
       this.props.route.params.onGoBack();
       this.props.navigation.goBack();
