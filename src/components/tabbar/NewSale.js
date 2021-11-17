@@ -2337,6 +2337,7 @@ import LoginService from '../services/LoginService';
 
 
 
+
 class NewSale extends Component {
   constructor(props) {
     super(props);
@@ -2838,7 +2839,7 @@ class NewSale extends Component {
           }
           else{
             if(this.state.barcodeId.length > 0){
-            alert('No product realted with this barcode')
+            alert('No product related with this barcode')
             }
           }
           this.setState({ flagone: true })
@@ -2997,22 +2998,27 @@ class NewSale extends Component {
       "isConfigUser":false,
       "clientDomain":[]
       }
-
+      this.setState({ loading: true })
     axios.post(LoginService.createUser(), params).then((res) => {
       if (res.data && res.data["isSuccess"] === "true") {
         this.setState({ flagCustomerOpen: false })
         this.setState({ modalVisible: false });
-        alert("create customer" + JSON.stringify(res.data["result"].body));
+        this.setState({ loading: false })
+        //alert("create customer" + JSON.stringify(res.data["result"].body));
       }
       else {
-        alert("create customer" + JSON.stringify(res.data["result"].body));
+        this.setState({ loading: false })
+        this.setState({ flagCustomerOpen: false })
+        this.setState({ modalVisible: false });
+       // alert("create customer" + JSON.stringify(res.data["result"].body));
       }
     }
-    );
-
-    
-
-   
+    ).catch(() => {
+      this.setState({ loading: false })
+      this.setState({ flagCustomerOpen: false })
+      this.setState({ modalVisible: false });
+      alert("create customer adding not successfully")
+  })
   }
 
   getUserDetails = () => {
@@ -3022,17 +3028,21 @@ class NewSale extends Component {
   axios.post(LoginService.getUser(), params).then((res) => {
     if (res.data && res.data["isSuccess"] === "true") {
       this.setState({ customerName: res.data["result"][0].userName });
-      this.setState({ customerEmail: res.data["result"][0].userName });
+      //this.setState({ customerEmail: res.data["result"][0].userName });
       this.setState({ customerGender: res.data["result"][0].gender });
      // this.setState({ customerAddress: res.data["result"][0].gender });
       
-      alert("get customer" + JSON.stringify(res.data["result"]));
+     // alert("get customer" + JSON.stringify(res.data["result"]));
     }
     else {
       this.setState({ loading: false })
     }
   }
-  );
+  ).catch(() => {
+    this.setState({ flagCustomerOpen: false })
+    this.setState({ modalVisible: false });
+   // alert("create customer adding not successfully")
+})
   }
 
 
@@ -4864,12 +4874,12 @@ refreshProductsAfterEdit(){
                     style={{
                       margin: 20,
                       height: 50, backgroundColor: "#ED1C24", borderRadius: 5,marginLeft:40,marginRight:40,
-                    }}
+                    }} onPress={() => this.addCustomer()}
                   >
                     <Text style={{
                       textAlign: 'center', margin: 20, color: "#ffffff", fontSize: 15,
                       fontFamily: "regular",height: 50,
-                    }} onPress={() => this.addCustomer()} > TAG/ADD CUSTOMER </Text>
+                    }}  > TAG/ADD CUSTOMER </Text>
 
                   </TouchableOpacity>
 
