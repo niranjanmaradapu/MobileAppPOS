@@ -80,6 +80,10 @@ class AddPool extends Component {
         return true;
     }
 
+    modelCancel() {
+        this.setState({ modalVisible: false });
+    }
+
 
     handleUOM = (value) => {
         this.setState({ productuom: value });
@@ -239,305 +243,372 @@ class AddPool extends Component {
                     }}> Add Pool </Text>
                 </View>
 
-            
-
-
-                <KeyboardAwareScrollView KeyboardAwareScrollView
-                    enableOnAndroid={true}>
-                    <View>
-                        <View style={{
-                            flex: 1, justifyContent: 'center', //Centered horizontally
-                            alignItems: 'center', color: '#ffffff'
-                        }}>
-                            <View style={{ flexDirection: 'column', flex: 0, marginLeft: 0, marginTop: 20, marginRight: 0, backgroundColor: "#ffffff", borderRadius: 20, }}>
-                                <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
-                                    Pool Details
-                                </Text>
-                                <View style={{ marginTop: 10, width: deviceWidth, }}>
-
-                                    <TextInput style={styles.input}
-                                        underlineColorAndroid="transparent"
-                                        placeholder="POOL NAME"
-                                        placeholderTextColor="#353C4050"
-                                        textAlignVertical="center"
-                                        autoCapitalize="none"
-                                        value={this.state.productmrp}
-                                        onChangeText={this.handleInventoryMRP}
-                                        ref={inputemail => { this.emailValueInput = inputemail }} />
-
-
-                                    <View style={{
-                                        justifyContent: 'center',
-                                        margin: 20,
-                                        height: 44,
-                                        marginTop: 5,
-                                        marginBottom: 10,
-                                        borderColor: '#8F9EB717',
-                                        borderRadius: 3,
-                                        backgroundColor: '#FBFBFB',
-                                        borderWidth: 1,
-                                        fontFamily: 'regular',
-                                        paddingLeft: 15,
-                                        fontSize: 14,
-                                    }} >
-                                        <RNPickerSelect style={{
-                                            color: '#8F9EB717',
-                                            fontWeight: 'regular',
-                                            fontSize: 15
-                                        }}
-                                            placeholder={{
-                                                label: 'POOL TYPE',
-
-                                            }}
-                                            Icon={() => {
-                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                            }}
-                                            items={this.state.uom}
-                                            onValueChange={this.handleUOM}
-                                            style={pickerSelectStyles}
-                                            value={this.state.productuom}
-                                            useNativeAndroidPickerStyle={false}
-
-                                        />
-                                    </View>
-
-                                    <View style={{
-                                        justifyContent: 'center',
-                                        margin: 20,
-                                        height: 44,
-                                        marginTop: 5,
-                                        marginBottom: 10,
-                                        borderColor: '#8F9EB717',
-                                        borderRadius: 3,
-                                        backgroundColor: '#FBFBFB',
-                                        borderWidth: 1,
-                                        fontFamily: 'regular',
-                                        paddingLeft: 15,
-                                        fontSize: 14,
-                                    }} >
-                                        <RNPickerSelect style={{
-                                            color: '#8F9EB717',
-                                            fontWeight: 'regular',
-                                            fontSize: 15
-                                        }}
-                                            placeholder={{
-                                                label: 'POOL RULE',
-
-                                            }}
-                                            Icon={() => {
-                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                            }}
-                                            items={this.state.uom}
-                                            onValueChange={this.handleUOM}
-                                            style={pickerSelectStyles}
-                                            value={this.state.productuom}
-                                            useNativeAndroidPickerStyle={false}
-
-                                        />
-                                        <Text></Text>
-                                    </View>
-
-                                </View>
-
-                                <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
-                                    Pool Rules
-                                </Text>
-                                <TouchableOpacity
-                                    style={{ position: 'absolute', right: 20, top: 240, borderRadius: 5, borderColor: "#ED1C24", backgroundColor: '#ffffff', width: 90, height: 28, borderWidth: 1, }}
-                                    onPress={() => this.addPoolRool()} >
-                                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginTop: 4, textAlign: 'center', alignSelf: 'center', borderRadius: 5, borderColor: "#ED1C24", }}> {('Add Pool Rule')} </Text>
-                                </TouchableOpacity>
-
-
-                                <ScrollView>
-                                    <FlatList
-                                        data={this.state.arrayData}
-                                        style={{ marginTop: 40, }}
-                                        onEndReached={this.onEndReached.bind(this)}
-
-                                        ref={(ref) => { this.listRef = ref; }}
-                                        keyExtractor={item => item.email}
-                                        renderItem={({ item, index }) => (
-                                            <View style={{
-                                                height: 100,
-                                                backgroundColor: '#FFFFFF',
-                                                borderBottomWidth: 5,
-                                                borderBottomColor: '#FFFFFF',
-                                                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-                                            }}>
-                                                <View style={{ flexDirection: 'column', width: '100%', height: 100, borderTopWidth: 10, borderColor: '#F6F6F6' }}>
-                                                    {/* <Text style={{ fontSize: 16,marginLeft:16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
-                       Pool id: #1011
-                      </Text>
-                      
-                      <Text style={{ fontSize: 12,marginLeft:16, marginTop: 20,  fontFamily: 'regular', color: '#808080' }}>
-                      POOL NAME
-                      </Text>
-                      <Text style={{ fontSize: 14,marginLeft:16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                       Womens 3 @ 999
-                      </Text>
-                      <Text style={{ fontSize: 12,marginLeft:16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                      CREATED BY 
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft:16,marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                      Ramesh
-                      </Text>
-                      <Text style={{ fontSize: 12,marginLeft:150, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
-                      CREATED ON
-                      </Text>
-                      <Text style={{ fontSize: 12,marginLeft:150, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                      30 Sep 2021
-                      </Text> */}
-                                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
-                                                        RULE NAME
-                                                    </Text>
-                                                    <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                                        Text here
-                                                    </Text>
-
-                                                    <Text style={{
-                                                        fontSize: 12, marginTop: -30, marginLeft: deviceWidth / 2 - 40, fontFamily: 'regular', color: '#808080', justifyContent: 'center', //Centered horizontally
-                                                        alignItems: 'center', //Centered vertically
-                                                        flex: 1
-                                                    }}>
-                                                        OPERATOR
-                                                    </Text>
-                                                    <Text style={{
-                                                        fontSize: 14, marginTop: -40, marginLeft: deviceWidth / 2 - 40, fontFamily: 'medium', color: '#353C40', justifyContent: 'center', //Centered horizontally
-                                                        alignItems: 'center', //Centered vertically
-                                                        flex: 1
-                                                    }}>
-                                                        Text
-                                                    </Text>
-
-                                                    <Text style={{ fontSize: 12, position: 'absolute', right: 50, top: 23, fontFamily: 'regular', color: '#808080' }}>
-                                                        VALUES
-                                                    </Text>
-                                                    <Text style={{ fontSize: 12, position: 'absolute', right: 50, top: 37, fontFamily: 'medium', color: '#353C40', }}>
-                                                        RULE NAME
-                                                    </Text>
-                                                </View>
 
 
 
-                                                <TouchableOpacity style={{
-                                                    position: 'absolute',
-                                                    right: 10,
-                                                    top: 30,
-                                                    width: 30,
-                                                    height: 30,
+                {/* <KeyboardAwareScrollView KeyboardAwareScrollView
+                    enableOnAndroid={true}> */}
+
+                <View style={{
+                    flex: 1, justifyContent: 'center', //Centered horizontally
+                    alignItems: 'center', color: '#ffffff'
+                }}>
+                    <View style={{ flexDirection: 'column', flex: 0, marginLeft: 0, marginTop: 20, marginRight: 0, backgroundColor: "#ffffff", borderRadius: 20, }}>
+                        <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
+                            Pool Details
+                        </Text>
+                        <View style={{ marginTop: 10, width: deviceWidth, }}>
+
+                            <TextInput style={styles.input}
+                                underlineColorAndroid="transparent"
+                                placeholder="POOL NAME"
+                                placeholderTextColor="#353C4050"
+                                textAlignVertical="center"
+                                autoCapitalize="none"
+                                value={this.state.productmrp}
+                                onChangeText={this.handleInventoryMRP}
+                                ref={inputemail => { this.emailValueInput = inputemail }} />
 
 
-                                                    borderColor: "lightgray",
-                                                }} onPress={() => this.handledeleteaction(item, index)}>
-                                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
-                                                </TouchableOpacity>
-                                                <View style={{
-                                                    backgroundColor: 'grey',
-                                                    flexDirection: 'row',
-                                                    justifyContent: 'space-around',
-                                                    alignItems: 'center',
-                                                    height: 30,
-                                                    width: 90
-                                                }}>
+                            <View style={{
+                                justifyContent: 'center',
+                                margin: 20,
+                                height: 44,
+                                marginTop: 5,
+                                marginBottom: 10,
+                                borderColor: '#8F9EB717',
+                                borderRadius: 3,
+                                backgroundColor: '#FBFBFB',
+                                borderWidth: 1,
+                                fontFamily: 'regular',
+                                paddingLeft: 15,
+                                fontSize: 14,
+                            }} >
+                                <RNPickerSelect style={{
+                                    color: '#8F9EB717',
+                                    fontWeight: 'regular',
+                                    fontSize: 15
+                                }}
+                                    placeholder={{
+                                        label: 'POOL TYPE',
 
-                                                </View>
+                                    }}
+                                    Icon={() => {
+                                        return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                    }}
+                                    items={this.state.uom}
+                                    onValueChange={this.handleUOM}
+                                    style={pickerSelectStyles}
+                                    value={this.state.productuom}
+                                    useNativeAndroidPickerStyle={false}
 
-                                            </View>
+                                />
+                            </View>
 
+                            <View style={{
+                                justifyContent: 'center',
+                                margin: 20,
+                                height: 44,
+                                marginTop: 5,
+                                marginBottom: 10,
+                                borderColor: '#8F9EB717',
+                                borderRadius: 3,
+                                backgroundColor: '#FBFBFB',
+                                borderWidth: 1,
+                                fontFamily: 'regular',
+                                paddingLeft: 15,
+                                fontSize: 14,
+                            }} >
+                                <RNPickerSelect style={{
+                                    color: '#8F9EB717',
+                                    fontWeight: 'regular',
+                                    fontSize: 15
+                                }}
+                                    placeholder={{
+                                        label: 'POOL RULE',
 
-                                        )}
+                                    }}
+                                    Icon={() => {
+                                        return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                    }}
+                                    items={this.state.uom}
+                                    onValueChange={this.handleUOM}
+                                    style={pickerSelectStyles}
+                                    value={this.state.productuom}
+                                    useNativeAndroidPickerStyle={false}
 
-
-                                    />
-                                    <View style={{ flexDirection: 'column', width: deviceWidth, backgroundColor: "#F6F6F6", marginTop: 20, }}>
-                                        <Text style={{
-                                            fontSize: 14, marginTop: 50, height: 100, fontFamily: 'regular', color: '#808080', textAlign: 'center', //Centered horizontally
-                                            alignItems: 'center', //Centered vertically
-                                            flex: 1
-                                        }}>
-                                            add more rules buy clicking on add pool rule button
-
-                                        </Text>
-
-                                    </View>
-
-                                    <TouchableOpacity
-                                        style={{
-                                            margin: 10,
-                                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                        }} onPress={() => this.inventoryUpdate()}
-                                    >
-                                        <Text style={{
-                                            textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                            fontFamily: "regular"
-                                        }}  > SAVE </Text>
-
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity
-                                        style={{
-                                            margin: 10,
-                                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                        }} onPress={() => this.inventoryUpdate()}
-                                    >
-                                        <Text style={{
-                                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                            fontFamily: "regular"
-                                        }}  > CANCEL </Text>
-
-                                    </TouchableOpacity>
-
-                                </ScrollView>
-
-
-
-
-
-
-                                {/* <View style={{ flexDirection: 'column', width: deviceWidth, height: 140, borderTopWidth: 5,marginTop:20, borderColor: '#F6F6F6', }}>
-
-                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
-                                        RULE NAME
-                                    </Text>
-                                    <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                        Text here
-                                    </Text>
-
-                                    <Text style={{
-                                        fontSize: 12, marginTop: -30,marginLeft:deviceWidth/2-40, fontFamily: 'regular', color: '#808080', justifyContent: 'center', //Centered horizontally
-                                        alignItems: 'center', //Centered vertically
-                                        flex: 1
-                                    }}>
-                                       OPERATOR
-                                    </Text>
-                                    <Text style={{ fontSize: 14, marginTop: -90,marginLeft:deviceWidth/2-40, fontFamily: 'medium', color: '#353C40',justifyContent: 'center', //Centered horizontally
-                                        alignItems: 'center', //Centered vertically
-                                        flex: 1 }}>
-                                        Text 
-                                    </Text>
-
-                                    <Text style={{ fontSize: 12, position: 'absolute', right: 20,top:20, fontFamily: 'regular', color: '#808080' }}>
-                                        VALUES
-                                    </Text>
-                                    <Text style={{ fontSize: 12, position: 'absolute', right: 20,top:34,fontFamily: 'medium', color: '#353C40', }}>
-                                        RULE NAME
-                                    </Text>
-                                </View> */}
-
-
-
-
-
-
-
-
-
+                                />
+                                <Text></Text>
                             </View>
 
                         </View>
+
+                        <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
+                            Pool Rules
+                        </Text>
+                        <TouchableOpacity
+                            style={{ position: 'absolute', right: 20, top: 240, borderRadius: 5, borderColor: "#ED1C24", backgroundColor: '#ffffff', width: 90, height: 28, borderWidth: 1, }}
+                            onPress={() => this.addPoolRool()} >
+                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginTop: 4, textAlign: 'center', alignSelf: 'center', borderRadius: 5, borderColor: "#ED1C24", }}> {('Add Pool Rule')} </Text>
+                        </TouchableOpacity>
+
+
+                        <ScrollView>
+                            <FlatList
+                                data={this.state.arrayData}
+                                style={{ marginTop: 40, }}
+                                onEndReached={this.onEndReached.bind(this)}
+
+                                ref={(ref) => { this.listRef = ref; }}
+                                keyExtractor={item => item.email}
+                                renderItem={({ item, index }) => (
+                                    <View style={{
+                                        height: 80,
+                                        backgroundColor: '#FFFFFF',
+                                        borderBottomWidth: 5,
+                                        borderBottomColor: '#FFFFFF',
+                                        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                                    }}>
+                                        <View style={{ flexDirection: 'column', width: '100%', height: 80, borderTopWidth: 10, borderColor: '#F6F6F6' }}>
+
+                                            <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
+                                                RULE NAME
+                                            </Text>
+                                            <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
+                                                Text here
+                                            </Text>
+
+                                            <Text style={{
+                                                fontSize: 12, marginTop: -30, marginLeft: deviceWidth / 2 - 40, fontFamily: 'regular', color: '#808080', justifyContent: 'center', //Centered horizontally
+                                                alignItems: 'center', //Centered vertically
+                                                flex: 1
+                                            }}>
+                                                OPERATOR
+                                            </Text>
+                                            <Text style={{
+                                                fontSize: 14, marginTop: -20, marginLeft: deviceWidth / 2 - 40, fontFamily: 'medium', color: '#353C40', justifyContent: 'center', //Centered horizontally
+                                                alignItems: 'center', //Centered vertically
+                                                flex: 1
+                                            }}>
+                                                Text
+                                            </Text>
+
+                                            <Text style={{ fontSize: 12, position: 'absolute', right: 50, top: 23, fontFamily: 'regular', color: '#808080' }}>
+                                                VALUES
+                                            </Text>
+                                            <Text style={{ fontSize: 12, position: 'absolute', right: 50, top: 37, fontFamily: 'medium', color: '#353C40', }}>
+                                                RULE NAME
+                                            </Text>
+                                        </View>
+
+
+
+                                        <TouchableOpacity style={{
+                                            position: 'absolute',
+                                            right: 10,
+                                            top: 30,
+                                            width: 30,
+                                            height: 30,
+
+
+                                            borderColor: "lightgray",
+                                        }} onPress={() => this.handledeleteaction(item, index)}>
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                        </TouchableOpacity>
+                                        <View style={{
+                                            backgroundColor: 'grey',
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-around',
+                                            alignItems: 'center',
+                                            height: 30,
+                                            width: 90
+                                        }}>
+
+                                        </View>
+
+                                    </View>
+
+
+                                )}
+
+
+                            />
+                            <View style={{ flexDirection: 'column', width: deviceWidth, backgroundColor: "#F6F6F6", marginTop: 20, }}>
+                                <Text style={{
+                                    fontSize: 14, marginTop: 50, height: 100, fontFamily: 'regular', color: '#808080', textAlign: 'center', //Centered horizontally
+                                    alignItems: 'center', //Centered vertically
+                                    flex: 1
+                                }}>
+                                    add more rules buy clicking on add pool rule button
+
+                                </Text>
+
+                            </View>
+
+                            <TouchableOpacity
+                                style={{
+                                    margin: 10,
+                                    height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                }} onPress={() => this.inventoryUpdate()}
+                            >
+                                <Text style={{
+                                    textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                    fontFamily: "regular"
+                                }}  > SAVE </Text>
+
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                style={{
+                                    margin: 10,
+                                    height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                }} onPress={() => this.inventoryUpdate()}
+                            >
+                                <Text style={{
+                                    textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                    fontFamily: "regular"
+                                }}  > CANCEL </Text>
+
+                            </TouchableOpacity>
+
+                        </ScrollView>
+                        {this.state.flagCustomerOpen && (
+                            <View>
+                                <Modal isVisible={this.state.modalVisible}>
+
+                                    <View style={{
+                                        width: deviceWidth,
+                                        alignItems: 'center',
+                                        marginLeft: -20,
+                                        backgroundColor: "#ffffff",
+                                        height: 400,
+                                        position: 'absolute',
+                                        bottom: 0,
+                                    }}>
+                                        <KeyboardAwareScrollView KeyboardAwareScrollView
+                                            enableOnAndroid={true}>
+                                            <Text style={{
+                                                position: 'absolute',
+                                                left: 20,
+                                                top: 15,
+                                                width: 300,
+                                                height: 20,
+                                                fontFamily: 'medium',
+                                                fontSize: 16,
+                                                color: '#353C40'
+                                            }}> Add pool rule </Text>
+
+                                            <TouchableOpacity style={{
+                                                position: 'absolute',
+                                                right: 20,
+                                                top: 8,
+                                                width: 50, height: 50,
+                                            }} onPress={() => this.modelCancel()}>
+                                                <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+
+                                            <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                            </Text>
+                                            <View style={{ marginTop: 10, width: deviceWidth, }}>
+                                                <TextInput style={styles.input}
+                                                    underlineColorAndroid="transparent"
+                                                    placeholder="SELECT NAME"
+                                                    placeholderTextColor="#6F6F6F"
+                                                    textAlignVertical="center"
+                                                    autoCapitalize="none"
+                                                    value={this.state.productmrp}
+                                                    onChangeText={this.handleInventoryMRP}
+                                                    ref={inputemail => { this.emailValueInput = inputemail }} />
+
+
+                                                <View style={{
+                                                    justifyContent: 'center',
+                                                    margin: 20,
+                                                    height: 44,
+                                                    marginTop: 5,
+                                                    marginBottom: 10,
+                                                    borderColor: '#8F9EB717',
+                                                    borderRadius: 3,
+                                                    backgroundColor: '#FBFBFB',
+                                                    borderWidth: 1,
+                                                    fontFamily: 'regular',
+                                                    paddingLeft: 15,
+                                                    fontSize: 14,
+                                                }} >
+                                                    <RNPickerSelect style={{
+                                                        color: '#8F9EB717',
+                                                        fontWeight: 'regular',
+                                                        fontSize: 15
+                                                    }}
+                                                        placeholder={{
+                                                            label: 'SELECT OPERATOR',
+
+                                                        }}
+                                                        Icon={() => {
+                                                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                        }}
+                                                        items={this.state.uom}
+                                                        onValueChange={this.handleUOM}
+                                                        style={pickerSelectStyles}
+                                                        value={this.state.productuom}
+                                                        useNativeAndroidPickerStyle={false}
+
+                                                    />
+                                                </View>
+
+                                                <TextInput style={styles.input}
+                                                    underlineColorAndroid="transparent"
+                                                    placeholder="ENTER VALUES"
+                                                    placeholderTextColor="#6F6F6F"
+                                                    textAlignVertical="center"
+                                                    autoCapitalize="none"
+                                                    value={this.state.productmrp}
+                                                    onChangeText={this.handleInventoryMRP}
+                                                    ref={inputemail => { this.emailValueInput = inputemail }} />
+                                            </View>
+
+                                            <TouchableOpacity
+                                                style={{
+                                                    width: deviceWidth - 40,
+                                                    marginLeft: 20,
+                                                    marginRight: 20,
+                                                    marginTop: 20,
+                                                    height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                }} onPress={() => this.inventoryUpdate()}
+                                            >
+                                                <Text style={{
+                                                    textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                                    fontFamily: "regular"
+                                                }}  > ADD </Text>
+
+                                            </TouchableOpacity>
+
+                                            <TouchableOpacity
+                                                style={{
+                                                    width: deviceWidth - 40,
+                                                    marginLeft: 20,
+                                                    marginRight: 20,
+                                                    marginTop: 20,
+                                                    height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                                }} onPress={() => this.modelCancel()}
+                                            >
+                                                <Text style={{
+                                                    textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                                    fontFamily: "regular"
+                                                }}  > CANCEL </Text>
+
+                                            </TouchableOpacity>
+                                        </KeyboardAwareScrollView>
+                                    </View>
+
+                                </Modal>
+                            </View>)}
+
                     </View>
-                </KeyboardAwareScrollView>
+
+                </View>
+                {/* </View> */}
+                {/* </KeyboardAwareScrollView> */}
             </View>
 
         )
@@ -548,7 +619,7 @@ export default AddPool
 
 const pickerSelectStyles = StyleSheet.create({
     placeholder: {
-        color: "#353C4050",
+        color: "#6F6F6F",
         fontFamily: "regular",
         fontSize: 15,
     },
