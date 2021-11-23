@@ -34,6 +34,8 @@ class Promo extends Component {
             enddate: new Date(),
             open: false,
             chargeExtra:false,
+            promoactiveStatus:false,
+            poolsactiveStatus:false,
         }
     }
 
@@ -108,8 +110,34 @@ class Promo extends Component {
 
     }
 
+    togglePoolsActiveStatus() {
+        if(this.state.poolsactiveStatus === true){
+            this.setState({ poolsactiveStatus: false })
+        } 
+        else{
+            this.setState({ poolsactiveStatus: true }) 
+        }
+    }
+
+    togglePromoActiveStatus() {
+        if(this.state.promoactiveStatus === true){
+            this.setState({ promoactiveStatus: false })
+        } 
+        else{
+            this.setState({ promoactiveStatus: true }) 
+        }
+    }
+
+ 
+
     chargeExtra(){
-        this.setState({ chargeExtra: true })
+        if(this.state.chargeExtra === true){
+            this.setState({ chargeExtra: false })
+        } 
+        else{
+            this.setState({ chargeExtra: true }) 
+        }
+        
     }
 
     datepickerClicked() {
@@ -294,24 +322,26 @@ class Promo extends Component {
                     </TouchableOpacity>
                 </View>
                 {this.state.flagone && (
-                    <Switch trackColor={{ true: '#353C40', false: 'grey' }} style={{
+                    <TouchableOpacity style={{
                         position: 'absolute',
-                        left: 107,
-                        top: 150,
+                        left:115,
+                        top: 147,
                         width: 32,
-                        height: 18, color: '#353C40',
-                    }}
-                        value={true}>
-                    </Switch>
+                        height: 18,
+                        borderBottomLeftRadius: 5,
+                        borderTopLeftRadius: 5,
+                        borderWidth: 1,
+                        borderColor: "lightgray",
+                        // borderRadius:5,
+                    }} onPress={() => this.togglePoolsActiveStatus()}>
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.poolsactiveStatus ? require('../assets/images/switchunabled.png') : require('../assets/images/switchdisabled.png')} />
+                    </TouchableOpacity>
                 )}
 
 
                 {this.state.flagone && (
-
-
-
                     <TouchableOpacity
-                        style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 90, height: 32, }}
+                        style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 95, height: 32, }}
                         onPress={() => this.navigateToAddPool()} >
                         <Text style={{ fontSize: 16, fontFamily: 'regular', color: '#707070', marginLeft: 10, marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('Only active')} </Text>
                     </TouchableOpacity>
@@ -431,24 +461,27 @@ class Promo extends Component {
                 )}
 
                 {this.state.flagtwo && (
-                    <Switch trackColor={{ true: '#353C40', false: 'grey' }} style={{
-                        position: 'absolute',
-                        left: 107,
-                        top: 150,
-                        width: 32,
-                        height: 18, color: '#353C40',
-                    }}
-                        value={true}>
-                    </Switch>
+                    
+<TouchableOpacity style={{
+    position: 'absolute',
+    left:115,
+    top: 147,
+    width: 32,
+    height: 18,
+    borderBottomLeftRadius: 5,
+    borderTopLeftRadius: 5,
+    borderWidth: 1,
+    borderColor: "lightgray",
+    // borderRadius:5,
+}} onPress={() => this.togglePromoActiveStatus()}>
+    <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.promoactiveStatus ? require('../assets/images/switchunabled.png') : require('../assets/images/switchdisabled.png')} />
+</TouchableOpacity>
                 )}
 
 
                 {this.state.flagtwo && (
-
-
-
                     <TouchableOpacity
-                        style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 90, height: 32, }}
+                        style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 95, height: 32, }}
                         onPress={() => this.navigateToAddPool()} >
                         <Text style={{ fontSize: 16, fontFamily: 'regular', color: '#707070', marginLeft: 10, marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('Only active')} </Text>
                     </TouchableOpacity>
@@ -687,9 +720,9 @@ class Promo extends Component {
                                 alignItems: 'center',
                                 marginLeft: -20,
                                 backgroundColor: "#ffffff",
-                                height: 400,
+                                height: 350,
                                 position: 'absolute',
-                                bottom: 0,
+                                bottom:-20,
                             }}>
                                 <KeyboardAwareScrollView KeyboardAwareScrollView
                                     enableOnAndroid={true}>
@@ -833,7 +866,7 @@ class Promo extends Component {
                                 backgroundColor: "#ffffff",
                                 height: 530,
                                 position: 'absolute',
-                                bottom: 0,
+                                bottom: -20,
                             }}>
                                 <KeyboardAwareScrollView KeyboardAwareScrollView
                                     enableOnAndroid={true}>
@@ -1045,7 +1078,7 @@ class Promo extends Component {
                                 backgroundColor: "#ffffff",
                                 height: 530,
                                 position: 'absolute',
-                                bottom: 0,
+                                bottom: -20,
                             }}>
                                 <KeyboardAwareScrollView KeyboardAwareScrollView
                                     enableOnAndroid={true}>
@@ -1233,7 +1266,7 @@ class Promo extends Component {
 
                                     </View>
                                     {this.state.datepickerOpen && this.state.flagtwo && (
-                                        <View style={{ height: 250, width: deviceWidth, backgroundColor: 'ffffff' }}>
+                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
                                             <TouchableOpacity
                                                 style={{
                                                     position: 'absolute',
@@ -1262,7 +1295,7 @@ class Promo extends Component {
                                                 }}  > Done </Text>
 
                                             </TouchableOpacity>
-                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 30, }}
+                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
                                                 date={this.state.date}
                                                 mode={'date'}
                                                 onDateChange={(date) => this.setState({ date })}
@@ -1270,7 +1303,7 @@ class Promo extends Component {
                                         </View>
                                     )}
                                     {this.state.datepickerendOpen && this.state.flagtwo && (
-                                        <View style={{ height: 250, width: deviceWidth, backgroundColor: 'ffffff' }}>
+                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
                                             <TouchableOpacity
                                                 style={{
                                                     position: 'absolute',
@@ -1299,7 +1332,7 @@ class Promo extends Component {
                                                 }}  > Done </Text>
 
                                             </TouchableOpacity>
-                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 30, }}
+                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
                                                 date={this.state.enddate}
                                                 mode={'date'}
                                                 onDateChange={(enddate) => this.setState({ enddate })}
