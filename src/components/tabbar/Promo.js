@@ -18,9 +18,9 @@ class Promo extends Component {
         this.barcodeCodes = [];
         this.state = {
             barcodeId: "",
-            flagone: false,
+            flagone: true,
             flagtwo: false,
-            flagthree: true,
+            flagthree: false,
             flagFilterOpen: false,
             flagAddPromo: false,
             flagAddStore: false,
@@ -328,9 +328,6 @@ class Promo extends Component {
                         top: 147,
                         width: 32,
                         height: 18,
-                        borderBottomLeftRadius: 5,
-                        borderTopLeftRadius: 5,
-                        borderWidth: 1,
                         borderColor: "lightgray",
                         // borderRadius:5,
                     }} onPress={() => this.togglePoolsActiveStatus()}>
@@ -468,10 +465,7 @@ class Promo extends Component {
     top: 147,
     width: 32,
     height: 18,
-    borderBottomLeftRadius: 5,
-    borderTopLeftRadius: 5,
-    borderWidth: 1,
-    borderColor: "lightgray",
+   
     // borderRadius:5,
 }} onPress={() => this.togglePromoActiveStatus()}>
     <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.promoactiveStatus ? require('../assets/images/switchunabled.png') : require('../assets/images/switchdisabled.png')} />
