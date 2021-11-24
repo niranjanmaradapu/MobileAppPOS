@@ -8,6 +8,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import DatePicker from 'react-native-date-picker'
 import PromotionsService from '../../services/PromotionsService';
+import axios from 'axios';
 
 
 class Promo extends Component {
@@ -25,6 +26,10 @@ class Promo extends Component {
             flagAddStore: false,
             datepickerOpen: false,
             datepickerendOpen: false,
+            createdByArray:[],
+            createdByTempArray:[],
+            selectedStatus:"",
+            selectedcreatedBy:"",
             poolsData: [1, 2],
             productuom: "",
             modalVisible: true,
@@ -32,11 +37,90 @@ class Promo extends Component {
             date: new Date(),
             enddate: new Date(),
             open: false,
-            chargeExtra:false,
-            promoactiveStatus:false,
-            poolsactiveStatus:false,
+            chargeExtra: false,
+            promoactiveStatus: false,
+            poolsactiveStatus: false,
         }
     }
+
+    async componentDidMount() {
+        this.getAllpools()
+    }
+
+
+    getAllpools = () => {
+        this.setState({ poolsData: [] })
+        axios.get(PromotionsService.getAllPools(), {}).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+                let len = res.data["result"].length;
+                if (len > 0) {
+                    for (let i = 0; i < len; i++) {
+                        let number = res.data["result"][i]
+                    if(number.createdBy != null){
+                            this.state.createdByTempArray.push({label:number.createdBy,value:number.createdBy})
+                            }
+                            
+                     this.setState({ createdByTempArray: this.state.createdByTempArray })
+
+                         if (this.state.poolsactiveStatus === false) {
+                            if(number.isActive == false){
+                                this.state.poolsData.push(number)
+                            }
+                            
+                        }
+                        if (this.state.poolsactiveStatus === true) {
+                            if(number.isActive == true){
+                                console.log('----addedactivepools')
+                                this.state.poolsData.push(number)
+                            }
+                           
+                        }
+                        this.setState({ poolsData: this.state.poolsData })
+                       
+                    }
+                }
+                this.state.createdByTempArray.forEach(obj => {
+                    if (!this.state.createdByArray.some(o => o.value === obj.value)) {
+                      this.state.createdByArray.push({ ...obj })
+                    }
+                    this.setState({ createdByArray: this.state.createdByArray })
+                  });
+                
+                return
+            }
+        })
+    };
+
+    getFilteredpools = () => {
+        this.setState({ poolsData: [] })
+        axios.get(PromotionsService.getAllPools(), {}).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+                let len = res.data["result"].length;
+                if (len > 0) {
+                    for (let i = 0; i < len; i++) {
+                        let number = res.data["result"][i]
+                         if (this.state.poolsactiveStatus === false && this.state.selectedcreatedBy === number.createdBy) {
+                            if(number.isActive == false){
+                                this.state.poolsData.push(number)
+                            }
+                            
+                        }
+                        if (this.state.poolsactiveStatus === true && this.state.selectedcreatedBy === number.createdBy) {
+                            if(number.isActive == true){
+                                console.log('----addedactivepools')
+                                this.state.poolsData.push(number)
+                            }
+                          
+                        }
+                        
+                        this.setState({ poolsData: this.state.poolsData })
+                    }
+                }
+                
+                return
+            }
+        })
+    };
 
     topbarAction1() {
         this.setState({ flagone: true })
@@ -66,6 +150,8 @@ class Promo extends Component {
     }
 
     filterAction() {
+        this.setState({ selectedStatus: "" });
+        this.setState({ selectedcreatedBy: "" });
         this.setState({ flagAddPromo: false });
         this.setState({ flagAddStore: false });
         this.setState({ modalVisible: true });
@@ -110,33 +196,36 @@ class Promo extends Component {
     }
 
     togglePoolsActiveStatus() {
-        if(this.state.poolsactiveStatus === true){
-            this.setState({ poolsactiveStatus: false })
-        } 
+        this.getAllpools()
+        if (this.state.poolsactiveStatus === false) {
+            
+            this.setState({ poolsactiveStatus: true })
+        }
         else{
-            this.setState({ poolsactiveStatus: true }) 
+            
+            this.setState({ poolsactiveStatus: false })
         }
     }
 
     togglePromoActiveStatus() {
-        if(this.state.promoactiveStatus === true){
+        if (this.state.promoactiveStatus === true) {
             this.setState({ promoactiveStatus: false })
-        } 
-        else{
-            this.setState({ promoactiveStatus: true }) 
+        }
+        else {
+            this.setState({ promoactiveStatus: true })
         }
     }
 
- 
 
-    chargeExtra(){
-        if(this.state.chargeExtra === true){
+
+    chargeExtra() {
+        if (this.state.chargeExtra === true) {
             this.setState({ chargeExtra: false })
-        } 
-        else{
-            this.setState({ chargeExtra: true }) 
         }
-        
+        else {
+            this.setState({ chargeExtra: true })
+        }
+
     }
 
     datepickerClicked() {
@@ -152,10 +241,54 @@ class Promo extends Component {
     }
 
     refteshPools() {
-
+       this.getAllpools()
     }
 
-    
+    handleCreatedBy = (value) => {
+        this.setState({ selectedcreatedBy: value });   
+    }
+
+    handleStatusBy= (value) => {
+        this.setState({ selectedStatus: value });
+       
+      }
+
+      applyFilter(){
+        if(this.state.selectedStatus == "Active"){
+            this.setState({ poolsactiveStatus: true })
+        }
+        else{
+            this.setState({ poolsactiveStatus: false })
+        }
+       
+        if(this.state.selectedStatus != "" && this.state.selectedcreatedBy === ""){
+            console.log('open filter with status only')
+            this.getAllpools()
+        }
+        else{
+            this.getFilteredpools()
+        }
+        this.setState({ modalVisible: false });
+      }
+
+      handlepooldeleteaction = (item, index) => {
+        console.log('barcode id is' + item.barcode)
+        axios.delete(PromotionsService.deletePool(), { params: {
+          //barcodeId=1811759398
+          "poolId": item.poolId, 
+         }}).then((res) => {
+          if (res.data && res.data["isSuccess"] === "true") {
+            const list = this.state.poolsData;
+            list.splice(index, 1);
+            this.setState({ poolsData: list });
+      }
+          else {
+              alert('Issue in delete barcode and having' + res.data["error"]);
+          }
+      }
+      );
+    }
+
 
 
     render() {
@@ -324,7 +457,7 @@ class Promo extends Component {
                 {this.state.flagone && (
                     <TouchableOpacity style={{
                         position: 'absolute',
-                        left:115,
+                        left: 115,
                         top: 147,
                         width: 32,
                         height: 18,
@@ -360,9 +493,9 @@ class Promo extends Component {
                         data={this.state.poolsData}
                         style={{ marginTop: 40, }}
                         scrollEnabled={
-                            false
+                            true
                         }
-                        keyExtractor={item => item.email}
+                        keyExtractor={item => item}
                         renderItem={({ item, index }) => (
                             <View style={{
                                 height: 140,
@@ -373,31 +506,37 @@ class Promo extends Component {
                             }}>
                                 <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
                                     <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
-                                        Pool id: #1011
+                                        Pool id: #{String(item.poolId)}
                                     </Text>
 
                                     <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
                                         POOL NAME
                                     </Text>
                                     <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                        Womens 3 @ 999
+                                        {item.poolName}
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                         CREATED BY
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                        Ramesh
+                                        {item.createdBy}
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 150, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
                                         CREATED ON
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 150, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                        30 Sep 2021
+                                        {item.createdDate}
                                     </Text>
                                 </View>
 
                                 <TouchableOpacity
-                                    style={{
+                                    style={item.isActive == true ?  {
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 20,
+                                        width: 50,
+                                        height: 24, backgroundColor: "#C1FCB0", borderRadius: 5,
+                                    } : {
                                         position: 'absolute',
                                         right: 20,
                                         top: 20,
@@ -408,7 +547,7 @@ class Promo extends Component {
                                     <Text style={{
                                         textAlign: 'center', marginTop: 5, color: "#353C40", fontSize: 12,
                                         fontFamily: "regular"
-                                    }}  > Inactive </Text>
+                                    }}  > {item.isActive == true ? 'Active' : 'Inactive'} </Text>
 
                                 </TouchableOpacity>
 
@@ -424,7 +563,7 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                     // borderRadius:5,
-                                }} onPress={() => this.handleeditaction(item, index)}>
+                                }} onPress={() => this.handlepooleditaction(item, index)}>
                                     <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
@@ -438,7 +577,7 @@ class Promo extends Component {
                                     borderTopRightRadius: 5,
                                     borderWidth: 1,
                                     borderColor: "lightgray",
-                                }} onPress={() => this.handledeleteaction(item, index)}>
+                                }} onPress={() => this.handlepooldeleteaction(item, index)}>
                                     <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
                                 </TouchableOpacity>
                                 <View style={{
@@ -458,18 +597,18 @@ class Promo extends Component {
                 )}
 
                 {this.state.flagtwo && (
-                    
-<TouchableOpacity style={{
-    position: 'absolute',
-    left:115,
-    top: 147,
-    width: 32,
-    height: 18,
-   
-    // borderRadius:5,
-}} onPress={() => this.togglePromoActiveStatus()}>
-    <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.promoactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
-</TouchableOpacity>
+
+                    <TouchableOpacity style={{
+                        position: 'absolute',
+                        left: 115,
+                        top: 147,
+                        width: 32,
+                        height: 18,
+
+                        // borderRadius:5,
+                    }} onPress={() => this.togglePromoActiveStatus()}>
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.promoactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
+                    </TouchableOpacity>
                 )}
 
 
@@ -716,7 +855,7 @@ class Promo extends Component {
                                 backgroundColor: "#ffffff",
                                 height: 350,
                                 position: 'absolute',
-                                bottom:-20,
+                                bottom: -20,
                             }}>
                                 <KeyboardAwareScrollView KeyboardAwareScrollView
                                     enableOnAndroid={true}>
@@ -769,10 +908,10 @@ class Promo extends Component {
                                                 Icon={() => {
                                                     return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                                 }}
-                                                items={this.state.uom}
-                                                onValueChange={this.handleUOM}
+                                                items={this.state.createdByArray}
+                                                onValueChange={this.handleCreatedBy}
                                                 style={pickerSelectStyles}
-                                                value={this.state.productuom}
+                                                value={this.state.selectedcreatedBy}
                                                 useNativeAndroidPickerStyle={false}
 
                                             />
@@ -803,10 +942,13 @@ class Promo extends Component {
                                                 Icon={() => {
                                                     return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                                 }}
-                                                items={this.state.uom}
-                                                onValueChange={this.handleUOM}
+                                                items={[
+                                                    { label: 'Active', value: 'Active' },
+                                                    { label: 'Inactive', value: 'Inactive' },
+                                                ]}
+                                                onValueChange={this.handleStatusBy}
                                                 style={pickerSelectStyles}
-                                                value={this.state.productuom}
+                                                value={this.state.selectedStatus}
                                                 useNativeAndroidPickerStyle={false}
 
                                             />
@@ -819,7 +961,7 @@ class Promo extends Component {
                                             marginRight: 20,
                                             marginTop: 20,
                                             height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                        }} onPress={() => this.inventoryUpdate()}
+                                        }} onPress={() => this.applyFilter()}
                                     >
                                         <Text style={{
                                             textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
@@ -966,58 +1108,58 @@ class Promo extends Component {
 
                                         <TouchableOpacity
                                             style={{
-                                            width:200,marginTop:20,
+                                                width: 200, marginTop: 20,
                                             }}
 
                                             onPress={() => this.chargeExtra()}
                                         >
                                             <Text style={{
                                                 marginLeft: 40, marginTop: 11, color: "#6F6F6F", fontSize: 15,
-                                                fontFamily: "regular",width:200,
+                                                fontFamily: "regular", width: 200,
                                             }}  > {'Charge Tax Entra'} </Text>
-                                            
+
                                             <Image style={{ position: 'absolute', top: 10, left: 20, }} source={
                                                 //require('../assets/images/chargeunselect.png')}
-                                            this.state.chargeExtra ? require('../../assets/images/chargeselect.png') : require('../../assets/images/chargeunselect.png')} />
+                                                this.state.chargeExtra ? require('../../assets/images/chargeselect.png') : require('../../assets/images/chargeunselect.png')} />
                                         </TouchableOpacity>
 
                                         {this.state.chargeExtra && (
-                                        <View style={{
-                                            justifyContent: 'center',
-                                            margin: 20,
-                                            width:deviceWidth/2-20,
-                                            height: 44,
-                                            marginTop: -30,
-                                            marginLeft:deviceWidth/2,
-                                            marginBottom: 10,
-                                            borderColor: '#8F9EB717',
-                                            borderRadius: 3,
-                                            backgroundColor: '#FBFBFB',
-                                            borderWidth: 1,
-                                            fontFamily: 'regular',
-                                            paddingLeft: 15,
-                                            fontSize: 14,
-                                        }} >
-                                            <RNPickerSelect style={{
-                                                color: '#8F9EB717',
-                                                fontWeight: 'regular',
-                                                fontSize: 15
-                                            }}
-                                                placeholder={{
-                                                    label: 'SELECT TAX %',
-
+                                            <View style={{
+                                                justifyContent: 'center',
+                                                margin: 20,
+                                                width: deviceWidth / 2 - 20,
+                                                height: 44,
+                                                marginTop: -30,
+                                                marginLeft: deviceWidth / 2,
+                                                marginBottom: 10,
+                                                borderColor: '#8F9EB717',
+                                                borderRadius: 3,
+                                                backgroundColor: '#FBFBFB',
+                                                borderWidth: 1,
+                                                fontFamily: 'regular',
+                                                paddingLeft: 15,
+                                                fontSize: 14,
+                                            }} >
+                                                <RNPickerSelect style={{
+                                                    color: '#8F9EB717',
+                                                    fontWeight: 'regular',
+                                                    fontSize: 15
                                                 }}
-                                                Icon={() => {
-                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                                }}
-                                                items={this.state.uom}
-                                                onValueChange={this.handleUOM}
-                                                style={pickerSelectStyles}
-                                                value={this.state.productuom}
-                                                useNativeAndroidPickerStyle={false}
+                                                    placeholder={{
+                                                        label: 'SELECT TAX %',
 
-                                            />
-                                        </View>
+                                                    }}
+                                                    Icon={() => {
+                                                        return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                    }}
+                                                    items={this.state.uom}
+                                                    onValueChange={this.handleUOM}
+                                                    style={pickerSelectStyles}
+                                                    value={this.state.productuom}
+                                                    useNativeAndroidPickerStyle={false}
+
+                                                />
+                                            </View>
                                         )}
 
                                     </View>

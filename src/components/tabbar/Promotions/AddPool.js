@@ -17,6 +17,7 @@ import { Chevron } from 'react-native-shapes';
 import NetInfo from "@react-native-community/netinfo";
 import InventoryService from '../../services/InventoryService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import PromotionsService from '../../services/PromotionsService';
 
 
 class AddPool extends Component {
@@ -34,7 +35,7 @@ class AddPool extends Component {
             altMobileNo: "",
             name: "",
             loading: false,
-            arrayData: [1, 2],
+            arrayData: [],
             temp: [],
             error: null,
             search: null,
@@ -48,14 +49,9 @@ class AddPool extends Component {
             address: "",
             modalVisible: true,
             flagone: true,
-
             domainId: 1,
             storeId: 1,
-
-
-
             uom: [],
-
             productItemId: 0,
             flagCustomerOpen: false,
             barcodeId: 0,
@@ -64,6 +60,10 @@ class AddPool extends Component {
             productuom: "",
             productmrp: "",
             productofferprice: "",
+            selectedPoolType: '',
+            selectedPoolName:'',
+            selectedColumnName: '',
+            selectedOperator: '',
             tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
             tableData: [
             ],
@@ -79,84 +79,38 @@ class AddPool extends Component {
         this.props.navigation.goBack(null);
         return true;
     }
+    cancel(){
+        this.props.navigation.goBack(null);   
+    }
 
     modelCancel() {
         this.setState({ modalVisible: false });
     }
 
-
-    handleUOM = (value) => {
-        this.setState({ productuom: value });
-    }
-
-
-
-    handleInventoryBarcode = (text) => {
-        this.setState({ barcodeId: text })
-    }
-    handleInventoryProductName = (text) => {
-        this.setState({ productname: text })
-    }
-    handleInventoryQuantity = (value) => {
-        this.setState({ produtctQty: value });
-    }
-
-    handleInventoryMRP = (text) => {
-        this.setState({ productmrp: text })
-    }
-    handleInventoryDiscount = (text) => {
-        this.setState({ productofferprice: text })
-        // console.log(this.state.inventoryMRP)
-        // console.log(text)
-        // this.setState({ inventoryNetAmount: (parseInt(this.state.inventoryMRP) - parseInt(text)).toString() })
-    }
-    handleInventoryNetAmount = (text) => {
-        this.setState({ inventoryNetAmount: text });
-    }
-
-
-    async inventoryUpdate() {
-        if (String(this.state.barcodeId).length === 0) {
-            alert('Please Enter Barcode by using scan/Mannually');
-        } else if (this.state.productname.length === 0) {
-            alert('Please Enter Product name');
+    async savePool() {
+        if (String(this.state.selectedPoolName).length === 0) {
+            alert('Please Enter PoolName');
+        } else if (this.state.selectedPoolType.length === 0) {
+            alert('Please Select Pool Type');
         }
-        else if (String(this.state.produtctQty).length === 0) {
-            alert('Please Enter Quantity');
-        }
-        else if (this.state.productmrp.length === 0) {
-            alert('Please Enter MRP');
-        }
-        else if (this.state.productofferprice.length === 0) {
-            alert('Please Enter Discount %');
+        else if (this.state.arrayData.length < 2) {
+            alert('You need atleast two rules for create pool');
         }
         else {
             this.setState({ loading: true })
+            const username = await AsyncStorage.getItem("username");
             const params = {
                 //required 
-                "productItemId": this.state.productItemId,
-                "costPrice": this.state.productmrp,
-                "name": this.state.productname,
-                "listPrice": this.state.productofferprice,
-                "stockValue": this.state.produtctQty,
-                "uom": this.state.productuom,
-                "domainDataId": this.state.domainId,
-                "storeId": this.state.storeId,
-                "barcodeId": this.state.barcodeId,
-                //optional
-                "tyecode": this.state.productofferprice,//"10",
-                "defaultImage": "",
-                "status": "1",
-                "title": "",
-                "stock": "1",
-                "color": "",
-                "length": 35,
-                "productValidity": "",
-                "empId": 1
+                "createdBy":username,
+                "isActive": true,
+                "isForEdit": false,
+                "poolName": this.state.selectedPoolName,
+                "poolType": this.state.selectedPoolType,
+                "ruleVo":this.state.arrayData,
             }
             console.log('params are' + JSON.stringify(params))
             this.setState({ loading: true })
-            axios.put(InventoryService.updateBarcode(), params).then((res) => {
+            axios.post(PromotionsService.createPool(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.setState({ loading: false })
                     this.props.route.params.onGoBack();
@@ -164,7 +118,6 @@ class AddPool extends Component {
                 }
                 else {
                     this.setState({ loading: false })
-                    // this.setState({ loading: false })
                     alert("duplicate record already exists");
                 }
             }
@@ -173,16 +126,12 @@ class AddPool extends Component {
     }
 
 
+
+
     refresh() {
         this.setState({ productname: global.productname })
         console.log('search' + this.state.productname)
     }
-
-    // refreshGetBarCode() {
-    //     if (global.barcodeId != 'something') {
-    //         this.setState({ inventoryBarcodeId: global.barcodeId })
-    //     }
-    // }
 
 
     navigateToGetBarCode() {
@@ -215,6 +164,46 @@ class AddPool extends Component {
         this.setState({ modalVisible: true });
         this.setState({ flagCustomerOpen: true });
     }
+
+    handlePoolType = (value) => {
+        this.setState({ selectedPoolType: value });
+    }
+
+    handleColumnName = (value) => {
+        this.setState({ selectedColumnName: value });
+    }
+
+    handleValue= (value) => {
+        this.setState({ productmrp: value });
+    }
+
+    
+
+    handledeleteaction = (item, index) => {
+        if(this.state.arrayData.length == 2){
+            alert('You need atleast two rules for create pool')
+            return
+          }
+        const list = this.state.arrayData;
+        list.splice(index, 1);
+        this.setState({ arrayData: list });
+        }
+
+
+    addruleName() {
+        this.state.arrayData.push({ columnName: this.state.selectedColumnName, operatorSymbol:this.state.selectedOperator,givenValue:this.state.productmrp})
+        this.setState({ modalVisible: false });
+    }
+
+    handlePoolName= (value) => {
+        this.setState({ selectedPoolName: value });
+    }
+
+
+    handleOperator = (value) => {
+        this.setState({ selectedOperator: value });
+    }
+
 
 
     render() {
@@ -265,8 +254,8 @@ class AddPool extends Component {
                                 placeholderTextColor="#353C4050"
                                 textAlignVertical="center"
                                 autoCapitalize="none"
-                                value={this.state.productmrp}
-                                onChangeText={this.handleInventoryMRP}
+                                value={this.state.selectedPoolName}
+                                onChangeText={this.handlePoolName}
                                 ref={inputemail => { this.emailValueInput = inputemail }} />
 
 
@@ -296,50 +285,20 @@ class AddPool extends Component {
                                     Icon={() => {
                                         return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                     }}
-                                    items={this.state.uom}
-                                    onValueChange={this.handleUOM}
+                                    items={[
+                                        { label: 'Buy', value: 'Buy' },
+                                        { label: 'Get', value: 'Get' },
+                                        { label: 'Both', value: 'Both' },
+                                    ]}
+                                    onValueChange={this.handlePoolType}
                                     style={pickerSelectStyles}
-                                    value={this.state.productuom}
+                                    value={this.state.selectedPoolType}
                                     useNativeAndroidPickerStyle={false}
 
                                 />
                             </View>
 
-                            <View style={{
-                                justifyContent: 'center',
-                                margin: 20,
-                                height: 44,
-                                marginTop: 5,
-                                marginBottom: 10,
-                                borderColor: '#8F9EB717',
-                                borderRadius: 3,
-                                backgroundColor: '#FBFBFB',
-                                borderWidth: 1,
-                                fontFamily: 'regular',
-                                paddingLeft: 15,
-                                fontSize: 14,
-                            }} >
-                                <RNPickerSelect style={{
-                                    color: '#8F9EB717',
-                                    fontWeight: 'regular',
-                                    fontSize: 15
-                                }}
-                                    placeholder={{
-                                        label: 'POOL RULE',
 
-                                    }}
-                                    Icon={() => {
-                                        return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                    }}
-                                    items={this.state.uom}
-                                    onValueChange={this.handleUOM}
-                                    style={pickerSelectStyles}
-                                    value={this.state.productuom}
-                                    useNativeAndroidPickerStyle={false}
-
-                                />
-                                <Text></Text>
-                            </View>
 
                         </View>
 
@@ -347,7 +306,7 @@ class AddPool extends Component {
                             Pool Rules
                         </Text>
                         <TouchableOpacity
-                            style={{ position: 'absolute', right: 20, top: 240, borderRadius: 5, borderColor: "#ED1C24", backgroundColor: '#ffffff', width: 90, height: 28, borderWidth: 1, }}
+                            style={{ position: 'absolute', right: 20, top: 180, borderRadius: 5, borderColor: "#ED1C24", backgroundColor: '#ffffff', width: 90, height: 28, borderWidth: 1, }}
                             onPress={() => this.addPoolRool()} >
                             <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginTop: 4, textAlign: 'center', alignSelf: 'center', borderRadius: 5, borderColor: "#ED1C24", }}> {('Add Pool Rule')} </Text>
                         </TouchableOpacity>
@@ -360,7 +319,7 @@ class AddPool extends Component {
                                 onEndReached={this.onEndReached.bind(this)}
 
                                 ref={(ref) => { this.listRef = ref; }}
-                                keyExtractor={item => item.email}
+                                keyExtractor={item => item}
                                 renderItem={({ item, index }) => (
                                     <View style={{
                                         height: 80,
@@ -372,10 +331,10 @@ class AddPool extends Component {
                                         <View style={{ flexDirection: 'column', width: '100%', height: 80, borderTopWidth: 10, borderColor: '#F6F6F6' }}>
 
                                             <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
-                                                RULE NAME
+                                                COLUMN NAME
                                             </Text>
                                             <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                                Text here
+                                                {item.columnName}
                                             </Text>
 
                                             <Text style={{
@@ -390,14 +349,14 @@ class AddPool extends Component {
                                                 alignItems: 'center', //Centered vertically
                                                 flex: 1
                                             }}>
-                                                Text
+                                                {item.operatorSymbol}
                                             </Text>
 
                                             <Text style={{ fontSize: 12, position: 'absolute', right: 50, top: 23, fontFamily: 'regular', color: '#808080' }}>
                                                 VALUES
                                             </Text>
                                             <Text style={{ fontSize: 12, position: 'absolute', right: 50, top: 37, fontFamily: 'medium', color: '#353C40', }}>
-                                                RULE NAME
+                                            {item.givenValue}
                                             </Text>
                                         </View>
 
@@ -449,7 +408,7 @@ class AddPool extends Component {
                                 style={{
                                     margin: 10,
                                     height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                }} onPress={() => this.inventoryUpdate()}
+                                }} onPress={() => this.savePool()}
                             >
                                 <Text style={{
                                     textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
@@ -462,7 +421,7 @@ class AddPool extends Component {
                                 style={{
                                     margin: 10,
                                     height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                }} onPress={() => this.inventoryUpdate()}
+                                }} onPress={() => this.cancel()}
                             >
                                 <Text style={{
                                     textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
@@ -510,15 +469,44 @@ class AddPool extends Component {
                                             <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
                                             </Text>
                                             <View style={{ marginTop: 10, width: deviceWidth, }}>
-                                                <TextInput style={styles.input}
-                                                    underlineColorAndroid="transparent"
-                                                    placeholder="SELECT NAME"
-                                                    placeholderTextColor="#6F6F6F"
-                                                    textAlignVertical="center"
-                                                    autoCapitalize="none"
-                                                    value={this.state.productmrp}
-                                                    onChangeText={this.handleInventoryMRP}
-                                                    ref={inputemail => { this.emailValueInput = inputemail }} />
+                                                <View style={{
+                                                    justifyContent: 'center',
+                                                    margin: 20,
+                                                    height: 44,
+                                                    marginTop: 5,
+                                                    marginBottom: 10,
+                                                    borderColor: '#8F9EB717',
+                                                    borderRadius: 3,
+                                                    backgroundColor: '#FBFBFB',
+                                                    borderWidth: 1,
+                                                    fontFamily: 'regular',
+                                                    paddingLeft: 15,
+                                                    fontSize: 14,
+                                                }} >
+                                                    <RNPickerSelect style={{
+                                                        color: '#8F9EB717',
+                                                        fontWeight: 'regular',
+                                                        fontSize: 15
+                                                    }}
+                                                        placeholder={{
+                                                            label: 'SELECT COLUMN NAME',
+
+                                                        }}
+                                                        Icon={() => {
+                                                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                        }}
+                                                        items={[
+                                                            { label: 'Mrp', value: 'Mrp' },
+                                                            { label: 'BarcodeCreatedDate', value: 'BarcodeCreatedDate' },
+                                                            { label: 'BatchNo', value: 'BatchNo' },
+                                                        ]}
+                                                        onValueChange={this.handleColumnName}
+                                                        style={pickerSelectStyles}
+                                                        value={this.state.selectedColumnName}
+                                                        useNativeAndroidPickerStyle={false}
+
+                                                    />
+                                                </View>
 
 
                                                 <View style={{
@@ -547,10 +535,31 @@ class AddPool extends Component {
                                                         Icon={() => {
                                                             return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                                         }}
-                                                        items={this.state.uom}
-                                                        onValueChange={this.handleUOM}
+                                                        items={[
+                                                            { label: 'Equals', value: 'Equals' },
+                                                            { label: 'NotEquals', value: 'NotEquals' },
+                                                            { label: 'GreaterThan', value: 'GreaterThan' },
+                                                            { label: 'GreaterThanAndEquals', value: 'GreaterThanAndEquals' },
+                                                            { label: 'LessThanAndEquals', value: 'LessThanAndEquals' },
+                                                            { label: 'In', value: 'In' },
+                                            
+                                                            // { label: 'Cost Price', value: 'Cost Price' },
+                                                            // { label: 'SECTION', value: 'SECTION' },
+                                                            // { label: 'SUBSECTION', value: 'SUBSECTION' },
+                                                            // { label: 'DCODE', value: 'DCODE' },
+                                                            // { label: 'MRP', value: 'MRP' },
+                                                            // { label: 'Barcode Created On', value: 'Barcode Created On' },
+                                                            // { label: 'STYLE CODE', value: 'STYLE CODE' },
+                                                            // { label: 'Original Barcode Created On', value: 'Original Barcode Created On' },
+                                                            // { label: 'SUBSECTION_ID', value: 'SUBSECTION_ID' },
+                                                            // { label: 'UOM', value: 'UOM' },
+                                                            // { label: 'BatchNo', value: 'BatchNo' },
+                                                            // { label: 'Discount Type', value: 'Discount Type' },
+                                                            // { label: 'DIVISION', value: 'DIVISION' },
+                                                        ]}
+                                                        onValueChange={this.handleOperator}
                                                         style={pickerSelectStyles}
-                                                        value={this.state.productuom}
+                                                        value={this.state.selectedOperator}
                                                         useNativeAndroidPickerStyle={false}
 
                                                     />
@@ -559,11 +568,12 @@ class AddPool extends Component {
                                                 <TextInput style={styles.input}
                                                     underlineColorAndroid="transparent"
                                                     placeholder="ENTER VALUES"
+                                                    keyboardType='name-phone-pad'
                                                     placeholderTextColor="#6F6F6F"
                                                     textAlignVertical="center"
                                                     autoCapitalize="none"
                                                     value={this.state.productmrp}
-                                                    onChangeText={this.handleInventoryMRP}
+                                                    onChangeText={this.handleValue}
                                                     ref={inputemail => { this.emailValueInput = inputemail }} />
                                             </View>
 
@@ -574,7 +584,7 @@ class AddPool extends Component {
                                                     marginRight: 20,
                                                     marginTop: 20,
                                                     height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                }} onPress={() => this.inventoryUpdate()}
+                                                }} onPress={() => this.addruleName()}
                                             >
                                                 <Text style={{
                                                     textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
