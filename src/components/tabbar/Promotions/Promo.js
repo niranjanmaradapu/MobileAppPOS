@@ -2,16 +2,15 @@ import React, { Component, useState } from 'react'
 import { View, Image, FlatList, Animated, ImageBackground, Text, Button, TouchableOpacity, Switch, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
-import { openDatabase } from 'react-native-sqlite-storage';
 import Modal from "react-native-modal";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import DatePicker from 'react-native-date-picker'
+import PromotionsService from '../../services/PromotionsService';
 
 
 class Promo extends Component {
-
     constructor(props) {
         super(props);
         this.camera = null;
@@ -148,7 +147,6 @@ class Promo extends Component {
     }
 
     enddatepickerClicked() {
-
         this.setState({ datepickerOpen: false })
         this.setState({ datepickerendOpen: true })
     }
@@ -156,6 +154,8 @@ class Promo extends Component {
     refteshPools() {
 
     }
+
+    
 
 
     render() {
@@ -175,7 +175,7 @@ class Promo extends Component {
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
                         onPress={() => this.filterAction()} >
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/promofilter.png')} />
                     </TouchableOpacity>
 
                 </View>
@@ -331,7 +331,7 @@ class Promo extends Component {
                         borderColor: "lightgray",
                         // borderRadius:5,
                     }} onPress={() => this.togglePoolsActiveStatus()}>
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.poolsactiveStatus ? require('../assets/images/switchunabled.png') : require('../assets/images/switchdisabled.png')} />
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.poolsactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
                     </TouchableOpacity>
                 )}
 
@@ -425,7 +425,7 @@ class Promo extends Component {
                                     borderColor: "lightgray",
                                     // borderRadius:5,
                                 }} onPress={() => this.handleeditaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
@@ -439,7 +439,7 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handledeleteaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
                                 </TouchableOpacity>
                                 <View style={{
                                     backgroundColor: 'grey',
@@ -468,7 +468,7 @@ class Promo extends Component {
    
     // borderRadius:5,
 }} onPress={() => this.togglePromoActiveStatus()}>
-    <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.promoactiveStatus ? require('../assets/images/switchunabled.png') : require('../assets/images/switchdisabled.png')} />
+    <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.promoactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
 </TouchableOpacity>
                 )}
 
@@ -580,7 +580,7 @@ class Promo extends Component {
                                     borderColor: "lightgray",
                                     // borderRadius:5,
                                 }} onPress={() => this.handleeditaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
@@ -594,7 +594,7 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handledeleteaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
                                 </TouchableOpacity>
                                 <View style={{
                                     backgroundColor: 'grey',
@@ -673,7 +673,7 @@ class Promo extends Component {
                                     borderColor: "lightgray",
                                     // borderRadius:5,
                                 }} onPress={() => this.handleeditaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
@@ -687,7 +687,7 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handledeleteaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
                                 </TouchableOpacity>
                                 <View style={{
                                     backgroundColor: 'grey',
@@ -737,7 +737,7 @@ class Promo extends Component {
                                         top: 8,
                                         width: 50, height: 50,
                                     }} onPress={() => this.modelCancel()}>
-                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
+                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
                                     <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
@@ -881,7 +881,7 @@ class Promo extends Component {
                                         top: 8,
                                         width: 50, height: 50,
                                     }} onPress={() => this.modelCancel()}>
-                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
+                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
                                     <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
@@ -978,7 +978,7 @@ class Promo extends Component {
                                             
                                             <Image style={{ position: 'absolute', top: 10, left: 20, }} source={
                                                 //require('../assets/images/chargeunselect.png')}
-                                            this.state.chargeExtra ? require('../assets/images/chargeselect.png') : require('../assets/images/chargeunselect.png')} />
+                                            this.state.chargeExtra ? require('../../assets/images/chargeselect.png') : require('../../assets/images/chargeunselect.png')} />
                                         </TouchableOpacity>
 
                                         {this.state.chargeExtra && (
@@ -1093,7 +1093,7 @@ class Promo extends Component {
                                         top: 8,
                                         width: 50, height: 50,
                                     }} onPress={() => this.modelCancel()}>
-                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
+                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
                                     <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
@@ -1235,7 +1235,7 @@ class Promo extends Component {
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
                                                 fontFamily: "regular"
                                             }}  > {this.state.date.toString()} </Text>
-                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
                                         <TouchableOpacity
@@ -1255,7 +1255,7 @@ class Promo extends Component {
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
                                                 fontFamily: "regular"
                                             }}  > {this.state.enddate.toString()} </Text>
-                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
                                     </View>

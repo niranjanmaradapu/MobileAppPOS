@@ -133,7 +133,7 @@ import React, { Component } from 'react';
 import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, Dimensions, View } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import axios from 'axios';
-import NewSaleService from '../services/NewSaleService';
+import NewSaleService from '../../services/NewSaleService';
 import RNBeep from 'react-native-a-beep';
 var deviceWidth = Dimensions.get('window').width;
 
@@ -276,7 +276,9 @@ export default class ImageScanner extends Component {
                         width: 40,
                         height: 40,
                     }} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/backButton.png')} />
+                        <Image source={require('../../assets/images/backButton.png')} />
+                        
+
                     </TouchableOpacity>
                     <Text style={{
                         position: 'absolute',

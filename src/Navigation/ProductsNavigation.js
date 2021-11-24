@@ -1,12 +1,12 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { Component } from 'react'
-import Products from '../components/tabbar/Products';
+import Products from '../components/tabbar/Newsale/Products';
 // import NewSaleNavigation from './NewSaleNavigation';
-import NewSale from '../components/tabbar/NewSale';
-import ImageScanner from '../components/tabbar/ImageScanner';
-import Home from '../components/tabbar/Home';
-import ScanBarCode from '../components/tabbar/ScanBarCode';
-import AddPool from '../components/tabbar/AddPool';
+import NewSale from '../components/tabbar/Newsale/NewSale';
+import ImageScanner from '../components/tabbar/Newsale/ImageScanner';
+import Home from '../components/tabbar/Home/Home';
+import ScanBarCode from '../components/tabbar/Newsale/ScanBarCode';
+import AddPool from '../components/tabbar/Promotions/AddPool';
 
 const Stack = createStackNavigator();
 export default class ProductsNavigation extends React.Component {

@@ -3,7 +3,7 @@ import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions,
 var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
 import axios from 'axios';
-import NewSaleService from '../services/NewSaleService';
+import NewSaleService from '../../services/NewSaleService';
 import { openDatabase } from 'react-native-sqlite-storage';
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
@@ -15,7 +15,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import NetInfo from "@react-native-community/netinfo";
-import InventoryService from '../services/InventoryService';
+import InventoryService from '../../services/InventoryService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -229,7 +229,7 @@ class AddPool extends Component {
                         width: 40,
                         height: 40,
                     }} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/backButton.png')} />
+                        <Image source={require('../../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={{
                         position: 'absolute',
@@ -413,7 +413,7 @@ class AddPool extends Component {
 
                                             borderColor: "lightgray",
                                         }} onPress={() => this.handledeleteaction(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
                                         </TouchableOpacity>
                                         <View style={{
                                             backgroundColor: 'grey',
@@ -504,7 +504,7 @@ class AddPool extends Component {
                                                 top: 8,
                                                 width: 50, height: 50,
                                             }} onPress={() => this.modelCancel()}>
-                                                <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
+                                                <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
 
                                             <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>

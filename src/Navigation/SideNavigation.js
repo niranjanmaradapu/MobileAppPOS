@@ -1,7 +1,7 @@
 
 
-import NewSale from '../components/tabbar/NewSale';
-import Settings from '../components/tabbar/Settings';
+import NewSale from '../components/tabbar/Newsale/NewSale';
+import Settings from '../components/tabbar/Profile/Settings';
 import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';

@@ -3,7 +3,7 @@ import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions,
 var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
 import axios from 'axios';
-import NewSaleService from '../services/NewSaleService';
+import NewSaleService from '../../services/NewSaleService';
 import { openDatabase } from 'react-native-sqlite-storage';
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
@@ -15,7 +15,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import NetInfo from "@react-native-community/netinfo";
-import InventoryService from '../services/InventoryService';
+import InventoryService from '../../services/InventoryService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -405,7 +405,7 @@ class ProductEdit extends Component {
                         width: 40,
                         height: 40,
                     }} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/backButton.png')} />
+                        <Image source={require('../../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={{
                         position: 'absolute',
@@ -434,7 +434,7 @@ class ProductEdit extends Component {
                                 <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 10, alignSelf: 'center', top: -20, left: 15 }} onPress={() => this.imageAction()}>
                                     <Image
                                         style={{ width: 30, height: 30, borderRadius: 10, }}
-                                        source={require('../assets/images/cameraclick.png')} />
+                                        source={require('../../assets/images/cameraclick.png')} />
 
                                 </TouchableOpacity>
 

@@ -236,7 +236,7 @@
 //         right: 10,
 //         top: 20,
 //       }} onPress={() => this.navigateToImageScanner()}>
-//         <Image source={require('../assets/images/barcode.png')} />
+//         <Image source={require('../../assets/images/barcode.png')} />
 //       </TouchableOpacity>
 
 //       {/* this.props.navigation.navigate('AuthNavigation') */}
@@ -839,9 +839,9 @@
 //     //             width: 20,
 //     //             height: 20,
 //     //           }} onPress={() => this.menuAction()}>
-//     //             <Image source={require('../assets/images/menu.png')} />
+//     //             <Image source={require('../../assets/images/menu.png')} />
 //     //           </TouchableOpacity>
-//     //           <Image source={require('../assets/images/filter.png')} style={{
+//     //           <Image source={require('../../assets/images/filter.png')} style={{
 //     //             position: 'absolute',
 //     //             right: 20,
 //     //             top: 50,
@@ -1026,7 +1026,7 @@
 //     //               right: 28,
 //     //               top: 15,
 //     //             }} onPress={() => this.navigateToScanCode()}>
-//     //               <Image source={require('../assets/images/barcode.png')} />
+//     //               <Image source={require('../../assets/images/barcode.png')} />
 //     //             </TouchableOpacity>
 
 //     //             {/* this.props.navigation.navigate('AuthNavigation') */}
@@ -1045,7 +1045,7 @@
 //     //               fontSize: 14, textAlign: 'center', width: 50,
 //     //             }}> PAY </Text>
 
-//     //             <Image source={this.state.flagfour ? require('../assets/images/topSelect.png') : null} style={{
+//     //             <Image source={this.state.flagfour ? require('../../assets/images/topSelect.png') : null} style={{
 //     //               left: 30, marginTop: 5,
 //     //             }} />
 //     //             {/* </TouchableOpacity> */}
@@ -1471,7 +1471,7 @@
 //     //                   right: 28,
 //     //                   top: 70,
 //     //                 }} onPress={() => this.navigateToGetBarCode()}>
-//     //                   <Image source={require('../assets/images/barcode.png')} />
+//     //                   <Image source={require('../../assets/images/barcode.png')} />
 //     //                 </TouchableOpacity>
 
 
@@ -1581,7 +1581,7 @@
 //             width: 40,
 //             height: 40,
 //           }} onPress={() => this.handleBackButtonClick()}>
-//             <Image source={require('../assets/images/backButton.png')} />
+//             <Image source={require('../../assets/images/backButton.png')} />
 //           </TouchableOpacity>
 
 //           <Text style={{
@@ -1600,7 +1600,7 @@
 //             <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('ADD')} </Text>
 //           </TouchableOpacity>
 
-//           {/* <Image style={{position:'absolute',left:0,width:30,height:30,top:2}}source={require('../assets/images/backButton.png')} /> */}
+//           {/* <Image style={{position:'absolute',left:0,width:30,height:30,top:2}}source={require('../../assets/images/backButton.png')} /> */}
 
 
 
@@ -1658,7 +1658,7 @@
 //           }}> NEW SALE </Text>
 
 
-//           <Image source={this.state.flagone ? require('../assets/images/topSelect.png') : null} style={{
+//           <Image source={this.state.flagone ? require('../../assets/images/topSelect.png') : null} style={{
 //             left: 30, marginTop: 5,
 //           }} />
 
@@ -1690,7 +1690,7 @@
 //             fontFamily: "regular",
 //             fontSize: 14, textAlign: 'center', width: 100,
 //           }}> ADD Product/Inventory</Text>
-//           <Image source={this.state.flagtwo ? require('../assets/images/topSelect.png') : null} style={{
+//           <Image source={this.state.flagtwo ? require('../../assets/images/topSelect.png') : null} style={{
 //             left: 30, marginTop: 5,
 //           }} />
 //         </View>
@@ -1722,7 +1722,7 @@
 //             fontFamily: "regular",
 //             fontSize: 14, textAlign: 'center', width: 100,
 //           }}> FIND ITEM  </Text>
-//           <Image source={this.state.flagthree ? require('../assets/images/topSelect.png') : null} style={{
+//           <Image source={this.state.flagthree ? require('../../assets/images/topSelect.png') : null} style={{
 //             left: 30, marginTop: 5,
 //           }} />
 //         </View>
@@ -2311,10 +2311,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
 import Modal from "react-native-modal";
-import CreateCustomerService from '../services/CreateCustomerService';
+import CreateCustomerService from '../../services/CreateCustomerService';
 import axios from 'axios';
 import RazorpayCheckout from 'react-native-razorpay';
-import NewSaleService from '../services/NewSaleService';
+import NewSaleService from '../../services/NewSaleService';
 import { DrawerActions } from '@react-navigation/native';
 import { openDatabase } from 'react-native-sqlite-storage';
 import { ListItem, SearchBar } from "react-native-elements";
@@ -2329,11 +2329,11 @@ import RNBeep from 'react-native-a-beep';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { Alert } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import Loader from '../loader';
-import InventoryService from '../services/InventoryService';
+import Loader from '../../loader';
+import InventoryService from '../../services/InventoryService';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import LoginService from '../services/LoginService';
+import LoginService from '../../services/LoginService';
 
 
 
@@ -2749,7 +2749,7 @@ class NewSale extends Component {
         right: 10,
         top: 20,
       }} onPress={() => this.navigateToImageScanner()}>
-        <Image source={require('../assets/images/barcode.png')} />
+        <Image source={require('../../assets/images/barcode.png')} />
       </TouchableOpacity>
 
       {/* this.props.navigation.navigate('AuthNavigation') */}
@@ -4193,7 +4193,7 @@ refreshProductsAfterEdit(){
               }}> NEW SALE </Text>
 
 
-              <Image source={this.state.flagone ? require('../assets/images/topSelect.png') : null} style={{
+              <Image source={this.state.flagone ? require('../../assets/images/topSelect.png') : null} style={{
                 left: 30, marginTop: 5,
               }} />
 
@@ -4239,7 +4239,7 @@ refreshProductsAfterEdit(){
                 fontSize: 14, textAlign: 'center', width: 100,
 
               }}> ADD Product </Text>
-              <Image source={this.state.flagtwo ? require('../assets/images/topSelect.png') : null} style={{
+              <Image source={this.state.flagtwo ? require('../../assets/images/topSelect.png') : null} style={{
                 left: 30, marginTop: 5,
               }} />
             </View>
@@ -4278,7 +4278,7 @@ refreshProductsAfterEdit(){
                 fontFamily: "regular",
                 fontSize: 14, textAlign: 'center', width: 100,
               }}> FIND ITEM  </Text>
-              <Image source={this.state.flagthree ? require('../assets/images/topSelect.png') : null} style={{
+              <Image source={this.state.flagthree ? require('../../assets/images/topSelect.png') : null} style={{
                 left: 30, marginTop: 5,
               }} />
             </View>
@@ -4305,7 +4305,7 @@ refreshProductsAfterEdit(){
                   <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 10, alignSelf: 'center', top: -20, left: 15 }} onPress={() => this.imageAction()}>
                     <Image
                       style={{ width: 30, height: 30, borderRadius: 10, }}
-                      source={require('../assets/images/cameraclick.png')} />
+                      source={require('../../assets/images/cameraclick.png')} />
 
                   </TouchableOpacity>
 
@@ -4370,7 +4370,7 @@ refreshProductsAfterEdit(){
                       top: 20,
                       width: 50, height: 50,
                     }} onPress={() => this.navigateToGetBarCode()}>
-                      <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', right: 30, }} source={require('../assets/images/addnew.png')} />
+                      <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', right: 30, }} source={require('../../assets/images/addnew.png')} />
                       <Text style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', right: 0, }}> scan </Text>
                     </TouchableOpacity>
                   </View>
@@ -4547,7 +4547,7 @@ refreshProductsAfterEdit(){
                   }}>
 
                     <View style={{ flexDirection: 'column', height: 120, }}>
-                      <Image source={require('../assets/images/default.jpeg')}
+                      <Image source={require('../../assets/images/default.jpeg')}
                         //source={{ uri: item.image }}
                         style={{
                           position: 'absolute', left: 20, top: 15, width: 90, height: 90,
@@ -4650,7 +4650,7 @@ refreshProductsAfterEdit(){
                         borderWidth: 1,
                         borderColor: "lightgray",
                       }} onPress={() => this.handlenewsaledeleteaction(item, index)}>
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
                       </TouchableOpacity>
                     </View>
 
@@ -4942,7 +4942,7 @@ refreshProductsAfterEdit(){
                   right: 10,
                   top: 20,
                 }} onPress={() => this.navigateToImageScanner()}>
-                  <Image source={require('../assets/images/barcode.png')} />
+                  <Image source={require('../../assets/images/barcode.png')} />
                 </TouchableOpacity>
 
                 {/* this.props.navigation.navigate('AuthNavigation') */}
@@ -4999,7 +4999,7 @@ refreshProductsAfterEdit(){
                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
                   }}>
                     <View style={{ flexDirection: 'column', width: '100%', height: 120, }}>
-                      <Image source={require('../assets/images/default.jpeg')}
+                      <Image source={require('../../assets/images/default.jpeg')}
                         //source={{ uri: item.image }} 
                         style={{
                           position: 'absolute', left: 20, top: 15, width: 90, height: 90, borderwidth: 5, borderColor: "#F6F6F6",
@@ -5055,7 +5055,7 @@ refreshProductsAfterEdit(){
                       borderColor: "lightgray",
                       // borderRadius:5,
                     }} onPress={() => this.handleeditaction(item, index)}>
-                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={{
@@ -5069,7 +5069,7 @@ refreshProductsAfterEdit(){
                       borderWidth: 1,
                       borderColor: "lightgray",
                     }} onPress={() => this.handledeleteaction(item, index)}>
-                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
                     </TouchableOpacity>
                     <View style={{
                       backgroundColor: 'grey',

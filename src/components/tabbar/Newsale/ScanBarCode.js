@@ -392,7 +392,7 @@ class ScanBarCode extends Component {
             width: 40,
             height: 40,
           }} onPress={() => this.handleBackButtonClick()}>
-            <Image source={require('../assets/images/backButton.png')} />
+            <Image source={require('../../assets/images/backButton.png')} />
           </TouchableOpacity>
           <Text style={{
             position: 'absolute',
@@ -432,9 +432,9 @@ class ScanBarCode extends Component {
           height: 40,
         }} onPress={() => this.handleflashClick()}>
           {this.state.torchon == RNCamera.Constants.FlashMode.off ? (
-            <Image source={require('../assets/images/flash.png')} />
+            <Image source={require('../../assets/images/flash.png')} />
           ) : (
-            <Image source={require('../assets/images/flash.png')} />
+            <Image source={require('../../assets/images/flash.png')} />
           )
           }
 

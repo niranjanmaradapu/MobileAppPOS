@@ -127,7 +127,7 @@ class Statitics extends Component {
                             width: 40,
                             height: 40,
                         }} onPress={() => this.handleBackButtonClick()}>
-                            <Image source={require('../assets/images/backButton.png')} />
+                            <Image source={require('../../assets/images/backButton.png')} />
                         </TouchableOpacity>
                         <Text style={{
                             position: 'absolute',
