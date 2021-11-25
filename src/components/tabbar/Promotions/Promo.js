@@ -31,6 +31,7 @@ class Promo extends Component {
             selectedStatus:"",
             selectedcreatedBy:"",
             poolsData: [1, 2],
+            promoData: [1, 2],
             productuom: "",
             modalVisible: true,
             uom: [],
@@ -38,8 +39,8 @@ class Promo extends Component {
             enddate: new Date(),
             open: false,
             chargeExtra: false,
-            promoactiveStatus: false,
-            poolsactiveStatus: false,
+            promoactiveStatus: true,
+            poolsactiveStatus: true,
         }
     }
 
@@ -91,6 +92,38 @@ class Promo extends Component {
         })
     };
 
+
+    getAllPromotions = () => {
+        this.setState({ poolsData: [] })
+        this.setState({ promoData: [] })
+        axios.get(PromotionsService.getAllPromotions(), {}).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+                let len = res.data["result"].length;
+                if (len > 0) {
+                    for (let i = 0; i < len; i++) {
+                        let number = res.data["result"][i]
+                         if (this.state.promoactiveStatus === false) {
+                            if(number.isActive == false){
+                                this.state.promoData.push(number)
+                            }  
+                        }
+                        if (this.state.promoactiveStatus === true) {
+                            if(number.isActive == true){
+                                console.log('----addedactivepools')
+                                this.state.promoData.push(number)
+                            }
+                           
+                        }
+                        this.setState({ promoData: this.state.promoData })
+                       
+                    }
+                }
+                return
+            }
+        })
+    };
+
+
     getFilteredpools = () => {
         this.setState({ poolsData: [] })
         axios.get(PromotionsService.getAllPools(), {}).then((res) => {
@@ -126,6 +159,7 @@ class Promo extends Component {
         this.setState({ flagone: true })
         this.setState({ flagtwo: false })
         this.setState({ flagthree: false })
+        this.getAllpools()
     }
 
 
@@ -133,7 +167,7 @@ class Promo extends Component {
         this.setState({ flagone: false })
         this.setState({ flagtwo: true })
         this.setState({ flagthree: false })
-
+        this.getAllPromotions()
     }
 
 
@@ -208,6 +242,7 @@ class Promo extends Component {
     }
 
     togglePromoActiveStatus() {
+        this.getAllPromotions()
         if (this.state.promoactiveStatus === true) {
             this.setState({ promoactiveStatus: false })
         }
@@ -270,6 +305,24 @@ class Promo extends Component {
         }
         this.setState({ modalVisible: false });
       }
+
+      handlepromodeleteaction = (item, index) => {
+        console.log('barcode id is' + item.barcode)
+        axios.delete(PromotionsService.deletePromotions(), { params: {
+          //barcodeId=1811759398
+          "id": item.promoId, 
+         }}).then((res) => {
+          if (res.data && res.data["isSuccess"] === "true") {
+            const list = this.state.promoData;
+            list.splice(index, 1);
+            this.setState({ promoData: list });
+      }
+          else {
+              alert('Issue in delete barcode and having' + res.data["error"]);
+          }
+      }
+      );
+    }
 
       handlepooldeleteaction = (item, index) => {
         console.log('barcode id is' + item.barcode)
@@ -644,9 +697,9 @@ class Promo extends Component {
 
                 {this.state.flagtwo && (
                     <FlatList
-                        data={this.state.poolsData}
+                        data={this.state.promoData}
                         style={{ marginTop: 40, }}
-                        keyExtractor={item => item.email}
+                        keyExtractor={item => item}
                         renderItem={({ item, index }) => (
                             <View style={{
                                 height: 140,
@@ -657,14 +710,14 @@ class Promo extends Component {
                             }}>
                                 <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
                                     <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
-                                        Pool id: #1011
+                                        Promo id: #{String(item.promoId)}
                                     </Text>
 
                                     <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
-                                        POOL NAME
+                                        PROMO NAME
                                     </Text>
                                     <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                        Womens 3 @ 999
+                                    {String(item.promoName)}
                                     </Text>
 
 
@@ -673,13 +726,13 @@ class Promo extends Component {
                                         START DATE
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                        30 Sep 2021
+                                        {item.startDate}
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
                                         END DATE
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                        31 Dec 2021
+                                       {item.endDate}
                                     </Text>
 
                                     <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
@@ -691,7 +744,13 @@ class Promo extends Component {
                                 </View>
 
                                 <TouchableOpacity
-                                    style={{
+                                    style={item.isActive == true ?  {
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 20,
+                                        width: 50,
+                                        height: 24, backgroundColor: "#C1FCB0", borderRadius: 5,
+                                    } : {
                                         position: 'absolute',
                                         right: 20,
                                         top: 20,
@@ -702,9 +761,10 @@ class Promo extends Component {
                                     <Text style={{
                                         textAlign: 'center', marginTop: 5, color: "#353C40", fontSize: 12,
                                         fontFamily: "regular"
-                                    }}  > Inactive </Text>
+                                    }}  > {item.isActive == true ? 'Active' : 'Inactive'} </Text>
 
                                 </TouchableOpacity>
+
 
 
                                 <TouchableOpacity style={{
@@ -732,7 +792,7 @@ class Promo extends Component {
                                     borderTopRightRadius: 5,
                                     borderWidth: 1,
                                     borderColor: "lightgray",
-                                }} onPress={() => this.handledeleteaction(item, index)}>
+                                }} onPress={() => this.handlepromodeleteaction(item, index)}>
                                     <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
                                 </TouchableOpacity>
                                 <View style={{

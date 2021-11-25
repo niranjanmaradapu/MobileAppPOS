@@ -3470,6 +3470,48 @@ class NewSale extends Component {
           if (res.data && res.data["isSuccess"] === "true") {
             this.setState({ tableData: [] })
             alert("Order created " + res.data["result"]);
+
+            const params = {
+                    "amount": JSON.stringify(this.state.totalAmount - this.state.totalDiscount),
+                    "info": "order_request"
+                  }
+
+            axios.post(NewSaleService.payment(), params).then((res) => {
+                    // this.setState({isPayment: false});
+                    const data = JSON.parse(res.data["result"])
+                    //console.log()
+                    var options = {
+                      description: 'Transaction',
+                      image: 'https://i.imgur.com/3g7nmJC.png',
+                      currency: data.currency,
+                      order_id: data.id,
+                      key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
+                      amount: data.amount,
+                      name: 'OTSI',
+                      prefill: {
+                        name: "Kadali",
+                        email: "kadali@gmail.com",
+                        contact: "9999999999",
+                      },
+                      theme: { color: '#F37254' }
+                    }
+                    console.log(options)
+                    RazorpayCheckout.open(options).then((data) => {
+                      // handle success
+                      this.setState({ tableData: [] })
+                      alert(`Success: ${data.razorpay_payment_id}`);
+                      this.props.navigation.navigate('Home')
+                      //this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
+                    }).catch((error) => {
+                      console.log(error)
+                      // handle failure
+                      alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
+                    });
+                  })
+                  
+                
+                
+
             this.setState({ loading: false })
           }
           else {
