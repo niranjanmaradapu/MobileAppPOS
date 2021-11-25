@@ -3437,7 +3437,6 @@ class NewSale extends Component {
         for (let i = 0; i < lineItemIds[0].length; i++) {
           lineItemIdAdd.push({ lineItemId: lineItemIds[0][i] })
         }
-
         const params = {
           "natureOfSale": "InStore",
           "domainId": this.state.domainId,
@@ -3463,17 +3462,15 @@ class NewSale extends Component {
           "dlSlip": [],
           "lineItemsReVo": lineItemIdAdd
         }
-
         console.log(params)
-
         axios.post(NewSaleService.createOrder(), params).then((res) => {
           if (res.data && res.data["isSuccess"] === "true") {
             this.setState({ tableData: [] })
-            alert("Order created " + res.data["result"]);
-
+           // alert("Order created " + res.data["result"]);
             const params = {
                     "amount": JSON.stringify(this.state.totalAmount - this.state.totalDiscount),
-                    "info": "order_request"
+                    "info": "order creations",
+                    "newsaleId":res.data["result"],
                   }
 
             axios.post(NewSaleService.payment(), params).then((res) => {
