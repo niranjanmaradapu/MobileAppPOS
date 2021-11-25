@@ -3328,6 +3328,12 @@ class NewSale extends Component {
           "approvedBy": 5218,
           "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
           "offlineNumber": null,
+          "paymentAmountType": [
+            {
+                "id": 1,
+                "paymentAmount": this.state.totalAmount - this.state.totalDiscount,
+                "paymentType": "Cash"
+            }],
           "customerDetails": {
             "name": this.state.customerName,
             "mobileNumber": this.state.customerPhoneNumber,
