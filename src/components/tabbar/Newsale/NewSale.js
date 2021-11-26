@@ -3330,7 +3330,6 @@ class NewSale extends Component {
           "offlineNumber": null,
           "paymentAmountType": [
             {
-                "id": 1,
                 "paymentAmount": this.state.totalAmount - this.state.totalDiscount,
                 "paymentType": "Cash"
             }],
