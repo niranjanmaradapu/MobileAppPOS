@@ -9,6 +9,7 @@ import { Chevron } from 'react-native-shapes';
 import DatePicker from 'react-native-date-picker'
 import PromotionsService from '../../services/PromotionsService';
 import axios from 'axios';
+import Loader from '../../loader';
 
 
 class Promo extends Component {
@@ -51,8 +52,10 @@ class Promo extends Component {
 
     getAllpools = () => {
         this.setState({ poolsData: [] })
+        this.setState({ loading: true })
         axios.get(PromotionsService.getAllPools(), {}).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
+                this.setState({ loading: false })
                 let len = res.data["result"].length;
                 if (len > 0) {
                     for (let i = 0; i < len; i++) {
@@ -96,7 +99,9 @@ class Promo extends Component {
     getAllPromotions = () => {
         this.setState({ poolsData: [] })
         this.setState({ promoData: [] })
+        this.setState({ loading: true })
         axios.get(PromotionsService.getAllPromotions(), {}).then((res) => {
+            this.setState({ loading: false })
             if (res.data && res.data["isSuccess"] === "true") {
                 let len = res.data["result"].length;
                 if (len > 0) {
@@ -126,8 +131,10 @@ class Promo extends Component {
 
     getFilteredpools = () => {
         this.setState({ poolsData: [] })
+        this.setState({ loading: true })
         axios.get(PromotionsService.getAllPools(), {}).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
+               
                 let len = res.data["result"].length;
                 if (len > 0) {
                     for (let i = 0; i < len; i++) {
@@ -347,6 +354,10 @@ class Promo extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
+                 {this.state.loading &&
+                    <Loader
+                        loading={this.state.loading} />
+                }
                 <View style={styles.viewswidth}>
                     <Text style={{
                         position: 'absolute',
@@ -1642,6 +1653,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 24,
         height: 84,
+    },
+    loading: {
+        flex: 1,
+        justifyContent: 'center'
+        // alignItems: 'center',
     },
     input: {
         justifyContent: 'center',
