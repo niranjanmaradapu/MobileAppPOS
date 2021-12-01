@@ -612,7 +612,7 @@ class Promo extends Component {
                         left: 115,
                         top: 147,
                         width: 32,
-                        height: 18,
+                        height: 30,
                         borderColor: "lightgray",
                         // borderRadius:5,
                     }} onPress={() => this.togglePoolsActiveStatus()}>
@@ -624,7 +624,7 @@ class Promo extends Component {
                 {this.state.flagone && (
                     <TouchableOpacity
                         style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 95, height: 32, }}
-                        onPress={() => this.navigateToAddPool()} >
+                         >
                         <Text style={{ fontSize: 16, fontFamily: 'regular', color: '#707070', marginLeft: 10, marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('Only active')} </Text>
                     </TouchableOpacity>
 
@@ -755,7 +755,7 @@ class Promo extends Component {
                         left: 115,
                         top: 147,
                         width: 32,
-                        height: 18,
+                        height: 30,
 
                         // borderRadius:5,
                     }} onPress={() => this.togglePromoActiveStatus()}>
@@ -766,8 +766,8 @@ class Promo extends Component {
 
                 {this.state.flagtwo && (
                     <TouchableOpacity
-                        style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 95, height: 32, }}
-                        onPress={() => this.navigateToAddPool()} >
+                        style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 95, height: 32 }}
+                        >
                         <Text style={{ fontSize: 16, fontFamily: 'regular', color: '#707070', marginLeft: 10, marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('Only active')} </Text>
                     </TouchableOpacity>
 

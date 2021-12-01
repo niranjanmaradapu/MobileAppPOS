@@ -490,7 +490,7 @@ class AddPool extends Component {
                                         backgroundColor: "#ffffff",
                                         height: 400,
                                         position: 'absolute',
-                                        bottom: 0,
+                                        bottom: -20,
                                     }}>
                                         <KeyboardAwareScrollView KeyboardAwareScrollView
                                             enableOnAndroid={true}>
