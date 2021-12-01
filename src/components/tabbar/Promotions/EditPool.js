@@ -7,6 +7,7 @@ import { openDatabase } from 'react-native-sqlite-storage';
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 import { RNCamera } from 'react-native-camera';
+import { Alert } from 'react-native';
 import Modal from "react-native-modal";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
@@ -15,8 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import PromotionsService from '../../services/PromotionsService';
 import Loader from '../../loader';
 
-
-class AddPool extends Component {
+class EditPool extends Component {
     constructor(props) {
         super(props);
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -30,6 +30,7 @@ class AddPool extends Component {
             mobileNumber: "",
             altMobileNo: "",
             name: "",
+            selectedIndex:0,
             loading: false,
             arrayData: [],
             temp: [],
@@ -57,12 +58,12 @@ class AddPool extends Component {
             productmrp: "",
             productofferprice: "",
             selectedPoolType: '',
-            selectedPoolName:'',
+            selectedPoolName: '',
             selectedColumnName: '',
             selectedOperator: '',
-            selectedIndex:0,
-            domainId:1,
             updateRool:false,
+            item: [],
+            domainId: 1,
             tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
             tableData: [
             ],
@@ -74,24 +75,32 @@ class AddPool extends Component {
     }
 
     async componentDidMount() {
+        this.setState({
+            item: this.props.route.params.item
+        });
+        console.log(this.state.item)
+        this.setState({ selectedPoolType: this.props.route.params.item.poolType })
+        this.setState({ arrayData: this.props.route.params.item.ruleVo })
+        this.setState({ selectedPoolName: this.props.route.params.item.poolName })
+       
         var domainStringId = ""
         AsyncStorage.getItem("domainDataId").then((value) => {
-          domainStringId = value
-          this.setState({ domainId: parseInt(domainStringId)})
-          console.log("domain data id" + this.state.domainId)
-         
+            domainStringId = value
+            this.setState({ domainId: parseInt(domainStringId) })
+            console.log("domain data id" + this.state.domainId)
+
         }).catch(() => {
-          console.log('there is error getting domainDataId')
+            console.log('there is error getting domainDataId')
         })
-}
+    }
 
 
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
     }
-    cancel(){
-        this.props.navigation.goBack(null);   
+    cancel() {
+        this.props.navigation.goBack(null);
     }
 
     modelCancel() {
@@ -112,21 +121,21 @@ class AddPool extends Component {
             const username = await AsyncStorage.getItem("username");
             const params = {
                 //required 
-                "createdBy":username,
                 "isActive": true,
-                "isForEdit": false,
-                "domainId":this.state.domainId,
+                "isForEdit": true,
+                "domainId": this.state.domainId,
                 "poolName": this.state.selectedPoolName,
                 "poolType": this.state.selectedPoolType,
-                "ruleVo":this.state.arrayData,
+                "ruleVo": this.state.arrayData,
+                "poolId":this.props.route.params.item.poolId, 
             }
             console.log('params are' + JSON.stringify(params))
             this.setState({ loading: true })
-            axios.post(PromotionsService.createPool(), params).then((res) => {
+            axios.post(PromotionsService.updatePool(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.setState({ loading: false })
-                    this.props.route.params.onGoBack();
-                    this.props.navigation.goBack();
+                   // this.props.route.params.onGoBack();
+                    this.props.navigation.goBack(null);
                 }
                 else {
                     this.setState({ loading: false })
@@ -137,9 +146,7 @@ class AddPool extends Component {
         }
     }
 
-
-
-
+    
     refresh() {
         this.setState({ productname: global.productname })
         console.log('search' + this.state.productname)
@@ -147,10 +154,8 @@ class AddPool extends Component {
 
 
    
+
     imageAction() {
-        // console.log('tapped')
-        // this.setState({ flagqtyModelOpen: true })
-        // this.setState({ modalVisible: true });
     }
 
     onEndReached() {
@@ -163,7 +168,7 @@ class AddPool extends Component {
         this.setState({ selectedOperator: ""})
         this.setState({ productmrp: ""})
         this.setState({ modalVisible: true });
-        this.setState({ flagCustomerOpen: true }); 
+        this.setState({ flagCustomerOpen: true });
     }
 
     handlePoolType = (value) => {
@@ -174,21 +179,21 @@ class AddPool extends Component {
         this.setState({ selectedColumnName: value });
     }
 
-    handleValue= (value) => {
+    handleValue = (value) => {
         this.setState({ productmrp: value });
     }
 
-    
+
 
     handledeleteaction = (item, index) => {
-        if(this.state.arrayData.length == 2){
+        if (this.state.arrayData.length == 2) {
             alert('You need atleast two rules for create pool')
             return
-          }
+        }
         const list = this.state.arrayData;
         list.splice(index, 1);
         this.setState({ arrayData: list });
-        }
+    }
 
 
     addruleName() {
@@ -202,16 +207,19 @@ class AddPool extends Component {
          
         }
         else{
-        this.state.arrayData.push({ columnName: this.state.selectedColumnName, operatorSymbol:this.state.selectedOperator,givenValue:this.state.productmrp})
+        this.state.arrayData.push({ columnName: this.state.selectedColumnName, operatorSymbol: this.state.selectedOperator, givenValue: this.state.productmrp })
         this.setState({ modalVisible: false });
         }
     }
 
-    handlePoolName= (value) => {
+    handlePoolName = (value) => {
         this.setState({ selectedPoolName: value });
     }
 
-   
+
+    handleOperator = (value) => {
+        this.setState({ selectedOperator: value });
+    }
 
     handleeditaction = (item, index) => {
         this.setState({ selectedIndex: index });
@@ -225,11 +233,6 @@ class AddPool extends Component {
 
 
 
-    handleOperator = (value) => {
-        this.setState({ selectedOperator: value });
-    }
-
-
 
     render() {
         return (
@@ -238,7 +241,6 @@ class AddPool extends Component {
                     <Loader
                         loading={this.state.loading} />
                  }
-
                 <View style={styles.viewswidth}>
                     <TouchableOpacity style={{
                         position: 'absolute',
@@ -258,14 +260,8 @@ class AddPool extends Component {
                         fontFamily: 'bold',
                         fontSize: 18,
                         color: '#353C40'
-                    }}> Add Pool </Text>
+                    }}> Edit Pool </Text>
                 </View>
-
-
-
-
-                {/* <KeyboardAwareScrollView KeyboardAwareScrollView
-                    enableOnAndroid={true}> */}
 
                 <View style={{
                     flex: 1, justifyContent: 'center', //Centered horizontally
@@ -343,7 +339,7 @@ class AddPool extends Component {
 
                         <ScrollView>
                             <FlatList
-                                data={this.state.arrayData}
+                                data={this.state.item.ruleVo}
                                 style={{ marginTop: 40, }}
                                 onEndReached={this.onEndReached.bind(this)}
 
@@ -385,13 +381,11 @@ class AddPool extends Component {
                                                 VALUES
                                             </Text>
                                             <Text style={{ fontSize: 12, position: 'absolute', right: 70, top: 37, fontFamily: 'medium', color: '#353C40', }}>
-                                            {item.givenValue}
+                                                {item.givenValue}
                                             </Text>
                                         </View>
 
-                                        
-
-                                <TouchableOpacity style={{
+                                        <TouchableOpacity style={{
                                             position: 'absolute',
                                             right: 35,
                                             top: 30,
@@ -409,7 +403,8 @@ class AddPool extends Component {
                                             height: 30,
                                             width: 90
                                         }}>
-                                              </View>
+                                        </View>
+
 
 
                                         <TouchableOpacity style={{
@@ -418,6 +413,8 @@ class AddPool extends Component {
                                             top: 30,
                                             width: 30,
                                             height: 30,
+
+
                                             borderColor: "lightgray",
                                         }} onPress={() => this.handledeleteaction(item, index)}>
                                             <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
@@ -478,8 +475,7 @@ class AddPool extends Component {
 
                             </TouchableOpacity>
 
-                        </ScrollView>
-                        {this.state.flagCustomerOpen && (
+                            {this.state.flagCustomerOpen && (
                             <View>
                                 <Modal isVisible={this.state.modalVisible}>
 
@@ -590,7 +586,7 @@ class AddPool extends Component {
                                                             { label: 'GreaterThanAndEquals', value: 'GreaterThanAndEquals' },
                                                             { label: 'LessThanAndEquals', value: 'LessThanAndEquals' },
                                                             { label: 'In', value: 'In' },
-                                            
+
                                                             // { label: 'Cost Price', value: 'Cost Price' },
                                                             // { label: 'SECTION', value: 'SECTION' },
                                                             // { label: 'SUBSECTION', value: 'SUBSECTION' },
@@ -622,7 +618,7 @@ class AddPool extends Component {
                                                     autoCapitalize="none"
                                                     value={this.state.productmrp}
                                                     onChangeText={this.handleValue}
-                                                    ref={inputemail => { this.emailValueInput = inputemail }} />
+                                                 />
                                             </View>
 
                                             <TouchableOpacity
@@ -662,6 +658,9 @@ class AddPool extends Component {
                                 </Modal>
                             </View>)}
 
+                        </ScrollView>
+                        
+
                     </View>
 
                 </View>
@@ -672,7 +671,7 @@ class AddPool extends Component {
         )
     }
 }
-export default AddPool
+export default EditPool
 
 
 const pickerSelectStyles = StyleSheet.create({
@@ -723,17 +722,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#FAFAFF'
     },
-    loading: {
-        flex: 1,
-        justifyContent: 'center'
-        // alignItems: 'center',
-    },
     viewswidth: {
         backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
         height: 84,
+    },
+    loading: {
+        flex: 1,
+        justifyContent: 'center'
+        // alignItems: 'center',
     },
     input: {
         justifyContent: 'center',

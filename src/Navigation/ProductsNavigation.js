@@ -8,6 +8,7 @@ import Home from '../components/tabbar/Home/Home';
 import ScanBarCode from '../components/tabbar/Newsale/ScanBarCode';
 import AddPool from '../components/tabbar/Promotions/AddPool';
 
+
 const Stack = createStackNavigator();
 export default class ProductsNavigation extends React.Component {
     render() {
@@ -20,6 +21,7 @@ export default class ProductsNavigation extends React.Component {
                 <Stack.Screen name="ImageScanner" options={{headerShown: false}} component={ImageScanner} />
                 <Stack.Screen name="Home" options={{headerShown: false}} component={Home} /> 
                 <Stack.Screen name="AddPool" options={{headerShown: false}} component={AddPool} /> 
+               
             </Stack.Navigator>
 
         );

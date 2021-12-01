@@ -10,6 +10,8 @@ import DatePicker from 'react-native-date-picker'
 import PromotionsService from '../../services/PromotionsService';
 import axios from 'axios';
 import Loader from '../../loader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 class Promo extends Component {
@@ -33,8 +35,11 @@ class Promo extends Component {
             selectedcreatedBy:"",
             poolsData: [1, 2],
             promoData: [1, 2],
+            loyaltyData: [1, 2],
             productuom: "",
+            selectedPromotionType:"",
             modalVisible: true,
+            selectedStore:'',
             uom: [],
             date: new Date(),
             enddate: new Date(),
@@ -42,24 +47,63 @@ class Promo extends Component {
             chargeExtra: false,
             promoactiveStatus: true,
             poolsactiveStatus: true,
+            domainId:1,
+            storeId:1,
+            storeNames:[]
         }
     }
 
     async componentDidMount() {
-        this.getAllpools()
+
+            var domainStringId = ""
+            AsyncStorage.getItem("domainDataId").then((value) => {
+              domainStringId = value
+              this.setState({ domainId: parseInt(domainStringId)})
+              console.log("domain data id" + this.state.domainId)
+              this.getAllpools()
+             
+            }).catch(() => {
+              console.log('there is error getting domainDataId')
+            })
+
+            const username = await AsyncStorage.getItem("username");
+       // console.log(LoginService.getUserStores() + "/" + username)
+        var storeNames = [];
+        axios.get(LoginService.getUserStores() + username).then((res) => {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    storeNames.push(
+                        res.data["result"][i]//id
+                       // label: res.data["result"][i]['storeName']
+                    );
+                }
+            }
+            this.setState({
+                storeNames: storeNames,
+            })
+            console.log("stores data----" + JSON.stringify(this.state.storeNames))
+            console.log('store Names are' + JSON.stringify(this.state.storeNames))
+        });
+        
     }
 
 
     getAllpools = () => {
         this.setState({ poolsData: [] })
         this.setState({ loading: true })
-        axios.get(PromotionsService.getAllPools(), {}).then((res) => {
+        const params = {
+            "domainId": this.state.domainId,
+            "isActive": true
+        }
+        console.log(this.state.domainId)
+        axios.get(PromotionsService.getAllPools(),
+            {params}).then((res) => {   
             if (res.data && res.data["isSuccess"] === "true") {
                 this.setState({ loading: false })
-                let len = res.data["result"].length;
+                let len = res.data["result"]["poolvo"].length;
                 if (len > 0) {
                     for (let i = 0; i < len; i++) {
-                        let number = res.data["result"][i]
+                        let number = res.data["result"]["poolvo"][i]
                     if(number.createdBy != null){
                             this.state.createdByTempArray.push({label:number.createdBy,value:number.createdBy})
                             }
@@ -92,7 +136,11 @@ class Promo extends Component {
                 
                 return
             }
-        })
+        }).catch(() => {
+            this.setState({ loading: false })
+                alert('No Records Found')
+            })
+
     };
 
 
@@ -100,13 +148,19 @@ class Promo extends Component {
         this.setState({ poolsData: [] })
         this.setState({ promoData: [] })
         this.setState({ loading: true })
-        axios.get(PromotionsService.getAllPromotions(), {}).then((res) => {
-            this.setState({ loading: false })
+        const params = {
+            "domainId": 1,//this.state.domainId,
+            "flag": true
+        }
+        console.log(this.state.domainId)
+        axios.get(PromotionsService.getAllPromotions(),
+            {params}).then((res) => {   
             if (res.data && res.data["isSuccess"] === "true") {
-                let len = res.data["result"].length;
+                this.setState({ loading: false })
+                let len = res.data["result"]["promovo"].length;
                 if (len > 0) {
                     for (let i = 0; i < len; i++) {
-                        let number = res.data["result"][i]
+                        let number = res.data["result"]["promovo"][i]
                          if (this.state.promoactiveStatus === false) {
                             if(number.isActive == false){
                                 this.state.promoData.push(number)
@@ -125,20 +179,29 @@ class Promo extends Component {
                 }
                 return
             }
-        })
+        }).catch(() => {
+            this.setState({ loading: false })
+                alert('No Records Found')
+            })
     };
 
 
     getFilteredpools = () => {
         this.setState({ poolsData: [] })
         this.setState({ loading: true })
-        axios.get(PromotionsService.getAllPools(), {}).then((res) => {
+        const params = {
+            "domainId": this.state.domainId,
+            "isActive": true
+        }
+        console.log(this.state.domainId)
+        axios.get(PromotionsService.getAllPools(),
+            {params}).then((res) => {   
             if (res.data && res.data["isSuccess"] === "true") {
-               
-                let len = res.data["result"].length;
+                this.setState({ loading: false })
+                let len = res.data["result"]["poolvo"].length;
                 if (len > 0) {
                     for (let i = 0; i < len; i++) {
-                        let number = res.data["result"][i]
+                        let number = res.data["result"]["poolvo"][i]
                          if (this.state.poolsactiveStatus === false && this.state.selectedcreatedBy === number.createdBy) {
                             if(number.isActive == false){
                                 this.state.poolsData.push(number)
@@ -159,7 +222,10 @@ class Promo extends Component {
                 
                 return
             }
-        })
+        }).catch(() => {
+            this.setState({ loading: false })
+                alert('No Records Found')
+            })
     };
 
     topbarAction1() {
@@ -185,9 +251,11 @@ class Promo extends Component {
     }
 
     handleeditaction = (item, index) => {
+
     }
 
     handledeleteaction = (item, index) => {
+
     }
 
     filterAction() {
@@ -283,11 +351,25 @@ class Promo extends Component {
     }
 
     refteshPools() {
+        console.log('---------refreshed')
+       this.getAllpools()
+    }
+
+    updatePools() {
+        console.log('---------refreshed')
        this.getAllpools()
     }
 
     handleCreatedBy = (value) => {
         this.setState({ selectedcreatedBy: value });   
+    }
+
+    handleSelectPromotionType = (value) => {
+        this.setState({ selectedPromotionType: value });   
+    }
+
+    handleSelectStore = (value) => {
+        this.setState({ selectedStore: value });   
     }
 
     handleStatusBy= (value) => {
@@ -329,6 +411,12 @@ class Promo extends Component {
           }
       }
       );
+    }
+
+    handlepooleditaction = (item, index) => {
+        this.props.navigation.navigate('EditPool', { item: item }, {
+            onGoBack: () => this.updatePools(),
+        });
     }
 
       handlepooldeleteaction = (item, index) => {
@@ -789,7 +877,7 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                     // borderRadius:5,
-                                }} onPress={() => this.handleeditaction(item, index)}>
+                                }} onPress={() => this.handleeditpromoaction(item, index)}>
                                     <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
@@ -825,8 +913,8 @@ class Promo extends Component {
 
                 {this.state.flagthree && (
                     <FlatList
-                        data={this.state.poolsData}
-                        keyExtractor={item => item.email}
+                        data={this.state.loyaltyData}
+                        keyExtractor={item => item}
                         renderItem={({ item, index }) => (
                             <View style={{
                                 height: 140,
@@ -882,7 +970,7 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                     // borderRadius:5,
-                                }} onPress={() => this.handleeditaction(item, index)}>
+                                }} onPress={() => this.handleeditloyaltyaction(item, index)}>
                                     <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
@@ -896,7 +984,7 @@ class Promo extends Component {
                                     borderTopRightRadius: 5,
                                     borderWidth: 1,
                                     borderColor: "lightgray",
-                                }} onPress={() => this.handledeleteaction(item, index)}>
+                                }} onPress={() => this.handledeleteloyaltyaction(item, index)}>
                                     <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
                                 </TouchableOpacity>
                                 <View style={{
@@ -1347,13 +1435,17 @@ class Promo extends Component {
                                                     label: 'PROMOTION TYPE',
 
                                                 }}
+                                                items={[
+                                                    { label: 'By_Promotion', value: 'By_Promotion' },
+                                                    { label: 'By_Store', value: 'By_Store' },
+                                                ]}
                                                 Icon={() => {
                                                     return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                                 }}
-                                                items={this.state.uom}
-                                                onValueChange={this.handleUOM}
+                                               
+                                                onValueChange={this.handleSelectPromotionType}
                                                 style={pickerSelectStyles}
-                                                value={this.state.productuom}
+                                                value={this.state.selectedPromotionType}
                                                 useNativeAndroidPickerStyle={false}
 
                                             />
@@ -1379,7 +1471,7 @@ class Promo extends Component {
                                                 fontSize: 15
                                             }}
                                                 placeholder={{
-                                                    label: 'PROMOTION CODE',
+                                                    label: 'PROMOTION NAME',
 
                                                 }}
                                                 Icon={() => {
@@ -1420,10 +1512,10 @@ class Promo extends Component {
                                                 Icon={() => {
                                                     return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                                 }}
-                                                items={this.state.uom}
-                                                onValueChange={this.handleUOM}
+                                                items={this.state.storeNames}
+                                                onValueChange={this.handleSelectStore}
                                                 style={pickerSelectStyles}
-                                                value={this.state.productuom}
+                                                value={this.state.selectedStore}
                                                 useNativeAndroidPickerStyle={false}
 
                                             />

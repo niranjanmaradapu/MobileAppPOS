@@ -198,6 +198,7 @@ export default class Login extends Component {
             this.setState({
                 storeNames: storeNames,
             })
+            console.log('stores are--' + this.state.storeNames)
             if(this.state.storeNames.length === 1){
                 this.props.navigation.navigate('HomeNavigation')
             }
