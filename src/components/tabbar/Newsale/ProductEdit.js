@@ -52,20 +52,20 @@ class ProductEdit extends Component {
             flagtwo: false,
             flagthree: false,
             flagfour: false,
-            domainId:1,
-           storeId:1,
-            
-          
-            
+            domainId: 1,
+            storeId: 1,
+
+
+
             uom: [],
-          
-            productItemId:0,
-            barcodeId:0,
-            productname:"",
-            produtctQty:0,
-            productuom:"",
-            productmrp:"",
-            productofferprice:"",
+
+            productItemId: 0,
+            barcodeId: 0,
+            productname: "",
+            produtctQty: 0,
+            productuom: "",
+            productmrp: "",
+            productofferprice: "",
             tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
             tableData: [
             ],
@@ -80,30 +80,30 @@ class ProductEdit extends Component {
         var domainStringId = ""
         var storeStringId = ""
         AsyncStorage.getItem("domainDataId").then((value) => {
-          domainStringId = value
-          this.setState({ domainId: parseInt(domainStringId)})
-          console.log("domain data id" + this.state.domainId)
-         
+            domainStringId = value
+            this.setState({ domainId: parseInt(domainStringId) })
+            console.log("domain data id" + this.state.domainId)
+
         }).catch(() => {
-          console.log('there is error getting domainDataId')
+            console.log('there is error getting domainDataId')
         })
-    
+
         AsyncStorage.getItem("storeId").then((value) => {
-          storeStringId = value
-          this.setState({ storeId: parseInt(storeStringId)})
-          console.log(this.state.storeId)
+            storeStringId = value
+            this.setState({ storeId: parseInt(storeStringId) })
+            console.log(this.state.storeId)
         }).catch(() => {
-          console.log('there is error getting storeId')
+            console.log('there is error getting storeId')
         })
 
         this.setState({
-            productItemId:this.props.route.params.productItemId,
-            barcodeId:this.props.route.params.barcodeId,
-            productname:this.props.route.params.productname,
-            produtctQty:this.props.route.params.produtctQty,
-            productuom:this.props.route.params.productuom,
-            productmrp:this.props.route.params.productmrp,
-            productofferprice:this.props.route.params.productofferprice,
+            productItemId: this.props.route.params.productItemId,
+            barcodeId: this.props.route.params.barcodeId,
+            productname: this.props.route.params.productname,
+            produtctQty: this.props.route.params.produtctQty,
+            productuom: this.props.route.params.productuom,
+            productmrp: this.props.route.params.productmrp,
+            productofferprice: this.props.route.params.productofferprice,
         });
         console.log('sadsadf' + this.state.productuom)
         this.getUOM()
@@ -268,7 +268,7 @@ class ProductEdit extends Component {
         return true;
     }
 
-   
+
     handleUOM = (value) => {
         this.setState({ productuom: value });
     }
@@ -318,14 +318,14 @@ class ProductEdit extends Component {
             this.setState({ loading: true })
             const params = {
                 //required 
-                "productItemId":this.state.productItemId,
+                "productItemId": this.state.productItemId,
                 "costPrice": this.state.productmrp,
                 "name": this.state.productname,
-                "listPrice":this.state.productofferprice,
-                "stockValue":this.state.produtctQty,
-                "uom": this.state.productuom, 
+                "listPrice": this.state.productofferprice,
+                "stockValue": this.state.produtctQty,
+                "uom": this.state.productuom,
                 "domainDataId": this.state.domainId,
-                "storeId":this.state.storeId,
+                "storeId": this.state.storeId,
                 "barcodeId": this.state.barcodeId,
                 //optional
                 "tyecode": this.state.productofferprice,//"10",
@@ -337,22 +337,22 @@ class ProductEdit extends Component {
                 "length": 35,
                 "productValidity": "",
                 "empId": 1
-              }
-              console.log('params are' + JSON.stringify(params))
-              this.setState({ loading: true })
-              axios.put(InventoryService.updateBarcode(), params).then((res) => {
+            }
+            console.log('params are' + JSON.stringify(params))
+            this.setState({ loading: true })
+            axios.put(InventoryService.updateBarcode(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                  this.setState({ loading: false })
-                  this.props.route.params.onGoBack();
-                  this.props.navigation.goBack();
+                    this.setState({ loading: false })
+                    this.props.route.params.onGoBack();
+                    this.props.navigation.goBack();
                 }
                 else {
                     this.setState({ loading: false })
-                 // this.setState({ loading: false })
-                  alert("duplicate record already exists");
+                    // this.setState({ loading: false })
+                    alert("duplicate record already exists");
                 }
-              }
-              );
+            }
+            );
         }
     }
 
@@ -519,15 +519,6 @@ class ProductEdit extends Component {
                                         value={String(this.state.produtctQty)}
                                         onChangeText={this.handleInventoryQuantity}
                                         ref={inputemail => { this.emailValueInput = inputemail }} />
-
-                                    {/* <TouchableOpacity style={{
-                        position: 'absolute',
-                        right: 28,
-                        top: 20,
-                      }} >
-
-                        <Text style={{ color: '#353C4050', fontFamily: 'regular', fontSize: 14, position: 'absolute', right: 0, }}> {'Select Unit >'} </Text>
-                      </TouchableOpacity> */}
                                 </View>
 
                                 <View style={{
@@ -551,7 +542,7 @@ class ProductEdit extends Component {
                                     }}
                                         placeholder={{
                                             label: 'SELECT UOM',
-                                         
+
                                         }}
                                         Icon={() => {
                                             return <Chevron style={styles.imagealign} size={1.5} color="gray" />;

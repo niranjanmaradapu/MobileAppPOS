@@ -14,14 +14,14 @@ export default class ProductsNavigation extends React.Component {
     render() {
         return (
             <Stack.Navigator>
-                <Stack.Screen name="Products" options={{headerShown: false}} component={Products} />
+                <Stack.Screen name="Products" options={{ headerShown: false }} component={Products} />
                 <Stack.Screen name="ScanBarCode" options={{ headerShown: false }} component={ScanBarCode} />
                 {/* <Stack.Screen name="NewSaleNavigation" options={{headerShown: false}} component={NewSaleNavigation} /> */}
-                <Stack.Screen name="NewSale" options={{headerShown: false}} component={NewSale} />
-                <Stack.Screen name="ImageScanner" options={{headerShown: false}} component={ImageScanner} />
-                <Stack.Screen name="Home" options={{headerShown: false}} component={Home} /> 
-                <Stack.Screen name="AddPool" options={{headerShown: false}} component={AddPool} /> 
-               
+                <Stack.Screen name="NewSale" options={{ headerShown: false }} component={NewSale} />
+                <Stack.Screen name="ImageScanner" options={{ headerShown: false }} component={ImageScanner} />
+                <Stack.Screen name="Home" options={{ headerShown: false }} component={Home} />
+                <Stack.Screen name="AddPool" options={{ headerShown: false }} component={AddPool} />
+
             </Stack.Navigator>
 
         );

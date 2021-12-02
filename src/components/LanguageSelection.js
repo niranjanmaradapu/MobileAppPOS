@@ -2,8 +2,6 @@ import React from 'react';
 import { StyleSheet, View, Text, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
 import I18n, { getLanguages } from 'react-native-i18n';
-import RNPickerSelect from 'react-native-picker-select';
-import { Chevron } from 'react-native-shapes';
 // Enable fallbacks if you want `en-US`
 // and `en-GB` to fallback to `en`
 I18n.fallbacks = true;
@@ -72,7 +70,7 @@ export default class LanguageSelection extends React.Component {
             I18n.locale = 'te';
             this.setState({ language: "Telugu" });
         }
-       
+
     };
 
 
@@ -93,25 +91,25 @@ export default class LanguageSelection extends React.Component {
                         data={data}
                         keyExtractor={item => item.email}
                         renderItem={({ item, index }) => (
-                            
-                                <TouchableOpacity onPress={() => this.selectedLanguage(item, index)}>
-                                    <View style={{
-                                        borderBottomColor: 'lightgray', borderBottomWidth: 0.6, marginLeft: this.state.selectedItem === index ? 0 : 0, marginRight: this.state.selectedItem === index ? 0 : 0, backgroundColor: this.state.selectedItem === index ? '#ED1C24' : '#ffffff'
-                                    }}>
+
+                            <TouchableOpacity onPress={() => this.selectedLanguage(item, index)}>
+                                <View style={{
+                                    borderBottomColor: 'lightgray', borderBottomWidth: 0.6, marginLeft: this.state.selectedItem === index ? 0 : 0, marginRight: this.state.selectedItem === index ? 0 : 0, backgroundColor: this.state.selectedItem === index ? '#ED1C24' : '#ffffff'
+                                }}>
 
 
-                                        <View style={{ flexDirection: 'column', width: '100%', height: 80 }}>
-                                            <Text style={{
-                                                fontSize: 18, marginTop: 30, marginLeft: 20, fontFamily: 'medium', color:this.state.selectedItem === index ? '#ffffff' : '#353C40'
-                                            }}>
-                                                {item.key}
-                                            </Text>
-                                            <Image source={this.state.selectedItem === index ? require('./assets/images/langselect.png') : require('./assets/images/langunselect.png')} style={{position:'absolute',right:20,top:30}} />
-                                        </View>
-
+                                    <View style={{ flexDirection: 'column', width: '100%', height: 80 }}>
+                                        <Text style={{
+                                            fontSize: 18, marginTop: 30, marginLeft: 20, fontFamily: 'medium', color: this.state.selectedItem === index ? '#ffffff' : '#353C40'
+                                        }}>
+                                            {item.key}
+                                        </Text>
+                                        <Image source={this.state.selectedItem === index ? require('./assets/images/langselect.png') : require('./assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 30 }} />
                                     </View>
-                                </TouchableOpacity>
-                           
+
+                                </View>
+                            </TouchableOpacity>
+
 
                         )}
                     />
@@ -156,19 +154,6 @@ const pickerSelectStyles = StyleSheet.create({
         textAlign: 'center',
 
     },
-    // flexDirection: 'row',
-    // marginLeft: 24,
-    // marginRight: 24,
-    // color:'black',
-    // marginTop: 2,
-    // height: 34,
-    // borderColor: '#AAAAAA',
-    // borderRadius: 8,
-    // backgroundColor: 'white',
-    // borderWidth: 1,
-    // padding: 10,
-    // textAlign: 'center',
-
 })
 
 

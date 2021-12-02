@@ -11,9 +11,9 @@ export default class HomeNavigation extends React.Component {
     render() {
         return (
             <Stack.Navigator>
-                
+
                 <Stack.Screen name="SideNavigation" options={{ headerShown: false }} component={SideNavigation} />
-               
+
             </Stack.Navigator>
         );
     }

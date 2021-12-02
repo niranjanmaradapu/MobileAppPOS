@@ -2,23 +2,12 @@ import React from 'react';
 import { StyleSheet, View, Text, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
 import I18n, { getLanguages } from 'react-native-i18n';
-import RNPickerSelect from 'react-native-picker-select';
-import { Chevron } from 'react-native-shapes';
 import LoginService from '../services/LoginService';
 import axios from 'axios';
-// Enable fallbacks if you want `en-US`
-// and `en-GB` to fallback to `en`
 I18n.fallbacks = true;
 I18n.defaultLocale = 'en';
 const data = [{ key: "Vijayawada" }, { key: "Kakinada" }, { key: "Anakapalli" }];
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// // Available languages
-// I18n.translations = {
-//     'en': require('./assets/translations/en'),
-//     'te': require('./assets/translations/te'),
-//     'hi': require('./assets/translations/hi'),
-// };
 
 export default class SelectStore extends React.Component {
     constructor(props) {
@@ -28,25 +17,18 @@ export default class SelectStore extends React.Component {
             languages: [],
             selectedItem: 0,
             storeNames: [],
-            }
+        }
     }
 
     async componentDidMount() {
-        // getLanguages().then(languages => {
-        //     this.setState({ languages });
-        // });
-
         const username = await AsyncStorage.getItem("username");
-       // console.log(LoginService.getUserStores() + "/" + username)
         var storeNames = [];
         axios.get(LoginService.getUserStores() + username).then((res) => {
             if (res.data["result"]) {
                 for (var i = 0; i < res.data["result"].length; i++) {
                     storeNames.push(
                         res.data["result"][i]//id
-                       // label: res.data["result"][i]['storeName']
                     );
-    
                 }
             }
             this.setState({
@@ -55,31 +37,28 @@ export default class SelectStore extends React.Component {
             console.log("stores data----" + JSON.stringify(res.data["result"]))
             console.log('store Name' + JSON.stringify(storeNames))
         });
-       // console.log('dsgsdgsdg' + username)
-       // const username = await this.getRememberedUser();
-      
     }
 
     getStoreId = (item) => {
         const params = {
-            "storeName": item, 
+            "storeName": item,
         }
         axios.post(LoginService.getStoreIdWithStoreName(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 console.log('dsgsdgsdg' + String(res.data["result"][0].id))
-              AsyncStorage.setItem("storeId",String(res.data["result"][0].id)).then(() => {
-            }).catch(() => {
-                console.log('there is error saving storeId')
-            })
+                AsyncStorage.setItem("storeId", String(res.data["result"][0].id)).then(() => {
+                }).catch(() => {
+                    console.log('there is error saving storeId')
+                })
             }
             else {
-              alert("id not found");
+                alert("id not found");
             }
-          }
-          )
+        }
+        )
     }
 
-   
+
     letsGoButtonAction() {
         this.props.navigation.navigate('HomeNavigation');
     }
@@ -118,7 +97,7 @@ export default class SelectStore extends React.Component {
             I18n.locale = 'te';
             this.setState({ language: "Telugu" });
         }
-       
+
     };
 
 
@@ -133,39 +112,30 @@ export default class SelectStore extends React.Component {
                         justifyContent: 'center',
                     }}> {('Select the Store')} </Text>
                     <FlatList
-                        style={{ width: deviceWidth, marginTop: 50,  marginBottom: 100,}}
+                        style={{ width: deviceWidth, marginTop: 50, marginBottom: 100, }}
                         // scrollEnabled={false}
                         ListHeaderComponent={this.renderHeader}
                         data={this.state.storeNames}
                         keyExtractor={item => item.email}
                         renderItem={({ item, index }) => (
-                            
-                                <TouchableOpacity onPress={() => this.selectedLanguage(item, index)}>
-                                    <View style={{
-                                        borderBottomColor: 'lightgray', borderBottomWidth: 0.6, marginLeft: this.state.selectedItem === index ? 0 : 0, marginRight: this.state.selectedItem === index ? 0 : 0, backgroundColor: this.state.selectedItem === index ? '#ED1C24' : '#ffffff'
-                                    }}>
-
-
-                                        <View style={{ flexDirection: 'column', width: '100%', height: 80 }}>
-                                            <Text style={{
-                                                fontSize: 18, marginTop: 30, marginLeft: 20, fontFamily: 'medium', color:this.state.selectedItem === index ? '#ffffff' : '#353C40'
-                                            }}>
-                                                {item}
-                                            </Text>
-                                            <Image source={this.state.selectedItem === index ? require('../assets/images/langselect.png') : require('../assets/images/langunselect.png')} style={{position:'absolute',right:20,top:30}} />
-                                        </View>
-
+                            <TouchableOpacity onPress={() => this.selectedLanguage(item, index)}>
+                                <View style={{
+                                    borderBottomColor: 'lightgray', borderBottomWidth: 0.6, marginLeft: this.state.selectedItem === index ? 0 : 0, marginRight: this.state.selectedItem === index ? 0 : 0, backgroundColor: this.state.selectedItem === index ? '#ED1C24' : '#ffffff'
+                                }}>
+                                    <View style={{ flexDirection: 'column', width: '100%', height: 80 }}>
+                                        <Text style={{
+                                            fontSize: 18, marginTop: 30, marginLeft: 20, fontFamily: 'medium', color: this.state.selectedItem === index ? '#ffffff' : '#353C40'
+                                        }}>
+                                            {item}
+                                        </Text>
+                                        <Image source={this.state.selectedItem === index ? require('../assets/images/langselect.png') : require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 30 }} />
                                     </View>
-                                </TouchableOpacity>
-                           
 
+                                </View>
+                            </TouchableOpacity>
                         )}
                     />
-
-
                 </View>
-
-
                 <TouchableOpacity
                     style={styles.signInButton}
                     onPress={() => this.letsGoButtonAction()} >
@@ -200,21 +170,7 @@ const pickerSelectStyles = StyleSheet.create({
         backgroundColor: 'white',
         color: 'black',
         textAlign: 'center',
-
     },
-    // flexDirection: 'row',
-    // marginLeft: 24,
-    // marginRight: 24,
-    // color:'black',
-    // marginTop: 2,
-    // height: 34,
-    // borderColor: '#AAAAAA',
-    // borderRadius: 8,
-    // backgroundColor: 'white',
-    // borderWidth: 1,
-    // padding: 10,
-    // textAlign: 'center',
-
 })
 
 

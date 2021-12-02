@@ -15,15 +15,15 @@ export default class SplashScreen extends React.Component {
         AsyncStorage.getItem("phone_number").then((value) => {
             phonenumber = value
         }).catch(() => {
-          console.log('there is error getting phone numner')
+            console.log('there is error getting phone numner')
         })
         console.log('phone number is' + phonenumber)
         setTimeout(() => {
-            if(phonenumber === null){
+            if (phonenumber === null) {
                 this.props.navigation.navigate('AuthNavigation')
             }
-            else{
-             this.props.navigation.navigate('HomeNavigation')
+            else {
+                this.props.navigation.navigate('HomeNavigation')
             }
         }, 2500);
     }

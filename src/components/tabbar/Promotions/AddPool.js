@@ -57,12 +57,12 @@ class AddPool extends Component {
             productmrp: "",
             productofferprice: "",
             selectedPoolType: '',
-            selectedPoolName:'',
+            selectedPoolName: '',
             selectedColumnName: '',
             selectedOperator: '',
-            selectedIndex:0,
-            domainId:1,
-            updateRool:false,
+            selectedIndex: 0,
+            domainId: 1,
+            updateRool: false,
             tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
             tableData: [
             ],
@@ -76,22 +76,22 @@ class AddPool extends Component {
     async componentDidMount() {
         var domainStringId = ""
         AsyncStorage.getItem("domainDataId").then((value) => {
-          domainStringId = value
-          this.setState({ domainId: parseInt(domainStringId)})
-          console.log("domain data id" + this.state.domainId)
-         
+            domainStringId = value
+            this.setState({ domainId: parseInt(domainStringId) })
+            console.log("domain data id" + this.state.domainId)
+
         }).catch(() => {
-          console.log('there is error getting domainDataId')
+            console.log('there is error getting domainDataId')
         })
-}
+    }
 
 
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
     }
-    cancel(){
-        this.props.navigation.goBack(null);   
+    cancel() {
+        this.props.navigation.goBack(null);
     }
 
     modelCancel() {
@@ -112,13 +112,13 @@ class AddPool extends Component {
             const username = await AsyncStorage.getItem("username");
             const params = {
                 //required 
-                "createdBy":username,
+                "createdBy": username,
                 "isActive": true,
                 "isForEdit": false,
-                "domainId":this.state.domainId,
+                "domainId": this.state.domainId,
                 "poolName": this.state.selectedPoolName,
                 "poolType": this.state.selectedPoolType,
-                "ruleVo":this.state.arrayData,
+                "ruleVo": this.state.arrayData,
             }
             console.log('params are' + JSON.stringify(params))
             this.setState({ loading: true })
@@ -146,7 +146,7 @@ class AddPool extends Component {
     }
 
 
-   
+
     imageAction() {
         // console.log('tapped')
         // this.setState({ flagqtyModelOpen: true })
@@ -160,10 +160,10 @@ class AddPool extends Component {
     addPoolRool() {
         this.setState({ updateRool: false });
         this.setState({ selectedColumnName: "" })
-        this.setState({ selectedOperator: ""})
-        this.setState({ productmrp: ""})
+        this.setState({ selectedOperator: "" })
+        this.setState({ productmrp: "" })
         this.setState({ modalVisible: true });
-        this.setState({ flagCustomerOpen: true }); 
+        this.setState({ flagCustomerOpen: true });
     }
 
     handlePoolType = (value) => {
@@ -174,44 +174,44 @@ class AddPool extends Component {
         this.setState({ selectedColumnName: value });
     }
 
-    handleValue= (value) => {
+    handleValue = (value) => {
         this.setState({ productmrp: value });
     }
 
-    
+
 
     handledeleteaction = (item, index) => {
-        if(this.state.arrayData.length == 2){
+        if (this.state.arrayData.length == 2) {
             alert('You need atleast two rules for create pool')
             return
-          }
+        }
         const list = this.state.arrayData;
         list.splice(index, 1);
         this.setState({ arrayData: list });
-        }
+    }
 
 
     addruleName() {
-        if(this.state.updateRool === true){
+        if (this.state.updateRool === true) {
             const editArray = [...this.state.arrayData];
             editArray[this.state.selectedIndex].columnName = this.state.selectedColumnName;
             editArray[this.state.selectedIndex].operatorSymbol = this.state.selectedOperator;
             editArray[this.state.selectedIndex].givenValue = this.state.productmrp;
-            this.setState({ arrayData:  editArray });
+            this.setState({ arrayData: editArray });
             this.setState({ modalVisible: false });
-         
+
         }
-        else{
-        this.state.arrayData.push({ columnName: this.state.selectedColumnName, operatorSymbol:this.state.selectedOperator,givenValue:this.state.productmrp})
-        this.setState({ modalVisible: false });
+        else {
+            this.state.arrayData.push({ columnName: this.state.selectedColumnName, operatorSymbol: this.state.selectedOperator, givenValue: this.state.productmrp })
+            this.setState({ modalVisible: false });
         }
     }
 
-    handlePoolName= (value) => {
+    handlePoolName = (value) => {
         this.setState({ selectedPoolName: value });
     }
 
-   
+
 
     handleeditaction = (item, index) => {
         this.setState({ selectedIndex: index });
@@ -234,10 +234,10 @@ class AddPool extends Component {
     render() {
         return (
             <View style={styles.container}>
-                 {this.state.loading &&
+                {this.state.loading &&
                     <Loader
                         loading={this.state.loading} />
-                 }
+                }
 
                 <View style={styles.viewswidth}>
                     <TouchableOpacity style={{
@@ -385,13 +385,13 @@ class AddPool extends Component {
                                                 VALUES
                                             </Text>
                                             <Text style={{ fontSize: 12, position: 'absolute', right: 70, top: 37, fontFamily: 'medium', color: '#353C40', }}>
-                                            {item.givenValue}
+                                                {item.givenValue}
                                             </Text>
                                         </View>
 
-                                        
 
-                                <TouchableOpacity style={{
+
+                                        <TouchableOpacity style={{
                                             position: 'absolute',
                                             right: 35,
                                             top: 30,
@@ -409,7 +409,7 @@ class AddPool extends Component {
                                             height: 30,
                                             width: 90
                                         }}>
-                                              </View>
+                                        </View>
 
 
                                         <TouchableOpacity style={{
@@ -590,7 +590,7 @@ class AddPool extends Component {
                                                             { label: 'GreaterThanAndEquals', value: 'GreaterThanAndEquals' },
                                                             { label: 'LessThanAndEquals', value: 'LessThanAndEquals' },
                                                             { label: 'In', value: 'In' },
-                                            
+
                                                             // { label: 'Cost Price', value: 'Cost Price' },
                                                             // { label: 'SECTION', value: 'SECTION' },
                                                             // { label: 'SUBSECTION', value: 'SUBSECTION' },
@@ -703,17 +703,6 @@ const pickerSelectStyles = StyleSheet.create({
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
     },
 })
 
@@ -991,9 +980,6 @@ const styles = StyleSheet.create({
         height: 45,
         textAlign: "center",
     },
-
-
-
 
 
     tabBar: {

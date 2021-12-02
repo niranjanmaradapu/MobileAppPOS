@@ -20,8 +20,8 @@ class ForgotPassword extends Component {
         this.setState({
             userName: this.props.route.params.username,
         });
-        
-      }
+
+    }
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
@@ -42,10 +42,7 @@ class ForgotPassword extends Component {
         this.setState({ confirmPassword: text })
     }
 
-    create(){
-         //
-        //this.props.navigation.navigate('HomeNavigation')
-        //return
+    create() {
         if (this.state.userName.length === 0) {
             alert('You must enter a Usename');
         } else if (this.state.code.length === 0) {
@@ -60,38 +57,38 @@ class ForgotPassword extends Component {
         else if (this.state.newPassword !== this.state.confirmPassword) {
             alert('new and confirm passwords are not matched');
         }
-        
+
         else {
             alert('Please enter correct code recieved in mail');
-           // this.props.navigation.goBack(null);
-    //         const params = {
-    //             "username": this.state.userName, //"+919493926067",
-    //             "confirmarionCode": this.state.code, //"Mani@1123",
-    //             "newPassword": this.state.newPassword,
-    //             //"storeName": this.state.store,//"kphb",
-    //         }
-    //         AsyncStorage.setItem("username", this.state.userName);
-    //         console.log(LoginService.getAuth() + JSON.stringify(params))
-    //         this.setState({ loading: true })
-    //         axios.post(LoginService.forgotPassword(),null, { params: {
-    //             "username": this.state.userName, //"+919493926067",
-    //             "confirmarionCode": this.state.code, //"Mani@1123",
-    //             "newPassword": this.state.newPassword,
-    //            }}).then((res) => {
-    //             if (res.data && res.data["isSuccess"] === "true") {
-    //             this.setState({ loading: false })
-    //             this.props.navigation.goBack(null);
-    //         }
-    //             else {
-    //                 this.setState({ loading: false })
-    //                 alert('Invalid Credentials');
-    //                // this.props.navigation.goBack(null);
-    //                // this.state.store = ""
-    //                 // this.state.store.clear()
-    //             }
-    //         }
-    //         );
-     }
+            // this.props.navigation.goBack(null);
+            //         const params = {
+            //             "username": this.state.userName, //"+919493926067",
+            //             "confirmarionCode": this.state.code, //"Mani@1123",
+            //             "newPassword": this.state.newPassword,
+            //             //"storeName": this.state.store,//"kphb",
+            //         }
+            //         AsyncStorage.setItem("username", this.state.userName);
+            //         console.log(LoginService.getAuth() + JSON.stringify(params))
+            //         this.setState({ loading: true })
+            //         axios.post(LoginService.forgotPassword(),null, { params: {
+            //             "username": this.state.userName, //"+919493926067",
+            //             "confirmarionCode": this.state.code, //"Mani@1123",
+            //             "newPassword": this.state.newPassword,
+            //            }}).then((res) => {
+            //             if (res.data && res.data["isSuccess"] === "true") {
+            //             this.setState({ loading: false })
+            //             this.props.navigation.goBack(null);
+            //         }
+            //             else {
+            //                 this.setState({ loading: false })
+            //                 alert('Invalid Credentials');
+            //                // this.props.navigation.goBack(null);
+            //                // this.state.store = ""
+            //                 // this.state.store.clear()
+            //             }
+            //         }
+            //         );
+        }
     }
 
 
@@ -152,7 +149,7 @@ class ForgotPassword extends Component {
                                 // textAlignVertical="center"
                                 autoCapitalize="none"
                                 onChangeText={this.handleEmail}
-                                 value={this.state.userName}
+                                value={this.state.userName}
                                 ref={inputemail => { this.emailValueInput = inputemail }} />
 
 
@@ -187,14 +184,14 @@ class ForgotPassword extends Component {
                                 //value={this.state.password}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
 
-                           
+
                             <TouchableOpacity
                                 style={styles.signInButton}
                                 onPress={() => this.create()} >
                                 <Text style={styles.signInButtonText}> CREATE  </Text>
                             </TouchableOpacity>
 
-                       
+
                         </View>
                     </View>
                 </SafeAreaView>

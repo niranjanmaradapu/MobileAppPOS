@@ -9,8 +9,8 @@ class Orders extends Component {
         super(props);
         this.state = {
             arrayData: [],
-            total:'',
-            payment:''
+            total: '',
+            payment: ''
         }
     }
 
@@ -19,8 +19,8 @@ class Orders extends Component {
             total: this.props.route.params.total,
             payment: this.props.route.params.payment,
         });
-        
-      }
+
+    }
 
 
     handleBackButtonClick() {
@@ -31,26 +31,26 @@ class Orders extends Component {
 
 
     render() {
-        if(this.state.total.length !== 0){
-            this.state.arrayData.push({ totalAmount:this.state.total,paymentType:this.state.payment})
-            }
+        if (this.state.total.length !== 0) {
+            this.state.arrayData.push({ totalAmount: this.state.total, paymentType: this.state.payment })
+        }
         const state = this.state;
         return (
             <ScrollView>
                 <View style={styles.container}>
                     <SafeAreaView style={styles.safeArea}>
-                        <View style={styles.viewswidth}> 
-                        <Text style={styles.signUptext}> Order History </Text>
-                        <TouchableOpacity style={{
-                            position: 'absolute',
-                            left: 10,
-                            top: 30,
-                            width: 20,
-                            height: 20,
-                        }} onPress={() => this.handleBackButtonClick()}>
-                            <Image source={require('../../assets/images/backButton.png')} />
-                        </TouchableOpacity>
-                    </View>
+                        <View style={styles.viewswidth}>
+                            <Text style={styles.signUptext}> Order History </Text>
+                            <TouchableOpacity style={{
+                                position: 'absolute',
+                                left: 10,
+                                top: 30,
+                                width: 20,
+                                height: 20,
+                            }} onPress={() => this.handleBackButtonClick()}>
+                                <Image source={require('../../assets/images/backButton.png')} />
+                            </TouchableOpacity>
+                        </View>
 
                     </SafeAreaView>
                     <FlatList
@@ -66,7 +66,7 @@ class Orders extends Component {
                             }}>
                                 <View style={{ flexDirection: 'column', width: '55%' }}>
                                     <Text style={{ fontSize: 15, marginTop: 10, marginLeft: 20, fontFamily: 'bold' }}>
-                                        Order Id: Order# {(JSON.stringify(index+1))}
+                                        Order Id: Order# {(JSON.stringify(index + 1))}
                                     </Text>
                                     <Text style={{ fontSize: 15, marginBottom: 0, marginLeft: 20, fontFamily: 'bold' }}>
                                         Amount: Rs {item.totalAmount}

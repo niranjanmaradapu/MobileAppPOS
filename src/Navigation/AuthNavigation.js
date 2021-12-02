@@ -15,7 +15,7 @@ export default class AuthNavigation extends React.Component {
         return (
 
             <Stack.Navigator>
-                 <Stack.Screen name="LanguageSelection" options={{ headerShown: false }} component={LanguageSelection} />
+                <Stack.Screen name="LanguageSelection" options={{ headerShown: false }} component={LanguageSelection} />
                 <Stack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
                 <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
                 <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUp} />

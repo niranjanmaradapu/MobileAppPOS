@@ -10,25 +10,25 @@ class PromotionService {
         return REACT_NATIVE_APP_BASE_URL + '/connection-pool/pool/createpool'
     }
 
-    updatePool(){
+    updatePool() {
         return REACT_NATIVE_APP_BASE_URL + '/connection-pool/pool/modifypool'
     }
 
-    deletePool(){
-        return REACT_NATIVE_APP_BASE_URL + '/connection-pool/pool/deletepool'; 
+    deletePool() {
+        return REACT_NATIVE_APP_BASE_URL + '/connection-pool/pool/deletepool';
     }
 
-     //Promotions
-     getAllPromotions() {
+    //Promotions
+    getAllPromotions() {
         return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/getpromolist'
     }
 
-    deletePromotions(){
-        return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/deletepromo'; 
+    deletePromotions() {
+        return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/deletepromo';
     }
 
-    addPromoStore(){
-        return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/addPromoToStore';   
+    addPromoStore() {
+        return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/addPromoToStore';
     }
 }
 export default new PromotionService()

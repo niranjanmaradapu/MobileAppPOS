@@ -42,12 +42,12 @@ class Promo extends Component {
             selectedPromotionName: "",
             modalVisible: true,
             selectedStore: '',
-            selectedstoreId:0,
+            selectedstoreId: 0,
             uom: [],
             // date: new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate(),
             // enddate:new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate(),
             date: new Date(),
-            enddate:new Date(),
+            enddate: new Date(),
             open: false,
             chargeExtra: false,
             promoactiveStatus: true,
@@ -81,1293 +81,1049 @@ class Promo extends Component {
                         label: res.data["result"][i]
                     });
                 }
-            this.setState({
-                storeNames: storeNames,
-            })
+                this.setState({
+                    storeNames: storeNames,
+                })
 
-            // for (var i = 0; i < res.data["result"].length; i++) {
-            //     storeNames.push(
-            //         res.data["result"][i]//id
-            //        // label: res.data["result"][i]['storeName']
-            //     );
-            // }
-        }
-          
+                // for (var i = 0; i < res.data["result"].length; i++) {
+                //     storeNames.push(
+                //         res.data["result"][i]//id
+                //        // label: res.data["result"][i]['storeName']
+                //     );
+                // }
+            }
+
             console.log("stores data----" + JSON.stringify(this.state.storeNames))
             console.log('store Names are' + JSON.stringify(this.state.storeNames))
         });
 
-}
-
-
-getAllpools = () => {
-    this.setState({ poolsData: [] })
-    this.setState({ loading: true })
-    const params = {
-        "domainId": this.state.domainId,
-        "isActive": true
     }
-    console.log(this.state.domainId)
-    axios.get(PromotionsService.getAllPools(),
-        { params }).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                this.setState({ loading: false })
-                let len = res.data["result"]["poolvo"].length;
-                if (len > 0) {
-                    for (let i = 0; i < len; i++) {
-                        let number = res.data["result"]["poolvo"][i]
-                        if (number.createdBy != null) {
-                            this.state.createdByTempArray.push({ label: number.createdBy, value: number.createdBy })
-                        }
 
-                        this.setState({ createdByTempArray: this.state.createdByTempArray })
 
-                        if (this.state.poolsactiveStatus === false) {
-                            if (number.isActive == false) {
-                                this.state.poolsData.push(number)
+    getAllpools = () => {
+        this.setState({ poolsData: [] })
+        this.setState({ loading: true })
+        const params = {
+            "domainId": this.state.domainId,
+            "isActive": true
+        }
+        console.log(this.state.domainId)
+        axios.get(PromotionsService.getAllPools(),
+            { params }).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    this.setState({ loading: false })
+                    let len = res.data["result"]["poolvo"].length;
+                    if (len > 0) {
+                        for (let i = 0; i < len; i++) {
+                            let number = res.data["result"]["poolvo"][i]
+                            if (number.createdBy != null) {
+                                this.state.createdByTempArray.push({ label: number.createdBy, value: number.createdBy })
                             }
 
-                        }
-                        if (this.state.poolsactiveStatus === true) {
-                            if (number.isActive == true) {
-                                console.log('----addedactivepools')
-                                this.state.poolsData.push(number)
+                            this.setState({ createdByTempArray: this.state.createdByTempArray })
+
+                            if (this.state.poolsactiveStatus === false) {
+                                if (number.isActive == false) {
+                                    this.state.poolsData.push(number)
+                                }
+
                             }
+                            if (this.state.poolsactiveStatus === true) {
+                                if (number.isActive == true) {
+                                    console.log('----addedactivepools')
+                                    this.state.poolsData.push(number)
+                                }
+
+                            }
+                            this.setState({ poolsData: this.state.poolsData })
 
                         }
-                        this.setState({ poolsData: this.state.poolsData })
-
                     }
+                    this.state.createdByTempArray.forEach(obj => {
+                        if (!this.state.createdByArray.some(o => o.value === obj.value)) {
+                            this.state.createdByArray.push({ ...obj })
+                        }
+                        this.setState({ createdByArray: this.state.createdByArray })
+                    });
+
+                    return
                 }
-                this.state.createdByTempArray.forEach(obj => {
-                    if (!this.state.createdByArray.some(o => o.value === obj.value)) {
-                        this.state.createdByArray.push({ ...obj })
-                    }
-                    this.setState({ createdByArray: this.state.createdByArray })
-                });
-
-                return
-            }
-        }).catch(() => {
-            this.setState({ loading: false })
-            alert('No Records Found')
-        })
-
-};
-
-
-getAllPromotions = () => {
-    this.setState({ poolsData: [] })
-    this.setState({ promoData: [] })
-    this.setState({ loading: true })
-    const params = {
-        "domainId": 1,//this.state.domainId,
-        "flag": true
-    }
-    console.log(this.state.domainId)
-    axios.get(PromotionsService.getAllPromotions(),
-        { params }).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
+            }).catch(() => {
                 this.setState({ loading: false })
-                let len = res.data["result"]["promovo"].length;
-                if (len > 0) {
-                    for (let i = 0; i < len; i++) {
-                        let number = res.data["result"]["promovo"][i]
-                        if (this.state.promoactiveStatus === false) {
-                            if (number.isActive == false) {
-                                this.state.promoData.push(number)
+                alert('No Records Found')
+            })
+
+    };
+
+
+    getAllPromotions = () => {
+        this.setState({ poolsData: [] })
+        this.setState({ promoData: [] })
+        this.setState({ loading: true })
+        const params = {
+            "domainId": 1,//this.state.domainId,
+            "flag": true
+        }
+        console.log(this.state.domainId)
+        axios.get(PromotionsService.getAllPromotions(),
+            { params }).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    this.setState({ loading: false })
+                    let len = res.data["result"]["promovo"].length;
+                    if (len > 0) {
+                        for (let i = 0; i < len; i++) {
+                            let number = res.data["result"]["promovo"][i]
+                            if (this.state.promoactiveStatus === false) {
+                                if (number.isActive == false) {
+                                    this.state.promoData.push(number)
+                                }
                             }
-                        }
-                        if (this.state.promoactiveStatus === true) {
-                            if (number.isActive == true) {
-                                console.log('----addedactivepools')
-                                this.state.promoData.push(number)
+                            if (this.state.promoactiveStatus === true) {
+                                if (number.isActive == true) {
+                                    console.log('----addedactivepools')
+                                    this.state.promoData.push(number)
+                                }
+
                             }
+                            this.setState({ promoData: this.state.promoData })
 
                         }
-                        this.setState({ promoData: this.state.promoData })
-
                     }
+                    return
                 }
-                return
-            }
-        }).catch(() => {
-            this.setState({ loading: false })
-            alert('No Records Found')
-        })
-};
-
-
-getFilteredpools = () => {
-    this.setState({ poolsData: [] })
-    this.setState({ loading: true })
-    const params = {
-        "domainId": this.state.domainId,
-        "isActive": true
-    }
-    console.log(this.state.domainId)
-    axios.get(PromotionsService.getAllPools(),
-        { params }).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
+            }).catch(() => {
                 this.setState({ loading: false })
-                let len = res.data["result"]["poolvo"].length;
-                if (len > 0) {
-                    for (let i = 0; i < len; i++) {
-                        let number = res.data["result"]["poolvo"][i]
-                        if (this.state.poolsactiveStatus === false && this.state.selectedcreatedBy === number.createdBy) {
-                            if (number.isActive == false) {
-                                this.state.poolsData.push(number)
+                alert('No Records Found')
+            })
+    };
+
+
+    getFilteredpools = () => {
+        this.setState({ poolsData: [] })
+        this.setState({ loading: true })
+        const params = {
+            "domainId": this.state.domainId,
+            "isActive": true
+        }
+        console.log(this.state.domainId)
+        axios.get(PromotionsService.getAllPools(),
+            { params }).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    this.setState({ loading: false })
+                    let len = res.data["result"]["poolvo"].length;
+                    if (len > 0) {
+                        for (let i = 0; i < len; i++) {
+                            let number = res.data["result"]["poolvo"][i]
+                            if (this.state.poolsactiveStatus === false && this.state.selectedcreatedBy === number.createdBy) {
+                                if (number.isActive == false) {
+                                    this.state.poolsData.push(number)
+                                }
+
+                            }
+                            if (this.state.poolsactiveStatus === true && this.state.selectedcreatedBy === number.createdBy) {
+                                if (number.isActive == true) {
+                                    console.log('----addedactivepools')
+                                    this.state.poolsData.push(number)
+                                }
+
                             }
 
+                            this.setState({ poolsData: this.state.poolsData })
                         }
-                        if (this.state.poolsactiveStatus === true && this.state.selectedcreatedBy === number.createdBy) {
-                            if (number.isActive == true) {
-                                console.log('----addedactivepools')
-                                this.state.poolsData.push(number)
-                            }
-
-                        }
-
-                        this.setState({ poolsData: this.state.poolsData })
                     }
+
+                    return
                 }
+            }).catch(() => {
+                this.setState({ loading: false })
+                alert('No Records Found')
+            })
+    };
 
-                return
-            }
-        }).catch(() => {
-            this.setState({ loading: false })
-            alert('No Records Found')
-        })
-};
-
-topbarAction1() {
-    this.setState({ flagone: true })
-    this.setState({ flagtwo: false })
-    this.setState({ flagthree: false })
-    this.getAllpools()
-}
-
-
-topbarAction2() {
-    this.setState({ flagone: false })
-    this.setState({ flagtwo: true })
-    this.setState({ flagthree: false })
-    this.getAllPromotions()
-}
-
-
-topbarAction3() {
-    this.setState({ flagone: false })
-    this.setState({ flagtwo: false })
-    this.setState({ flagthree: true })
-}
-
-handleeditaction = (item, index) => {
-
-}
-
-handledeleteaction = (item, index) => {
-
-}
-
-filterAction() {
-    this.setState({ selectedStatus: "" });
-    this.setState({ selectedcreatedBy: "" });
-    this.setState({ flagAddPromo: false });
-    this.setState({ flagAddStore: false });
-    this.setState({ modalVisible: true });
-    this.setState({ flagFilterOpen: true });
-}
-
-modelCancel() {
-    this.setState({ modalVisible: false });
-}
-
-navigateToAddPromo() {
-    this.setState({ flagAddStore: false });
-    this.setState({ modalVisible: true });
-    this.setState({ flagAddPromo: true });
-}
-
-addStore() {
-    this.setState({ flagAddPromo: false });
-    this.setState({ modalVisible: true });
-    this.setState({ flagAddStore: true });
-    this.setState({ datepickerOpen: false })
-}
-
-datepickerCancelClicked() {
-    this.setState({ date: new Date() })
-    this.setState({ enddate: new Date() })
-    this.setState({ datepickerOpen: false })
-    this.setState({ datepickerendOpen: false })
-}
-
-datepickerDoneClicked() {
-    //this.setState({date:this.state.})
-    this.setState({ datepickerOpen: false })
-    this.setState({ datepickerendOpen: false })
-}
-
-navigateToAddPool() {
-    this.props.navigation.navigate('AddPool', {
-        onGoBack: () => this.refteshPools(),
-    });
-
-}
-
-togglePoolsActiveStatus() {
-    this.getAllpools()
-    if (this.state.poolsactiveStatus === false) {
-
-        this.setState({ poolsactiveStatus: true })
-    }
-    else {
-
-        this.setState({ poolsactiveStatus: false })
-    }
-}
-
-togglePromoActiveStatus() {
-    this.getAllPromotions()
-    if (this.state.promoactiveStatus === true) {
-        this.setState({ promoactiveStatus: false })
-    }
-    else {
-        this.setState({ promoactiveStatus: true })
-    }
-}
-
-
-
-chargeExtra() {
-    if (this.state.chargeExtra === true) {
-        this.setState({ chargeExtra: false })
-    }
-    else {
-        this.setState({ chargeExtra: true })
-    }
-
-}
-
-datepickerClicked() {
-    console.log('button clicked')
-
-    this.setState({ datepickerOpen: true })
-
-}
-
-enddatepickerClicked() {
-    this.setState({ datepickerOpen: false })
-    this.setState({ datepickerendOpen: true })
-}
-
-refteshPools() {
-    console.log('---------refreshed')
-    this.getAllpools()
-}
-
-updatePools() {
-    console.log('---------refreshed')
-    this.getAllpools()
-}
-
-handleCreatedBy = (value) => {
-    this.setState({ selectedcreatedBy: value });
-}
-
-handleSelectPromotionType = (value) => {
-    this.setState({ selectedPromotionType: value });
-}
-
-handlePromotionName = (value) => {
-    this.setState({ selectedPromotionName: value });
-}
-
-handleSelectStore = (value) => {
-    this.getStoreId(value)
-    this.setState({ selectedStore: value });
-}
-
-handleStatusBy = (value) => {
-    this.setState({ selectedStatus: value });
-
-}
-
-applyFilter(){
-    if (this.state.selectedStatus == "Active") {
-        this.setState({ poolsactiveStatus: true })
-    }
-    else {
-        this.setState({ poolsactiveStatus: false })
-    }
-
-    if (this.state.selectedStatus != "" && this.state.selectedcreatedBy === "") {
-        console.log('open filter with status only')
+    topbarAction1() {
+        this.setState({ flagone: true })
+        this.setState({ flagtwo: false })
+        this.setState({ flagthree: false })
         this.getAllpools()
     }
-    else {
-        this.getFilteredpools()
-    }
-    this.setState({ modalVisible: false });
-}
 
-handlepromodeleteaction = (item, index) => {
-    console.log('barcode id is' + item.barcode)
-    axios.delete(PromotionsService.deletePromotions(), {
-        params: {
-            //barcodeId=1811759398
-            "id": item.promoId,
-        }
-    }).then((res) => {
-        if (res.data && res.data["isSuccess"] === "true") {
-            const list = this.state.promoData;
-            list.splice(index, 1);
-            this.setState({ promoData: list });
+
+    topbarAction2() {
+        this.setState({ flagone: false })
+        this.setState({ flagtwo: true })
+        this.setState({ flagthree: false })
+        this.getAllPromotions()
+    }
+
+
+    topbarAction3() {
+        this.setState({ flagone: false })
+        this.setState({ flagtwo: false })
+        this.setState({ flagthree: true })
+    }
+
+    handleeditaction = (item, index) => {
+
+    }
+
+    handledeleteaction = (item, index) => {
+
+    }
+
+    filterAction() {
+        this.setState({ selectedStatus: "" });
+        this.setState({ selectedcreatedBy: "" });
+        this.setState({ flagAddPromo: false });
+        this.setState({ flagAddStore: false });
+        this.setState({ modalVisible: true });
+        this.setState({ flagFilterOpen: true });
+    }
+
+    modelCancel() {
+        this.setState({ modalVisible: false });
+    }
+
+    navigateToAddPromo() {
+        this.setState({ flagAddStore: false });
+        this.setState({ modalVisible: true });
+        this.setState({ flagAddPromo: true });
+    }
+
+    addStore() {
+        this.setState({ flagAddPromo: false });
+        this.setState({ modalVisible: true });
+        this.setState({ flagAddStore: true });
+        this.setState({ datepickerOpen: false })
+    }
+
+    datepickerCancelClicked() {
+        this.setState({ date: new Date() })
+        this.setState({ enddate: new Date() })
+        this.setState({ datepickerOpen: false })
+        this.setState({ datepickerendOpen: false })
+    }
+
+    datepickerDoneClicked() {
+        //this.setState({date:this.state.})
+        this.setState({ datepickerOpen: false })
+        this.setState({ datepickerendOpen: false })
+    }
+
+    navigateToAddPool() {
+        this.props.navigation.navigate('AddPool', {
+            onGoBack: () => this.refteshPools(),
+        });
+
+    }
+
+    togglePoolsActiveStatus() {
+        this.getAllpools()
+        if (this.state.poolsactiveStatus === false) {
+
+            this.setState({ poolsactiveStatus: true })
         }
         else {
-            alert('Issue in delete barcode and having' + res.data["error"]);
+
+            this.setState({ poolsactiveStatus: false })
         }
     }
-    );
-}
 
-handlepooleditaction = (item, index) => {
-    this.props.navigation.navigate('EditPool', { item: item }, {
-        onGoBack: () => this.updatePools(),
-    });
-}
-
-getStoreId = (item) => {
-    const params = {
-        "storeName": item, 
-    }
-    
-    axios.post(LoginService.getStoreIdWithStoreName(), params).then((res) => {
-        if (res.data && res.data["isSuccess"] === "true") {
-           this.setState({selectedstoreId:res.data["result"][0].id}) 
+    togglePromoActiveStatus() {
+        this.getAllPromotions()
+        if (this.state.promoactiveStatus === true) {
+            this.setState({ promoactiveStatus: false })
         }
         else {
-          alert("id not found");
+            this.setState({ promoactiveStatus: true })
         }
-      }
-      )
-}
+    }
 
-addPromoStore(){
-    if (String(this.state.selectedPromotionType).length === 0) {
-        alert('Please Select PromotionType');
-    } else if (this.state.selectedPromotionName.length === 0) {
-        alert('Please Select PromotionName');
-    }
-    else if (this.state.selectedStore.length === 0) {
-        alert('Please Select Store');
-    }
-    else {
-      const params =  {
-        "promoType": this.state.selectedPromotionType,
-        "promoName":this.state.selectedPromotionName,
-        "storeVo": {
-            "id": 4,
-            "name": this.state.selectedStore,
-        },
-        "startDate": this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(),
-        "endDate": this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate(),
-      }
-      console.log('store--'+params)
-      
-      console.log('params are' + JSON.stringify(params))
-      this.setState({ loading: true })
-      axios.post(PromotionsService.addPromoStore(), params).then((res) => {
-        if (res.data && res.data["isSuccess"] === "true") {
-          this.setState({ loading: false })
-          this.props.route.params.onGoBack();
-          this.props.navigation.goBack();
+
+
+    chargeExtra() {
+        if (this.state.chargeExtra === true) {
+            this.setState({ chargeExtra: false })
         }
         else {
-            this.setState({ loading: false })
-         // this.setState({ loading: false })
-          alert("duplicate record already exists");
+            this.setState({ chargeExtra: true })
         }
-      }
-      );
+
     }
 
-}
+    datepickerClicked() {
+        console.log('button clicked')
 
-handlepooldeleteaction = (item, index) => {
-    console.log('barcode id is' + item.barcode)
-    axios.delete(PromotionsService.deletePool(), {
-        params: {
-            //barcodeId=1811759398
-            "poolId": item.poolId,
-        }
-    }).then((res) => {
-        if (res.data && res.data["isSuccess"] === "true") {
-            const list = this.state.poolsData;
-            list.splice(index, 1);
-            this.setState({ poolsData: list });
+        this.setState({ datepickerOpen: true })
+
+    }
+
+    enddatepickerClicked() {
+        this.setState({ datepickerOpen: false })
+        this.setState({ datepickerendOpen: true })
+    }
+
+    refteshPools() {
+        console.log('---------refreshed')
+        this.getAllpools()
+    }
+
+    updatePools() {
+        console.log('---------refreshed')
+        this.getAllpools()
+    }
+
+    handleCreatedBy = (value) => {
+        this.setState({ selectedcreatedBy: value });
+    }
+
+    handleSelectPromotionType = (value) => {
+        this.setState({ selectedPromotionType: value });
+    }
+
+    handlePromotionName = (value) => {
+        this.setState({ selectedPromotionName: value });
+    }
+
+    handleSelectStore = (value) => {
+        this.getStoreId(value)
+        this.setState({ selectedStore: value });
+    }
+
+    handleStatusBy = (value) => {
+        this.setState({ selectedStatus: value });
+
+    }
+
+    applyFilter() {
+        if (this.state.selectedStatus == "Active") {
+            this.setState({ poolsactiveStatus: true })
         }
         else {
-            alert('Issue in delete barcode and having' + res.data["error"]);
+            this.setState({ poolsactiveStatus: false })
         }
+
+        if (this.state.selectedStatus != "" && this.state.selectedcreatedBy === "") {
+            console.log('open filter with status only')
+            this.getAllpools()
+        }
+        else {
+            this.getFilteredpools()
+        }
+        this.setState({ modalVisible: false });
     }
-    );
-}
 
-
-
-render() {
-    return (
-        <View style={{ flex: 1 }}>
-            {this.state.loading &&
-                <Loader
-                    loading={this.state.loading} />
+    handlepromodeleteaction = (item, index) => {
+        console.log('barcode id is' + item.barcode)
+        axios.delete(PromotionsService.deletePromotions(), {
+            params: {
+                //barcodeId=1811759398
+                "id": item.promoId,
             }
-            <View style={styles.viewswidth}>
-                <Text style={{
-                    position: 'absolute',
-                    left: 10,
-                    top: 55,
-                    width: 300,
-                    height: 20,
-                    fontFamily: 'bold',
-                    fontSize: 18,
-                    color: '#353C40'
-                }}> Promotions & Loyalty </Text>
-                <TouchableOpacity
-                    style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
-                    onPress={() => this.filterAction()} >
-                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/promofilter.png')} />
-                </TouchableOpacity>
+        }).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+                const list = this.state.promoData;
+                list.splice(index, 1);
+                this.setState({ promoData: list });
+            }
+            else {
+                alert('Issue in delete barcode and having' + res.data["error"]);
+            }
+        }
+        );
+    }
 
-            </View>
+    handlepooleditaction = (item, index) => {
+        this.props.navigation.navigate('EditPool', { item: item }, {
+            onGoBack: () => this.updatePools(),
+        });
+    }
 
-            <View style={styles.Topcontainer}>
-                <TouchableOpacity style={{
-                    borderColor: '#353C40',
-                    height: 32,
-                    width: "33.3%",
-                    borderBottomLeftRadius: 5,
-                    borderTopLeftRadius: 5,
-                    borderLeftWidth: 1,
-                    borderTopWidth: 1,
-                    borderBottomWidth: 1,
-                    backgroundColor: this.state.flagone ? "#353C40" : "#FFFFFF",
-                    alignSelf: "flex-start",
-                    // //marginHorizontal: "1%",
-                    // marginBottom: 6,
+    getStoreId = (item) => {
+        const params = {
+            "storeName": item,
+        }
 
-                }}
-                    onPress={() => this.topbarAction1()} >
-                    <View style={{
-                        //   borderColor: '#ED1C24',
-                        //   height: 50,
-                        //   width: "33.3%",
-                        //   borderBottomLeftRadius: 5,
-                        //   borderTopLeftRadius: 5,
-                        //   borderLeftWidth: 1,
-                        //   borderTopWidth: 1,
-                        //   borderBottomWidth: 1,
-                        //  backgroundColor: this.state.flagone ?  "#ED1C24" : "#FFFFFF",
-                        //  alignSelf: "flex-start",
-                        //  // //marginHorizontal: "1%",
-                        //  // marginBottom: 6,
-                    }}>
+        axios.post(LoginService.getStoreIdWithStoreName(), params).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+                this.setState({ selectedstoreId: res.data["result"][0].id })
+            }
+            else {
+                alert("id not found");
+            }
+        }
+        )
+    }
 
-                        <Text style={{
-                            // borderColor: '#ED1C24',
-                            height: 32,
-                            width: 100,
-                            //   borderBottomLeftRadius: 5,
-                            //  borderTopLeftRadius: 5,
-                            //   borderBottomWidth: 1,
-                            //   borderTopWidth: 1,
-                            //   borderRightWidth: 1,
-                            color: this.state.flagone ? "#FFFFFF" : "#353C40",
-                            marginTop: 5,
-                            fontFamily: "medium",
-                            fontSize: 12,
-                            textAlign: 'center',
-                            alignItems: 'center',
-                        }}> Pools </Text>
+    addPromoStore() {
+        if (String(this.state.selectedPromotionType).length === 0) {
+            alert('Please Select PromotionType');
+        } else if (this.state.selectedPromotionName.length === 0) {
+            alert('Please Select PromotionName');
+        }
+        else if (this.state.selectedStore.length === 0) {
+            alert('Please Select Store');
+        }
+        else {
+            const params = {
+                "promoType": this.state.selectedPromotionType,
+                "promoName": this.state.selectedPromotionName,
+                "storeVo": {
+                    "id": 4,
+                    "name": this.state.selectedStore,
+                },
+                "startDate": this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(),
+                "endDate": this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate(),
+            }
+            console.log('store--' + params)
+
+            console.log('params are' + JSON.stringify(params))
+            this.setState({ loading: true })
+            axios.post(PromotionsService.addPromoStore(), params).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    this.setState({ loading: false })
+                    this.props.route.params.onGoBack();
+                    this.props.navigation.goBack();
+                }
+                else {
+                    this.setState({ loading: false })
+                    // this.setState({ loading: false })
+                    alert("duplicate record already exists");
+                }
+            }
+            );
+        }
+
+    }
+
+    handlepooldeleteaction = (item, index) => {
+        console.log('barcode id is' + item.barcode)
+        axios.delete(PromotionsService.deletePool(), {
+            params: {
+                //barcodeId=1811759398
+                "poolId": item.poolId,
+            }
+        }).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+                const list = this.state.poolsData;
+                list.splice(index, 1);
+                this.setState({ poolsData: list });
+            }
+            else {
+                alert('Issue in delete barcode and having' + res.data["error"]);
+            }
+        }
+        );
+    }
 
 
-                        {/* <Image source={this.state.flagone ? require('../assets/images/topSelect.png') : null} style={{
-                                left: 30, marginTop: 5,
-                            }} /> */}
 
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity style={{
-                    borderColor: '#353C40',
-                    height: 32,
-                    width: "33.3%",
-                    //  borderBottomLeftRadius: 5,
-                    //  borderTopLeftRadius: 5,
-                    borderLeftWidth: 1,
-                    borderTopWidth: 1,
-                    borderBottomWidth: 1,
-                    backgroundColor: this.state.flagtwo ? "#353C40" : "#FFFFFF",
-                    alignSelf: "flex-start",
-                }}
-                    onPress={() => this.topbarAction2()} >
-                    <View style={{
-                        //   borderColor: '#ED1C24',
-                        //   height: 50,
-                        //   width: "33.3%",
-                        //   borderBottomLeftRadius: 5,
-                        //   borderTopLeftRadius: 5,
-                        //   borderBottomWidth: 1,
-                        //   borderTopWidth: 1,
-                        //   borderLeftWidth: 1,
-                        //  backgroundColor: this.state.flagone ?  "#ED1C24" : "#FFFFFF",
-                        //  alignSelf: "flex-start",
-                        //  // //marginHorizontal: "1%",
-                        //  // marginBottom: 6,
-                        //   width: "33.3%",
-                        //  // height: 50,
-                    }}>
+    render() {
+        return (
+            <View style={{ flex: 1 }}>
+                {this.state.loading &&
+                    <Loader
+                        loading={this.state.loading} />
+                }
+                <View style={styles.viewswidth}>
+                    <Text style={{
+                        position: 'absolute',
+                        left: 10,
+                        top: 55,
+                        width: 300,
+                        height: 20,
+                        fontFamily: 'bold',
+                        fontSize: 18,
+                        color: '#353C40'
+                    }}> Promotions & Loyalty </Text>
+                    <TouchableOpacity
+                        style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
+                        onPress={() => this.filterAction()} >
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/promofilter.png')} />
+                    </TouchableOpacity>
 
-                        <Text style={{
-                            borderColor: '#353C40',
-                            height: 32,
-                            width: 100,
-                            color: this.state.flagtwo ? "#FFFFFF" : "#353C40",
-                            marginTop: 5,
-                            fontFamily: "medium",
-                            fontSize: 12, textAlign: 'center', width: 100,
+                </View>
 
-                        }}> Manage Promo </Text>
-                        {/* <Image source={this.state.flagtwo ? require('../assets/images/topSelect.png') : null} style={{
-                                left: 30, marginTop: 5,
-                            }} /> */}
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={{
-                    borderColor: '#353C40',
-                    height: 32,
-                    width: "33.3%",
-                    borderBottomRightRadius: 5,
-                    borderTopRightRadius: 5,
-                    borderRightWidth: 1,
-                    borderLeftWidth: 1,
-                    borderTopWidth: 1,
-                    borderBottomWidth: 1,
-                    backgroundColor: this.state.flagthree ? "#353C40" : "#FFFFFF",
-                    alignSelf: "flex-start",
-                }}
-                    onPress={() => this.topbarAction3()} >
-                    <View style={{
-                        // backgroundColor: this.state.flagthree ? "#1CA2FF" : "#ED1C24",
-                        // alignSelf: "flex-start",
+                <View style={styles.Topcontainer}>
+                    <TouchableOpacity style={{
+                        borderColor: '#353C40',
+                        height: 32,
+                        width: "33.3%",
+                        borderBottomLeftRadius: 5,
+                        borderTopLeftRadius: 5,
+                        borderLeftWidth: 1,
+                        borderTopWidth: 1,
+                        borderBottomWidth: 1,
+                        backgroundColor: this.state.flagone ? "#353C40" : "#FFFFFF",
+                        alignSelf: "flex-start",
                         // //marginHorizontal: "1%",
                         // marginBottom: 6,
-                        // width: "33.3%",
-                        // height: 50,
-                        // textAlign: "center",
-                    }}>
 
-                        <Text style={{
-                            borderColor: '#353C40',
-                            height: 32,
-                            width: 100,
-                            color: this.state.flagthree ? "#FFFFFF" : "#353C40",
-                            marginTop: 5,
-                            fontFamily: "medium",
-                            fontSize: 12, textAlign: 'center', width: 100,
-                        }}> Loyalty Points  </Text>
-                        {/* <Image source={this.state.flagthree ? require('../assets/images/topSelect.png') : null} style={{
+                    }}
+                        onPress={() => this.topbarAction1()} >
+                        <View style={{
+                            //   borderColor: '#ED1C24',
+                            //   height: 50,
+                            //   width: "33.3%",
+                            //   borderBottomLeftRadius: 5,
+                            //   borderTopLeftRadius: 5,
+                            //   borderLeftWidth: 1,
+                            //   borderTopWidth: 1,
+                            //   borderBottomWidth: 1,
+                            //  backgroundColor: this.state.flagone ?  "#ED1C24" : "#FFFFFF",
+                            //  alignSelf: "flex-start",
+                            //  // //marginHorizontal: "1%",
+                            //  // marginBottom: 6,
+                        }}>
+
+                            <Text style={{
+                                // borderColor: '#ED1C24',
+                                height: 32,
+                                width: 100,
+                                //   borderBottomLeftRadius: 5,
+                                //  borderTopLeftRadius: 5,
+                                //   borderBottomWidth: 1,
+                                //   borderTopWidth: 1,
+                                //   borderRightWidth: 1,
+                                color: this.state.flagone ? "#FFFFFF" : "#353C40",
+                                marginTop: 5,
+                                fontFamily: "medium",
+                                fontSize: 12,
+                                textAlign: 'center',
+                                alignItems: 'center',
+                            }}> Pools </Text>
+
+
+                            {/* <Image source={this.state.flagone ? require('../assets/images/topSelect.png') : null} style={{
                                 left: 30, marginTop: 5,
                             }} /> */}
-                    </View>
-                </TouchableOpacity>
-            </View>
-            {this.state.flagone && (
-                <TouchableOpacity style={{
-                    position: 'absolute',
-                    left: 115,
-                    top: 147,
-                    width: 32,
-                    height: 30,
-                    borderColor: "lightgray",
-                    // borderRadius:5,
-                }} onPress={() => this.togglePoolsActiveStatus()}>
-                    <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.poolsactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
-                </TouchableOpacity>
-            )}
-
-
-            {this.state.flagone && (
-                <TouchableOpacity
-                    style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 95, height: 32, }}
-                >
-                    <Text style={{ fontSize: 16, fontFamily: 'regular', color: '#707070', marginLeft: 10, marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('Only active')} </Text>
-                </TouchableOpacity>
-
-            )}
-
-            {this.state.flagone && (
-
-                <TouchableOpacity
-                    style={{ position: 'absolute', right: 20, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
-                    onPress={() => this.navigateToAddPool()} >
-                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD POOL')} </Text>
-                </TouchableOpacity>
-
-            )}
-
-            {this.state.flagone && (
-                <FlatList
-                    data={this.state.poolsData}
-                    style={{ marginTop: 40, }}
-                    scrollEnabled={
-                        true
-                    }
-                    keyExtractor={item => item}
-                    renderItem={({ item, index }) => (
-                        <View style={{
-                            height: 140,
-                            backgroundColor: '#FBFBFB',
-                            borderBottomWidth: 5,
-                            borderBottomColor: '#FFFFFF',
-                            flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-                        }}>
-                            <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
-                                <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
-                                    Pool id: #{String(item.poolId)}
-                                </Text>
-
-                                <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
-                                    POOL NAME
-                                </Text>
-                                <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                    {item.poolName}
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                    CREATED BY
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                    {item.createdBy}
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 150, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
-                                    CREATED ON
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 150, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                    {item.createdDate}
-                                </Text>
-                            </View>
-
-                            <TouchableOpacity
-                                style={item.isActive == true ? {
-                                    position: 'absolute',
-                                    right: 20,
-                                    top: 20,
-                                    width: 50,
-                                    height: 24, backgroundColor: "#C1FCB0", borderRadius: 5,
-                                } : {
-                                    position: 'absolute',
-                                    right: 20,
-                                    top: 20,
-                                    width: 50,
-                                    height: 24, backgroundColor: "#FCB0BA", borderRadius: 5,
-                                }}
-                            >
-                                <Text style={{
-                                    textAlign: 'center', marginTop: 5, color: "#353C40", fontSize: 12,
-                                    fontFamily: "regular"
-                                }}  > {item.isActive == true ? 'Active' : 'Inactive'} </Text>
-
-                            </TouchableOpacity>
-
-
-                            <TouchableOpacity style={{
-                                position: 'absolute',
-                                right: 50,
-                                top: 65,
-                                width: 30,
-                                height: 30,
-                                borderBottomLeftRadius: 5,
-                                borderTopLeftRadius: 5,
-                                borderWidth: 1,
-                                borderColor: "lightgray",
-                                // borderRadius:5,
-                            }} onPress={() => this.handlepooleditaction(item, index)}>
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={{
-                                position: 'absolute',
-                                right: 20,
-                                top: 65,
-                                width: 30,
-                                height: 30,
-                                borderBottomRightRadius: 5,
-                                borderTopRightRadius: 5,
-                                borderWidth: 1,
-                                borderColor: "lightgray",
-                            }} onPress={() => this.handlepooldeleteaction(item, index)}>
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
-                            </TouchableOpacity>
-                            <View style={{
-                                backgroundColor: 'grey',
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                alignItems: 'center',
-                                height: 30,
-                                width: 90
-                            }}>
-
-                            </View>
 
                         </View>
-                    )}
-                />
-            )}
-
-            {this.state.flagtwo && (
-
-                <TouchableOpacity style={{
-                    position: 'absolute',
-                    left: 115,
-                    top: 147,
-                    width: 32,
-                    height: 30,
-
-                    // borderRadius:5,
-                }} onPress={() => this.togglePromoActiveStatus()}>
-                    <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.promoactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
-                </TouchableOpacity>
-            )}
-
-
-            {this.state.flagtwo && (
-                <TouchableOpacity
-                    style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 95, height: 32 }}
-                >
-                    <Text style={{ fontSize: 16, fontFamily: 'regular', color: '#707070', marginLeft: 10, marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('Only active')} </Text>
-                </TouchableOpacity>
-
-            )}
-
-
-            {this.state.flagtwo && (
-
-                <TouchableOpacity
-                    style={{ position: 'absolute', right: 140, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
-                    onPress={() => this.navigateToAddPromo()} >
-                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD PROMO')} </Text>
-                </TouchableOpacity>
-
-            )}
-
-            {this.state.flagtwo && (
-
-                <TouchableOpacity
-                    style={{ position: 'absolute', right: 20, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 100, height: 32, }}
-                    onPress={() => this.addStore()} >
-                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD TO STORE')} </Text>
-                </TouchableOpacity>
-
-            )}
-
-            {this.state.flagtwo && (
-                <FlatList
-                    data={this.state.promoData}
-                    style={{ marginTop: 40, }}
-                    keyExtractor={item => item}
-                    renderItem={({ item, index }) => (
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{
+                        borderColor: '#353C40',
+                        height: 32,
+                        width: "33.3%",
+                        //  borderBottomLeftRadius: 5,
+                        //  borderTopLeftRadius: 5,
+                        borderLeftWidth: 1,
+                        borderTopWidth: 1,
+                        borderBottomWidth: 1,
+                        backgroundColor: this.state.flagtwo ? "#353C40" : "#FFFFFF",
+                        alignSelf: "flex-start",
+                    }}
+                        onPress={() => this.topbarAction2()} >
                         <View style={{
-                            height: 140,
-                            backgroundColor: '#FBFBFB',
-                            borderBottomWidth: 5,
-                            borderBottomColor: '#FFFFFF',
-                            flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                            //   borderColor: '#ED1C24',
+                            //   height: 50,
+                            //   width: "33.3%",
+                            //   borderBottomLeftRadius: 5,
+                            //   borderTopLeftRadius: 5,
+                            //   borderBottomWidth: 1,
+                            //   borderTopWidth: 1,
+                            //   borderLeftWidth: 1,
+                            //  backgroundColor: this.state.flagone ?  "#ED1C24" : "#FFFFFF",
+                            //  alignSelf: "flex-start",
+                            //  // //marginHorizontal: "1%",
+                            //  // marginBottom: 6,
+                            //   width: "33.3%",
+                            //  // height: 50,
                         }}>
-                            <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
-                                <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
-                                    Promo id: #{String(item.promoId)}
-                                </Text>
 
-                                <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
-                                    PROMO NAME
-                                </Text>
-                                <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                    {String(item.promoName)}
-                                </Text>
+                            <Text style={{
+                                borderColor: '#353C40',
+                                height: 32,
+                                width: 100,
+                                color: this.state.flagtwo ? "#FFFFFF" : "#353C40",
+                                marginTop: 5,
+                                fontFamily: "medium",
+                                fontSize: 12, textAlign: 'center', width: 100,
 
-
-
-                                <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                    START DATE
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                    {item.startDate}
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
-                                    END DATE
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                    {item.endDate}
-                                </Text>
-
-                                <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
-                                    STORE
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                    Hyd-Patny
-                                </Text>
-                            </View>
-
-                            <TouchableOpacity
-                                style={item.isActive == true ? {
-                                    position: 'absolute',
-                                    right: 20,
-                                    top: 20,
-                                    width: 50,
-                                    height: 24, backgroundColor: "#C1FCB0", borderRadius: 5,
-                                } : {
-                                    position: 'absolute',
-                                    right: 20,
-                                    top: 20,
-                                    width: 50,
-                                    height: 24, backgroundColor: "#FCB0BA", borderRadius: 5,
-                                }}
-                            >
-                                <Text style={{
-                                    textAlign: 'center', marginTop: 5, color: "#353C40", fontSize: 12,
-                                    fontFamily: "regular"
-                                }}  > {item.isActive == true ? 'Active' : 'Inactive'} </Text>
-
-                            </TouchableOpacity>
-
-
-
-                            <TouchableOpacity style={{
-                                position: 'absolute',
-                                right: 50,
-                                top: 65,
-                                width: 30,
-                                height: 30,
-                                borderBottomLeftRadius: 5,
-                                borderTopLeftRadius: 5,
-                                borderWidth: 1,
-                                borderColor: "lightgray",
-                                // borderRadius:5,
-                            }} onPress={() => this.handleeditpromoaction(item, index)}>
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={{
-                                position: 'absolute',
-                                right: 20,
-                                top: 65,
-                                width: 30,
-                                height: 30,
-                                borderBottomRightRadius: 5,
-                                borderTopRightRadius: 5,
-                                borderWidth: 1,
-                                borderColor: "lightgray",
-                            }} onPress={() => this.handlepromodeleteaction(item, index)}>
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
-                            </TouchableOpacity>
-                            <View style={{
-                                backgroundColor: 'grey',
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                alignItems: 'center',
-                                height: 30,
-                                width: 90
-                            }}>
-
-                            </View>
-
+                            }}> Manage Promo </Text>
+                            {/* <Image source={this.state.flagtwo ? require('../assets/images/topSelect.png') : null} style={{
+                                left: 30, marginTop: 5,
+                            }} /> */}
                         </View>
-                    )}
-                />
-            )}
+                    </TouchableOpacity>
 
-
-            {this.state.flagthree && (
-                <FlatList
-                    data={this.state.loyaltyData}
-                    keyExtractor={item => item}
-                    renderItem={({ item, index }) => (
+                    <TouchableOpacity style={{
+                        borderColor: '#353C40',
+                        height: 32,
+                        width: "33.3%",
+                        borderBottomRightRadius: 5,
+                        borderTopRightRadius: 5,
+                        borderRightWidth: 1,
+                        borderLeftWidth: 1,
+                        borderTopWidth: 1,
+                        borderBottomWidth: 1,
+                        backgroundColor: this.state.flagthree ? "#353C40" : "#FFFFFF",
+                        alignSelf: "flex-start",
+                    }}
+                        onPress={() => this.topbarAction3()} >
                         <View style={{
-                            height: 140,
-                            backgroundColor: '#FBFBFB',
-                            borderBottomWidth: 5,
-                            borderBottomColor: '#FFFFFF',
-                            flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                            // backgroundColor: this.state.flagthree ? "#1CA2FF" : "#ED1C24",
+                            // alignSelf: "flex-start",
+                            // //marginHorizontal: "1%",
+                            // marginBottom: 6,
+                            // width: "33.3%",
+                            // height: 50,
+                            // textAlign: "center",
                         }}>
-                            <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
-                                <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
-                                    Ramesh G
-                                </Text>
 
-                                <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
-                                    MOBILE NUMBER
-                                </Text>
-                                <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                    +91 XXX XXX 1233
-                                </Text>
-
-
-
-                                <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                    EXPIRY DATE
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                    3 Dec 2021
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
-                                    POINTS VALUE
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                    ₹ 500
-                                </Text>
-
-                                <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
-                                    LOYALTY POINTS
-                                </Text>
-                                <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                    5000
-                                </Text>
-                            </View>
-
-
-                            <TouchableOpacity style={{
-                                position: 'absolute',
-                                right: 50,
-                                top: 65,
-                                width: 30,
-                                height: 30,
-                                borderBottomLeftRadius: 5,
-                                borderTopLeftRadius: 5,
-                                borderWidth: 1,
-                                borderColor: "lightgray",
-                                // borderRadius:5,
-                            }} onPress={() => this.handleeditloyaltyaction(item, index)}>
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={{
-                                position: 'absolute',
-                                right: 20,
-                                top: 65,
-                                width: 30,
-                                height: 30,
-                                borderBottomRightRadius: 5,
-                                borderTopRightRadius: 5,
-                                borderWidth: 1,
-                                borderColor: "lightgray",
-                            }} onPress={() => this.handledeleteloyaltyaction(item, index)}>
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
-                            </TouchableOpacity>
-                            <View style={{
-                                backgroundColor: 'grey',
-                                flexDirection: 'row',
-                                justifyContent: 'space-around',
-                                alignItems: 'center',
-                                height: 30,
-                                width: 90
-                            }}>
-
-                            </View>
-
+                            <Text style={{
+                                borderColor: '#353C40',
+                                height: 32,
+                                width: 100,
+                                color: this.state.flagthree ? "#FFFFFF" : "#353C40",
+                                marginTop: 5,
+                                fontFamily: "medium",
+                                fontSize: 12, textAlign: 'center', width: 100,
+                            }}> Loyalty Points  </Text>
+                            {/* <Image source={this.state.flagthree ? require('../assets/images/topSelect.png') : null} style={{
+                                left: 30, marginTop: 5,
+                            }} /> */}
                         </View>
-                    )}
-                />
-            )}
+                    </TouchableOpacity>
+                </View>
+                {this.state.flagone && (
+                    <TouchableOpacity style={{
+                        position: 'absolute',
+                        left: 115,
+                        top: 147,
+                        width: 32,
+                        height: 30,
+                        borderColor: "lightgray",
+                        // borderRadius:5,
+                    }} onPress={() => this.togglePoolsActiveStatus()}>
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.poolsactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
+                    </TouchableOpacity>
+                )}
 
-            {this.state.flagFilterOpen && (
-                <View>
-                    <Modal isVisible={this.state.modalVisible}>
 
-                        <View style={{
-                            width: deviceWidth,
-                            alignItems: 'center',
-                            marginLeft: -20,
-                            backgroundColor: "#ffffff",
-                            height: 350,
-                            position: 'absolute',
-                            bottom: -20,
-                        }}>
-                            <KeyboardAwareScrollView KeyboardAwareScrollView
-                                enableOnAndroid={true}>
-                                <Text style={{
-                                    position: 'absolute',
-                                    left: 20,
-                                    top: 15,
-                                    width: 300,
-                                    height: 20,
-                                    fontFamily: 'medium',
-                                    fontSize: 16,
-                                    color: '#353C40'
-                                }}> Filter by </Text>
+                {this.state.flagone && (
+                    <TouchableOpacity
+                        style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 95, height: 32, }}
+                    >
+                        <Text style={{ fontSize: 16, fontFamily: 'regular', color: '#707070', marginLeft: 10, marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('Only active')} </Text>
+                    </TouchableOpacity>
 
-                                <TouchableOpacity style={{
-                                    position: 'absolute',
-                                    right: 20,
-                                    top: 8,
-                                    width: 50, height: 50,
-                                }} onPress={() => this.modelCancel()}>
-                                    <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
-                                </TouchableOpacity>
+                )}
 
-                                <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                </Text>
-                                <View style={{ marginTop: 10, width: deviceWidth, }}>
-                                    <View style={{
-                                        justifyContent: 'center',
-                                        margin: 20,
-                                        height: 44,
-                                        marginTop: 5,
-                                        marginBottom: 10,
-                                        borderColor: '#8F9EB717',
-                                        borderRadius: 3,
-                                        backgroundColor: '#FBFBFB',
-                                        borderWidth: 1,
-                                        fontFamily: 'regular',
-                                        paddingLeft: 15,
-                                        fontSize: 14,
-                                    }} >
-                                        <RNPickerSelect style={{
-                                            color: '#8F9EB717',
-                                            fontWeight: 'regular',
-                                            fontSize: 15
-                                        }}
-                                            placeholder={{
-                                                label: 'SELECT CREATED BY',
+                {this.state.flagone && (
 
-                                            }}
-                                            Icon={() => {
-                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                            }}
-                                            items={this.state.createdByArray}
-                                            onValueChange={this.handleCreatedBy}
-                                            style={pickerSelectStyles}
-                                            value={this.state.selectedcreatedBy}
-                                            useNativeAndroidPickerStyle={false}
+                    <TouchableOpacity
+                        style={{ position: 'absolute', right: 20, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
+                        onPress={() => this.navigateToAddPool()} >
+                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD POOL')} </Text>
+                    </TouchableOpacity>
 
-                                        />
-                                    </View>
-                                    <View style={{
-                                        justifyContent: 'center',
-                                        margin: 20,
-                                        height: 44,
-                                        marginTop: 5,
-                                        marginBottom: 10,
-                                        borderColor: '#8F9EB717',
-                                        borderRadius: 3,
-                                        backgroundColor: '#FBFBFB',
-                                        borderWidth: 1,
-                                        fontFamily: 'regular',
-                                        paddingLeft: 15,
-                                        fontSize: 14,
-                                    }} >
-                                        <RNPickerSelect style={{
-                                            color: '#8F9EB717',
-                                            fontWeight: 'regular',
-                                            fontSize: 15
-                                        }}
-                                            placeholder={{
-                                                label: 'SELECT STATUS',
+                )}
 
-                                            }}
-                                            Icon={() => {
-                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                            }}
-                                            items={[
-                                                { label: 'Active', value: 'Active' },
-                                                { label: 'Inactive', value: 'Inactive' },
-                                            ]}
-                                            onValueChange={this.handleStatusBy}
-                                            style={pickerSelectStyles}
-                                            value={this.state.selectedStatus}
-                                            useNativeAndroidPickerStyle={false}
+                {this.state.flagone && (
+                    <FlatList
+                        data={this.state.poolsData}
+                        style={{ marginTop: 40, }}
+                        scrollEnabled={
+                            true
+                        }
+                        keyExtractor={item => item}
+                        renderItem={({ item, index }) => (
+                            <View style={{
+                                height: 140,
+                                backgroundColor: '#FBFBFB',
+                                borderBottomWidth: 5,
+                                borderBottomColor: '#FFFFFF',
+                                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                            }}>
+                                <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
+                                    <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
+                                        Pool id: #{String(item.poolId)}
+                                    </Text>
 
-                                        />
-                                    </View>
+                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
+                                        POOL NAME
+                                    </Text>
+                                    <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
+                                        {item.poolName}
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                        CREATED BY
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                        {item.createdBy}
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 150, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
+                                        CREATED ON
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 150, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                        {item.createdDate}
+                                    </Text>
                                 </View>
+
                                 <TouchableOpacity
-                                    style={{
-                                        width: deviceWidth - 40,
-                                        marginLeft: 20,
-                                        marginRight: 20,
-                                        marginTop: 20,
-                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                    }} onPress={() => this.applyFilter()}
+                                    style={item.isActive == true ? {
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 20,
+                                        width: 50,
+                                        height: 24, backgroundColor: "#C1FCB0", borderRadius: 5,
+                                    } : {
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 20,
+                                        width: 50,
+                                        height: 24, backgroundColor: "#FCB0BA", borderRadius: 5,
+                                    }}
                                 >
                                     <Text style={{
-                                        textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                        textAlign: 'center', marginTop: 5, color: "#353C40", fontSize: 12,
                                         fontFamily: "regular"
-                                    }}  > APPLY </Text>
+                                    }}  > {item.isActive == true ? 'Active' : 'Inactive'} </Text>
 
                                 </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    style={{
-                                        width: deviceWidth - 40,
-                                        marginLeft: 20,
-                                        marginRight: 20,
-                                        marginTop: 20,
-                                        height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                    }} onPress={() => this.modelCancel()}
-                                >
-                                    <Text style={{
-                                        textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                        fontFamily: "regular"
-                                    }}  > CANCEL </Text>
 
-                                </TouchableOpacity>
-                            </KeyboardAwareScrollView>
-                        </View>
-                    </Modal>
-                </View>)}
-
-
-            {this.state.flagAddPromo && (
-                <View>
-                    <Modal isVisible={this.state.modalVisible}>
-
-                        <View style={{
-                            width: deviceWidth,
-                            alignItems: 'center',
-                            marginLeft: -20,
-                            backgroundColor: "#ffffff",
-                            height: 530,
-                            position: 'absolute',
-                            bottom: -20,
-                        }}>
-                            <KeyboardAwareScrollView KeyboardAwareScrollView
-                                enableOnAndroid={true}>
-                                <Text style={{
+                                <TouchableOpacity style={{
                                     position: 'absolute',
-                                    left: 20,
-                                    top: 15,
-                                    width: 300,
-                                    height: 20,
-                                    fontFamily: 'medium',
-                                    fontSize: 16,
-                                    color: '#353C40'
-                                }}> Add Promo </Text>
+                                    right: 50,
+                                    top: 65,
+                                    width: 30,
+                                    height: 30,
+                                    borderBottomLeftRadius: 5,
+                                    borderTopLeftRadius: 5,
+                                    borderWidth: 1,
+                                    borderColor: "lightgray",
+                                    // borderRadius:5,
+                                }} onPress={() => this.handlepooleditaction(item, index)}>
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
+                                </TouchableOpacity>
 
                                 <TouchableOpacity style={{
                                     position: 'absolute',
                                     right: 20,
-                                    top: 8,
-                                    width: 50, height: 50,
-                                }} onPress={() => this.modelCancel()}>
-                                    <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                    top: 65,
+                                    width: 30,
+                                    height: 30,
+                                    borderBottomRightRadius: 5,
+                                    borderTopRightRadius: 5,
+                                    borderWidth: 1,
+                                    borderColor: "lightgray",
+                                }} onPress={() => this.handlepooldeleteaction(item, index)}>
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
+                                </TouchableOpacity>
+                                <View style={{
+                                    backgroundColor: 'grey',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    alignItems: 'center',
+                                    height: 30,
+                                    width: 90
+                                }}>
+
+                                </View>
+
+                            </View>
+                        )}
+                    />
+                )}
+
+                {this.state.flagtwo && (
+
+                    <TouchableOpacity style={{
+                        position: 'absolute',
+                        left: 115,
+                        top: 147,
+                        width: 32,
+                        height: 30,
+
+                        // borderRadius:5,
+                    }} onPress={() => this.togglePromoActiveStatus()}>
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.promoactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
+                    </TouchableOpacity>
+                )}
+
+
+                {this.state.flagtwo && (
+                    <TouchableOpacity
+                        style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 95, height: 32 }}
+                    >
+                        <Text style={{ fontSize: 16, fontFamily: 'regular', color: '#707070', marginLeft: 10, marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('Only active')} </Text>
+                    </TouchableOpacity>
+
+                )}
+
+
+                {this.state.flagtwo && (
+
+                    <TouchableOpacity
+                        style={{ position: 'absolute', right: 140, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
+                        onPress={() => this.navigateToAddPromo()} >
+                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD PROMO')} </Text>
+                    </TouchableOpacity>
+
+                )}
+
+                {this.state.flagtwo && (
+
+                    <TouchableOpacity
+                        style={{ position: 'absolute', right: 20, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 100, height: 32, }}
+                        onPress={() => this.addStore()} >
+                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD TO STORE')} </Text>
+                    </TouchableOpacity>
+
+                )}
+
+                {this.state.flagtwo && (
+                    <FlatList
+                        data={this.state.promoData}
+                        style={{ marginTop: 40, }}
+                        keyExtractor={item => item}
+                        renderItem={({ item, index }) => (
+                            <View style={{
+                                height: 140,
+                                backgroundColor: '#FBFBFB',
+                                borderBottomWidth: 5,
+                                borderBottomColor: '#FFFFFF',
+                                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                            }}>
+                                <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
+                                    <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
+                                        Promo id: #{String(item.promoId)}
+                                    </Text>
+
+                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
+                                        PROMO NAME
+                                    </Text>
+                                    <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
+                                        {String(item.promoName)}
+                                    </Text>
+
+
+
+                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                        START DATE
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                        {item.startDate}
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
+                                        END DATE
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                        {item.endDate}
+                                    </Text>
+
+                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
+                                        STORE
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                        Hyd-Patny
+                                    </Text>
+                                </View>
+
+                                <TouchableOpacity
+                                    style={item.isActive == true ? {
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 20,
+                                        width: 50,
+                                        height: 24, backgroundColor: "#C1FCB0", borderRadius: 5,
+                                    } : {
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 20,
+                                        width: 50,
+                                        height: 24, backgroundColor: "#FCB0BA", borderRadius: 5,
+                                    }}
+                                >
+                                    <Text style={{
+                                        textAlign: 'center', marginTop: 5, color: "#353C40", fontSize: 12,
+                                        fontFamily: "regular"
+                                    }}  > {item.isActive == true ? 'Active' : 'Inactive'} </Text>
+
                                 </TouchableOpacity>
 
-                                <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                </Text>
-                                <Text style={{
+
+
+                                <TouchableOpacity style={{
                                     position: 'absolute',
-                                    left: 20,
-                                    top: 60,
-                                    width: 300,
-                                    height: 20,
-                                    fontFamily: 'regular',
-                                    fontSize: 12,
-                                    color: '#353C40'
-                                }}> Please add promo code details </Text>
+                                    right: 50,
+                                    top: 65,
+                                    width: 30,
+                                    height: 30,
+                                    borderBottomLeftRadius: 5,
+                                    borderTopLeftRadius: 5,
+                                    borderWidth: 1,
+                                    borderColor: "lightgray",
+                                    // borderRadius:5,
+                                }} onPress={() => this.handleeditpromoaction(item, index)}>
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
+                                </TouchableOpacity>
 
-                                <View style={{ marginTop: 30, width: deviceWidth, }}>
-                                    <TextInput style={styles.input}
-                                        underlineColorAndroid="transparent"
-                                        placeholder="PROMOTION NAME"
-                                        placeholderTextColor="#6F6F6F"
-                                        textAlignVertical="center"
-                                        autoCapitalize="none"
-                                        value={this.state.productmrp}
-                                        onChangeText={this.handleInventoryMRP}
-                                    />
-                                    <TextInput style={styles.input}
-                                        underlineColorAndroid="transparent"
-                                        placeholder="DESCRIPTION"
-                                        placeholderTextColor="#6F6F6F"
-                                        textAlignVertical="center"
-                                        autoCapitalize="none"
-                                        value={this.state.productmrp}
-                                        onChangeText={this.handleInventoryMRP}
-                                    />
+                                <TouchableOpacity style={{
+                                    position: 'absolute',
+                                    right: 20,
+                                    top: 65,
+                                    width: 30,
+                                    height: 30,
+                                    borderBottomRightRadius: 5,
+                                    borderTopRightRadius: 5,
+                                    borderWidth: 1,
+                                    borderColor: "lightgray",
+                                }} onPress={() => this.handlepromodeleteaction(item, index)}>
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
+                                </TouchableOpacity>
+                                <View style={{
+                                    backgroundColor: 'grey',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    alignItems: 'center',
+                                    height: 30,
+                                    width: 90
+                                }}>
 
-                                    <TextInput style={styles.input}
-                                        underlineColorAndroid="transparent"
-                                        placeholder="PRINT NAME ON SALE BILL"
-                                        placeholderTextColor="#6F6F6F"
-                                        textAlignVertical="center"
-                                        autoCapitalize="none"
-                                        value={this.state.productmrp}
-                                        onChangeText={this.handleInventoryMRP}
-                                    />
+                                </View>
 
+                            </View>
+                        )}
+                    />
+                )}
 
 
-                                    <View style={{
-                                        justifyContent: 'center',
-                                        margin: 20,
-                                        height: 44,
-                                        marginTop: 5,
-                                        marginBottom: 10,
-                                        borderColor: '#8F9EB717',
-                                        borderRadius: 3,
-                                        backgroundColor: '#FBFBFB',
-                                        borderWidth: 1,
-                                        fontFamily: 'regular',
-                                        paddingLeft: 15,
-                                        fontSize: 14,
-                                    }} >
-                                        <RNPickerSelect style={{
-                                            color: '#8F9EB717',
-                                            fontWeight: 'regular',
-                                            fontSize: 15
-                                        }}
-                                            placeholder={{
-                                                label: 'APPLICABILITY',
+                {this.state.flagthree && (
+                    <FlatList
+                        data={this.state.loyaltyData}
+                        keyExtractor={item => item}
+                        renderItem={({ item, index }) => (
+                            <View style={{
+                                height: 140,
+                                backgroundColor: '#FBFBFB',
+                                borderBottomWidth: 5,
+                                borderBottomColor: '#FFFFFF',
+                                flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                            }}>
+                                <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
+                                    <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
+                                        Ramesh G
+                                    </Text>
 
-                                            }}
-                                            Icon={() => {
-                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                            }}
-                                            items={this.state.uom}
-                                            onValueChange={this.handleUOM}
-                                            style={pickerSelectStyles}
-                                            value={this.state.productuom}
-                                            useNativeAndroidPickerStyle={false}
+                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
+                                        MOBILE NUMBER
+                                    </Text>
+                                    <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
+                                        +91 XXX XXX 1233
+                                    </Text>
 
-                                        />
-                                    </View>
 
-                                    <TouchableOpacity
-                                        style={{
-                                            width: 200, marginTop: 20,
-                                        }}
 
-                                        onPress={() => this.chargeExtra()}
-                                    >
-                                        <Text style={{
-                                            marginLeft: 40, marginTop: 11, color: "#6F6F6F", fontSize: 15,
-                                            fontFamily: "regular", width: 200,
-                                        }}  > {'Charge Tax Entra'} </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                        EXPIRY DATE
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                        3 Dec 2021
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
+                                        POINTS VALUE
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                        ₹ 500
+                                    </Text>
 
-                                        <Image style={{ position: 'absolute', top: 10, left: 20, }} source={
-                                            //require('../assets/images/chargeunselect.png')}
-                                            this.state.chargeExtra ? require('../../assets/images/chargeselect.png') : require('../../assets/images/chargeunselect.png')} />
+                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
+                                        LOYALTY POINTS
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                        5000
+                                    </Text>
+                                </View>
+
+
+                                <TouchableOpacity style={{
+                                    position: 'absolute',
+                                    right: 50,
+                                    top: 65,
+                                    width: 30,
+                                    height: 30,
+                                    borderBottomLeftRadius: 5,
+                                    borderTopLeftRadius: 5,
+                                    borderWidth: 1,
+                                    borderColor: "lightgray",
+                                    // borderRadius:5,
+                                }} onPress={() => this.handleeditloyaltyaction(item, index)}>
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={{
+                                    position: 'absolute',
+                                    right: 20,
+                                    top: 65,
+                                    width: 30,
+                                    height: 30,
+                                    borderBottomRightRadius: 5,
+                                    borderTopRightRadius: 5,
+                                    borderWidth: 1,
+                                    borderColor: "lightgray",
+                                }} onPress={() => this.handledeleteloyaltyaction(item, index)}>
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
+                                </TouchableOpacity>
+                                <View style={{
+                                    backgroundColor: 'grey',
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-around',
+                                    alignItems: 'center',
+                                    height: 30,
+                                    width: 90
+                                }}>
+
+                                </View>
+
+                            </View>
+                        )}
+                    />
+                )}
+
+                {this.state.flagFilterOpen && (
+                    <View>
+                        <Modal isVisible={this.state.modalVisible}>
+
+                            <View style={{
+                                width: deviceWidth,
+                                alignItems: 'center',
+                                marginLeft: -20,
+                                backgroundColor: "#ffffff",
+                                height: 350,
+                                position: 'absolute',
+                                bottom: -20,
+                            }}>
+                                <KeyboardAwareScrollView KeyboardAwareScrollView
+                                    enableOnAndroid={true}>
+                                    <Text style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 15,
+                                        width: 300,
+                                        height: 20,
+                                        fontFamily: 'medium',
+                                        fontSize: 16,
+                                        color: '#353C40'
+                                    }}> Filter by </Text>
+
+                                    <TouchableOpacity style={{
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 8,
+                                        width: 50, height: 50,
+                                    }} onPress={() => this.modelCancel()}>
+                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
-                                    {this.state.chargeExtra && (
+                                    <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                    </Text>
+                                    <View style={{ marginTop: 10, width: deviceWidth, }}>
                                         <View style={{
                                             justifyContent: 'center',
                                             margin: 20,
-                                            width: deviceWidth / 2 - 20,
                                             height: 44,
-                                            marginTop: -30,
-                                            marginLeft: deviceWidth / 2,
+                                            marginTop: 5,
                                             marginBottom: 10,
                                             borderColor: '#8F9EB717',
                                             borderRadius: 3,
@@ -1383,7 +1139,196 @@ render() {
                                                 fontSize: 15
                                             }}
                                                 placeholder={{
-                                                    label: 'SELECT TAX %',
+                                                    label: 'SELECT CREATED BY',
+
+                                                }}
+                                                Icon={() => {
+                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                }}
+                                                items={this.state.createdByArray}
+                                                onValueChange={this.handleCreatedBy}
+                                                style={pickerSelectStyles}
+                                                value={this.state.selectedcreatedBy}
+                                                useNativeAndroidPickerStyle={false}
+
+                                            />
+                                        </View>
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: 44,
+                                            marginTop: 5,
+                                            marginBottom: 10,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: 14,
+                                        }} >
+                                            <RNPickerSelect style={{
+                                                color: '#8F9EB717',
+                                                fontWeight: 'regular',
+                                                fontSize: 15
+                                            }}
+                                                placeholder={{
+                                                    label: 'SELECT STATUS',
+
+                                                }}
+                                                Icon={() => {
+                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                }}
+                                                items={[
+                                                    { label: 'Active', value: 'Active' },
+                                                    { label: 'Inactive', value: 'Inactive' },
+                                                ]}
+                                                onValueChange={this.handleStatusBy}
+                                                style={pickerSelectStyles}
+                                                value={this.state.selectedStatus}
+                                                useNativeAndroidPickerStyle={false}
+
+                                            />
+                                        </View>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={{
+                                            width: deviceWidth - 40,
+                                            marginLeft: 20,
+                                            marginRight: 20,
+                                            marginTop: 20,
+                                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                        }} onPress={() => this.applyFilter()}
+                                    >
+                                        <Text style={{
+                                            textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                            fontFamily: "regular"
+                                        }}  > APPLY </Text>
+
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={{
+                                            width: deviceWidth - 40,
+                                            marginLeft: 20,
+                                            marginRight: 20,
+                                            marginTop: 20,
+                                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                        }} onPress={() => this.modelCancel()}
+                                    >
+                                        <Text style={{
+                                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                            fontFamily: "regular"
+                                        }}  > CANCEL </Text>
+
+                                    </TouchableOpacity>
+                                </KeyboardAwareScrollView>
+                            </View>
+                        </Modal>
+                    </View>)}
+
+
+                {this.state.flagAddPromo && (
+                    <View>
+                        <Modal isVisible={this.state.modalVisible}>
+
+                            <View style={{
+                                width: deviceWidth,
+                                alignItems: 'center',
+                                marginLeft: -20,
+                                backgroundColor: "#ffffff",
+                                height: 530,
+                                position: 'absolute',
+                                bottom: -20,
+                            }}>
+                                <KeyboardAwareScrollView KeyboardAwareScrollView
+                                    enableOnAndroid={true}>
+                                    <Text style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 15,
+                                        width: 300,
+                                        height: 20,
+                                        fontFamily: 'medium',
+                                        fontSize: 16,
+                                        color: '#353C40'
+                                    }}> Add Promo </Text>
+
+                                    <TouchableOpacity style={{
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 8,
+                                        width: 50, height: 50,
+                                    }} onPress={() => this.modelCancel()}>
+                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                    </TouchableOpacity>
+
+                                    <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                    </Text>
+                                    <Text style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 60,
+                                        width: 300,
+                                        height: 20,
+                                        fontFamily: 'regular',
+                                        fontSize: 12,
+                                        color: '#353C40'
+                                    }}> Please add promo code details </Text>
+
+                                    <View style={{ marginTop: 30, width: deviceWidth, }}>
+                                        <TextInput style={styles.input}
+                                            underlineColorAndroid="transparent"
+                                            placeholder="PROMOTION NAME"
+                                            placeholderTextColor="#6F6F6F"
+                                            textAlignVertical="center"
+                                            autoCapitalize="none"
+                                            value={this.state.productmrp}
+                                            onChangeText={this.handleInventoryMRP}
+                                        />
+                                        <TextInput style={styles.input}
+                                            underlineColorAndroid="transparent"
+                                            placeholder="DESCRIPTION"
+                                            placeholderTextColor="#6F6F6F"
+                                            textAlignVertical="center"
+                                            autoCapitalize="none"
+                                            value={this.state.productmrp}
+                                            onChangeText={this.handleInventoryMRP}
+                                        />
+
+                                        <TextInput style={styles.input}
+                                            underlineColorAndroid="transparent"
+                                            placeholder="PRINT NAME ON SALE BILL"
+                                            placeholderTextColor="#6F6F6F"
+                                            textAlignVertical="center"
+                                            autoCapitalize="none"
+                                            value={this.state.productmrp}
+                                            onChangeText={this.handleInventoryMRP}
+                                        />
+
+
+
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: 44,
+                                            marginTop: 5,
+                                            marginBottom: 10,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: 14,
+                                        }} >
+                                            <RNPickerSelect style={{
+                                                color: '#8F9EB717',
+                                                fontWeight: 'regular',
+                                                fontSize: 15
+                                            }}
+                                                placeholder={{
+                                                    label: 'APPLICABILITY',
 
                                                 }}
                                                 Icon={() => {
@@ -1397,397 +1342,452 @@ render() {
 
                                             />
                                         </View>
+
+                                        <TouchableOpacity
+                                            style={{
+                                                width: 200, marginTop: 20,
+                                            }}
+
+                                            onPress={() => this.chargeExtra()}
+                                        >
+                                            <Text style={{
+                                                marginLeft: 40, marginTop: 11, color: "#6F6F6F", fontSize: 15,
+                                                fontFamily: "regular", width: 200,
+                                            }}  > {'Charge Tax Entra'} </Text>
+
+                                            <Image style={{ position: 'absolute', top: 10, left: 20, }} source={
+                                                //require('../assets/images/chargeunselect.png')}
+                                                this.state.chargeExtra ? require('../../assets/images/chargeselect.png') : require('../../assets/images/chargeunselect.png')} />
+                                        </TouchableOpacity>
+
+                                        {this.state.chargeExtra && (
+                                            <View style={{
+                                                justifyContent: 'center',
+                                                margin: 20,
+                                                width: deviceWidth / 2 - 20,
+                                                height: 44,
+                                                marginTop: -30,
+                                                marginLeft: deviceWidth / 2,
+                                                marginBottom: 10,
+                                                borderColor: '#8F9EB717',
+                                                borderRadius: 3,
+                                                backgroundColor: '#FBFBFB',
+                                                borderWidth: 1,
+                                                fontFamily: 'regular',
+                                                paddingLeft: 15,
+                                                fontSize: 14,
+                                            }} >
+                                                <RNPickerSelect style={{
+                                                    color: '#8F9EB717',
+                                                    fontWeight: 'regular',
+                                                    fontSize: 15
+                                                }}
+                                                    placeholder={{
+                                                        label: 'SELECT TAX %',
+
+                                                    }}
+                                                    Icon={() => {
+                                                        return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                    }}
+                                                    items={this.state.uom}
+                                                    onValueChange={this.handleUOM}
+                                                    style={pickerSelectStyles}
+                                                    value={this.state.productuom}
+                                                    useNativeAndroidPickerStyle={false}
+
+                                                />
+                                            </View>
+                                        )}
+
+                                    </View>
+                                    <TouchableOpacity
+                                        style={{
+                                            width: deviceWidth - 40,
+                                            marginLeft: 20,
+                                            marginRight: 20,
+                                            marginTop: 20,
+                                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                        }} onPress={() => this.inventoryUpdate()}
+                                    >
+                                        <Text style={{
+                                            textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                            fontFamily: "regular"
+                                        }}  > ADD </Text>
+
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={{
+                                            width: deviceWidth - 40,
+                                            marginLeft: 20,
+                                            marginRight: 20,
+                                            marginTop: 20,
+                                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                        }} onPress={() => this.modelCancel()}
+                                    >
+                                        <Text style={{
+                                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                            fontFamily: "regular"
+                                        }}  > CANCEL </Text>
+
+                                    </TouchableOpacity>
+                                </KeyboardAwareScrollView>
+                            </View>
+                        </Modal>
+                    </View>)}
+
+
+                {this.state.flagAddStore && (
+                    <View>
+
+
+
+                        <Modal isVisible={this.state.modalVisible}>
+
+                            <View style={{
+                                width: deviceWidth,
+                                alignItems: 'center',
+                                marginLeft: -20,
+                                backgroundColor: "#ffffff",
+                                height: 530,
+                                position: 'absolute',
+                                bottom: -20,
+                            }}>
+                                <KeyboardAwareScrollView KeyboardAwareScrollView
+                                    enableOnAndroid={true}>
+                                    <Text style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 15,
+                                        width: 300,
+                                        height: 20,
+                                        fontFamily: 'medium',
+                                        fontSize: 16,
+                                        color: '#353C40'
+                                    }}> Add promo to store </Text>
+
+                                    <TouchableOpacity style={{
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 8,
+                                        width: 50, height: 50,
+                                    }} onPress={() => this.modelCancel()}>
+                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                    </TouchableOpacity>
+
+                                    <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                    </Text>
+                                    <Text style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 60,
+                                        width: 300,
+                                        height: 20,
+                                        fontFamily: 'regular',
+                                        fontSize: 12,
+                                        color: '#353C40'
+                                    }}> Please add promo code details </Text>
+
+                                    <View style={{ marginTop: 30, width: deviceWidth, }}>
+
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: 44,
+                                            marginTop: 5,
+                                            marginBottom: 10,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: 14,
+                                        }} >
+                                            <RNPickerSelect style={{
+                                                color: '#8F9EB717',
+                                                fontWeight: 'regular',
+                                                fontSize: 15
+                                            }}
+                                                placeholder={{
+                                                    label: 'PROMOTION TYPE',
+
+                                                }}
+                                                items={[
+                                                    { label: 'By_Promotion', value: 'By_Promotion' },
+                                                    { label: 'By_Store', value: 'By_Store' },
+                                                ]}
+                                                Icon={() => {
+                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                }}
+
+                                                onValueChange={this.handleSelectPromotionType}
+                                                style={pickerSelectStyles}
+                                                value={this.state.selectedPromotionType}
+                                                useNativeAndroidPickerStyle={false}
+
+                                            />
+                                        </View>
+
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: 44,
+                                            marginTop: 5,
+                                            marginBottom: 10,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: 14,
+                                        }} >
+                                            <RNPickerSelect style={{
+                                                color: '#8F9EB717',
+                                                fontWeight: 'regular',
+                                                fontSize: 15
+                                            }}
+                                                placeholder={{
+                                                    label: 'PROMOTION NAME',
+
+                                                }}
+                                                items={[
+                                                    { label: 'Mens Buy2@200', value: 'Mens Buy2@200' },
+                                                    { label: 'Mens Buy2@300', value: 'Mens Buy2@300' },
+                                                ]}
+                                                Icon={() => {
+                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                }}
+                                                // items={this.state.uom}
+                                                onValueChange={this.handlePromotionName}
+                                                style={pickerSelectStyles}
+                                                value={this.state.selectedPromotionName}
+                                                useNativeAndroidPickerStyle={false}
+
+                                            />
+                                        </View>
+
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: 44,
+                                            marginTop: 5,
+                                            marginBottom: 10,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: 14,
+                                        }} >
+                                            <RNPickerSelect style={{
+                                                color: '#8F9EB717',
+                                                fontWeight: 'regular',
+                                                fontSize: 15
+                                            }}
+                                                placeholder={{
+                                                    label: 'SELECT STORE',
+
+                                                }}
+                                                Icon={() => {
+                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                }}
+                                                items={this.state.storeNames}
+                                                onValueChange={this.handleSelectStore}
+                                                style={pickerSelectStyles}
+                                                value={this.state.selectedStore}
+                                                useNativeAndroidPickerStyle={false}
+
+                                            />
+                                        </View>
+
+
+                                        <Text style={{
+                                            position: 'absolute',
+                                            left: 20,
+                                            top: 170,
+                                            width: 300,
+                                            height: 20,
+                                            fontFamily: 'regular',
+                                            fontSize: 12,
+                                            color: '#353C40'
+                                        }}> Start Date </Text>
+                                        <TouchableOpacity
+                                            style={{
+                                                width: deviceWidth - 40,
+                                                marginLeft: 20,
+                                                marginRight: 20,
+                                                marginTop: 10,
+                                                borderColor: '#8F9EB717',
+                                                borderRadius: 3,
+                                                height: 50, backgroundColor: "#F6F6F6", borderRadius: 5,
+                                            }} testID="openModal"
+
+                                            onPress={() => this.datepickerClicked()}
+                                        >
+                                            <Text style={{
+                                                marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
+                                                fontFamily: "regular"
+                                            }}  > {this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()} </Text>
+                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                        </TouchableOpacity>
+
+
+                                        <Text style={{
+                                            position: 'absolute',
+                                            left: 20,
+                                            top: 235,
+                                            width: 300,
+                                            height: 20,
+                                            fontFamily: 'regular',
+                                            fontSize: 12,
+                                            color: '#353C40'
+                                        }}> End Date </Text>
+
+                                        <TouchableOpacity
+                                            style={{
+                                                width: deviceWidth - 40,
+                                                marginLeft: 20,
+                                                marginRight: 20,
+                                                marginTop: 10,
+                                                borderColor: '#8F9EB717',
+                                                borderRadius: 3,
+                                                height: 50, backgroundColor: "#F6F6F6", borderRadius: 5,
+                                            }} testID="openModal"
+
+                                            onPress={() => this.enddatepickerClicked()}
+                                        >
+                                            <Text style={{
+                                                marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
+                                                fontFamily: "regular"
+                                            }}  > {this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()} </Text>
+                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                        </TouchableOpacity>
+
+                                    </View>
+                                    {this.state.datepickerOpen && this.state.flagtwo && (
+                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
+                                            <TouchableOpacity
+                                                style={{
+                                                    position: 'absolute',
+                                                    left: 20,
+                                                    top: 10,
+                                                    height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                }} onPress={() => this.datepickerCancelClicked()}
+                                            >
+                                                <Text style={{
+                                                    textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                                    fontFamily: "regular"
+                                                }}  > Cancel </Text>
+
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={{
+                                                    position: 'absolute',
+                                                    right: 20,
+                                                    top: 10,
+                                                    height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                }} onPress={() => this.datepickerDoneClicked()}
+                                            >
+                                                <Text style={{
+                                                    textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                                    fontFamily: "regular"
+                                                }}  > Done </Text>
+
+                                            </TouchableOpacity>
+                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                                date={this.state.date}
+                                                mode={'date'}
+                                                onDateChange={(date) => this.setState({ date })}
+                                            />
+                                        </View>
+                                    )}
+                                    {this.state.datepickerendOpen && this.state.flagtwo && (
+                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
+                                            <TouchableOpacity
+                                                style={{
+                                                    position: 'absolute',
+                                                    left: 20,
+                                                    top: 10,
+                                                    height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                }} onPress={() => this.datepickerCancelClicked()}
+                                            >
+                                                <Text style={{
+                                                    textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                                    fontFamily: "regular"
+                                                }}  > Cancel </Text>
+
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={{
+                                                    position: 'absolute',
+                                                    right: 20,
+                                                    top: 10,
+                                                    height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                }} onPress={() => this.datepickerDoneClicked()}
+                                            >
+                                                <Text style={{
+                                                    textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                                    fontFamily: "regular"
+                                                }}  > Done </Text>
+
+                                            </TouchableOpacity>
+                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                                date={this.state.enddate}
+                                                mode={'date'}
+                                                onDateChange={(enddate) => this.setState({ enddate })}
+                                            />
+                                        </View>
                                     )}
 
-                                </View>
-                                <TouchableOpacity
-                                    style={{
-                                        width: deviceWidth - 40,
-                                        marginLeft: 20,
-                                        marginRight: 20,
-                                        marginTop: 20,
-                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                    }} onPress={() => this.inventoryUpdate()}
-                                >
-                                    <Text style={{
-                                        textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                        fontFamily: "regular"
-                                    }}  > ADD </Text>
-
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    style={{
-                                        width: deviceWidth - 40,
-                                        marginLeft: 20,
-                                        marginRight: 20,
-                                        marginTop: 20,
-                                        height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                    }} onPress={() => this.modelCancel()}
-                                >
-                                    <Text style={{
-                                        textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                        fontFamily: "regular"
-                                    }}  > CANCEL </Text>
-
-                                </TouchableOpacity>
-                            </KeyboardAwareScrollView>
-                        </View>
-                    </Modal>
-                </View>)}
-
-
-            {this.state.flagAddStore && (
-                <View>
 
 
 
-                    <Modal isVisible={this.state.modalVisible}>
-
-                        <View style={{
-                            width: deviceWidth,
-                            alignItems: 'center',
-                            marginLeft: -20,
-                            backgroundColor: "#ffffff",
-                            height: 530,
-                            position: 'absolute',
-                            bottom: -20,
-                        }}>
-                            <KeyboardAwareScrollView KeyboardAwareScrollView
-                                enableOnAndroid={true}>
-                                <Text style={{
-                                    position: 'absolute',
-                                    left: 20,
-                                    top: 15,
-                                    width: 300,
-                                    height: 20,
-                                    fontFamily: 'medium',
-                                    fontSize: 16,
-                                    color: '#353C40'
-                                }}> Add promo to store </Text>
-
-                                <TouchableOpacity style={{
-                                    position: 'absolute',
-                                    right: 20,
-                                    top: 8,
-                                    width: 50, height: 50,
-                                }} onPress={() => this.modelCancel()}>
-                                    <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
-                                </TouchableOpacity>
-
-                                <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                </Text>
-                                <Text style={{
-                                    position: 'absolute',
-                                    left: 20,
-                                    top: 60,
-                                    width: 300,
-                                    height: 20,
-                                    fontFamily: 'regular',
-                                    fontSize: 12,
-                                    color: '#353C40'
-                                }}> Please add promo code details </Text>
-
-                                <View style={{ marginTop: 30, width: deviceWidth, }}>
-
-                                    <View style={{
-                                        justifyContent: 'center',
-                                        margin: 20,
-                                        height: 44,
-                                        marginTop: 5,
-                                        marginBottom: 10,
-                                        borderColor: '#8F9EB717',
-                                        borderRadius: 3,
-                                        backgroundColor: '#FBFBFB',
-                                        borderWidth: 1,
-                                        fontFamily: 'regular',
-                                        paddingLeft: 15,
-                                        fontSize: 14,
-                                    }} >
-                                        <RNPickerSelect style={{
-                                            color: '#8F9EB717',
-                                            fontWeight: 'regular',
-                                            fontSize: 15
-                                        }}
-                                            placeholder={{
-                                                label: 'PROMOTION TYPE',
-
-                                            }}
-                                            items={[
-                                                { label: 'By_Promotion', value: 'By_Promotion' },
-                                                { label: 'By_Store', value: 'By_Store' },
-                                            ]}
-                                            Icon={() => {
-                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                            }}
-
-                                            onValueChange={this.handleSelectPromotionType}
-                                            style={pickerSelectStyles}
-                                            value={this.state.selectedPromotionType}
-                                            useNativeAndroidPickerStyle={false}
-
-                                        />
-                                    </View>
-
-                                    <View style={{
-                                        justifyContent: 'center',
-                                        margin: 20,
-                                        height: 44,
-                                        marginTop: 5,
-                                        marginBottom: 10,
-                                        borderColor: '#8F9EB717',
-                                        borderRadius: 3,
-                                        backgroundColor: '#FBFBFB',
-                                        borderWidth: 1,
-                                        fontFamily: 'regular',
-                                        paddingLeft: 15,
-                                        fontSize: 14,
-                                    }} >
-                                        <RNPickerSelect style={{
-                                            color: '#8F9EB717',
-                                            fontWeight: 'regular',
-                                            fontSize: 15
-                                        }}
-                                            placeholder={{
-                                                label: 'PROMOTION NAME',
-
-                                            }}
-                                            items={[
-                                                { label: 'Mens Buy2@200', value: 'Mens Buy2@200' },
-                                                { label: 'Mens Buy2@300', value: 'Mens Buy2@300' },
-                                            ]}
-                                            Icon={() => {
-                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                            }}
-                                            // items={this.state.uom}
-                                            onValueChange={this.handlePromotionName}
-                                            style={pickerSelectStyles}
-                                            value={this.state.selectedPromotionName}
-                                            useNativeAndroidPickerStyle={false}
-
-                                        />
-                                    </View>
-
-                                    <View style={{
-                                        justifyContent: 'center',
-                                        margin: 20,
-                                        height: 44,
-                                        marginTop: 5,
-                                        marginBottom: 10,
-                                        borderColor: '#8F9EB717',
-                                        borderRadius: 3,
-                                        backgroundColor: '#FBFBFB',
-                                        borderWidth: 1,
-                                        fontFamily: 'regular',
-                                        paddingLeft: 15,
-                                        fontSize: 14,
-                                    }} >
-                                        <RNPickerSelect style={{
-                                            color: '#8F9EB717',
-                                            fontWeight: 'regular',
-                                            fontSize: 15
-                                        }}
-                                            placeholder={{
-                                                label: 'SELECT STORE',
-
-                                            }}
-                                            Icon={() => {
-                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                            }}
-                                            items={this.state.storeNames}
-                                            onValueChange={this.handleSelectStore}
-                                            style={pickerSelectStyles}
-                                            value={this.state.selectedStore}
-                                            useNativeAndroidPickerStyle={false}
-
-                                        />
-                                    </View>
-
-
-                                    <Text style={{
-                                    position: 'absolute',
-                                    left: 20,
-                                    top: 170,
-                                    width: 300,
-                                    height: 20,
-                                    fontFamily: 'regular',
-                                    fontSize: 12,
-                                    color: '#353C40'
-                                }}> Start Date </Text>
-                                    <TouchableOpacity
-                                        style={{
-                                            width: deviceWidth - 40,
-                                            marginLeft: 20,
-                                            marginRight: 20,
-                                            marginTop: 10,
-                                            borderColor: '#8F9EB717',
-                                            borderRadius: 3,
-                                            height: 50, backgroundColor: "#F6F6F6", borderRadius: 5,
-                                        }} testID="openModal"
-
-                                        onPress={() => this.datepickerClicked()}
-                                    >
-                                        <Text style={{
-                                            marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
-                                            fontFamily: "regular"
-                                        }}  > {this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()} </Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
-                                    </TouchableOpacity>
-
-
-                                    <Text style={{
-                                    position: 'absolute',
-                                    left: 20,
-                                    top: 235,
-                                    width: 300,
-                                    height: 20,
-                                    fontFamily: 'regular',
-                                    fontSize: 12,
-                                    color: '#353C40'
-                                }}> End Date </Text>
 
                                     <TouchableOpacity
                                         style={{
                                             width: deviceWidth - 40,
                                             marginLeft: 20,
                                             marginRight: 20,
-                                            marginTop: 10,
-                                            borderColor: '#8F9EB717',
-                                            borderRadius: 3,
-                                            height: 50, backgroundColor: "#F6F6F6", borderRadius: 5,
-                                        }} testID="openModal"
-
-                                        onPress={() => this.enddatepickerClicked()}
+                                            marginTop: 20,
+                                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                        }} onPress={() => this.addPromoStore()}
                                     >
                                         <Text style={{
-                                            marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
+                                            textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
                                             fontFamily: "regular"
-                                        }}  > {this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()} </Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                        }}  > ADD </Text>
+
                                     </TouchableOpacity>
 
-                                </View>
-                                {this.state.datepickerOpen && this.state.flagtwo && (
-                                    <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
-                                        <TouchableOpacity
-                                            style={{
-                                                position: 'absolute',
-                                                left: 20,
-                                                top: 10,
-                                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                            }} onPress={() => this.datepickerCancelClicked()}
-                                        >
-                                            <Text style={{
-                                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                fontFamily: "regular"
-                                            }}  > Cancel </Text>
+                                    <TouchableOpacity
+                                        style={{
+                                            width: deviceWidth - 40,
+                                            marginLeft: 20,
+                                            marginRight: 20,
+                                            marginTop: 20,
+                                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                        }} onPress={() => this.modelCancel()}
+                                    >
+                                        <Text style={{
+                                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                            fontFamily: "regular"
+                                        }}  > CANCEL </Text>
 
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={{
-                                                position: 'absolute',
-                                                right: 20,
-                                                top: 10,
-                                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                            }} onPress={() => this.datepickerDoneClicked()}
-                                        >
-                                            <Text style={{
-                                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                fontFamily: "regular"
-                                            }}  > Done </Text>
-
-                                        </TouchableOpacity>
-                                        <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
-                                            date={this.state.date}
-                                            mode={'date'}
-                                            onDateChange={(date) => this.setState({ date })}
-                                        />
-                                    </View>
-                                )}
-                                {this.state.datepickerendOpen && this.state.flagtwo && (
-                                    <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
-                                        <TouchableOpacity
-                                            style={{
-                                                position: 'absolute',
-                                                left: 20,
-                                                top: 10,
-                                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                            }} onPress={() => this.datepickerCancelClicked()}
-                                        >
-                                            <Text style={{
-                                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                fontFamily: "regular"
-                                            }}  > Cancel </Text>
-
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={{
-                                                position: 'absolute',
-                                                right: 20,
-                                                top: 10,
-                                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                            }} onPress={() => this.datepickerDoneClicked()}
-                                        >
-                                            <Text style={{
-                                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                fontFamily: "regular"
-                                            }}  > Done </Text>
-
-                                        </TouchableOpacity>
-                                        <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
-                                            date={this.state.enddate}
-                                            mode={'date'}
-                                            onDateChange={(enddate) => this.setState({ enddate })}
-                                        />
-                                    </View>
-                                )}
+                                    </TouchableOpacity>
+                                </KeyboardAwareScrollView>
+                            </View>
+                        </Modal>
+                    </View >)
+                }
 
 
 
-
-
-                                <TouchableOpacity
-                                    style={{
-                                        width: deviceWidth - 40,
-                                        marginLeft: 20,
-                                        marginRight: 20,
-                                        marginTop: 20,
-                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                    }} onPress={() => this.addPromoStore()}
-                                >
-                                    <Text style={{
-                                        textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                        fontFamily: "regular"
-                                    }}  > ADD </Text>
-
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    style={{
-                                        width: deviceWidth - 40,
-                                        marginLeft: 20,
-                                        marginRight: 20,
-                                        marginTop: 20,
-                                        height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                    }} onPress={() => this.modelCancel()}
-                                >
-                                    <Text style={{
-                                        textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                        fontFamily: "regular"
-                                    }}  > CANCEL </Text>
-
-                                </TouchableOpacity>
-                            </KeyboardAwareScrollView>
-                        </View>
-                    </Modal>
-                </View >)
-            }
-
-
-
-        </View>
-    )
-}
+            </View>
+        )
+    }
 }
 export default Promo
 

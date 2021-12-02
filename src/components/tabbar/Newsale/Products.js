@@ -43,8 +43,8 @@ class Products extends Component {
             address: "",
             modalVisible: true,
             flagqtyModelOpen: false,
-           
-            flagone: true, 
+
+            flagone: true,
             flagtwo: false,
             flagthree: false,
             flagfour: false,
@@ -211,7 +211,7 @@ class Products extends Component {
                     { RNBeep.beep() }
                     global.productname = response.data.result[0].name
                     this.refresh()
-                  //    }
+                    //    }
                 }
 
             })
@@ -219,10 +219,10 @@ class Products extends Component {
                 console.log(error);
 
             })
-           
+
     }
 
-    cancel(){
+    cancel() {
         console.log('clicked')
         //this.setState({ modalVisible: true });
         this.setState({ flagqtyModelOpen: false })
@@ -372,7 +372,7 @@ class Products extends Component {
         // });
     }
 
-   
+
     handledeleteaction = (item, index) => {
         const list = this.state.arrayData;
         list.splice(index, 1);
@@ -391,8 +391,8 @@ class Products extends Component {
         this.getItems()
     }
 
-    
-   
+
+
 
     render() {
         return (
@@ -446,40 +446,40 @@ class Products extends Component {
 
                     {this.state.flagqtyModelOpen && (
                         <View>
-                          <Modal isVisible={this.state.modalVisible}>
-                            <View style={{
-                              flex: 1, justifyContent: 'center', //Centered horizontally
-                              alignItems: 'center',
-                            }}>
-                              <View style={{
-                                position: 'absolute',
-                                right: 20,
-                                left: 20,
-                                alignItems: 'center',
-                                justifyContent: 'flex-start',
-                                backgroundColor: "#ffffff", borderRadius: 20,
-                              }}>
-                                <TouchableOpacity
-                                    style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
-                                    onPress={() => this.pickSingleWithCamera(true)} >
-                                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Product Image Scan With Camera')} </Text>
-                                </TouchableOpacity>
+                            <Modal isVisible={this.state.modalVisible}>
+                                <View style={{
+                                    flex: 1, justifyContent: 'center', //Centered horizontally
+                                    alignItems: 'center',
+                                }}>
+                                    <View style={{
+                                        position: 'absolute',
+                                        right: 20,
+                                        left: 20,
+                                        alignItems: 'center',
+                                        justifyContent: 'flex-start',
+                                        backgroundColor: "#ffffff", borderRadius: 20,
+                                    }}>
+                                        <TouchableOpacity
+                                            style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
+                                            onPress={() => this.pickSingleWithCamera(true)} >
+                                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Product Image Scan With Camera')} </Text>
+                                        </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
-                                    onPress={() => this.pickSingle(true)} >
-                                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Product Image Scan With Gallery')} </Text>
-                                </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
+                                            onPress={() => this.pickSingle(true)} >
+                                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Product Image Scan With Gallery')} </Text>
+                                        </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center',marginBottom: 20, }}
-                                    onPress={() => this.cancel()} >
-                                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Cancel')} </Text>
-                                </TouchableOpacity>
-                              
-                              </View>
-                            </View>
-                          </Modal>
+                                        <TouchableOpacity
+                                            style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center', marginBottom: 20, }}
+                                            onPress={() => this.cancel()} >
+                                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Cancel')} </Text>
+                                        </TouchableOpacity>
+
+                                    </View>
+                                </View>
+                            </Modal>
                         </View>)}
 
                     <FlatList

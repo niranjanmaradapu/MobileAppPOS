@@ -9,9 +9,9 @@ export default class HomeNav extends React.Component {
         return (
 
             <Stack.Navigator>
-                <Stack.Screen name="Home" options={{headerShown: false}} component={Home} />
-                <Stack.Screen name="Statitics" options={{headerShown: false}} component={Statitics} />
-               
+                <Stack.Screen name="Home" options={{ headerShown: false }} component={Home} />
+                <Stack.Screen name="Statitics" options={{ headerShown: false }} component={Statitics} />
+
             </Stack.Navigator>
 
         );

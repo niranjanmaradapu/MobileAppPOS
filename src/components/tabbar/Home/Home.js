@@ -133,9 +133,9 @@ class Home extends Component {
                         ListFooterComponent={<View style={{ width: 15 }}></View>}
                     />
                     <View style={{ height: 40, backgroundColor: '#ffffff', width: deviceWidth, marginTop: 0, }}>
-                    
-                            <Text onPress={() => this.statatics()} style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', position: 'absolute', right: 20, top: 20, }}> {('STATISTICS >')} </Text>
-                        
+
+                        <Text onPress={() => this.statatics()} style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', position: 'absolute', right: 20, top: 20, }}> {('STATISTICS >')} </Text>
+
                     </View>
 
                     <View style={{ height: 50, backgroundColor: '#e6e6e6', width: deviceWidth, marginTop: 0, }}>
@@ -280,8 +280,6 @@ const styles = StyleSheet.create({
     },
     flatList: {
         marginTop: 20
-        // THIS DOESN'T SEEM TO BE WORKING
-        // marginRight: 15   I can't use marginRight because it cuts off the box with whitespace
     },
     flatlistbox: {
         display: 'flex',

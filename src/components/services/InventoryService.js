@@ -7,14 +7,14 @@ class InventoryService {
         return REACT_NATIVE_APP_BASE_URL + '/inventory/inventoryRetail/createBarcode';
     }
 
-    deleteBarcode(){
-        return REACT_NATIVE_APP_BASE_URL + '/inventory/inventoryRetail/deleteBarcode'; 
+    deleteBarcode() {
+        return REACT_NATIVE_APP_BASE_URL + '/inventory/inventoryRetail/deleteBarcode';
     }
 
-    updateBarcode(){
-        return REACT_NATIVE_APP_BASE_URL + '/inventory/inventoryRetail/updateBarcode'; 
+    updateBarcode() {
+        return REACT_NATIVE_APP_BASE_URL + '/inventory/inventoryRetail/updateBarcode';
     }
-   
+
     getAllBarcodes() {
         return REACT_NATIVE_APP_BASE_URL + '/inventory/inventoryRetail/getAllBarcodes';
     }

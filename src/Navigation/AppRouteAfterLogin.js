@@ -9,7 +9,7 @@ function AppRouteAfterLogin() {
     return (
         <NavigationContainer>
             <Stack.Navigator>
-             <Stack.Screen name="SplashScreen" options={{ headerShown: false }} component={SplashScreen} />
+                <Stack.Screen name="SplashScreen" options={{ headerShown: false }} component={SplashScreen} />
                 <Stack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
             </Stack.Navigator>
         </NavigationContainer>

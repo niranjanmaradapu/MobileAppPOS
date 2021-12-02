@@ -30,7 +30,7 @@ class EditPool extends Component {
             mobileNumber: "",
             altMobileNo: "",
             name: "",
-            selectedIndex:0,
+            selectedIndex: 0,
             loading: false,
             arrayData: [],
             temp: [],
@@ -61,7 +61,7 @@ class EditPool extends Component {
             selectedPoolName: '',
             selectedColumnName: '',
             selectedOperator: '',
-            updateRool:false,
+            updateRool: false,
             item: [],
             domainId: 1,
             tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
@@ -82,7 +82,7 @@ class EditPool extends Component {
         this.setState({ selectedPoolType: this.props.route.params.item.poolType })
         this.setState({ arrayData: this.props.route.params.item.ruleVo })
         this.setState({ selectedPoolName: this.props.route.params.item.poolName })
-       
+
         var domainStringId = ""
         AsyncStorage.getItem("domainDataId").then((value) => {
             domainStringId = value
@@ -127,14 +127,14 @@ class EditPool extends Component {
                 "poolName": this.state.selectedPoolName,
                 "poolType": this.state.selectedPoolType,
                 "ruleVo": this.state.arrayData,
-                "poolId":this.props.route.params.item.poolId, 
+                "poolId": this.props.route.params.item.poolId,
             }
             console.log('params are' + JSON.stringify(params))
             this.setState({ loading: true })
             axios.post(PromotionsService.updatePool(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.setState({ loading: false })
-                   // this.props.route.params.onGoBack();
+                    // this.props.route.params.onGoBack();
                     this.props.navigation.goBack(null);
                 }
                 else {
@@ -146,14 +146,14 @@ class EditPool extends Component {
         }
     }
 
-    
+
     refresh() {
         this.setState({ productname: global.productname })
         console.log('search' + this.state.productname)
     }
 
 
-   
+
 
     imageAction() {
     }
@@ -165,8 +165,8 @@ class EditPool extends Component {
     addPoolRool() {
         this.setState({ updateRool: false });
         this.setState({ selectedColumnName: "" })
-        this.setState({ selectedOperator: ""})
-        this.setState({ productmrp: ""})
+        this.setState({ selectedOperator: "" })
+        this.setState({ productmrp: "" })
         this.setState({ modalVisible: true });
         this.setState({ flagCustomerOpen: true });
     }
@@ -197,18 +197,18 @@ class EditPool extends Component {
 
 
     addruleName() {
-        if(this.state.updateRool === true){
+        if (this.state.updateRool === true) {
             const editArray = [...this.state.arrayData];
             editArray[this.state.selectedIndex].columnName = this.state.selectedColumnName;
             editArray[this.state.selectedIndex].operatorSymbol = this.state.selectedOperator;
             editArray[this.state.selectedIndex].givenValue = this.state.productmrp;
-            this.setState({ arrayData:  editArray });
+            this.setState({ arrayData: editArray });
             this.setState({ modalVisible: false });
-         
+
         }
-        else{
-        this.state.arrayData.push({ columnName: this.state.selectedColumnName, operatorSymbol: this.state.selectedOperator, givenValue: this.state.productmrp })
-        this.setState({ modalVisible: false });
+        else {
+            this.state.arrayData.push({ columnName: this.state.selectedColumnName, operatorSymbol: this.state.selectedOperator, givenValue: this.state.productmrp })
+            this.setState({ modalVisible: false });
         }
     }
 
@@ -237,10 +237,10 @@ class EditPool extends Component {
     render() {
         return (
             <View style={styles.container}>
-                 {this.state.loading &&
+                {this.state.loading &&
                     <Loader
                         loading={this.state.loading} />
-                 }
+                }
                 <View style={styles.viewswidth}>
                     <TouchableOpacity style={{
                         position: 'absolute',
@@ -476,190 +476,190 @@ class EditPool extends Component {
                             </TouchableOpacity>
 
                             {this.state.flagCustomerOpen && (
-                            <View>
-                                <Modal isVisible={this.state.modalVisible}>
+                                <View>
+                                    <Modal isVisible={this.state.modalVisible}>
 
-                                    <View style={{
-                                        width: deviceWidth,
-                                        alignItems: 'center',
-                                        marginLeft: -20,
-                                        backgroundColor: "#ffffff",
-                                        height: 400,
-                                        position: 'absolute',
-                                        bottom: -20,
-                                    }}>
-                                        <KeyboardAwareScrollView KeyboardAwareScrollView
-                                            enableOnAndroid={true}>
-                                            <Text style={{
-                                                position: 'absolute',
-                                                left: 20,
-                                                top: 15,
-                                                width: 300,
-                                                height: 20,
-                                                fontFamily: 'medium',
-                                                fontSize: 16,
-                                                color: '#353C40'
-                                            }}> {this.state.updateRool == true ? 'Update pool rule' : 'Add pool rule'} </Text>
+                                        <View style={{
+                                            width: deviceWidth,
+                                            alignItems: 'center',
+                                            marginLeft: -20,
+                                            backgroundColor: "#ffffff",
+                                            height: 400,
+                                            position: 'absolute',
+                                            bottom: -20,
+                                        }}>
+                                            <KeyboardAwareScrollView KeyboardAwareScrollView
+                                                enableOnAndroid={true}>
+                                                <Text style={{
+                                                    position: 'absolute',
+                                                    left: 20,
+                                                    top: 15,
+                                                    width: 300,
+                                                    height: 20,
+                                                    fontFamily: 'medium',
+                                                    fontSize: 16,
+                                                    color: '#353C40'
+                                                }}> {this.state.updateRool == true ? 'Update pool rule' : 'Add pool rule'} </Text>
 
-                                            <TouchableOpacity style={{
-                                                position: 'absolute',
-                                                right: 20,
-                                                top: 8,
-                                                width: 50, height: 50,
-                                            }} onPress={() => this.modelCancel()}>
-                                                <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
-                                            </TouchableOpacity>
+                                                <TouchableOpacity style={{
+                                                    position: 'absolute',
+                                                    right: 20,
+                                                    top: 8,
+                                                    width: 50, height: 50,
+                                                }} onPress={() => this.modelCancel()}>
+                                                    <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                                </TouchableOpacity>
 
-                                            <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                            </Text>
-                                            <View style={{ marginTop: 10, width: deviceWidth, }}>
-                                                <View style={{
-                                                    justifyContent: 'center',
-                                                    margin: 20,
-                                                    height: 44,
-                                                    marginTop: 5,
-                                                    marginBottom: 10,
-                                                    borderColor: '#8F9EB717',
-                                                    borderRadius: 3,
-                                                    backgroundColor: '#FBFBFB',
-                                                    borderWidth: 1,
-                                                    fontFamily: 'regular',
-                                                    paddingLeft: 15,
-                                                    fontSize: 14,
-                                                }} >
-                                                    <RNPickerSelect style={{
-                                                        color: '#8F9EB717',
-                                                        fontWeight: 'regular',
-                                                        fontSize: 15
-                                                    }}
-                                                        placeholder={{
-                                                            label: 'SELECT COLUMN NAME',
-
+                                                <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                                </Text>
+                                                <View style={{ marginTop: 10, width: deviceWidth, }}>
+                                                    <View style={{
+                                                        justifyContent: 'center',
+                                                        margin: 20,
+                                                        height: 44,
+                                                        marginTop: 5,
+                                                        marginBottom: 10,
+                                                        borderColor: '#8F9EB717',
+                                                        borderRadius: 3,
+                                                        backgroundColor: '#FBFBFB',
+                                                        borderWidth: 1,
+                                                        fontFamily: 'regular',
+                                                        paddingLeft: 15,
+                                                        fontSize: 14,
+                                                    }} >
+                                                        <RNPickerSelect style={{
+                                                            color: '#8F9EB717',
+                                                            fontWeight: 'regular',
+                                                            fontSize: 15
                                                         }}
-                                                        Icon={() => {
-                                                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                                        }}
-                                                        items={[
-                                                            { label: 'Mrp', value: 'Mrp' },
-                                                            { label: 'BarcodeCreatedDate', value: 'BarcodeCreatedDate' },
-                                                            { label: 'BatchNo', value: 'BatchNo' },
-                                                        ]}
-                                                        onValueChange={this.handleColumnName}
-                                                        style={pickerSelectStyles}
-                                                        value={this.state.selectedColumnName}
-                                                        useNativeAndroidPickerStyle={false}
+                                                            placeholder={{
+                                                                label: 'SELECT COLUMN NAME',
 
+                                                            }}
+                                                            Icon={() => {
+                                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                            }}
+                                                            items={[
+                                                                { label: 'Mrp', value: 'Mrp' },
+                                                                { label: 'BarcodeCreatedDate', value: 'BarcodeCreatedDate' },
+                                                                { label: 'BatchNo', value: 'BatchNo' },
+                                                            ]}
+                                                            onValueChange={this.handleColumnName}
+                                                            style={pickerSelectStyles}
+                                                            value={this.state.selectedColumnName}
+                                                            useNativeAndroidPickerStyle={false}
+
+                                                        />
+                                                    </View>
+
+
+                                                    <View style={{
+                                                        justifyContent: 'center',
+                                                        margin: 20,
+                                                        height: 44,
+                                                        marginTop: 5,
+                                                        marginBottom: 10,
+                                                        borderColor: '#8F9EB717',
+                                                        borderRadius: 3,
+                                                        backgroundColor: '#FBFBFB',
+                                                        borderWidth: 1,
+                                                        fontFamily: 'regular',
+                                                        paddingLeft: 15,
+                                                        fontSize: 14,
+                                                    }} >
+                                                        <RNPickerSelect style={{
+                                                            color: '#8F9EB717',
+                                                            fontWeight: 'regular',
+                                                            fontSize: 15
+                                                        }}
+                                                            placeholder={{
+                                                                label: 'SELECT OPERATOR',
+
+                                                            }}
+                                                            Icon={() => {
+                                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                            }}
+                                                            items={[
+                                                                { label: 'Equals', value: 'Equals' },
+                                                                { label: 'NotEquals', value: 'NotEquals' },
+                                                                { label: 'GreaterThan', value: 'GreaterThan' },
+                                                                { label: 'GreaterThanAndEquals', value: 'GreaterThanAndEquals' },
+                                                                { label: 'LessThanAndEquals', value: 'LessThanAndEquals' },
+                                                                { label: 'In', value: 'In' },
+
+                                                                // { label: 'Cost Price', value: 'Cost Price' },
+                                                                // { label: 'SECTION', value: 'SECTION' },
+                                                                // { label: 'SUBSECTION', value: 'SUBSECTION' },
+                                                                // { label: 'DCODE', value: 'DCODE' },
+                                                                // { label: 'MRP', value: 'MRP' },
+                                                                // { label: 'Barcode Created On', value: 'Barcode Created On' },
+                                                                // { label: 'STYLE CODE', value: 'STYLE CODE' },
+                                                                // { label: 'Original Barcode Created On', value: 'Original Barcode Created On' },
+                                                                // { label: 'SUBSECTION_ID', value: 'SUBSECTION_ID' },
+                                                                // { label: 'UOM', value: 'UOM' },
+                                                                // { label: 'BatchNo', value: 'BatchNo' },
+                                                                // { label: 'Discount Type', value: 'Discount Type' },
+                                                                // { label: 'DIVISION', value: 'DIVISION' },
+                                                            ]}
+                                                            onValueChange={this.handleOperator}
+                                                            style={pickerSelectStyles}
+                                                            value={this.state.selectedOperator}
+                                                            useNativeAndroidPickerStyle={false}
+
+                                                        />
+                                                    </View>
+
+                                                    <TextInput style={styles.input}
+                                                        underlineColorAndroid="transparent"
+                                                        placeholder="ENTER VALUES"
+                                                        keyboardType='name-phone-pad'
+                                                        placeholderTextColor="#6F6F6F"
+                                                        textAlignVertical="center"
+                                                        autoCapitalize="none"
+                                                        value={this.state.productmrp}
+                                                        onChangeText={this.handleValue}
                                                     />
                                                 </View>
 
+                                                <TouchableOpacity
+                                                    style={{
+                                                        width: deviceWidth - 40,
+                                                        marginLeft: 20,
+                                                        marginRight: 20,
+                                                        marginTop: 20,
+                                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                    }} onPress={() => this.addruleName()}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > {this.state.updateRool == true ? 'UPDATE' : 'ADD'} </Text>
 
-                                                <View style={{
-                                                    justifyContent: 'center',
-                                                    margin: 20,
-                                                    height: 44,
-                                                    marginTop: 5,
-                                                    marginBottom: 10,
-                                                    borderColor: '#8F9EB717',
-                                                    borderRadius: 3,
-                                                    backgroundColor: '#FBFBFB',
-                                                    borderWidth: 1,
-                                                    fontFamily: 'regular',
-                                                    paddingLeft: 15,
-                                                    fontSize: 14,
-                                                }} >
-                                                    <RNPickerSelect style={{
-                                                        color: '#8F9EB717',
-                                                        fontWeight: 'regular',
-                                                        fontSize: 15
-                                                    }}
-                                                        placeholder={{
-                                                            label: 'SELECT OPERATOR',
+                                                </TouchableOpacity>
 
-                                                        }}
-                                                        Icon={() => {
-                                                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                                        }}
-                                                        items={[
-                                                            { label: 'Equals', value: 'Equals' },
-                                                            { label: 'NotEquals', value: 'NotEquals' },
-                                                            { label: 'GreaterThan', value: 'GreaterThan' },
-                                                            { label: 'GreaterThanAndEquals', value: 'GreaterThanAndEquals' },
-                                                            { label: 'LessThanAndEquals', value: 'LessThanAndEquals' },
-                                                            { label: 'In', value: 'In' },
+                                                <TouchableOpacity
+                                                    style={{
+                                                        width: deviceWidth - 40,
+                                                        marginLeft: 20,
+                                                        marginRight: 20,
+                                                        marginTop: 20,
+                                                        height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                                    }} onPress={() => this.modelCancel()}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > CANCEL </Text>
 
-                                                            // { label: 'Cost Price', value: 'Cost Price' },
-                                                            // { label: 'SECTION', value: 'SECTION' },
-                                                            // { label: 'SUBSECTION', value: 'SUBSECTION' },
-                                                            // { label: 'DCODE', value: 'DCODE' },
-                                                            // { label: 'MRP', value: 'MRP' },
-                                                            // { label: 'Barcode Created On', value: 'Barcode Created On' },
-                                                            // { label: 'STYLE CODE', value: 'STYLE CODE' },
-                                                            // { label: 'Original Barcode Created On', value: 'Original Barcode Created On' },
-                                                            // { label: 'SUBSECTION_ID', value: 'SUBSECTION_ID' },
-                                                            // { label: 'UOM', value: 'UOM' },
-                                                            // { label: 'BatchNo', value: 'BatchNo' },
-                                                            // { label: 'Discount Type', value: 'Discount Type' },
-                                                            // { label: 'DIVISION', value: 'DIVISION' },
-                                                        ]}
-                                                        onValueChange={this.handleOperator}
-                                                        style={pickerSelectStyles}
-                                                        value={this.state.selectedOperator}
-                                                        useNativeAndroidPickerStyle={false}
+                                                </TouchableOpacity>
+                                            </KeyboardAwareScrollView>
+                                        </View>
 
-                                                    />
-                                                </View>
-
-                                                <TextInput style={styles.input}
-                                                    underlineColorAndroid="transparent"
-                                                    placeholder="ENTER VALUES"
-                                                    keyboardType='name-phone-pad'
-                                                    placeholderTextColor="#6F6F6F"
-                                                    textAlignVertical="center"
-                                                    autoCapitalize="none"
-                                                    value={this.state.productmrp}
-                                                    onChangeText={this.handleValue}
-                                                 />
-                                            </View>
-
-                                            <TouchableOpacity
-                                                style={{
-                                                    width: deviceWidth - 40,
-                                                    marginLeft: 20,
-                                                    marginRight: 20,
-                                                    marginTop: 20,
-                                                    height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                }} onPress={() => this.addruleName()}
-                                            >
-                                                <Text style={{
-                                                    textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                                    fontFamily: "regular"
-                                                }}  > {this.state.updateRool == true ? 'UPDATE' : 'ADD'} </Text>
-
-                                            </TouchableOpacity>
-
-                                            <TouchableOpacity
-                                                style={{
-                                                    width: deviceWidth - 40,
-                                                    marginLeft: 20,
-                                                    marginRight: 20,
-                                                    marginTop: 20,
-                                                    height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                                }} onPress={() => this.modelCancel()}
-                                            >
-                                                <Text style={{
-                                                    textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                                    fontFamily: "regular"
-                                                }}  > CANCEL </Text>
-
-                                            </TouchableOpacity>
-                                        </KeyboardAwareScrollView>
-                                    </View>
-
-                                </Modal>
-                            </View>)}
+                                    </Modal>
+                                </View>)}
 
                         </ScrollView>
-                        
+
 
                     </View>
 

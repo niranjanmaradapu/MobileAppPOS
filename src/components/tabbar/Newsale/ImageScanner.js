@@ -1,134 +1,3 @@
-// import React from 'react';
-// import { Dimensions, Alert, StyleSheet, ActivityIndicator,TouchableOpacity,Image,Images } from 'react-native';
-// import { RNCamera } from 'react-native-camera';
-// import CaptureButton from './CaptureButton.js'
-// import Amplify, { API } from 'aws-amplify';
-
-
-// // Amplify configuration for API-Gateway
-// Amplify.configure({
-//     API: {
-//         endpoints: [
-//             {
-//                 name: 'LabellingAPI',   //your api name
-//                 endpoint: '', //Your Endpoint URL
-//             },
-//         ],
-//     },
-// });
-
-// export default class ImageScanner extends React.Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             identifedAs: '',
-//             loading: false
-//         }
-//     }
-
-//     takePicture = async () => {
-//         if (this.camera) {
-//             const options = { quality: 0.5, base64: true };
-//             const data = await this.camera.takePictureAsync(options);
-//             console.log(data.uri);
-//         }
-//     };
-
-
-//     takePicture = async function () {
-//         if (this.camera) {
-//             // Pause the camera's preview
-//             this.camera.pausePreview();
-//             // Set the activity indicator
-//             this.setState((previousState, props) => ({
-//                 loading: true
-//             }));
-//             // Set options
-//             const options = {
-//                 base64: true
-//             };
-//             // this.setState({
-//             //     capturedImage: response.uri,
-//             //   });
-//             // Get the base64 version of the image
-//             const data = await this.camera.takePictureAsync(options)
-//             // Get the identified image
-//            // this.identifyImage(data.uri);
-//             Alert.alert(
-//                 'object name is' + data.base64
-//             )
-//             console.log(data.base64)
-//             // Alert.alert(
-//             //     'object is' + data.uri
-//             // )
-//             if(data.base64.length !== 0){
-//                 this.setState({ loading: false });
-//             }
-//             const apiName = 'LabellingAPI';
-//             const path = '/storeimage';
-//             const init = {
-//                 headers: {
-//                     Accept: 'application/json',
-//                     'Content-Type': 'application/x-amz-json-1.1',
-//                 },
-//                 body: JSON.stringify({
-//                     Image: data.base64,
-//                     name: 'storeImage.png',
-//                 }),
-//             };
-
-//             API.post(apiName, path, init).then(response => {
-//                 if (JSON.stringify(response.Labels.length) > 0) {
-//                     this.setState({
-//                         objectName: response.Labels[0].Name,
-//                     });
-//                     // Dismiss the acitivty indicator
-//                     this.setState({ loading: false });
-//                     // Show an alert wit loading:falseh the answer on
-//                     Alert.alert(
-//                         'object name is' + objectName
-//                     )
-//                     // Resume the preview
-//                     this.camera.resumePreview();
-//                 } else {
-//                     alert('Please Try Again.');
-//                 }
-//             });
-//         }
-//     }
-//     // identifyImage(imageData) {
-
-//     // }
-//     // displayAnswer(identifiedImage) {
-
-//     // }
-
-
-//     render() {
-//         return (
-//             <RNCamera ref={ref => { this.camera = ref; }} style={styles.preview}>
-//                 <ActivityIndicator size="large" style={styles.loadingIndicator} color="#fff" animating={this.state.loading} />
-//                 <CaptureButton buttonDisabled={this.state.loading} onClick={this.takePicture.bind(this)} />
-//             </RNCamera>
-//         );
-//     }
-// }
-// const styles = StyleSheet.create({
-//     preview: {
-//         flex: 1,
-//         justifyContent: 'flex-end',
-//         alignItems: 'center',
-//         height: Dimensions.get('window').height,
-//         width: Dimensions.get('window').width,
-//     },
-//     loadingIndicator: {
-//         flex: 1,
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//     }
-// });
-
-
 import React, { Component } from 'react';
 import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, Dimensions, View } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -143,14 +12,13 @@ export default class ImageScanner extends Component {
         super(props);
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
-            image:null,
+            image: null,
             images: null,
         };
     }
     handleBackButtonClick() {
-       // this.props.navigation.goBack(null);
-       this.props.route.params.onGoBack()
-       this.props.navigation.goBack()
+        this.props.route.params.onGoBack()
+        this.props.navigation.goBack()
         return true;
     }
 
@@ -196,29 +64,29 @@ export default class ImageScanner extends Component {
 
     pickSingleWithCamera(cropping, mediaType = 'photo') {
         if (this.state.image === null) {
-        ImagePicker.openCamera({
-            cropping: cropping,
-            width: 500,
-            height: 500,
-            includeExif: true,
-            mediaType,
-        })
-            .then((image) => {
-                console.log('received image', image);
-                this.setState({
-                    image: {
-                        uri: image.path,
-                        width: image.width,
-                        height: image.height,
-                        mime: image.mime,
-                    },
-                    images: null,
-                });
-                this.getImageNameByScan()
+            ImagePicker.openCamera({
+                cropping: cropping,
+                width: 500,
+                height: 500,
+                includeExif: true,
+                mediaType,
             })
-            .catch((e) => alert(e));
+                .then((image) => {
+                    console.log('received image', image);
+                    this.setState({
+                        image: {
+                            uri: image.path,
+                            width: image.width,
+                            height: image.height,
+                            mime: image.mime,
+                        },
+                        images: null,
+                    });
+                    this.getImageNameByScan()
+                })
+                .catch((e) => alert(e));
+        }
     }
-}
 
 
     getImageNameByScan() {
@@ -240,14 +108,13 @@ export default class ImageScanner extends Component {
                     console.log("response :", response.data.result[0].name);
                     console.log("response :", global.productname);
                     // this.setState({ inventoryProductName: response.data.result[0].name})
-                     if (global.productname == "something") {
-                    { RNBeep.beep() }
-                    global.productname = response.data.result[0].name
-                    console.log(global.productname)
-                    this.props.route.params.onGoBack();
-                    this.props.navigation.goBack();
-
-                      }
+                    if (global.productname == "something") {
+                        { RNBeep.beep() }
+                        global.productname = response.data.result[0].name
+                        console.log(global.productname)
+                        this.props.route.params.onGoBack();
+                        this.props.navigation.goBack();
+                    }
                 }
 
             })
@@ -255,19 +122,13 @@ export default class ImageScanner extends Component {
                 console.log(error);
 
             })
-           
     }
 
 
-
-
-
-
     render() {
-     
         return (
             <View style={styles.container}>
-                  {this.pickSingleWithCamera(true)}
+                {this.pickSingleWithCamera(true)}
                 <View style={styles.viewswidth}>
                     <TouchableOpacity style={{
                         position: 'absolute',
@@ -277,7 +138,7 @@ export default class ImageScanner extends Component {
                         height: 40,
                     }} onPress={() => this.handleBackButtonClick()}>
                         <Image source={require('../../assets/images/backButton.png')} />
-                        
+
 
                     </TouchableOpacity>
                     <Text style={{
