@@ -26,5 +26,9 @@ class PromotionService {
     deletePromotions(){
         return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/deletepromo'; 
     }
+
+    addPromoStore(){
+        return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/addPromoToStore';   
+    }
 }
 export default new PromotionService()
