@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import Home from '../components/tabbar/Home/Home';
 import Statitics from '../components/tabbar/Home/Statitics';
 
+
 const Stack = createStackNavigator();
 export default class HomeNav extends React.Component {
     render() {
@@ -11,7 +12,6 @@ export default class HomeNav extends React.Component {
             <Stack.Navigator>
                 <Stack.Screen name="Home" options={{ headerShown: false }} component={Home} />
                 <Stack.Screen name="Statitics" options={{ headerShown: false }} component={Statitics} />
-
             </Stack.Navigator>
 
         );

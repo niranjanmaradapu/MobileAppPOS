@@ -4,10 +4,11 @@ import Login from '../components/Login/Login';
 import SignUp from '../components/Login/SignUp';
 import SelectDomain from '../components/Login/SelectDomain';
 import SelectStore from '../components/Login/SelectStore';
+import ForgotPassword from '../components/Login/ForgotPassword';
 import HomeNavigation from './HomeNavigation';
 import Welcome from '../components/Welcome';
 import LanguageSelection from '../components/LanguageSelection';
-import ForgotPassword from '../components/Login/ForgotPassword';
+
 
 const Stack = createStackNavigator();
 export default class AuthNavigation extends React.Component {

@@ -121,6 +121,7 @@ class EditPool extends Component {
             const username = await AsyncStorage.getItem("username");
             const params = {
                 //required 
+                "createdBy": username,
                 "isActive": true,
                 "isForEdit": true,
                 "domainId": this.state.domainId,

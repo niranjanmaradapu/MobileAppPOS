@@ -6,6 +6,11 @@ import { openDatabase } from 'react-native-sqlite-storage';
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import RNPickerSelect from 'react-native-picker-select';
+import { Chevron } from 'react-native-shapes';
+import DatePicker from 'react-native-date-picker'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -17,8 +22,32 @@ class Settings extends Component {
         this.barcodeCodes = [];
         this.state = {
             barcodeId: "",
-
+            selectedGender: '',
+            date: new Date(),
+            datepickerOpen: false,
         }
+    }
+
+    handleGender = (value) => {
+        this.setState({ selectedGender: value });
+    }
+
+    datepickerCancelClicked() {
+        this.setState({ date: new Date() })
+        this.setState({ datepickerOpen: false })
+    }
+
+    datepickerDoneClicked() {
+        this.setState({ datepickerOpen: false })
+    }
+
+    datepickerClicked() {
+        this.setState({ datepickerOpen: true })
+    }
+    
+    signOut(){
+        AsyncStorage.removeItem('phone_number');
+        this.props.navigation.push('Login'); 
     }
 
 
@@ -35,17 +64,424 @@ class Settings extends Component {
                         fontFamily: 'bold',
                         fontSize: 18,
                         color: '#353C40'
-                    }}> Settings </Text>
+                    }}> Profile </Text>
+
+<TouchableOpacity
+                        style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
+                        onPress={() => this.signOut()} >
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/applogout.png')} />
+                    </TouchableOpacity>
 
                 </View>
 
+                <KeyboardAwareScrollView KeyboardAwareScrollView
+                    enableOnAndroid={true}>
+                    <View>
+                        {this.state.loading &&
+                            <Loader
+                                loading={this.state.loading} />
+                        }
+                        <View style={{
+                            flex: 1, justifyContent: 'center', //Centered horizontally
+                            alignItems: 'center', color: '#ffffff'
+                        }}>
+                            <View style={{ flexDirection: 'column', flex: 0, marginLeft: 0, marginTop: 10, marginRight: 0, backgroundColor: "#ffffff", borderRadius: 20, }}>
+
+                                <Image
+                                    style={{ width: 80, height: 80, resizeMode: "cover", marginTop: 20, borderRadius: 40, borderColor: '#F2F2F2', alignSelf: 'center', borderWidth: 2, }}
+                                    source={this.state.image}
+                                />
+                                <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 10, alignSelf: 'center', top: -20, left: 15 }}>
+                                    <Image
+                                        style={{ width: 30, height: 30, borderRadius: 10, }}
+                                        source={require('../../assets/images/cameraclick.png')} />
+
+                                </TouchableOpacity>
+
+
+
+
+                                {this.state.flagqtyModelOpen && (
+                                    <View>
+                                        <Modal isVisible={this.state.modalVisible}>
+                                            <View style={{
+                                                flex: 1, justifyContent: 'center', //Centered horizontally
+                                                alignItems: 'center',
+                                            }}>
+                                                <View style={{
+                                                    position: 'absolute',
+                                                    right: 20,
+                                                    left: 20,
+                                                    alignItems: 'center',
+                                                    justifyContent: 'flex-start',
+                                                    backgroundColor: "#ffffff", borderRadius: 20,
+                                                }}>
+                                                    <TouchableOpacity
+                                                        style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
+                                                        onPress={() => this.pickSingleWithCameraForProductsAdd(true)} >
+                                                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Select Product Image With Camera')} </Text>
+                                                    </TouchableOpacity>
+
+                                                    <TouchableOpacity
+                                                        style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
+                                                        onPress={() => this.pickSingleForProductsAdd(true)} >
+                                                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Select Product Image With Gallery')} </Text>
+                                                    </TouchableOpacity>
+
+                                                    <TouchableOpacity
+                                                        style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center', marginBottom: 20, }}
+                                                        onPress={() => this.cancel()} >
+                                                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Cancel')} </Text>
+                                                    </TouchableOpacity>
+
+                                                </View>
+                                            </View>
+                                        </Modal>
+                                    </View>)}
+
+
+                                <Text></Text>
+
+                                <View style={{ marginTop: 0, width: deviceWidth }}>
+
+                                    <Text style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 0,
+                                        width: 300,
+                                        height: 20,
+                                        fontFamily: 'regular',
+                                        fontSize: 12,
+                                        color: '#353C40'
+                                    }}> NAME: </Text>
+
+                                    <TextInput style={styles.phoneinput}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="NAME"
+                                        placeholderTextColor="#353C4050"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.inventoryBarcodeId}
+                                        onChangeText={this.handleInventoryBarcode}
+                                    />
+
+                                    <TouchableOpacity style={{
+                                        position: 'absolute',
+                                        right: 28,
+                                        top: 20,
+                                        width: 50, height: 50,
+                                    }} onPress={() => this.navigateToGetBarCode()}>
+                                    </TouchableOpacity>
+                                </View>
+
+                                <Text style={{
+                                    position: 'absolute',
+                                    left: 20,
+                                    top: 220,
+                                    width: 300,
+                                    height: 20,
+                                    fontFamily: 'regular',
+                                    fontSize: 12,
+                                    color: '#353C40'
+                                }}> DIGIGNATION: </Text>
+
+                                <TextInput style={styles.phoneinput}
+                                    underlineColorAndroid="transparent"
+                                    placeholder="DIGIGNATION"
+                                    placeholderTextColor="#353C4050"
+                                    textAlignVertical="center"
+                                    autoCapitalize="none"
+                                    value={this.state.inventoryProductName}
+                                    onChangeText={this.handleInventoryProductName}
+                                />
+
+                                <View>
+                                    <Text style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 0,
+                                        width: 300,
+                                        height: 20,
+                                        fontFamily: 'regular',
+                                        fontSize: 12,
+                                        color: '#353C40'
+                                    }}> EMAIL: </Text>
+
+                                    <TextInput style={styles.phoneinput}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="EMAIL"
+                                        placeholderTextColor="#353C4050"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.inventoryQuantity}
+                                        onChangeText={this.handleInventoryQuantity}
+                                    />
+
+                                    {/* <TouchableOpacity style={{
+                        position: 'absolute',
+                        right: 28,
+                        top: 20,
+                      }} >
+
+                        <Text style={{ color: '#353C4050', fontFamily: 'regular', fontSize: 14, position: 'absolute', right: 0, }}> {'Select Unit >'} </Text>
+                      </TouchableOpacity> */}
+                                </View>
+
+                                <View>
+                                    <Text style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 0,
+                                        width: 300,
+                                        height: 20,
+                                        fontFamily: 'regular',
+                                        fontSize: 12,
+                                        color: '#353C40'
+                                    }}> MOBILE NUMBER: </Text>
+
+                                    <TextInput style={styles.phoneinput}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="MOBILE NUMBER"
+                                        placeholderTextColor="#353C4050"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.inventoryQuantity}
+                                        onChangeText={this.handleInventoryQuantity}
+                                    />
+                                </View>
+
+                                <Text style={{
+                                    position: 'absolute',
+                                    left: 20,
+                                    top: 445,
+                                    width: 300,
+                                    height: 20,
+                                    fontFamily: 'regular',
+                                    fontSize: 12,
+                                    color: '#353C40'
+                                }}> GENDER: </Text>
+
+                                <View style={{
+                                    justifyContent: 'center',
+                                    margin: 20,
+                                    height: 44,
+                                    marginTop: 25,
+                                    marginBottom: 10,
+                                    borderColor: '#8F9EB717',
+                                    borderRadius: 3,
+                                    backgroundColor: '#FBFBFB',
+                                    borderWidth: 1,
+                                    fontFamily: 'regular',
+                                    paddingLeft: 15,
+                                    fontSize: 14,
+                                }} >
+                                    <RNPickerSelect style={{
+                                        color: '#8F9EB717',
+                                        fontWeight: 'regular',
+                                        fontSize: 15
+                                    }}
+                                        placeholder={{
+                                            label: 'SELECT GENDER',
+                                            value: " ",
+                                        }}
+                                        Icon={() => {
+                                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                        }}
+                                        items={[
+                                            { label: 'MALE', value: 'MALE' },
+                                            { label: 'FEMALE', value: 'FEMALE' },
+                                            { label: 'PREFER NOT TO SAY', value: 'PREFER NOT TO SAY' },
+                                        ]}
+                                        onValueChange={this.handleGender}
+                                        style={pickerSelectStyles}
+                                        value={this.state.selectedGender}
+                                        useNativeAndroidPickerStyle={false}
+
+                                    />
+                                </View>
+
+
+                               
+
+                                <Text style={{
+                                    position: 'absolute',
+                                    left: 20,
+                                    top: 520,
+                                    width: 300,
+                                    height: 20,
+                                    fontFamily: 'regular',
+                                    fontSize: 12,
+                                    color: '#353C40'
+                                }}> DATE OF BIRTH: </Text>
+
+                                <TouchableOpacity
+                                    style={{
+                                        justifyContent: 'center',
+                                    margin: 20,
+                                    height: 44,
+                                    marginTop: 25,
+                                    marginBottom: 10,
+                                    borderColor: '#8F9EB717',
+                                    borderRadius: 3,
+                                    backgroundColor: '#FBFBFB',
+                                    borderWidth: 1,
+                                    fontFamily: 'regular',
+                                    paddingLeft: 15,
+                                    fontSize: 14,
+                                    }} testID="openModal"
+
+                                    onPress={() => this.datepickerClicked()}
+                                >
+                                    <Text style={{
+                                        marginLeft: 0, marginTop: 0, color: "#6F6F6F", fontSize: 15,
+                                        fontFamily: "regular"
+                                    }}  > {this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()} </Text>
+                                    <Image style={{ position: 'absolute', top: 5, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                </TouchableOpacity>
+
+
+                                <View>
+                                    <Text style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 0,
+                                        width: 300,
+                                        height: 20,
+                                        fontFamily: 'regular',
+                                        fontSize: 12,
+                                        color: '#353C40'
+                                    }}> ADDRESS: </Text>
+
+
+                                <TextInput style={styles.phoneinput}
+                                    underlineColorAndroid="transparent"
+                                    placeholder="ADDRESS"
+                                    placeholderTextColor="#353C4050"
+                                    textAlignVertical="center"
+                                    autoCapitalize="none"
+                                    value={this.state.inventoryMRP}
+                                    onChangeText={this.handleInventoryMRP}
+                                    ref={inputemail => { this.emailValueInput = inputemail }} />
+                                     </View>
+
+                                <View>
+                                  
+
+                                    {/* <TouchableOpacity style={{
+                        position: 'absolute',
+                        right: 28,
+                        top: 20,
+                      }}
+
+                      >
+                        <Text style={{ color: '#353C4050', fontFamily: 'regular', fontSize: 14, position: 'absolute', right: 0, }}> {'%'} </Text>
+                      </TouchableOpacity> */}
+
+                                </View>
+
+
+
+                                <TouchableOpacity
+                                    style={{
+                                        margin: 20,
+                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                    }} onPress={() => this.inventoryCreate()}
+                                >
+                                    <Text style={{
+                                        textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                        fontFamily: "regular"
+                                    }}  > SAVE </Text>
+
+                                </TouchableOpacity>
+                            </View>
+
+                        </View>
+                    </View>
+                </KeyboardAwareScrollView>
+
+                {this.state.datepickerOpen && (
+                                    <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
+                                        <TouchableOpacity
+                                            style={{
+                                                position: 'absolute',
+                                                left: 20,
+                                                top: 10,
+                                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                                            }} onPress={() => this.datepickerCancelClicked()}
+                                        >
+                                            <Text style={{
+                                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                                fontFamily: "regular"
+                                            }}  > Cancel </Text>
+
+                                        </TouchableOpacity>
+                                        <TouchableOpacity
+                                            style={{
+                                                position: 'absolute',
+                                                right: 20,
+                                                top: 10,
+                                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                                            }} onPress={() => this.datepickerDoneClicked()}
+                                        >
+                                            <Text style={{
+                                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                                fontFamily: "regular"
+                                            }}  > Done </Text>
+
+                                        </TouchableOpacity>
+                                        <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                            date={this.state.date}
+                                            mode={'date'}
+                                            onDateChange={(date) => this.setState({ date })}
+                                        />
+                                    </View>
+                                )}
             </View>
         )
     }
 }
 export default Settings
 
+const pickerSelectStyles = StyleSheet.create({
+    placeholder: {
+        color: "#353C4050",
+        fontFamily: "regular",
+        fontSize: 15,
+    },
+    inputIOS: {
+        justifyContent: 'center',
+        height: 42,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+    },
+    inputAndroid: {
+        justifyContent: 'center',
+        height: 42,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
 
+        // marginLeft: 20,
+        // marginRight: 20,
+        // marginTop: 10,
+        // height: 40,
+        // backgroundColor: '#ffffff',
+        // borderBottomColor: '#456CAF55',
+        color: '#001B4A',
+        // fontFamily: "bold",
+        // fontSize: 16,
+        // borderRadius: 3,
+    },
+})
 
 
 const styles = StyleSheet.create({
@@ -80,7 +516,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         margin: 20,
         height: 44,
-        marginTop: 5,
+        marginTop: 20,
         marginBottom: 10,
         borderColor: '#8F9EB717',
         borderRadius: 3,
