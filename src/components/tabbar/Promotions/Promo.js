@@ -26,6 +26,7 @@ class Promo extends Component {
             flagtwo: false,
             flagthree: false,
             flagFilterOpen: false,
+            flagFilterPromoOpen: false,
             flagAddPromo: false,
             flagAddStore: false,
             datepickerOpen: false,
@@ -41,6 +42,7 @@ class Promo extends Component {
             selectedPromotionType: "",
             selectedPromotionName: "",
             modalVisible: true,
+            selectedPoolType: '',
             selectedStore: '',
             selectedstoreId: 0,
             uom: [],
@@ -197,47 +199,99 @@ class Promo extends Component {
             })
     };
 
-
-    getFilteredpools = () => {
-        this.setState({ poolsData: [] })
+    getFilteredpromotions = () => {
+        this.setState({ promoData: [] })
         this.setState({ loading: true })
         const params = {
-            "domainId": this.state.domainId,
-            "isActive": true
+            "startDate": this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(),
+            "endDate": this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate(),
+                "promotionName": this.state.selectedPromotionName,
+                "promotionStatus": this.state.selectedStatus,
+                "storeName": this.state.selectedStore,
         }
-        console.log(this.state.domainId)
-        axios.get(PromotionsService.getAllPools(),
-            { params }).then((res) => {
+        this.setState({ loading: true })
+        axios.post(PromotionsService.promoSearch(),
+            params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.setState({ loading: false })
-                    let len = res.data["result"]["poolvo"].length;
+                    this.setState({ loading: false })
+                    let len = res.data["result"].length;
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let number = res.data["result"]["poolvo"][i]
-                            if (this.state.poolsactiveStatus === false && this.state.selectedcreatedBy === number.createdBy) {
-                                if (number.isActive == false) {
-                                    this.state.poolsData.push(number)
-                                }
-
-                            }
-                            if (this.state.poolsactiveStatus === true && this.state.selectedcreatedBy === number.createdBy) {
-                                if (number.isActive == true) {
-                                    console.log('----addedactivepools')
-                                    this.state.poolsData.push(number)
-                                }
-
-                            }
-
-                            this.setState({ poolsData: this.state.poolsData })
+                            let number = res.data["result"][i]
+                            this.state.promoData.push(number)
                         }
                     }
-
-                    return
                 }
             }).catch(() => {
                 this.setState({ loading: false })
                 alert('No Records Found')
             })
+        }
+
+    getFilteredpools = () => {
+        this.setState({ poolsData: [] })
+        this.setState({ loading: true })
+        const params = {
+            "createdBy": this.state.selectedcreatedBy,
+            "poolType": this.state.selectedPoolType,
+            "isActive": this.state.poolsactiveStatus
+        }
+        this.setState({ loading: true })
+        axios.post(PromotionsService.poolSearch(),
+            params).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    this.setState({ loading: false })
+                    this.setState({ loading: false })
+                    let len = res.data["result"].length;
+                    if (len > 0) {
+                        for (let i = 0; i < len; i++) {
+                            let number = res.data["result"][i]
+                            this.state.poolsData.push(number)
+                        }
+                    }
+                }
+            }).catch(() => {
+                this.setState({ loading: false })
+                alert('No Records Found')
+            })
+        // const params = {
+        //     "domainId": this.state.domainId,
+        //     "isActive": true
+        // }
+        // console.log(this.state.domainId)
+        // axios.get(PromotionsService.getAllPools(),
+        //     { params }).then((res) => {
+        //         if (res.data && res.data["isSuccess"] === "true") {
+        //             this.setState({ loading: false })
+        //             let len = res.data["result"]["poolvo"].length;
+        //             if (len > 0) {
+        //                 for (let i = 0; i < len; i++) {
+        //                     let number = res.data["result"]["poolvo"][i]
+        //                     if (this.state.poolsactiveStatus === false && this.state.selectedcreatedBy === number.createdBy && this.state.selectedPoolType === number.poolType) {
+        //                         if (number.isActive == false) {
+        //                             this.state.poolsData.push(number)
+        //                         }
+
+        //                     }
+        //                     if (this.state.poolsactiveStatus === true && this.state.selectedcreatedBy === number.createdBy && this.state.selectedPoolType === number.poolType) {
+        //                         if (number.isActive == true) {
+        //                             console.log('----addedactivepools')
+        //                             this.state.poolsData.push(number)
+        //                         }
+
+        //                     }
+
+        //                     this.setState({ poolsData: this.state.poolsData })
+        //                 }
+        //             }
+
+        //             return
+        //         }
+        //     }).catch(() => {
+        //         this.setState({ loading: false })
+        //         alert('No Records Found')
+        //     })
     };
 
     topbarAction1() {
@@ -271,12 +325,28 @@ class Promo extends Component {
     }
 
     filterAction() {
+        this.setState({ selectedPromotionName: "" });
         this.setState({ selectedStatus: "" });
         this.setState({ selectedcreatedBy: "" });
+        this.setState({ selectedPoolType: "" });
         this.setState({ flagAddPromo: false });
         this.setState({ flagAddStore: false });
+        if (this.state.flagone === true) {
+            this.setState({ flagFilterOpen: true });
+        }
+        else {
+            this.setState({ flagFilterOpen: false });
+        }
+        if (this.state.flagtwo === true) {
+            this.setState({ flagFilterPromoOpen: true });
+        }
+        else {
+            this.setState({ flagFilterPromoOpen: false });
+        }
+
+
         this.setState({ modalVisible: true });
-        this.setState({ flagFilterOpen: true });
+
     }
 
     modelCancel() {
@@ -284,12 +354,14 @@ class Promo extends Component {
     }
 
     navigateToAddPromo() {
+        this.setState({ flagFilterPromoOpen: false });
         this.setState({ flagAddStore: false });
         this.setState({ modalVisible: true });
         this.setState({ flagAddPromo: true });
     }
 
     addStore() {
+        this.setState({ flagFilterPromoOpen: false });
         this.setState({ flagAddPromo: false });
         this.setState({ modalVisible: true });
         this.setState({ flagAddStore: true });
@@ -394,15 +466,28 @@ class Promo extends Component {
 
     }
 
+    handlePoolType = (value) => {
+        this.setState({ selectedPoolType: value });
+
+    }
+
+    applyFilterForPromotions(){
+        this.getFilteredpromotions()
+        this.setState({ modalVisible: false });
+    }
+
     applyFilter() {
         if (this.state.selectedStatus == "Active") {
             this.setState({ poolsactiveStatus: true })
         }
-        else {
+        else if (this.state.selectedStatus == "Inactive") {
             this.setState({ poolsactiveStatus: false })
         }
+        else {
+            this.setState({ poolsactiveStatus: true })
+        }
 
-        if (this.state.selectedStatus != "" && this.state.selectedcreatedBy === "") {
+        if (this.state.selectedStatus != "" && this.state.selectedcreatedBy === "" && this.state.selectedPoolType === "") {
             console.log('open filter with status only')
             this.getAllpools()
         }
@@ -433,7 +518,8 @@ class Promo extends Component {
     }
 
     handlepooleditaction = (item, index) => {
-        this.props.navigation.navigate('EditPool', { item: item }, {
+        this.props.navigation.navigate('EditPool', {
+            item: item,
             onGoBack: () => this.updatePools(),
         });
     }
@@ -756,6 +842,12 @@ class Promo extends Component {
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 150, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
                                         {item.createdDate}
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 150, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
+                                        TYPE
+                                    </Text>
+                                    <Text style={{ fontSize: 12, marginLeft: 150, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                        {item.poolType}
                                     </Text>
                                 </View>
 
@@ -1082,6 +1174,7 @@ class Promo extends Component {
                 )}
 
                 {this.state.flagFilterOpen && (
+
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
 
@@ -1153,6 +1246,46 @@ class Promo extends Component {
 
                                             />
                                         </View>
+
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: 44,
+                                            marginTop: 5,
+                                            marginBottom: 10,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: 14,
+                                        }} >
+                                            <RNPickerSelect style={{
+                                                color: '#8F9EB717',
+                                                fontWeight: 'regular',
+                                                fontSize: 15
+                                            }}
+                                                placeholder={{
+                                                    label: 'SELECT POOL TYPE',
+
+                                                }}
+                                                Icon={() => {
+                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                }}
+                                                items={[
+                                                    { label: 'Buy', value: 'Buy' },
+                                                    { label: 'Get', value: 'Get' },
+                                                    { label: 'Both', value: 'Both' },
+                                                ]}
+                                                onValueChange={this.handlePoolType}
+                                                style={pickerSelectStyles}
+                                                value={this.state.selectedPoolType}
+                                                useNativeAndroidPickerStyle={false}
+
+                                            />
+                                        </View>
+
                                         <View style={{
                                             justifyContent: 'center',
                                             margin: 20,
@@ -1199,6 +1332,300 @@ class Promo extends Component {
                                             marginTop: 20,
                                             height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
                                         }} onPress={() => this.applyFilter()}
+                                    >
+                                        <Text style={{
+                                            textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                            fontFamily: "regular"
+                                        }}  > APPLY </Text>
+
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={{
+                                            width: deviceWidth - 40,
+                                            marginLeft: 20,
+                                            marginRight: 20,
+                                            marginTop: 20,
+                                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                        }} onPress={() => this.modelCancel()}
+                                    >
+                                        <Text style={{
+                                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                            fontFamily: "regular"
+                                        }}  > CANCEL </Text>
+
+                                    </TouchableOpacity>
+                                </KeyboardAwareScrollView>
+                            </View>
+                        </Modal>
+                    </View>)}
+
+                {this.state.flagFilterPromoOpen && (
+
+                    <View>
+                        <Modal isVisible={this.state.modalVisible}>
+
+                            <View style={{
+                                width: deviceWidth,
+                                alignItems: 'center',
+                                marginLeft: -20,
+                                backgroundColor: "#ffffff",
+                                height: 520,
+                                position: 'absolute',
+                                bottom: -20,
+                            }}>
+                                <KeyboardAwareScrollView KeyboardAwareScrollView
+                                    enableOnAndroid={true}>
+                                    <Text style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 15,
+                                        width: 300,
+                                        height: 20,
+                                        fontFamily: 'medium',
+                                        fontSize: 16,
+                                        color: '#353C40'
+                                    }}> Filter by </Text>
+
+                                    <TouchableOpacity style={{
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 8,
+                                        width: 50, height: 50,
+                                    }} onPress={() => this.modelCancel()}>
+                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                    </TouchableOpacity>
+
+                                    <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                    </Text>
+                                    <View style={{ marginTop: 10, width: deviceWidth, }}>
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: 44,
+                                            marginTop: 5,
+                                            marginBottom: 10,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: 14,
+                                        }} >
+                                            <RNPickerSelect style={{
+                                                color: '#8F9EB717',
+                                                fontWeight: 'regular',
+                                                fontSize: 15
+                                            }}
+                                                placeholder={{
+                                                    label: 'SELECT STORE',
+
+                                                }}
+                                                Icon={() => {
+                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                }}
+                                                items={this.state.storeNames}
+                                                onValueChange={this.handleSelectStore}
+                                                style={pickerSelectStyles}
+                                                value={this.state.selectedStore}
+                                                useNativeAndroidPickerStyle={false}
+                                            />
+                                        </View>
+
+                                        <TextInput style={styles.input}
+                                            underlineColorAndroid="transparent"
+                                            placeholder="PROMO NAME"
+                                            placeholderTextColor="#6F6F6F"
+                                            textAlignVertical="center"
+                                            autoCapitalize="none"
+                                            value={this.state.selectedPromotionName}
+                                            onChangeText={this.handlePromotionName}
+                                        />
+
+                                        <Text style={{
+                                            position: 'absolute',
+                                            left: 20,
+                                            top: 110,
+                                            width: 300,
+                                            height: 20,
+                                            fontFamily: 'regular',
+                                            fontSize: 12,
+                                            color: '#353C40'
+                                        }}> Start Date </Text>
+                                        <TouchableOpacity
+                                            style={{
+                                                width: deviceWidth - 40,
+                                                marginLeft: 20,
+                                                marginRight: 20,
+                                                marginTop: 10,
+                                                borderColor: '#8F9EB717',
+                                                borderRadius: 3,
+                                                height: 50, backgroundColor: "#F6F6F6", borderRadius: 5,
+                                            }} testID="openModal"
+
+                                            onPress={() => this.datepickerClicked()}
+                                        >
+                                            <Text style={{
+                                                marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
+                                                fontFamily: "regular"
+                                            }}  > {this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()} </Text>
+                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                        </TouchableOpacity>
+
+
+                                        <Text style={{
+                                            position: 'absolute',
+                                            left: 20,
+                                            top: 175,
+                                            width: 300,
+                                            height: 20,
+                                            fontFamily: 'regular',
+                                            fontSize: 12,
+                                            color: '#353C40'
+                                        }}> End Date </Text>
+
+                                        <TouchableOpacity
+                                            style={{
+                                                width: deviceWidth - 40,
+                                                marginLeft: 20,
+                                                marginRight: 20,
+                                                marginTop: 10,
+                                                borderColor: '#8F9EB717',
+                                                borderRadius: 3,
+                                                height: 50, backgroundColor: "#F6F6F6", borderRadius: 5,
+                                            }} testID="openModal"
+
+                                            onPress={() => this.enddatepickerClicked()}
+                                        >
+                                            <Text style={{
+                                                marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
+                                                fontFamily: "regular"
+                                            }}  > {this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()} </Text>
+                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                        </TouchableOpacity>
+
+                                        {this.state.datepickerOpen && this.state.flagtwo && (
+                                            <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
+                                                <TouchableOpacity
+                                                    style={{
+                                                        position: 'absolute',
+                                                        left: 20,
+                                                        top: 10,
+                                                        height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                    }} onPress={() => this.datepickerCancelClicked()}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > Cancel </Text>
+
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={{
+                                                        position: 'absolute',
+                                                        right: 20,
+                                                        top: 10,
+                                                        height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                    }} onPress={() => this.datepickerDoneClicked()}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > Done </Text>
+
+                                                </TouchableOpacity>
+                                                <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                                    date={this.state.date}
+                                                    mode={'date'}
+                                                    onDateChange={(date) => this.setState({ date })}
+                                                />
+                                            </View>
+                                        )}
+                                        {this.state.datepickerendOpen && this.state.flagtwo && (
+                                            <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
+                                                <TouchableOpacity
+                                                    style={{
+                                                        position: 'absolute',
+                                                        left: 20,
+                                                        top: 10,
+                                                        height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                    }} onPress={() => this.datepickerCancelClicked()}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > Cancel </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={{
+                                                        position: 'absolute',
+                                                        right: 20,
+                                                        top: 10,
+                                                        height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                    }} onPress={() => this.datepickerDoneClicked()}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > Done </Text>
+
+                                                </TouchableOpacity>
+                                                <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                                    date={this.state.enddate}
+                                                    mode={'date'}
+                                                    onDateChange={(enddate) => this.setState({ enddate })}
+                                                />
+                                            </View>
+                                        )}
+
+
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: 44,
+                                            marginTop: 5,
+                                            marginBottom: 10,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: 14,
+                                        }} >
+                                            <RNPickerSelect style={{
+                                                color: '#8F9EB717',
+                                                fontWeight: 'regular',
+                                                fontSize: 15
+                                            }}
+                                                placeholder={{
+                                                    label: 'SELECT STATUS',
+
+                                                }}
+                                                Icon={() => {
+                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                }}
+                                                items={[
+                                                    { label: 'Active', value: 'Active' },
+                                                    { label: 'Inactive', value: 'Inactive' },
+                                                ]}
+                                                onValueChange={this.handleStatusBy}
+                                                style={pickerSelectStyles}
+                                                value={this.state.selectedStatus}
+                                                useNativeAndroidPickerStyle={false}
+
+                                            />
+                                        </View>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={{
+                                            width: deviceWidth - 40,
+                                            marginLeft: 20,
+                                            marginRight: 20,
+                                            marginTop: 20,
+                                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                        }} onPress={() => this.applyFilterForPromotions()}
                                     >
                                         <Text style={{
                                             textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
@@ -1599,6 +2026,7 @@ class Promo extends Component {
                                                 style={pickerSelectStyles}
                                                 value={this.state.selectedStore}
                                                 useNativeAndroidPickerStyle={false}
+
 
                                             />
                                         </View>

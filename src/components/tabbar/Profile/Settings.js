@@ -11,6 +11,9 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import DatePicker from 'react-native-date-picker'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ProfileService from '../../services/ProfileService';
+import axios from 'axios';
+import Loader from '../../loader';
 
 
 
@@ -25,11 +28,27 @@ class Settings extends Component {
             selectedGender: '',
             date: new Date(),
             datepickerOpen: false,
+            userName:"",
+            role:"",
+            mobileNumber:"",
+
         }
     }
 
     handleGender = (value) => {
         this.setState({ selectedGender: value });
+    }
+
+    handleUserName = (value) => {
+        this.setState({ userName: value });
+    }
+
+    handleRole = (value) => {
+        this.setState({ role: value });
+    }
+
+    handleMobileNumber = (value) => {
+        this.setState({ mobileNumber: value });
     }
 
     datepickerCancelClicked() {
@@ -44,6 +63,29 @@ class Settings extends Component {
     datepickerClicked() {
         this.setState({ datepickerOpen: true })
     }
+
+    async componentDidMount() {
+        const username = await AsyncStorage.getItem("username");
+        const params = {
+            "name": username
+        }
+        this.setState({ loading: true })
+        axios.post(ProfileService.getUser(),
+             params).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    this.setState({ loading: false })
+                    this.setState({ userName: res.data["result"][0].userName })
+                    this.setState({ role: res.data["result"][0].role })
+                    this.setState({ mobileNumber: res.data["result"][0].phoneNumber })
+
+                }
+            }).catch(() => {
+                this.setState({ loading: false })
+                alert('No user details get')
+            })
+    }
+
+    
     
     signOut(){
         AsyncStorage.removeItem('phone_number');
@@ -161,17 +203,11 @@ class Settings extends Component {
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
-                                        value={this.state.inventoryBarcodeId}
-                                        onChangeText={this.handleInventoryBarcode}
+                                        value={this.state.userName}
+                                        onChangeText={this.handleUserName}
                                     />
 
-                                    <TouchableOpacity style={{
-                                        position: 'absolute',
-                                        right: 28,
-                                        top: 20,
-                                        width: 50, height: 50,
-                                    }} onPress={() => this.navigateToGetBarCode()}>
-                                    </TouchableOpacity>
+                                   
                                 </View>
 
                                 <Text style={{
@@ -191,8 +227,8 @@ class Settings extends Component {
                                     placeholderTextColor="#353C4050"
                                     textAlignVertical="center"
                                     autoCapitalize="none"
-                                    value={this.state.inventoryProductName}
-                                    onChangeText={this.handleInventoryProductName}
+                                    value={this.state.role}
+                                    onChangeText={this.handleRole}
                                 />
 
                                 <View>
@@ -245,8 +281,8 @@ class Settings extends Component {
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
-                                        value={this.state.inventoryQuantity}
-                                        onChangeText={this.handleInventoryQuantity}
+                                        value={this.state.mobileNumber}
+                                        onChangeText={this.handleMobileNumber}
                                     />
                                 </View>
 

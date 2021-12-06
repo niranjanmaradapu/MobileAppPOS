@@ -136,7 +136,8 @@ class EditPool extends Component {
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.setState({ loading: false })
                     // this.props.route.params.onGoBack();
-                    this.props.navigation.goBack(null);
+                    this.props.route.params.onGoBack();
+                    this.props.navigation.goBack();
                 }
                 else {
                     this.setState({ loading: false })
