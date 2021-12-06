@@ -209,17 +209,21 @@ class Promo extends Component {
                 "promotionStatus": this.state.selectedStatus,
                 "storeName": this.state.selectedStore,
         }
+        
+        console.log(params)
         this.setState({ loading: true })
         axios.post(PromotionsService.promoSearch(),
             params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.setState({ loading: false })
-                    this.setState({ loading: false })
-                    let len = res.data["result"].length;
+                    let len = res.data.result.length;
+                 
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let number = res.data["result"][i]
+                            let number = res.data.result[i]
+                            console.log(number)
                             this.state.promoData.push(number)
+                            this.setState({ promoData: this.state.promoData })
                         }
                     }
                 }
@@ -232,22 +236,29 @@ class Promo extends Component {
     getFilteredpools = () => {
         this.setState({ poolsData: [] })
         this.setState({ loading: true })
+        // if(this.state.selectedcreatedBy === ""){
+        //     this.setState({ selectedcreatedBy: null })
+        // }
         const params = {
             "createdBy": this.state.selectedcreatedBy,
             "poolType": this.state.selectedPoolType,
             "isActive": this.state.poolsactiveStatus
         }
+
+        console.log(params)
         this.setState({ loading: true })
         axios.post(PromotionsService.poolSearch(),
             params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.setState({ loading: false })
-                    this.setState({ loading: false })
-                    let len = res.data["result"].length;
+                    let len = res.data.result.length;
+                 
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let number = res.data["result"][i]
+                            let number = res.data.result[i]
+                            console.log(number)
                             this.state.poolsData.push(number)
+                            this.setState({ poolsData: this.state.poolsData })
                         }
                     }
                 }
