@@ -1770,7 +1770,12 @@ class NewSale extends Component {
     }
     this.state.totalQty = (parseInt(this.state.totalQty) - item.qty).toString()
     this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(item.netamount)).toString()
+    if(item.promoDisc === null){
+      this.state.totalDiscount = (parseInt(this.state.totalDiscount) - 0).toString()
+    }
+    else{
     this.state.totalDiscount = (parseInt(this.state.totalDiscount) - parseInt(item.promoDisc)).toString()
+    }
   }
 
   tagCustomer() {
