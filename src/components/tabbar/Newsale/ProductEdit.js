@@ -487,10 +487,10 @@ class ProductEdit extends Component {
                                     <TextInput style={styles.barcodeinput}
                                         underlineColorAndroid="transparent"
                                         placeholder="BARCODE"
-                                        placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
                                         editable={false} selectTextOnFocus={false}
+                                        placeholderTextColor="#353C4050"
                                         value={String(this.state.barcodeId)}
                                         onChangeText={this.handleInventoryBarcode}
                                     />

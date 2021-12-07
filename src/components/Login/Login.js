@@ -34,7 +34,7 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'mani321',
+            userName: 'vinod',
             password: 'Otsi@123',
             dropValue: '',
             store: 0,
@@ -155,6 +155,10 @@ export default class Login extends Component {
             })
             console.log('stores are--' + this.state.storeNames)
             if (this.state.storeNames.length === 1) {
+                AsyncStorage.setItem("storeName", this.state.storeNames[0]).then(() => {
+                }).catch(() => {
+                    console.log('there is error saving storeName')
+                })
                 this.props.navigation.navigate('HomeNavigation')
             }
             else {

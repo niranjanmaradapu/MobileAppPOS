@@ -37,7 +37,7 @@ class PromotionService {
     }
 
     promoSearch() {
-        return REACT_NATIVE_APP_BASE_URL + '/connection-pool/pool/searchPromotion';
+        return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/searchPromotion';
     }
 
 }

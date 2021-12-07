@@ -43,6 +43,10 @@ export default class SelectStore extends React.Component {
         const params = {
             "storeName": item,
         }
+        AsyncStorage.setItem("storeName", item).then(() => {
+        }).catch(() => {
+            console.log('there is error saving storeName')
+        })
         axios.post(LoginService.getStoreIdWithStoreName(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 console.log('dsgsdgsdg' + String(res.data["result"][0].id))

@@ -30,8 +30,11 @@ class Settings extends Component {
             datepickerOpen: false,
             userName:"",
             role:"",
+            email:"",
             mobileNumber:"",
-
+            dateOfBirth:"",
+            address:"",
+            userId:0,
         }
     }
 
@@ -51,12 +54,21 @@ class Settings extends Component {
         this.setState({ mobileNumber: value });
     }
 
+    handleEmail = (value) => {
+        this.setState({ email: value });
+    } 
+
+    handleAddress = (value) => {
+        this.setState({ address: value });
+    } 
+
     datepickerCancelClicked() {
         this.setState({ date: new Date() })
         this.setState({ datepickerOpen: false })
     }
 
     datepickerDoneClicked() {
+        this.setState({ dateOfBirth: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
         this.setState({ datepickerOpen: false })
     }
 
@@ -64,20 +76,82 @@ class Settings extends Component {
         this.setState({ datepickerOpen: true })
     }
 
-    async componentDidMount() {
-        const username = await AsyncStorage.getItem("username");
+    profileUpdate() {
+        if(this.state.dateOfBirth === "Date Of Birth"){
+            this.state.dateOfBirth = null
+         }
+
         const params = {
-            "name": username
+                "userId":this.state.userId,
+                "email": this.state.email,
+                "phoneNumber": this.state.mobileNumber,
+                "birthDate":this.state.dateOfBirth,
+                "gender": this.state.selectedGender,
+                "name": this.state.userName,
+                "username": this.state.userName,
+                // "parentId": "1",
+                // "domianId": "1",
+                "address":this.state.address,
+                "clientId":"123"
+                // "role": {
+                //     "roleName": "config_user"
+                // }
+                // "stores": [
+                //     {
+                //         "name":"Vizag"
+                //     },
+                //     {
+                //         "name":"kakinada"
+                //     }
+                // ],
+                // "clientId": "801",
+                // "isConfigUser": "true",
+                // "clientDomain": [1,2]
         }
+
+        console.log('params are' + JSON.stringify(params))
+        this.setState({ loading: true })  
+    axios.put(ProfileService.updateUser(), params).then((res) => {
+        if (res.data && res.data["isSuccess"] === "true") {
+            this.setState({ loading: false })
+        }
+        else {
+            this.setState({ loading: false })
+            // this.setState({ loading: false })
+            alert("user Update issue");
+        }
+    }
+    ).catch(() => {
+        this.setState({ loading: false })
+        alert('Update Api error')
+    })
+    }
+
+    async componentDidMount() {
+        var phonenumber = ""
+        AsyncStorage.getItem("phone_number").then((value) => {
+            phonenumber = value
+        }).catch(() => {
+            console.log('there is error getting phone numner')
+        })
+        const username = await AsyncStorage.getItem("username");
+        //console.log(ProfileService.getUser() + "+919895695626")
         this.setState({ loading: true })
-        axios.post(ProfileService.getUser(),
-             params).then((res) => {
+        axios.get(ProfileService.getUser() + username).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.setState({ loading: false })
-                    this.setState({ userName: res.data["result"][0].userName })
-                    this.setState({ role: res.data["result"][0].role })
-                    this.setState({ mobileNumber: res.data["result"][0].phoneNumber })
-
+                    this.setState({ userId: res.data["result"].userId })
+                    this.setState({ userName: res.data["result"].userName })
+                    this.setState({ role: res.data["result"].roleName })
+                    this.setState({ email: res.data["result"].email })
+                     if(res.data["result"].dob === null){
+                        this.setState({ dateOfBirth: 'Date Of Birth' }) 
+                     }
+                     else{
+                    this.setState({ dateOfBirth: res.data["result"].dob })
+                     }
+                    this.setState({ address: res.data["result"].address })
+                    this.setState({ mobileNumber: phonenumber})
                 }
             }).catch(() => {
                 this.setState({ loading: false })
@@ -197,9 +271,10 @@ class Settings extends Component {
                                         color: '#353C40'
                                     }}> NAME: </Text>
 
-                                    <TextInput style={styles.phoneinput}
+                                    <TextInput style={styles.barcodeinput}
                                         underlineColorAndroid="transparent"
                                         placeholder="NAME"
+                                        editable={false} selectTextOnFocus={false}
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -221,7 +296,8 @@ class Settings extends Component {
                                     color: '#353C40'
                                 }}> DIGIGNATION: </Text>
 
-                                <TextInput style={styles.phoneinput}
+                                <TextInput style={styles.barcodeinput}
+                                    editable={false} selectTextOnFocus={false}
                                     underlineColorAndroid="transparent"
                                     placeholder="DIGIGNATION"
                                     placeholderTextColor="#353C4050"
@@ -249,8 +325,8 @@ class Settings extends Component {
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
-                                        value={this.state.inventoryQuantity}
-                                        onChangeText={this.handleInventoryQuantity}
+                                        value={this.state.email}
+                                        onChangeText={this.handleEmail}
                                     />
 
                                     {/* <TouchableOpacity style={{
@@ -286,7 +362,7 @@ class Settings extends Component {
                                     />
                                 </View>
 
-                                <Text style={{
+                                {/* <Text style={{
                                     position: 'absolute',
                                     left: 20,
                                     top: 445,
@@ -333,8 +409,8 @@ class Settings extends Component {
                                         value={this.state.selectedGender}
                                         useNativeAndroidPickerStyle={false}
 
-                                    />
-                                </View>
+                                    /> */}
+                                {/* </View> */}
 
 
                                
@@ -342,7 +418,7 @@ class Settings extends Component {
                                 <Text style={{
                                     position: 'absolute',
                                     left: 20,
-                                    top: 520,
+                                    top: 450,
                                     width: 300,
                                     height: 20,
                                     fontFamily: 'regular',
@@ -371,7 +447,7 @@ class Settings extends Component {
                                     <Text style={{
                                         marginLeft: 0, marginTop: 0, color: "#6F6F6F", fontSize: 15,
                                         fontFamily: "regular"
-                                    }}  > {this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()} </Text>
+                                    }}  > {this.state.dateOfBirth} </Text>
                                     <Image style={{ position: 'absolute', top: 5, right: 0, }} source={require('../../assets/images/calender.png')} />
                                 </TouchableOpacity>
 
@@ -395,9 +471,9 @@ class Settings extends Component {
                                     placeholderTextColor="#353C4050"
                                     textAlignVertical="center"
                                     autoCapitalize="none"
-                                    value={this.state.inventoryMRP}
-                                    onChangeText={this.handleInventoryMRP}
-                                    ref={inputemail => { this.emailValueInput = inputemail }} />
+                                    value={this.state.address}
+                                    onChangeText={this.handleAddress}
+                                     />
                                      </View>
 
                                 <View>
@@ -421,7 +497,7 @@ class Settings extends Component {
                                     style={{
                                         margin: 20,
                                         height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                    }} onPress={() => this.inventoryCreate()}
+                                    }} onPress={() => this.profileUpdate()}
                                 >
                                     <Text style={{
                                         textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
@@ -521,6 +597,20 @@ const pickerSelectStyles = StyleSheet.create({
 
 
 const styles = StyleSheet.create({
+    barcodeinput: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 44,
+        marginTop: 20,
+        marginBottom: 10,
+        borderColor: '#DCE3F2',
+        borderRadius: 3,
+        backgroundColor: '#DCE3F2',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
     safeArea: {
         flex: 1,
         justifyContent: 'center',

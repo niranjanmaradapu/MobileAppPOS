@@ -44,10 +44,11 @@ class Promo extends Component {
             modalVisible: true,
             selectedPoolType: '',
             selectedStore: '',
+            doneButtonClicked:false,
+            startDate:"",
+            endDate:"",
             selectedstoreId: 0,
             uom: [],
-            // date: new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate(),
-            // enddate:new Date().getFullYear() + "-" + (new Date().getMonth() + 1) + "-" + new Date().getDate(),
             date: new Date(),
             enddate: new Date(),
             open: false,
@@ -202,14 +203,28 @@ class Promo extends Component {
     getFilteredpromotions = () => {
         this.setState({ promoData: [] })
         this.setState({ loading: true })
+        if(this.state.selectedPromotionName === ""){
+            this.state.selectedPromotionName = null
+         }
+         if(this.state.selectedStatus === ""){
+             this.state.selectedStatus = null
+          }
+          if(this.state.selectedStore === ""){
+            this.state.selectedStore = null
+         }
+         if(this.state.startDate === ""){
+            this.state.startDate = null
+         }
+         if(this.state.endDate === ""){
+            this.state.endDate = null
+         }
         const params = {
-            "startDate": this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(),
-            "endDate": this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate(),
+            "startDate": this.state.startDate,
+            "endDate": this.state.endDate,
                 "promotionName": this.state.selectedPromotionName,
                 "promotionStatus": this.state.selectedStatus,
                 "storeName": this.state.selectedStore,
         }
-        
         console.log(params)
         this.setState({ loading: true })
         axios.post(PromotionsService.promoSearch(),
@@ -217,7 +232,7 @@ class Promo extends Component {
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.setState({ loading: false })
                     let len = res.data.result.length;
-                 
+                    console.log(res.data)
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
                             let number = res.data.result[i]
@@ -236,15 +251,17 @@ class Promo extends Component {
     getFilteredpools = () => {
         this.setState({ poolsData: [] })
         this.setState({ loading: true })
-        // if(this.state.selectedcreatedBy === ""){
-        //     this.setState({ selectedcreatedBy: null })
-        // }
+        if(this.state.selectedcreatedBy === ""){
+           this.state.selectedcreatedBy = null
+        }
+        if(this.state.selectedPoolType === ""){
+            this.state.selectedPoolType = null
+         }
         const params = {
             "createdBy": this.state.selectedcreatedBy,
             "poolType": this.state.selectedPoolType,
             "isActive": this.state.poolsactiveStatus
         }
-
         console.log(params)
         this.setState({ loading: true })
         axios.post(PromotionsService.poolSearch(),
@@ -387,6 +404,9 @@ class Promo extends Component {
     }
 
     datepickerDoneClicked() {
+        this.setState({ startDate: truthis.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+        this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+        this.setState({ doneButtonClicked: true })
         //this.setState({date:this.state.})
         this.setState({ datepickerOpen: false })
         this.setState({ datepickerendOpen: false })
@@ -441,6 +461,7 @@ class Promo extends Component {
     }
 
     enddatepickerClicked() {
+
         this.setState({ datepickerOpen: false })
         this.setState({ datepickerendOpen: true })
     }
@@ -1480,7 +1501,7 @@ class Promo extends Component {
                                             <Text style={{
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
                                                 fontFamily: "regular"
-                                            }}  > {this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()} </Text>
+                                            }}  > {this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate} </Text>
                                             <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
@@ -1512,7 +1533,7 @@ class Promo extends Component {
                                             <Text style={{
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
                                                 fontFamily: "regular"
-                                            }}  > {this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()} </Text>
+                                            }}  > {this.state.doneButtonClicked == false ? 'End Date' : this.state.endDate} </Text>
                                             <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
@@ -2069,7 +2090,7 @@ class Promo extends Component {
                                             <Text style={{
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
                                                 fontFamily: "regular"
-                                            }}  > {this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()} </Text>
+                                            }}  > {this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate} </Text>
                                             <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
@@ -2101,7 +2122,7 @@ class Promo extends Component {
                                             <Text style={{
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
                                                 fontFamily: "regular"
-                                            }}  > {this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()} </Text>
+                                            }}  > {this.state.doneButtonClicked == false ? 'End Date' : this.state.enddate} </Text>
                                             <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
