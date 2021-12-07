@@ -1018,7 +1018,7 @@ class Promo extends Component {
                                         PROMO NAME
                                     </Text>
                                     <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                        {String(item.promoName)}
+                                        {String(item.promotionName)}
                                     </Text>
 
 
