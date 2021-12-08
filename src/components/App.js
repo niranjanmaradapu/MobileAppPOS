@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import * as Font from 'expo-font';
 import AppRoute from '../Navigation/AppRoute';
 import { openDatabase } from 'react-native-sqlite-storage';
-
+ 
 
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });

@@ -19,6 +19,6 @@ axios.interceptors.request.use(
     },
     (err) => {
        return Promise.reject(err);
-    }
+    } 
  );
 AppRegistry.registerComponent('main', () => App);
