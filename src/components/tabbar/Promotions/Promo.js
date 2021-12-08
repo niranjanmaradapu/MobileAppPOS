@@ -382,10 +382,11 @@ class Promo extends Component {
     }
 
     navigateToAddPromo() {
-        this.setState({ flagFilterPromoOpen: false });
-        this.setState({ flagAddStore: false });
-        this.setState({ modalVisible: true });
-        this.setState({ flagAddPromo: true });
+        // this.setState({ flagFilterPromoOpen: false });
+        // this.setState({ flagAddStore: false });
+        // this.setState({ modalVisible: true });
+        // this.setState({ flagAddPromo: true });
+        this.props.navigation.navigate('AddPromo');
     }
 
     addStore() {
