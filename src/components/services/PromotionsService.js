@@ -28,6 +28,14 @@ class PromotionService {
         return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/getpromolist'
     }
 
+    addPromotion() {
+        return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/addpromo'
+    }
+
+    editPromo(){
+        return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/editpromo'
+    }
+
     deletePromotions() {
         return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/deletepromo';
     }

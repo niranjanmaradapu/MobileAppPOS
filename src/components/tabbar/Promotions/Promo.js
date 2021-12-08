@@ -166,7 +166,7 @@ class Promo extends Component {
         this.setState({ promoData: [] })
         this.setState({ loading: true })
         const params = {
-            "domainId": 1,//this.state.domainId,
+            "domainId": this.state.domainId,
             "flag": true
         }
         console.log(this.state.domainId)
@@ -394,7 +394,9 @@ class Promo extends Component {
         // this.setState({ flagAddStore: false });
         // this.setState({ modalVisible: true });
         // this.setState({ flagAddPromo: true });
-        this.props.navigation.navigate('AddPromo');
+        this.props.navigation.navigate('AddPromo', {
+            onGoBack: () => this.refteshPromo(),
+        });
     }
 
     navigateToAddLoyalty() {
@@ -417,7 +419,7 @@ class Promo extends Component {
     }
 
     datepickerDoneClicked() {
-        this.setState({ startDate: truthis.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+        this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
         this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
         this.setState({ doneButtonClicked: true })
         //this.setState({date:this.state.})
@@ -484,9 +486,17 @@ class Promo extends Component {
         this.getAllpools()
     }
 
+    refteshPromo(){
+        this.getAllPromotions()
+    }
+
     updatePools() {
         console.log('---------refreshed')
         this.getAllpools()
+    }
+
+    updatePromotions(){
+        this.getAllPromotions()
     }
 
     handleCreatedBy = (value) => {
@@ -566,6 +576,14 @@ class Promo extends Component {
         this.props.navigation.navigate('EditPool', {
             item: item,
             onGoBack: () => this.updatePools(),
+        });
+    }
+
+    handleeditpromoaction = (item, index) => {
+        this.props.navigation.navigate('AddPromo'
+        , {
+            item: item,isEdit:true,
+            onGoBack: () => this.updatePromotions(),
         });
     }
 
@@ -1166,23 +1184,23 @@ class Promo extends Component {
                                     <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
                                         3 Dec 2021
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: 12, marginLeft: 250, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
                                         POINTS VALUE
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ fontSize: 12, marginLeft: 250, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
                                         ₹ 500
                                     </Text>
 
-                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: 12, marginLeft: 250, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
                                         LOYALTY POINTS
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ fontSize: 12, marginLeft: 250, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
                                         5000
                                     </Text>
                                 </View>
 
 
-                                <TouchableOpacity style={{
+                                {/* <TouchableOpacity style={{
                                     position: 'absolute',
                                     right: 50,
                                     top: 65,
@@ -1209,7 +1227,7 @@ class Promo extends Component {
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handledeleteloyaltyaction(item, index)}>
                                     <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                                 <View style={{
                                     backgroundColor: 'grey',
                                     flexDirection: 'row',
