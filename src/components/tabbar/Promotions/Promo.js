@@ -12,6 +12,7 @@ import axios from 'axios';
 import Loader from '../../loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginService from '../../services/LoginService';
+import { ThemeConsumer } from 'react-native-elements';
 
 
 
@@ -27,6 +28,7 @@ class Promo extends Component {
             flagthree: false,
             flagFilterOpen: false,
             flagFilterPromoOpen: false,
+            flagFilterLoyaltyOpen: false,
             flagAddPromo: false,
             flagAddStore: false,
             datepickerOpen: false,
@@ -371,6 +373,12 @@ class Promo extends Component {
         else {
             this.setState({ flagFilterPromoOpen: false });
         }
+        if (this.state.flagthree === true) {
+            this.setState({ flagFilterLoyaltyOpen: true });
+        }
+        else {
+            this.setState({ flagFilterLoyaltyOpen: false });
+        }
 
 
         this.setState({ modalVisible: true });
@@ -387,6 +395,10 @@ class Promo extends Component {
         // this.setState({ modalVisible: true });
         // this.setState({ flagAddPromo: true });
         this.props.navigation.navigate('AddPromo');
+    }
+
+    navigateToAddLoyalty() {
+        this.props.navigation.navigate('AddLoyalty');
     }
 
     addStore() {
@@ -1067,8 +1079,6 @@ class Promo extends Component {
 
                                 </TouchableOpacity>
 
-
-
                                 <TouchableOpacity style={{
                                     position: 'absolute',
                                     right: 50,
@@ -1112,11 +1122,21 @@ class Promo extends Component {
                         )}
                     />
                 )}
+                
+                {this.state.flagthree && (
 
+                    <TouchableOpacity
+                        style={{ position: 'absolute', right: 140, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
+                        onPress={() => this.navigateToAddLoyalty()} >
+                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD LOYALTY')} </Text>
+                    </TouchableOpacity>
+
+                )}
 
                 {this.state.flagthree && (
                     <FlatList
                         data={this.state.loyaltyData}
+                        style={{ marginTop: 40, }}
                         keyExtractor={item => item}
                         renderItem={({ item, index }) => (
                             <View style={{
@@ -1686,7 +1706,184 @@ class Promo extends Component {
                             </View>
                         </Modal>
                     </View>)}
+                    
+                    {this.state.flagFilterLoyaltyOpen && (
+                    <View>
+                        <Modal isVisible={this.state.modalVisible}>
+                        
+                            <View style={{
+                                width: deviceWidth,
+                                alignItems: 'center',
+                                marginLeft: -20,
+                                backgroundColor: '#fff',
+                                height: 350,
+                                position: 'absolute',
+                                bottom: -20,
+                            }}>
+                                <KeyboardAwareScrollView KeyboardAwareScrollView
+                                    enableOnAndroid={true}>
+                                        <Text style={{
+                                        position: 'absolute',
+                                        left: 20,
+                                        top: 15,
+                                        width: 300,
+                                        height: 20,
+                                        fontFamily: 'medium',
+                                        fontSize: 16,
+                                        color: '#353C40'
+                                    }}> Filter by </Text>
 
+                                    <TouchableOpacity style={{
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 8,
+                                        width: 50, height: 50,
+                                    }} onPress={() => this.modelCancel()}>
+                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                    </TouchableOpacity>
+
+                                    <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                    </Text>
+                                    <View style={{ marginTop: 10, width: deviceWidth, }}>
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: 44,
+                                            marginTop: 5,
+                                            marginBottom: 10,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: 14,
+                                        }} >
+                                            <RNPickerSelect style={{
+                                                color: '#8F9EB717',
+                                                fontWeight: 'regular',
+                                                fontSize: 15
+                                            }}
+                                                placeholder={{
+                                                    label: 'SELECT STORE',
+
+                                                }}
+                                                Icon={() => {
+                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                }}
+                                                items={this.state.createdByArray}
+                                                //onValueChange={this.handleCreatedBy}
+                                                style={pickerSelectStyles}
+                                                //value={this.state.selectedcreatedBy}
+                                                useNativeAndroidPickerStyle={false}
+
+                                            />
+                                        </View>
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: 44,
+                                            marginTop: 5,
+                                            marginBottom: 10,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: 14,
+                                        }} >
+                                            <RNPickerSelect style={{
+                                                color: '#8F9EB717',
+                                                fontWeight: 'regular',
+                                                fontSize: 15
+                                            }}
+                                                placeholder={{
+                                                    label: 'SELECT DISTRICT',
+
+                                                }}
+                                                Icon={() => {
+                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                }}
+                                                items={this.state.createdByArray}
+                                                //onValueChange={this.handleCreatedBy}
+                                                style={pickerSelectStyles}
+                                                //value={this.state.selectedcreatedBy}
+                                                useNativeAndroidPickerStyle={false}
+
+                                            />
+                                        </View>
+                                        <View style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: 44,
+                                            marginTop: 5,
+                                            marginBottom: 10,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: 14,
+                                        }} >
+                                            <RNPickerSelect style={{
+                                                color: '#8F9EB717',
+                                                fontWeight: 'regular',
+                                                fontSize: 15
+                                            }}
+                                                placeholder={{
+                                                    label: 'SELECT STORE',
+
+                                                }}
+                                                Icon={() => {
+                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                }}
+                                                items={this.state.createdByArray}
+                                                //onValueChange={this.handleCreatedBy}
+                                                style={pickerSelectStyles}
+                                                //value={this.state.selectedcreatedBy}
+                                                useNativeAndroidPickerStyle={false}
+
+                                            />
+                                        </View>
+                                        <TouchableOpacity
+                                            style={{
+                                                width: deviceWidth - 40,
+                                                marginLeft: 20,
+                                                marginRight: 20,
+                                                marginTop: 20,
+                                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                            }} //onPress={() => this.applyFilter()}
+                                        >
+                                            <Text style={{
+                                                textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                                fontFamily: "regular"
+                                            }}  > APPLY </Text>
+
+                                        </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={{
+                                            width: deviceWidth - 40,
+                                            marginLeft: 20,
+                                            marginRight: 20,
+                                            marginTop: 20,
+                                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                        }} onPress={() => this.modelCancel()}
+                                    >
+                                        <Text style={{
+                                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                            fontFamily: "regular"
+                                        }}  > CANCEL </Text>
+
+                                    </TouchableOpacity>
+                                        </View>
+                                    </KeyboardAwareScrollView>
+                            </View>
+                        </Modal>
+                    </View>
+                )}
 
                 {this.state.flagAddPromo && (
                     <View>
