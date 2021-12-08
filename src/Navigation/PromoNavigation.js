@@ -4,6 +4,7 @@ import Promo from '../components/tabbar/Promotions/Promo';
 import AddPool from '../components/tabbar/Promotions/AddPool';
 import EditPool from '../components/tabbar/Promotions/EditPool';
 import AddPromo from '../components/tabbar/Promotions/AddPromo';
+import AddLoyalty from '../components/tabbar/Promotions/AddLoyalty';
 
 const Stack = createStackNavigator();
 export default class ProductsNavigation extends React.Component {
@@ -14,6 +15,7 @@ export default class ProductsNavigation extends React.Component {
                 <Stack.Screen name="AddPool" options={{ headerShown: false }} component={AddPool} />
                 <Stack.Screen name="EditPool" options={{ headerShown: false }} component={EditPool} />
                 <Stack.Screen name="AddPromo" options={{ headerShown: false }} component={AddPromo} />
+                <Stack.Screen name="AddLoyalty" options={{ headerShown: false }} component={AddLoyalty} />
             </Stack.Navigator>
 
         );
