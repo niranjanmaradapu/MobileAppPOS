@@ -5,7 +5,6 @@ import { DrawerActions } from '@react-navigation/native';
 var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
-import Pie from 'react-native-pie-chart'
 import {
     LineChart,
     BarChart,
@@ -16,38 +15,166 @@ import {
 } from "react-native-chart-kit";
 const datapie = [
     {
-        name: "vegetables",
-        population: 10,
+        name: "SHIRTS",
+        population: 19.5,
         color: "rgba(131, 167, 234, 1)",
         legendFontColor: "#7F7F7F",
         legendFontSize: 15
     },
     {
-        name: "Dairy",
-        population: 20,
+        name: "SAREES",
+        population: 17.1,
         color: "#F00",
         legendFontColor: "#7F7F7F",
         legendFontSize: 15
     },
     {
-        name: "Loose items",
-        population: 20,
+        name: "KIDS",
+        population: 15.5,
         color: "#0063C6",
         legendFontColor: "#7F7F7F",
         legendFontSize: 15
     },
     {
-        name: "Other",
-        population: 25,
+        name: "JEANS",
+        population: 15.2,
         color: "#e26a00",
         legendFontColor: "#7F7F7F",
         legendFontSize: 15
     },
     {
-        name: "Chacklets",
-        population: 25,
+        name: "T-SHIRTS",
+        population: 12.3,
         color: "rgb(0, 0, 255)",
         legendFontColor: "#7F7F7F",
+        legendFontSize: 15
+    },
+    {
+        name: "WOMEN",
+        population: 10.01,
+        color: "#ff0",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15
+    },
+    {
+        name: "OTHERS",
+        population: 10.01,
+        color: "#7F7F7F",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15
+    }
+];
+
+const Invoices = [
+    {
+        name: "jan",
+        sales: 10,
+        color: "#f00",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "feb",
+        sales: 10,
+        color: "#0f0",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "mar",
+        sales: 10,
+        color: "#00f",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "apr",
+        sales: 10,
+        color: "#f0f",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "may",
+        sales: 10,
+        color: "#ff0",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "jun",
+        sales: 10,
+        color: "#070795",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "jul",
+        sales: 10,
+        color: "#00ffff",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "aug",
+        sales: 10,
+        color: "#9ffff0",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "sep",
+        sales: 10,
+        color: "#086",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "nov",
+        sales: 10,
+        color: "#289",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "dec",
+        sales: 10,
+        color: "#2f4",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    }
+];
+
+const salesSummary = [
+    {
+        name: "Sales invoicing",
+        sales: 8000,
+        color: "#ff0",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "Return invoicing",
+        sales: 2000,
+        color: "#00f",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    }
+];
+
+const activeInactive = [
+    {
+        name: "Active",
+        promo: 57,
+        color: "#0f0",
+        legendFontColor: "#7f7f7f",
+        legendFontSize: 15
+    },
+    {
+        name: "InActive",
+        promo: 17,
+        color: "#7f7f7f",
+        legendFontColor: "#7f7f7f",
         legendFontSize: 15
     }
 ];
@@ -78,13 +205,33 @@ const chartConfig = {
 };
 
 const dataBar = {
-    labels: ["Loose", "Vegetables", "Packet", "Dal", "Snacks"],
+    labels: ["John", "Raju", "Gayathri", "Vignesh", "Ramya"],
     datasets: [
         {
-            data: [0, 100, 200, 300, 400]
+            data: [45, 35, 28, 18.5, 12]
         }
     ]
 };
+
+
+
+const debitBar = {
+    labels: ["Panjagutta-Hyd", "Patney-Hyd", "Chandanagar-Hyd", "Ecil-Hyd", "Vijayawada", "Vizag", "Waranal"],
+    datasets: [
+        {
+            data: [3, 1.8, 3.8, 4.3, 5.4, 4, 2.3, 3.8]
+        }
+    ]
+};
+
+const topSales = {
+    labels: ["Kukatpally-Hyd", "Patny-Hyd", "Vijaywada", "Panjagutta-Hyd", "Warangal"],
+    datasets: [
+        {
+            data: [45, 38.25, 35, 29.5, 20.55]
+        }
+    ]
+}
 
 class Statitics extends Component {
     constructor(props) {
@@ -139,7 +286,6 @@ class Statitics extends Component {
                             fontSize: 18,
                             color: '#353C40'
                         }}> Statistics </Text>
-                        {/* <Text style={styles.signUptext}> Sign Up </Text> */}
 
                     </View>
 
@@ -150,18 +296,6 @@ class Statitics extends Component {
                         borderRadius: 10
                     }}>
                         <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Sales % by category</Text>
-                        {/* <PieChart style={{
-                            marginTop: 20,
-                            //   marginLeft: 10,
-                            alignSelf: 'center'
-                        }}
-                            widthAndHeight={widthAndHeight}
-                            series={series}
-                            sliceColor={sliceColor}
-                            doughnut={true}
-                            coverRadius={0.65}
-                            coverFill={'#FFF'}
-                        /> */}
                         <PieChart
                             data={datapie}
                             width={deviceWidth - 60}
@@ -173,37 +307,7 @@ class Statitics extends Component {
                             center={[0, 0]}
                             absolute
                         />
-                        {/* <Text style={{ color: '#F44336', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 10, }}>{"Vegetables and fruits: 10%"}</Text>
-                        <Text style={{ color: '#2196F3', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Dairy: 30%"}</Text>
-                        <Text style={{ color: '#FFEB3B', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Snacks: 10%"}</Text>
-                        <Text style={{ color: '#4CAF50', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Loose Items: 40%"}</Text>
-                        <Text style={{ color: '#FF9800', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"Meat & Fish: 20%"}</Text> */}
-                    </View>
-
-                    <View style={{
-                        margin: 20,
-                        backgroundColor: '#FFFFFF',
-                        height: 400,
-                        borderRadius: 10
-                    }}>
-                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Sales % by Time</Text>
-                        <Pie style={{
-                            marginTop: 20,
-                            //   marginLeft: 10,
-                            alignSelf: 'center'
-                        }}
-                            widthAndHeight={widthAndHeight}
-                            series={series}
-                            sliceColor={sliceColor}
-                            doughnut={true}
-                            coverRadius={0.65}
-                            coverFill={'#FFF'}
-                        />
-                        <Text style={{ color: '#F44336', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 10, }}>{"7AM-9AM: 10%"}</Text>
-                        <Text style={{ color: '#2196F3', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"9AM-12PM: 30%"}</Text>
-                        <Text style={{ color: '#FFEB3B', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"12PM-4PM: 10%"}</Text>
-                        <Text style={{ color: '#4CAF50', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"4PM-8PM: 40%"}</Text>
-                        <Text style={{ color: '#FF9800', fontWeight: 'bold', fontSize: 16, textAlign: 'center', marginTop: 5, }}>{"8PM-11PM: 20%"}</Text>
+                       
                     </View>
 
                     <View style={{
@@ -226,8 +330,114 @@ class Statitics extends Component {
                             verticalLabelRotation={30}
                         />
                     </View>
+
+                    <View style={{
+                        margin: 20,
+                        backgroundColor: '#FFFFFF',
+                        height: 350,
+                        borderRadius: 10
+                    }}>
+                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Debit Notes by stores</Text>
+
+                        <BarChart
+                            style={{ margin: 5 }}
+                            data={debitBar}
+                            width={deviceWidth - 60}
+                            height={300}
+                            yLabelsOffset={30}
+                            yAxisLabel="₹"
+                            yAxisSuffix="k"
+                            chartConfig={chartConfig}
+                            verticalLabelRotation={30}
+                        />
+                    </View>
+
+                    <View style={{
+                        margin: 20,
+                        backgroundColor: '#FFFFFF',
+                        height: 350,
+                        borderRadius: 10
+                    }}>
+                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Debit Notes by stores</Text>
+
+                        <BarChart
+                            style={{ margin: 5 }}
+                            data={topSales}
+                            width={deviceWidth - 60}
+                            height={300}
+                            yLabelsOffset={30}
+                            yAxisLabel="₹"
+                            yAxisSuffix="L"
+                            chartConfig={chartConfig}
+                            verticalLabelRotation={30}
+                        />
+                    </View>         
+
+                    <View style={{
+                        margin: 20,
+                        backgroundColor: '#FFFFFF',
+                        height: 280,
+                        borderRadius: 10
+                    }}>
+                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Invoices generated</Text>
+                        <PieChart
+                            data={Invoices}
+                            width={deviceWidth - 60}
+                            height={220}
+                            chartConfig={chartConfig}
+                            accessor="sales"
+                            backgroundColor={"transparent"}
+                            paddingLeft={"15"}
+                            center={[0, 0]}
+                            absolute
+                        />
+                       
+                    </View>
+
+                    <View style={{
+                        margin: 20,
+                        backgroundColor: '#FFFFFF',
+                        height: 280,
+                        borderRadius: 10
+                    }}>
+                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Sales summary</Text>
+                        <PieChart
+                            data={salesSummary}
+                            width={deviceWidth - 60}
+                            height={220}
+                            chartConfig={chartConfig}
+                            accessor="sales"
+                            backgroundColor={"transparent"}
+                            paddingLeft={"15"}
+                            center={[0, 0]}
+                            absolute
+                        />
+                       
+                    </View>
+
+                    <View style={{
+                        margin: 20,
+                        backgroundColor: '#FFFFFF',
+                        height: 280,
+                        borderRadius: 10
+                    }}>
+                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Active & InActive Promos</Text>
+                        <PieChart
+                            data={activeInactive}
+                            width={deviceWidth - 60}
+                            height={220}
+                            chartConfig={chartConfig}
+                            accessor="promo"
+                            backgroundColor={"transparent"}
+                            paddingLeft={"15"}
+                            center={[0, 0]}
+                            absolute
+                        />
+                       
+                    </View>
+
                 </View>
-            </ScrollView >
+            </ScrollView>
         )
     }
 }
