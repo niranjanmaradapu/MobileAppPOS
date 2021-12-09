@@ -79,6 +79,8 @@ class NewSale extends Component {
       storeId: 1,
       tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
       tableData: [],
+      inventoryDelete: false,
+      lineItemDelete: false,
       uom: [],
       store: '',
       camera: {
@@ -549,6 +551,11 @@ class NewSale extends Component {
   }
 
   modelCancel() {
+    this.setState({ inventoryDelete: false });
+    this.setState({ lineItemDelete: false });
+    this.setState({  flagqtyModelOpen: false });
+    this.setState({ flagCustomerOpen: false })
+   
     this.setState({ modalVisible: false });
   }
 
@@ -1235,6 +1242,8 @@ class NewSale extends Component {
   }
 
   topbarAction1() {
+    this.setState({ inventoryDelete: false });
+    this.setState({ modalVisible: false });
     this.setState({ flagone: true })
     this.setState({ flagtwo: false })
     this.setState({ flagthree: false })
@@ -1244,6 +1253,8 @@ class NewSale extends Component {
 
 
   topbarAction2() {
+    this.setState({ inventoryDelete: false });
+    this.setState({ modalVisible: false });
     this.setState({ inventoryBarcodeId: '' });
     this.setState({ inventoryProductName: '' });
     this.setState({ inventoryQuantity: '' });
@@ -1262,6 +1273,8 @@ class NewSale extends Component {
 
 
   topbarAction3() {
+    this.setState({ inventoryDelete: false });
+    this.setState({ modalVisible: false });
     this.setState({ arrayData: [] })
     this.setState({ temp: [] })
     this.setState({ search: null })
@@ -1707,7 +1720,7 @@ class NewSale extends Component {
 
   }
 
-  handledeleteaction = (item, index) => {
+  deleteInventory = (item, index) => {
     console.log('barcode id is' + item.barcode)
     axios.delete(InventoryService.deleteBarcode(), {
       params: {
@@ -1719,12 +1732,49 @@ class NewSale extends Component {
         const list = this.state.arrayData;
         list.splice(index, 1);
         this.setState({ arrayData: list });
+        this.setState({ inventoryDelete: false });
+        this.setState({ modalVisible: false });
       }
       else {
         alert('Issue in delete barcode and having' + res.data["error"]);
       }
     }
     );
+  }
+
+  handledeleteaction = (item, index) => {
+    this.setState({ inventoryDelete: true });
+    this.setState({ modalVisible: true });
+  }
+
+  deleteLineItem = (item, index) => {
+    this.setState({ lineItemDelete: false });
+    this.setState({ modalVisible: false });
+    const list = this.state.tableData;
+    list.splice(index, 1);
+    this.setState({ tableData: list });
+    if (this.state.tableData.length == 0) {
+      this.setState({ totalQty: 0 })
+      this.setState({ totalAmount: 0 })
+      this.setState({ totalDiscount: 0 })
+      return
+    }
+    this.state.totalQty = (parseInt(this.state.totalQty) - item.qty).toString()
+    this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(item.netamount)).toString()
+    if (item.promoDisc === null) {
+      this.state.totalDiscount = (parseInt(this.state.totalDiscount) - 0).toString()
+    }
+    else {
+      this.state.totalDiscount = (parseInt(this.state.totalDiscount) - parseInt(item.promoDisc)).toString()
+    }
+  }
+
+
+
+
+  handlenewsaledeleteaction = (item, index) => {
+    this.setState({ lineItemDelete: true });
+    this.setState({ modalVisible: true });
   }
 
   handleeditaction = (item, index) => {
@@ -1758,25 +1808,7 @@ class NewSale extends Component {
     this.setState({ store: value });
   }
 
-  handlenewsaledeleteaction = (item, index) => {
-    const list = this.state.tableData;
-    list.splice(index, 1);
-    this.setState({ tableData: list });
-    if (this.state.tableData.length == 0) {
-      this.setState({ totalQty: 0 })
-      this.setState({ totalAmount: 0 })
-      this.setState({ totalDiscount: 0 })
-      return
-    }
-    this.state.totalQty = (parseInt(this.state.totalQty) - item.qty).toString()
-    this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(item.netamount)).toString()
-    if(item.promoDisc === null){
-      this.state.totalDiscount = (parseInt(this.state.totalDiscount) - 0).toString()
-    }
-    else{
-    this.state.totalDiscount = (parseInt(this.state.totalDiscount) - parseInt(item.promoDisc)).toString()
-    }
-  }
+
 
   tagCustomer() {
     this.setState({ customerEmail: "" })
@@ -2354,7 +2386,89 @@ class NewSale extends Component {
                       </TouchableOpacity>
                     </View>
 
+                    {this.state.lineItemDelete && (
+                      <View>
+                        <Modal isVisible={this.state.modalVisible}>
+
+                          <View style={{
+                            width: deviceWidth,
+                            alignItems: 'center',
+                            marginLeft: -20,
+                            backgroundColor: "#ffffff",
+                            height: 260,
+                            position: 'absolute',
+                            bottom: -20,
+                          }}>
+
+                            <Text style={{
+                              position: 'absolute',
+                              left: 20,
+                              top: 15,
+                              width: 300,
+                              height: 20,
+                              fontFamily: 'medium',
+                              fontSize: 16,
+                              color: '#353C40'
+                            }}> Delete Item </Text>
+
+                            <TouchableOpacity style={{
+                              position: 'absolute',
+                              right: 20,
+                              top: 7,
+                              width: 50, height: 50,
+                            }} onPress={() => this.modelCancel()}>
+                              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                            </TouchableOpacity>
+
+                            <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                            </Text>
+                            <Text style={{
+                              position: 'absolute',
+                              top: 70,
+                              height: 20,
+                              textAlign: 'center',
+                              fontFamily: 'regular',
+                              fontSize: 18,
+                              color: '#353C40'
+                            }}> Are you sure want to delete NewSale Item?  </Text>
+                            <TouchableOpacity
+                              style={{
+                                width: deviceWidth - 40,
+                                marginLeft: 20,
+                                marginRight: 20,
+                                marginTop: 60,
+                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                              }} onPress={() => this.deleteLineItem(item, index)}
+                            >
+                              <Text style={{
+                                textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                fontFamily: "regular"
+                              }}  > DELETE </Text>
+
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                              style={{
+                                width: deviceWidth - 40,
+                                marginLeft: 20,
+                                marginRight: 20,
+                                marginTop: 20,
+                                height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                              }} onPress={() => this.modelCancel()}
+                            >
+                              <Text style={{
+                                textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                fontFamily: "regular"
+                              }}  > CANCEL </Text>
+
+                            </TouchableOpacity>
+                          </View>
+                        </Modal>
+                      </View>)}
+
                   </View>
+
+
 
                 )}
               />
@@ -2727,10 +2841,85 @@ class NewSale extends Component {
 
                     </View>
 
+                    {this.state.inventoryDelete && (
+                      <View>
+                        <Modal isVisible={this.state.modalVisible}>
 
+                          <View style={{
+                            width: deviceWidth,
+                            alignItems: 'center',
+                            marginLeft: -20,
+                            backgroundColor: "#ffffff",
+                            height: 260,
+                            position: 'absolute',
+                            bottom: -20,
+                          }}>
 
+                            <Text style={{
+                              position: 'absolute',
+                              left: 20,
+                              top: 15,
+                              width: 300,
+                              height: 20,
+                              fontFamily: 'medium',
+                              fontSize: 16,
+                              color: '#353C40'
+                            }}> Delete Inventory </Text>
 
+                            <TouchableOpacity style={{
+                              position: 'absolute',
+                              right: 20,
+                              top: 7,
+                              width: 50, height: 50,
+                            }} onPress={() => this.modelCancel()}>
+                              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                            </TouchableOpacity>
 
+                            <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                            </Text>
+                            <Text style={{
+                              position: 'absolute',
+                              top: 70,
+                              height: 20,
+                              textAlign: 'center',
+                              fontFamily: 'regular',
+                              fontSize: 18,
+                              color: '#353C40'
+                            }}> Are you sure want to delete inventory?  </Text>
+                            <TouchableOpacity
+                              style={{
+                                width: deviceWidth - 40,
+                                marginLeft: 20,
+                                marginRight: 20,
+                                marginTop: 60,
+                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                              }} onPress={() => this.deleteInventory(item, index)}
+                            >
+                              <Text style={{
+                                textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                fontFamily: "regular"
+                              }}  > DELETE </Text>
+
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                              style={{
+                                width: deviceWidth - 40,
+                                marginLeft: 20,
+                                marginRight: 20,
+                                marginTop: 20,
+                                height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                              }} onPress={() => this.modelCancel()}
+                            >
+                              <Text style={{
+                                textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                fontFamily: "regular"
+                              }}  > CANCEL </Text>
+
+                            </TouchableOpacity>
+                          </View>
+                        </Modal>
+                      </View>)}
 
                     <TouchableOpacity
                       style={{
@@ -2786,12 +2975,15 @@ class NewSale extends Component {
 
                     </View>
 
+
                   </View>
                 )}
               />
             </View>
           </View>
         )}
+
+
       </View>
     )
   }

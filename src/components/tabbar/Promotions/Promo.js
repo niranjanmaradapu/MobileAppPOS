@@ -47,6 +47,7 @@ class Promo extends Component {
             selectedPoolType: '',
             selectedStore: '',
             doneButtonClicked:false,
+            enddoneButtonClicked:false,
             startDate:"",
             endDate:"",
             selectedstoreId: 0,
@@ -59,7 +60,13 @@ class Promo extends Component {
             poolsactiveStatus: true,
             domainId: 1,
             storeId: 1,
-            storeNames: []
+            storeNames: [],
+            poolsDelete:false,
+            promoDelete:false,
+            delelePromoId:0,
+            delelePromoIndex:0,
+            deletePoolId:0,
+            promoNamesArray:[],
         }
     }
 
@@ -162,8 +169,9 @@ class Promo extends Component {
 
 
     getAllPromotions = () => {
-        this.setState({ poolsData: [] })
         this.setState({ promoData: [] })
+        this.setState({ promoNamesArray: [] })
+
         this.setState({ loading: true })
         const params = {
             "domainId": this.state.domainId,
@@ -178,6 +186,8 @@ class Promo extends Component {
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
                             let number = res.data["result"]["promovo"][i]
+                            this.state.promoNamesArray.push({ label: number.promotionName, value: number.promotionName })
+                            
                             if (this.state.promoactiveStatus === false) {
                                 if (number.isActive == false) {
                                     this.state.promoData.push(number)
@@ -191,6 +201,7 @@ class Promo extends Component {
 
                             }
                             this.setState({ promoData: this.state.promoData })
+                            this.setState({ promoNamesArray: this.state.promoNamesArray })
 
                         }
                     }
@@ -379,13 +390,17 @@ class Promo extends Component {
         else {
             this.setState({ flagFilterLoyaltyOpen: false });
         }
-
-
         this.setState({ modalVisible: true });
-
     }
 
     modelCancel() {
+        this.setState({ flagFilterOpen: false });
+        this.setState({ flagFilterPromoOpen: false });
+        this.setState({ flagFilterLoyaltyOpen: false });
+        this.setState({ flagAddPromo: false });
+        this.setState({ flagAddStore: false });
+        this.setState({ promoDelete: false });
+        this.setState({ poolsDelete: false });
         this.setState({ modalVisible: false });
     }
 
@@ -404,6 +419,12 @@ class Promo extends Component {
     }
 
     addStore() {
+        this.setState({ selectedPromotionType: "" });
+        this.setState({ selectedPromotionName: "" });
+        this.setState({ selectedStore: "" });
+        this.setState({ startDate: "" });
+        this.setState({ endDate: "" });
+
         this.setState({ flagFilterPromoOpen: false });
         this.setState({ flagAddPromo: false });
         this.setState({ modalVisible: true });
@@ -419,10 +440,27 @@ class Promo extends Component {
     }
 
     datepickerDoneClicked() {
-        this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
-        this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+        if(parseInt(this.state.date.getDate()) < 10){
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() })
+        }
+        else{
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })   
+        }
+   
         this.setState({ doneButtonClicked: true })
         //this.setState({date:this.state.})
+        this.setState({ datepickerOpen: false })
+        this.setState({ datepickerendOpen: false })
+    }
+
+    datepickerendDoneClicked(){
+        if(parseInt(this.state.enddate.getDate()) < 10){
+            this.setState({ enddate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() })
+        }
+        else{
+        this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+        }
+        this.setState({ enddoneButtonClicked: true }) 
         this.setState({ datepickerOpen: false })
         this.setState({ datepickerendOpen: false })
     }
@@ -476,7 +514,6 @@ class Promo extends Component {
     }
 
     enddatepickerClicked() {
-
         this.setState({ datepickerOpen: false })
         this.setState({ datepickerendOpen: true })
     }
@@ -552,24 +589,30 @@ class Promo extends Component {
         this.setState({ modalVisible: false });
     }
 
-    handlepromodeleteaction = (item, index) => {
-        console.log('barcode id is' + item.barcode)
+    deletePromotion = (item, index) => {
         axios.delete(PromotionsService.deletePromotions(), {
             params: {
-                //barcodeId=1811759398
-                "id": item.promoId,
+                "id": this.state.delelePromoId,
             }
         }).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
-                const list = this.state.promoData;
-                list.splice(index, 1);
-                this.setState({ promoData: list });
+                this.getAllPromotions()
+                this.setState({ promoDelete: false });
+                this.setState({ modalVisible: false });
             }
             else {
                 alert('Issue in delete barcode and having' + res.data["error"]);
             }
         }
         );
+    }
+
+    handlepromodeleteaction = (item, index) => {
+        this.setState({ delelePromoId: item.promoId });
+        this.setState({ delelePromoIndex: item.delelePromoIndex });
+        this.setState({ promoDelete: true });
+        this.setState({ modalVisible: true });
+        
     }
 
     handlepooleditaction = (item, index) => {
@@ -595,8 +638,10 @@ class Promo extends Component {
         axios.post(LoginService.getStoreIdWithStoreName(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 this.setState({ selectedstoreId: res.data["result"][0].id })
+                console.log('store id is' + this.state.selectedstoreId)
             }
             else {
+             
                 alert("id not found");
             }
         }
@@ -615,13 +660,14 @@ class Promo extends Component {
         else {
             const params = {
                 "promoType": this.state.selectedPromotionType,
-                "promoName": this.state.selectedPromotionName,
+                "promotionName": this.state.selectedPromotionName,
                 "storeVo": {
-                    "id": 4,
+                    "id": this.state.selectedstoreId,
                     "name": this.state.selectedStore,
+                    "location": this.state.selectedStore,
                 },
-                "startDate": this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(),
-                "endDate": this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate(),
+                "startDate": this.state.startDate,
+                "endDate": this.state.endDate,
             }
             console.log('store--' + params)
 
@@ -630,8 +676,9 @@ class Promo extends Component {
             axios.post(PromotionsService.addPromoStore(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.setState({ loading: false })
-                    this.props.route.params.onGoBack();
-                    this.props.navigation.goBack();
+                    this.setState({ flagAddPromo: false });
+                    this.setState({ modalVisible: false });
+                   
                 }
                 else {
                     this.setState({ loading: false })
@@ -644,24 +691,27 @@ class Promo extends Component {
 
     }
 
-    handlepooldeleteaction = (item, index) => {
-        console.log('barcode id is' + item.barcode)
+    deletePool = (item, index) => {
         axios.delete(PromotionsService.deletePool(), {
             params: {
-                //barcodeId=1811759398
                 "poolId": item.poolId,
             }
         }).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
-                const list = this.state.poolsData;
-                list.splice(index, 1);
-                this.setState({ poolsData: list });
+                this.getAllpools()
+                this.setState({ poolsDelete: false });
+                this.setState({ modalVisible: false });
             }
             else {
                 alert('Issue in delete barcode and having' + res.data["error"]);
             }
         }
         );
+    }
+
+    handlepooldeleteaction = (item, index) => {
+        this.setState({ poolsDelete: true });
+        this.setState({ modalVisible: true });
     }
 
 
@@ -914,6 +964,86 @@ class Promo extends Component {
                                     </Text>
                                 </View>
 
+         {this.state.poolsDelete && (
+          <View>
+            <Modal isVisible={this.state.modalVisible}>
+
+              <View style={{
+                width: deviceWidth,
+                alignItems: 'center',
+                marginLeft: -20,
+                backgroundColor: "#ffffff",
+                height: 260,
+                position: 'absolute',
+                bottom: -20,
+              }}>
+
+              <Text style={{
+              position: 'absolute',
+              left: 20,
+              top: 15,
+              width: 300,
+              height: 20,
+              fontFamily: 'medium',
+              fontSize: 16,
+              color: '#353C40'
+            }}> Delete Pool </Text>
+
+              <TouchableOpacity style={{
+              position: 'absolute',
+              right: 20,
+              top: 7,
+              width: 50, height: 50,
+            }} onPress={() => this.modelCancel()}>
+              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+              </TouchableOpacity>
+
+              <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+              </Text>
+              <Text style={{
+              position: 'absolute',
+              top: 70,
+              height: 20,
+              textAlign:'center',
+              fontFamily: 'regular',
+              fontSize: 18,
+              color: '#353C40'
+            }}> Are you sure want to delete pool?  </Text>
+              <TouchableOpacity
+              style={{
+              width: deviceWidth - 40,
+              marginLeft: 20,
+              marginRight: 20,
+              marginTop: 60,
+              height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+            }} onPress={() => this.deletePool(item, index)}
+              >
+              <Text style={{
+              textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+              fontFamily: "regular"
+            }}  > DELETE </Text>
+
+              </TouchableOpacity>
+
+              <TouchableOpacity
+              style={{
+              width: deviceWidth - 40,
+              marginLeft: 20,
+              marginRight: 20,
+              marginTop: 20,
+              height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+            }} onPress={() => this.modelCancel()}
+              >
+              <Text style={{
+              textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+              fontFamily: "regular"
+            }}  > CANCEL </Text>
+
+              </TouchableOpacity>
+              </View>
+            </Modal>
+          </View>)}
+
                                 <TouchableOpacity
                                     style={item.isActive == true ? {
                                         position: 'absolute',
@@ -1052,7 +1182,12 @@ class Promo extends Component {
                                         {String(item.promotionName)}
                                     </Text>
 
-
+                                    <Text style={{ position:"absolute", fontSize: 12, right: 20, marginTop: 60, fontFamily: 'regular', color: '#808080' }}>
+                                    PRIORITY
+                                    </Text>
+                                    <Text style={{ position:"absolute", fontSize: 12, right: 20, marginTop: 75, fontFamily: 'regular', color: '#353C40' }}>
+                                        {String(item.priority)}
+                                    </Text>
 
                                     <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                         START DATE
@@ -1071,8 +1206,10 @@ class Promo extends Component {
                                         STORE
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                        Hyd-Patny
+                                          -
                                     </Text>
+
+                                   
                                 </View>
 
                                 <TouchableOpacity
@@ -1097,10 +1234,90 @@ class Promo extends Component {
 
                                 </TouchableOpacity>
 
+                                {this.state.promoDelete && (
+          <View>
+            <Modal isVisible={this.state.modalVisible}>
+
+              <View style={{
+                width: deviceWidth,
+                alignItems: 'center',
+                marginLeft: -20,
+                backgroundColor: "#ffffff",
+                height: 260,
+                position: 'absolute',
+                bottom: -20,
+              }}>
+
+              <Text style={{
+              position: 'absolute',
+              left: 20,
+              top: 15,
+              width: 300,
+              height: 20,
+              fontFamily: 'medium',
+              fontSize: 16,
+              color: '#353C40'
+            }}> Delete Promotion </Text>
+
+              <TouchableOpacity style={{
+              position: 'absolute',
+              right: 20,
+              top: 7,
+              width: 50, height: 50,
+            }} onPress={() => this.modelCancel()}>
+              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+              </TouchableOpacity>
+
+              <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+              </Text>
+              <Text style={{
+              position: 'absolute',
+              top: 70,
+              height: 20,
+              textAlign:'center',
+              fontFamily: 'regular',
+              fontSize: 18,
+              color: '#353C40'
+            }}> Are you sure want to delete Promotion?  </Text>
+              <TouchableOpacity
+              style={{
+              width: deviceWidth - 40,
+              marginLeft: 20,
+              marginRight: 20,
+              marginTop: 60,
+              height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+            }} onPress={() => this.deletePromotion(item, index)}
+              >
+              <Text style={{
+              textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+              fontFamily: "regular"
+            }}  > DELETE </Text>
+
+              </TouchableOpacity>
+
+              <TouchableOpacity
+              style={{
+              width: deviceWidth - 40,
+              marginLeft: 20,
+              marginRight: 20,
+              marginTop: 20,
+              height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+            }} onPress={() => this.modelCancel()}
+              >
+              <Text style={{
+              textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+              fontFamily: "regular"
+            }}  > CANCEL </Text>
+
+              </TouchableOpacity>
+              </View>
+            </Modal>
+          </View>)}
+
                                 <TouchableOpacity style={{
                                     position: 'absolute',
                                     right: 50,
-                                    top: 65,
+                                    top: 90,
                                     width: 30,
                                     height: 30,
                                     borderBottomLeftRadius: 5,
@@ -1115,7 +1332,7 @@ class Promo extends Component {
                                 <TouchableOpacity style={{
                                     position: 'absolute',
                                     right: 20,
-                                    top: 65,
+                                    top: 90,
                                     width: 30,
                                     height: 30,
                                     borderBottomRightRadius: 5,
@@ -1144,7 +1361,7 @@ class Promo extends Component {
                 {this.state.flagthree && (
 
                     <TouchableOpacity
-                        style={{ position: 'absolute', right: 140, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
+                        style={{ position: 'absolute', right: 20, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
                         onPress={() => this.navigateToAddLoyalty()} >
                         <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD LOYALTY')} </Text>
                     </TouchableOpacity>
@@ -1572,7 +1789,7 @@ class Promo extends Component {
                                             <Text style={{
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
                                                 fontFamily: "regular"
-                                            }}  > {this.state.doneButtonClicked == false ? 'End Date' : this.state.endDate} </Text>
+                                            }}  > {this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate} </Text>
                                             <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
@@ -1634,7 +1851,7 @@ class Promo extends Component {
                                                         right: 20,
                                                         top: 10,
                                                         height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                    }} onPress={() => this.datepickerDoneClicked()}
+                                                    }} onPress={() => this.datepickerendDoneClicked()}
                                                 >
                                                     <Text style={{
                                                         textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
@@ -2227,10 +2444,7 @@ class Promo extends Component {
                                                     label: 'PROMOTION NAME',
 
                                                 }}
-                                                items={[
-                                                    { label: 'Mens Buy2@200', value: 'Mens Buy2@200' },
-                                                    { label: 'Mens Buy2@300', value: 'Mens Buy2@300' },
-                                                ]}
+                                                items={this.state.promoNamesArray}
                                                 Icon={() => {
                                                     return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                                 }}
@@ -2338,7 +2552,7 @@ class Promo extends Component {
                                             <Text style={{
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
                                                 fontFamily: "regular"
-                                            }}  > {this.state.doneButtonClicked == false ? 'End Date' : this.state.enddate} </Text>
+                                            }}  > {this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate} </Text>
                                             <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
@@ -2402,7 +2616,7 @@ class Promo extends Component {
                                                     right: 20,
                                                     top: 10,
                                                     height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                }} onPress={() => this.datepickerDoneClicked()}
+                                                }} onPress={() => this.datepickerendDoneClicked()}
                                             >
                                                 <Text style={{
                                                     textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
