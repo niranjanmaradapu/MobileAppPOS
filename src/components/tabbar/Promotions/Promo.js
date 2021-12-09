@@ -390,13 +390,17 @@ class Promo extends Component {
         else {
             this.setState({ flagFilterLoyaltyOpen: false });
         }
-
-
         this.setState({ modalVisible: true });
-
     }
 
     modelCancel() {
+        this.setState({ flagFilterOpen: false });
+        this.setState({ flagFilterPromoOpen: false });
+        this.setState({ flagFilterLoyaltyOpen: false });
+        this.setState({ flagAddPromo: false });
+        this.setState({ flagAddStore: false });
+        this.setState({ promoDelete: false });
+        this.setState({ poolsDelete: false });
         this.setState({ modalVisible: false });
     }
 
@@ -415,7 +419,6 @@ class Promo extends Component {
     }
 
     addStore() {
-        
         this.setState({ selectedPromotionType: "" });
         this.setState({ selectedPromotionName: "" });
         this.setState({ selectedStore: "" });
@@ -437,7 +440,13 @@ class Promo extends Component {
     }
 
     datepickerDoneClicked() {
-        this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+        if(parseInt(this.state.date.getDate()) < 10){
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() })
+        }
+        else{
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })   
+        }
+   
         this.setState({ doneButtonClicked: true })
         //this.setState({date:this.state.})
         this.setState({ datepickerOpen: false })
@@ -445,7 +454,12 @@ class Promo extends Component {
     }
 
     datepickerendDoneClicked(){
+        if(parseInt(this.state.enddate.getDate()) < 10){
+            this.setState({ enddate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() })
+        }
+        else{
         this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+        }
         this.setState({ enddoneButtonClicked: true }) 
         this.setState({ datepickerOpen: false })
         this.setState({ datepickerendOpen: false })
@@ -500,7 +514,6 @@ class Promo extends Component {
     }
 
     enddatepickerClicked() {
-
         this.setState({ datepickerOpen: false })
         this.setState({ datepickerendOpen: true })
     }
@@ -647,7 +660,7 @@ class Promo extends Component {
         else {
             const params = {
                 "promoType": this.state.selectedPromotionType,
-                "promoName": " " + this.state.selectedPromotionName,
+                "promotionName": this.state.selectedPromotionName,
                 "storeVo": {
                     "id": this.state.selectedstoreId,
                     "name": this.state.selectedStore,
@@ -1193,7 +1206,7 @@ class Promo extends Component {
                                         STORE
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                        Hyd-Patny
+                                          -
                                     </Text>
 
                                    

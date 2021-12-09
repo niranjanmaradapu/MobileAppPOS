@@ -68,7 +68,12 @@ class Settings extends Component {
     }
 
     datepickerDoneClicked() {
-        this.setState({ dateOfBirth: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+        if(parseInt(this.state.date.getDate()) < 10){
+            this.setState({ dateOfBirth: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() })
+        }
+        else{
+            this.setState({ dateOfBirth: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })   
+        }
         this.setState({ datepickerOpen: false })
     }
 

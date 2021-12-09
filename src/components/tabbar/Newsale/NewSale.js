@@ -551,6 +551,11 @@ class NewSale extends Component {
   }
 
   modelCancel() {
+    this.setState({ inventoryDelete: false });
+    this.setState({ lineItemDelete: false });
+    this.setState({  flagqtyModelOpen: false });
+    this.setState({ flagCustomerOpen: false })
+   
     this.setState({ modalVisible: false });
   }
 
