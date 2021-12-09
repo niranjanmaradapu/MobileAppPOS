@@ -51,22 +51,6 @@ class AddPromo extends Component {
     }
 
     async componentDidMount() {
-
-        this.setState({ promotionName: this.props.route.params.item.promotionName })
-        this.setState({ selectedPromoApplyName: this.props.route.params.item.promoApplyType })
-        this.setState({ description: this.props.route.params.item.description })
-        this.setState({ printonbill: this.props.route.params.item.printNameOnBill })
-        this.setState({ selectedApplicability: this.props.route.params.item.applicability })
-        this.setState({ buyany: String(this.props.route.params.item.buyItemsFromPool) })
-        this.setState({ isEdit:this.props.route.params.isEdit})
-        this.setState({ selctedPoolnames: this.props.route.params.item.poolVo })
-
-
-        console.log('data is----' + this.state.createdByArray)
-        // this.setState({ arrayData: this.props.route.params.item.ruleVo })
-        // this.setState({ arrayData: this.props.route.params.item.ruleVo })
-
-
         var domainStringId = ""
         AsyncStorage.getItem("domainDataId").then((value) => {
             domainStringId = value
@@ -77,6 +61,17 @@ class AddPromo extends Component {
         }).catch(() => {
             console.log('there is error getting domainDataId')
         })
+        this.setState({ promotionName: this.props.route.params.item.promotionName })
+        this.setState({ selectedPromoApplyName: this.props.route.params.item.promoApplyType })
+        this.setState({ description: this.props.route.params.item.description })
+        this.setState({ printonbill: this.props.route.params.item.printNameOnBill })
+        this.setState({ selectedApplicability: this.props.route.params.item.applicability })
+        this.setState({ buyany: String(this.props.route.params.item.buyItemsFromPool) })
+        this.setState({ isEdit:this.props.route.params.isEdit})
+        this.setState({ selctedPoolnames: this.props.route.params.item.poolVo })
+        // this.setState({ arrayData: this.props.route.params.item.ruleVo })
+        // this.setState({ arrayData: this.props.route.params.item.ruleVo })
+     
     }
 
 

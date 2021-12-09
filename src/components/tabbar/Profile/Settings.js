@@ -144,6 +144,7 @@ class Settings extends Component {
                     this.setState({ userName: res.data["result"].userName })
                     this.setState({ role: res.data["result"].roleName })
                     this.setState({ email: res.data["result"].email })
+                    this.setState({ selectedGender: res.data["result"].gender })
                      if(res.data["result"].dob === null){
                         this.setState({ dateOfBirth: 'Date Of Birth' }) 
                      }
@@ -362,7 +363,7 @@ class Settings extends Component {
                                     />
                                 </View>
 
-                                {/* <Text style={{
+                                <Text style={{
                                     position: 'absolute',
                                     left: 20,
                                     top: 445,
@@ -409,8 +410,8 @@ class Settings extends Component {
                                         value={this.state.selectedGender}
                                         useNativeAndroidPickerStyle={false}
 
-                                    /> */}
-                                {/* </View> */}
+                                    /> 
+                                 </View>
 
 
                                
@@ -418,7 +419,7 @@ class Settings extends Component {
                                 <Text style={{
                                     position: 'absolute',
                                     left: 20,
-                                    top: 450,
+                                    top: 525,
                                     width: 300,
                                     height: 20,
                                     fontFamily: 'regular',
