@@ -6,13 +6,10 @@ var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
 import {
-    LineChart,
     BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
+    PieChart
 } from "react-native-chart-kit";
+
 const datapie = [
     {
         name: "SHIRTS",
@@ -65,7 +62,7 @@ const datapie = [
     }
 ];
 
-const Invoices = [
+const invoices = [
     {
         name: "jan",
         sales: 10,
@@ -147,14 +144,14 @@ const Invoices = [
 
 const salesSummary = [
     {
-        name: "Sales invoicing",
+        name: "Sales",
         sales: 8000,
         color: "#ff0",
         legendFontColor: "#7f7f7f",
         legendFontSize: 15
     },
     {
-        name: "Return invoicing",
+        name: "Returns",
         sales: 2000,
         color: "#00f",
         legendFontColor: "#7f7f7f",
@@ -219,7 +216,7 @@ const debitBar = {
     labels: ["Panjagutta-Hyd", "Patney-Hyd", "Chandanagar-Hyd", "Ecil-Hyd", "Vijayawada", "Vizag", "Waranal"],
     datasets: [
         {
-            data: [3, 1.8, 3.8, 4.3, 5.4, 4, 2.3, 3.8]
+            data: [3.0, 1.8, 3.8, 5, 4.0, 2.3, 3.9]
         }
     ]
 };
@@ -270,7 +267,7 @@ class Statitics extends Component {
                         <TouchableOpacity style={{
                             position: 'absolute',
                             left: 10,
-                            top: 30,
+                            top: 10,
                             width: 40,
                             height: 40,
                         }} onPress={() => this.handleBackButtonClick()}>
@@ -279,7 +276,7 @@ class Statitics extends Component {
                         <Text style={{
                             position: 'absolute',
                             left: 70,
-                            top: 47,
+                            top: 27,
                             width: 300,
                             height: 20,
                             fontFamily: 'bold',
@@ -313,7 +310,7 @@ class Statitics extends Component {
                     <View style={{
                         margin: 20,
                         backgroundColor: '#FFFFFF',
-                        height: 350,
+                        height: 450,
                         borderRadius: 10
                     }}>
                         <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Top 5 sales by category</Text>
@@ -322,73 +319,74 @@ class Statitics extends Component {
                             style={{ margin: 5 }}
                             data={dataBar}
                             width={deviceWidth - 60}
-                            height={300}
+                            height={400}
                             yLabelsOffset={30}
                             yAxisLabel="₹"
                             yAxisSuffix="k"
                             chartConfig={chartConfig}
-                            verticalLabelRotation={30}
+                            verticalLabelRotation={90}
                         />
                     </View>
 
                     <View style={{
                         margin: 20,
                         backgroundColor: '#FFFFFF',
-                        height: 350,
+                        height: 600,
                         borderRadius: 10
                     }}>
                         <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Debit Notes by stores</Text>
 
                         <BarChart
-                            style={{ margin: 5 }}
+                            
                             data={debitBar}
                             width={deviceWidth - 60}
-                            height={300}
+                            height={550}
                             yLabelsOffset={30}
                             yAxisLabel="₹"
-                            yAxisSuffix="k"
+                            yAxisSuffix="L"
                             chartConfig={chartConfig}
-                            verticalLabelRotation={30}
+                            verticalLabelRotation={90}
                         />
                     </View>
 
                     <View style={{
                         margin: 20,
                         backgroundColor: '#FFFFFF',
-                        height: 350,
+                        height: 550,
                         borderRadius: 10
                     }}>
-                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Debit Notes by stores</Text>
+                        <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Top 5 Sales By Store</Text>
 
                         <BarChart
                             style={{ margin: 5 }}
                             data={topSales}
                             width={deviceWidth - 60}
-                            height={300}
-                            yLabelsOffset={30}
+                            height={490}
+                            yLabelsOffset={20}
                             yAxisLabel="₹"
                             yAxisSuffix="L"
                             chartConfig={chartConfig}
-                            verticalLabelRotation={30}
+                            verticalLabelRotation={90}
                         />
                     </View>         
 
                     <View style={{
                         margin: 20,
                         backgroundColor: '#FFFFFF',
-                        height: 280,
+                        height: 330,
                         borderRadius: 10
                     }}>
                         <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Invoices generated</Text>
                         <PieChart
-                            data={Invoices}
-                            width={deviceWidth - 60}
-                            height={220}
+                            data={invoices}
+                            width={deviceWidth - 30}
+                            height={280}
                             chartConfig={chartConfig}
                             accessor="sales"
                             backgroundColor={"transparent"}
-                            paddingLeft={"15"}
+                            paddingLeft={"35"}
                             center={[0, 0]}
+                            hasLegend="true"
                             absolute
                         />
                        
@@ -397,14 +395,14 @@ class Statitics extends Component {
                     <View style={{
                         margin: 20,
                         backgroundColor: '#FFFFFF',
-                        height: 280,
+                        height: 230,
                         borderRadius: 10
                     }}>
                         <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Sales summary</Text>
                         <PieChart
                             data={salesSummary}
                             width={deviceWidth - 60}
-                            height={220}
+                            height={180}
                             chartConfig={chartConfig}
                             accessor="sales"
                             backgroundColor={"transparent"}
@@ -418,14 +416,14 @@ class Statitics extends Component {
                     <View style={{
                         margin: 20,
                         backgroundColor: '#FFFFFF',
-                        height: 280,
+                        height: 230,
                         borderRadius: 10
                     }}>
                         <Text style={{ fontSize: 20, fontFamily: 'bold', marginTop: 20, marginLeft: 20 }}>Active & InActive Promos</Text>
                         <PieChart
                             data={activeInactive}
                             width={deviceWidth - 60}
-                            height={220}
+                            height={180}
                             chartConfig={chartConfig}
                             accessor="promo"
                             backgroundColor={"transparent"}
@@ -463,7 +461,7 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        height: 84,
+        height: 70,
     },
     input: {
         justifyContent: 'center',
