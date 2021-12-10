@@ -39,7 +39,7 @@ class Promo extends Component {
             selectedcreatedBy: "",
             poolsData: [1, 2],
             promoData: [1, 2],
-            loyaltyData: [1, 2],
+            loyaltyData: [],
             productuom: "",
             selectedPromotionType: "",
             selectedPromotionName: "",
@@ -165,6 +165,37 @@ class Promo extends Component {
                 alert('No Records Found')
             })
 
+    };
+
+
+    getLoyaltyPoints = () => {
+        this.setState({ loyaltyData: [] })
+        this.setState({ loading: true })
+        const params = {
+          
+        }
+        console.log(this.state.domainId)
+        axios.get(PromotionsService.getLoyaltyPoints(),
+            { params }).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    this.setState({ loading: false })
+                    let len = res.data["result"].length;
+                    console.log(res.data["result"])
+                    if (len > 0) {
+                        for (let i = 0; i < len; i++) {
+                            let number = res.data["result"][i]
+                            this.state.loyaltyData.push(number)
+                            
+                           
+                            }
+                            this.setState({ loyaltyData: this.state.loyaltyData })
+                    }
+                    return
+                }
+            }).catch(() => {
+                this.setState({ loading: false })
+                alert('No Records Found')
+            })
     };
 
 
@@ -355,6 +386,7 @@ class Promo extends Component {
         this.setState({ flagone: false })
         this.setState({ flagtwo: false })
         this.setState({ flagthree: true })
+        this.getLoyaltyPoints()
     }
 
     handleeditaction = (item, index) => {
@@ -415,9 +447,14 @@ class Promo extends Component {
     }
 
     navigateToAddLoyalty() {
-        this.props.navigation.navigate('AddLoyalty');
+        this.props.navigation.navigate('AddLoyalty', {
+            onGoBack: () => this.refteshLoyalty(),
+        });
     }
 
+    refteshLoyalty(){
+        this.getLoyaltyPoints()  
+    }
     addStore() {
         this.setState({ selectedPromotionType: "" });
         this.setState({ selectedPromotionName: "" });
@@ -1390,7 +1427,7 @@ class Promo extends Component {
                                         MOBILE NUMBER
                                     </Text>
                                     <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                        +91 XXX XXX 1233
+                                    {item.mobileNumber}
                                     </Text>
 
 
@@ -1399,21 +1436,29 @@ class Promo extends Component {
                                         EXPIRY DATE
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                        3 Dec 2021
+                                    {item.expiredDate}
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 250, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
                                         POINTS VALUE
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 250, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                        ₹ 500
+                                    {item.loyaltyPoints}
                                     </Text>
 
                                     <Text style={{ fontSize: 12, marginLeft: 250, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
                                         LOYALTY POINTS
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 250, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                        5000
+                                     ₹ {item.invoiceAmount}
                                     </Text>
+
+                                    <Text style={{ position:"absolute", fontSize: 12, right: 60, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
+                                    INVOICE NUMBER
+                                    </Text>
+                                    <Text style={{ position:"absolute", fontSize: 12, right: 60, marginTop: 35, fontFamily: 'regular', color: '#353C40' }}>
+                                        {String(item.invoiceNumber)}
+                                    </Text>
+
                                 </View>
 
 
