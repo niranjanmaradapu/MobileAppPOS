@@ -48,5 +48,19 @@ class PromotionService {
         return REACT_NATIVE_APP_BASE_URL + '/connection-pool/promo/searchPromotion';
     }
 
+    //loyalty points
+    getLoyaltyPoints(){
+        return REACT_NATIVE_APP_BASE_URL + '/new-sale/newsale/getAllLoyaltyPoints';
+    }
+
+    saveLoyaltyPoints(){
+        return REACT_NATIVE_APP_BASE_URL + '/new-sale/newsale/saveLoyaltyPoints';
+    }
+
+    getInvoiceData(){
+        return REACT_NATIVE_APP_BASE_URL + '/new-sale/newsale/getinvoicedata';
+    }
+
+
 }
 export default new PromotionService()
