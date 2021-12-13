@@ -5,6 +5,7 @@ import NewSale from '../components/tabbar/Newsale/NewSale';
 import Orders from '../components/tabbar/Newsale/Orders';
 import ImageScanner from '../components/tabbar/Newsale/ImageScanner';
 import ProductEdit from '../components/tabbar/Newsale/ProductEdit';
+import Payment from '../components/tabbar/Newsale/Payment';
 
 
 const Stack = createStackNavigator();
@@ -18,6 +19,7 @@ export default class NewSaleNavigation extends React.Component {
                 <Stack.Screen name="ScanBarCode" options={{ headerShown: false }} component={ScanBarCode} />
                 <Stack.Screen name="ImageScanner" options={{ headerShown: false }} component={ImageScanner} />
                 <Stack.Screen name="ProductEdit" options={{ headerShown: false }} component={ProductEdit} />
+                <Stack.Screen name="Payment" options={{ headerShown: false }} component={Payment} />
             </Stack.Navigator>
 
         );

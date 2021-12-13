@@ -224,6 +224,122 @@ class NewSale extends Component {
     })
   }
 
+  pay = () => {
+    this.props.navigation.navigate('Payment')
+    return
+    var lineItems = []
+    var lineItemIds = []
+    for (let i = 0; i < this.state.tableData.length; i++) {
+      lineItems.push({
+        itemPrice: this.state.tableData[i].netamount,
+        quantity: this.state.tableData[i].qty,
+        discount: this.state.tableData[i].promoDisc,
+        netValue: this.state.tableData[i].netamount - this.state.tableData[i].promoDisc,
+        barCode: this.state.tableData[i].barcode,
+        domainId: this.state.domainId,
+      })
+    }
+    this.setState({ loading: true })
+    // const params = lineItems
+    console.log(lineItems);
+    console.log('params are' + JSON.stringify(lineItems))
+    this.setState({ loading: true })
+    axios.post(NewSaleService.saveLineItems(), lineItems).then((res) => {
+      if (res.data && res.data["isSuccess"] === "true") {
+        lineItemIds.push(JSON.parse(res.data["result"]))
+        // 
+        console.log(lineItemIds + `line items saved successfully`);
+        var lineItemIdAdd = []
+        for (let i = 0; i < lineItemIds[0].length; i++) {
+          lineItemIdAdd.push({ lineItemId: lineItemIds[0][i] })
+        }
+        const params = {
+          "natureOfSale": "InStore",
+          "domainId": this.state.domainId,
+          "storeId": this.state.storeId,
+          "grossAmount": this.state.totalAmount,
+          "totalPromoDisc": this.state.totalDiscount,
+          "taxAmount": 0,
+          "totalManualDisc": 0,
+          "discApprovedBy": null,
+          "discType": null,
+          "approvedBy": 5218,
+          "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
+          "offlineNumber": null,
+          "customerDetails": {
+            "name": this.state.customerName,
+            "mobileNumber": this.state.customerPhoneNumber,
+            "gstNumber": this.state.customerGSTNumber,
+            "address": this.state.customerAddress,
+            "gender": this.state.customerAddress,
+            "altMobileNo": "",
+            "dob": ""
+          },
+          "dlSlip": [],
+          "lineItemsReVo": lineItemIdAdd
+        }
+       
+        console.log(params)
+        axios.post(NewSaleService.createOrder(), params).then((res) => {
+          if (res.data && res.data["isSuccess"] === "true") {
+            this.setState({ tableData: [] })
+            // alert("Order created " + res.data["result"]);
+            const params = {
+              "amount": JSON.stringify(this.state.totalAmount - this.state.totalDiscount),
+              "info": "order creations",
+              "newsaleId": res.data["result"],
+            }
+
+            axios.post(NewSaleService.payment(), params).then((res) => {
+              // this.setState({isPayment: false});
+              const data = JSON.parse(res.data["result"])
+              //console.log()
+              var options = {
+                description: 'Transaction',
+                image: 'https://i.imgur.com/3g7nmJC.png',
+                currency: data.currency,
+                order_id: data.id,
+                key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
+                amount: data.amount,
+                name: 'OTSI',
+                prefill: {
+                  name: "Kadali",
+                  email: "kadali@gmail.com",
+                  contact: "9999999999",
+                },
+                theme: { color: '#F37254' }
+              }
+              console.log(options)
+              RazorpayCheckout.open(options).then((data) => {
+                // handle success
+                this.setState({ tableData: [] })
+                alert(`Success: ${data.razorpay_payment_id}`);
+                this.props.navigation.navigate('Home')
+                //this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
+              }).catch((error) => {
+                console.log(error)
+                // handle failure
+                alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
+              });
+            })
+            this.setState({ loading: false })
+          }
+          else {
+            this.setState({ loading: false })
+            alert("duplicate record already exists");
+          }
+        }
+        )
+      }
+
+      else {
+        this.setState({ loading: false })
+        alert("duplicate record already exists");
+      }
+    }
+    );
+  }
+
   getItems = () => {
     this.setState({ arrayData: [] })
     this.setState({ temp: [] })
@@ -941,301 +1057,7 @@ class NewSale extends Component {
     });
   }
 
-  payCash = () => {
-    var lineItems = []
-    var lineItemIds = []
-
-
-    for (let i = 0; i < this.state.tableData.length; i++) {
-      lineItems.push({
-        itemPrice: this.state.tableData[i].netamount,
-        quantity: this.state.tableData[i].qty,
-        discount: this.state.tableData[i].promoDisc,
-        netValue: this.state.tableData[i].netamount - this.state.tableData[i].promoDisc,
-        barCode: this.state.tableData[i].barcode,
-        domainId: this.state.domainId,
-      })
-    }
-    this.setState({ loading: true })
-    // const params = lineItems
-    console.log(lineItems);
-    console.log('params are' + JSON.stringify(lineItems))
-    this.setState({ loading: true })
-    axios.post(NewSaleService.saveLineItems(), lineItems).then((res) => {
-      if (res.data && res.data["isSuccess"] === "true") {
-        lineItemIds.push(JSON.parse(res.data["result"]))
-        // 
-        console.log(lineItemIds + `line items saved successfully`);
-        var lineItemIdAdd = []
-        for (let i = 0; i < lineItemIds[0].length; i++) {
-          lineItemIdAdd.push({ lineItemId: lineItemIds[0][i] })
-        }
-
-        const params = {
-          "natureOfSale": "InStore",
-          "domainId": this.state.domainId,
-          "storeId": this.state.storeId,
-          "grossAmount": this.state.totalAmount,
-          "totalPromoDisc": this.state.totalDiscount,
-          "taxAmount": 0,
-          "totalManualDisc": 0,
-          "discApprovedBy": null,
-          "discType": null,
-          "approvedBy": 5218,
-          "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
-          "offlineNumber": null,
-          "paymentAmountType": [
-            {
-              "paymentAmount": this.state.totalAmount - this.state.totalDiscount,
-              "paymentType": "Cash"
-            }],
-          "customerDetails": {
-            "name": this.state.customerName,
-            "mobileNumber": this.state.customerPhoneNumber,
-            "gstNumber": this.state.customerGSTNumber,
-            "address": this.state.customerAddress,
-            "gender": this.state.customerAddress,
-            "altMobileNo": "",
-            "dob": ""
-          },
-          "dlSlip": [],
-          "lineItemsReVo": lineItemIdAdd
-        }
-
-        console.log(params)
-
-        axios.post(NewSaleService.createOrder(), params).then((res) => {
-          if (res.data && res.data["isSuccess"] === "true") {
-            this.setState({ tableData: [] })
-            alert("Order created " + res.data["result"]);
-            this.setState({ loading: false })
-          }
-          else {
-            this.setState({ loading: false })
-            alert("duplicate record already exists");
-          }
-        }
-        )
-      }
-
-      else {
-        this.setState({ loading: false })
-        alert("duplicate record already exists");
-      }
-    }
-    );
-    // for (let j = 0; j < this.state.tableData.length; j++) {
-    //   for (let i = 0; i < this.state.arrayData.length; i++) {
-    //     if (parseInt(this.state.tableData[j].qty) > parseInt(this.state.arrayData[i].qty)) {
-    //       alert(`the quantity for  ${this.state.arrayData[i].itemdesc} is only ${this.state.arrayData[i].qty} available in inventory.Please select qty below ${this.state.arrayData[i].qty} only`);
-    //     }
-    //     else if (parseInt(this.state.tableData[j].qty) === parseInt(this.state.arrayData[i].qty)) {
-    //       db.transaction(txn => {
-    //         txn.executeSql(
-    //           'DELETE FROM  tbl_item where barcode=?',
-    //           [this.state.tableData[i].barcode],
-    //           (sqlTxn, res) => {
-    //             console.log("deleted successfully");
-    //             this.setState({ tableData: [] })
-    //             this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'cash' })
-    //           },
-    //           error => {
-    //             console.log("error on search category " + error.message);
-    //           },
-    //         );
-    //       });
-    //     }
-    //     else {
-    //       db.transaction(txn => {
-    //         txn.executeSql(
-    //           'UPDATE tbl_item set qty=? where barcode=?',
-    //           [parseInt(this.state.arrayData[i].qty) - parseInt(this.state.tableData[j].qty), this.state.tableData[i].barcode],
-    //           (sqlTxn, res) => {
-    //             console.log("updated successfully");
-    //             this.setState({ tableData: [] })
-    //             this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'cash' })
-    //             console.log((parseInt(this.state.arrayData[i].qty) - parseInt(this.state.tableData[j].qty)).toString());
-    //           },
-    //           error => {
-    //             console.log("error on search category " + error.message);
-    //           },
-    //         );
-    //       });
-    //     }
-    //   }
-    //}
-
-    // alert(`Please Pay  Rs ${this.state.totalAmount} and inventory updated based on this transaction`);
-  }
-  // sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount
-
-  pay = () => {
-    var lineItems = []
-    var lineItemIds = []
-
-
-    for (let i = 0; i < this.state.tableData.length; i++) {
-      lineItems.push({
-        itemPrice: this.state.tableData[i].netamount,
-        quantity: this.state.tableData[i].qty,
-        discount: this.state.tableData[i].promoDisc,
-        netValue: this.state.tableData[i].netamount - this.state.tableData[i].promoDisc,
-        barCode: this.state.tableData[i].barcode,
-        domainId: this.state.domainId,
-      })
-    }
-    this.setState({ loading: true })
-    // const params = lineItems
-    console.log(lineItems);
-    console.log('params are' + JSON.stringify(lineItems))
-    this.setState({ loading: true })
-    axios.post(NewSaleService.saveLineItems(), lineItems).then((res) => {
-      if (res.data && res.data["isSuccess"] === "true") {
-        lineItemIds.push(JSON.parse(res.data["result"]))
-        // 
-        console.log(lineItemIds + `line items saved successfully`);
-        var lineItemIdAdd = []
-        for (let i = 0; i < lineItemIds[0].length; i++) {
-          lineItemIdAdd.push({ lineItemId: lineItemIds[0][i] })
-        }
-        const params = {
-          "natureOfSale": "InStore",
-          "domainId": this.state.domainId,
-          "storeId": this.state.storeId,
-          "grossAmount": this.state.totalAmount,
-          "totalPromoDisc": this.state.totalDiscount,
-          "taxAmount": 0,
-          "totalManualDisc": 0,
-          "discApprovedBy": null,
-          "discType": null,
-          "approvedBy": 5218,
-          "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
-          "offlineNumber": null,
-          "customerDetails": {
-            "name": this.state.customerName,
-            "mobileNumber": this.state.customerPhoneNumber,
-            "gstNumber": this.state.customerGSTNumber,
-            "address": this.state.customerAddress,
-            "gender": this.state.customerAddress,
-            "altMobileNo": "",
-            "dob": ""
-          },
-          "dlSlip": [],
-          "lineItemsReVo": lineItemIdAdd
-        }
-        console.log(params)
-        axios.post(NewSaleService.createOrder(), params).then((res) => {
-          if (res.data && res.data["isSuccess"] === "true") {
-            this.setState({ tableData: [] })
-            // alert("Order created " + res.data["result"]);
-            const params = {
-              "amount": JSON.stringify(this.state.totalAmount - this.state.totalDiscount),
-              "info": "order creations",
-              "newsaleId": res.data["result"],
-            }
-
-            axios.post(NewSaleService.payment(), params).then((res) => {
-              // this.setState({isPayment: false});
-              const data = JSON.parse(res.data["result"])
-              //console.log()
-              var options = {
-                description: 'Transaction',
-                image: 'https://i.imgur.com/3g7nmJC.png',
-                currency: data.currency,
-                order_id: data.id,
-                key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
-                amount: data.amount,
-                name: 'OTSI',
-                prefill: {
-                  name: "Kadali",
-                  email: "kadali@gmail.com",
-                  contact: "9999999999",
-                },
-                theme: { color: '#F37254' }
-              }
-              console.log(options)
-              RazorpayCheckout.open(options).then((data) => {
-                // handle success
-                this.setState({ tableData: [] })
-                alert(`Success: ${data.razorpay_payment_id}`);
-                this.props.navigation.navigate('Home')
-                //this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
-              }).catch((error) => {
-                console.log(error)
-                // handle failure
-                alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
-              });
-            })
-
-
-
-
-            this.setState({ loading: false })
-          }
-          else {
-            this.setState({ loading: false })
-            alert("duplicate record already exists");
-          }
-        }
-        )
-      }
-
-      else {
-        this.setState({ loading: false })
-        alert("duplicate record already exists");
-      }
-    }
-    );
-
-
-    // NetInfo.addEventListener(state => {
-    //   if (state.isConnected) {
-    //     //  console.log(this.state.totalAmount)
-    //     const params = {
-    //       "amount": JSON.stringify(this.state.totalAmount),
-    //       "info": "order_request"
-    //     }
-
-    //     axios.post(NewSaleService.payment(), params).then((res) => {
-    //       // this.setState({isPayment: false});
-    //       const data = JSON.parse(res.data["result"])
-
-    //       //console.log()
-    //       var options = {
-    //         description: 'Transaction',
-    //         image: 'https://i.imgur.com/3g7nmJC.png',
-    //         currency: data.currency,
-    //         order_id: data.id,
-    //         key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
-    //         amount: data.amount,
-    //         name: 'OTSI',
-    //         prefill: {
-    //           name: "Kadali",
-    //           email: "kadali@gmail.com",
-    //           contact: "9999999999",
-    //         },
-    //         theme: { color: '#F37254' }
-    //       }
-    //       console.log(options)
-    //       RazorpayCheckout.open(options).then((data) => {
-    //         // handle success
-    //         this.setState({ tableData: [] })
-    //         alert(`Success: ${data.razorpay_payment_id}`);
-    //         this.props.navigation.navigate('Home')
-    //         //this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
-    //       }).catch((error) => {
-    //         console.log(error)
-    //         // handle failure
-    //         alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
-    //       });
-    //     }
-    //     )
-    //   }
-    //   else {
-    //     alert('Please check your Internet Connection');
-    //   }
-    // })
-  }
+ 
 
   menuAction() {
     this.props.navigation.dispatch(DrawerActions.openDrawer())
@@ -2539,17 +2361,14 @@ class NewSale extends Component {
 
 
                   <View style={styles.TopcontainerforPay}>
-                    <TouchableOpacity
+                    
+                     <TouchableOpacity
                       style={styles.signInButton}
-                      onPress={() => this.payCash()} >
+                      onPress={() =>  this.pay()} >
 
-                      <Text style={styles.signInButtonText}> Pay Cash </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.signInButtonRight}
-                      onPress={() => this.pay()} >
-                      <Text style={styles.signInButtonText}> Pay Card </Text>
-                    </TouchableOpacity>
+                      <Text style={styles.signInButtonText}> Check out </Text>
+                    </TouchableOpacity> 
+                   
 
                   </View>
 
@@ -3092,9 +2911,8 @@ const styles = StyleSheet.create({
   signInButton: {
     backgroundColor: '#ED1C24',
     justifyContent: 'center',
-    width: '46%',
+    width: '95%',
     marginLeft: 10,
-    marginTop: 10,
     height: 40,
     borderRadius: 10,
     fontWeight: 'bold',

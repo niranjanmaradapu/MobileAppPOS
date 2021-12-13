@@ -64,7 +64,6 @@ class AddLoyalty extends Component {
     }
 
     endEditing() {
-   
         const params = {
             "orderNumber": this.state.invoiceNumber,
         }
