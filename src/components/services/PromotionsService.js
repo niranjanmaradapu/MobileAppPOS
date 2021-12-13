@@ -57,6 +57,10 @@ class PromotionService {
         return REACT_NATIVE_APP_BASE_URL + '/new-sale/newsale/saveLoyaltyPoints';
     }
 
+    searchLoyaltyPoints(){
+        return REACT_NATIVE_APP_BASE_URL + '/new-sale/newsale/searchLoyaltyPoints';
+    }
+
     getInvoiceData(){
         return REACT_NATIVE_APP_BASE_URL + '/new-sale/newsale/getinvoicedata';
     }

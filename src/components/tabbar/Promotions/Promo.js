@@ -46,10 +46,10 @@ class Promo extends Component {
             modalVisible: true,
             selectedPoolType: '',
             selectedStore: '',
-            doneButtonClicked:false,
-            enddoneButtonClicked:false,
-            startDate:"",
-            endDate:"",
+            doneButtonClicked: false,
+            enddoneButtonClicked: false,
+            startDate: "",
+            endDate: "",
             selectedstoreId: 0,
             uom: [],
             date: new Date(),
@@ -61,12 +61,14 @@ class Promo extends Component {
             domainId: 1,
             storeId: 1,
             storeNames: [],
-            poolsDelete:false,
-            promoDelete:false,
-            delelePromoId:0,
-            delelePromoIndex:0,
-            deletePoolId:0,
-            promoNamesArray:[],
+            poolsDelete: false,
+            promoDelete: false,
+            delelePromoId: 0,
+            delelePromoIndex: 0,
+            deletePoolId: 0,
+            promoNamesArray: [],
+            invoiceNumber:"",
+            loyaltyMobileNumber:"",
         }
     }
 
@@ -172,7 +174,7 @@ class Promo extends Component {
         this.setState({ loyaltyData: [] })
         this.setState({ loading: true })
         const params = {
-          
+
         }
         console.log(this.state.domainId)
         axios.get(PromotionsService.getLoyaltyPoints(),
@@ -185,10 +187,10 @@ class Promo extends Component {
                         for (let i = 0; i < len; i++) {
                             let number = res.data["result"][i]
                             this.state.loyaltyData.push(number)
-                            
-                           
-                            }
-                            this.setState({ loyaltyData: this.state.loyaltyData })
+
+
+                        }
+                        this.setState({ loyaltyData: this.state.loyaltyData })
                     }
                     return
                 }
@@ -218,7 +220,7 @@ class Promo extends Component {
                         for (let i = 0; i < len; i++) {
                             let number = res.data["result"]["promovo"][i]
                             this.state.promoNamesArray.push({ label: number.promotionName, value: number.promotionName })
-                            
+
                             if (this.state.promoactiveStatus === false) {
                                 if (number.isActive == false) {
                                     this.state.promoData.push(number)
@@ -244,30 +246,74 @@ class Promo extends Component {
             })
     };
 
+    getFilteredLoyaltyPoints = () => {
+        this.setState({ loyaltyData: [] })
+        this.setState({ loading: true })
+        if (this.state.invoiceNumber === "") {
+            this.state.invoiceNumber = null
+        }
+        if (this.state.loyaltyMobileNumber === "") {
+            this.state.loyaltyMobileNumber = null
+        }
+        if (this.state.invoiceNumber === "") {
+            alert('please Enter Invoice Number');
+        }
+        else if (this.state.loyaltyMobileNumber.length !== 10) {
+            alert('Please Enter A Valid 10 Digit Mobile Number');
+        }
+        const params = {
+            "invoiceNumber":this.state.invoiceNumber,
+            "mobileNumber" :this.state.loyaltyMobileNumber,
+        }
+        console.log(params)
+        this.setState({ loading: true })
+        axios.post(PromotionsService.searchLoyaltyPoints(),
+            params).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    this.setState({ loading: false })
+                    let len = res.data["result"].length;
+                    console.log(res.data["result"])
+                    if (len > 0) {
+                        for (let i = 0; i < len; i++) {
+                            let number = res.data["result"][i]
+                            this.state.loyaltyData.push(number)
+                            this.setState({ flagFilterLoyaltyOpen: false });
+                            this.setState({ modalVisible: false });
+                        }
+                        this.setState({ loyaltyData: this.state.loyaltyData })
+                    }
+                }
+            }).catch(() => {
+                this.setState({ loading: false })
+                alert('No Records Found')
+            })
+    }
+
+
     getFilteredpromotions = () => {
         this.setState({ promoData: [] })
         this.setState({ loading: true })
-        if(this.state.selectedPromotionName === ""){
+        if (this.state.selectedPromotionName === "") {
             this.state.selectedPromotionName = null
-         }
-         if(this.state.selectedStatus === ""){
-             this.state.selectedStatus = null
-          }
-          if(this.state.selectedStore === ""){
+        }
+        if (this.state.selectedStatus === "") {
+            this.state.selectedStatus = null
+        }
+        if (this.state.selectedStore === "") {
             this.state.selectedStore = null
-         }
-         if(this.state.startDate === ""){
+        }
+        if (this.state.startDate === "") {
             this.state.startDate = null
-         }
-         if(this.state.endDate === ""){
+        }
+        if (this.state.endDate === "") {
             this.state.endDate = null
-         }
+        }
         const params = {
             "startDate": this.state.startDate,
             "endDate": this.state.endDate,
-                "promotionName": this.state.selectedPromotionName,
-                "promotionStatus": this.state.selectedStatus,
-                "storeName": this.state.selectedStore,
+            "promotionName": this.state.selectedPromotionName,
+            "promotionStatus": this.state.selectedStatus,
+            "storeName": this.state.selectedStore,
         }
         console.log(params)
         this.setState({ loading: true })
@@ -290,17 +336,17 @@ class Promo extends Component {
                 this.setState({ loading: false })
                 alert('No Records Found')
             })
-        }
+    }
 
     getFilteredpools = () => {
         this.setState({ poolsData: [] })
         this.setState({ loading: true })
-        if(this.state.selectedcreatedBy === ""){
-           this.state.selectedcreatedBy = null
+        if (this.state.selectedcreatedBy === "") {
+            this.state.selectedcreatedBy = null
         }
-        if(this.state.selectedPoolType === ""){
+        if (this.state.selectedPoolType === "") {
             this.state.selectedPoolType = null
-         }
+        }
         const params = {
             "createdBy": this.state.selectedcreatedBy,
             "poolType": this.state.selectedPoolType,
@@ -313,7 +359,7 @@ class Promo extends Component {
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.setState({ loading: false })
                     let len = res.data.result.length;
-                 
+
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
                             let number = res.data.result[i]
@@ -397,6 +443,14 @@ class Promo extends Component {
 
     }
 
+    handleloyaltyMobileNumber = (value) => {
+        this.setState({ loyaltyMobileNumber: value });
+    }
+
+    handleInvoicenumber = (value) => {
+        this.setState({ invoiceNumber: value });
+    }
+
     filterAction() {
         this.setState({ selectedPromotionName: "" });
         this.setState({ selectedStatus: "" });
@@ -452,8 +506,8 @@ class Promo extends Component {
         });
     }
 
-    refteshLoyalty(){
-        this.getLoyaltyPoints()  
+    refteshLoyalty() {
+        this.getLoyaltyPoints()
     }
     addStore() {
         this.setState({ selectedPromotionType: "" });
@@ -477,27 +531,27 @@ class Promo extends Component {
     }
 
     datepickerDoneClicked() {
-        if(parseInt(this.state.date.getDate()) < 10){
+        if (parseInt(this.state.date.getDate()) < 10) {
             this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() })
         }
-        else{
-            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })   
+        else {
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
         }
-   
+
         this.setState({ doneButtonClicked: true })
         //this.setState({date:this.state.})
         this.setState({ datepickerOpen: false })
         this.setState({ datepickerendOpen: false })
     }
 
-    datepickerendDoneClicked(){
-        if(parseInt(this.state.enddate.getDate()) < 10){
-            this.setState({ enddate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() })
+    datepickerendDoneClicked() {
+        if (parseInt(this.state.enddate.getDate()) < 10) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() })
         }
-        else{
-        this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+        else {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
         }
-        this.setState({ enddoneButtonClicked: true }) 
+        this.setState({ enddoneButtonClicked: true })
         this.setState({ datepickerOpen: false })
         this.setState({ datepickerendOpen: false })
     }
@@ -560,7 +614,7 @@ class Promo extends Component {
         this.getAllpools()
     }
 
-    refteshPromo(){
+    refteshPromo() {
         this.getAllPromotions()
     }
 
@@ -569,7 +623,7 @@ class Promo extends Component {
         this.getAllpools()
     }
 
-    updatePromotions(){
+    updatePromotions() {
         this.getAllPromotions()
     }
 
@@ -600,7 +654,7 @@ class Promo extends Component {
 
     }
 
-    applyFilterForPromotions(){
+    applyFilterForPromotions() {
         this.getFilteredpromotions()
         this.setState({ modalVisible: false });
     }
@@ -649,7 +703,7 @@ class Promo extends Component {
         this.setState({ delelePromoIndex: item.delelePromoIndex });
         this.setState({ promoDelete: true });
         this.setState({ modalVisible: true });
-        
+
     }
 
     handlepooleditaction = (item, index) => {
@@ -661,10 +715,10 @@ class Promo extends Component {
 
     handleeditpromoaction = (item, index) => {
         this.props.navigation.navigate('AddPromo'
-        , {
-            item: item,isEdit:true,
-            onGoBack: () => this.updatePromotions(),
-        });
+            , {
+                item: item, isEdit: true,
+                onGoBack: () => this.updatePromotions(),
+            });
     }
 
     getStoreId = (item) => {
@@ -678,7 +732,7 @@ class Promo extends Component {
                 console.log('store id is' + this.state.selectedstoreId)
             }
             else {
-             
+
                 alert("id not found");
             }
         }
@@ -715,7 +769,7 @@ class Promo extends Component {
                     this.setState({ loading: false })
                     this.setState({ flagAddPromo: false });
                     this.setState({ modalVisible: false });
-                   
+
                 }
                 else {
                     this.setState({ loading: false })
@@ -1001,85 +1055,85 @@ class Promo extends Component {
                                     </Text>
                                 </View>
 
-         {this.state.poolsDelete && (
-          <View>
-            <Modal isVisible={this.state.modalVisible}>
+                                {this.state.poolsDelete && (
+                                    <View>
+                                        <Modal isVisible={this.state.modalVisible}>
 
-              <View style={{
-                width: deviceWidth,
-                alignItems: 'center',
-                marginLeft: -20,
-                backgroundColor: "#ffffff",
-                height: 260,
-                position: 'absolute',
-                bottom: -20,
-              }}>
+                                            <View style={{
+                                                width: deviceWidth,
+                                                alignItems: 'center',
+                                                marginLeft: -20,
+                                                backgroundColor: "#ffffff",
+                                                height: 260,
+                                                position: 'absolute',
+                                                bottom: -20,
+                                            }}>
 
-              <Text style={{
-              position: 'absolute',
-              left: 20,
-              top: 15,
-              width: 300,
-              height: 20,
-              fontFamily: 'medium',
-              fontSize: 16,
-              color: '#353C40'
-            }}> Delete Pool </Text>
+                                                <Text style={{
+                                                    position: 'absolute',
+                                                    left: 20,
+                                                    top: 15,
+                                                    width: 300,
+                                                    height: 20,
+                                                    fontFamily: 'medium',
+                                                    fontSize: 16,
+                                                    color: '#353C40'
+                                                }}> Delete Pool </Text>
 
-              <TouchableOpacity style={{
-              position: 'absolute',
-              right: 20,
-              top: 7,
-              width: 50, height: 50,
-            }} onPress={() => this.modelCancel()}>
-              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
-              </TouchableOpacity>
+                                                <TouchableOpacity style={{
+                                                    position: 'absolute',
+                                                    right: 20,
+                                                    top: 7,
+                                                    width: 50, height: 50,
+                                                }} onPress={() => this.modelCancel()}>
+                                                    <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                                </TouchableOpacity>
 
-              <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-              </Text>
-              <Text style={{
-              position: 'absolute',
-              top: 70,
-              height: 20,
-              textAlign:'center',
-              fontFamily: 'regular',
-              fontSize: 18,
-              color: '#353C40'
-            }}> Are you sure want to delete pool?  </Text>
-              <TouchableOpacity
-              style={{
-              width: deviceWidth - 40,
-              marginLeft: 20,
-              marginRight: 20,
-              marginTop: 60,
-              height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-            }} onPress={() => this.deletePool(item, index)}
-              >
-              <Text style={{
-              textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-              fontFamily: "regular"
-            }}  > DELETE </Text>
+                                                <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                                </Text>
+                                                <Text style={{
+                                                    position: 'absolute',
+                                                    top: 70,
+                                                    height: 20,
+                                                    textAlign: 'center',
+                                                    fontFamily: 'regular',
+                                                    fontSize: 18,
+                                                    color: '#353C40'
+                                                }}> Are you sure want to delete pool?  </Text>
+                                                <TouchableOpacity
+                                                    style={{
+                                                        width: deviceWidth - 40,
+                                                        marginLeft: 20,
+                                                        marginRight: 20,
+                                                        marginTop: 60,
+                                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                    }} onPress={() => this.deletePool(item, index)}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > DELETE </Text>
 
-              </TouchableOpacity>
+                                                </TouchableOpacity>
 
-              <TouchableOpacity
-              style={{
-              width: deviceWidth - 40,
-              marginLeft: 20,
-              marginRight: 20,
-              marginTop: 20,
-              height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-            }} onPress={() => this.modelCancel()}
-              >
-              <Text style={{
-              textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-              fontFamily: "regular"
-            }}  > CANCEL </Text>
+                                                <TouchableOpacity
+                                                    style={{
+                                                        width: deviceWidth - 40,
+                                                        marginLeft: 20,
+                                                        marginRight: 20,
+                                                        marginTop: 20,
+                                                        height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                                    }} onPress={() => this.modelCancel()}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > CANCEL </Text>
 
-              </TouchableOpacity>
-              </View>
-            </Modal>
-          </View>)}
+                                                </TouchableOpacity>
+                                            </View>
+                                        </Modal>
+                                    </View>)}
 
                                 <TouchableOpacity
                                     style={item.isActive == true ? {
@@ -1219,10 +1273,10 @@ class Promo extends Component {
                                         {String(item.promotionName)}
                                     </Text>
 
-                                    <Text style={{ position:"absolute", fontSize: 12, right: 20, marginTop: 60, fontFamily: 'regular', color: '#808080' }}>
-                                    PRIORITY
+                                    <Text style={{ position: "absolute", fontSize: 12, right: 20, marginTop: 60, fontFamily: 'regular', color: '#808080' }}>
+                                        PRIORITY
                                     </Text>
-                                    <Text style={{ position:"absolute", fontSize: 12, right: 20, marginTop: 75, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ position: "absolute", fontSize: 12, right: 20, marginTop: 75, fontFamily: 'regular', color: '#353C40' }}>
                                         {String(item.priority)}
                                     </Text>
 
@@ -1243,10 +1297,10 @@ class Promo extends Component {
                                         STORE
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                          -
+                                        -
                                     </Text>
 
-                                   
+
                                 </View>
 
                                 <TouchableOpacity
@@ -1272,84 +1326,84 @@ class Promo extends Component {
                                 </TouchableOpacity>
 
                                 {this.state.promoDelete && (
-          <View>
-            <Modal isVisible={this.state.modalVisible}>
+                                    <View>
+                                        <Modal isVisible={this.state.modalVisible}>
 
-              <View style={{
-                width: deviceWidth,
-                alignItems: 'center',
-                marginLeft: -20,
-                backgroundColor: "#ffffff",
-                height: 260,
-                position: 'absolute',
-                bottom: -20,
-              }}>
+                                            <View style={{
+                                                width: deviceWidth,
+                                                alignItems: 'center',
+                                                marginLeft: -20,
+                                                backgroundColor: "#ffffff",
+                                                height: 260,
+                                                position: 'absolute',
+                                                bottom: -20,
+                                            }}>
 
-              <Text style={{
-              position: 'absolute',
-              left: 20,
-              top: 15,
-              width: 300,
-              height: 20,
-              fontFamily: 'medium',
-              fontSize: 16,
-              color: '#353C40'
-            }}> Delete Promotion </Text>
+                                                <Text style={{
+                                                    position: 'absolute',
+                                                    left: 20,
+                                                    top: 15,
+                                                    width: 300,
+                                                    height: 20,
+                                                    fontFamily: 'medium',
+                                                    fontSize: 16,
+                                                    color: '#353C40'
+                                                }}> Delete Promotion </Text>
 
-              <TouchableOpacity style={{
-              position: 'absolute',
-              right: 20,
-              top: 7,
-              width: 50, height: 50,
-            }} onPress={() => this.modelCancel()}>
-              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
-              </TouchableOpacity>
+                                                <TouchableOpacity style={{
+                                                    position: 'absolute',
+                                                    right: 20,
+                                                    top: 7,
+                                                    width: 50, height: 50,
+                                                }} onPress={() => this.modelCancel()}>
+                                                    <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                                </TouchableOpacity>
 
-              <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-              </Text>
-              <Text style={{
-              position: 'absolute',
-              top: 70,
-              height: 20,
-              textAlign:'center',
-              fontFamily: 'regular',
-              fontSize: 18,
-              color: '#353C40'
-            }}> Are you sure want to delete Promotion?  </Text>
-              <TouchableOpacity
-              style={{
-              width: deviceWidth - 40,
-              marginLeft: 20,
-              marginRight: 20,
-              marginTop: 60,
-              height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-            }} onPress={() => this.deletePromotion(item, index)}
-              >
-              <Text style={{
-              textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-              fontFamily: "regular"
-            }}  > DELETE </Text>
+                                                <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                                </Text>
+                                                <Text style={{
+                                                    position: 'absolute',
+                                                    top: 70,
+                                                    height: 20,
+                                                    textAlign: 'center',
+                                                    fontFamily: 'regular',
+                                                    fontSize: 18,
+                                                    color: '#353C40'
+                                                }}> Are you sure want to delete Promotion?  </Text>
+                                                <TouchableOpacity
+                                                    style={{
+                                                        width: deviceWidth - 40,
+                                                        marginLeft: 20,
+                                                        marginRight: 20,
+                                                        marginTop: 60,
+                                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                    }} onPress={() => this.deletePromotion(item, index)}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > DELETE </Text>
 
-              </TouchableOpacity>
+                                                </TouchableOpacity>
 
-              <TouchableOpacity
-              style={{
-              width: deviceWidth - 40,
-              marginLeft: 20,
-              marginRight: 20,
-              marginTop: 20,
-              height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-            }} onPress={() => this.modelCancel()}
-              >
-              <Text style={{
-              textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-              fontFamily: "regular"
-            }}  > CANCEL </Text>
+                                                <TouchableOpacity
+                                                    style={{
+                                                        width: deviceWidth - 40,
+                                                        marginLeft: 20,
+                                                        marginRight: 20,
+                                                        marginTop: 20,
+                                                        height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                                    }} onPress={() => this.modelCancel()}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > CANCEL </Text>
 
-              </TouchableOpacity>
-              </View>
-            </Modal>
-          </View>)}
+                                                </TouchableOpacity>
+                                            </View>
+                                        </Modal>
+                                    </View>)}
 
                                 <TouchableOpacity style={{
                                     position: 'absolute',
@@ -1394,7 +1448,7 @@ class Promo extends Component {
                         )}
                     />
                 )}
-                
+
                 {this.state.flagthree && (
 
                     <TouchableOpacity
@@ -1420,14 +1474,14 @@ class Promo extends Component {
                             }}>
                                 <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
                                     <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
-                                        Ramesh G
+                                        {item.customerName}
                                     </Text>
 
                                     <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
                                         MOBILE NUMBER
                                     </Text>
                                     <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                    {item.mobileNumber}
+                                        {item.mobileNumber}
                                     </Text>
 
 
@@ -1436,26 +1490,26 @@ class Promo extends Component {
                                         EXPIRY DATE
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                    {item.expiredDate}
+                                        {item.expiredDate}
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 250, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
                                         POINTS VALUE
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 250, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                    {item.loyaltyPoints}
+                                        {item.loyaltyPoints}
                                     </Text>
 
                                     <Text style={{ fontSize: 12, marginLeft: 250, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
                                         LOYALTY POINTS
                                     </Text>
                                     <Text style={{ fontSize: 12, marginLeft: 250, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
-                                     ₹ {item.invoiceAmount}
+                                        ₹ {item.invoiceAmount}
                                     </Text>
 
-                                    <Text style={{ position:"absolute", fontSize: 12, right: 60, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
-                                    INVOICE NUMBER
+                                    <Text style={{ position: "absolute", fontSize: 12, right: 60, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
+                                        INVOICE NUMBER
                                     </Text>
-                                    <Text style={{ position:"absolute", fontSize: 12, right: 60, marginTop: 35, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ position: "absolute", fontSize: 12, right: 60, marginTop: 35, fontFamily: 'regular', color: '#353C40' }}>
                                         {String(item.invoiceNumber)}
                                     </Text>
 
@@ -1516,7 +1570,7 @@ class Promo extends Component {
                                 alignItems: 'center',
                                 marginLeft: -20,
                                 backgroundColor: "#ffffff",
-                                height: 350,
+                                height: 400,
                                 position: 'absolute',
                                 bottom: -20,
                             }}>
@@ -1986,11 +2040,11 @@ class Promo extends Component {
                             </View>
                         </Modal>
                     </View>)}
-                    
-                    {this.state.flagFilterLoyaltyOpen && (
+
+                {this.state.flagFilterLoyaltyOpen && (
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
-                        
+
                             <View style={{
                                 width: deviceWidth,
                                 alignItems: 'center',
@@ -2002,7 +2056,7 @@ class Promo extends Component {
                             }}>
                                 <KeyboardAwareScrollView KeyboardAwareScrollView
                                     enableOnAndroid={true}>
-                                        <Text style={{
+                                    <Text style={{
                                         position: 'absolute',
                                         left: 20,
                                         top: 15,
@@ -2025,108 +2079,26 @@ class Promo extends Component {
                                     <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
                                     </Text>
                                     <View style={{ marginTop: 10, width: deviceWidth, }}>
-                                        <View style={{
-                                            justifyContent: 'center',
-                                            margin: 20,
-                                            height: 44,
-                                            marginTop: 5,
-                                            marginBottom: 10,
-                                            borderColor: '#8F9EB717',
-                                            borderRadius: 3,
-                                            backgroundColor: '#FBFBFB',
-                                            borderWidth: 1,
-                                            fontFamily: 'regular',
-                                            paddingLeft: 15,
-                                            fontSize: 14,
-                                        }} >
-                                            <RNPickerSelect style={{
-                                                color: '#8F9EB717',
-                                                fontWeight: 'regular',
-                                                fontSize: 15
-                                            }}
-                                                placeholder={{
-                                                    label: 'SELECT STORE',
+                                        <TextInput style={styles.input}
+                                            underlineColorAndroid="transparent"
+                                            placeholder="INVOICE NUMBER"
+                                            placeholderTextColor="#6F6F6F"
+                                            textAlignVertical="center"
+                                            autoCapitalize="none"
+                                            value={this.state.invoiceNumber}
+                                            onChangeText={this.handleInvoicenumber}
+                                        />
 
-                                                }}
-                                                Icon={() => {
-                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                                }}
-                                                items={this.state.createdByArray}
-                                                //onValueChange={this.handleCreatedBy}
-                                                style={pickerSelectStyles}
-                                                //value={this.state.selectedcreatedBy}
-                                                useNativeAndroidPickerStyle={false}
+                                        <TextInput style={styles.input}
+                                            underlineColorAndroid="transparent"
+                                            placeholder="MOBILE NUMBER"
+                                            placeholderTextColor="#6F6F6F"
+                                            textAlignVertical="center"
+                                            autoCapitalize="none"
+                                            value={this.state.loyaltyMobileNumber}
+                                            onChangeText={this.handleloyaltyMobileNumber}
+                                        />
 
-                                            />
-                                        </View>
-                                        <View style={{
-                                            justifyContent: 'center',
-                                            margin: 20,
-                                            height: 44,
-                                            marginTop: 5,
-                                            marginBottom: 10,
-                                            borderColor: '#8F9EB717',
-                                            borderRadius: 3,
-                                            backgroundColor: '#FBFBFB',
-                                            borderWidth: 1,
-                                            fontFamily: 'regular',
-                                            paddingLeft: 15,
-                                            fontSize: 14,
-                                        }} >
-                                            <RNPickerSelect style={{
-                                                color: '#8F9EB717',
-                                                fontWeight: 'regular',
-                                                fontSize: 15
-                                            }}
-                                                placeholder={{
-                                                    label: 'SELECT DISTRICT',
-
-                                                }}
-                                                Icon={() => {
-                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                                }}
-                                                items={this.state.createdByArray}
-                                                //onValueChange={this.handleCreatedBy}
-                                                style={pickerSelectStyles}
-                                                //value={this.state.selectedcreatedBy}
-                                                useNativeAndroidPickerStyle={false}
-
-                                            />
-                                        </View>
-                                        <View style={{
-                                            justifyContent: 'center',
-                                            margin: 20,
-                                            height: 44,
-                                            marginTop: 5,
-                                            marginBottom: 10,
-                                            borderColor: '#8F9EB717',
-                                            borderRadius: 3,
-                                            backgroundColor: '#FBFBFB',
-                                            borderWidth: 1,
-                                            fontFamily: 'regular',
-                                            paddingLeft: 15,
-                                            fontSize: 14,
-                                        }} >
-                                            <RNPickerSelect style={{
-                                                color: '#8F9EB717',
-                                                fontWeight: 'regular',
-                                                fontSize: 15
-                                            }}
-                                                placeholder={{
-                                                    label: 'SELECT STORE',
-
-                                                }}
-                                                Icon={() => {
-                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                                }}
-                                                items={this.state.createdByArray}
-                                                //onValueChange={this.handleCreatedBy}
-                                                style={pickerSelectStyles}
-                                                //value={this.state.selectedcreatedBy}
-                                                useNativeAndroidPickerStyle={false}
-
-                                            />
-                                        </View>
                                         <TouchableOpacity
                                             style={{
                                                 width: deviceWidth - 40,
@@ -2134,7 +2106,7 @@ class Promo extends Component {
                                                 marginRight: 20,
                                                 marginTop: 20,
                                                 height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                            }} //onPress={() => this.applyFilter()}
+                                            }} onPress={() => this.getFilteredLoyaltyPoints()}
                                         >
                                             <Text style={{
                                                 textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
@@ -2143,23 +2115,23 @@ class Promo extends Component {
 
                                         </TouchableOpacity>
 
-                                    <TouchableOpacity
-                                        style={{
-                                            width: deviceWidth - 40,
-                                            marginLeft: 20,
-                                            marginRight: 20,
-                                            marginTop: 20,
-                                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                        }} onPress={() => this.modelCancel()}
-                                    >
-                                        <Text style={{
-                                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                            fontFamily: "regular"
-                                        }}  > CANCEL </Text>
+                                        <TouchableOpacity
+                                            style={{
+                                                width: deviceWidth - 40,
+                                                marginLeft: 20,
+                                                marginRight: 20,
+                                                marginTop: 20,
+                                                height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                            }} onPress={() => this.modelCancel()}
+                                        >
+                                            <Text style={{
+                                                textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                                fontFamily: "regular"
+                                            }}  > CANCEL </Text>
 
-                                    </TouchableOpacity>
-                                        </View>
-                                    </KeyboardAwareScrollView>
+                                        </TouchableOpacity>
+                                    </View>
+                                </KeyboardAwareScrollView>
                             </View>
                         </Modal>
                     </View>

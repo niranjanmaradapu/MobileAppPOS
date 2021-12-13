@@ -13,9 +13,10 @@ class AddLoyalty extends Component {
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.camera = null;
         this.state = {
-            Name: '',
-            MobileNumber: '',
-            InvoiceNumber: 'KLM/202110/328433703',
+            name: '',
+            mobileNumber: '',
+            invoiceNumber: 'KLM/202110/328433703',
+            invocieDate:'',
             payableAmount: '',
             userId: '',
             domainId: 1,
@@ -35,15 +36,15 @@ class AddLoyalty extends Component {
     }
 
     handleName = (value) => {
-        this.setState({ Name: value })
+        this.setState({ name: value })
     }
 
     handleMobileNumber = (value) => {
-        this.setState({ MobileNumber: value })
+        this.setState({ mobileNumber: value })
     }
 
     handleInvoiceNumber = (value) => {
-        this.setState({ InvoiceNumber: value })
+        this.setState({ invoiceNumber: value })
     }
 
     handlePrice = (value) => {
@@ -65,13 +66,14 @@ class AddLoyalty extends Component {
     endEditing() {
    
         const params = {
-            "orderNumber": this.state.InvoiceNumber,
+            "orderNumber": this.state.invoiceNumber,
         }
         axios.get(PromotionsService.getInvoiceData(),
             { params }).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     console.log("end edited-------" + String(res.data["result"].netPayableAmount))
                     this.setState({ payableAmount:   String(res.data["result"].netPayableAmount) })
+                    this.setState({ invocieDate: res.data["result"].createdDate })
                     this.setState({ userId: String(res.data["result"].userId) })
                 }
                 return
@@ -84,19 +86,21 @@ class AddLoyalty extends Component {
 
 
 saveLoyalty() {
-    if (this.state.InvoiceNumber.length === 0) {
+    if (this.state.invoiceNumber.length === 0) {
         alert('please Enter A Valid Invoice Number');
     }
-    else if (String(this.state.Name).length === 0) {
+    else if (String(this.state.name).length === 0) {
         alert('Please Enter a Name');
-    } else if (this.state.MobileNumber.length !== 10) {
+    } else if (this.state.mobileNumber.length !== 10) {
         alert('Please Enter A Valid 10 Digit Mobile Number');
     } else {
         const params = {
             "userId": this.state.userId,
             "domainId":this.state.domainId,
-            "mobileNumber":this.state.MobileNumber,
-            "invoiceNumber": this.state.InvoiceNumber,
+            "mobileNumber":this.state.mobileNumber,
+            "customerName":this.state.name,
+            "invoiceCreatedDate":this.state.invocieDate,
+            "invoiceNumber": this.state.invoiceNumber,
             "invoiceAmount": this.state.payableAmount,
             "numberOfMonths":1
         }
@@ -107,6 +111,7 @@ saveLoyalty() {
         axios.post(PromotionsService.saveLoyaltyPoints(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 this.setState({ loading: false })
+                this.props.route.params.onGoBack();
                 this.props.navigation.goBack();
             }
             else {
@@ -155,7 +160,7 @@ render() {
                     placeholderTextColor="#6F6F6F"
                     textAlignVertical="center"
                     autoCapitalize="none"
-                    value={this.state.InvoiceNumber}
+                    value={this.state.invoiceNumber}
                     onChangeText={this.handleInvoiceNumber}
                     onEndEditing
                     onEndEditing={() => this.endEditing()}
@@ -167,7 +172,7 @@ render() {
                     placeholderTextColor="#6F6F6F"
                     textAlignVertical="center"
                     autoCapitalize="none"
-                    value={this.state.Name}
+                    value={this.state.name}
                     onChangeText={this.handleName}
                 />
                 <TextInput style={styles.input}
@@ -176,7 +181,7 @@ render() {
                     placeholderTextColor="#6F6F6F"
                     textAlignVertical="center"
                     autoCapitalize="none"
-                    value={this.state.MobileNumber}
+                    value={this.state.mobileNumber}
                     onChangeText={this.handleMobileNumber}
                 />
 
