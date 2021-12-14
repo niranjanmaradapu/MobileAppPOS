@@ -34,7 +34,7 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'vinodtest',
+            userName: 'vinod',
             password: 'Otsi@123',
             dropValue: '',
             store: 0,
@@ -76,6 +76,7 @@ export default class Login extends Component {
 
 
     login() {
+        AsyncStorage.removeItem('tokenkey');
         if (this.state.userName.length === 0) {
             alert('You must enter a Usename');
         } else if (this.state.password.length === 0) {
@@ -122,7 +123,14 @@ export default class Login extends Component {
                     }).catch(() => {
                         console.log('there is error saving domainDataId')
                     })
-                    this.getstores()
+                    AsyncStorage.getItem("tokenkey").then((value) => {
+                        var finalToken = value.replace('"', '');
+                        console.log(finalToken);
+                        axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken }
+                        this.getstores()
+                        console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
+                    })
+                   
                     this.setState({ loading: false })
                 }
                 else {
@@ -135,6 +143,29 @@ export default class Login extends Component {
             }
             );
         }
+    }
+
+    async getStoreId() {
+        const params = {
+            "storeName": this.state.storeNames[0],
+        }
+        AsyncStorage.setItem("storeName", this.state.storeNames[0]).then(() => {
+        }).catch(() => {
+            console.log('there is error saving storeName')
+        })
+        axios.post(LoginService.getStoreIdWithStoreName(), params).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+                console.log('dsgsdgsdg' + String(res.data["result"][0].id))
+                AsyncStorage.setItem("storeId", String(res.data["result"][0].id)).then(() => {
+                }).catch(() => {
+                    console.log('there is error saving storeId')
+                })
+            }
+            else {
+                alert("id not found");
+            }
+        }
+        )
     }
 
     async getstores() {
@@ -155,6 +186,7 @@ export default class Login extends Component {
             })
             console.log('stores are--' + this.state.storeNames)
             if (this.state.storeNames.length === 1) {
+                this.getStoreId()
                 AsyncStorage.setItem("storeName", this.state.storeNames[0]).then(() => {
                 }).catch(() => {
                     console.log('there is error saving storeName')

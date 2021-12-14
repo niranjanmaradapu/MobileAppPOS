@@ -13,6 +13,10 @@ class BottomTabBar extends Component {
   render() {
     return (
       <Tab.Navigator
+      tabBarOptions={{
+        keyboardHidesTabBar: true
+     }}   
+     
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
@@ -38,7 +42,7 @@ class BottomTabBar extends Component {
           // tabBarLabel:() => {return null},
         })}
       >
-        <Tab.Screen name="HOME" title='Home' options={{ headerShown: false }} component={HomeNav} />
+        <Tab.Screen name="HOME" title='Home' options={{ headerShown: false }} component={HomeNav}  />
         <Tab.Screen name="KATHABOOK" options={{ headerShown: false }} component={KathaBook} />
         <Tab.Screen name="NEW SALE" options={{ headerShown: false, unmountOnBlur: true }} component={NewSaleNavigation} />
         <Tab.Screen name="PROMO" options={{ headerShown: false }} component={PromoNavigation} />

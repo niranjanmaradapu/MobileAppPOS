@@ -8,6 +8,9 @@ import Loader from '../../loader';
 import PromotionsService from '../../services/PromotionsService';
 import axios from 'axios';
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }, { key: 5 }];
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NewSaleService from '../../services/NewSaleService';
+import RazorpayCheckout from 'react-native-razorpay';
 
 
 class Payment extends Component {
@@ -29,8 +32,52 @@ class Payment extends Component {
             totalDiscount: "",
             recievedAmount: "",
             verifiedCash: "",
+            domainId: 1,
+            storeId: 1,
+            customerName: '',
+            customerPhoneNumber: '',
+            customerGSTNumber: '',
+            customerAddress: '',
+            customerGender: '',
+            lineItemIdAdd: '',
+            totalQty: 0,
+            notfound: '',
         }
     }
+
+    async componentDidMount() {
+        var domainStringId = ""
+        var storeStringId = ""
+        AsyncStorage.getItem("domainDataId").then((value) => {
+            domainStringId = value
+            this.setState({ domainId: parseInt(domainStringId) })
+            console.log("domain data id" + this.state.domainId)
+
+        }).catch(() => {
+            console.log('there is error getting domainDataId')
+        })
+
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value
+            this.setState({ storeId: parseInt(storeStringId) })
+            console.log(this.state.storeId)
+        }).catch(() => {
+            console.log('there is error getting storeId')
+        })
+        console.log(this.props.route.params.totalAmount)
+        this.setState({ totalAmount: this.props.route.params.totalAmount })
+        this.setState({ totalDiscount: this.props.route.params.totalDiscount })
+        this.setState({ customerName: this.props.route.params.customerName })
+        this.setState({ customerPhoneNumber: this.props.route.params.customerPhoneNumber })
+        this.setState({ customerGSTNumber: this.props.route.params.customerGSTNumber })
+        this.setState({ customerAddress: String(this.props.route.params.customerAddress) })
+        this.setState({ customerGender: this.props.route.params.customerGender })
+        this.setState({ lineItemIdAdd: this.props.route.params.lineItemIdAdd })
+        this.setState({ totalQty: this.props.route.params.totalQty })
+
+
+    }
+
 
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
@@ -107,205 +154,152 @@ class Payment extends Component {
         this.setState({ giftvoucher: this.state.promocode })
     }
 
-    payCash = () => {
-        var lineItems = []
-        var lineItemIds = []
+    clearTaggedCustomer() {
+        this.setState({ mobileNumber: "" })
+        this.setState({ loyaltyPoints: "" })
+        this.setState({ notfound: "" })
+    }
 
+    clearPromocode(){
+        this.setState({ giftvoucher: "" })
+        this.setState({ promocode: "" })
+    }
 
-        for (let i = 0; i < this.state.tableData.length; i++) {
-            lineItems.push({
-                itemPrice: this.state.tableData[i].netamount,
-                quantity: this.state.tableData[i].qty,
-                discount: this.state.tableData[i].promoDisc,
-                netValue: this.state.tableData[i].netamount - this.state.tableData[i].promoDisc,
-                barCode: this.state.tableData[i].barcode,
-                domainId: this.state.domainId,
-            })
-        }
-        this.setState({ loading: true })
-        // const params = lineItems
-        console.log(lineItems);
-        console.log('params are' + JSON.stringify(lineItems))
-        this.setState({ loading: true })
-        axios.post(NewSaleService.saveLineItems(), lineItems).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                lineItemIds.push(JSON.parse(res.data["result"]))
-                // 
-                console.log(lineItemIds + `line items saved successfully`);
-                var lineItemIdAdd = []
-                for (let i = 0; i < lineItemIds[0].length; i++) {
-                    lineItemIdAdd.push({ lineItemId: lineItemIds[0][i] })
-                }
-
-                const params = {
-                    "natureOfSale": "InStore",
-                    "domainId": this.state.domainId,
-                    "storeId": this.state.storeId,
-                    "grossAmount": this.state.totalAmount,
-                    "totalPromoDisc": this.state.totalDiscount,
-                    "taxAmount": 0,
-                    "totalManualDisc": 0,
-                    "discApprovedBy": null,
-                    "discType": null,
-                    "approvedBy": 5218,
-                    "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
-                    "offlineNumber": null,
-                    "paymentAmountType": [
-                        {
-                            "paymentAmount": this.state.totalAmount - this.state.totalDiscount,
-                            "paymentType": "Cash"
-                        }],
-                    "customerDetails": {
-                        "name": this.state.customerName,
-                        "mobileNumber": this.state.customerPhoneNumber,
-                        "gstNumber": this.state.customerGSTNumber,
-                        "address": this.state.customerAddress,
-                        "gender": this.state.customerAddress,
-                        "altMobileNo": "",
-                        "dob": ""
-                    },
-                    "dlSlip": [],
-                    "lineItemsReVo": lineItemIdAdd
-                }
-
-                console.log(params)
-
-                axios.post(NewSaleService.createOrder(), params).then((res) => {
-                    if (res.data && res.data["isSuccess"] === "true") {
-                        this.setState({ tableData: [] })
-                        alert("Order created " + res.data["result"]);
-                        this.setState({ loading: false })
-                    }
-                    else {
-                        this.setState({ loading: false })
-                        alert("duplicate record already exists");
-                    }
-                }
-                )
-            }
-
-            else {
-                this.setState({ loading: false })
-                alert("duplicate record already exists");
-            }
-        }
-        );
+    clearCashSammary(){
+        this.setState({ verifiedCash: "" })
+        this.setState({ recievedAmount: "" })
     }
 
     pay = () => {
-        var lineItems = []
-        var lineItemIds = []
+        if (this.state.flagOne === true) {
+            const params = {
+                "natureOfSale": "InStore",
+                "domainId": this.state.domainId,
+                "storeId": this.state.storeId,
+                "grossAmount": this.state.totalAmount,
+                "totalPromoDisc": this.state.totalDiscount,
+                "taxAmount": 0,
+                "totalManualDisc": 0,
+                "discApprovedBy": null,
+                "discType": null,
+                "approvedBy": 5218,
+                "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
+                "offlineNumber": null,
+                "paymentAmountType": [
+                    {
+                        "paymentAmount": this.state.totalAmount - this.state.totalDiscount,
+                        "paymentType": "Cash"
+                    }],
+                "customerDetails": {
+                    "name": this.state.customerName,
+                    "mobileNumber": this.state.customerPhoneNumber,
+                    "gstNumber": this.state.customerGSTNumber,
+                    "address": this.state.customerAddress,
+                    "gender": this.state.customerAddress,
+                    "altMobileNo": "",
+                    "dob": ""
+                },
+                "dlSlip": [],
+                "lineItemsReVo": this.state.lineItemIdAdd
+            }
 
+            console.log(params)
 
-        for (let i = 0; i < this.state.tableData.length; i++) {
-            lineItems.push({
-                itemPrice: this.state.tableData[i].netamount,
-                quantity: this.state.tableData[i].qty,
-                discount: this.state.tableData[i].promoDisc,
-                netValue: this.state.tableData[i].netamount - this.state.tableData[i].promoDisc,
-                barCode: this.state.tableData[i].barcode,
-                domainId: this.state.domainId,
-            })
+            axios.post(NewSaleService.createOrder(), params).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    alert("Order created " + res.data["result"]);
+                    console.log(res.data["result"])
+                    this.setState({ loading: false })
+                }
+                else {
+                    this.setState({ loading: false })
+                    alert("duplicate record already exists");
+                }
+            }
+            )
         }
-        this.setState({ loading: true })
-        // const params = lineItems
-        console.log(lineItems);
-        console.log('params are' + JSON.stringify(lineItems))
-        this.setState({ loading: true })
-        axios.post(NewSaleService.saveLineItems(), lineItems).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                lineItemIds.push(JSON.parse(res.data["result"]))
-                // 
-                console.log(lineItemIds + `line items saved successfully`);
-                var lineItemIdAdd = []
-                for (let i = 0; i < lineItemIds[0].length; i++) {
-                    lineItemIdAdd.push({ lineItemId: lineItemIds[0][i] })
-                }
-                const params = {
-                    "natureOfSale": "InStore",
-                    "domainId": this.state.domainId,
-                    "storeId": this.state.storeId,
-                    "grossAmount": this.state.totalAmount,
-                    "totalPromoDisc": this.state.totalDiscount,
-                    "taxAmount": 0,
-                    "totalManualDisc": 0,
-                    "discApprovedBy": null,
-                    "discType": null,
-                    "approvedBy": 5218,
-                    "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
-                    "offlineNumber": null,
-                    "customerDetails": {
-                        "name": this.state.customerName,
-                        "mobileNumber": this.state.customerPhoneNumber,
-                        "gstNumber": this.state.customerGSTNumber,
-                        "address": this.state.customerAddress,
-                        "gender": this.state.customerAddress,
-                        "altMobileNo": "",
-                        "dob": ""
-                    },
-                    "dlSlip": [],
-                    "lineItemsReVo": lineItemIdAdd
-                }
-                console.log(params)
-                axios.post(NewSaleService.createOrder(), params).then((res) => {
-                    if (res.data && res.data["isSuccess"] === "true") {
-                        this.setState({ tableData: [] })
-                        // alert("Order created " + res.data["result"]);
-                        const params = {
-                            "amount": JSON.stringify(this.state.totalAmount - this.state.totalDiscount),
-                            "info": "order creations",
-                            "newsaleId": res.data["result"],
+        else if (this.state.flagTwo === true) {
+            const params = {
+                "natureOfSale": "InStore",
+                "domainId": this.state.domainId,
+                "storeId": this.state.storeId,
+                "grossAmount": this.state.totalAmount,
+                "totalPromoDisc": this.state.totalDiscount,
+                "taxAmount": 0,
+                "totalManualDisc": 0,
+                "discApprovedBy": null,
+                "discType": null,
+                "approvedBy": 5218,
+                "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
+                "offlineNumber": null,
+                "customerDetails": {
+                    "name": this.state.customerName,
+                    "mobileNumber": this.state.customerPhoneNumber,
+                    "gstNumber": this.state.customerGSTNumber,
+                    "address": this.state.customerAddress,
+                    "gender": this.state.customerGender,
+                    "altMobileNo": "",
+                    "dob": ""
+                },
+                "dlSlip": [],
+                "lineItemsReVo": this.state.lineItemIdAdd
+            }
+            console.log(params)
+            axios.post(NewSaleService.createOrder(), params).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    // alert("Order created " + res.data["result"]);
+                    const params = {
+                        "amount": JSON.stringify(this.state.totalAmount - this.state.totalDiscount),
+                        "info": "order creations",
+                        "newsaleId": res.data["result"],
+                    }
+
+                    axios.post(NewSaleService.payment(), params).then((res) => {
+                        // this.setState({isPayment: false});
+                        const data = JSON.parse(res.data["result"])
+                        //console.log()
+                        var options = {
+                            description: 'Transaction',
+                            image: 'https://i.imgur.com/3g7nmJC.png',
+                            currency: data.currency,
+                            order_id: data.id,
+                            key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
+                            amount: data.amount,
+                            name: 'OTSI',
+                            prefill: {
+                                name: "Kadali",
+                                email: "kadali@gmail.com",
+                                contact: "9999999999",
+                            },
+                            theme: { color: '#F37254' }
                         }
-
-                        axios.post(NewSaleService.payment(), params).then((res) => {
-                            // this.setState({isPayment: false});
-                            const data = JSON.parse(res.data["result"])
-                            //console.log()
-                            var options = {
-                                description: 'Transaction',
-                                image: 'https://i.imgur.com/3g7nmJC.png',
-                                currency: data.currency,
-                                order_id: data.id,
-                                key: 'rzp_test_z8jVsg0bBgLQer', // Your api key
-                                amount: data.amount,
-                                name: 'OTSI',
-                                prefill: {
-                                    name: "Kadali",
-                                    email: "kadali@gmail.com",
-                                    contact: "9999999999",
-                                },
-                                theme: { color: '#F37254' }
-                            }
-                            console.log(options)
-                            RazorpayCheckout.open(options).then((data) => {
-                                // handle success
-                                this.setState({ tableData: [] })
-                                alert(`Success: ${data.razorpay_payment_id}`);
-                                this.props.navigation.navigate('Home')
-                                //this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
-                            }).catch((error) => {
-                                console.log(error)
-                                // handle failure
-                                alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
-                            });
-                        })
-                        this.setState({ loading: false })
-                    }
-                    else {
-                        this.setState({ loading: false })
-                        alert("duplicate record already exists");
-                    }
+                        console.log(options)
+                        RazorpayCheckout.open(options).then((data) => {
+                            // handle success
+                            this.setState({ tableData: [] })
+                            alert(`Success: ${data.razorpay_payment_id}`);
+                            this.props.navigation.navigate('Home')
+                            //this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
+                        }).catch((error) => {
+                            console.log(error)
+                            // handle failure
+                            alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
+                        });
+                    })
+                    this.setState({ loading: false })
                 }
-                )
+                else {
+                    this.setState({ loading: false })
+                    alert("duplicate record already exists");
+                }
             }
-
-            else {
-                this.setState({ loading: false })
-                alert("duplicate record already exists");
-            }
+            )
         }
-        );
+        else {
+            alert('Payment for this tab implementation inprogress')
+        }
     }
+
 
     verifyCustomer() {
         this.setState({ loyaltyPoints: '' })
@@ -335,7 +329,8 @@ class Payment extends Component {
                 }
             }).catch(() => {
                 this.setState({ loading: false })
-                // alert('No Records Found')
+                //  alert('No Records Found')
+                this.setState({ notfound: "not found" })
             })
     }
 
@@ -503,6 +498,13 @@ class Payment extends Component {
                             ListFooterComponent={<View style={{ width: 15 }}></View>}
                         />
                         <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 10 }}> {('HAVE A PROMO CODE ?')} </Text>
+                        {this.state.giftvoucher !== "" && (
+                        <TouchableOpacity
+                            style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
+                            onPress={() => this.clearPromocode()} >
+                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
+                        </TouchableOpacity>
+                        )}
                         {/* {this.state.loyaltyPoints !== "" && (
                               <TouchableOpacity 
                               onPress={() => this.applyPromocode()} >
@@ -550,6 +552,24 @@ class Payment extends Component {
 
 
                         <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 10 }}> {('ARE YOU A TAGGED CUSTOMER ?')} </Text>
+                        {this.state.loyaltyPoints !== "" && (
+                        <TouchableOpacity
+                            style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
+                            onPress={() => this.clearTaggedCustomer()} >
+                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
+                        </TouchableOpacity>
+                        )}
+
+                    {this.state.notfound === "not found"  && (
+                        <TouchableOpacity
+                            style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
+                            onPress={() => this.clearTaggedCustomer()} >
+                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
+                        </TouchableOpacity>
+                        )}
+                       
+
+
                         <TextInput style={styles.input}
                             underlineColorAndroid="transparent"
                             placeholder="+91 Enter mobile number"
@@ -576,6 +596,17 @@ class Payment extends Component {
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('VERIFY')} </Text>
                             </TouchableOpacity>
                         )}
+                        {this.state.notfound === "not found" && this.state.giftvoucher === "" && (
+                            <TouchableOpacity
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 260, position: 'absolute', right: 10 }}
+                            >
+                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../../assets/images/notapplied.png')} />
+
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('NO RECORDS')} </Text>
+
+                            </TouchableOpacity>
+                        )}
+
                         {this.state.loyaltyPoints !== "" && this.state.giftvoucher === "" && (
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 260, position: 'absolute', right: 10 }}
@@ -583,6 +614,17 @@ class Payment extends Component {
                                 <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
 
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
+
+                            </TouchableOpacity>
+                        )}
+
+                        {this.state.notfound === "not found" && this.state.giftvoucher !== "" && (
+                            <TouchableOpacity
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 285, position: 'absolute', right: 10 }}
+                            >
+                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../../assets/images/notapplied.png')} />
+
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('NO RECORDS')} </Text>
 
                             </TouchableOpacity>
                         )}
@@ -606,7 +648,16 @@ class Payment extends Component {
                         )}
                         {this.state.flagOne === true && (
                             <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 10 }}> {('CASH SUMMARY')} </Text>
+                           
                         )}
+                        {this.state.flagOne === true && this.state.verifiedCash !== ""  &&  (
+                         <TouchableOpacity
+                            style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
+                            onPress={() => this.clearCashSammary()} >
+                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
+                        </TouchableOpacity>
+                        )}
+
                         {this.state.flagOne === true && (
                             <TextInput style={styles.input}
                                 underlineColorAndroid="transparent"
@@ -646,7 +697,7 @@ class Payment extends Component {
                             </TouchableOpacity>
                         )}
 
-                {this.state.flagOne === true && this.state.giftvoucher === "" && this.state.loyaltyPoints !== "" && this.state.verifiedCash === "" && (
+                        {this.state.flagOne === true && this.state.giftvoucher === "" && this.state.loyaltyPoints !== "" && this.state.verifiedCash === "" && (
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 395, borderColor: "#ED1C24", borderWidth: 1, position: 'absolute', right: 10 }}
                                 onPress={() => this.verifycash()} >
@@ -655,51 +706,51 @@ class Payment extends Component {
                         )}
 
 
-{this.state.flagOne === true && this.state.giftvoucher === "" && this.state.loyaltyPoints === "" && this.state.verifiedCash !== "" && (
-                             <TouchableOpacity
-                             style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 335, position: 'absolute', right: 10 }}
-                         >
-                             <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+                        {this.state.flagOne === true && this.state.giftvoucher === "" && this.state.loyaltyPoints === "" && this.state.verifiedCash !== "" && (
+                            <TouchableOpacity
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 335, position: 'absolute', right: 10 }}
+                            >
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
 
-                             <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
 
-                         </TouchableOpacity>
+                            </TouchableOpacity>
                         )}
 
                         {this.state.flagOne === true && this.state.giftvoucher !== "" && this.state.loyaltyPoints !== "" && this.state.verifiedCash !== "" && (
-                           <TouchableOpacity
-                           style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 420, position: 'absolute', right: 10 }}
-                       >
-                           <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+                            <TouchableOpacity
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 420, position: 'absolute', right: 10 }}
+                            >
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
 
-                           <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
 
-                       </TouchableOpacity>
+                            </TouchableOpacity>
                         )}
 
                         {this.state.flagOne === true && this.state.giftvoucher !== "" && this.state.loyaltyPoints === "" && this.state.verifiedCash !== "" && (
-                           <TouchableOpacity
-                           style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 360, position: 'absolute', right: 10 }}
-                       >
-                           <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
-
-                           <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
-
-                       </TouchableOpacity>
-                        )}
-
-                {this.state.flagOne === true && this.state.giftvoucher === "" && this.state.loyaltyPoints !== "" && this.state.verifiedCash !== "" && (
                             <TouchableOpacity
-                            style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 395, position: 'absolute', right: 10 }}
-                        >
-                            <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 360, position: 'absolute', right: 10 }}
+                            >
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
 
-                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
 
-                        </TouchableOpacity>
+                            </TouchableOpacity>
                         )}
 
-                       
+                        {this.state.flagOne === true && this.state.giftvoucher === "" && this.state.loyaltyPoints !== "" && this.state.verifiedCash !== "" && (
+                            <TouchableOpacity
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 395, position: 'absolute', right: 10 }}
+                            >
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
+
+                            </TouchableOpacity>
+                        )}
+
+
 
                         {this.state.flagOne === true && this.state.verifiedCash !== "" && (
                             <View style={{ backgroundColor: '#ffffff', marginTop: 0 }}>
@@ -759,7 +810,7 @@ class Payment extends Component {
                             <View style={styles.TopcontainerforPay}>
                                 <TouchableOpacity
                                     style={styles.signInButton}
-                                    onPress={() => this.props.navigation.navigate('Payment')} >
+                                    onPress={() => this.pay()} >
 
                                     <Text style={styles.signInButtonText}> Pay </Text>
                                 </TouchableOpacity>
