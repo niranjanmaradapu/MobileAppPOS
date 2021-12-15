@@ -14,6 +14,11 @@ class LoginService {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/store/getStoresWithFilter';
     }
 
+    getDomains(){
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/client/getDomainsForClient/';
+    }
+    
+
     createUser() {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/createUser';
     }

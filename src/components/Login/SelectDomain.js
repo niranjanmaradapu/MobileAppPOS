@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
 import I18n, { getLanguages } from 'react-native-i18n';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 I18n.fallbacks = true;
 I18n.defaultLocale = 'en';
 const data = [{ key: "Textile", image: require("../assets/images/texttile.png") }, { key: "Retail", image: require("../assets/images/retaildomain.png") }, { key: "Admin", image: require("../assets/images/admin.png") }];
@@ -48,27 +49,27 @@ export default class SelectDomain extends React.Component {
     selectedLanguage = (item, index) => {
         console.log('-------ITEM TAPPED')
         this.setState({ selectedItem: index })
-        if (index == 0) {
-            AsyncStorage.setItem("domainDataId", ((item.index + 1)).toString()).then(() => {
-                // console.log
-            }).catch(() => {
-                console.log('there is error saving token')
-            })
-        }
-        else if (index == 1) {
-            AsyncStorage.setItem("domainDataId", ((item.index + 1)).toString()).then(() => {
-                // console.log
-            }).catch(() => {
-                console.log('there is error saving token')
-            })
-        }
-        else {
-            AsyncStorage.setItem("domainDataId", ((item.index + 1)).toString()).then(() => {
-                // console.log
-            }).catch(() => {
-                console.log('there is error saving token')
-            })
-        }
+        // if (index == 0) {
+        //     AsyncStorage.setItem("domainDataId", ((item.index + 1)).toString()).then(() => {
+        //         // console.log
+        //     }).catch(() => {
+        //         console.log('there is error saving token')
+        //     })
+        // }
+        // else if (index == 1) {
+        //     AsyncStorage.setItem("domainDataId", ((item.index + 1)).toString()).then(() => {
+        //         // console.log
+        //     }).catch(() => {
+        //         console.log('there is error saving token')
+        //     })
+        // }
+        // else {
+        //     AsyncStorage.setItem("domainDataId", ((item.index + 1)).toString()).then(() => {
+        //         // console.log
+        //     }).catch(() => {
+        //         console.log('there is error saving token')
+        //     })
+        // }
 
     };
 
@@ -79,9 +80,9 @@ export default class SelectDomain extends React.Component {
         return (
             <View style={styles.container}>
                 <View>
-                    <Image source={require('../assets/images/welcomeLogo.png')} style={styles.logoImage} />
+                    {/* <Image source={require('../assets/images/welcomeLogo.png')} style={styles.logoImage} /> */}
                     <Text style={{
-                        color: "#353C40", fontSize: 30, fontFamily: "bold", marginLeft: 20, marginTop: 20, flexDirection: 'column',
+                        color: "#353C40", fontSize: 30, fontFamily: "bold", marginLeft: 20, marginTop: 100, flexDirection: 'column',
                         justifyContent: 'center',
                     }}> {('Select Domain Type')} </Text>
                     <FlatList

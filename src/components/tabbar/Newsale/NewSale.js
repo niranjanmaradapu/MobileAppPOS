@@ -223,8 +223,9 @@ class NewSale extends Component {
     })
   }
 
-  updateLineItems() {
-
+  invoiceUpdate() {
+    this.setState({tableData:[]})
+  alert('payment created successfully')
   }
 
   pay = () => {
@@ -261,7 +262,7 @@ class NewSale extends Component {
           customerGSTNumber: this.state.customerGSTNumber, customerAddress: this.state.customerAddress,
           customerGender: this.state.customerGender, lineItemIdAdd: lineItemIdAdd,
           totalQty: this.state.totalQty.toString(),
-          onGoBack: () => this.updateLineItems(),
+          onGoBack: () => this.invoiceUpdate(),
         });
       }
 
@@ -279,7 +280,7 @@ class NewSale extends Component {
     this.setState({ search: null })
     NetInfo.addEventListener(state => {
       if (state.isConnected) {
-        axios.post(InventoryService.getAllBarcodes(), {}).then((res) => {
+        axios.post(InventoryService.getAllBarcodes(), {"storeId": this.state.storeId}).then((res) => {
           if (res.data && res.data["isSuccess"] === "true") {
             let len = res.data["result"].length;
             console.log("get products lenth" + len)

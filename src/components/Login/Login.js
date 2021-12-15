@@ -118,7 +118,14 @@ export default class Login extends Component {
                     // else if (jwt_decode(token)["custom:clientDomians"] === "3,") {
                     // this.getModel();
                     var domainArray = jwt_decode(token)["custom:clientDomians"].split(',');
+                    console.log('domainArray are' + domainArray)
                     AsyncStorage.setItem("domainDataId", domainArray[0]).then(() => {
+                        if (domainArray.length === 1) {
+                            this.getstores()
+                        }
+                        else{
+                            this.props.navigation.navigate('SelectDomain')
+                        }
                         // console.log
                     }).catch(() => {
                         console.log('there is error saving domainDataId')

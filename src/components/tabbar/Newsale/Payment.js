@@ -50,8 +50,9 @@ class Payment extends Component {
             customerEmail: '',
             flagCustomerOpen: false,
             flagredeem: false,
-            redeemedPints: "",
+            redeemedPints: "0",
             enterredeempoint:'',
+            promoDiscount:"0",
         }
     }
 
@@ -78,11 +79,11 @@ class Payment extends Component {
         this.setState({ totalAmount: this.props.route.params.totalAmount })
 
         this.setState({ totalDiscount: this.props.route.params.totalDiscount })
-        // this.setState({ customerName: this.props.route.params.customerName })
-        // this.setState({ customerPhoneNumber: this.props.route.params.customerPhoneNumber })
-        // this.setState({ customerGSTNumber: this.props.route.params.customerGSTNumber })
-        // this.setState({ customerAddress: String(this.props.route.params.customerAddress) })
-        // this.setState({ customerGender: this.props.route.params.customerGender })
+        this.setState({ customerName: this.props.route.params.customerName })
+        this.setState({ customerPhoneNumber: this.props.route.params.customerPhoneNumber })
+        this.setState({ customerGSTNumber: this.props.route.params.customerGSTNumber })
+        this.setState({ customerAddress: String(this.props.route.params.customerAddress) })
+        this.setState({ customerGender: this.props.route.params.customerGender })
         this.setState({ lineItemIdAdd: this.props.route.params.lineItemIdAdd })
         this.setState({ totalQty: this.props.route.params.totalQty })
     }
@@ -331,6 +332,8 @@ class Payment extends Component {
     applyPromocode() {
         // alert('promo code applied') 
         this.setState({ giftvoucher: this.state.promocode })
+        this.setState({ promoDiscount: "100" })
+        
     }
 
     applyRedem() {
@@ -364,6 +367,7 @@ class Payment extends Component {
     }
 
     clearPromocode() {
+        this.setState({ promoDiscount: "0" })
         this.setState({ giftvoucher: "" })
         this.setState({ promocode: "" })
     }
@@ -380,17 +384,17 @@ class Payment extends Component {
                 "domainId": 2,
                 "storeId": this.state.storeId,
                 "grossAmount": this.state.totalAmount,
-                "totalPromoDisc": this.state.totalDiscount,
+                "totalPromoDisc": (parseFloat(this.state.totalDiscount) + parseFloat(this.state.promoDiscount) + parseFloat(this.state.redeemedPints/10)).toString(),
                 "taxAmount": 0,
                 "totalManualDisc": 0,
                 "discApprovedBy": null,
                 "discType": null,
                 "approvedBy": 5218,
-                "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
+                "netPayableAmount":(parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints/10)).toString(),
                 "offlineNumber": null,
                 "paymentAmountType": [
                     {
-                        "paymentAmount": this.state.totalAmount - this.state.totalDiscount,
+                        "paymentAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints/10)).toString(),
                         "paymentType": "Cash"
                     }],
                 "customerDetails": {
@@ -410,8 +414,10 @@ class Payment extends Component {
 
             axios.post(NewSaleService.createOrder(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    alert("Order created " + res.data["result"]);
+                  //  alert("Order created " + res.data["result"]);
                     this.setState({ loading: false })
+                    this.props.route.params.onGoBack();
+                    this.props.navigation.goBack();
                 }
                 else {
                     this.setState({ loading: false })
@@ -426,13 +432,13 @@ class Payment extends Component {
                 "domainId": 2,
                 "storeId": this.state.storeId,
                 "grossAmount": this.state.totalAmount,
-                "totalPromoDisc": this.state.totalDiscount,
+                "totalPromoDisc": (parseFloat(this.state.totalDiscount) + parseFloat(this.state.promoDiscount) + parseFloat(this.state.redeemedPints/10)).toString(),
                 "taxAmount": 0,
                 "totalManualDisc": 0,
                 "discApprovedBy": null,
                 "discType": null,
                 "approvedBy": 5218,
-                "netPayableAmount": this.state.totalAmount - this.state.totalDiscount,
+                "netPayableAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints/10)).toString(),
                 "offlineNumber": null,
                 "customerDetails": {
                     "name": this.state.customerName,
@@ -451,7 +457,7 @@ class Payment extends Component {
                 if (res.data && res.data["isSuccess"] === "true") {
                     alert("Order created " + res.data["result"]);
                     const params = {
-                        "amount": JSON.stringify(this.state.totalAmount - this.state.totalDiscount),
+                        "amount": JSON.stringify((parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints/10)).toString()),
                         "info": "order creations",
                         "newsaleId": res.data["result"],
                     }
@@ -480,7 +486,8 @@ class Payment extends Component {
                             // handle success
                             this.setState({ tableData: [] })
                             alert(`Success: ${data.razorpay_payment_id}`);
-                            this.props.navigation.navigate('Home')
+                            this.props.route.params.onGoBack();
+                            this.props.navigation.goBack();
                             //this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
                         }).catch((error) => {
                             console.log(error)
@@ -802,21 +809,21 @@ class Payment extends Component {
                             </TouchableOpacity>
                         )}
 
-                        {this.state.loyaltyPoints !== "" && this.state.redeemedPints === "" && (
+                        {this.state.loyaltyPoints !== "" && this.state.redeemedPints === "0" && (
                             <View style={{ backgroundColor: '#ffffff', marginTop: 0 }}>
                                 <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10 }}> LOYALTY POINTS  {this.state.loyaltyPoints} </Text>
-                                <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10, marginBottom: 10 }}> VALUE  {(parseInt(this.state.loyaltyPoints) / 100).toString()} </Text>
+                                <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10, marginBottom: 10 }}> VALUE  {(parseInt(this.state.loyaltyPoints) /10).toString()} </Text>
                             </View>
                         )}
 
-                        {this.state.redeemedPints !== "" && (
+                        {this.state.redeemedPints !== "0" && (
                             <View style={{ backgroundColor: '#ffffff', marginTop: 0 }}>
                                 <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10 }}> REDEEMED POINTS   {this.state.redeemedPints} </Text>
                                 <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10, marginBottom: 10 }}> REMAINING POINTS  {(parseInt(this.state.loyaltyPoints - this.state.redeemedPints)).toString()} </Text>
                             </View>
                         )}
 
-                        {this.state.loyaltyPoints !== "" && this.state.redeemedPints !== "" && (
+                        {this.state.loyaltyPoints !== "" && this.state.redeemedPints !== "0" && (
                             <View style={{ backgroundColor: '#ffffff', marginTop: 0 }}>
                             <TouchableOpacity
                                 style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -40 }}
@@ -826,7 +833,7 @@ class Payment extends Component {
                             </View>
                         )}
 
-                        {this.state.loyaltyPoints !== "" && this.state.redeemedPints === "" && (
+                        {this.state.loyaltyPoints !== "" && this.state.redeemedPints === "0" && (
                             <View style={{ height: 0, backgroundColor: "#ffffff", }}>
                                 {/* <View style={{ height: 1, backgroundColor: "#22222240",marginTop:-20, }}> */}
 
@@ -1263,7 +1270,7 @@ class Payment extends Component {
                         <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 10 }}> {('PRICE SUMMARY')} </Text>
 
 
-                        <View style={{ width: deviceWidth, height: 220, backgroundColor: '#FFFFFF', marginTop: 10, }}>
+                        <View style={{ width: deviceWidth, height: 290, backgroundColor: '#FFFFFF', marginTop: 10, }}>
                             <Text style={{
                                 color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                 fontSize: 14, position: 'absolute',
@@ -1288,22 +1295,44 @@ class Payment extends Component {
                                 color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 90, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                 fontSize: 14, position: 'absolute',
                             }}>
-                                Promo Discount </Text>
+                                Product Discount </Text>
                             <Text style={{
                                 color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 90, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                 fontSize: 14, position: 'absolute',
                             }}>
                                 ₹  {this.state.totalDiscount} </Text>
+                                <Text style={{
+                                color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 120, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                fontSize: 14, position: 'absolute',
+                            }}>
+                                Promo Discount </Text>
                             <Text style={{
-                                color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 120, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                fontSize: 14, position: 'absolute',
+                            }}>
+                                ₹  {this.state.promoDiscount} </Text>
+
+                                <Text style={{
+                                color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 150, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                fontSize: 14, position: 'absolute',
+                            }}>
+                                Points Redemption({this.state.redeemedPints}) </Text>
+                            <Text style={{
+                                color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 150, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                fontSize: 14, position: 'absolute',
+                            }}>
+                                ₹  {(parseInt(this.state.redeemedPints)/10).toString()} </Text>
+
+                            <Text style={{
+                                color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                 fontSize: 20, position: 'absolute',
                             }}>
                                 Payable Amount </Text>
                             <Text style={{
-                                color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                 fontSize: 20, position: 'absolute',
                             }}>
-                                ₹ {(parseInt(this.state.totalAmount) - parseInt(this.state.totalDiscount)).toString()} </Text>
+                                ₹ {(parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints/10)).toString()} </Text>
 
                             <View style={styles.TopcontainerforPay}>
                                 <TouchableOpacity
