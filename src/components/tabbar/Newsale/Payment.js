@@ -11,7 +11,11 @@ const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }, { key: 5 }];
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NewSaleService from '../../services/NewSaleService';
 import RazorpayCheckout from 'react-native-razorpay';
-
+import Modal from "react-native-modal";
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import RNPickerSelect from 'react-native-picker-select';
+import { Chevron } from 'react-native-shapes';
+import LoginService from '../../services/LoginService';
 
 class Payment extends Component {
     constructor(props) {
@@ -40,8 +44,14 @@ class Payment extends Component {
             customerAddress: '',
             customerGender: '',
             lineItemIdAdd: '',
+            modalVisible: true,
             totalQty: 0,
             notfound: '',
+            customerEmail: '',
+            flagCustomerOpen: false,
+            flagredeem: false,
+            redeemedPints: "",
+            enterredeempoint:'',
         }
     }
 
@@ -66,17 +76,140 @@ class Payment extends Component {
         })
         console.log(this.props.route.params.totalAmount)
         this.setState({ totalAmount: this.props.route.params.totalAmount })
+
         this.setState({ totalDiscount: this.props.route.params.totalDiscount })
-        this.setState({ customerName: this.props.route.params.customerName })
-        this.setState({ customerPhoneNumber: this.props.route.params.customerPhoneNumber })
-        this.setState({ customerGSTNumber: this.props.route.params.customerGSTNumber })
-        this.setState({ customerAddress: String(this.props.route.params.customerAddress) })
-        this.setState({ customerGender: this.props.route.params.customerGender })
+        // this.setState({ customerName: this.props.route.params.customerName })
+        // this.setState({ customerPhoneNumber: this.props.route.params.customerPhoneNumber })
+        // this.setState({ customerGSTNumber: this.props.route.params.customerGSTNumber })
+        // this.setState({ customerAddress: String(this.props.route.params.customerAddress) })
+        // this.setState({ customerGender: this.props.route.params.customerGender })
         this.setState({ lineItemIdAdd: this.props.route.params.lineItemIdAdd })
         this.setState({ totalQty: this.props.route.params.totalQty })
-
-
     }
+
+
+    addCustomer() {
+        if (this.state.customerPhoneNumber.length != 10) {
+            alert('Please Enter valid mobile number');
+            return
+        }
+        else if (this.state.customerName.length === 0) {
+            alert('Please Enter customer name');
+            return
+        }
+        // else if (this.state.customerGender.length === 0) {
+        //   alert('Please Enter customer gender');
+        //   return
+        // }
+        // else if (this.state.customerAddress.length === 0) {
+        //   alert('Please Enter customer address');
+        //   return
+        // }
+        // else if (this.state.customerGSTNumber.length === 0) {
+        //   alert('Please Enter customer GST Number');
+        //   return
+        // }
+        // {
+        //   "email":"manideep6067@gmail.com",	
+        //   "phoneNumber":"8466043603",
+        //   "birthDate":"07-03-1995",
+        //   "gender":"male",
+        //   "name":"vinod",
+        //   "username":"Mani_123451",
+        //   "parentId":"1",
+        //   "domianId":"0",
+        //   "address":"Katrenikona",
+        //   "isCustomer":true,
+        //   "isSuperAdmin":false,
+        //   "stores":[
+
+        //   ],
+        //   "role":{
+        //   },
+        //   "clientId":"",
+        //   "isConfigUser":false,
+        //   "clientDomain":[]
+        //   }
+        const params = {
+            "email": this.state.customerEmail,
+            "phoneNumber": this.state.customerPhoneNumber,
+            "birthDate": "",
+            "gender": this.state.customerGender,
+            "name": this.state.customerName,
+            "username": this.state.customerName,
+            "parentId": "1",
+            "domianId": this.state.domainId,
+            "address": this.state.customerAddress,
+            "isCustomer": true,
+            "isSuperAdmin": false,
+            "role": {
+            },
+            "stores": [],
+            "clientId": "",
+            "isConfigUser": false,
+            "clientDomain": []
+        }
+        this.setState({ loading: true })
+        axios.post(LoginService.createUser(), params).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+                this.setState({ flagCustomerOpen: false })
+                this.setState({ modalVisible: false });
+                this.setState({ loading: false })
+                this.setState({ mobileNumber: "" })
+                this.setState({ loyaltyPoints: "" })
+                this.setState({ notfound: "" })
+                //alert("create customer" + JSON.stringify(res.data["result"].body));
+            }
+            else {
+                this.setState({ loading: false })
+                this.setState({ flagCustomerOpen: false })
+                this.setState({ modalVisible: false });
+                this.setState({ mobileNumber: "" })
+                this.setState({ loyaltyPoints: "" })
+                this.setState({ notfound: "" })
+                // alert("create customer" + JSON.stringify(res.data["result"].body));
+            }
+        }
+        ).catch(() => {
+            this.setState({ loading: false })
+            this.setState({ flagCustomerOpen: false })
+            this.setState({ modalVisible: false });
+            this.setState({ mobileNumber: "" })
+            this.setState({ loyaltyPoints: "" })
+            this.setState({ notfound: "" })
+            alert("create customer adding not successfully")
+        })
+    }
+
+    getUserDetails = () => {
+        const params = {
+            "phoneNo": this.state.customerPhoneNumber,
+        }
+        axios.post(LoginService.getUser(), params).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+                this.setState({ customerName: res.data["result"][0].userName });
+                //this.setState({ customerEmail: res.data["result"][0].userName });
+                this.setState({ customerGender: res.data["result"][0].gender });
+                // this.setState({ customerAddress: res.data["result"][0].gender });
+
+                // alert("get customer" + JSON.stringify(res.data["result"]));
+            }
+            else {
+                this.setState({ loading: false })
+            }
+        }
+        ).catch(() => {
+            this.setState({ flagCustomerOpen: false })
+            this.setState({ modalVisible: false });
+            // alert("create customer adding not successfully")
+        })
+    }
+
+    modelCancel() {
+        this.setState({ flagCustomerOpen: false })
+        this.setState({ modalVisible: false });
+    }
+
 
 
     handleBackButtonClick() {
@@ -107,6 +240,52 @@ class Payment extends Component {
         this.setState({ flagThree: false })
         this.setState({ flagFour: false })
         this.setState({ flagFive: false })
+    }
+    handleredeemPoints = (text) => {
+        this.setState({ enterredeempoint: text });
+    }
+
+    clearRedemption(){
+        console.log('dasdsdasdafsf')
+        this.setState({ redeemedPints: "" });
+    }
+    handleCustomerPhoneNumber = (text) => {
+        this.setState({ customerPhoneNumber: text });
+    }
+
+    handleCustomerName = (text) => {
+        this.setState({ customerName: text });
+    }
+
+    handleCustomerEmail = (text) => {
+        this.setState({ customerEmail: text });
+    }
+
+    handleCustomerAddress = (text) => {
+        this.setState({ customerAddress: text });
+    }
+
+    handleCustomerGSTNumber = (text) => {
+        this.setState({ customerGSTNumber: text });
+    }
+
+    handlecustomerGender = (text) => {
+        this.setState({ customerGender: text });
+    }
+
+    cancel() {
+        console.log('clicked')
+        this.setState({ flagCustomerOpen: false })
+        //this.setState({ modalVisible: true });
+        this.setState({ flagqtyModelOpen: false })
+        this.setState({ modalVisible: false });
+    }
+
+    endEditing() {
+        console.log("end edited")
+        if (this.state.customerPhoneNumber.length > 0) {
+            this.getUserDetails()
+        }
     }
 
     qrAction() {
@@ -154,18 +333,42 @@ class Payment extends Component {
         this.setState({ giftvoucher: this.state.promocode })
     }
 
+    applyRedem() {
+        this.setState({ redeemedPints: this.state.enterredeempoint });
+        if (parseInt(this.state.loyaltyPoints) < parseInt(this.state.redeemedPints)) {
+            alert('please enter greater than the available points')
+        }
+        else {
+            this.setState({ flagredeem: false })
+            this.setState({ modalVisible: false });
+        }
+    }
+
+
+    tagCustomer() {
+        this.setState({ customerEmail: "" })
+        this.setState({ customerPhoneNumber: "" })
+        this.setState({ customerName: "" })
+        this.setState({ customerGender: "" })
+        this.setState({ customerAddress: "" })
+        this.setState({ customerGSTNumber: "" })
+
+        this.setState({ flagCustomerOpen: true })
+        this.setState({ modalVisible: true });
+    }
+
     clearTaggedCustomer() {
         this.setState({ mobileNumber: "" })
         this.setState({ loyaltyPoints: "" })
         this.setState({ notfound: "" })
     }
 
-    clearPromocode(){
+    clearPromocode() {
         this.setState({ giftvoucher: "" })
         this.setState({ promocode: "" })
     }
 
-    clearCashSammary(){
+    clearCashSammary() {
         this.setState({ verifiedCash: "" })
         this.setState({ recievedAmount: "" })
     }
@@ -174,7 +377,7 @@ class Payment extends Component {
         if (this.state.flagOne === true) {
             const params = {
                 "natureOfSale": "InStore",
-                "domainId": this.state.domainId,
+                "domainId": 2,
                 "storeId": this.state.storeId,
                 "grossAmount": this.state.totalAmount,
                 "totalPromoDisc": this.state.totalDiscount,
@@ -208,7 +411,6 @@ class Payment extends Component {
             axios.post(NewSaleService.createOrder(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     alert("Order created " + res.data["result"]);
-                    console.log(res.data["result"])
                     this.setState({ loading: false })
                 }
                 else {
@@ -221,7 +423,7 @@ class Payment extends Component {
         else if (this.state.flagTwo === true) {
             const params = {
                 "natureOfSale": "InStore",
-                "domainId": this.state.domainId,
+                "domainId": 2,
                 "storeId": this.state.storeId,
                 "grossAmount": this.state.totalAmount,
                 "totalPromoDisc": this.state.totalDiscount,
@@ -247,7 +449,7 @@ class Payment extends Component {
             console.log(params)
             axios.post(NewSaleService.createOrder(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    // alert("Order created " + res.data["result"]);
+                    alert("Order created " + res.data["result"]);
                     const params = {
                         "amount": JSON.stringify(this.state.totalAmount - this.state.totalDiscount),
                         "info": "order creations",
@@ -300,38 +502,45 @@ class Payment extends Component {
         }
     }
 
+    redeemPoints() {
+        this.setState({ flagredeem: true })
+        this.setState({ modalVisible: true });
+    }
+
 
     verifyCustomer() {
         this.setState({ loyaltyPoints: '' })
         if (this.state.mobileNumber.length !== 10) {
             alert('please Enter a customer valid mobile number');
         }
-        const params = {
-            "invoiceNumber": null,
-            "mobileNumber": this.state.mobileNumber,
-        }
-        console.log(params)
-        this.setState({ loading: true })
-        axios.post(PromotionsService.searchLoyaltyPoints(),
-            params).then((res) => {
-                if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
-                    let len = res.data["result"].length;
-                    console.log(res.data["result"])
-                    if (len > 0) {
-                        for (let i = 0; i < len; i++) {
-                            let number = res.data["result"][i]
-                            this.setState({ loyaltyPoints: number.loyaltyPoints })
+        else {
+            const params = {
+                "invoiceNumber": null,
+                "mobileNumber": this.state.mobileNumber,
+            }
+            console.log(params)
+            this.setState({ loading: true })
+            axios.post(PromotionsService.searchLoyaltyPoints(),
+                params).then((res) => {
+                    if (res.data && res.data["isSuccess"] === "true") {
+                        this.setState({ loading: false })
+                        let len = res.data["result"].length;
+                        console.log(res.data["result"])
+                        if (len > 0) {
+                            for (let i = 0; i < len; i++) {
+                                let number = res.data["result"][i]
+                                this.setState({ loyaltyPoints: number.loyaltyPoints })
 
-                            console.log(this.state.loyaltyPoints)
+                                console.log(this.state.loyaltyPoints)
+                            }
                         }
                     }
-                }
-            }).catch(() => {
-                this.setState({ loading: false })
-                //  alert('No Records Found')
-                this.setState({ notfound: "not found" })
-            })
+                }).catch(() => {
+                    this.setState({ loading: false })
+                    //  alert('No Records Found')
+                    this.setState({ notfound: "not found" })
+                })
+        }
     }
 
 
@@ -497,13 +706,148 @@ class Payment extends Component {
                             }}
                             ListFooterComponent={<View style={{ width: 15 }}></View>}
                         />
+
+
+
+                        <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 10 }}> {('ARE YOU A TAGGED CUSTOMER ?')} </Text>
+                        {this.state.loyaltyPoints !== "" && (
+                            <TouchableOpacity
+                                style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
+                                onPress={() => this.clearTaggedCustomer()} >
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
+                            </TouchableOpacity>
+                        )}
+
+                        {this.state.notfound === "not found" && (
+                            <TouchableOpacity
+                                style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
+                                onPress={() => this.clearTaggedCustomer()} >
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
+                            </TouchableOpacity>
+                        )}
+
+
+                        {/* loyalty points */}
+                        <TextInput style={styles.input}
+                            underlineColorAndroid="transparent"
+                            placeholder="+91 Enter mobile number"
+                            placeholderTextColor="#6F6F6F60"
+                            textAlignVertical="center"
+                            keyboardType={'default'}
+                            autoCapitalize="none"
+                            value={this.state.mobileNumber}
+                            //  onEndEditing
+                            onChangeText={(text) => this.handleMobileNumber(text)}
+                        // onEndEditing={() => this.endEditing()}
+                        />
+                        {this.state.loyaltyPoints === "" && this.state.notfound !== "not found" && (
+                            <TouchableOpacity
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, borderColor: "#ED1C24", borderWidth: 1, alignSelf: 'flex-end', right: 10, marginTop: -37 }}
+                                onPress={() => this.verifyCustomer()} >
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('VERIFY')} </Text>
+                            </TouchableOpacity>
+                        )}
+
+                        {this.state.notfound === "not found" && this.state.loyaltyPoints == "" && (
+                            <TouchableOpacity
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, alignSelf: 'flex-end', right: 10, marginTop: -37 }}
+                            >
+                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../../assets/images/notapplied.png')} />
+
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('NO RECORDS')} </Text>
+                            </TouchableOpacity>
+                        )}
+                        {this.state.notfound === "not found" && this.state.loyaltyPoints == "" && (
+                            <View style={{ height: 50, backgroundColor: "#ffffff", }}>
+                                <View style={{ height: 1, backgroundColor: "" }}>
+                                </View>
+                                <TouchableOpacity
+                                    style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 150, height: 32, alignSelf: 'center', marginTop: 5 }}
+                                    onPress={() => this.tagCustomer()} >
+                                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('ADD TO TAG CUSTOMER')} </Text>
+                                </TouchableOpacity>
+                            </View>
+                        )}
+
+                        {this.state.loyaltyPoints !== "" && this.state.giftvoucher === "" && (
+                            <TouchableOpacity
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, alignSelf: 'flex-end', right: 10, marginTop: -37 }}
+                            >
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
+
+                            </TouchableOpacity>
+                        )}
+
+                        {/* {this.state.notfound === "not found" && this.state.giftvoucher !== "" && (
+                            <TouchableOpacity
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, position: 'absolute', right: 10,alignSelf: 'flex-end',marginTop:-37 }}
+                            >
+                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../../assets/images/notapplied.png')} />
+
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('NO RECORDS')} </Text>
+
+                            </TouchableOpacity>
+                        )} */}
+
+                        {this.state.loyaltyPoints !== "" && this.state.giftvoucher !== "" && (
+                            <TouchableOpacity
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, position: 'absolute', right: 10, alignSelf: 'flex-end', marginTop: -37 }}
+                            >
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
+
+                            </TouchableOpacity>
+                        )}
+
+                        {this.state.loyaltyPoints !== "" && this.state.redeemedPints === "" && (
+                            <View style={{ backgroundColor: '#ffffff', marginTop: 0 }}>
+                                <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10 }}> LOYALTY POINTS  {this.state.loyaltyPoints} </Text>
+                                <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10, marginBottom: 10 }}> VALUE  {(parseInt(this.state.loyaltyPoints) / 100).toString()} </Text>
+                            </View>
+                        )}
+
+                        {this.state.redeemedPints !== "" && (
+                            <View style={{ backgroundColor: '#ffffff', marginTop: 0 }}>
+                                <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10 }}> REDEEMED POINTS   {this.state.redeemedPints} </Text>
+                                <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10, marginBottom: 10 }}> REMAINING POINTS  {(parseInt(this.state.loyaltyPoints - this.state.redeemedPints)).toString()} </Text>
+                            </View>
+                        )}
+
+                        {this.state.loyaltyPoints !== "" && this.state.redeemedPints !== "" && (
+                            <View style={{ backgroundColor: '#ffffff', marginTop: 0 }}>
+                            <TouchableOpacity
+                                style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -40 }}
+                                onPress={() => this.clearRedemption()} >
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
+                            </TouchableOpacity>
+                            </View>
+                        )}
+
+                        {this.state.loyaltyPoints !== "" && this.state.redeemedPints === "" && (
+                            <View style={{ height: 0, backgroundColor: "#ffffff", }}>
+                                {/* <View style={{ height: 1, backgroundColor: "#22222240",marginTop:-20, }}> */}
+
+                                <TouchableOpacity
+                                    style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 150, height: 32, alignSelf: 'flex-end', marginTop: -45, right: 10 }}
+                                    onPress={() => this.redeemPoints()} >
+                                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('REDEEM POINTS')} </Text>
+                                </TouchableOpacity>
+                                {/* </View> */}
+                            </View>
+                        )}
+
+
+
                         <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 10 }}> {('HAVE A PROMO CODE ?')} </Text>
                         {this.state.giftvoucher !== "" && (
-                        <TouchableOpacity
-                            style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
-                            onPress={() => this.clearPromocode()} >
-                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
+                                onPress={() => this.clearPromocode()} >
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
+                            </TouchableOpacity>
                         )}
                         {/* {this.state.loyaltyPoints !== "" && (
                               <TouchableOpacity 
@@ -526,7 +870,7 @@ class Payment extends Component {
                         />
                         {this.state.giftvoucher === "" && (
                             <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 185, borderColor: "#ED1C24", borderWidth: 1, position: 'absolute', right: 10 }}
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, borderColor: "#ED1C24", borderWidth: 1, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                                 onPress={() => this.applyPromocode()} >
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('APPLY')} </Text>
                             </TouchableOpacity>
@@ -534,7 +878,7 @@ class Payment extends Component {
 
                         {this.state.giftvoucher !== "" && (
                             <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 185, position: 'absolute', right: 10 }}
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                             >
                                 <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
 
@@ -550,112 +894,16 @@ class Payment extends Component {
                             </View>
                         )}
 
-
-                        <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 10 }}> {('ARE YOU A TAGGED CUSTOMER ?')} </Text>
-                        {this.state.loyaltyPoints !== "" && (
-                        <TouchableOpacity
-                            style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
-                            onPress={() => this.clearTaggedCustomer()} >
-                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
-                        </TouchableOpacity>
-                        )}
-
-                    {this.state.notfound === "not found"  && (
-                        <TouchableOpacity
-                            style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
-                            onPress={() => this.clearTaggedCustomer()} >
-                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
-                        </TouchableOpacity>
-                        )}
-                       
-
-
-                        <TextInput style={styles.input}
-                            underlineColorAndroid="transparent"
-                            placeholder="+91 Enter mobile number"
-                            placeholderTextColor="#6F6F6F60"
-                            textAlignVertical="center"
-                            keyboardType={'default'}
-                            autoCapitalize="none"
-                            value={this.state.mobileNumber}
-                            //  onEndEditing
-                            onChangeText={(text) => this.handleMobileNumber(text)}
-                        // onEndEditing={() => this.endEditing()}
-                        />
-                        {this.state.giftvoucher === "" && (
-                            <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 260, borderColor: "#ED1C24", borderWidth: 1, position: 'absolute', right: 10 }}
-                                onPress={() => this.verifyCustomer()} >
-                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('VERIFY')} </Text>
-                            </TouchableOpacity>
-                        )}
-                        {this.state.loyaltyPoints === "" && this.state.giftvoucher !== "" && (
-                            <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 285, borderColor: "#ED1C24", borderWidth: 1, position: 'absolute', right: 10 }}
-                                onPress={() => this.verifyCustomer()} >
-                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('VERIFY')} </Text>
-                            </TouchableOpacity>
-                        )}
-                        {this.state.notfound === "not found" && this.state.giftvoucher === "" && (
-                            <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 260, position: 'absolute', right: 10 }}
-                            >
-                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../../assets/images/notapplied.png')} />
-
-                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('NO RECORDS')} </Text>
-
-                            </TouchableOpacity>
-                        )}
-
-                        {this.state.loyaltyPoints !== "" && this.state.giftvoucher === "" && (
-                            <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 260, position: 'absolute', right: 10 }}
-                            >
-                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
-
-                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
-
-                            </TouchableOpacity>
-                        )}
-
-                        {this.state.notfound === "not found" && this.state.giftvoucher !== "" && (
-                            <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 285, position: 'absolute', right: 10 }}
-                            >
-                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../../assets/images/notapplied.png')} />
-
-                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('NO RECORDS')} </Text>
-
-                            </TouchableOpacity>
-                        )}
-
-                        {this.state.loyaltyPoints !== "" && this.state.giftvoucher !== "" && (
-                            <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 285, position: 'absolute', right: 10 }}
-                            >
-                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
-
-                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
-
-                            </TouchableOpacity>
-                        )}
-
-                        {this.state.loyaltyPoints !== "" && (
-                            <View style={{ backgroundColor: '#ffffff', marginTop: 0 }}>
-                                <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10 }}> LOYALTY POINTS  {this.state.loyaltyPoints} </Text>
-                                <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10, marginBottom: 10 }}> VALUE  {(parseInt(this.state.loyaltyPoints) / 100).toString()} </Text>
-                            </View>
-                        )}
                         {this.state.flagOne === true && (
                             <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 10 }}> {('CASH SUMMARY')} </Text>
-                           
+
                         )}
-                        {this.state.flagOne === true && this.state.verifiedCash !== ""  &&  (
-                         <TouchableOpacity
-                            style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
-                            onPress={() => this.clearCashSammary()} >
-                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
-                        </TouchableOpacity>
+                        {this.state.flagOne === true && this.state.verifiedCash !== "" && (
+                            <TouchableOpacity
+                                style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -20 }}
+                                onPress={() => this.clearCashSammary()} >
+                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
+                            </TouchableOpacity>
                         )}
 
                         {this.state.flagOne === true && (
@@ -675,7 +923,7 @@ class Payment extends Component {
 
                         {this.state.flagOne === true && this.state.giftvoucher === "" && this.state.loyaltyPoints === "" && this.state.verifiedCash === "" && (
                             <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 335, borderColor: "#ED1C24", borderWidth: 1, position: 'absolute', right: 10 }}
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, borderColor: "#ED1C24", borderWidth: 1, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                                 onPress={() => this.verifycash()} >
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('VERIFY')} </Text>
                             </TouchableOpacity>
@@ -683,7 +931,7 @@ class Payment extends Component {
 
                         {this.state.flagOne === true && this.state.giftvoucher !== "" && this.state.loyaltyPoints !== "" && this.state.verifiedCash === "" && (
                             <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 420, borderColor: "#ED1C24", borderWidth: 1, position: 'absolute', right: 10 }}
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, borderColor: "#ED1C24", borderWidth: 1, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                                 onPress={() => this.verifycash()} >
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('VERIFY')} </Text>
                             </TouchableOpacity>
@@ -691,7 +939,7 @@ class Payment extends Component {
 
                         {this.state.flagOne === true && this.state.giftvoucher !== "" && this.state.loyaltyPoints === "" && this.state.verifiedCash === "" && (
                             <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 360, borderColor: "#ED1C24", borderWidth: 1, position: 'absolute', right: 10 }}
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, borderColor: "#ED1C24", borderWidth: 1, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                                 onPress={() => this.verifycash()} >
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('VERIFY')} </Text>
                             </TouchableOpacity>
@@ -699,7 +947,7 @@ class Payment extends Component {
 
                         {this.state.flagOne === true && this.state.giftvoucher === "" && this.state.loyaltyPoints !== "" && this.state.verifiedCash === "" && (
                             <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 395, borderColor: "#ED1C24", borderWidth: 1, position: 'absolute', right: 10 }}
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, borderColor: "#ED1C24", borderWidth: 1, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                                 onPress={() => this.verifycash()} >
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('VERIFY')} </Text>
                             </TouchableOpacity>
@@ -708,7 +956,7 @@ class Payment extends Component {
 
                         {this.state.flagOne === true && this.state.giftvoucher === "" && this.state.loyaltyPoints === "" && this.state.verifiedCash !== "" && (
                             <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 335, position: 'absolute', right: 10 }}
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                             >
                                 <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
 
@@ -719,7 +967,7 @@ class Payment extends Component {
 
                         {this.state.flagOne === true && this.state.giftvoucher !== "" && this.state.loyaltyPoints !== "" && this.state.verifiedCash !== "" && (
                             <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 420, position: 'absolute', right: 10 }}
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                             >
                                 <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
 
@@ -730,7 +978,7 @@ class Payment extends Component {
 
                         {this.state.flagOne === true && this.state.giftvoucher !== "" && this.state.loyaltyPoints === "" && this.state.verifiedCash !== "" && (
                             <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 360, position: 'absolute', right: 10 }}
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                             >
                                 <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
 
@@ -741,7 +989,7 @@ class Payment extends Component {
 
                         {this.state.flagOne === true && this.state.giftvoucher === "" && this.state.loyaltyPoints !== "" && this.state.verifiedCash !== "" && (
                             <TouchableOpacity
-                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, top: 395, position: 'absolute', right: 10 }}
+                                style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                             >
                                 <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
 
@@ -758,6 +1006,256 @@ class Payment extends Component {
 
                             </View>
                         )}
+
+                        {this.state.flagredeem && (
+                            <View>
+                                <Modal isVisible={this.state.modalVisible}>
+
+                                    <View style={{
+                                        width: deviceWidth,
+                                        alignItems: 'center',
+                                        marginLeft: -20,
+                                        backgroundColor: "#ffffff",
+                                        height: 300,
+                                        position: 'absolute',
+                                        bottom: -20,
+                                    }}>
+
+                                        <Text style={{
+                                            position: 'absolute',
+                                            left: 20,
+                                            top: 15,
+                                            width: 300,
+                                            height: 20,
+                                            fontFamily: 'medium',
+                                            fontSize: 16,
+                                            color: '#353C40'
+                                        }}> Redeem your points </Text>
+
+                                        <TouchableOpacity style={{
+                                            position: 'absolute',
+                                            right: 20,
+                                            top: 7,
+                                            width: 50, height: 50,
+                                        }} onPress={() => this.modelCancel()}>
+                                            <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                        </TouchableOpacity>
+
+                                        <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                        </Text>
+                                        <Text style={{
+                                            position: 'absolute',
+                                            left: 20,
+                                            top: 60,
+                                            width: 300,
+                                            height: 20,
+                                            fontFamily: 'regular',
+                                            fontSize: 14,
+                                            color: '#353C40'
+                                        }}> Please enter how many points you want to redeem? </Text>
+
+                                        <View style={{ marginTop: 30, width: deviceWidth, }}>
+                                            <TextInput style={styles.modelinput}
+                                                underlineColorAndroid="transparent"
+                                                placeholder="ENTER POINTS"
+                                                placeholderTextColor="#6F6F6F"
+                                                textAlignVertical="center"
+                                                autoCapitalize="none"
+                                                value={this.state.enterredeempoint}
+                                                onChangeText={this.handleredeemPoints}
+                                            />
+                                        </View>
+
+                                        <TouchableOpacity
+                                            style={{
+                                                width: deviceWidth - 40,
+                                                marginLeft: 20,
+                                                marginRight: 20,
+                                                marginTop: 20,
+                                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                            }} onPress={() => this.applyRedem()}
+                                        >
+                                            <Text style={{
+                                                textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                                fontFamily: "regular"
+                                            }}  > APPLY </Text>
+
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity
+                                            style={{
+                                                width: deviceWidth - 40,
+                                                marginLeft: 20,
+                                                marginRight: 20,
+                                                marginTop: 20,
+                                                height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                            }} onPress={() => this.modelCancel()}
+                                        >
+                                            <Text style={{
+                                                textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                                fontFamily: "regular"
+                                            }}  > CANCEL </Text>
+
+                                        </TouchableOpacity>
+                                    </View>
+                                </Modal>
+                            </View>)}
+
+                        {this.state.flagCustomerOpen && (
+                            <View>
+                                <Modal isVisible={this.state.modalVisible}>
+                                    <KeyboardAwareScrollView KeyboardAwareScrollView
+                                        enableOnAndroid={true}>
+
+
+                                        <View style={{
+                                            flex: 1, justifyContent: 'center', //Centered horizontally
+                                            alignItems: 'center', color: '#ffffff',
+                                            borderRadius: 20, borderwidth: 10
+                                        }}>
+                                            <View style={{ flex: 1, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", marginTop: deviceWidth / 2 - 80 }}>
+                                                <Text style={{
+                                                    color: "#353C40", fontSize: 18, fontFamily: "semibold", marginLeft: 20, marginTop: 20, height: 20,
+                                                    justifyContent: 'center',
+                                                }}> {'Personal Information'} </Text>
+
+                                                <View style={{ marginTop: 0, width: deviceWidth }}>
+                                                    <TextInput style={styles.createUserinput}
+                                                        underlineColorAndroid="transparent"
+                                                        placeholder="MOBILE NUMBER *"
+                                                        placeholderTextColor="#353C4050"
+                                                        keyboardType="name-phone-pad"
+                                                        textAlignVertical="center"
+                                                        autoCapitalize="none"
+                                                        value={this.state.customerPhoneNumber}
+                                                        onChangeText={(text) => this.handleCustomerPhoneNumber(text)}
+                                                        onEndEditing={() => this.endEditing()}
+                                                    />
+                                                </View>
+
+
+                                                <TextInput style={styles.createUserinput}
+                                                    underlineColorAndroid="transparent"
+                                                    placeholder="CUSTOMER NAME *"
+                                                    placeholderTextColor="#353C4050"
+                                                    textAlignVertical="center"
+                                                    autoCapitalize="none"
+                                                    value={this.state.customerName}
+                                                    onChangeText={this.handleCustomerName}
+                                                />
+
+                                                <View>
+                                                    <TextInput style={styles.createUserinput}
+                                                        underlineColorAndroid="transparent"
+                                                        placeholder="EMAIL"
+                                                        placeholderTextColor="#353C4050"
+                                                        textAlignVertical="center"
+                                                        autoCapitalize="none"
+                                                        value={this.state.customerEmail}
+                                                        onChangeText={this.handleCustomerEmail}
+                                                    />
+                                                </View>
+
+                                                <View style={{
+                                                    justifyContent: 'center',
+                                                    margin: 40,
+                                                    height: 44,
+                                                    marginTop: 5,
+                                                    marginBottom: 10,
+                                                    borderColor: '#8F9EB717',
+                                                    borderRadius: 3,
+                                                    backgroundColor: '#FBFBFB',
+                                                    borderWidth: 1,
+                                                    fontFamily: 'regular',
+                                                    paddingLeft: 15,
+                                                    fontSize: 14,
+                                                }} >
+                                                    <RNPickerSelect style={{
+                                                        color: '#8F9EB717',
+                                                        fontWeight: 'regular',
+                                                        fontSize: 15
+                                                    }}
+                                                        placeholder={{
+                                                            label: 'GENDER',
+                                                            value: '',
+                                                        }}
+                                                        Icon={() => {
+                                                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                                        }}
+                                                        items={[
+                                                            { label: 'Male', value: 'male' },
+                                                            { label: 'Female', value: 'female' },
+                                                        ]}
+                                                        onValueChange={this.handlecustomerGender}
+                                                        style={pickerSelectStyles}
+                                                        value={this.state.customerGender}
+                                                        useNativeAndroidPickerStyle={false}
+
+                                                    />
+                                                </View>
+
+
+                                                <TextInput style={styles.createUserinput}
+                                                    underlineColorAndroid="transparent"
+                                                    placeholder="ADDRESS"
+                                                    placeholderTextColor="#353C4050"
+                                                    textAlignVertical="center"
+                                                    autoCapitalize="none"
+                                                    value={this.state.customerAddress}
+                                                    onChangeText={this.handleCustomerAddress}
+                                                />
+
+                                                <Text style={{
+                                                    color: "#353C40", fontSize: 18, fontFamily: "semibold", marginLeft: 20, marginTop: 20, height: 20,
+                                                    justifyContent: 'center',
+                                                }}> {'Business Information(optional)'} </Text>
+
+                                                <View>
+                                                    <TextInput style={styles.createUserinput}
+                                                        underlineColorAndroid="transparent"
+                                                        placeholder="GST NUMBER"
+                                                        placeholderTextColor="#353C4050"
+                                                        textAlignVertical="center"
+                                                        autoCapitalize="none"
+                                                        value={this.state.customerGSTNumber}
+                                                        onChangeText={this.handleCustomerGSTNumber}
+                                                    />
+                                                </View>
+
+
+
+                                                <TouchableOpacity
+                                                    style={{
+                                                        margin: 20,
+                                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5, marginLeft: 40, marginRight: 40,
+                                                    }} onPress={() => this.addCustomer()}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', margin: 20, color: "#ffffff", fontSize: 15,
+                                                        fontFamily: "regular", height: 50,
+                                                    }}  > TAG/ADD CUSTOMER </Text>
+
+                                                </TouchableOpacity>
+
+                                                <TouchableOpacity
+                                                    style={{
+                                                        margin: 20,
+                                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5, marginLeft: 40, marginRight: 40,
+                                                    }}
+                                                    onPress={() => this.cancel()} >
+                                                    <Text style={{
+                                                        textAlign: 'center', margin: 20, color: "#ffffff", fontSize: 15,
+                                                        fontFamily: "regular", height: 50,
+                                                    }}> {('Cancel')} </Text>
+                                                </TouchableOpacity>
+
+                                            </View>
+
+                                        </View>
+
+                                    </KeyboardAwareScrollView>
+                                </Modal>
+                            </View>)}
 
 
 
@@ -823,6 +1321,47 @@ class Payment extends Component {
     }
 }
 export default Payment
+
+const pickerSelectStyles = StyleSheet.create({
+    placeholder: {
+        color: "#353C4050",
+        fontFamily: "regular",
+        fontSize: 15,
+    },
+    inputIOS: {
+        justifyContent: 'center',
+        height: 42,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+    },
+    inputAndroid: {
+        justifyContent: 'center',
+        height: 42,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+
+        // marginLeft: 20,
+        // marginRight: 20,
+        // marginTop: 10,
+        // height: 40,
+        // backgroundColor: '#ffffff',
+        // borderBottomColor: '#456CAF55',
+        color: '#001B4A',
+        // fontFamily: "bold",
+        // fontSize: 16,
+        // borderRadius: 3,
+    },
+})
 
 
 const styles = StyleSheet.create({
@@ -1075,6 +1614,10 @@ const styles = StyleSheet.create({
         fontFamily: "regular",
         fontSize: 14,
     },
+    imagealign: {
+        marginTop: 16,
+        marginRight: 20,
+    },
     selectedLabel: {
         color: "white",
         textAlign: "center",
@@ -1083,10 +1626,39 @@ const styles = StyleSheet.create({
         fontFamily: "regular",
         fontSize: 14,
     },
+    modelinput: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
     label: {
         textAlign: "center",
         marginBottom: 10,
         fontSize: 24,
+    },
+    createUserinput: {
+        justifyContent: 'center',
+        margin: 40,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
     },
 
     //model
