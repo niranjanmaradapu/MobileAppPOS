@@ -12,7 +12,7 @@ export default class SplashScreen extends React.Component {
 
     componentDidMount() {
         var phonenumber = ""
-        AsyncStorage.getItem("storeId").then((value) => {
+        AsyncStorage.getItem("phone_number").then((value) => {
             phonenumber = value
         }).catch(() => {
             console.log('there is error getting phone numner')
