@@ -34,7 +34,7 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'vinod',
+            userName: 'superadmin1',
             password: 'Otsi@123',
             dropValue: '',
             store: 0,
@@ -89,55 +89,53 @@ export default class Login extends Component {
                 //"storeName": this.state.store,//"kphb",
             }
             AsyncStorage.setItem("username", this.state.userName);
+            AsyncStorage.removeItem('tokenkey');
+            AsyncStorage.removeItem('custom:clientId1');
+            AsyncStorage.removeItem('phone_number');
+            AsyncStorage.removeItem('domainDataId');
+            AsyncStorage.removeItem('storeId');
+
             console.log(LoginService.getAuth() + JSON.stringify(params))
             this.setState({ loading: true })
             axios.post(LoginService.getAuth(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    //console.log(res.data)
                     const token = res.data.result.authenticationResult.idToken
-                    AsyncStorage.setItem("user", JSON.stringify(jwt_decode(token))).then(() => {
-                        // console.log
-                    }).catch(() => {
-                        console.log('there is error saving token')
-                    })
+                    //==============================Token Key & phone number save ===================//
                     AsyncStorage.setItem("tokenkey", JSON.stringify(token)).then(() => {
                     }).catch(() => {
                         console.log('there is error saving token')
                     })
-                    console.log("stores data----" + JSON.stringify(jwt_decode(token)["custom:clientDomians"]))
-                    console.log("phone number is----" + JSON.stringify(jwt_decode(token)["phone_number"]))
+
+                    AsyncStorage.getItem("tokenkey").then((value) => {
+                        var finalToken = value.replace('"', '');
+                        console.log(finalToken);
+                        axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken }
+                        console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
+                    })
+
                     AsyncStorage.setItem("phone_number", jwt_decode(token)["phone_number"]).then(() => {
                         // console.log
                     }).catch(() => {
                         console.log('there is error saving domainDataId')
                     })
-                    // if (jwt_decode(token)["custom:clientDomians"] === "1,2,3" || jwt_decode(token)["custom:clientDomians"] === "1,2") {
-                    //     // this.getModel();
-                    //     this.props.navigation.navigate('SelectDomain')
-                    // }
-                    // else if (jwt_decode(token)["custom:clientDomians"] === "3,") {
-                    // this.getModel();
-                    var domainArray = jwt_decode(token)["custom:clientDomians"].split(',');
-                    console.log('domainArray are' + domainArray)
-                    AsyncStorage.setItem("domainDataId", domainArray[0]).then(() => {
-                        if (domainArray.length === 1) {
-                            this.getstores()
-                        }
-                        else{
-                            this.props.navigation.navigate('SelectDomain')
-                        }
-                        // console.log
-                    }).catch(() => {
-                        console.log('there is error saving domainDataId')
-                    })
-                    AsyncStorage.getItem("tokenkey").then((value) => {
-                        var finalToken = value.replace('"', '');
-                        console.log(finalToken);
-                        axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken }
-                        this.getstores()
-                        console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
-                    })
-                   
+
+                    //==============================Navigation===================//
+                    if (jwt_decode(token)["custom:isSuperAdmin"] === "true") {
+                        AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
+                            // console.log
+                        }).catch(() => {
+                            console.log('there is error saving domainDataId')
+                        })
+                        this.getDomainsList()
+                    } else {
+                        AsyncStorage.setItem("domainDataId", jwt_decode(token)["custom:domianId1"]).then(() => {
+                            // console.log
+                        }).catch(() => {
+                            console.log('there is error saving domainDataId')
+                        })
+                        this.getstoresForNormalUser()
+                    }
+
                     this.setState({ loading: false })
                 }
                 else {
@@ -152,59 +150,85 @@ export default class Login extends Component {
         }
     }
 
-    async getStoreId() {
-        const params = {
-            "storeName": this.state.storeNames[0],
-        }
-        AsyncStorage.setItem("storeName", this.state.storeNames[0]).then(() => {
-        }).catch(() => {
-            console.log('there is error saving storeName')
-        })
-        axios.post(LoginService.getStoreIdWithStoreName(), params).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                console.log('dsgsdgsdg' + String(res.data["result"][0].id))
-                AsyncStorage.setItem("storeId", String(res.data["result"][0].id)).then(() => {
-                }).catch(() => {
-                    console.log('there is error saving storeId')
-                })
-            }
-            else {
-                alert("id not found");
-            }
-        }
-        )
-    }
 
-    async getstores() {
-        const username = await AsyncStorage.getItem("username");
-        // console.log(LoginService.getUserStores() + "/" + username)
-        var storeNames = [];
-        axios.get(LoginService.getUserStores() + username).then((res) => {
-            if (res.data["result"]) {
-                for (var i = 0; i < res.data["result"].length; i++) {
-                    storeNames.push(
-                        res.data["result"][i]//id
-                        // label: res.data["result"][i]['storeName']
-                    );
+    async getDomainsList() {
+        const clientId = await AsyncStorage.getItem("custom:clientId1");
+        console.log('vinodddd' + clientId)
+        axios.get(LoginService.getDomainsList() + clientId).then((res) => {
+            if (res.data["result"][0]) {
+                console.log('sdasdasdsadasdsasfsfssaf' + res.data["result"])
+                if (res.data["result"].length > 1) {
+                    this.props.navigation.navigate('SelectDomain')
                 }
-            }
-            this.setState({
-                storeNames: storeNames,
-            })
-            console.log('stores are--' + this.state.storeNames)
-            if (this.state.storeNames.length === 1) {
-                this.getStoreId()
-                AsyncStorage.setItem("storeName", this.state.storeNames[0]).then(() => {
-                }).catch(() => {
-                    console.log('there is error saving storeName')
-                })
-                this.props.navigation.navigate('HomeNavigation')
-            }
-            else {
-                this.props.navigation.navigate('SelectStore')
+                else {
+                    AsyncStorage.setItem("domainDataId", String(res.data.result[0].clientDomainaId)).then(() => {
+                        // console.log
+
+                    }).catch(() => {
+                        console.log('there is error saving token')
+                    })
+                    this.getstoresForSuperAdmin()
+                }
             }
         });
     }
+
+
+    async getstoresForSuperAdmin() {
+        const username = await AsyncStorage.getItem("domainDataId");
+        const params = {
+            "clientDomianId": username
+        }
+        console.log('sfsdfsdff' + params)
+        axios.get(LoginService.getUserStoresForSuperAdmin(), { params }).then((res) => {
+            let len = res.data["result"].length;
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    if (res.data["result"].length > 1) {
+                        this.props.navigation.navigate('SelectStore')
+                    }
+                    else {
+                        AsyncStorage.setItem("storeId", String(res.data.result[0].id)).then(() => {
+                        }).catch(() => {
+                            console.log('there is error saving storeName')
+                        })
+                        this.props.navigation.navigate('HomeNavigation')
+                    }
+                }
+            }
+        });
+    }
+
+
+    async getstoresForNormalUser() {
+        const username = await AsyncStorage.getItem("username");
+
+        axios.get(LoginService.getUserStores() + username).then((res) => {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    let number = res.data.result[i]
+                    const myArray = []
+                    myArray = number.split(":");
+                    this.state.storeNames.push({ name: myArray[0], id: myArray[1] })
+                   
+                }
+                this.setState({ storeNames: this.state.storeNames })
+                AsyncStorage.setItem("storeId", (this.state.storeNames[0].id).toString()).then(() => {
+                }).catch(() => {
+                    console.log('there is error saving token')
+                })
+
+
+                if (this.state.storeNames.length === 1) {
+                    this.props.navigation.navigate('HomeNavigation')
+                }
+                else {
+                    this.props.navigation.navigate('SelectStore')
+                }
+            }
+        });
+    }
+
 
 
     forgotPassword() {

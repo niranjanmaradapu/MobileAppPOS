@@ -123,7 +123,7 @@ class NewSale extends Component {
     AsyncStorage.getItem("domainDataId").then((value) => {
       domainStringId = value
       this.setState({ domainId: parseInt(domainStringId) })
-      console.log("domain data id" + this.state.domainId)
+      console.log("domain data ids" + this.state.domainId)
 
     }).catch(() => {
       console.log('there is error getting domainDataId')
@@ -133,15 +133,13 @@ class NewSale extends Component {
       storeStringId = value
       this.setState({ storeId: parseInt(storeStringId) })
       console.log(this.state.storeId)
+      console.log("cssafsfs" + this.state.storeId)
     }).catch(() => {
       console.log('there is error getting storeId')
     })
     this.barcodeDBStore()
     this.getItems()
     this.synccreateInventoryOfflineToOnline()
-    // if (this.state.barcodeId.length >= 1) {
-    //   this.inventoryCreate()
-    // }
   }
 
   synccreateInventoryOfflineToOnline = () => {

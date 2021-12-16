@@ -6,6 +6,10 @@ class LoginService {
     getStores() {
         return REACT_NATIVE_APP_BASE_URL + '/user-store/stores/getstores';
     }
+    getUserStoresForSuperAdmin() {
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/store/getClientDomianStores';
+    }
+
     getUserStores() {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/getUserStores/';
     }
@@ -14,10 +18,10 @@ class LoginService {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/store/getStoresWithFilter';
     }
 
-    getDomains(){
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/client/getDomainsForClient/';
+    getDomainsList(){
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/client/getDomiansForClient/';
     }
-    
+
 
     createUser() {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/createUser';

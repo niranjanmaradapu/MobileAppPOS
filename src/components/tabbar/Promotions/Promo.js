@@ -67,8 +67,9 @@ class Promo extends Component {
             delelePromoIndex: 0,
             deletePoolId: 0,
             promoNamesArray: [],
-            invoiceNumber:"",
-            loyaltyMobileNumber:"",
+            invoiceNumber: "",
+            loyaltyMobileNumber: "",
+            storeNamesArray: [],
         }
     }
 
@@ -84,32 +85,59 @@ class Promo extends Component {
             console.log('there is error getting domainDataId')
         })
 
+
         const username = await AsyncStorage.getItem("username");
-        // console.log(LoginService.getUserStores() + "/" + username)
         var storeNames = [];
         axios.get(LoginService.getUserStores() + username).then((res) => {
             if (res.data["result"]) {
                 for (var i = 0; i < res.data["result"].length; i++) {
+                    let number = res.data.result[i]
+                    const myArray = []
+                    myArray = number.split(":");
+                    this.state.storeNamesArray.push({ name: myArray[0], id: myArray[1] })
+                    console.log(this.state.storeNamesArray)
                     storeNames.push({
-                        value: res.data["result"][i],
-                        label: res.data["result"][i]
+                        value: this.state.storeNamesArray[i].name,
+                        label: this.state.storeNamesArray[i].name
                     });
+                    this.setState({
+                        storeNames: storeNames,
+                    })
+
+                    this.setState({ storeNamesArray: this.state.storeNamesArray })
+
                 }
-                this.setState({
-                    storeNames: storeNames,
-                })
 
-                // for (var i = 0; i < res.data["result"].length; i++) {
-                //     storeNames.push(
-                //         res.data["result"][i]//id
-                //        // label: res.data["result"][i]['storeName']
-                //     );
-                // }
             }
-
-            console.log("stores data----" + JSON.stringify(this.state.storeNames))
-            console.log('store Names are' + JSON.stringify(this.state.storeNames))
         });
+
+
+        //  const username = await AsyncStorage.getItem("username");
+        // console.log(LoginService.getUserStores() + "/" + username)
+
+        // axios.get(LoginService.getUserStores() + username).then((res) => {
+        //     if (res.data["result"]) {
+        //         for (var i = 0; i < res.data["result"].length; i++) {
+        //             storeNames.push({
+        //                 value: res.data["result"][i],
+        //                 label: res.data["result"][i]
+        //             });
+        //         }
+        //         this.setState({
+        //             storeNames: storeNames,
+        //         })
+
+        //         // for (var i = 0; i < res.data["result"].length; i++) {
+        //         //     storeNames.push(
+        //         //         res.data["result"][i]//id
+        //         //        // label: res.data["result"][i]['storeName']
+        //         //     );
+        //         // }
+        //     }
+
+        //     console.log("stores data----" + JSON.stringify(this.state.storeNames))
+        //     console.log('store Names are' + JSON.stringify(this.state.storeNames))
+        // });
 
     }
 
@@ -262,8 +290,8 @@ class Promo extends Component {
             alert('Please Enter A Valid 10 Digit Mobile Number');
         }
         const params = {
-            "invoiceNumber":this.state.invoiceNumber,
-            "mobileNumber" :this.state.loyaltyMobileNumber,
+            "invoiceNumber": this.state.invoiceNumber,
+            "mobileNumber": this.state.loyaltyMobileNumber,
         }
         console.log(params)
         this.setState({ loading: true })
@@ -640,7 +668,13 @@ class Promo extends Component {
     }
 
     handleSelectStore = (value) => {
-        this.getStoreId(value)
+        
+        for (let i = 0; i < this.state.storeNamesArray.length; i++) {
+            if (this.state.storeNamesArray[i].name === value) {
+                this.setState({ selectedstoreId: this.state.storeNamesArray[i].id })
+            }   
+        }
+        console.log('store id is' + this.state.storeNamesArray[0].name)
         this.setState({ selectedStore: value });
     }
 
@@ -721,23 +755,7 @@ class Promo extends Component {
             });
     }
 
-    getStoreId = (item) => {
-        const params = {
-            "storeName": item,
-        }
 
-        axios.post(LoginService.getStoreIdWithStoreName(), params).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                this.setState({ selectedstoreId: res.data["result"][0].id })
-                console.log('store id is' + this.state.selectedstoreId)
-            }
-            else {
-
-                alert("id not found");
-            }
-        }
-        )
-    }
 
     addPromoStore() {
         if (String(this.state.selectedPromotionType).length === 0) {

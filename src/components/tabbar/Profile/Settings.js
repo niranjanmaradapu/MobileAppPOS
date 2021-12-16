@@ -266,6 +266,8 @@ class Settings extends Component {
 
                                 <View style={{ marginTop: 0, width: deviceWidth }}>
 
+                                    
+
                                     <Text style={{
                                         position: 'absolute',
                                         left: 20,

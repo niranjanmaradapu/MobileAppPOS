@@ -5,72 +5,63 @@ import I18n, { getLanguages } from 'react-native-i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 I18n.fallbacks = true;
 I18n.defaultLocale = 'en';
+import axios from 'axios';
+import LoginService from '../services/LoginService';
 const data = [{ key: "Textile", image: require("../assets/images/texttile.png") }, { key: "Retail", image: require("../assets/images/retaildomain.png") }, { key: "Admin", image: require("../assets/images/admin.png") }];
 
 export default class SelectDomain extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            language: 'English',
-            languages: [],
+            domainData: [],
             selectedItem: 0,
         }
     }
 
-    componentWillMount() {
-        getLanguages().then(languages => {
-            this.setState({ languages });
+    componentDidMount() {
+        this.getDomainsList()
+    }
+
+    async getDomainsList() {
+        const clientId = await AsyncStorage.getItem("custom:clientId1");
+        console.log('dsdasdsdadsadas is' + clientId)
+        axios.get(LoginService.getDomainsList() + clientId).then((res) => {
+            let len = res.data["result"].length;
+            console.log('sdasdasdsd' + len)
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    let number = res.data.result[i]
+                    console.log(number)
+                    
+                    this.state.domainData.push(number)
+                    AsyncStorage.setItem("domainDataId", (res.data.result[0].clientDomainaId).toString()).then(() => {
+                        // console.log
+                       
+                    }).catch(() => {
+                        console.log('there is error saving token')
+                    })
+                    this.setState({ domainData: this.state.domainData })
+                }
+            } 
         });
     }
 
+
     letsGoButtonAction() {
-        //this.props.navigation.push('LoginAndSignUp', { screen: 'SignUp' });
-        this.props.navigation.navigate('SelectStore');
+        this.props.navigation.navigate('SelectStore',{isFromDomain:true});
     }
 
 
-    setLanguage() {
-
-    }
-
-    setLanguage = (value) => {
-        if (value == "English") {
-            I18n.locale = 'en';
-        }
-        else if (value == "Telugu") {
-            I18n.locale = 'te';
-        }
-        else {
-            I18n.locale = 'hi';
-        }
-        this.setState({ language: value });
-    }
-
-    selectedLanguage = (item, index) => {
-        console.log('-------ITEM TAPPED')
+    selectedDomain = (item, index) => {
         this.setState({ selectedItem: index })
+        console.log('asdsadsd is' + item.clientDomainaId)
         // if (index == 0) {
-        //     AsyncStorage.setItem("domainDataId", ((item.index + 1)).toString()).then(() => {
-        //         // console.log
-        //     }).catch(() => {
-        //         console.log('there is error saving token')
-        //     })
-        // }
-        // else if (index == 1) {
-        //     AsyncStorage.setItem("domainDataId", ((item.index + 1)).toString()).then(() => {
-        //         // console.log
-        //     }).catch(() => {
-        //         console.log('there is error saving token')
-        //     })
-        // }
-        // else {
-        //     AsyncStorage.setItem("domainDataId", ((item.index + 1)).toString()).then(() => {
-        //         // console.log
-        //     }).catch(() => {
-        //         console.log('there is error saving token')
-        //     })
-        // }
-
+            AsyncStorage.setItem("domainDataId", (item.clientDomainaId).toString()).then(() => {
+                // console.log
+               
+            }).catch(() => {
+                console.log('there is error saving token')
+            })
     };
 
 
@@ -89,24 +80,25 @@ export default class SelectDomain extends React.Component {
                         style={{ width: deviceWidth, marginTop: 10, }}
                         //scrollEnabled={false}
                         ListHeaderComponent={this.renderHeader}
-                        data={data}
-                        keyExtractor={item => item.email}
+                        data={this.state.domainData}
+                        keyExtractor={item => item}
                         renderItem={({ item, index }) => (
-                            <TouchableOpacity onPress={() => this.selectedLanguage(item, index)}>
+                            <TouchableOpacity onPress={() => this.selectedDomain(item, index)}>
                                 <View style={{
                                     borderBottomColor: 'lightgray', borderBottomWidth: 0.6, marginLeft: this.state.selectedItem === index ? 0 : 0, marginRight: this.state.selectedItem === index ? 0 : 0, backgroundColor: this.state.selectedItem === index ? '#ED1C24' : '#ffffff'
                                 }}>
 
 
                                     <View style={{ flexDirection: 'column', width: '100%', height: 100 }}>
+                                        
 
                                         <Image
                                             style={{ width: 60, height: 60, borderRadius: 30, marginLeft: 30, marginTop: 20, }}
-                                            source={item.image} />
+                                            source={require("../assets/images/texttile.png") }/>
                                         <Text style={{
                                             fontSize: 20, fontFamily: 'medium', marginTop: -40, alignSelf: 'center', color: this.state.selectedItem === index ? '#ffffff' : '#353C40'
                                         }}>
-                                            {item.key}
+                                            {item.domaiName}
                                         </Text>
                                         <Image source={this.state.selectedItem === index ? require('../assets/images/langselect.png') : require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 40 }} />
                                     </View>

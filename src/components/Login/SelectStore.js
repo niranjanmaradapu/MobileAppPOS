@@ -12,54 +12,81 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default class SelectStore extends React.Component {
     constructor(props) {
         super(props);
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             language: 'English',
+           
             languages: [],
             selectedItem: 0,
             storeNames: [],
+            storeData: [],
+            isFromDomain:false
         }
     }
 
+    handleBackButtonClick() {
+        this.props.navigation.goBack();
+        return true;
+      }
+
     async componentDidMount() {
+        this.setState({ isFromDomain: this.props.route.params.isFromDomain })
+        this.getstores()
+    }
+
+    async getstores() {
+        console.log('it is super admin' + this.props.route.params.isFromDomain)
+        if(this.props.route.params.isFromDomain === true){
+        this.setState({ storeData: [] })
+        console.log('it is super admin')
+        const username = await AsyncStorage.getItem("domainDataId");
+        const params = {
+            "clientDomianId": username
+        }
+        axios.get(LoginService.getUserStoresForSuperAdmin(), { params }).then((res) => {
+            let len = res.data["result"].length;
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    let number = res.data.result[i]
+                    this.state.storeData.push(number)
+                    console.log(this.state.storeData)
+                    AsyncStorage.setItem("domainDataId", (res.data.result[0].id).toString()).then(() => {
+                        // 
+                       
+                    }).catch(() => {
+                      
+                    })
+                    // 
+                }
+                this.setState({ storeData: this.state.storeData })
+            }
+        });
+    }
+    else{
         const username = await AsyncStorage.getItem("username");
         var storeNames = [];
         axios.get(LoginService.getUserStores() + username).then((res) => {
             if (res.data["result"]) {
                 for (var i = 0; i < res.data["result"].length; i++) {
-                    storeNames.push(
-                        res.data["result"][i]//id
-                    );
+                    let number = res.data.result[i]
+                    const myArray = []
+                     myArray = number.split(":");
+                    this.state.storeData.push({name:myArray[0],id:myArray[1]})
+                    console.log(this.state.storeData) 
+                    AsyncStorage.setItem("storeId", ( this.state.storeData[0].id).toString()).then(() => {
+                    
+                       
+                    }).catch(() => {
+                        console.log('there is error saving token')
+                    })
+                    this.setState({ storeData: this.state.storeData })
+                    console.log('adsadas' +  this.state.storeData[0].id)
+                    
                 }
-            }
-            this.setState({
-                storeNames: storeNames,
-            })
-            console.log("stores data----" + JSON.stringify(res.data["result"]))
-            console.log('store Name' + JSON.stringify(storeNames))
-        });
+               
+                }
+        });   
     }
-
-    getStoreId = (item) => {
-        const params = {
-            "storeName": item,
-        }
-        AsyncStorage.setItem("storeName", item).then(() => {
-        }).catch(() => {
-            console.log('there is error saving storeName')
-        })
-        axios.post(LoginService.getStoreIdWithStoreName(), params).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                console.log('dsgsdgsdg' + String(res.data["result"][0].id))
-                AsyncStorage.setItem("storeId", String(res.data["result"][0].id)).then(() => {
-                }).catch(() => {
-                    console.log('there is error saving storeId')
-                })
-            }
-            else {
-                alert("id not found");
-            }
-        }
-        )
     }
 
 
@@ -72,36 +99,15 @@ export default class SelectStore extends React.Component {
 
     }
 
-    setLanguage = (value) => {
-        if (value == "English") {
-            I18n.locale = 'en';
-        }
-        else if (value == "Telugu") {
-            I18n.locale = 'te';
-        }
-        else {
-            I18n.locale = 'hi';
-        }
-        this.setState({ language: value });
-    }
 
-    selectedLanguage = (item, index) => {
-        console.log('-------ITEM TAPPED')
-        this.getStoreId(item)
+    selectStoreName = (item, index) => {
         this.setState({ selectedItem: index })
-        if (index == 0) {
-            I18n.locale = 'en';
-            this.setState({ language: "English" });
-        }
-        else if (index == 1) {
-            I18n.locale = 'hi';
-            this.setState({ language: "Hindi" });
-        }
-        else {
-            I18n.locale = 'te';
-            this.setState({ language: "Telugu" });
-        }
+        AsyncStorage.setItem("storeId", String(item.id)).then(() => {
+        }).catch(() => {
+            console.log('there is error saving storeId')
+        })
 
+        
     };
 
 
@@ -111,18 +117,42 @@ export default class SelectStore extends React.Component {
         return (
             <View style={styles.container}>
                 <View>
+                {this.state.isFromDomain === true && (
+                <View style={styles.viewswidth}>
+           
+          <TouchableOpacity style={{
+            position: 'absolute',
+            left: 10,
+            top: 30,
+            width: 40,
+            height: 40,
+          }} onPress={() => this.handleBackButtonClick()}>
+            <Image source={require('../assets/images/backButton.png')} />
+          </TouchableOpacity>
+          <Text style={{
+            position: 'absolute',
+            left: 70,
+            top: 47,
+            width: 300,
+            height: 20,
+            fontFamily: 'bold',
+            fontSize: 18,
+            color: '#353C40'
+          }}> {'Stores'} </Text>
+          </View>
+                 )}
                     <Text style={{
                         color: "#353C40", fontSize: 30, fontFamily: "bold", marginLeft: 20, marginTop: 100, flexDirection: 'column',
                         justifyContent: 'center',
                     }}> {('Select the Store')} </Text>
                     <FlatList
                         style={{ width: deviceWidth, marginTop: 50, marginBottom: 100, }}
-                        // scrollEnabled={false}
+                        //scrollEnabled={false}
                         ListHeaderComponent={this.renderHeader}
-                        data={this.state.storeNames}
-                        keyExtractor={item => item.email}
+                        data={this.state.storeData}
+                        keyExtractor={item => item}
                         renderItem={({ item, index }) => (
-                            <TouchableOpacity onPress={() => this.selectedLanguage(item, index)}>
+                            <TouchableOpacity onPress={() => this.selectStoreName(item, index)}>
                                 <View style={{
                                     borderBottomColor: 'lightgray', borderBottomWidth: 0.6, marginLeft: this.state.selectedItem === index ? 0 : 0, marginRight: this.state.selectedItem === index ? 0 : 0, backgroundColor: this.state.selectedItem === index ? '#ED1C24' : '#ffffff'
                                 }}>
@@ -130,7 +160,7 @@ export default class SelectStore extends React.Component {
                                         <Text style={{
                                             fontSize: 18, marginTop: 30, marginLeft: 20, fontFamily: 'medium', color: this.state.selectedItem === index ? '#ffffff' : '#353C40'
                                         }}>
-                                            {item}
+                                            {item.name}
                                         </Text>
                                         <Image source={this.state.selectedItem === index ? require('../assets/images/langselect.png') : require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 30 }} />
                                     </View>
@@ -208,6 +238,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         // marginBottom:100,
     },
+    viewswidth: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 24,
+        height: 84,
+      },
     signInButtonText: {
         color: 'white',
         justifyContent: 'center',
