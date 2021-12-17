@@ -50,7 +50,7 @@ export default class SelectStore extends React.Component {
                     let number = res.data.result[i]
                     this.state.storeData.push(number)
                     console.log(this.state.storeData)
-                    AsyncStorage.setItem("domainDataId", (res.data.result[0].id).toString()).then(() => {
+                    AsyncStorage.setItem("storeId", (res.data.result[0].id).toString()).then(() => {
                         // 
                        
                     }).catch(() => {

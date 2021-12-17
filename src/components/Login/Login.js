@@ -34,7 +34,7 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'superadmin1',
+            userName: 'super_user4',
             password: 'Otsi@123',
             dropValue: '',
             store: 0,
