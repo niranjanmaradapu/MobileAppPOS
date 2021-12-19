@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
 import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, ScrollView, FlatList } from 'react-native';
-var deviceWidth = Dimensions.get('window').width;
 import { DrawerActions } from '@react-navigation/native';
-var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
 import Device from 'react-native-device-detection'
-
-
-const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
 import {
     BarChart,
     PieChart
 } from "react-native-chart-kit";
 
+var deviceWidth = Dimensions.get('window').width;
 
+const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
 const chartConfigMobile = {
     backgroundGradientFrom: "#fff",
     backgroundGradientTo: "#fff",
@@ -64,7 +61,7 @@ const chartConfigTablet = {
     },
 };
 
-const datapie = [
+const salesByCategoryPie = [
 
     {
         name: "SHIRTS",
@@ -118,7 +115,7 @@ const datapie = [
     }
 ];
 
-const invoices = [
+const invoicesPie = [
     {
         name: "jan",
         sales: 10,
@@ -198,7 +195,7 @@ const invoices = [
     }
 ];
 
-const salesSummary = [
+const salesSummaryPie = [
     {
         name: "Sales",
         sales: 8000,
@@ -215,7 +212,7 @@ const salesSummary = [
     }
 ];
 
-const activeInactive = [
+const activeInactivePie = [
     {
         name: "Active",
         promo: 57,
@@ -232,7 +229,7 @@ const activeInactive = [
     }
 ];
 
-const dataBar = {
+const topSalesManBar = {
     labels: ["John", "Raju", "Gayathri", "Vignesh", "Ramya"],
     datasets: [
         {
@@ -242,7 +239,7 @@ const dataBar = {
 };
 
 
-const debitBar = {
+const debitNotesBar = {
     labels: ["Panjagutta-Hyd", "Patney-Hyd", "Chandanagar-Hyd", "Ecil-Hyd", "Vijayawada", "Vizag", "Waranal"],
     datasets: [
         {
@@ -251,7 +248,7 @@ const debitBar = {
     ]
 };
 
-const topSales = {
+const topSalesByStoresBar = {
     labels: ["Kukatpally-Hyd", "Patny-Hyd", "Vijaywada", "Panjagutta-Hyd", "Warangal"],
     datasets: [
         {
@@ -292,21 +289,19 @@ class Statitics extends Component {
         const sliceColor = ['#F44336', '#2196F3', '#FFEB3B', '#4CAF50', '#FF9800']
         return (
             <ScrollView>
-                {Device.isTablet ? <Text>Tablet</Text> : <Text>Mobile</Text>}
-                <View style={styles.container}>
-                    <View style={styles.viewswidth}>
-                        <TouchableOpacity style={styles.backButton} onPress={() => this.handleBackButtonClick()}>
+                <View style={styles.mainContainer}>
+                    <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
+                        <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
                             <Image source={require('../../assets/images/backButton.png')} />
                         </TouchableOpacity>
-                        <Text style={styles.headerTitle}> Statistics </Text>
-
+                        <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Statistics </Text>
                     </View>
-                    <View style={Device.isTablet ? styles.tabletContainer : styles.mobileContainer}>
-                        <Text style={styles.chartTitle}>Sales % by category</Text>
+                    <View style={Device.isTablet ? styles.salesByCategoryChart_tablet : styles.salesByCategoryChart_mobile}>
+                        <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Sales % by category</Text>
                         <PieChart
-                            data={datapie}
+                            data={salesByCategoryPie}
                             width={deviceWidth - 60}
-                            height={220}
+                            height={Device.isTablet ? 300 : 220}
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
                             accessor="population"
                             backgroundColor={"transparent"}
@@ -314,62 +309,55 @@ class Statitics extends Component {
                             center={[0, 0]}
                             absolute
                         />
-
                     </View>
-
-                    <View style={Device.isTablet ? styles.tabletContainer : styles.mobileContainer}>
-                        <Text style={styles.chartTitle}>Top 5 sales by category</Text>
-
+                    <View style={Device.isTablet ? styles.topSalesManChartContainer_tablet : styles.topSalesManChartContainer_mobile}>
+                        <Text style={ Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 sales by category</Text>
                         <BarChart
-                            style={{ margin: 5 }}
-                            data={dataBar}
+                            style={Device.isTablet ? styles.topSalesManChart_tablet : styles.topSalesManChart_mobile}
+                            data={topSalesManBar}
                             width={deviceWidth - 70}
-                            height={400}
+                            height={Device.isTablet ? 400 : 350}
                             yLabelsOffset={30}
                             yAxisLabel="₹"
                             yAxisSuffix="k"
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
-                            verticalLabelRotation={90}
+                            verticalLabelRotation={Device.isTablet ? 0 : 90}
                         />
                     </View>
-
-                    <View style={Device.isTablet ? styles.tabletContainer : styles.mobileContainer}>
-                        <Text style={styles.chartTitle}>Debit Notes by stores</Text>
-
+                    <View style={Device.isTablet ? styles.debitNotesChartContainer_tablet : styles.debitNotesChartContainer_mobile}>
+                        <Text style={ Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Debit Notes by stores</Text>
                         <BarChart
                             style={{ margin: 5 }}
-                            data={debitBar}
+                            data={debitNotesBar}
                             width={deviceWidth - 80}
-                            height={550}
+                            height={Device.isTablet ? 380 : 550}
                             yLabelsOffset={30}
                             yAxisLabel="₹"
                             yAxisSuffix="L"
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
-                            verticalLabelRotation={90}
+                            verticalLabelRotation={Device.isTablet ? 0 : 90}
                         />
                     </View>
-
-                    <View style={Device.isTablet ? styles.tabletContainer : styles.mobileContainer}>
-                        <Text style={styles.chartTitle}>Top 5 Sales By Store</Text>
+                    <View style={Device.isTablet ? styles.topSalesByStoresChartContainer_tablet : styles.topSalesByStoresChartContainer_mobile}>
+                        <Text style={ Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales By Store</Text>
                         <BarChart
                             style={{ margin: 5 }}
-                            data={topSales}
+                            data={topSalesByStoresBar}
                             width={deviceWidth - 70}
-                            height={490}
+                            height={Device.isTablet ? 380 : 490}
                             yLabelsOffset={20}
                             yAxisLabel="₹"
                             yAxisSuffix="L"
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
-                            verticalLabelRotation={90}
+                            verticalLabelRotation={Device.isTablet ? 0 : 90}
                         />
                     </View>
-
-                    <View style={Device.isTablet ? styles.tabletContainer : styles.mobileContainer}>
-                        <Text style={styles.chartTitle}>Invoices generated</Text>
+                    <View style={Device.isTablet ? styles.invoicesGeneratedChartContainer_tablet : styles.invoicesGeneratedChartContainer_mobile}>
+                        <Text style={ Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Invoices generated</Text>
                         <PieChart
-                            data={invoices}
+                            data={invoicesPie}
                             width={deviceWidth - 30}
-                            height={280}
+                            height={Device.isTablet ? 330 : 280}
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
                             accessor="sales"
                             backgroundColor={"transparent"}
@@ -378,15 +366,13 @@ class Statitics extends Component {
                             hasLegend="true"
                             absolute
                         />
-
                     </View>
-
-                    <View style={Device.isTablet ? styles.tabletContainer : styles.mobileContainer}>
-                        <Text style={styles.chartTitle}>Sales summary</Text>
+                    <View style={Device.isTablet ? styles.salesSummaryChartContainer_tablet : styles.salesSummaryChartContainer_mobile}>
+                        <Text style={ Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Sales summary</Text>
                         <PieChart
-                            data={salesSummary}
+                            data={salesSummaryPie}
                             width={deviceWidth - 60}
-                            height={180}
+                            height={Device.isTablet ? 230 : 180}
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
                             accessor="sales"
                             backgroundColor={"transparent"}
@@ -394,15 +380,13 @@ class Statitics extends Component {
                             center={[0, 0]}
                             absolute
                         />
-
                     </View>
-
-                    <View style={Device.isTablet ? styles.tabletContainer : styles.mobileContainer}>
-                        <Text style={styles.chartTitle}>Active & InActive Promos</Text>
+                    <View style={Device.isTablet ? styles.activeInactiveChartContainer_tablet : styles.activeInactiveChartContainer_mobile}>
+                        <Text style={ Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Active & InActive Promos</Text>
                         <PieChart
-                            data={activeInactive}
+                            data={activeInactivePie}
                             width={deviceWidth - 60}
-                            height={180}
+                            height={Device.isTablet ? 230 : 180}
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
                             accessor="promo"
                             backgroundColor={"transparent"}
@@ -410,26 +394,37 @@ class Statitics extends Component {
                             center={[0, 0]}
                             absolute
                         />
-
                     </View>
                 </View>
             </ScrollView>
         )
     }
 }
+
 export default Statitics
 
-
 const styles = StyleSheet.create({
-    // Tablet
-    backButton: {
+    mainContainer: {
+        flex: 1,
+        justifyContent: 'center',
+    },
+
+// Styles For Mobiles
+    viewsWidth_mobile: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 24,
+        height: 70,
+    },
+    backButton_mobile: {
         position: 'absolute',
         left: 10,
         top: 10,
         width: 40,
         height: 40,
     },
-    headerTitle: {
+    headerTitle_mobile: {
         position: 'absolute',
         left: 70,
         top: 27,
@@ -439,34 +434,132 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#353C40'
     },
-    safeArea: {
-        flex: 1,
-        justifyContent: 'center',
-        backgroundColor: '#FAFAFF'
-    },
-    viewswidth: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 24,
-        height: 70,
-    },
-    mobileContainer: {
+    salesByCategoryChart_mobile: {
         margin: 20,
         backgroundColor: '#FFFFFF',
         height: 280,
         borderRadius: 10
     },
-    chartTitle: {
+    chartTitle_mobile: {
         fontSize: 20,
         fontFamily: 'bold',
         marginTop: 20,
         marginLeft: 20
     },
-    tabletContainer: {
+    topSalesManChart_mobile: {
+        margin: 5,
+    },
+    topSalesManChartContainer_mobile: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 420,
+        borderRadius: 10
+    },
+    debitNotesChartContainer_mobile: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 620,
+        borderRadius: 10
+    },
+    topSalesByStoresChartContainer_mobile: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 570,
+        borderRadius: 10
+    },
+    invoicesGeneratedChartContainer_mobile: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 330,
+        borderRadius: 10
+    },
+    salesSummaryChartContainer_mobile: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 230,
+        borderRadius: 10
+    },
+    activeInactiveChartContainer_mobile: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 230,
+        borderRadius: 10
+    },
+
+    // Styles For Tablet
+    viewsWidth_tablet: {
         backgroundColor: '#ffffff',
-        margin: 30,
-        height: 600,
-        borderRadius: 15
-    }
-});
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 28,
+        height: 90,
+    },
+    backButton_tablet: {
+        position: 'absolute',
+        left: 10,
+        top: 20,
+        width: 90,
+        height: 90,
+    },
+    headerTitle_tablet: {
+        position: 'absolute',
+        left: 70,
+        top: 32,
+        width: 300,
+        height: 40,
+        fontFamily: 'bold',
+        fontSize: 24,
+        color: '#353C40'
+    },
+    salesByCategoryChart_tablet: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 340,
+        borderRadius: 10
+    },
+    chartTitle_tablet: {
+        fontSize: 25,
+        fontFamily: 'bold',
+        marginTop: 20,
+        marginLeft: 20
+    },
+    topSalesManChart_tablet: {
+        margin: 10,
+    },
+    topSalesManChartContainer_tablet: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 460,
+        borderRadius: 10
+    },
+    debitNotesChartContainer_tablet: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 450,
+        borderRadius: 10
+    },
+    topSalesByStoresChartContainer_tablet: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 450,
+        borderRadius: 10
+    },
+    invoicesGeneratedChartContainer_tablet: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 380,
+        borderRadius: 10
+    },
+    salesSummaryChartContainer_tablet: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 280,
+        borderRadius: 10
+    },
+    activeInactiveChartContainer_tablet: {
+        margin: 20,
+        backgroundColor: '#FFFFFF',
+        height: 280,
+        borderRadius: 10
+    },
+})
