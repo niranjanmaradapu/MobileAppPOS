@@ -7,6 +7,8 @@ import HomeNav from './HomeNav';
 import KathaBook from '../components/tabbar/Kathabook/KathaBook';
 import Promo from '../components/tabbar/Promotions/Promo';
 import PromoNavigation from './PromoNavigation';
+import Device from 'react-native-device-detection';
+
 const Tab = createBottomTabNavigator();
 class BottomTabBar extends Component {
 
@@ -28,7 +30,11 @@ class BottomTabBar extends Component {
               iconName = focused ? <Image source={require('../components/assets/images/marketRed.png')} /> : <Image source={require('../components/assets/images/market.png')} />
             }
             else if (route.name === 'NEW SALE') {
+              if(!Device.isTablet){
               iconName = focused ? <Image style={{ marginTop: -30 }} source={require('../components/assets/images/newsaleRed.png')} /> : <Image style={{ marginTop: -30 }} source={require('../components/assets/images/newsaleRed.png')} />
+              } else{
+                iconName = focused ? <Image style={{ marginTop: -70, marginLeft: 100 }} source={require('../components/assets/images/newsaleRed.png')} /> : <Image style={{ marginTop: -70, marginLeft: 100 }} source={require('../components/assets/images/newsaleRed.png')} />
+              }
             } else if (route.name === 'PROMO') {
               iconName = focused ? <Image source={require('../components/assets/images/promoRed.png')} /> : <Image source={require('../components/assets/images/promo.png')} />
             }
