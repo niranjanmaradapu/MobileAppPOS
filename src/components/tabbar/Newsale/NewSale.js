@@ -1051,8 +1051,9 @@ class NewSale extends Component {
   refresh() {
     if (global.barcodeId != 'something') {
       this.setState({ barcodeId: global.barcodeId })
+      this.barcodeDBStore()
     }
-    this.barcodeDBStore()
+    
     this.setState({ flagone: true })
     this.setState({ flagtwo: false })
     this.setState({ flagthree: false })
