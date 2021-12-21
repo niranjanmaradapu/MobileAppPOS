@@ -8,6 +8,7 @@ import ForgotPassword from '../components/Login/ForgotPassword';
 import HomeNavigation from './HomeNavigation';
 import Welcome from '../components/Welcome';
 import LanguageSelection from '../components/LanguageSelection';
+import RegisterClient from '../components/URM/RegisterClient';
 
 
 const Stack = createStackNavigator();
@@ -19,6 +20,7 @@ export default class AuthNavigation extends React.Component {
                 <Stack.Screen name="LanguageSelection" options={{ headerShown: false }} component={LanguageSelection} />
                 <Stack.Screen name="Welcome" options={{ headerShown: false }} component={Welcome} />
                 <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
+                <Stack.Screen name="RegisterClient" options={{ headerShown: false }} component={RegisterClient} />
                 <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUp} />
                 <Stack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
                 <Stack.Screen name="SelectDomain" options={{ headerShown: false }} component={SelectDomain} />

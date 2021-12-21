@@ -73,6 +73,10 @@ export default class Login extends Component {
         this.setState({ store: value });
     }
 
+    registerClient(){
+        this.props.navigation.navigate('RegisterClient')
+    }
+
 
 
     login() {
@@ -210,7 +214,7 @@ export default class Login extends Component {
                     const myArray = []
                     myArray = number.split(":");
                     this.state.storeNames.push({ name: myArray[0], id: myArray[1] })
-                   
+
                 }
                 this.setState({ storeNames: this.state.storeNames })
                 AsyncStorage.setItem("storeId", (this.state.storeNames[0].id).toString()).then(() => {
@@ -337,12 +341,27 @@ export default class Login extends Component {
                                             top: 35, alignItems: 'center', flexDirection: 'row'
                                         }}>
 
+                                          
+                                          
+
                                             <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> {I18n.t('Forgot password')} </Text>
                                             <TouchableOpacity
                                                 onPress={() => this.forgotPassword()} >
                                                 <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> {I18n.t('Reset')} </Text>
                                             </TouchableOpacity>
                                         </View>
+
+                                        <View style={{
+                                            position: 'absolute',
+                                            left: 20,
+                                            top: 35, alignItems: 'center', flexDirection: 'row'
+                                        }}>
+                                             <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> {'Register Client?'} </Text>
+                                        <TouchableOpacity
+                                                onPress={() => this.registerClient()} >
+                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> {'Register'} </Text>
+                                                </TouchableOpacity>
+                                                </View>
 
                                     </View>
                                 </View>
