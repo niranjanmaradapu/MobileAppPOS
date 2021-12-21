@@ -5,6 +5,7 @@ import { Chevron } from 'react-native-shapes';
 import axios from 'axios';
 import Loader from "../../loader";
 import DatePicker from 'react-native-date-picker'
+import InventoryService from '../../services/InventoryService';
 import Device from 'react-native-device-detection'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -30,7 +31,7 @@ export default class Inventory extends Component {
             endDate: "",
             date: new Date(),
             enddate: new Date(),
-            barcodesData: [],
+            barcodesData: [1,2],
             reBarcodesData: [],
             deleteBarcodeId: "",
             deleteBarcoeIndex: "",
@@ -45,6 +46,9 @@ export default class Inventory extends Component {
     filterAction() {
         
     }
+
+    
+
 
     topbarAction1(){
         this.setState({ flagone: true })
@@ -141,6 +145,16 @@ export default class Inventory extends Component {
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
                         Inventory Portal
                     </Text>
+                    {this.state.flagone && (
+                    <TouchableOpacity style={Device.isTablet ? styles.addBarcodeButton_tablet : styles.addBarcodeButton_mobile} onPress={() => this.navigateToAddBarcode()}>
+                        <Text style={Device.isTablet ? styles.addBarcodeButtonText_tablet : styles.addBarcodeButtonText_mobile}>Add BarCode</Text>
+                    </TouchableOpacity>
+                )}
+                    {/* <TouchableOpacity
+            style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ED1C24', borderRadius: 5, width: 105, height: 32, }}
+            onPress={() => this.navigateToScanCode()} >
+            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('NEW SALE SCAN')} </Text>
+          </TouchableOpacity> */}
                     <TouchableOpacity
                         style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
                         onPress={() => this.filterAction()} >
@@ -165,11 +179,7 @@ export default class Inventory extends Component {
                     </View>
                 </TouchableOpacity>
                 </View>
-                {this.state.flagone && (
-                    <TouchableOpacity style={Device.isTablet ? styles.addBarcodeButton_tablet : styles.addBarcodeButton_mobile} onPress={() => this.navigateToAddBarcode()}>
-                        <Text style={Device.isTablet ? styles.addBarcodeButtonText_tablet : styles.addBarcodeButtonText_mobile}>Add BarCode</Text>
-                    </TouchableOpacity>
-                )}
+              
                 {this.state.flagone && (
                     <FlatList
                         data={this.state.barcodesData}
@@ -536,13 +546,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     addBarcodeButton_mobile: {
-        position: 'absolute', 
-        right: 20, 
-        top: 150, 
-        backgroundColor: '#ED1C24', 
-        borderRadius: 5, 
-        width: 100, 
-        height: 32,
+           position: 'absolute', 
+           right: 70, 
+           top: 40,
+            backgroundColor: '#ED1C24', 
+            borderRadius: 5,
+             width: 110, 
+             height: 32,
+             textAlign: 'center',
+           alignItems: 'center',
     },
     addBarcodeButtonText_mobile: {
         fontSize: 12, 
@@ -736,13 +748,16 @@ const styles = StyleSheet.create({
         height: 37,
     },
     modalContainer_tablet: {
+        alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
         flexDirection: 'row',
-        marginLeft: 20,
+        alignSelf:'center',
         marginRight: 20,
         borderRadius: 5,
         marginTop: 20,
         borderColor: '#ED1C24',
-        width: '90%',
+        width: '100%',
         height: 50,
     },
     modalButton_tablet: {
@@ -763,12 +778,14 @@ const styles = StyleSheet.create({
     },
     addBarcodeButton_tablet: {
         position: 'absolute', 
-        right: 20, 
-        top: 150, 
-        backgroundColor: '#ED1C24', 
-        borderRadius: 5, 
-        width: 110,
-        height: 42,
+        right: 70, 
+        top: 40,
+         backgroundColor: '#ED1C24', 
+         borderRadius: 5,
+          width: 110, 
+          height: 32,
+          textAlign: 'center',
+        alignItems: 'center',
     },
     addBarcodeButtonText_tablet: {
         fontSize: 17, 

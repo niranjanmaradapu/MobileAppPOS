@@ -4,6 +4,10 @@ import { Chevron } from 'react-native-shapes';
 import Loader from '../../loader';
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
+import InventoryService from '../../services/InventoryService';
+import LoginService from '../../services/LoginService';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -12,7 +16,7 @@ var deviceWidth = Dimensions.get('window').width;
     constructor(props){
         super(props);
         this.state = {
-            division: "",
+            division: '',
             section: "",
             subSection: "",
             category: "",
@@ -20,32 +24,292 @@ var deviceWidth = Dimensions.get('window').width;
             batchNo: "",
             costPrice: 0,
             listPrice: 0,
-            uom: "",
+            uomName: "",
             hsnCode: "",
             store: "",
             empId: "",
             quantity: "",
+            divisionArray:[],
+            divisions:[],
+            divisionId:0,
+            secionArray:[],
+            secions:[],
+            sectionId:0,
+            subsecionArray:[],
+            subsecions:[],
+            subsectionId:0,
+            catogiriesArray:[],
+            catogiries:[],
+            catogirieId:0,
+            uom:[],
+            uomArray:[],
+            uomId:0,
+            hsncodes:[],
+            hsncodesArray:[],
+            hsnId:"",
+            storeNamesArray: [],
+            storeNames: [],
+            storeId: 1,
+            domainId: 1,
         }
     }
 
+    componentDidMount(){
+        var domainStringId = ""
+        AsyncStorage.getItem("domainDataId").then((value) => {
+            domainStringId = value
+            this.setState({ domainId: parseInt(domainStringId) })
+            console.log("domain data id" + this.state.domainId)
+            this.getAllpools()
+
+        }).catch(() => {
+            console.log('there is error getting domainDataId')
+        })
+
+
+       
+
+        this.getAllDivisions()
+        this.getAllCatogiries()
+        this.getAllUOM()
+        this.getAllHSNCodes()
+        this.getAllstores()
+    }
+    
+    getAllDivisions() {
+        var divisions = [];
+        axios.get(InventoryService.getAllDivisions(),).then((res) => {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                  
+                    this.state.divisionArray.push({ name: res.data["result"][i].name, id:  res.data["result"][i].id })
+                 
+                    divisions.push({
+                        value: this.state.divisionArray[i].name,
+                        label: this.state.divisionArray[i].name
+                    });
+                    console.log(this.state.divisionArray)
+                    this.setState({
+                        divisions: divisions,
+                    })
+                  
+                    this.setState({ divisionArray: this.state.divisionArray })
+                }
+            }
+            
+        });
+      }
+    
+    
+      getAllSections() {
+        const params = {
+            "id": this.state.divisionId
+        }
+        var secions = [];
+        axios.get(InventoryService.getAllSections(),{params}).then((res) => {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                  
+                    this.state.secionArray.push({ name: res.data["result"][i].name, id:  res.data["result"][i].id })
+                 
+                    secions.push({
+                        value: this.state.secionArray[i].name,
+                        label: this.state.secionArray[i].name
+                    });
+                 
+                    this.setState({
+                        secions: secions,
+                    })
+                  
+                    this.setState({ secionArray: this.state.secionArray })
+                }
+            }
+            
+        });
+      }
+    
+      getAllSubsections() {
+        const params = {
+            "id": this.state.sectionId
+        }
+        var subsecions = [];
+        axios.get(InventoryService.getAllSections(),{params}).then((res) => {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                  
+                    this.state.subsecionArray.push({ name: res.data["result"][i].name, id:  res.data["result"][i].id })
+                 
+                    subsecions.push({
+                        value: this.state.subsecionArray[i].name,
+                        label: this.state.subsecionArray[i].name
+                    });
+                    console.log(this.state.subsecionArray)
+                    this.setState({
+                        subsecions: subsecions,
+                    })
+                  
+                    this.setState({ subsecionArray: this.state.subsecionArray })
+                }
+            }
+            
+        });
+      }
+
+      getAllCatogiries() {
+        var catogiries = [];
+        axios.get(InventoryService.getAllCategories()).then((res) => {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                  
+                    this.state.catogiriesArray.push({ name: res.data["result"][i].name, id:  res.data["result"][i].id })
+                 
+                    catogiries.push({
+                        value: this.state.catogiriesArray[i].name,
+                        label: this.state.catogiriesArray[i].name
+                    });
+                 
+                    this.setState({
+                        catogiries: catogiries,
+                    })
+                  
+                    this.setState({ catogiriesArray: this.state.catogiriesArray })
+                }
+            }
+            
+        });
+      
+      }
+
+      getAllUOM(){
+        var uom = [];
+        axios.get(InventoryService.getUOM()).then((res) => {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    this.state.uomArray.push({ name: res.data["result"][i].uomName, id:  res.data["result"][i].id })
+                    console.log(this.state.uomArray)
+                    uom.push({
+                        value: this.state.uomArray[i].name,
+                        label: this.state.uomArray[i].name
+                    });
+                 
+                    this.setState({
+                        uom: uom,
+                    })
+                  
+                    this.setState({ uomArray: this.state.uomArray })
+                }
+            }
+            
+        });  
+      }
+
+      getAllHSNCodes(){
+        var hsncodes = [];
+        axios.get(InventoryService.getAllHsnList()).then((res) => {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    this.state.hsncodesArray.push({ name: res.data["result"][i].hsnCode, id:  res.data["result"][i].id })
+                    console.log(res.data["result"])
+                    hsncodes.push({
+                        value: this.state.hsncodesArray[i].name,
+                        label: this.state.hsncodesArray[i].name
+                    });
+                 
+                    this.setState({
+                        hsncodes: hsncodes,
+                    })
+                  
+                    this.setState({ hsncodesArray: this.state.hsncodesArray })
+                }
+            }
+            
+        });  
+      }
+
+      async getAllstores(){
+        const username = await AsyncStorage.getItem("username");
+        var storeNames = [];
+        axios.get(LoginService.getUserStores() + username).then((res) => {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    let number = res.data.result[i]
+                    const myArray = []
+                    myArray = number.split(":");
+                    this.state.storeNamesArray.push({ name: myArray[0], id: myArray[1] })
+                    console.log(this.state.storeNamesArray)
+                    storeNames.push({
+                        value: this.state.storeNamesArray[i].name,
+                        label: this.state.storeNamesArray[i].name
+                    });
+                    this.setState({
+                        storeNames: storeNames,
+                    })
+
+                    this.setState({ storeNamesArray: this.state.storeNamesArray })
+
+                }
+
+            }
+        });
+      }
 
     handleBackButtonClick() {
         this.props.navigation.navigate('Inventory')
     }
 
     handleDivision = (value) => {
+        for (let i = 0; i < this.state.divisionArray.length; i++) {
+            if (this.state.divisionArray[i].name === value) {
+              this.setState({ divisionId: this.state.divisionArray[i].id })
+            }   
+        }
+        this.getAllSections()
         this.setState({ division: value })
     }
 
     handleSection = (value) => {
+        for (let i = 0; i < this.state.secionArray.length; i++) {
+            if (this.state.secionArray[i].name === value) {
+              this.setState({ sectionId: this.state.secionArray[i].id })
+            }   
+        }
+        this.getAllSubsections()
         this.setState({ section: value })
     }
 
     handleSubSection = (value) => {
+        for (let i = 0; i < this.state.subsecionArray.length; i++) {
+            if (this.state.subsecionArray[i].name === value) {
+              this.setState({ subsectionId: this.state.subsecionArray[i].id })
+            }   
+        }
         this.setState({ subSection: value })
     }
     handleCateory = (value) => {
+        for (let i = 0; i < this.state.catogiriesArray.length; i++) {
+            if (this.state.catogiriesArray[i].name === value) {
+              this.setState({ catogirieId: this.state.catogiriesArray[i].id })
+            }   
+        }
         this.setState({ category: value })
+    }
+
+    handleUOM = (value) => {
+        for (let i = 0; i < this.state.uomArray.length; i++) {
+            if (this.state.uomArray[i].name === value) {
+              this.setState({ uomId: this.state.uomArray[i].id })
+            }   
+        }
+        this.setState({ uomName: value })
+    }
+
+    handleHSNCode = (value) => {
+        for (let i = 0; i < this.state.hsncodesArray.length; i++) {
+            if (this.state.hsncodesArray[i].name === value) {
+              this.setState({ hsnId: this.state.hsncodesArray[i].id })
+            }   
+        }
+        this.setState({ hsnCode: value })
     }
 
     handleColour = (value) => {
@@ -64,15 +328,15 @@ var deviceWidth = Dimensions.get('window').width;
         this.setState({ listPrice: value })
     }
 
-    handleUOM = (value) => {
-        this.setState({ uom: value })
-    }
-
-    handleHSNCode = (value) => {
-        this.setState({ hsnCode: value })
-    }
+   
 
     handleStore = (value) => {
+        for (let i = 0; i < this.state.storeNamesArray.length; i++) {
+            if (this.state.storeNamesArray[i].name === value) {
+                this.setState({ selectedstoreId: this.state.storeNamesArray[i].id })
+            }   
+        }
+
         this.setState({ store: value })
     }
 
@@ -85,7 +349,7 @@ var deviceWidth = Dimensions.get('window').width;
     }
 
     saveBarcode() {
-        if (String(this.state.division).length === 0) {
+        if (this.state.divisionId.length === 0) {
             alert("please select the Division");
         }
         else if(String(this.state.section).length === 0) {
@@ -97,7 +361,7 @@ var deviceWidth = Dimensions.get('window').width;
         else if(String(this.state.category).length === 0) {
             alert("please select the category");
         }
-        else if(String(this.state.colour).lenght === 0) {
+        else if(String(this.state.colour).length === 0) {
             alert("please enter the Colour");
         }
         else if(String(this.state.batchNo).length === 0) {
@@ -125,6 +389,37 @@ var deviceWidth = Dimensions.get('window').width;
             alert("please enter the Qty");
         }
         else {
+            const params = {
+                    "division":this.state.divisionId,
+                    "section":this.state.sectionId,
+                    "subSection":this.state.subsectionId,
+                    "category":this.state.catogirieId,
+                    "batchNo":this.state.batchNo,
+                    "colour":this.state.colour,
+                    "productTextile": {
+                       "costPrice": this.state.costPrice,
+                       "empId":this.state.empId,
+                       "hsnMasterId": this.state.hsnId,
+                       "itemMrp": this.state.listPrice,
+                       "qty":this.state.quantity,
+                       "storeId":this.state.storeId ,
+                       "uom": this.state.uomName,
+                     }
+              }
+              console.log('params are' + JSON.stringify(params))
+              this.setState({ loading: true })
+              axios.post(InventoryService.addTextileBarcodes(), params).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                  console.log(`inventory added successfully`);
+                 // this.props.route.params.onGoBack();
+                  this.props.navigation.goBack();
+                }
+                else {
+                  this.setState({ loading: false })
+                  alert("duplicate record already exists");
+                }
+              }
+              );
             alert("success");
         }
     }
@@ -157,11 +452,7 @@ var deviceWidth = Dimensions.get('window').width;
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
-                            items={[
-                                {label: 'mens', value: 'mens'},
-                                {label: 'ladies', value: 'ladies'},
-                                {label: 'kids', value: 'kids'}
-                            ]}
+                            items={this.state.divisions}
                             onValueChange={this.handleDivision}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                             value={this.state.division}
@@ -177,9 +468,7 @@ var deviceWidth = Dimensions.get('window').width;
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
-                            items={[
-
-                            ]}
+                            items={this.state.secions}
                             onValueChange={this.handleSection}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                             value={this.state.section}
@@ -195,9 +484,7 @@ var deviceWidth = Dimensions.get('window').width;
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
-                            items={[
-
-                            ]}
+                            items={this.state.subsecions}
                             onValueChange={this.handleSubSection}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                             value={this.state.subSection}
@@ -213,12 +500,10 @@ var deviceWidth = Dimensions.get('window').width;
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
-                            items={[
-
-                            ]}
+                            items={this.state.catogiries}
                             onValueChange={this.handleCateory}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                            value={this.state.Category}
+                            value={this.state.category}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
@@ -251,7 +536,7 @@ var deviceWidth = Dimensions.get('window').width;
                         />
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                             underlineColorAndroid="transparent"
-                            placeholder="Last Price"
+                            placeholder="List Price"
                             placeholderTextColor="#6F6F6F"
                             textAlignVertical="center"
                             autoCapitalize="none"
@@ -267,12 +552,10 @@ var deviceWidth = Dimensions.get('window').width;
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
-                            items={[
-
-                            ]}
+                            items={this.state.uom}
                             onValueChange={this.handleUOM}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                            value={this.state.uom}
+                            value={this.state.uomName}
                             useNativeAndroidPickerStyle={false}
                         />
                         </View>
@@ -285,9 +568,7 @@ var deviceWidth = Dimensions.get('window').width;
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
-                            items={[
-
-                            ]}
+                            items={this.state.hsncodes}
                             onValueChange={this.handleHSNCode}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                             value={this.state.hsnCode}
@@ -312,9 +593,7 @@ var deviceWidth = Dimensions.get('window').width;
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
-                            items={[
-
-                            ]}
+                            items={this.state.storeNames}
                             onValueChange={this.handleStore}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                             value={this.state.store}
