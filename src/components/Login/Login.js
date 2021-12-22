@@ -114,7 +114,7 @@ export default class Login extends Component {
                         var finalToken = value.replace('"', '');
                         console.log(finalToken);
                         axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken }
-                        console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
+                        //console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
                     })
 
                     AsyncStorage.setItem("phone_number", jwt_decode(token)["phone_number"]).then(() => {
@@ -189,7 +189,7 @@ export default class Login extends Component {
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
                     if (res.data["result"].length > 1) {
-                        this.props.navigation.navigate('SelectStore')
+                        this.props.navigation.navigate('SelectStore',{isFromDomain:false})
                     }
                     else {
                         AsyncStorage.setItem("storeId", String(res.data.result[0].id)).then(() => {
@@ -227,7 +227,7 @@ export default class Login extends Component {
                     this.props.navigation.navigate('HomeNavigation')
                 }
                 else {
-                    this.props.navigation.navigate('SelectStore')
+                    this.props.navigation.navigate('SelectStore',{isFromDomain:false})
                 }
             }
         });
