@@ -10,9 +10,9 @@ axios.interceptors.request.use(
    (req) => {
       AsyncStorage.getItem("tokenkey").then((value) => {
          var finalToken = value.replace('"', '');
-         console.log(finalToken);
+        // console.log(finalToken);
          axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken }
-         console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
+         //console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
       }).catch(() => {
          console.log('there is error getting token')
       })

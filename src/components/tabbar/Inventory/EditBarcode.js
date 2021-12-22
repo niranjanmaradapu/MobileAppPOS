@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 var deviceWidth = Dimensions.get('window').width;
 
- class AddBarcode extends Component {
+ class EditBarcode extends Component {
 
     constructor(props){
         super(props);
@@ -51,24 +51,61 @@ var deviceWidth = Dimensions.get('window').width;
             storeNames: [],
             storeId: 1,
             domainId: 1,
+            item: [],
+            storeName:"",
+            productTextileId:0,
+            barcodeTextileId:0,
         }
     }
 
     componentDidMount(){
         var domainStringId = ""
         var storeStringId = ""
+        var storeName = ""
         AsyncStorage.getItem("domainDataId").then((value) => {
             domainStringId = value
             this.setState({ domainId: parseInt(domainStringId) })
-            console.log("domain data id" + this.state.domainId)
+           // console.log("domain data id" + this.state.domainId)
             this.getAllpools()
 
         }).catch(() => {
             console.log('there is error getting domainDataId')
         })
+
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value
+            this.setState({ storeId: parseInt(storeStringId) })
+           // console.log(this.state.storeId)
+            this.getAllBarcodes()
+           
+          }).catch(() => {
+            console.log('there is error getting storeId')
+          })
+
+          AsyncStorage.getItem("storeName").then((value) => {
+            storeName = value
+            this.setState({ storeName: storeName})           
+          }).catch(() => {
+            console.log('there is error getting storeId')
+          })   
+      //('dasdsadsadsad' + this.props.route.params.item)
+        this.setState({ divisionId: this.props.route.params.item.division })
+        this.setState({ sectionId: this.props.route.params.item.section })
+        this.setState({ subsectionId: this.props.route.params.item.subSection })
+        this.setState({ catogirieId: this.props.route.params.item.category })
+        this.setState({ colour: this.props.route.params.item.colour })
+        this.setState({ batchNo: this.props.route.params.item.batchNo })
+        this.setState({ costPrice: String(this.props.route.params.item.productTextile.costPrice) })
+        this.setState({ listPrice: String(this.props.route.params.item.productTextile.itemMrp) })
+        this.setState({ uomName: this.props.route.params.item.productTextile.uom})
+        this.setState({ hsnId: this.props.route.params.item.productTextile.hsnMasterId})
+        this.setState({ empId: this.props.route.params.item.productTextile.empId})
+        this.setState({ storeId: this.props.route.params.item.productTextile.storeId})
+        this.setState({ quantity: String(this.props.route.params.item.productTextile.qty)})
+        this.setState({ productTextileId:this.props.route.params.item.productTextile.productTextileId})
+        this.setState({ barcodeTextileId:this.props.route.params.item.barcodeTextileId})
         this.getAllDivisions()
         this.getAllCatogiries()
-        this.getAllUOM()
         this.getAllHSNCodes()
         this.getAllstores()
     }
@@ -80,12 +117,16 @@ var deviceWidth = Dimensions.get('window').width;
                 for (var i = 0; i < res.data["result"].length; i++) {
                   
                     this.state.divisionArray.push({ name: res.data["result"][i].name, id:  res.data["result"][i].id })
+                    if (this.state.divisionArray[i].id === this.state.divisionId) {
+                        this.setState({ division: this.state.divisionArray[i].name })
+                        this.getAllSections()
+                      }   
                  
                     divisions.push({
                         value: this.state.divisionArray[i].name,
                         label: this.state.divisionArray[i].name
                     });
-                    console.log(this.state.divisionArray)
+                   // console.log(this.state.divisionArray)
                     this.setState({
                         divisions: divisions,
                     })
@@ -95,6 +136,7 @@ var deviceWidth = Dimensions.get('window').width;
             }
             
         });
+      
       }
     
     
@@ -108,6 +150,10 @@ var deviceWidth = Dimensions.get('window').width;
                 for (var i = 0; i < res.data["result"].length; i++) {
                   
                     this.state.secionArray.push({ name: res.data["result"][i].name, id:  res.data["result"][i].id })
+                    if (this.state.secionArray[i].id === this.state.sectionId) {
+                        this.setState({ section: this.state.secionArray[i].name })
+                        this.getAllSubsections()
+                      }   
                  
                     secions.push({
                         value: this.state.secionArray[i].name,
@@ -135,12 +181,16 @@ var deviceWidth = Dimensions.get('window').width;
                 for (var i = 0; i < res.data["result"].length; i++) {
                   
                     this.state.subsecionArray.push({ name: res.data["result"][i].name, id:  res.data["result"][i].id })
-                 
+                    if (this.state.subsecionArray[i].id === this.state.subsectionId) {
+                        this.setState({ subSection: this.state.subsecionArray[i].name })
+                        this.getAllSubsections()
+                      }   
+
                     subsecions.push({
                         value: this.state.subsecionArray[i].name,
                         label: this.state.subsecionArray[i].name
                     });
-                    console.log(this.state.subsecionArray)
+                  //  console.log(this.state.subsecionArray)
                     this.setState({
                         subsecions: subsecions,
                     })
@@ -159,7 +209,10 @@ var deviceWidth = Dimensions.get('window').width;
                 for (var i = 0; i < res.data["result"].length; i++) {
                   
                     this.state.catogiriesArray.push({ name: res.data["result"][i].name, id:  res.data["result"][i].id })
-                 
+                    if (this.state.catogiriesArray[i].id === this.state.catogirieId) {
+                        this.setState({ category: this.state.catogiriesArray[i].name })
+                        this.getAllSections()
+                      }   
                     catogiries.push({
                         value: this.state.catogiriesArray[i].name,
                         label: this.state.catogiriesArray[i].name
@@ -183,7 +236,11 @@ var deviceWidth = Dimensions.get('window').width;
             if (res.data["result"]) {
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.uomArray.push({ name: res.data["result"][i].uomName, id:  res.data["result"][i].id })
-                    console.log(this.state.uomArray)
+                    if (this.state.uomArray[i].name === this.state.uomName) {
+                        this.setState({ uomName: this.state.uomArray[i].uomName })
+                      }   
+
+                 //   console.log(this.state.uomArray)
                     uom.push({
                         value: this.state.uomArray[i].name,
                         label: this.state.uomArray[i].name
@@ -206,7 +263,11 @@ var deviceWidth = Dimensions.get('window').width;
             if (res.data["result"]) {
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.hsncodesArray.push({ name: res.data["result"][i].hsnCode, id:  res.data["result"][i].id })
-                    console.log(res.data["result"])
+                    if (this.state.hsncodesArray[i].id === this.state.hsnId) {
+                        this.setState({ hsnCode: this.state.hsncodesArray[i].name })
+                        this.getAllSubsections()
+                      }   
+                  //  console.log(res.data["result"])
                     hsncodes.push({
                         value: this.state.hsncodesArray[i].name,
                         label: this.state.hsncodesArray[i].name
@@ -233,7 +294,8 @@ var deviceWidth = Dimensions.get('window').width;
                     const myArray = []
                     myArray = number.split(":");
                     this.state.storeNamesArray.push({ name: myArray[0], id: myArray[1] })
-                    console.log(this.state.storeNamesArray)
+                  //  console.log(this.state.storeNamesArray)
+                   
                     storeNames.push({
                         value: this.state.storeNamesArray[i].name,
                         label: this.state.storeNamesArray[i].name
@@ -243,6 +305,10 @@ var deviceWidth = Dimensions.get('window').width;
                     })
 
                     this.setState({ storeNamesArray: this.state.storeNamesArray })
+                    if (this.state.storeNamesArray[i].id === this.state.storeId) {
+                        this.setState({ store: this.state.storeNamesArray[i].name })
+                      }   
+                      
 
                 }
 
@@ -256,12 +322,7 @@ var deviceWidth = Dimensions.get('window').width;
     }
 
     handleDivision = (value) => {
-        for (let i = 0; i < this.state.divisionArray.length; i++) {
-            if (this.state.divisionArray[i].name === value) {
-              this.setState({ divisionId: this.state.divisionArray[i].id })
-            }   
-        }
-        this.getAllSections()
+       // this.getAllSections()
         this.setState({ division: value })
     }
 
@@ -347,47 +408,15 @@ var deviceWidth = Dimensions.get('window').width;
     }
 
     saveBarcode() {
-        if (this.state.divisionId.length === 0) {
-            alert("please select the Division");
-        }
-        else if(String(this.state.section).length === 0) {
-            alert("please select the Section");
-        }
-        else if(String(this.state.subSection).length === 0) {
-            alert("please select the Sub Section");
-        }
-        else if(String(this.state.category).length === 0) {
-            alert("please select the category");
-        }
-        else if(String(this.state.colour).length === 0) {
-            alert("please enter the Colour");
-        }
-        else if(String(this.state.batchNo).length === 0) {
-            alert("please enter the Batch No");
-        }
-        else if(String(this.state.costPrice).length === 0) {
-            alert("please enter the Cost Price");
-        }
-        else if(String(this.state.listPrice).length === 0) {
+       if(String(this.state.listPrice).length === 0) {
             alert("please enter the List price")
-        }
-        else if(String(this.state.uom).length === 0) {
-            alert("please select the UOM");
-        }
-        else if(String(this.state.hsnCode).length === 0) {
-            alert("please enter the Hsn code");
-        }
-        else if(String(this.state.empId).length === 0) {
-            alert("please enter the Emp ID");
-        }
-        else if(String(this.state.store).length === 0) {
-            alert("please select the Store");
         }
         else if(String(this.state.quantity) === 0) {
             alert("please enter the Qty");
         }
         else {
             const params = {
+                "barcodeTextileId":this.state.barcodeTextileId,
                     "division":this.state.divisionId,
                     "section":this.state.sectionId,
                     "subSection":this.state.subsectionId,
@@ -395,21 +424,26 @@ var deviceWidth = Dimensions.get('window').width;
                     "batchNo":this.state.batchNo,
                     "colour":this.state.colour,
                     "productTextile": {
+                    "productTextileId":this.state.productTextileId,
                        "costPrice": this.state.costPrice,
+                       "createForLocation": 0,
                        "empId":this.state.empId,
                        "hsnMasterId": this.state.hsnId,
+                       "itemCode": "item1",
+                       "itemRsp": 0,
                        "itemMrp": this.state.listPrice,
                        "qty":this.state.quantity,
                        "storeId":this.state.storeId ,
                        "uom": this.state.uomName,
+                       "valueAdditionCp": 0
                      }
               }
               console.log('params are' + JSON.stringify(params))
               this.setState({ loading: true })
-              axios.post(InventoryService.addTextileBarcodes(), params).then((res) => {
+              axios.put(InventoryService.updatTextileBarcodes(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                  console.log(`inventory added successfully`);
-                 // this.props.route.params.onGoBack();
+                  this.setState({ loading: false })
+                 this.props.route.params.onGoBack();
                   this.props.navigation.goBack();
                 }
                 else {
@@ -418,7 +452,7 @@ var deviceWidth = Dimensions.get('window').width;
                 }
               }
               );
-            alert("success");
+           
         }
     }
 
@@ -438,7 +472,7 @@ var deviceWidth = Dimensions.get('window').width;
                     <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
                         <Image source={require('../../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Add Barcode </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Edit Barcode </Text>
                 </View>
                 <ScrollView>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
@@ -450,6 +484,7 @@ var deviceWidth = Dimensions.get('window').width;
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
+                            disabled={true}
                             items={this.state.divisions}
                             onValueChange={this.handleDivision}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
@@ -466,6 +501,7 @@ var deviceWidth = Dimensions.get('window').width;
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
+                            disabled={true}
                             items={this.state.secions}
                             onValueChange={this.handleSection}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
@@ -482,6 +518,7 @@ var deviceWidth = Dimensions.get('window').width;
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
+                            disabled={true}
                             items={this.state.subsecions}
                             onValueChange={this.handleSubSection}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
@@ -498,6 +535,7 @@ var deviceWidth = Dimensions.get('window').width;
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
+                            disabled={true}
                             items={this.state.catogiries}
                             onValueChange={this.handleCateory}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
@@ -512,6 +550,7 @@ var deviceWidth = Dimensions.get('window').width;
                             textAlignVertical="center"
                             autoCapitalize="none"
                             value={this.state.colour}
+                            editable={false} selectTextOnFocus={false}
                             onChangeText={this.handleColour}
                         />
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -521,6 +560,7 @@ var deviceWidth = Dimensions.get('window').width;
                             textAlignVertical="center"
                             autoCapitalize="none"
                             value={this.state.batchNo}
+                            editable={false} selectTextOnFocus={false}
                             onChangeText={this.handleBatchNo}
                         />
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -530,9 +570,10 @@ var deviceWidth = Dimensions.get('window').width;
                             textAlignVertical="center"
                             autoCapitalize="none"
                             value={this.state.costPrice}
+                            editable={false} selectTextOnFocus={false}
                             onChangeText={this.handleCostPrice}
                         />
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    <TextInput style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
                             underlineColorAndroid="transparent"
                             placeholder="List Price"
                             placeholderTextColor="#6F6F6F"
@@ -541,22 +582,16 @@ var deviceWidth = Dimensions.get('window').width;
                             value={this.state.listPrice}
                             onChangeText={this.handleListPrice}
                         />
-                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                        <RNPickerSelect 
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                            placeholder={{
-                                label: 'UOM'
-                            }}
-                            Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                            }}
-                            items={this.state.uom}
-                            onValueChange={this.handleUOM}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                        <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                            underlineColorAndroid="transparent"
+                            placeholder="UOM"
+                            placeholderTextColor="#6F6F6F"
+                            textAlignVertical="center"
+                            autoCapitalize="none"
                             value={this.state.uomName}
-                            useNativeAndroidPickerStyle={false}
+                            editable={false} selectTextOnFocus={false}
+                           
                         />
-                        </View>
                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect 
                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -580,25 +615,21 @@ var deviceWidth = Dimensions.get('window').width;
                             textAlignVertical="center"
                             autoCapitalize="none"
                             value={this.state.empId}
+                            editable={false} selectTextOnFocus={false}
                             onChangeText={this.handleEMPId}
                         />
-                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                        <RNPickerSelect 
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                            placeholder={{
-                                label: 'Store'
-                            }}
-                            Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                            }}
-                            items={this.state.storeNames}
-                            onValueChange={this.handleStore}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                            value={this.state.store}
-                            useNativeAndroidPickerStyle={false}
+
+<TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                            underlineColorAndroid="transparent"
+                            placeholder="Store"
+                            placeholderTextColor="#6F6F6F"
+                            textAlignVertical="center"
+                            autoCapitalize="none"
+                            value={this.state.storeName}
+                            onChangeText={this.handleStore}
                         />
-                        </View>
-                        <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        
+                        <TextInput style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
                             underlineColorAndroid="transparent"
                             placeholder="QTY"
                             placeholderTextColor="#6F6F6F"
@@ -622,7 +653,7 @@ var deviceWidth = Dimensions.get('window').width;
     }
 }
 
-export default AddBarcode;
+export default EditBarcode;
 
 const pickerSelectStyles_mobile = StyleSheet.create({
     placeholder: {
@@ -638,8 +669,8 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         fontFamily: 'regular',
         //paddingLeft: -20,
         fontSize: 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
+        borderColor: '#DCE3F2',
+        backgroundColor: '#DCE3F2',
     },
     inputAndroid: {
         justifyContent: 'center',
@@ -649,8 +680,8 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         fontFamily: 'regular',
         //paddingLeft: -20,
         fontSize: 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
+        borderColor: '#DCE3F2',
+      backgroundColor: '#DCE3F2',
         color: '#001B4A',
 
         // marginLeft: 20,
@@ -680,8 +711,8 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         fontFamily: 'regular',
         //paddingLeft: -20,
         fontSize: 20,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
+        borderColor: '#DCE3F2',
+        backgroundColor: '#DCE3F2',
     },
     inputAndroid: {
         justifyContent: 'center',
@@ -691,8 +722,9 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         fontFamily: 'regular',
         //paddingLeft: -20,
         fontSize: 20,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
+        borderColor: '#DCE3F2',
+        backgroundColor: '#DCE3F2',
+       
         color: '#001B4A',
 
         // marginLeft: 20,
@@ -752,6 +784,21 @@ const styles = StyleSheet.create({
         height: 44,
         marginTop: 5,
         marginBottom: 10,
+        borderColor: '#DCE3F2',
+        borderRadius: 3,
+        backgroundColor: '#DCE3F2',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    input_mobile_edit: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
@@ -772,7 +819,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderColor: '#8F9EB717',
         borderRadius: 3,
-        backgroundColor: '#FBFBFB',
+        backgroundColor: '#DCE3F2',
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
@@ -839,13 +886,28 @@ const styles = StyleSheet.create({
         height: 54,
         marginTop: 5,
         marginBottom: 10,
+        borderColor: '#DCE3F2',
+        borderRadius: 3,
+        backgroundColor: '#DCE3F2',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    input_tablet_edit: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 20,
+        fontSize: 14,
     },
     rnSelect_tablet: {
         color: '#8F9EB7',
@@ -859,7 +921,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         borderColor: '#8F9EB717',
         borderRadius: 3,
-        backgroundColor: '#FBFBFB',
+        backgroundColor: '#DCE3F2',
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,

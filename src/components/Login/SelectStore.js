@@ -30,7 +30,9 @@ export default class SelectStore extends React.Component {
       }
 
     async componentDidMount() {
+      
         this.setState({ isFromDomain: this.props.route.params.isFromDomain })
+      
         this.getstores()
     }
 
@@ -64,7 +66,6 @@ export default class SelectStore extends React.Component {
     }
     else{
         const username = await AsyncStorage.getItem("username");
-        var storeNames = [];
         axios.get(LoginService.getUserStores() + username).then((res) => {
             if (res.data["result"]) {
                 for (var i = 0; i < res.data["result"].length; i++) {
@@ -72,14 +73,20 @@ export default class SelectStore extends React.Component {
                     const myArray = []
                      myArray = number.split(":");
                     this.state.storeData.push({name:myArray[0],id:myArray[1]})
-                    console.log(this.state.storeData) 
-                    AsyncStorage.setItem("storeId", ( this.state.storeData[0].id).toString()).then(() => {
-                    
+                    this.setState({ storeData: this.state.storeData })
+                    console.log('sfsfssfdsfsdfs' + this.state.storeData[0].id)
+                    AsyncStorage.setItem("storeId", (this.state.storeData[0].id).toString()).then(() => {
                        
                     }).catch(() => {
                         console.log('there is error saving token')
                     })
-                    this.setState({ storeData: this.state.storeData })
+
+                    AsyncStorage.setItem("storeName", (this.state.storeData[0].name)).then(() => {
+                       
+                    }).catch(() => {
+                        console.log('there is error saving token')
+                    })
+                  
                     console.log('adsadas' +  this.state.storeData[0].id)
                     
                 }
@@ -105,6 +112,11 @@ export default class SelectStore extends React.Component {
         AsyncStorage.setItem("storeId", String(item.id)).then(() => {
         }).catch(() => {
             console.log('there is error saving storeId')
+        })
+
+        AsyncStorage.setItem("storeName",id.name).then(() => {            
+        }).catch(() => {
+            console.log('there is error saving token')
         })
 
         

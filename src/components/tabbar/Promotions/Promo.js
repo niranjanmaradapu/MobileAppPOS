@@ -59,8 +59,6 @@ class Promo extends Component {
             promoactiveStatus: true,
             poolsactiveStatus: true,
             domainId: 1,
-            storeId: 1,
-            storeNames: [],
             poolsDelete: false,
             promoDelete: false,
             delelePromoId: 0,
@@ -70,6 +68,8 @@ class Promo extends Component {
             invoiceNumber: "",
             loyaltyMobileNumber: "",
             storeNamesArray: [],
+            storeNames: [],
+            storeId: 1,
         }
     }
 
