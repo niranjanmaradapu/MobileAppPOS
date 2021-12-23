@@ -24,10 +24,37 @@ class Home extends Component {
         this.props.navigation.dispatch(DrawerActions.openDrawer())
     }
 
+    handleBackButtonClick() {
+        this.props.navigation.openDrawer();
+        // this.props.navigation.navigate('Home')
+    }
 
 
     render() {
         return (
+            <View style={styles.container}>
+            <View style={styles.viewswidth}>
+            <TouchableOpacity style={{
+                position: 'absolute',
+                left: 10,
+                top: 30,
+                width: 40,
+                height: 40,
+            }} onPress={() => this.handleBackButtonClick()}>
+                <Image source={require('../../assets/images/menu.png')} />
+            </TouchableOpacity>
+            <Text style={{
+                position: 'absolute',
+                left: 70,
+                top: 47,
+                width: 300,
+                height: 20,
+                fontFamily: 'bold',
+                fontSize: 18,
+                color: '#353C40'
+            }}> Home </Text>
+        </View>
+
             <ScrollView>
                 <View style={styles.container}>
                     <Image
@@ -172,6 +199,7 @@ class Home extends Component {
 
                 </View>
             </ScrollView >
+            </View>
         )
     }
 }
@@ -193,12 +221,12 @@ const styles = StyleSheet.create({
         borderRadius: 40,
     },
     viewswidth: {
-        backgroundColor: '#0196FD',
+        backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
         height: 84,
-    },
+      },
     input: {
         justifyContent: 'center',
         margin: 20,

@@ -28,13 +28,13 @@ class Settings extends Component {
             selectedGender: '',
             date: new Date(),
             datepickerOpen: false,
-            userName:"",
-            role:"",
-            email:"",
-            mobileNumber:"",
-            dateOfBirth:"",
-            address:"",
-            userId:0,
+            userName: "",
+            role: "",
+            email: "",
+            mobileNumber: "",
+            dateOfBirth: "",
+            address: "",
+            userId: 0,
         }
     }
 
@@ -56,11 +56,11 @@ class Settings extends Component {
 
     handleEmail = (value) => {
         this.setState({ email: value });
-    } 
+    }
 
     handleAddress = (value) => {
         this.setState({ address: value });
-    } 
+    }
 
     datepickerCancelClicked() {
         this.setState({ date: new Date() })
@@ -68,11 +68,11 @@ class Settings extends Component {
     }
 
     datepickerDoneClicked() {
-        if(parseInt(this.state.date.getDate()) < 10){
+        if (parseInt(this.state.date.getDate()) < 10) {
             this.setState({ dateOfBirth: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() })
         }
-        else{
-            this.setState({ dateOfBirth: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })   
+        else {
+            this.setState({ dateOfBirth: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
         }
         this.setState({ datepickerOpen: false })
     }
@@ -82,54 +82,54 @@ class Settings extends Component {
     }
 
     profileUpdate() {
-        if(this.state.dateOfBirth === "Date Of Birth"){
+        if (this.state.dateOfBirth === "Date Of Birth") {
             this.state.dateOfBirth = null
-         }
+        }
 
         const params = {
-                "userId":this.state.userId,
-                "email": this.state.email,
-                "phoneNumber": this.state.mobileNumber,
-                "birthDate":this.state.dateOfBirth,
-                "gender": this.state.selectedGender,
-                "name": this.state.userName,
-                "username": this.state.userName,
-                // "parentId": "1",
-                // "domianId": "1",
-                "address":this.state.address,
-                "clientId":"123"
-                // "role": {
-                //     "roleName": "config_user"
-                // }
-                // "stores": [
-                //     {
-                //         "name":"Vizag"
-                //     },
-                //     {
-                //         "name":"kakinada"
-                //     }
-                // ],
-                // "clientId": "801",
-                // "isConfigUser": "true",
-                // "clientDomain": [1,2]
+            "userId": this.state.userId,
+            "email": this.state.email,
+            "phoneNumber": this.state.mobileNumber,
+            "birthDate": this.state.dateOfBirth,
+            "gender": this.state.selectedGender,
+            "name": this.state.userName,
+            "username": this.state.userName,
+            // "parentId": "1",
+            // "domianId": "1",
+            "address": this.state.address,
+            "clientId": "123"
+            // "role": {
+            //     "roleName": "config_user"
+            // }
+            // "stores": [
+            //     {
+            //         "name":"Vizag"
+            //     },
+            //     {
+            //         "name":"kakinada"
+            //     }
+            // ],
+            // "clientId": "801",
+            // "isConfigUser": "true",
+            // "clientDomain": [1,2]
         }
 
         console.log('params are' + JSON.stringify(params))
-        this.setState({ loading: true })  
-    axios.put(ProfileService.updateUser(), params).then((res) => {
-        if (res.data && res.data["isSuccess"] === "true") {
-            this.setState({ loading: false })
+        this.setState({ loading: true })
+        axios.put(ProfileService.updateUser(), params).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+                this.setState({ loading: false })
+            }
+            else {
+                this.setState({ loading: false })
+                // this.setState({ loading: false })
+                alert("user Update issue");
+            }
         }
-        else {
+        ).catch(() => {
             this.setState({ loading: false })
-            // this.setState({ loading: false })
-            alert("user Update issue");
-        }
-    }
-    ).catch(() => {
-        this.setState({ loading: false })
-        alert('Update Api error')
-    })
+            alert('Update Api error')
+        })
     }
 
     async componentDidMount() {
@@ -143,52 +143,67 @@ class Settings extends Component {
         //console.log(ProfileService.getUser() + "+919895695626")
         this.setState({ loading: true })
         axios.get(ProfileService.getUser() + username).then((res) => {
-                if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
-                    this.setState({ userId: res.data["result"].userId })
-                    this.setState({ userName: res.data["result"].userName })
-                    this.setState({ role: res.data["result"].roleName })
-                    this.setState({ email: res.data["result"].email })
-                    this.setState({ selectedGender: res.data["result"].gender })
-                     if(res.data["result"].dob === null){
-                        this.setState({ dateOfBirth: 'Date Of Birth' }) 
-                     }
-                     else{
-                    this.setState({ dateOfBirth: res.data["result"].dob })
-                     }
-                    this.setState({ address: res.data["result"].address })
-                    this.setState({ mobileNumber: phonenumber})
-                }
-            }).catch(() => {
+            if (res.data && res.data["isSuccess"] === "true") {
                 this.setState({ loading: false })
-                alert('No user details get')
-            })
+                this.setState({ userId: res.data["result"].userId })
+                this.setState({ userName: res.data["result"].userName })
+                this.setState({ role: res.data["result"].roleName })
+                this.setState({ email: res.data["result"].email })
+                this.setState({ selectedGender: res.data["result"].gender })
+                if (res.data["result"].dob === null) {
+                    this.setState({ dateOfBirth: 'Date Of Birth' })
+                }
+                else {
+                    this.setState({ dateOfBirth: res.data["result"].dob })
+                }
+                this.setState({ address: res.data["result"].address })
+                this.setState({ mobileNumber: phonenumber })
+            }
+        }).catch(() => {
+            this.setState({ loading: false })
+            alert('No user details get')
+        })
     }
 
-    
-    
-    signOut(){
+
+
+    signOut() {
         AsyncStorage.removeItem('phone_number');
-        this.props.navigation.push('Login'); 
+        this.props.navigation.push('Login');
+    }
+
+    handleBackButtonClick() {
+        this.props.navigation.openDrawer();
+        // this.props.navigation.navigate('Home')
     }
 
 
     render() {
         return (
+
             <View style={{ flex: 1 }}>
                 <View style={styles.viewswidth}>
-                    <Text style={{
+
+                    <TouchableOpacity style={{
                         position: 'absolute',
                         left: 10,
-                        top: 55,
+                        top: 30,
+                        width: 40,
+                        height: 40,
+                    }} onPress={() => this.handleBackButtonClick()}>
+                        <Image source={require('../../assets/images/menu.png')} />
+                    </TouchableOpacity>
+                    <Text style={{
+                        position: 'absolute',
+                        left: 70,
+                        top: 47,
                         width: 300,
                         height: 20,
                         fontFamily: 'bold',
                         fontSize: 18,
                         color: '#353C40'
-                    }}> Profile </Text>
-
-<TouchableOpacity
+                    }}> Settings </Text>
+                    <TouchableOpacity
                         style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
                         onPress={() => this.signOut()} >
                         <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/applogout.png')} />
@@ -266,7 +281,7 @@ class Settings extends Component {
 
                                 <View style={{ marginTop: 0, width: deviceWidth }}>
 
-                                    
+
 
                                     <Text style={{
                                         position: 'absolute',
@@ -290,7 +305,7 @@ class Settings extends Component {
                                         onChangeText={this.handleUserName}
                                     />
 
-                                   
+
                                 </View>
 
                                 <Text style={{
@@ -417,11 +432,11 @@ class Settings extends Component {
                                         value={this.state.selectedGender}
                                         useNativeAndroidPickerStyle={false}
 
-                                    /> 
-                                 </View>
+                                    />
+                                </View>
 
 
-                               
+
 
                                 <Text style={{
                                     position: 'absolute',
@@ -437,17 +452,17 @@ class Settings extends Component {
                                 <TouchableOpacity
                                     style={{
                                         justifyContent: 'center',
-                                    margin: 20,
-                                    height: 44,
-                                    marginTop: 25,
-                                    marginBottom: 10,
-                                    borderColor: '#8F9EB717',
-                                    borderRadius: 3,
-                                    backgroundColor: '#FBFBFB',
-                                    borderWidth: 1,
-                                    fontFamily: 'regular',
-                                    paddingLeft: 15,
-                                    fontSize: 14,
+                                        margin: 20,
+                                        height: 44,
+                                        marginTop: 25,
+                                        marginBottom: 10,
+                                        borderColor: '#8F9EB717',
+                                        borderRadius: 3,
+                                        backgroundColor: '#FBFBFB',
+                                        borderWidth: 1,
+                                        fontFamily: 'regular',
+                                        paddingLeft: 15,
+                                        fontSize: 14,
                                     }} testID="openModal"
 
                                     onPress={() => this.datepickerClicked()}
@@ -473,19 +488,19 @@ class Settings extends Component {
                                     }}> ADDRESS: </Text>
 
 
-                                <TextInput style={styles.phoneinput}
-                                    underlineColorAndroid="transparent"
-                                    placeholder="ADDRESS"
-                                    placeholderTextColor="#353C4050"
-                                    textAlignVertical="center"
-                                    autoCapitalize="none"
-                                    value={this.state.address}
-                                    onChangeText={this.handleAddress}
-                                     />
-                                     </View>
+                                    <TextInput style={styles.phoneinput}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="ADDRESS"
+                                        placeholderTextColor="#353C4050"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.address}
+                                        onChangeText={this.handleAddress}
+                                    />
+                                </View>
 
                                 <View>
-                                  
+
 
                                     {/* <TouchableOpacity style={{
                         position: 'absolute',
@@ -520,42 +535,42 @@ class Settings extends Component {
                 </KeyboardAwareScrollView>
 
                 {this.state.datepickerOpen && (
-                                    <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
-                                        <TouchableOpacity
-                                            style={{
-                                                position: 'absolute',
-                                                left: 20,
-                                                top: 10,
-                                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                            }} onPress={() => this.datepickerCancelClicked()}
-                                        >
-                                            <Text style={{
-                                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                fontFamily: "regular"
-                                            }}  > Cancel </Text>
+                    <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
+                        <TouchableOpacity
+                            style={{
+                                position: 'absolute',
+                                left: 20,
+                                top: 10,
+                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                            }} onPress={() => this.datepickerCancelClicked()}
+                        >
+                            <Text style={{
+                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                fontFamily: "regular"
+                            }}  > Cancel </Text>
 
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            style={{
-                                                position: 'absolute',
-                                                right: 20,
-                                                top: 10,
-                                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                            }} onPress={() => this.datepickerDoneClicked()}
-                                        >
-                                            <Text style={{
-                                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                fontFamily: "regular"
-                                            }}  > Done </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{
+                                position: 'absolute',
+                                right: 20,
+                                top: 10,
+                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
+                            }} onPress={() => this.datepickerDoneClicked()}
+                        >
+                            <Text style={{
+                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
+                                fontFamily: "regular"
+                            }}  > Done </Text>
 
-                                        </TouchableOpacity>
-                                        <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
-                                            date={this.state.date}
-                                            mode={'date'}
-                                            onDateChange={(date) => this.setState({ date })}
-                                        />
-                                    </View>
-                                )}
+                        </TouchableOpacity>
+                        <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                            date={this.state.date}
+                            mode={'date'}
+                            onDateChange={(date) => this.setState({ date })}
+                        />
+                    </View>
+                )}
             </View>
         )
     }

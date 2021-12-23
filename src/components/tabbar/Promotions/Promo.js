@@ -823,6 +823,9 @@ class Promo extends Component {
         this.setState({ modalVisible: true });
     }
 
+    handleBackButtonClick() {
+        this.props.navigation.openDrawer();
+    }
 
 
     render() {
@@ -833,15 +836,24 @@ class Promo extends Component {
                         loading={this.state.loading} />
                 }
                 <View style={styles.viewswidth}>
+                <TouchableOpacity style={{
+                position: 'absolute',
+                left: 10,
+                top: 30,
+                width: 40,
+                height: 40,
+            }} onPress={() => this.handleBackButtonClick()}>
+                <Image source={require('../../assets/images/menu.png')} />
+            </TouchableOpacity>
                     <Text style={{
-                        position: 'absolute',
-                        left: 10,
-                        top: 55,
-                        width: 300,
-                        height: 20,
-                        fontFamily: 'bold',
-                        fontSize: 18,
-                        color: '#353C40'
+                         position: 'absolute',
+                         left: 70,
+                         top: 47,
+                         width: 300,
+                         height: 20,
+                         fontFamily: 'bold',
+                         fontSize: 18,
+                         color: '#353C40'
                     }}> Promotions & Loyalty </Text>
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}

@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 var deviceWidth = Dimensions.get('window').width;
 
- class EditBarcode extends Component {
+ class ViewReBarcode extends Component {
 
     constructor(props){
         super(props);
@@ -472,7 +472,7 @@ var deviceWidth = Dimensions.get('window').width;
                     <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
                         <Image source={require('../../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Edit Barcode </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Re-Barcode Details </Text>
                 </View>
                 <ScrollView>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
@@ -573,13 +573,14 @@ var deviceWidth = Dimensions.get('window').width;
                             editable={false} selectTextOnFocus={false}
                             onChangeText={this.handleCostPrice}
                         />
-                    <TextInput style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                             underlineColorAndroid="transparent"
                             placeholder="List Price"
                             placeholderTextColor="#6F6F6F"
                             textAlignVertical="center"
                             autoCapitalize="none"
                             value={this.state.listPrice}
+                            editable={false} selectTextOnFocus={false}
                             onChangeText={this.handleListPrice}
                         />
                         <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -630,19 +631,17 @@ var deviceWidth = Dimensions.get('window').width;
                             onChangeText={this.handleStore}
                         />
                         
-                        <TextInput style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
+                        <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                             underlineColorAndroid="transparent"
                             placeholder="QTY"
                             placeholderTextColor="#6F6F6F"
                             textAlignVertical="center"
                             autoCapitalize="none"
                             value={this.state.quantity}
+                            editable={false} selectTextOnFocus={false}
                             onChangeText={this.handleQuantity}
                         />
-                        <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
-                            onPress={() => this.saveBarcode()}>
-                            <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
-                        </TouchableOpacity>
+                    
                         <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
                             onPress={() => this.cancel()}>
                             <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>CANCEL</Text>
@@ -654,7 +653,7 @@ var deviceWidth = Dimensions.get('window').width;
     }
 }
 
-export default EditBarcode;
+export default ViewReBarcode;
 
 const pickerSelectStyles_mobile = StyleSheet.create({
     placeholder: {
