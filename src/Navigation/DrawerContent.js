@@ -85,6 +85,7 @@ export function DrawerContent(props) {
                             label="Promotions"
                             onPress={() => {props.navigation.navigate('PromoNavigation')}}
                         />
+                        
                         <DrawerItem 
                             icon={({color, size}) => (
                                 <Icon 
