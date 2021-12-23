@@ -108,6 +108,17 @@ export function DrawerContent(props) {
                             label="Support"
                             onPress={() => {props.navigation.navigate('InventoryNavigation')}}
                         />
+                        <DrawerItem 
+                            icon={({color, size}) => (
+                                <Icon 
+                                name="user-outline" 
+                                color={color}
+                                size={size}
+                                />
+                            )}
+                            label="Urm Portal"
+                            onPress={() => {props.navigation.navigate('UrmNavigation')}}
+                        />
                     </Drawer.Section>
                     {/* <Drawer.Section title="Preferences">
                         <TouchableRipple onPress={() => {toggleTheme()}}>

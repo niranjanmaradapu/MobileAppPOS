@@ -15,11 +15,9 @@ export default class SideNavigation extends React.Component {
             <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
                 <Drawer.Screen name="Home" options={{ headerShown: false }} component={BottomTabBar} />
                 <Drawer.Screen name="Settings" options={{ headerShown: false }} component={Settings} />
-
                 <Drawer.Screen name="PromoNavigation" options={{ headerShown: false }} component={PromoNavigation} />
                 <Drawer.Screen name="InventoryNavigation" options={{ headerShown: false }} component={InventoryNavigation} />
                 <Drawer.Screen name="UrmNavigation" options={{ headerShown: false }} component={UrmNavigation} />
-
             </Drawer.Navigator>
         );
     }
