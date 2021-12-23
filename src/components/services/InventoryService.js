@@ -61,6 +61,12 @@ class InventoryService {
     deleteTextileBarcode(){
         return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/deleteBarcode_Textile";
     } 
+
+    getbarcodeTexttileAdjustments(){
+        return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/getAllAdjustments";
+    }
+
+   
   
 }
 export default new InventoryService()
