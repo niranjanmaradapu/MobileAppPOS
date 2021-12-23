@@ -356,7 +356,7 @@ export default class Login extends Component {
                                             left: 20,
                                             top: 35, alignItems: 'center', flexDirection: 'row'
                                         }}>
-                                             <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> {'Register Client?'} </Text>
+                                             <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> {'Register?'} </Text>
                                         <TouchableOpacity
                                                 onPress={() => this.registerClient()} >
                                                 <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> {'Register'} </Text>

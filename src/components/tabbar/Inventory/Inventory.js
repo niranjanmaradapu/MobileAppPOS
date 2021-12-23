@@ -44,7 +44,8 @@ export default class Inventory extends Component {
     }
 
     handleBackButtonClick() {
-        this.props.navigation.navigate('Home')
+        this.props.navigation.openDrawer();
+        // this.props.navigation.navigate('Home')
     }
 
     filterAction() {
@@ -358,7 +359,7 @@ export default class Inventory extends Component {
                 }
                 <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
                     <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../../assets/images/backButton.png')} />
+                        <Image source={require('../../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
                         Inventory Portal
