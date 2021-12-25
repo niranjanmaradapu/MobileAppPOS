@@ -8,7 +8,9 @@ import jwt_decode from "jwt-decode";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../loader';
 var deviceheight = Dimensions.get('window').height;
+var deviceWidth = Dimensions.get("window").width;
 import I18n from 'react-native-i18n';
+import Device from 'react-native-device-detection'
 
 
 const data = [
@@ -278,22 +280,12 @@ export default class Login extends Component {
                     }
                     <SafeAreaView style={{ flex: 1 }}>
                         <View style={styles.container}>
-                            <Image source={require('../assets/images/Subtraction.png')} style={{ position: 'absolute', right: 0, bottom: 40, width: 162, height: 170 }} />
+                            <Image source={require('../assets/images/Subtraction.png')} style={Device.isTablet ? styles.bottomImage_tablet : styles.bottomImage_mobile} />
                             <View style={{ flex: 1, marginTop: '5%', backgroundColor: '#FFFFFF' }}>
                                 {/* <Image source={require('../assets/images/logo.png')} style={styles.logoImage} /> */}
                                 {/* <Text></Text> */}
-                                <Text style={{
-                                    color: "#353C40", fontSize: 20, fontFamily: "bold", marginLeft: 10, marginTop: 100,
-                                    flexDirection: 'column',
-                                    justifyContent: 'center',
-                                    fontSize: 28,
-                                }}> {I18n.t('Hey')} </Text>
-                                <Text style={{
-                                    color: "#353C40", fontSize: 20, fontFamily: "bold", marginLeft: 10, marginTop: 0,
-                                    flexDirection: 'column',
-                                    justifyContent: 'center', height: 45,
-                                    fontSize: 28,
-                                }}> {I18n.t('Login Now')} </Text>
+                                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}> {I18n.t('Hey')} </Text>
+                                <Text style={Device.isTablet ? styles.headerText2_tablet : styles.headerText2_mobile}> {I18n.t('Login Now')} </Text>
                                 {/* <View style={{ marginTop: 15, marginLeft: 18, flexDirection: 'row' }}>
 
                                     <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}>If you are new / </Text>
@@ -309,8 +301,7 @@ export default class Login extends Component {
 
 
                             <View style={{ flex: 2 }}>
-                                {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
-                                <TextInput style={styles.input}
+                                <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                     underlineColorAndroid="transparent"
                                     placeholder={I18n.t('Username')}
                                     placeholderTextColor="#6F6F6F"
@@ -321,8 +312,7 @@ export default class Login extends Component {
                                     ref={inputemail => { this.emailValueInput = inputemail }} />
 
 
-                                {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
-                                <TextInput style={styles.passwordInput}
+                                <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                     underlineColorAndroid="transparent"
                                     placeholder={I18n.t('Password')}
                                     secureTextEntry={true}
@@ -344,10 +334,10 @@ export default class Login extends Component {
                                           
                                           
 
-                                            <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> {I18n.t('Forgot password')} </Text>
+                                            <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Forgot password')} </Text>
                                             <TouchableOpacity
                                                 onPress={() => this.forgotPassword()} >
-                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> {I18n.t('Reset')} </Text>
+                                                <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {I18n.t('Reset')} </Text>
                                             </TouchableOpacity>
                                         </View>
 
@@ -356,19 +346,19 @@ export default class Login extends Component {
                                             left: 20,
                                             top: 35, alignItems: 'center', flexDirection: 'row'
                                         }}>
-                                             <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> {'Register?'} </Text>
+                                             <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {'Register?'} </Text>
                                         <TouchableOpacity
                                                 onPress={() => this.registerClient()} >
-                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> {'Register'} </Text>
+                                                <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {'Register'} </Text>
                                                 </TouchableOpacity>
                                                 </View>
 
                                     </View>
                                 </View>
                                 <TouchableOpacity
-                                    style={styles.signInButton}
+                                    style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
                                     onPress={() => this.login()} >
-                                    <Text style={styles.signInButtonText}> {I18n.t('SIGN IN')} </Text>
+                                    <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}> {I18n.t('SIGN IN')} </Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -451,81 +441,189 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
         // alignItems: 'center',
     },
-    input: {
+
+    // Mobile Styles
+    hederText_mobile: {
+        color: "#353C40", 
+        fontSize: 20, 
+        fontFamily: "bold", 
+        marginLeft: 10, 
+        marginTop: 100,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        fontSize: 28,
+    },
+    headerText2_mobile: {
+        color: "#353C40", 
+        fontSize: 20, 
+        fontFamily: "bold", 
+        marginLeft: 10, 
+        marginTop: 0,
+        flexDirection: 'column',
+        justifyContent: 'center', 
+        height: 45,
+        fontSize: 28,
+    },
+    bottomImage_mobile: { 
+        position: 'absolute', 
+        right: 0, 
+        bottom: 40, 
+        width: 162, 
+        height: 170 
+    },
+    input_mobile: {
+        justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
-        height: 50,
-        backgroundColor: '#F6F6F6',
-        borderColor: '#F6F6F6',
-        color: '#6F6F6F',
-        fontFamily: "regular",
-        borderWidth: 5,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
         fontSize: 14,
     },
-    passwordInput: {
-        marginLeft: 20,
-        marginRight: 20,
-        height: 50,
-        marginBottom: 5,
-        marginTop: 20,
-        backgroundColor: '#F6F6F6',
-        borderColor: '#F6F6F6',
-        color: '#6F6F6F',
-        fontFamily: "regular",
-        borderWidth: 5,
-        fontSize: 14,
-    },
-    signInButton: {
+    signInButton_mobile: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
         marginTop: 100,
-        height: 44,
+        width: deviceWidth - 40,
+        height: 50,
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
     },
-    signInText: {
-        color: '#002C46',
-        alignSelf: 'center',
-        fontSize: 28,
-        fontFamily: "bold",
-        marginTop: 25,
-    },
-
-    signInFieldStyle: {
-        color: '#456CAF55',
-        marginLeft: 30,
-        marginTop: 15,
-        fontSize: 12,
-        fontFamily: "regular",
-    },
-    signinContinueText: {
-        color: '#456CAF55',
-        alignSelf: 'center',
-        fontSize: 13,
-        marginTop: 5,
-        fontFamily: "regular",
-    },
-    getStartedText: {
-        color: 'black',
-        alignSelf: 'center',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 14
-    },
-    signInButtonText: {
+    signInButtonText_mobile: {
         color: 'white',
         alignSelf: 'center',
-        fontSize: 14,
+        fontSize: 15,
         fontFamily: "regular",
     },
-    spinnerTextalign: {
-        flex: 9.4,
-        color: '#A2A2A2',
+    navigationText_mobile: { 
+        fontSize: 16, 
+        color: '#858585', 
+        fontFamily: "regular", 
+    },
+    navigationButtonText_mobile: { 
+        color: '#353C40', 
+        fontSize: 16, 
+        fontFamily: "bold", 
+        textDecorationLine: 'underline' 
+    },
+
+    // Tablet Styles
+    headerText_tablet: {
+        color: "#353C40", 
+        fontSize: 40, 
+        fontFamily: "bold", 
+        marginLeft: 10, 
+        marginTop: 100,
+        flexDirection: 'column',
         justifyContent: 'center',
-        textAlign: "center",
-        color: 'black',
+    },
+    headerText2_tablet: {
+        color: "#353C40", 
+        fontSize: 40, 
+        fontFamily: "bold", 
+        marginLeft: 10, 
+        marginTop: 0,
+        flexDirection: 'column',
+        justifyContent: 'center', 
+        height: 55,
+    },
+    bottomImage_tablet: { 
+        position: 'absolute', 
+        right: 0, 
+        bottom: 40, 
+        width: 202, 
+        height: 230 
+    },
+    input_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 60,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 22,
+    },
+    signInButton_tablet: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 100,
+        width: deviceWidth - 40,
+        height: 60,
+        borderRadius: 10,
+        fontWeight: 'bold',
+        // marginBottom:100,
+    },
+    signInButtonText_tablet: {
+        color: 'white',
+        alignSelf: 'center',
+        fontSize: 20,
+        fontFamily: "regular",
+    },
+    navigationText_tablet: { 
+        fontSize: 22, 
+        color: '#858585', 
+        fontFamily: "regular", 
+    },
+    navigationButtonText_tablet: { 
+        color: '#353C40', 
+        fontSize: 22, 
+        fontFamily: "bold", 
+        textDecorationLine: 'underline' 
     },
 })
+
+// Unused Styles
+// {
+//     signInFieldStyle: {
+//         color: '#456CAF55',
+//         marginLeft: 30,
+//         marginTop: 15,
+//         fontSize: 12,
+//         fontFamily: "regular",
+//     },
+//     signinContinueText: {
+//         color: '#456CAF55',
+//         alignSelf: 'center',
+//         fontSize: 13,
+//         marginTop: 5,
+//         fontFamily: "regular",
+//     },
+// getStartedText: {
+//     color: 'black',
+//     alignSelf: 'center',
+//     fontStyle: 'normal',
+//     fontWeight: 'bold',
+//     fontSize: 14
+// },
+// signInText: {
+//     color: '#002C46',
+//     alignSelf: 'center',
+//     fontSize: 28,
+//     fontFamily: "bold",
+//     marginTop: 25,
+// },
+// spinnerTextalign: {
+//     flex: 9.4,
+//     color: '#A2A2A2',
+//     justifyContent: 'center',
+//     textAlign: "center",
+//     color: 'black',
+// },
+// }

@@ -5,6 +5,7 @@ import {
   Modal,
   ActivityIndicator
 } from 'react-native';
+import Device from "react-native-device-detection";
 
 const Loader = props => {
   const {
@@ -19,7 +20,7 @@ const Loader = props => {
       visible={true}
       onRequestClose={() => { console.log('close modal') }}>
       <View style={styles.modalBackground}>
-        <View style={styles.activityIndicatorWrapper}>
+        <View style={Device.isTablet ? styles.activityIndicatorWrapper_tablet : styles.activityIndicatorWrapper_mobile}>
           <ActivityIndicator size="large" color="#1D7791" />
           {/* <ActivityIndicator
             animating={true} /> */}
@@ -37,10 +38,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     backgroundColor: '#00000040'
   },
-  activityIndicatorWrapper: {
+  activityIndicatorWrapper_mobile: {
     backgroundColor: '#FFFFFF',
     height: 100,
     width: 100,
+    borderRadius: 10,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
+  activityIndicatorWrapper_tablet: {
+    backgroundColor: '#FFFFFF',
+    height: 150,
+    width: 130,
     borderRadius: 10,
     display: 'flex',
     alignItems: 'center',

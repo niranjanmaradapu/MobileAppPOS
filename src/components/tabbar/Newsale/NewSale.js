@@ -25,9 +25,7 @@ import InventoryService from '../../services/InventoryService';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import LoginService from '../../services/LoginService';
-
-
-
+import Device from 'react-native-device-detection'
 
 class NewSale extends Component {
   constructor(props) {
@@ -1613,20 +1611,11 @@ class NewSale extends Component {
         {/* <View style={styles.container}> */}
         {/* <SafeAreaView> */}
         <View style={styles.viewswidth}>
-          <Text style={{
-            position: 'absolute',
-            left: 10,
-            top: 55,
-            width: 300,
-            height: 20,
-            fontFamily: 'bold',
-            fontSize: 18,
-            color: '#353C40'
-          }}> New Sale </Text>
+          <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> New Sale </Text>
           <TouchableOpacity
-            style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ED1C24', borderRadius: 5, width: 105, height: 32, }}
+            style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
             onPress={() => this.navigateToScanCode()} >
-            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('NEW SALE SCAN')} </Text>
+            <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {('NEW SALE SCAN')} </Text>
           </TouchableOpacity>
         </View>
 
@@ -1841,7 +1830,7 @@ class NewSale extends Component {
                   <Text></Text>
 
                   <View style={{ marginTop: 10, width: deviceWidth }}>
-                    <TextInput style={styles.phoneinput}
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                       underlineColorAndroid="transparent"
                       placeholder="BARCODE"
                       placeholderTextColor="#353C4050"
@@ -1851,18 +1840,13 @@ class NewSale extends Component {
                       onChangeText={this.handleInventoryBarcode}
                     />
 
-                    <TouchableOpacity style={{
-                      position: 'absolute',
-                      right: 28,
-                      top: 20,
-                      width: 50, height: 50,
-                    }} onPress={() => this.navigateToGetBarCode()}>
-                      <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', right: 30, }} source={require('../../assets/images/addnew.png')} />
-                      <Text style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', right: 0, }}> scan </Text>
+                    <TouchableOpacity style={Device.isTablet ? styles.scanButton_tablet : styles.scanButton_mobile} onPress={() => this.navigateToGetBarCode()}>
+                      <Image style={Device.isTablet ? styles.scanButtonImage_tablet : styles.scanButtonImage_mobile} source={require('../../assets/images/addnew.png')} />
+                      <Text style={Device.isTablet ? styles.scanButtonText_tablet : styles.scanButtonText_mobile}> scan </Text>
                     </TouchableOpacity>
                   </View>
 
-                  <TextInput style={styles.phoneinput}
+                  <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     underlineColorAndroid="transparent"
                     placeholder="PRODUCT NAME"
                     placeholderTextColor="#353C4050"
@@ -1873,7 +1857,7 @@ class NewSale extends Component {
                   />
 
                   <View>
-                    <TextInput style={styles.phoneinput}
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                       underlineColorAndroid="transparent"
                       placeholder="QTY"
                       placeholderTextColor="#353C4050"
@@ -1893,26 +1877,10 @@ class NewSale extends Component {
                       </TouchableOpacity> */}
                   </View>
 
-                  <View style={{
-                    justifyContent: 'center',
-                    margin: 20,
-                    height: 44,
-                    marginTop: 5,
-                    marginBottom: 10,
-                    borderColor: '#8F9EB717',
-                    borderRadius: 3,
-                    backgroundColor: '#FBFBFB',
-                    borderWidth: 1,
-                    fontFamily: 'regular',
-                    paddingLeft: 15,
-                    fontSize: 14,
-                  }} >
-                    <RNPickerSelect style={{
-                      color: '#8F9EB717',
-                      fontWeight: 'regular',
-                      fontSize: 15
-                    }}
-                      placeholder={{
+                  <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                        <RNPickerSelect
+                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                            placeholder={{
                         label: 'SELECT UOM',
                         value: " ",
                       }}
@@ -1921,7 +1889,7 @@ class NewSale extends Component {
                       }}
                       items={this.state.uom}
                       onValueChange={this.handleUOM}
-                      style={pickerSelectStyles}
+                      style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                       value={this.state.store}
                       useNativeAndroidPickerStyle={false}
 
@@ -1929,7 +1897,7 @@ class NewSale extends Component {
                   </View>
 
 
-                  <TextInput style={styles.phoneinput}
+                  <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     underlineColorAndroid="transparent"
                     placeholder="₹ MRP"
                     placeholderTextColor="#353C4050"
@@ -1940,7 +1908,7 @@ class NewSale extends Component {
                     ref={inputemail => { this.emailValueInput = inputemail }} />
 
                   <View>
-                    <TextInput style={styles.phoneinput}
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                       underlineColorAndroid="transparent"
                       placeholder="₹ OFFER PRICE"
                       placeholderTextColor="#353C4050"
@@ -1965,15 +1933,9 @@ class NewSale extends Component {
 
 
                   <TouchableOpacity
-                    style={{
-                      margin: 20,
-                      height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                    }} onPress={() => this.inventoryCreate()}
+                    style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile} onPress={() => this.inventoryCreate()}
                   >
-                    <Text style={{
-                      textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                      fontFamily: "regular"
-                    }}  > ADD PRODUCT </Text>
+                    <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}  > ADD PRODUCT </Text>
 
                   </TouchableOpacity>
                 </View>
@@ -1995,7 +1957,7 @@ class NewSale extends Component {
                 marginTop: 10,
               }}>
               <View>
-                <TextInput style={styles.input}
+                <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                   underlineColorAndroid="transparent"
                   placeholder="Enter Barcode"
                   placeholderTextColor="#6F6F6F60"
@@ -2008,9 +1970,9 @@ class NewSale extends Component {
                 />
 
                 <TouchableOpacity
-                  style={{ position: 'absolute', right: 5, top: 10, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
+                  style={Device.isTablet ? styles.tagCustomerButton_tablet : styles.tagCustomerButton_mobile}
                   onPress={() => this.tagCustomer()} >
-                  <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Tag Customer')} </Text>
+                  <Text style={Device.isTablet ? styles.tagCustomerButtonText_tablet : styles.tagCustomerButtonText_mobile}> {('Tag Customer')} </Text>
                 </TouchableOpacity>
               </View>
               <FlatList
@@ -2743,47 +2705,89 @@ class NewSale extends Component {
 export default NewSale
 
 
-const pickerSelectStyles = StyleSheet.create({
+const pickerSelectStyles_mobile = StyleSheet.create({
   placeholder: {
-    color: "#353C4050",
-    fontFamily: "regular",
-    fontSize: 15,
+      color: "#6F6F6F",
+      fontFamily: "regular",
+      fontSize: 15,
   },
   inputIOS: {
-    justifyContent: 'center',
-    height: 42,
-    borderRadius: 3,
-    borderWidth: 1,
-    fontFamily: 'regular',
-    //paddingLeft: -20,
-    fontSize: 15,
-    borderColor: '#FBFBFB',
-    backgroundColor: '#FBFBFB',
+      justifyContent: 'center',
+      height: 42,
+      borderRadius: 3,
+      borderWidth: 1,
+      fontFamily: 'regular',
+      //paddingLeft: -20,
+      fontSize: 15,
+      borderColor: '#FBFBFB',
+      backgroundColor: '#FBFBFB',
   },
   inputAndroid: {
-    justifyContent: 'center',
-    height: 42,
-    borderRadius: 3,
-    borderWidth: 1,
-    fontFamily: 'regular',
-    //paddingLeft: -20,
-    fontSize: 15,
-    borderColor: '#FBFBFB',
-    backgroundColor: '#FBFBFB',
+      justifyContent: 'center',
+      height: 42,
+      borderRadius: 3,
+      borderWidth: 1,
+      fontFamily: 'regular',
+      //paddingLeft: -20,
+      fontSize: 15,
+      borderColor: '#FBFBFB',
+      backgroundColor: '#FBFBFB',
+      color: '#001B4A',
 
-    // marginLeft: 20,
-    // marginRight: 20,
-    // marginTop: 10,
-    // height: 40,
-    // backgroundColor: '#ffffff',
-    // borderBottomColor: '#456CAF55',
-    color: '#001B4A',
-    // fontFamily: "bold",
-    // fontSize: 16,
-    // borderRadius: 3,
+      // marginLeft: 20,
+      // marginRight: 20,
+      // marginTop: 10,
+      // height: 40,
+      // backgroundColor: '#ffffff',
+      // borderBottomColor: '#456CAF55',
+      // color: '#001B4A',
+      // fontFamily: "bold",
+      // fontSize: 16,
+      // borderRadius: 3,
   },
 })
 
+const pickerSelectStyles_tablet = StyleSheet.create({
+  placeholder: {
+      color: "#6F6F6F",
+      fontFamily: "regular",
+      fontSize: 20,
+  },
+  inputIOS: {
+      justifyContent: 'center',
+      height: 52,
+      borderRadius: 3,
+      borderWidth: 1,
+      fontFamily: 'regular',
+      //paddingLeft: -20,
+      fontSize: 20,
+      borderColor: '#FBFBFB',
+      backgroundColor: '#FBFBFB',
+  },
+  inputAndroid: {
+      justifyContent: 'center',
+      height: 52,
+      borderRadius: 3,
+      borderWidth: 1,
+      fontFamily: 'regular',
+      //paddingLeft: -20,
+      fontSize: 20,
+      borderColor: '#FBFBFB',
+      backgroundColor: '#FBFBFB',
+      color: '#001B4A',
+
+      // marginLeft: 20,
+      // marginRight: 20,
+      // marginTop: 10,
+      // height: 40,
+      // backgroundColor: '#ffffff',
+      // borderBottomColor: '#456CAF55',
+      // color: '#001B4A',
+      // fontFamily: "bold",
+      // fontSize: 16,
+      // borderRadius: 3,
+  },
+})
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -3200,5 +3204,229 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+
+
+  // Styles For Mobile
+  headerTitle_mobile: {
+    position: 'absolute',
+    left: 20,
+    top: 47,
+    width: 300,
+    height: 25,
+    fontFamily: 'bold',
+    fontSize: 18,
+    color: '#353C40'
+},
+  input_mobile: {
+    justifyContent: 'center',
+    marginLeft: 20,
+    marginRight: 20,
+    height: 44,
+    marginTop: 5,
+    marginBottom: 10,
+    borderColor: '#8F9EB717',
+    borderRadius: 3,
+    backgroundColor: '#FBFBFB',
+    borderWidth: 1,
+    fontFamily: 'regular',
+    paddingLeft: 15,
+    fontSize: 14,
+},
+rnSelect_mobile: {
+  color: '#8F9EB7',
+  fontSize: 15
+},
+rnSelectContainer_mobile: {
+  justifyContent: 'center',
+  margin: 20,
+  height: 44,
+  marginTop: 5,
+  marginBottom: 10,
+  borderColor: '#8F9EB717',
+  borderRadius: 3,
+  backgroundColor: '#FBFBFB',
+  borderWidth: 1,
+  fontFamily: 'regular',
+  paddingLeft: 15,
+  fontSize: 14,
+},
+saveButton_mobile: {
+  margin: 8,
+  height: 50,
+  backgroundColor: "#ED1C24",
+  borderRadius: 5,
+},
+saveButtonText_mobile: {
+  textAlign: 'center',
+  marginTop: 15,
+  color: "#ffffff",
+  fontSize: 15,
+  fontFamily: "regular"
+},
+scanButton_mobile: {
+  position: 'absolute',
+  right: 28,
+  top: 20,
+  width: 50, height: 50,
+},
+scanButtonImage_mobile: { 
+  color: '#ED1C24', 
+  fontFamily: 'regular', 
+  fontSize: 12, 
+  position: 'absolute', 
+  right: 30, 
+},
+scanButtonText_mobile: { 
+  color: '#ED1C24', 
+  fontFamily: 'regular', 
+  fontSize: 12, 
+  position: 'absolute', 
+  right: 0, 
+},
+tagCustomerButton_mobile: {
+  position: 'absolute', 
+  right: 5, top: 10, 
+  backgroundColor: '#ED1C24', 
+  borderRadius: 5, 
+  width: 90, 
+  height: 32,
+},
+tagCustomerButtonText_mobile: { 
+  fontSize: 12, 
+  fontFamily: 'regular', 
+  color: '#ffffff', 
+  marginLeft: 10, 
+  marginTop: 8, 
+  alignSelf: 'center' 
+},
+navButton_mobile: {
+  position: 'absolute', 
+  right: 20, top: 37, 
+  backgroundColor: '#ED1C24', 
+  borderRadius: 5, 
+  width: 105, 
+  height: 32, 
+},
+navButtonText_mobile: { 
+  fontSize: 12, 
+  fontFamily: 'regular', 
+  color: '#ffffff', 
+  marginLeft: 10, 
+  marginTop: 8, 
+  alignSelf: 'center' 
+},
+
+// Styles For Tablet
+headerTitle_tablet: {
+  position: 'absolute',
+  left: 20,
+  top: 40,
+  width: 300,
+  height: 40,
+  fontFamily: 'bold',
+  fontSize: 24,
+  color: '#353C40'
+},
+input_tablet: {
+  justifyContent: 'center',
+  marginLeft: 20,
+  marginRight: 20,
+  height: 60,
+  marginTop: 5,
+  marginBottom: 10,
+  borderColor: '#8F9EB717',
+  borderRadius: 3,
+  backgroundColor: '#FBFBFB',
+  borderWidth: 1,
+  fontFamily: 'regular',
+  paddingLeft: 15,
+  fontSize: 22,
+},
+rnSelect_tablet: {
+  color: '#8F9EB7',
+  fontSize: 20
+},
+rnSelectContainer_tablet: {
+  justifyContent: 'center',
+  margin: 20,
+  height: 54,
+  marginTop: 5,
+  marginBottom: 10,
+  borderColor: '#8F9EB717',
+  borderRadius: 3,
+  backgroundColor: '#FBFBFB',
+  borderWidth: 1,
+  fontFamily: 'regular',
+  paddingLeft: 15,
+  fontSize: 20,
+},
+saveButton_tablet: {
+  margin: 8,
+  height: 60,
+  backgroundColor: "#ED1C24",
+  borderRadius: 5,
+},
+saveButtonText_tablet: {
+  textAlign: 'center',
+  marginTop: 15,
+  color: "#ffffff",
+  fontSize: 20,
+  fontFamily: "regular"
+},
+scanButton_tablet: {
+  position: 'absolute',
+  right: 28,
+  top: 20,
+  width: 70, 
+  height: 70,
+},
+scanButtonImage_tablet: { 
+  color: '#ED1C24', 
+  fontFamily: 'regular', 
+  fontSize: 18, 
+  position: 'absolute', 
+  right: 43, 
+  top: 5,
+},
+scanButtonText_tablet: { 
+  color: '#ED1C24', 
+  fontFamily: 'regular', 
+  fontSize: 18, 
+  position: 'absolute', 
+  right: 0, 
+},
+tagCustomerButton_tablet: {
+  position: 'absolute', 
+  right: 30, top: 15, 
+  backgroundColor: '#ED1C24', 
+  borderRadius: 5, 
+  width: 120, 
+  height: 42,
+},
+tagCustomerButtonText_tablet: {
+  fontSize: 16, 
+  fontFamily: 'regular', 
+  color: '#ffffff', 
+  marginLeft: 10, 
+  marginTop: 8, 
+  alignSelf: 'center' 
+},
+navButton_tablet: {
+  position: 'absolute', 
+  right: 20, top: 27, 
+  backgroundColor: '#ED1C24', 
+  borderRadius: 5, 
+  width: 155, 
+  height: 42, 
+},
+navButtonText_tablet: { 
+  fontSize: 17, 
+  fontFamily: 'regular', 
+  color: '#ffffff', 
+  marginLeft: 10, 
+  marginTop: 8, 
+  alignSelf: 'center' 
+},
+
 });
