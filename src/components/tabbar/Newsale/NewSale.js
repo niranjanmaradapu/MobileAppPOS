@@ -87,6 +87,9 @@ class NewSale extends Component {
     }
   }
 
+  handleMenuButtonClick() {
+    this.props.navigation.openDrawer();
+  }
 
   async takePicture() {
     if (this.camera) {
@@ -220,8 +223,8 @@ class NewSale extends Component {
   }
 
   invoiceUpdate() {
-    this.setState({tableData:[]})
-  alert('payment created successfully')
+    this.setState({ tableData: [] })
+    alert('payment created successfully')
   }
 
   pay = () => {
@@ -276,7 +279,7 @@ class NewSale extends Component {
     this.setState({ search: null })
     NetInfo.addEventListener(state => {
       if (state.isConnected) {
-        axios.post(InventoryService.getAllBarcodes(), {"storeId": this.state.storeId}).then((res) => {
+        axios.post(InventoryService.getAllBarcodes(), { "storeId": this.state.storeId }).then((res) => {
           if (res.data && res.data["isSuccess"] === "true") {
             let len = res.data["result"].length;
             console.log("get products lenth" + len)
@@ -1051,7 +1054,7 @@ class NewSale extends Component {
       this.setState({ barcodeId: global.barcodeId })
       this.barcodeDBStore()
     }
-    
+
     this.setState({ flagone: true })
     this.setState({ flagtwo: false })
     this.setState({ flagthree: false })
@@ -1610,7 +1613,10 @@ class NewSale extends Component {
 
         {/* <View style={styles.container}> */}
         {/* <SafeAreaView> */}
-        <View style={styles.viewswidth}>
+        <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
+          <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
+            <Image source={require('../../assets/images/menu.png')} />
+          </TouchableOpacity>
           <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> New Sale </Text>
           <TouchableOpacity
             style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
@@ -1878,9 +1884,9 @@ class NewSale extends Component {
                   </View>
 
                   <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                        <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                            placeholder={{
+                    <RNPickerSelect
+                      style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                      placeholder={{
                         label: 'SELECT UOM',
                         value: " ",
                       }}
@@ -2707,85 +2713,85 @@ export default NewSale
 
 const pickerSelectStyles_mobile = StyleSheet.create({
   placeholder: {
-      color: "#6F6F6F",
-      fontFamily: "regular",
-      fontSize: 15,
+    color: "#6F6F6F",
+    fontFamily: "regular",
+    fontSize: 15,
   },
   inputIOS: {
-      justifyContent: 'center',
-      height: 42,
-      borderRadius: 3,
-      borderWidth: 1,
-      fontFamily: 'regular',
-      //paddingLeft: -20,
-      fontSize: 15,
-      borderColor: '#FBFBFB',
-      backgroundColor: '#FBFBFB',
+    justifyContent: 'center',
+    height: 42,
+    borderRadius: 3,
+    borderWidth: 1,
+    fontFamily: 'regular',
+    //paddingLeft: -20,
+    fontSize: 15,
+    borderColor: '#FBFBFB',
+    backgroundColor: '#FBFBFB',
   },
   inputAndroid: {
-      justifyContent: 'center',
-      height: 42,
-      borderRadius: 3,
-      borderWidth: 1,
-      fontFamily: 'regular',
-      //paddingLeft: -20,
-      fontSize: 15,
-      borderColor: '#FBFBFB',
-      backgroundColor: '#FBFBFB',
-      color: '#001B4A',
+    justifyContent: 'center',
+    height: 42,
+    borderRadius: 3,
+    borderWidth: 1,
+    fontFamily: 'regular',
+    //paddingLeft: -20,
+    fontSize: 15,
+    borderColor: '#FBFBFB',
+    backgroundColor: '#FBFBFB',
+    color: '#001B4A',
 
-      // marginLeft: 20,
-      // marginRight: 20,
-      // marginTop: 10,
-      // height: 40,
-      // backgroundColor: '#ffffff',
-      // borderBottomColor: '#456CAF55',
-      // color: '#001B4A',
-      // fontFamily: "bold",
-      // fontSize: 16,
-      // borderRadius: 3,
+    // marginLeft: 20,
+    // marginRight: 20,
+    // marginTop: 10,
+    // height: 40,
+    // backgroundColor: '#ffffff',
+    // borderBottomColor: '#456CAF55',
+    // color: '#001B4A',
+    // fontFamily: "bold",
+    // fontSize: 16,
+    // borderRadius: 3,
   },
 })
 
 const pickerSelectStyles_tablet = StyleSheet.create({
   placeholder: {
-      color: "#6F6F6F",
-      fontFamily: "regular",
-      fontSize: 20,
+    color: "#6F6F6F",
+    fontFamily: "regular",
+    fontSize: 20,
   },
   inputIOS: {
-      justifyContent: 'center',
-      height: 52,
-      borderRadius: 3,
-      borderWidth: 1,
-      fontFamily: 'regular',
-      //paddingLeft: -20,
-      fontSize: 20,
-      borderColor: '#FBFBFB',
-      backgroundColor: '#FBFBFB',
+    justifyContent: 'center',
+    height: 52,
+    borderRadius: 3,
+    borderWidth: 1,
+    fontFamily: 'regular',
+    //paddingLeft: -20,
+    fontSize: 20,
+    borderColor: '#FBFBFB',
+    backgroundColor: '#FBFBFB',
   },
   inputAndroid: {
-      justifyContent: 'center',
-      height: 52,
-      borderRadius: 3,
-      borderWidth: 1,
-      fontFamily: 'regular',
-      //paddingLeft: -20,
-      fontSize: 20,
-      borderColor: '#FBFBFB',
-      backgroundColor: '#FBFBFB',
-      color: '#001B4A',
+    justifyContent: 'center',
+    height: 52,
+    borderRadius: 3,
+    borderWidth: 1,
+    fontFamily: 'regular',
+    //paddingLeft: -20,
+    fontSize: 20,
+    borderColor: '#FBFBFB',
+    backgroundColor: '#FBFBFB',
+    color: '#001B4A',
 
-      // marginLeft: 20,
-      // marginRight: 20,
-      // marginTop: 10,
-      // height: 40,
-      // backgroundColor: '#ffffff',
-      // borderBottomColor: '#456CAF55',
-      // color: '#001B4A',
-      // fontFamily: "bold",
-      // fontSize: 16,
-      // borderRadius: 3,
+    // marginLeft: 20,
+    // marginRight: 20,
+    // marginTop: 10,
+    // height: 40,
+    // backgroundColor: '#ffffff',
+    // borderBottomColor: '#456CAF55',
+    // color: '#001B4A',
+    // fontFamily: "bold",
+    // fontSize: 16,
+    // borderRadius: 3,
   },
 })
 
@@ -3208,16 +3214,30 @@ const styles = StyleSheet.create({
 
 
   // Styles For Mobile
+  viewsWidth_mobile: {
+    backgroundColor: '#ffffff',
+    width: deviceWidth,
+    textAlign: 'center',
+    fontSize: 24,
+    height: 84,
+  },
+  menuButton_mobile: {
+    position: 'absolute',
+    left: 10,
+    top: 30,
+    width: 40,
+    height: 40,
+  },
   headerTitle_mobile: {
     position: 'absolute',
-    left: 20,
+    left: 70,
     top: 47,
     width: 300,
     height: 25,
     fontFamily: 'bold',
     fontSize: 18,
     color: '#353C40'
-},
+  },
   input_mobile: {
     justifyContent: 'center',
     marginLeft: 20,
@@ -3232,201 +3252,215 @@ const styles = StyleSheet.create({
     fontFamily: 'regular',
     paddingLeft: 15,
     fontSize: 14,
-},
-rnSelect_mobile: {
-  color: '#8F9EB7',
-  fontSize: 15
-},
-rnSelectContainer_mobile: {
-  justifyContent: 'center',
-  margin: 20,
-  height: 44,
-  marginTop: 5,
-  marginBottom: 10,
-  borderColor: '#8F9EB717',
-  borderRadius: 3,
-  backgroundColor: '#FBFBFB',
-  borderWidth: 1,
-  fontFamily: 'regular',
-  paddingLeft: 15,
-  fontSize: 14,
-},
-saveButton_mobile: {
-  margin: 8,
-  height: 50,
-  backgroundColor: "#ED1C24",
-  borderRadius: 5,
-},
-saveButtonText_mobile: {
-  textAlign: 'center',
-  marginTop: 15,
-  color: "#ffffff",
-  fontSize: 15,
-  fontFamily: "regular"
-},
-scanButton_mobile: {
-  position: 'absolute',
-  right: 28,
-  top: 20,
-  width: 50, height: 50,
-},
-scanButtonImage_mobile: { 
-  color: '#ED1C24', 
-  fontFamily: 'regular', 
-  fontSize: 12, 
-  position: 'absolute', 
-  right: 30, 
-},
-scanButtonText_mobile: { 
-  color: '#ED1C24', 
-  fontFamily: 'regular', 
-  fontSize: 12, 
-  position: 'absolute', 
-  right: 0, 
-},
-tagCustomerButton_mobile: {
-  position: 'absolute', 
-  right: 5, top: 10, 
-  backgroundColor: '#ED1C24', 
-  borderRadius: 5, 
-  width: 90, 
-  height: 32,
-},
-tagCustomerButtonText_mobile: { 
-  fontSize: 12, 
-  fontFamily: 'regular', 
-  color: '#ffffff', 
-  marginLeft: 10, 
-  marginTop: 8, 
-  alignSelf: 'center' 
-},
-navButton_mobile: {
-  position: 'absolute', 
-  right: 20, top: 37, 
-  backgroundColor: '#ED1C24', 
-  borderRadius: 5, 
-  width: 105, 
-  height: 32, 
-},
-navButtonText_mobile: { 
-  fontSize: 12, 
-  fontFamily: 'regular', 
-  color: '#ffffff', 
-  marginLeft: 10, 
-  marginTop: 8, 
-  alignSelf: 'center' 
-},
+  },
+  rnSelect_mobile: {
+    color: '#8F9EB7',
+    fontSize: 15
+  },
+  rnSelectContainer_mobile: {
+    justifyContent: 'center',
+    margin: 20,
+    height: 44,
+    marginTop: 5,
+    marginBottom: 10,
+    borderColor: '#8F9EB717',
+    borderRadius: 3,
+    backgroundColor: '#FBFBFB',
+    borderWidth: 1,
+    fontFamily: 'regular',
+    paddingLeft: 15,
+    fontSize: 14,
+  },
+  saveButton_mobile: {
+    margin: 8,
+    height: 50,
+    backgroundColor: "#ED1C24",
+    borderRadius: 5,
+  },
+  saveButtonText_mobile: {
+    textAlign: 'center',
+    marginTop: 15,
+    color: "#ffffff",
+    fontSize: 15,
+    fontFamily: "regular"
+  },
+  scanButton_mobile: {
+    position: 'absolute',
+    right: 28,
+    top: 20,
+    width: 50, height: 50,
+  },
+  scanButtonImage_mobile: {
+    color: '#ED1C24',
+    fontFamily: 'regular',
+    fontSize: 12,
+    position: 'absolute',
+    right: 30,
+  },
+  scanButtonText_mobile: {
+    color: '#ED1C24',
+    fontFamily: 'regular',
+    fontSize: 12,
+    position: 'absolute',
+    right: 0,
+  },
+  tagCustomerButton_mobile: {
+    position: 'absolute',
+    right: 5, top: 10,
+    backgroundColor: '#ED1C24',
+    borderRadius: 5,
+    width: 90,
+    height: 32,
+  },
+  tagCustomerButtonText_mobile: {
+    fontSize: 12,
+    fontFamily: 'regular',
+    color: '#ffffff',
+    marginLeft: 10,
+    marginTop: 8,
+    alignSelf: 'center'
+  },
+  navButton_mobile: {
+    position: 'absolute',
+    right: 20, top: 37,
+    backgroundColor: '#ED1C24',
+    borderRadius: 5,
+    width: 105,
+    height: 32,
+  },
+  navButtonText_mobile: {
+    fontSize: 12,
+    fontFamily: 'regular',
+    color: '#ffffff',
+    marginLeft: 10,
+    marginTop: 8,
+    alignSelf: 'center'
+  },
 
-// Styles For Tablet
-headerTitle_tablet: {
-  position: 'absolute',
-  left: 20,
-  top: 40,
-  width: 300,
-  height: 40,
-  fontFamily: 'bold',
-  fontSize: 24,
-  color: '#353C40'
-},
-input_tablet: {
-  justifyContent: 'center',
-  marginLeft: 20,
-  marginRight: 20,
-  height: 60,
-  marginTop: 5,
-  marginBottom: 10,
-  borderColor: '#8F9EB717',
-  borderRadius: 3,
-  backgroundColor: '#FBFBFB',
-  borderWidth: 1,
-  fontFamily: 'regular',
-  paddingLeft: 15,
-  fontSize: 22,
-},
-rnSelect_tablet: {
-  color: '#8F9EB7',
-  fontSize: 20
-},
-rnSelectContainer_tablet: {
-  justifyContent: 'center',
-  margin: 20,
-  height: 54,
-  marginTop: 5,
-  marginBottom: 10,
-  borderColor: '#8F9EB717',
-  borderRadius: 3,
-  backgroundColor: '#FBFBFB',
-  borderWidth: 1,
-  fontFamily: 'regular',
-  paddingLeft: 15,
-  fontSize: 20,
-},
-saveButton_tablet: {
-  margin: 8,
-  height: 60,
-  backgroundColor: "#ED1C24",
-  borderRadius: 5,
-},
-saveButtonText_tablet: {
-  textAlign: 'center',
-  marginTop: 15,
-  color: "#ffffff",
-  fontSize: 20,
-  fontFamily: "regular"
-},
-scanButton_tablet: {
-  position: 'absolute',
-  right: 28,
-  top: 20,
-  width: 70, 
-  height: 70,
-},
-scanButtonImage_tablet: { 
-  color: '#ED1C24', 
-  fontFamily: 'regular', 
-  fontSize: 18, 
-  position: 'absolute', 
-  right: 43, 
-  top: 5,
-},
-scanButtonText_tablet: { 
-  color: '#ED1C24', 
-  fontFamily: 'regular', 
-  fontSize: 18, 
-  position: 'absolute', 
-  right: 0, 
-},
-tagCustomerButton_tablet: {
-  position: 'absolute', 
-  right: 30, top: 15, 
-  backgroundColor: '#ED1C24', 
-  borderRadius: 5, 
-  width: 120, 
-  height: 42,
-},
-tagCustomerButtonText_tablet: {
-  fontSize: 16, 
-  fontFamily: 'regular', 
-  color: '#ffffff', 
-  marginLeft: 10, 
-  marginTop: 8, 
-  alignSelf: 'center' 
-},
-navButton_tablet: {
-  position: 'absolute', 
-  right: 20, top: 27, 
-  backgroundColor: '#ED1C24', 
-  borderRadius: 5, 
-  width: 155, 
-  height: 42, 
-},
-navButtonText_tablet: { 
-  fontSize: 17, 
-  fontFamily: 'regular', 
-  color: '#ffffff', 
-  marginLeft: 10, 
-  marginTop: 8, 
-  alignSelf: 'center' 
-},
+  // Styles For Tablet
+  viewsWidth_tablet: {
+    backgroundColor: '#ffffff',
+    width: deviceWidth,
+    textAlign: 'center',
+    fontSize: 28,
+    height: 90,
+  },
+  menuButton_tablet: {
+    position: 'absolute',
+    left: 10,
+    top: 25,
+    width: 90,
+    height: 90,
+  },
+  headerTitle_tablet: {
+    position: 'absolute',
+    left: 70,
+    top: 40,
+    width: 300,
+    height: 40,
+    fontFamily: 'bold',
+    fontSize: 24,
+    color: '#353C40'
+  },
+  input_tablet: {
+    justifyContent: 'center',
+    marginLeft: 20,
+    marginRight: 20,
+    height: 60,
+    marginTop: 5,
+    marginBottom: 10,
+    borderColor: '#8F9EB717',
+    borderRadius: 3,
+    backgroundColor: '#FBFBFB',
+    borderWidth: 1,
+    fontFamily: 'regular',
+    paddingLeft: 15,
+    fontSize: 22,
+  },
+  rnSelect_tablet: {
+    color: '#8F9EB7',
+    fontSize: 20
+  },
+  rnSelectContainer_tablet: {
+    justifyContent: 'center',
+    margin: 20,
+    height: 54,
+    marginTop: 5,
+    marginBottom: 10,
+    borderColor: '#8F9EB717',
+    borderRadius: 3,
+    backgroundColor: '#FBFBFB',
+    borderWidth: 1,
+    fontFamily: 'regular',
+    paddingLeft: 15,
+    fontSize: 20,
+  },
+  saveButton_tablet: {
+    margin: 8,
+    height: 60,
+    backgroundColor: "#ED1C24",
+    borderRadius: 5,
+  },
+  saveButtonText_tablet: {
+    textAlign: 'center',
+    marginTop: 15,
+    color: "#ffffff",
+    fontSize: 20,
+    fontFamily: "regular"
+  },
+  scanButton_tablet: {
+    position: 'absolute',
+    right: 28,
+    top: 20,
+    width: 70,
+    height: 70,
+  },
+  scanButtonImage_tablet: {
+    color: '#ED1C24',
+    fontFamily: 'regular',
+    fontSize: 18,
+    position: 'absolute',
+    right: 43,
+    top: 5,
+  },
+  scanButtonText_tablet: {
+    color: '#ED1C24',
+    fontFamily: 'regular',
+    fontSize: 18,
+    position: 'absolute',
+    right: 0,
+  },
+  tagCustomerButton_tablet: {
+    position: 'absolute',
+    right: 30, top: 15,
+    backgroundColor: '#ED1C24',
+    borderRadius: 5,
+    width: 120,
+    height: 42,
+  },
+  tagCustomerButtonText_tablet: {
+    fontSize: 16,
+    fontFamily: 'regular',
+    color: '#ffffff',
+    marginLeft: 10,
+    marginTop: 8,
+    alignSelf: 'center'
+  },
+  navButton_tablet: {
+    position: 'absolute',
+    right: 20, top: 27,
+    backgroundColor: '#ED1C24',
+    borderRadius: 5,
+    width: 155,
+    height: 42,
+  },
+  navButtonText_tablet: {
+    fontSize: 17,
+    fontFamily: 'regular',
+    color: '#ffffff',
+    marginLeft: 10,
+    marginTop: 8,
+    alignSelf: 'center'
+  },
 
 });
