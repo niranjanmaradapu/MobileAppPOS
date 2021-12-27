@@ -48,7 +48,6 @@ class UpdateNewpassword extends Component {
             alert('You must enter New Password');
         } 
         else {
-           // this.props.navigation.goBack(null);
                     const params = {
                         "username": this.state.userName, //"+919493926067",
                         "confirmarionCode": this.state.code, //"Mani@1123",

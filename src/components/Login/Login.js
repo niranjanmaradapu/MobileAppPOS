@@ -36,7 +36,7 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'chetan',
+            userName: 'veera',
             password: 'Otsi@123',
             dropValue: '',
             store: 0,
@@ -131,6 +131,12 @@ export default class Login extends Component {
 
                         //==============================Navigation===================//
                         if (jwt_decode(token)["custom:isSuperAdmin"] === "true") {
+                            AsyncStorage.setItem("custom:isSuperAdmin", "true").then(() => {
+                                // console.log
+                            }).catch(() => {
+                               
+                            })
+
                             AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
                                 // console.log
                             }).catch(() => {
@@ -139,6 +145,12 @@ export default class Login extends Component {
                             this.getDomainsList()
                         }
                         else if (jwt_decode(token)["custom:isConfigUser"] === "true") {
+                            AsyncStorage.setItem("custom:isConfigUser", "true").then(() => {
+                                // console.log
+                            }).catch(() => {
+                               
+                            })
+
                             this.props.navigation.navigate('HomeNavigation')
                         }
                          else {

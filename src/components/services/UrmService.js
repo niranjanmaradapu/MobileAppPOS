@@ -12,6 +12,14 @@ class UrmService {
     changePassword() {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/authResponce'
     }
+
+    getPrivillagesForDomain(){
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/roles/privillagesForDomian/' 
+    }
+
+    getPrivillagesByRoleName(){
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/roles/privilagesByName/' 
+    }
 }
 export default new UrmService()
 
