@@ -6,16 +6,30 @@ var deviceWidth = Dimensions.get('window').width;
 import Device from 'react-native-device-detection';
 import Loader from '../loader';
 import axios from 'axios';
+import UrmService from '../services/UrmService';
 
 export default class ManagePassword extends Component {
 
-    constructor(props)  {
+    constructor(props) {
         super(props);
         this.state = {
+            userName: "",
             password: "",
             newPassword: "",
+            session: "",
+            roleName: "",
+            userName: "",
+
         }
     }
+
+    async componentDidMount() {
+        this.setState({ userName: this.props.route.params.userName })
+        this.setState({ roleName: this.props.route.params.roleName })
+        this.setState({ session: this.props.route.params.session })
+        this.setState({ password: this.props.route.params.password })
+    }
+
 
     handlePassword = (value) => {
         this.setState({ password: value })
@@ -36,15 +50,33 @@ export default class ManagePassword extends Component {
     }
 
     changePassword() {
-        if(this.state.password.length === 0) {
+        if (this.state.password.length === 0) {
             alert("Current Password Cannot be Empty")
-        }else if(this.state.newPassword.length === 0) {
+        } else if (this.state.newPassword.length === 0) {
             alert("Current Password Cannot be Empty")
-        }else{
-            alert("password Changed");
-            this.props.navigation.navigate('Login');
+        } else {
+            this.setState({ loading: true })
+            const obj = {
+                userName: this.state.userName,
+                password: this.state.password,
+                newPassword: this.state.newPassword,
+                session: this.state.session,
+                roleName: this.state.roleName,
+            };
+            console.log('params are' + JSON.stringify(obj))
+            this.setState({ loading: true })
+            axios.post(UrmService.changePassword(), obj).then((res) => {
+                if (res) {
+                    alert("Password Changed Successfully");
+                    this.setState({ loading: false })
+                    this.props.navigation.goBack();
+                    //    window.location.reload();
+                }
+                else {
+                    this.setState({ loading: false })
+                }
+            });
         }
-        
     }
 
     render() {
@@ -103,8 +135,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-     // Styles For Mobile
-     viewsWidth_mobile: {
+    // Styles For Mobile
+    viewsWidth_mobile: {
         backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',

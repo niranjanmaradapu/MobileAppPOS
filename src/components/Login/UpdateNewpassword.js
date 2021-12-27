@@ -6,8 +6,9 @@ var deviceWidth = Dimensions.get('window').width;
 import Device from 'react-native-device-detection';
 import LoginService from '../services/LoginService';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class ForgotPassword extends Component {
+class UpdateNewpassword extends Component {
     constructor(props) {
         super(props);
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
@@ -20,9 +21,9 @@ class ForgotPassword extends Component {
     }
 
     componentDidMount() {
-        // this.setState({
-        //     userName: this.props.route.params.username,
-        // });
+        this.setState({
+            userName: this.props.route.params.userName,
+        });
 
     }
     handleBackButtonClick() {
@@ -31,31 +32,48 @@ class ForgotPassword extends Component {
     }
 
     handleEmail = (text) => {
-        this.setState({ userName: text })
-    }
-    handleCode = (text) => {
         this.setState({ code: text })
     }
-
+   
     handleNewPassword = (text) => {
         this.setState({ newPassword: text })
     }
 
-    handleConfirmPassword = (text) => {
-        this.setState({ confirmPassword: text })
-    }
-
-    async create() {
-        if (this.state.userName.length === 0) {
+  
+     create() {
+        if (this.state.code.length === 0) {
             alert('You must enter a Usename');
         } 
+        if (this.state.newPassword.length === 0) {
+            alert('You must enter New Password');
+        } 
         else {
-            axios.get(LoginService.sendVerificationCode() + this.state.userName).then((res) => {
-                if (res) {
-                    alert("Confirmation Code Sent to mail");
-                    this.props.navigation.navigate('UpdateNewpassword', { userName: this.state.userName });  
-                }
-            });
+           // this.props.navigation.goBack(null);
+                    const params = {
+                        "username": this.state.userName, //"+919493926067",
+                        "confirmarionCode": this.state.code, //"Mani@1123",
+                        "newPassword": this.state.newPassword,
+                        //"storeName": this.state.store,//"kphb",
+                    }
+                    console.log(params)
+                    this.setState({ loading: true })
+                    axios.post(LoginService.forgotPassword(),null, { params: {
+                        "username": this.state.userName, //"+919493926067",
+                        "confirmarionCode": this.state.code, //"Mani@1123",
+                        "newPassword": this.state.newPassword,
+                       }}).then((res) => {
+                        if (res) {
+                         alert("Password Changed Successfully");
+                            // window.location.reload();
+                        this.setState({ loading: false })
+                        this.props.navigation.navigate('Login');
+                    }
+                        else {
+                            this.setState({ loading: false })
+                            alert('Invalid Credentials');
+                        }
+                    }
+                    );
            
         }
     }
@@ -81,7 +99,7 @@ class ForgotPassword extends Component {
                             <Image source={require('../assets/images/backButton.png')} />
                         </TouchableOpacity>
                         <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                          Verification Code
+                          Update New Password
                         </Text>
                     </View>
                         </View>
@@ -92,27 +110,29 @@ class ForgotPassword extends Component {
                             {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
                             <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
-                                placeholder="User Name"
+                                placeholder="Confirmation Code"
                                 placeholderTextColor="#6F6F6F"
                                 // textAlignVertical="center"
                                 autoCapitalize="none"
                                 onChangeText={this.handleEmail}
-                                value={this.state.userName}
+                                value={this.state.code}
                                 ref={inputemail => { this.emailValueInput = inputemail }} />
+
+                                
 
 
                             {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
-                            {/* <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                         <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
-                                placeholder="Confirmation Code"
+                                placeholder="New Password"
                                 secureTextEntry={true}
                                 placeholderTextColor="#6F6F6F"
                                 autoCapitalize="none"
-                                onChangeText={this.handleCode}
-                                //value={this.state.password}
+                                onChangeText={this.handleNewPassword}
+                                value={this.state.newPassword}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
 
-                            <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                            {/* <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder="New Password"
                                 secureTextEntry={true}
@@ -130,7 +150,7 @@ class ForgotPassword extends Component {
                                 autoCapitalize="none"
                                 onChangeText={this.handleConfirmPassword}
                                 //value={this.state.password}
-                                ref={inputpassword => { this.passwordValueInput = inputpassword }} /> */}
+                                ref={inputpassword => { this.passwordValueInput = inputpassword }} /> */} 
 
 
                             <TouchableOpacity
@@ -149,7 +169,7 @@ class ForgotPassword extends Component {
     }
 }
 
-export default ForgotPassword
+export default UpdateNewpassword
 
 
 const pickerSelectStyles = StyleSheet.create({

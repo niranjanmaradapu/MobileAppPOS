@@ -39,6 +39,11 @@ class LoginService {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/confirmforgetPassword';
     }
 
+    
+    sendVerificationCode(){
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/resetUserPassword/';
+    }
+
     getAuth() {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/loginWithTempPass';
     }
