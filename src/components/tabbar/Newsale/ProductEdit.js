@@ -121,9 +121,9 @@ class ProductEdit extends Component {
         })
             .then((image) => {
                 console.log('received image', image);
-                this.setState({ flagqtyModelOpen: false })
-                this.setState({ modalVisible: false });
                 this.setState({
+                    flagqtyModelOpen: false,
+                    modalVisible: false,
                     image: {
                         uri: image.path,
                         width: image.width,
@@ -135,8 +135,7 @@ class ProductEdit extends Component {
                 this.getImageNameByScan()
             })
             .catch((e) => {
-                this.setState({ flagqtyModelOpen: false })
-                this.setState({ modalVisible: false });
+                this.setState({ flagqtyModelOpen: false, modalVisible: false })
                 console.log(e);
                 Alert.alert(e.message ? e.message : e);
             });
@@ -188,8 +187,7 @@ class ProductEdit extends Component {
     cancel() {
         console.log('clicked')
         //this.setState({ modalVisible: true });
-        this.setState({ flagqtyModelOpen: false })
-        this.setState({ modalVisible: false });
+        this.setState({ flagqtyModelOpen: false, modalVisible: false })
     }
 
     async getImageNameByScan() {

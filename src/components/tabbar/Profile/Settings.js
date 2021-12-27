@@ -1,20 +1,20 @@
-import React, { Component, useState } from 'react'
-import { View, Image, FlatList, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
-var deviceWidth = Dimensions.get('window').width;
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import Constants from 'expo-constants';
-import { openDatabase } from 'react-native-sqlite-storage';
-// Connction to access the pre-populated db
-const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
-const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
+import React, { Component } from 'react';
+import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import DatePicker from 'react-native-date-picker'
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import ProfileService from '../../services/ProfileService';
-import axios from 'axios';
+import { openDatabase } from 'react-native-sqlite-storage';
 import Loader from '../../loader';
-import Device from 'react-native-device-detection';
+import ProfileService from '../../services/ProfileService';
+var deviceWidth = Dimensions.get('window').width;
+// Connction to access the pre-populated db
+const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
+const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
 
 
 
@@ -36,55 +36,55 @@ class Settings extends Component {
             dateOfBirth: "",
             address: "",
             userId: 0,
-        }
+        };
     }
 
     handleGender = (value) => {
         this.setState({ selectedGender: value });
-    }
+    };
 
     handleUserName = (value) => {
         this.setState({ userName: value });
-    }
+    };
 
     handleRole = (value) => {
         this.setState({ role: value });
-    }
+    };
 
     handleMobileNumber = (value) => {
         this.setState({ mobileNumber: value });
-    }
+    };
 
     handleEmail = (value) => {
         this.setState({ email: value });
-    }
+    };
 
     handleAddress = (value) => {
         this.setState({ address: value });
-    }
+    };
 
     datepickerCancelClicked() {
-        this.setState({ date: new Date() })
-        this.setState({ datepickerOpen: false })
+        this.setState({ date: new Date() });
+        this.setState({ datepickerOpen: false });
     }
 
     datepickerDoneClicked() {
         if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ dateOfBirth: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() })
+            this.setState({ dateOfBirth: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
         }
         else {
-            this.setState({ dateOfBirth: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+            this.setState({ dateOfBirth: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
-        this.setState({ datepickerOpen: false })
+        this.setState({ datepickerOpen: false });
     }
 
     datepickerClicked() {
-        this.setState({ datepickerOpen: true })
+        this.setState({ datepickerOpen: true });
     }
 
     profileUpdate() {
         if (this.state.dateOfBirth === "Date Of Birth") {
-            this.state.dateOfBirth = null
+            this.state.dateOfBirth = null;
         }
 
         const params = {
@@ -113,57 +113,58 @@ class Settings extends Component {
             // "clientId": "801",
             // "isConfigUser": "true",
             // "clientDomain": [1,2]
-        }
+        };
 
-        console.log('params are' + JSON.stringify(params))
-        this.setState({ loading: true })
+        console.log('params are' + JSON.stringify(params));
+        this.setState({ loading: true });
         axios.put(ProfileService.updateUser(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
-                this.setState({ loading: false })
+                this.setState({ loading: false });
             }
             else {
-                this.setState({ loading: false })
+                this.setState({ loading: false });
                 // this.setState({ loading: false })
                 alert("user Update issue");
             }
         }
         ).catch(() => {
-            this.setState({ loading: false })
-            alert('Update Api error')
-        })
+            this.setState({ loading: false });
+            alert('Update Api error');
+        });
     }
 
     async componentDidMount() {
-        var phonenumber = ""
+        var phonenumber = "";
         AsyncStorage.getItem("phone_number").then((value) => {
-            phonenumber = value
+            phonenumber = value;
         }).catch(() => {
-            console.log('there is error getting phone numner')
-        })
+            console.log('there is error getting phone numner');
+        });
         const username = await AsyncStorage.getItem("username");
         //console.log(ProfileService.getUser() + "+919895695626")
-        this.setState({ loading: true })
+        this.setState({ loading: true });
         axios.get(ProfileService.getUser() + username).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
-                this.setState({ loading: false })
-                this.setState({ userId: res.data["result"].userId })
-                this.setState({ userName: res.data["result"].userName })
-                this.setState({ role: res.data["result"].roleName })
-                this.setState({ email: res.data["result"].email })
-                this.setState({ selectedGender: res.data["result"].gender })
+                this.setState({
+                    loading: false,
+                    userId: res.data["result"].userId,
+                    userName: res.data["result"].userName,
+                    role: res.data["result"].roleName,
+                    email: res.data["result"].email,
+                    selectedGender: res.data["result"].gender
+                });
                 if (res.data["result"].dob === null) {
-                    this.setState({ dateOfBirth: 'Date Of Birth' })
+                    this.setState({ dateOfBirth: 'Date Of Birth' });
                 }
                 else {
-                    this.setState({ dateOfBirth: res.data["result"].dob })
+                    this.setState({ dateOfBirth: res.data["result"].dob });
                 }
-                this.setState({ address: res.data["result"].address })
-                this.setState({ mobileNumber: phonenumber })
+                this.setState({ address: res.data["result"].address, mobileNumber: phonenumber });
             }
         }).catch(() => {
-            this.setState({ loading: false })
-            alert('No user details get')
-        })
+            this.setState({ loading: false });
+            alert('No user details get');
+        });
     }
 
 
@@ -558,10 +559,10 @@ class Settings extends Component {
                     </View>
                 )}
             </View>
-        )
+        );
     }
 }
-export default Settings
+export default Settings;
 
 const pickerSelectStyles = StyleSheet.create({
     placeholder: {
@@ -602,7 +603,7 @@ const pickerSelectStyles = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 
 const styles = StyleSheet.create({

@@ -89,21 +89,23 @@ var deviceWidth = Dimensions.get('window').width;
             console.log('there is error getting storeId')
           })   
       //('dasdsadsadsad' + this.props.route.params.item)
-        this.setState({ divisionId: this.props.route.params.item.division })
-        this.setState({ sectionId: this.props.route.params.item.section })
-        this.setState({ subsectionId: this.props.route.params.item.subSection })
-        this.setState({ catogirieId: this.props.route.params.item.category })
-        this.setState({ colour: this.props.route.params.item.colour })
-        this.setState({ batchNo: this.props.route.params.item.batchNo })
-        this.setState({ costPrice: String(this.props.route.params.item.productTextile.costPrice) })
-        this.setState({ listPrice: String(this.props.route.params.item.productTextile.itemMrp) })
-        this.setState({ uomName: this.props.route.params.item.productTextile.uom})
-        this.setState({ hsnId: this.props.route.params.item.productTextile.hsnMasterId})
-        this.setState({ empId: this.props.route.params.item.productTextile.empId})
-        this.setState({ storeId: this.props.route.params.item.productTextile.storeId})
-        this.setState({ quantity: String(this.props.route.params.item.productTextile.qty)})
-        this.setState({ productTextileId:this.props.route.params.item.productTextile.productTextileId})
-        this.setState({ barcodeTextileId:this.props.route.params.item.barcodeTextileId})
+        this.setState({ 
+            divisionId: this.props.route.params.item.division, 
+            sectionId: this.props.route.params.item.section, 
+            subsectionId: this.props.route.params.item.subSection, 
+            catogirieId: this.props.route.params.item.category,
+            colour: this.props.route.params.item.colour,
+            batchNo: this.props.route.params.item.batchNo,
+            costPrice: String(this.props.route.params.item.productTextile.costPrice),
+            listPrice: String(this.props.route.params.item.productTextile.itemMrp),
+            uomName: this.props.route.params.item.productTextile.uom,
+            hsnId: this.props.route.params.item.productTextile.hsnMasterId,
+            empId: this.props.route.params.item.productTextile.empId,
+            storeId: this.props.route.params.item.productTextile.storeId,
+            quantity: String(this.props.route.params.item.productTextile.qty),
+            productTextileId: this.props.route.params.item.productTextile.productTextileId,
+            barcodeTextileId: this.props.route.params.item.barcodeTextileId
+        });
         this.getAllDivisions()
         this.getAllCatogiries()
         this.getAllHSNCodes()

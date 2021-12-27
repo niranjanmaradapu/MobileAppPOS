@@ -1,19 +1,18 @@
-import React, { Component, useState } from 'react'
-import { View, Image, FlatList, Animated, ImageBackground, Text, Button, TouchableOpacity, Switch, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
-var deviceWidth = Dimensions.get('window').width;
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import Constants from 'expo-constants';
-import Modal from "react-native-modal";
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import DatePicker from 'react-native-date-picker'
-import PromotionsService from '../../services/PromotionsService';
-import axios from 'axios';
 import Loader from '../../loader';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginService from '../../services/LoginService';
-import { ThemeConsumer } from 'react-native-elements';
-import Device from 'react-native-device-detection';
+import PromotionsService from '../../services/PromotionsService';
+var deviceWidth = Dimensions.get('window').width;
 
 
 
@@ -144,8 +143,7 @@ class Promo extends Component {
 
 
     getAllpools = () => {
-        this.setState({ poolsData: [] })
-        this.setState({ loading: true })
+        this.setState({ poolsData: [], loading: true })
         const params = {
             "domainId": this.state.domainId,
             "isActive": true
@@ -200,8 +198,7 @@ class Promo extends Component {
 
 
     getLoyaltyPoints = () => {
-        this.setState({ loyaltyData: [] })
-        this.setState({ loading: true })
+        this.setState({ loyaltyData: [], loading: true })
         const params = {
 
         }
@@ -231,10 +228,8 @@ class Promo extends Component {
 
 
     getAllPromotions = () => {
-        this.setState({ promoData: [] })
-        this.setState({ promoNamesArray: [] })
+        this.setState({ promoData: [], promoNamesArray: [], loading: true })
 
-        this.setState({ loading: true })
         const params = {
             "domainId": this.state.domainId,
             "flag": true
@@ -262,8 +257,7 @@ class Promo extends Component {
                                 }
 
                             }
-                            this.setState({ promoData: this.state.promoData })
-                            this.setState({ promoNamesArray: this.state.promoNamesArray })
+                            this.setState({ promoData: this.state.promoData, promoNamesArray: this.state.promoNamesArray })
 
                         }
                     }
@@ -276,8 +270,7 @@ class Promo extends Component {
     };
 
     getFilteredLoyaltyPoints = () => {
-        this.setState({ loyaltyData: [] })
-        this.setState({ loading: true })
+        this.setState({ loyaltyData: [], loading: true })
         if (this.state.invoiceNumber === "") {
             this.state.invoiceNumber = null
         }
@@ -306,8 +299,7 @@ class Promo extends Component {
                         for (let i = 0; i < len; i++) {
                             let number = res.data["result"][i]
                             this.state.loyaltyData.push(number)
-                            this.setState({ flagFilterLoyaltyOpen: false });
-                            this.setState({ modalVisible: false });
+                            this.setState({ flagFilterLoyaltyOpen: false, modalVisible: false });
                         }
                         this.setState({ loyaltyData: this.state.loyaltyData })
                     }
@@ -320,8 +312,7 @@ class Promo extends Component {
 
 
     getFilteredpromotions = () => {
-        this.setState({ promoData: [] })
-        this.setState({ loading: true })
+        this.setState({ promoData: [], loading: true })
         if (this.state.selectedPromotionName === "") {
             this.state.selectedPromotionName = null
         }
@@ -368,8 +359,7 @@ class Promo extends Component {
     }
 
     getFilteredpools = () => {
-        this.setState({ poolsData: [] })
-        this.setState({ loading: true })
+        this.setState({ poolsData: [], loading: true })
         if (this.state.selectedcreatedBy === "") {
             this.state.selectedcreatedBy = null
         }
@@ -442,25 +432,19 @@ class Promo extends Component {
     };
 
     topbarAction1() {
-        this.setState({ flagone: true })
-        this.setState({ flagtwo: false })
-        this.setState({ flagthree: false })
+        this.setState({ flagone: true, flagtwo: false, flagthree: false })
         this.getAllpools()
     }
 
 
     topbarAction2() {
-        this.setState({ flagone: false })
-        this.setState({ flagtwo: true })
-        this.setState({ flagthree: false })
+        this.setState({ flagone: false, flagtwo: true, flagthree: false })
         this.getAllPromotions()
     }
 
 
     topbarAction3() {
-        this.setState({ flagone: false })
-        this.setState({ flagtwo: false })
-        this.setState({ flagthree: true })
+        this.setState({ flagone: false, flagtwo: false, flagthree: true })
         this.getLoyaltyPoints()
     }
 
@@ -481,12 +465,14 @@ class Promo extends Component {
     }
 
     filterAction() {
-        this.setState({ selectedPromotionName: "" });
-        this.setState({ selectedStatus: "" });
-        this.setState({ selectedcreatedBy: "" });
-        this.setState({ selectedPoolType: "" });
-        this.setState({ flagAddPromo: false });
-        this.setState({ flagAddStore: false });
+        this.setState({ 
+            selectedPromotionName: "",
+            selectedStatus: "",
+            selectedcreatedBy: "",
+            selectedPoolType: "",
+            flagAddPromo: false,
+            flagAddStore: false
+        });
         if (this.state.flagone === true) {
             this.setState({ flagFilterOpen: true });
         }
@@ -509,14 +495,16 @@ class Promo extends Component {
     }
 
     modelCancel() {
-        this.setState({ flagFilterOpen: false });
-        this.setState({ flagFilterPromoOpen: false });
-        this.setState({ flagFilterLoyaltyOpen: false });
-        this.setState({ flagAddPromo: false });
-        this.setState({ flagAddStore: false });
-        this.setState({ promoDelete: false });
-        this.setState({ poolsDelete: false });
-        this.setState({ modalVisible: false });
+        this.setState({ 
+            flagFilterOpen: false,
+            flagFilterLoyaltyOpen: false,
+            flagFilterPromoOpen: false,
+            flagAddPromo: false,
+            flagAddStore: false,
+            promoDelete: false,
+            poolsDelete: false,
+            modalVisible: false
+        });
     }
 
     navigateToAddPromo() {
@@ -539,24 +527,22 @@ class Promo extends Component {
         this.getLoyaltyPoints()
     }
     addStore() {
-        this.setState({ selectedPromotionType: "" });
-        this.setState({ selectedPromotionName: "" });
-        this.setState({ selectedStore: "" });
-        this.setState({ startDate: "" });
-        this.setState({ endDate: "" });
-
-        this.setState({ flagFilterPromoOpen: false });
-        this.setState({ flagAddPromo: false });
-        this.setState({ modalVisible: true });
-        this.setState({ flagAddStore: true });
-        this.setState({ datepickerOpen: false })
+        this.setState({ 
+            selectedPromotionType: "",
+            selectedPromotionName: "",
+            selectedStore: "",
+            startDate: "",
+            endDate: "",
+            flagFilterPromoOpen: false,
+            flagAddPromo: false,
+            modalVisible: true,
+            flagAddStore: true,
+            datepickerOpen: false
+        });
     }
 
     datepickerCancelClicked() {
-        this.setState({ date: new Date() })
-        this.setState({ enddate: new Date() })
-        this.setState({ datepickerOpen: false })
-        this.setState({ datepickerendOpen: false })
+        this.setState({ date: new Date(), endDate: new Date(), datepickerOpen: false, datepickerendOpen: false })
     }
 
     datepickerDoneClicked() {
@@ -567,10 +553,7 @@ class Promo extends Component {
             this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
         }
 
-        this.setState({ doneButtonClicked: true })
-        //this.setState({date:this.state.})
-        this.setState({ datepickerOpen: false })
-        this.setState({ datepickerendOpen: false })
+        this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false })
     }
 
     datepickerendDoneClicked() {
@@ -580,9 +563,7 @@ class Promo extends Component {
         else {
             this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
         }
-        this.setState({ enddoneButtonClicked: true })
-        this.setState({ datepickerOpen: false })
-        this.setState({ datepickerendOpen: false })
+        this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false })
     }
 
     navigateToAddPool() {
@@ -634,8 +615,7 @@ class Promo extends Component {
     }
 
     enddatepickerClicked() {
-        this.setState({ datepickerOpen: false })
-        this.setState({ datepickerendOpen: true })
+        this.setState({ datepickerOpen: false, datepickerendOpen: true })
     }
 
     refteshPools() {
@@ -723,8 +703,7 @@ class Promo extends Component {
         }).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 this.getAllPromotions()
-                this.setState({ promoDelete: false });
-                this.setState({ modalVisible: false });
+                this.setState({ promoDelete: false, modalVisible: false });
             }
             else {
                 alert('Issue in delete barcode and having' + res.data["error"]);
@@ -734,11 +713,7 @@ class Promo extends Component {
     }
 
     handlepromodeleteaction = (item, index) => {
-        this.setState({ delelePromoId: item.promoId });
-        this.setState({ delelePromoIndex: item.delelePromoIndex });
-        this.setState({ promoDelete: true });
-        this.setState({ modalVisible: true });
-
+        this.setState({ delelePromoId: item.promoId, delelePromoIndex: item.delelePromoIndex, promoDelete: true, modalVisible: true });
     }
 
     handlepooleditaction = (item, index) => {
@@ -785,9 +760,7 @@ class Promo extends Component {
             this.setState({ loading: true })
             axios.post(PromotionsService.addPromoStore(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
-                    this.setState({ flagAddPromo: false });
-                    this.setState({ modalVisible: false });
+                    this.setState({ loading: false, flagAddPromo: false, modalVisible: false })
 
                 }
                 else {
@@ -809,8 +782,7 @@ class Promo extends Component {
         }).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 this.getAllpools()
-                this.setState({ poolsDelete: false });
-                this.setState({ modalVisible: false });
+                this.setState({ poolsDelete: false, modalVisible: false });
             }
             else {
                 alert('Issue in delete barcode and having' + res.data["error"]);
@@ -820,8 +792,7 @@ class Promo extends Component {
     }
 
     handlepooldeleteaction = (item, index) => {
-        this.setState({ poolsDelete: true });
-        this.setState({ modalVisible: true });
+        this.setState({ poolsDelete: true, modalVisible: true });
     }
 
     handleMenuButtonClick() {

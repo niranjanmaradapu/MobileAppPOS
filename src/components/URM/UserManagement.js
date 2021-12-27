@@ -1,14 +1,12 @@
-import React, { Component } from 'react'
-import { View, Image, Text, Button, FlatList, TouchableOpacity, Switch, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
-import Modal from 'react-native-modal';
-import axios from 'axios';
-import Loader from "../loader";
-import DatePicker from 'react-native-date-picker'
-import Device from 'react-native-device-detection'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import Loader from "../loader";
 
 
 var deviceWidth = Dimensions.get("window").width;
@@ -22,7 +20,7 @@ export default class UserManagement extends Component {
             flagOne: true,
             flagTwo: false,
             flagFilterRoles: false,
-            flagFiterUsers: false,
+            flagFilterUsers: false,
             modalVisible: true,
             createdDate: "",
             date: new Date(),
@@ -44,17 +42,15 @@ export default class UserManagement extends Component {
             this.setState({ flagFilterRoles: false })
         }
         if (this.state.flagTwo === true) {
-            this.setState({ flagFiterUsers: true })
+            this.setState({ flagFilterUsers: true })
         } else {
-            this.setState({ flagFiterUsers: false })
+            this.setState({ flagFilterUsers: false })
         }
         this.setState({ modalVisible: true })
     }
 
     modelCancel() {
-        this.setState({ modalVisible: false });
-        this.setState({ flagFilterRoles: false });
-        this.setState({ flagFiterUsers: false });
+        this.setState({ modalVisible: false, flagFilterRoles: false, flagFilterUsers: false });
     }
 
     navigateToCreateRoles() {
@@ -84,14 +80,12 @@ export default class UserManagement extends Component {
 
     filterDatepickerDoneClicked() {
         // if (parseInt(this.state.date.getDate()) < 10) {
-        this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() })
+        this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false })
         // }
-        this.setState({ doneButtonClicked: true, datepickerOpen: false })
     }
 
     filterDatepickerCancelClicked() {
-        this.setState({ date: new Date() })
-        this.setState({ datepickerOpen: false })
+        this.setState({ date: new Date(), datepickerOpen: false })
     }
 
     handleCreatedBy = (value) => {
@@ -129,12 +123,10 @@ export default class UserManagement extends Component {
     }
 
     handleuserdeleteaction(item, index) {
-        this.setState({ modalVisible: true })
-        this.setState({ userDelete: true })
+        this.setState({ modalVisible: true, userDelete: true })
     }
     handleRoledeleteaction(item, index) {
-        this.setState({ modalVisible: true })
-        this.setState({ roleDelete: true })
+        this.setState({ modalVisible: true, roleDelete: true })
     }
 
     getAllRoles() {
@@ -531,7 +523,7 @@ export default class UserManagement extends Component {
                         </View>
                     )}
 
-                    {this.state.flagFiterUsers && (
+                    {this.state.flagFilterUsers && (
                         <View>
                             <Modal isVisible={this.state.modalVisible}>
                                 <View style={Device.isTablet ? styles.filterBarcodeContainer_tablet : styles.filterBarcodeContainer_mobile} >

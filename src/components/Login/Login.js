@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, Image, SafeAreaView } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-var deviceheight = Dimensions.get('window').height;
-import LoginService from '../services/LoginService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { Component } from 'react';
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loader from '../loader';
+import LoginService from '../services/LoginService';
+var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
-import I18n from 'react-native-i18n';
-import Device from 'react-native-device-detection'
 
 
 const data = [
@@ -45,18 +45,18 @@ export default class Login extends Component {
             },
             storeNames: []
 
-        }
+        };
         console.log(process.env.REACT_APP_BASE_URL);
     }
 
     toggleRememberMe = value => {
-        this.setState({ rememberMe: value })
+        this.setState({ rememberMe: value });
         if (value === true) {
             this.rememberUser();
         } else {
             this.forgetUser();
         }
-    }
+    };
 
     forgetUser = async () => {
         try {
@@ -66,17 +66,17 @@ export default class Login extends Component {
     };
 
     handleEmail = (text) => {
-        this.setState({ userName: text })
-    }
+        this.setState({ userName: text });
+    };
     handlePassword = (text) => {
-        this.setState({ password: text })
-    }
+        this.setState({ password: text });
+    };
     handleStore = (value) => {
         this.setState({ store: value });
-    }
+    };
 
-    registerClient(){
-        this.props.navigation.navigate('RegisterClient')
+    registerClient() {
+        this.props.navigation.navigate('RegisterClient');
     }
 
 
@@ -93,7 +93,7 @@ export default class Login extends Component {
                 "email": this.state.userName, //"+919493926067",
                 "password": this.state.password, //"Mani@1123",
                 //"storeName": this.state.store,//"kphb",
-            }
+            };
             AsyncStorage.setItem("username", this.state.userName);
             AsyncStorage.removeItem('tokenkey');
             AsyncStorage.removeItem('custom:clientId1');
@@ -101,55 +101,54 @@ export default class Login extends Component {
             AsyncStorage.removeItem('domainDataId');
             AsyncStorage.removeItem('storeId');
 
-            console.log(LoginService.getAuth() + JSON.stringify(params))
-            this.setState({ loading: true })
+            console.log(LoginService.getAuth() + JSON.stringify(params));
+            this.setState({ loading: true });
             axios.post(LoginService.getAuth(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    const token = res.data.result.authenticationResult.idToken
+                    const token = res.data.result.authenticationResult.idToken;
                     //==============================Token Key & phone number save ===================//
                     AsyncStorage.setItem("tokenkey", JSON.stringify(token)).then(() => {
                     }).catch(() => {
-                        console.log('there is error saving token')
-                    })
+                        console.log('there is error saving token');
+                    });
 
                     AsyncStorage.getItem("tokenkey").then((value) => {
                         var finalToken = value.replace('"', '');
                         console.log(finalToken);
-                        axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken }
+                        axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken };
                         //console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
-                    })
+                    });
 
                     AsyncStorage.setItem("phone_number", jwt_decode(token)["phone_number"]).then(() => {
                         // console.log
                     }).catch(() => {
-                        console.log('there is error saving domainDataId')
-                    })
+                        console.log('there is error saving domainDataId');
+                    });
 
                     //==============================Navigation===================//
                     if (jwt_decode(token)["custom:isSuperAdmin"] === "true") {
                         AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
                             // console.log
                         }).catch(() => {
-                            console.log('there is error saving domainDataId')
-                        })
-                        this.getDomainsList()
+                            console.log('there is error saving domainDataId');
+                        });
+                        this.getDomainsList();
                     } else {
                         AsyncStorage.setItem("domainDataId", jwt_decode(token)["custom:domianId1"]).then(() => {
                             // console.log
                         }).catch(() => {
-                            console.log('there is error saving domainDataId')
-                        })
-                        this.getstoresForNormalUser()
+                            console.log('there is error saving domainDataId');
+                        });
+                        this.getstoresForNormalUser();
                     }
 
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                 }
                 else {
-                    this.setState({ loading: false })
                     alert('Invalid Credentials');
-                    this.emailValueInput.clear()
-                    this.passwordValueInput.clear()
-                    this.setState({ userName: '', password: '', selectedOption: null })
+                    this.emailValueInput.clear();
+                    this.passwordValueInput.clear();
+                    this.setState({ userName: '', password: '', selectedOption: null, loading: false });
                 }
             }
             );
@@ -159,21 +158,21 @@ export default class Login extends Component {
 
     async getDomainsList() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
-        console.log('vinodddd' + clientId)
+        console.log('vinodddd' + clientId);
         axios.get(LoginService.getDomainsList() + clientId).then((res) => {
             if (res.data["result"][0]) {
-                console.log('sdasdasdsadasdsasfsfssaf' + res.data["result"])
+                console.log('sdasdasdsadasdsasfsfssaf' + res.data["result"]);
                 if (res.data["result"].length > 1) {
-                    this.props.navigation.navigate('SelectDomain')
+                    this.props.navigation.navigate('SelectDomain');
                 }
                 else {
                     AsyncStorage.setItem("domainDataId", String(res.data.result[0].clientDomainaId)).then(() => {
                         // console.log
 
                     }).catch(() => {
-                        console.log('there is error saving token')
-                    })
-                    this.getstoresForSuperAdmin()
+                        console.log('there is error saving token');
+                    });
+                    this.getstoresForSuperAdmin();
                 }
             }
         });
@@ -184,21 +183,21 @@ export default class Login extends Component {
         const username = await AsyncStorage.getItem("domainDataId");
         const params = {
             "clientDomianId": username
-        }
-        console.log('sfsdfsdff' + params)
+        };
+        console.log('sfsdfsdff' + params);
         axios.get(LoginService.getUserStoresForSuperAdmin(), { params }).then((res) => {
             let len = res.data["result"].length;
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
                     if (res.data["result"].length > 1) {
-                        this.props.navigation.navigate('SelectStore',{isFromDomain:false})
+                        this.props.navigation.navigate('SelectStore', { isFromDomain: false });
                     }
                     else {
                         AsyncStorage.setItem("storeId", String(res.data.result[0].id)).then(() => {
                         }).catch(() => {
-                            console.log('there is error saving storeName')
-                        })
-                        this.props.navigation.navigate('HomeNavigation')
+                            console.log('there is error saving storeName');
+                        });
+                        this.props.navigation.navigate('HomeNavigation');
                     }
                 }
             }
@@ -212,24 +211,24 @@ export default class Login extends Component {
         axios.get(LoginService.getUserStores() + username).then((res) => {
             if (res.data["result"]) {
                 for (var i = 0; i < res.data["result"].length; i++) {
-                    let number = res.data.result[i]
-                    const myArray = []
+                    let number = res.data.result[i];
+                    const myArray = [];
                     myArray = number.split(":");
-                    this.state.storeNames.push({ name: myArray[0], id: myArray[1] })
+                    this.state.storeNames.push({ name: myArray[0], id: myArray[1] });
 
                 }
-                this.setState({ storeNames: this.state.storeNames })
+                this.setState({ storeNames: this.state.storeNames });
                 AsyncStorage.setItem("storeId", (this.state.storeNames[0].id).toString()).then(() => {
                 }).catch(() => {
-                    console.log('there is error saving token')
-                })
+                    console.log('there is error saving token');
+                });
 
 
                 if (this.state.storeNames.length === 1) {
-                    this.props.navigation.navigate('HomeNavigation')
+                    this.props.navigation.navigate('HomeNavigation');
                 }
                 else {
-                    this.props.navigation.navigate('SelectStore',{isFromDomain:false})
+                    this.props.navigation.navigate('SelectStore', { isFromDomain: false });
                 }
             }
         });
@@ -241,9 +240,9 @@ export default class Login extends Component {
         const params = {
             "username": this.state.userName, //"+919493926067",
             //"storeName": this.state.store,//"kphb",
-        }
+        };
         AsyncStorage.setItem("username", this.state.userName);
-        console.log(LoginService.forgotPasswordCodeSent() + JSON.stringify(params))
+        console.log(LoginService.forgotPasswordCodeSent() + JSON.stringify(params));
         // this.setState({ loading: true })
         axios.post(LoginService.forgotPasswordCodeSent(), null, {
             params: {
@@ -255,7 +254,7 @@ export default class Login extends Component {
                 this.props.navigation.navigate('ForgotPassword', { username: this.state.userName });
             }
             else {
-                this.setState({ loading: false })
+                this.setState({ loading: false });
                 alert('Invalid Credentials');
                 // this.props.navigation.goBack(null);
                 // this.state.store = ""
@@ -309,7 +308,7 @@ export default class Login extends Component {
                                     autoCapitalize="none"
                                     onChangeText={this.handleEmail}
                                     value={this.state.userName}
-                                    ref={inputemail => { this.emailValueInput = inputemail }} />
+                                    ref={inputemail => { this.emailValueInput = inputemail; }} />
 
 
                                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -320,7 +319,7 @@ export default class Login extends Component {
                                     autoCapitalize="none"
                                     onChangeText={this.handlePassword}
                                     value={this.state.password}
-                                    ref={inputpassword => { this.passwordValueInput = inputpassword }} />
+                                    ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
 
                                 <View>
                                     <View style={{ flexDirection: "column" }}>
@@ -331,8 +330,8 @@ export default class Login extends Component {
                                             top: 35, alignItems: 'center', flexDirection: 'row'
                                         }}>
 
-                                          
-                                          
+
+
 
                                             <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Forgot password')} </Text>
                                             <TouchableOpacity
@@ -346,12 +345,12 @@ export default class Login extends Component {
                                             left: 20,
                                             top: 35, alignItems: 'center', flexDirection: 'row'
                                         }}>
-                                             <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {'Register?'} </Text>
-                                        <TouchableOpacity
+                                            <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {'Register?'} </Text>
+                                            <TouchableOpacity
                                                 onPress={() => this.registerClient()} >
                                                 <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {'Register'} </Text>
-                                                </TouchableOpacity>
-                                                </View>
+                                            </TouchableOpacity>
+                                        </View>
 
                                     </View>
                                 </View>
@@ -368,7 +367,7 @@ export default class Login extends Component {
                 </View>
 
             </KeyboardAwareScrollView>
-        )
+        );
     }
 }
 
@@ -403,7 +402,7 @@ const pickerSelectStyles = StyleSheet.create({
         borderWidth: 5,
         fontSize: 14,
     },
-})
+});
 
 const styles = StyleSheet.create({
     logoImage: {
@@ -444,32 +443,32 @@ const styles = StyleSheet.create({
 
     // Mobile Styles
     hederText_mobile: {
-        color: "#353C40", 
-        fontSize: 20, 
-        fontFamily: "bold", 
-        marginLeft: 10, 
+        color: "#353C40",
+        fontSize: 20,
+        fontFamily: "bold",
+        marginLeft: 10,
         marginTop: 100,
         flexDirection: 'column',
         justifyContent: 'center',
         fontSize: 28,
     },
     headerText2_mobile: {
-        color: "#353C40", 
-        fontSize: 20, 
-        fontFamily: "bold", 
-        marginLeft: 10, 
+        color: "#353C40",
+        fontSize: 20,
+        fontFamily: "bold",
+        marginLeft: 10,
         marginTop: 0,
         flexDirection: 'column',
-        justifyContent: 'center', 
+        justifyContent: 'center',
         height: 45,
         fontSize: 28,
     },
-    bottomImage_mobile: { 
-        position: 'absolute', 
-        right: 0, 
-        bottom: 40, 
-        width: 162, 
-        height: 170 
+    bottomImage_mobile: {
+        position: 'absolute',
+        right: 0,
+        bottom: 40,
+        width: 162,
+        height: 170
     },
     input_mobile: {
         justifyContent: 'center',
@@ -504,44 +503,44 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: "regular",
     },
-    navigationText_mobile: { 
-        fontSize: 16, 
-        color: '#858585', 
-        fontFamily: "regular", 
+    navigationText_mobile: {
+        fontSize: 16,
+        color: '#858585',
+        fontFamily: "regular",
     },
-    navigationButtonText_mobile: { 
-        color: '#353C40', 
-        fontSize: 16, 
-        fontFamily: "bold", 
-        textDecorationLine: 'underline' 
+    navigationButtonText_mobile: {
+        color: '#353C40',
+        fontSize: 16,
+        fontFamily: "bold",
+        textDecorationLine: 'underline'
     },
 
     // Tablet Styles
     headerText_tablet: {
-        color: "#353C40", 
-        fontSize: 40, 
-        fontFamily: "bold", 
-        marginLeft: 10, 
+        color: "#353C40",
+        fontSize: 40,
+        fontFamily: "bold",
+        marginLeft: 10,
         marginTop: 100,
         flexDirection: 'column',
         justifyContent: 'center',
     },
     headerText2_tablet: {
-        color: "#353C40", 
-        fontSize: 40, 
-        fontFamily: "bold", 
-        marginLeft: 10, 
+        color: "#353C40",
+        fontSize: 40,
+        fontFamily: "bold",
+        marginLeft: 10,
         marginTop: 0,
         flexDirection: 'column',
-        justifyContent: 'center', 
+        justifyContent: 'center',
         height: 55,
     },
-    bottomImage_tablet: { 
-        position: 'absolute', 
-        right: 0, 
-        bottom: 40, 
-        width: 202, 
-        height: 230 
+    bottomImage_tablet: {
+        position: 'absolute',
+        right: 0,
+        bottom: 40,
+        width: 202,
+        height: 230
     },
     input_tablet: {
         justifyContent: 'center',
@@ -576,18 +575,18 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: "regular",
     },
-    navigationText_tablet: { 
-        fontSize: 22, 
-        color: '#858585', 
-        fontFamily: "regular", 
+    navigationText_tablet: {
+        fontSize: 22,
+        color: '#858585',
+        fontFamily: "regular",
     },
-    navigationButtonText_tablet: { 
-        color: '#353C40', 
-        fontSize: 22, 
-        fontFamily: "bold", 
-        textDecorationLine: 'underline' 
+    navigationButtonText_tablet: {
+        color: '#353C40',
+        fontSize: 22,
+        fontFamily: "bold",
+        textDecorationLine: 'underline'
     },
-})
+});;
 
 // Unused Styles
 // {

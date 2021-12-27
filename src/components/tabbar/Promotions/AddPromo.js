@@ -1,19 +1,16 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native';
-var deviceWidth = Dimensions.get('window').width;
-import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { openDatabase } from 'react-native-sqlite-storage';
-// Connction to access the pre-populated db
-const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
-import { RNCamera } from 'react-native-camera';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Modal from "react-native-modal";
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import PromotionsService from '../../services/PromotionsService';
+import { openDatabase } from 'react-native-sqlite-storage';
 import Loader from '../../loader';
+import PromotionsService from '../../services/PromotionsService';
+var deviceWidth = Dimensions.get('window').width;
+// Connction to access the pre-populated db
+const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 
 
 class AddPromo extends Component {
@@ -47,56 +44,57 @@ class AddPromo extends Component {
             selectedItem: -1,
             loading: false,
             item: [],
-        }
+        };
     }
 
     async componentDidMount() {
-        var domainStringId = ""
+        var domainStringId = "";
         AsyncStorage.getItem("domainDataId").then((value) => {
-            domainStringId = value
-            this.setState({ domainId: parseInt(domainStringId) })
-            console.log("domain data id" + this.state.domainId)
-            this.getAllpools()
+            domainStringId = value;
+            this.setState({ domainId: parseInt(domainStringId) });
+            console.log("domain data id" + this.state.domainId);
+            this.getAllpools();
 
         }).catch(() => {
-            console.log('there is error getting domainDataId')
-        })
-        this.setState({ promotionName: this.props.route.params.item.promotionName })
-        this.setState({ selectedPromoApplyName: this.props.route.params.item.promoApplyType })
-        this.setState({ description: this.props.route.params.item.description })
-        this.setState({ printonbill: this.props.route.params.item.printNameOnBill })
-        this.setState({ selectedApplicability: this.props.route.params.item.applicability })
-        this.setState({ buyany: String(this.props.route.params.item.buyItemsFromPool) })
-        this.setState({ isEdit:this.props.route.params.isEdit})
-        this.setState({ selctedPoolnames: this.props.route.params.item.poolVo })
+            console.log('there is error getting domainDataId');
+        });
+        this.setState({
+            promotionName: this.props.route.params.item.promotionName,
+            selectedPromoApplyName: this.props.route.params.item.promoApplyType,
+            description: this.props.route.params.item.description,
+            printonbill: this.props.route.params.item.printNameOnBill,
+            selectedApplicability: this.props.route.params.item.applicability,
+            buyany: String(this.props.route.params.item.buyItemsFromPool),
+            isEdit: this.props.route.params.isEdit,
+            selctedPoolnames: this.props.route.params.item.poolVo
+        });
         // this.setState({ arrayData: this.props.route.params.item.ruleVo })
         // this.setState({ arrayData: this.props.route.params.item.ruleVo })
-     
+
     }
 
 
     getAllpools = () => {
-        this.setState({ createdByArray: [] })
-        this.setState({ loading: true })
+        this.setState({ createdByArray: [], loading: true });
         const params = {
             "domainId": this.state.domainId,
             "isActive": true
-        }
+        };
         axios.get(PromotionsService.getAllPools(),
             { params }).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
 
                     let len = res.data["result"]["poolvo"].length;
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let number = res.data["result"]["poolvo"][i]
+                            let number = res.data["result"]["poolvo"][i];
                             if (number.poolName != null) {
-                                this.state.createdByArray.push({ poolName: number.poolName, poolId: number.poolId })
+                                this.state.createdByArray.push({ poolName: number.poolName, poolId: number.poolId });
                             }
 
-                            this.setState({ createdByArray: this.state.createdByArray })
-                            console.log('pool names' + number.poolName)
+                            this.setState({ createdByArray: this.state.createdByArray });
+                            console.log('pool names' + number.poolName);
                         }
                     }
                     // this.state.createdByTempArray.forEach(obj => {
@@ -106,21 +104,18 @@ class AddPromo extends Component {
                     //     this.setState({ createdByArray: this.state.createdByArray })
                     // });
 
-                    return
+                    return;
                 }
             }).catch(() => {
-                this.setState({ loading: false })
+                this.setState({ loading: false });
                 // alert('No Records Found')
-            })
+            });
 
     };
 
     selectPools = (item, index) => {
-        console.log('-------ITEM TAPPED' + item.poolName)
-        this.setState({ selectedItem: index })
-
-        this.setState({ selectedPoolName: item.poolName })
-        this.setState({ selectedPoolId: item.poolId })
+        console.log('-------ITEM TAPPED' + item.poolName);
+        this.setState({ selectedItem: index, selectedPoolName: item.poolName, selectedPoolId: item.poolId });
     };
 
 
@@ -134,42 +129,41 @@ class AddPromo extends Component {
     }
 
     modelCancel() {
-        this.setState({ modalVisible: false });
-        this.setState({ flagAddPool: false });
+        this.setState({ modalVisible: false, flagAddPool: false });
     }
 
     handlePromotionName = (value) => {
         this.setState({ promotionName: value });
-    }
+    };
 
     handleDescription = (value) => {
         this.setState({ description: value });
-    }
+    };
 
     handlePrintOnSallBill = (value) => {
         this.setState({ printonbill: value });
-    }
+    };
 
     handleApplicability = (value) => {
         this.setState({ selectedApplicability: value });
-    }
+    };
 
     handleTax = (value) => {
         this.setState({ selectedTax: value });
-    }
+    };
 
     chargeExtra() {
         if (this.state.chargeExtra === true) {
-            this.setState({ chargeExtra: false })
+            this.setState({ chargeExtra: false });
         }
         else {
-            this.setState({ chargeExtra: true })
+            this.setState({ chargeExtra: true });
         }
 
     }
     handlePromoApplyname = (value) => {
         this.setState({ selectedPromoApplyName: value });
-    }
+    };
 
     async savePromo() {
         if (String(this.state.promotionName).length === 0) {
@@ -189,9 +183,9 @@ class AddPromo extends Component {
             alert('You need to select atleast one pool for create promo');
         }
         else {
-            this.setState({ loading: true })
+            this.setState({ loading: true });
             const username = await AsyncStorage.getItem("username");
-            this.setState({ loading: true })
+            this.setState({ loading: true });
             if (this.state.isEdit === true) {
                 const params = {
                     "applicability": this.state.selectedApplicability,
@@ -204,22 +198,22 @@ class AddPromo extends Component {
                     "poolVo":
                         this.state.selctedPoolnames
                     ,
-                    "promoId":this.props.route.params.item.promoId,
+                    "promoId": this.props.route.params.item.promoId,
                     "printNameOnBill": this.state.printonbill,
                     "domainId": this.state.domainId,
                     "promoApplyType": this.state.selectedPromoApplyName,
                     "promotionName": this.state.promotionName,
                     "promoType": null,
-                }
-               console.log('--start updating')
+                };
+                console.log('--start updating');
                 axios.post(PromotionsService.editPromo(), params).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
-                        this.setState({ loading: false })
+                        this.setState({ loading: false });
                         this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
                     else {
-                        this.setState({ loading: false })
+                        this.setState({ loading: false });
                         alert("duplicate record already exists");
                     }
                 }
@@ -242,15 +236,15 @@ class AddPromo extends Component {
                     "promoApplyType": this.state.selectedPromoApplyName,
                     "promotionName": this.state.promotionName,
                     "promoType": null,
-                }
+                };
                 axios.post(PromotionsService.addPromotion(), params).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
-                        this.setState({ loading: false })
+                        this.setState({ loading: false });
                         this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
                     else {
-                        this.setState({ loading: false })
+                        this.setState({ loading: false });
                         alert("duplicate record already exists");
                     }
                 }
@@ -260,8 +254,8 @@ class AddPromo extends Component {
     }
 
     refresh() {
-        this.setState({ productname: global.productname })
-        console.log('search' + this.state.productname)
+        this.setState({ productname: global.productname });
+        console.log('search' + this.state.productname);
     }
 
     onEndReached() {
@@ -273,19 +267,17 @@ class AddPromo extends Component {
     }
 
     addPools() {
-        this.setState({ flagAddPool: true });
-        this.setState({ modalVisible: true });
+        this.setState({ flagAddPool: true, modalVisible: true });
     }
 
     addPoolName() {
-        this.state.selctedPoolnames.push({ poolName: this.state.selectedPoolName, poolId: this.state.selectedPoolId })
-        this.setState({ modalVisible: false });
-        this.setState({ flagAddPool: false });
+        this.state.selctedPoolnames.push({ poolName: this.state.selectedPoolName, poolId: this.state.selectedPoolId });
+        this.setState({ modalVisible: false, flagAddPool: false });
     }
 
     handleValue = (value) => {
         this.setState({ buyany: value });
-    }
+    };
 
     render() {
         return (
@@ -498,7 +490,7 @@ class AddPromo extends Component {
                             autoCapitalize="none"
                             value={this.state.buyany}
                             onChangeText={this.handleValue}
-                            ref={inputemail => { this.emailValueInput = inputemail }}
+                            ref={inputemail => { this.emailValueInput = inputemail; }}
                         />
 
 
@@ -738,11 +730,11 @@ class AddPromo extends Component {
                 )}
             </View>
 
-        )
+        );
 
     }
 }
-export default AddPromo
+export default AddPromo;
 
 const pickerSelectStyles = StyleSheet.create({
     placeholder: {
@@ -784,7 +776,7 @@ const pickerSelectStyles = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 const styles = StyleSheet.create({
     input: {
