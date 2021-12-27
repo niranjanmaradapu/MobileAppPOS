@@ -1,21 +1,21 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, TextInput, SafeAreaView, ScrollView, FlatList } from 'react-native';
-var deviceWidth = Dimensions.get('window').width;
-import { DrawerActions } from '@react-navigation/native';
-var deviceWidth = Dimensions.get('window').width;
-import Constants from 'expo-constants';
-import Loader from '../../loader';
-import PromotionsService from '../../services/PromotionsService';
-import axios from 'axios';
-const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }, { key: 5 }];
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import NewSaleService from '../../services/NewSaleService';
-import RazorpayCheckout from 'react-native-razorpay';
-import Modal from "react-native-modal";
+import { DrawerActions } from '@react-navigation/native';
+import axios from 'axios';
+import Constants from 'expo-constants';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
+import RazorpayCheckout from 'react-native-razorpay';
 import { Chevron } from 'react-native-shapes';
+import Loader from '../../loader';
 import LoginService from '../../services/LoginService';
+import NewSaleService from '../../services/NewSaleService';
+import PromotionsService from '../../services/PromotionsService';
+var deviceWidth = Dimensions.get('window').width;
+var deviceWidth = Dimensions.get('window').width;
+const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }, { key: 5 }];
 
 class Payment extends Component {
     constructor(props) {
@@ -51,52 +51,54 @@ class Payment extends Component {
             flagCustomerOpen: false,
             flagredeem: false,
             redeemedPints: "0",
-            enterredeempoint:'',
-            promoDiscount:"0",
-        }
+            enterredeempoint: '',
+            promoDiscount: "0",
+        };
     }
 
     async componentDidMount() {
-        var domainStringId = ""
-        var storeStringId = ""
+        var domainStringId = "";
+        var storeStringId = "";
         AsyncStorage.getItem("domainDataId").then((value) => {
-            domainStringId = value
-            this.setState({ domainId: parseInt(domainStringId) })
-            console.log("domain data id" + this.state.domainId)
+            domainStringId = value;
+            this.setState({ domainId: parseInt(domainStringId) });
+            console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
-            console.log('there is error getting domainDataId')
-        })
+            console.log('there is error getting domainDataId');
+        });
 
         AsyncStorage.getItem("storeId").then((value) => {
-            storeStringId = value
-            this.setState({ storeId: parseInt(storeStringId) })
-            console.log(this.state.storeId)
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) });
+            console.log(this.state.storeId);
         }).catch(() => {
-            console.log('there is error getting storeId')
-        })
-        console.log(this.props.route.params.totalAmount)
-        this.setState({ totalAmount: this.props.route.params.totalAmount })
+            console.log('there is error getting storeId');
+        });
+        console.log(this.props.route.params.totalAmount);
+        this.setState({
+            totalAmount: this.props.route.params.totalAmount,
+            totalDiscount: this.props.route.params.totalDiscount,
+            customerName: this.props.route.params.customerName,
+            customerPhoneNumber: this.props.route.params.customerPhoneNumber,
+            customerGSTNumber: this.props.route.params.customerGSTNumber,
+            customerAddress: String(this.props.route.params.customerAddress),
+            customerGender: this.props.route.params.customerGender,
+            lineItemIdAdd: this.props.route.params.lineItemIdAdd,
+            totalQty: this.props.route.params.totalQty
+        });
 
-        this.setState({ totalDiscount: this.props.route.params.totalDiscount })
-        this.setState({ customerName: this.props.route.params.customerName })
-        this.setState({ customerPhoneNumber: this.props.route.params.customerPhoneNumber })
-        this.setState({ customerGSTNumber: this.props.route.params.customerGSTNumber })
-        this.setState({ customerAddress: String(this.props.route.params.customerAddress) })
-        this.setState({ customerGender: this.props.route.params.customerGender })
-        this.setState({ lineItemIdAdd: this.props.route.params.lineItemIdAdd })
-        this.setState({ totalQty: this.props.route.params.totalQty })
     }
 
 
     addCustomer() {
         if (this.state.customerPhoneNumber.length != 10) {
             alert('Please Enter valid mobile number');
-            return
+            return;
         }
         else if (this.state.customerName.length === 0) {
             alert('Please Enter customer name');
-            return
+            return;
         }
         // else if (this.state.customerGender.length === 0) {
         //   alert('Please Enter customer gender');
@@ -149,66 +151,68 @@ class Payment extends Component {
             "clientId": "",
             "isConfigUser": false,
             "clientDomain": []
-        }
-        this.setState({ loading: true })
+        };
+        this.setState({ loading: true });
         axios.post(LoginService.createUser(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
-                this.setState({ flagCustomerOpen: false })
-                this.setState({ modalVisible: false });
-                this.setState({ loading: false })
-                this.setState({ mobileNumber: "" })
-                this.setState({ loyaltyPoints: "" })
-                this.setState({ notfound: "" })
+                this.setState({
+                    flagCustomerOpen: false,
+                    modalVisible: false,
+                    loading: false,
+                    mobileNumber: "",
+                    loyaltyPoints: "",
+                    notfound: ""
+                });
                 //alert("create customer" + JSON.stringify(res.data["result"].body));
             }
             else {
-                this.setState({ loading: false })
-                this.setState({ flagCustomerOpen: false })
-                this.setState({ modalVisible: false });
-                this.setState({ mobileNumber: "" })
-                this.setState({ loyaltyPoints: "" })
-                this.setState({ notfound: "" })
+                this.setState({
+                    loading: false,
+                    flagCustomerOpen: false,
+                    modalVisible: false,
+                    mobileNumber: "",
+                    loyaltyPoints: "",
+                    notfound: ""
+                });
                 // alert("create customer" + JSON.stringify(res.data["result"].body));
             }
         }
         ).catch(() => {
-            this.setState({ loading: false })
-            this.setState({ flagCustomerOpen: false })
-            this.setState({ modalVisible: false });
-            this.setState({ mobileNumber: "" })
-            this.setState({ loyaltyPoints: "" })
-            this.setState({ notfound: "" })
-            alert("create customer adding not successfully")
-        })
+            this.setState({
+                loading: false,
+                flagCustomerOpen: false,
+                modalVisible: false,
+                mobileNumber: "",
+                loyaltyPoints: "",
+                notfound: ""
+            });
+            alert("create customer adding not successfully");
+        });
     }
 
     getUserDetails = () => {
         const params = {
             "phoneNo": this.state.customerPhoneNumber,
-        }
+        };
         axios.post(LoginService.getUser(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
-                this.setState({ customerName: res.data["result"][0].userName });
+                this.setState({ customerName: res.data["result"][0].userName, customerGender: res.data["result"][0].gender });
                 //this.setState({ customerEmail: res.data["result"][0].userName });
-                this.setState({ customerGender: res.data["result"][0].gender });
                 // this.setState({ customerAddress: res.data["result"][0].gender });
-
                 // alert("get customer" + JSON.stringify(res.data["result"]));
             }
             else {
-                this.setState({ loading: false })
+                this.setState({ loading: false });
             }
         }
         ).catch(() => {
-            this.setState({ flagCustomerOpen: false })
-            this.setState({ modalVisible: false });
+            this.setState({ flagCustomerOpen: false, modalVisible: false });
             // alert("create customer adding not successfully")
-        })
-    }
+        });
+    };
 
     modelCancel() {
-        this.setState({ flagCustomerOpen: false })
-        this.setState({ modalVisible: false });
+        this.setState({ flagCustomerOpen: false, modalVisible: false });
     }
 
 
@@ -219,162 +223,157 @@ class Payment extends Component {
     }
 
     statatics() {
-        this.props.navigation.navigate('Statitics')
+        this.props.navigation.navigate('Statitics');
     }
 
 
     menuAction() {
-        this.props.navigation.dispatch(DrawerActions.openDrawer())
+        this.props.navigation.dispatch(DrawerActions.openDrawer());
     }
 
     cashAction() {
-        this.setState({ flagOne: true })
-        this.setState({ flagTwo: false })
-        this.setState({ flagThree: false })
-        this.setState({ flagFour: false })
-        this.setState({ flagFive: false })
+        this.setState({
+            flagOne: true,
+            flagTwo: false,
+            flagThree: false,
+            flagFour: false,
+            flagFive: false
+        });
     }
 
     cardAction() {
-        this.setState({ flagOne: false })
-        this.setState({ flagTwo: true })
-        this.setState({ flagThree: false })
-        this.setState({ flagFour: false })
-        this.setState({ flagFive: false })
+        this.setState({
+            flagOne: false,
+            flagTwo: true,
+            flagThree: false,
+            flagFour: false,
+            flagFive: false
+        });
     }
     handleredeemPoints = (text) => {
         this.setState({ enterredeempoint: text });
-    }
+    };
 
-    clearRedemption(){
-        console.log('dasdsdasdafsf')
+    clearRedemption() {
+        console.log('dasdsdasdafsf');
         this.setState({ redeemedPints: "" });
     }
     handleCustomerPhoneNumber = (text) => {
         this.setState({ customerPhoneNumber: text });
-    }
+    };
 
     handleCustomerName = (text) => {
         this.setState({ customerName: text });
-    }
+    };
 
     handleCustomerEmail = (text) => {
         this.setState({ customerEmail: text });
-    }
+    };
 
     handleCustomerAddress = (text) => {
         this.setState({ customerAddress: text });
-    }
+    };
 
     handleCustomerGSTNumber = (text) => {
         this.setState({ customerGSTNumber: text });
-    }
+    };
 
     handlecustomerGender = (text) => {
         this.setState({ customerGender: text });
-    }
+    };
 
     cancel() {
-        console.log('clicked')
-        this.setState({ flagCustomerOpen: false })
+        console.log('clicked');
+        this.setState({ flagCustomerOpen: false, flagqtyModelOpen: false, modalVisible: false });
         //this.setState({ modalVisible: true });
-        this.setState({ flagqtyModelOpen: false })
-        this.setState({ modalVisible: false });
     }
 
     endEditing() {
-        console.log("end edited")
+        console.log("end edited");
         if (this.state.customerPhoneNumber.length > 0) {
-            this.getUserDetails()
+            this.getUserDetails();
         }
     }
 
     qrAction() {
-        this.setState({ flagOne: false })
-        this.setState({ flagTwo: false })
-        this.setState({ flagThree: true })
-        this.setState({ flagFour: false })
-        this.setState({ flagFive: false })
+        this.setState({
+            flagOne: false,
+            flagTwo: false,
+            flagThree: true,
+            flagFour: false,
+            flagFive: false
+        });
     }
 
     upiAction() {
-        this.setState({ flagOne: false })
-        this.setState({ flagTwo: false })
-        this.setState({ flagThree: false })
-        this.setState({ flagFour: true })
-        this.setState({ flagFive: false })
+        this.setState({
+            flagOne: false,
+            flagTwo: false,
+            flagThree: false,
+            flagFour: true,
+            flagFive: false
+        });
     }
 
     khathaAction() {
-        this.setState({ flagOne: false })
-        this.setState({ flagTwo: false })
-        this.setState({ flagThree: false })
-        this.setState({ flagFour: false })
-        this.setState({ flagFive: true })
+        this.setState({
+            flagOne: false,
+            flagTwo: false,
+            flagThree: false,
+            flagFour: false,
+            flagFive: true
+        });
     }
 
     handlePromocode = (text) => {
-        this.setState({ promocode: text })
-    }
+        this.setState({ promocode: text });
+    };
 
     handleMobileNumber = (text) => {
-        this.setState({ mobileNumber: text })
-    }
+        this.setState({ mobileNumber: text });
+    };
 
     handlerecievedAmount = (text) => {
-        this.setState({ recievedAmount: text })
-    }
+        this.setState({ recievedAmount: text });
+    };
 
     verifycash() {
-        this.setState({ verifiedCash: this.state.recievedAmount })
+        this.setState({ verifiedCash: this.state.recievedAmount });
     }
 
     applyPromocode() {
         // alert('promo code applied') 
-        this.setState({ giftvoucher: this.state.promocode })
-        this.setState({ promoDiscount: "100" })
-        
+        this.setState({ giftvoucher: this.state.promocode });
+        this.setState({ promoDiscount: "100" });
+
     }
 
     applyRedem() {
         this.setState({ redeemedPints: this.state.enterredeempoint });
         if (parseInt(this.state.loyaltyPoints) < parseInt(this.state.redeemedPints)) {
-            alert('please enter greater than the available points')
+            alert('please enter greater than the available points');
         }
         else {
-            this.setState({ flagredeem: false })
+            this.setState({ flagredeem: false });
             this.setState({ modalVisible: false });
         }
     }
 
 
     tagCustomer() {
-        this.setState({ customerEmail: "" })
-        this.setState({ customerPhoneNumber: "" })
-        this.setState({ customerName: "" })
-        this.setState({ customerGender: "" })
-        this.setState({ customerAddress: "" })
-        this.setState({ customerGSTNumber: "" })
-
-        this.setState({ flagCustomerOpen: true })
-        this.setState({ modalVisible: true });
+        this.setState({ customerEmail: "", customerPhoneNumber: "", customerName: "", customerGender: "", customerAddress: "", flagCustomerOpen: true, modalVisible: true });
     }
 
     clearTaggedCustomer() {
-        this.setState({ mobileNumber: "" })
-        this.setState({ loyaltyPoints: "" })
-        this.setState({ notfound: "" })
+        this.setState({ mobileNumber: "", loyaltyPoints: "", notfound: "" });
     }
 
     clearPromocode() {
-        this.setState({ promoDiscount: "0" })
-        this.setState({ giftvoucher: "" })
-        this.setState({ promocode: "" })
+        this.setState({ promoDiscount: "0", giftvoucher: "", promocode: "" });
     }
 
     clearCashSammary() {
-        this.setState({ verifiedCash: "" })
-        this.setState({ recievedAmount: "" })
+        this.setState({ verifiedCash: "", recievedAmount: "" });
     }
 
     pay = () => {
@@ -384,17 +383,17 @@ class Payment extends Component {
                 "domainId": 2,
                 "storeId": this.state.storeId,
                 "grossAmount": this.state.totalAmount,
-                "totalPromoDisc": (parseFloat(this.state.totalDiscount) + parseFloat(this.state.promoDiscount) + parseFloat(this.state.redeemedPints/10)).toString(),
+                "totalPromoDisc": (parseFloat(this.state.totalDiscount) + parseFloat(this.state.promoDiscount) + parseFloat(this.state.redeemedPints / 10)).toString(),
                 "taxAmount": 0,
                 "totalManualDisc": 0,
                 "discApprovedBy": null,
                 "discType": null,
                 "approvedBy": 5218,
-                "netPayableAmount":(parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints/10)).toString(),
+                "netPayableAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
                 "offlineNumber": null,
                 "paymentAmountType": [
                     {
-                        "paymentAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints/10)).toString(),
+                        "paymentAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
                         "paymentType": "Cash"
                     }],
                 "customerDetails": {
@@ -408,23 +407,23 @@ class Payment extends Component {
                 },
                 "dlSlip": [],
                 "lineItemsReVo": this.state.lineItemIdAdd
-            }
+            };
 
-            console.log(params)
+            console.log(params);
 
             axios.post(NewSaleService.createOrder(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                  //  alert("Order created " + res.data["result"]);
-                    this.setState({ loading: false })
+                    //  alert("Order created " + res.data["result"]);
+                    this.setState({ loading: false });
                     this.props.route.params.onGoBack();
                     this.props.navigation.goBack();
                 }
                 else {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     alert("duplicate record already exists");
                 }
             }
-            )
+            );
         }
         else if (this.state.flagTwo === true) {
             const params = {
@@ -432,13 +431,13 @@ class Payment extends Component {
                 "domainId": 2,
                 "storeId": this.state.storeId,
                 "grossAmount": this.state.totalAmount,
-                "totalPromoDisc": (parseFloat(this.state.totalDiscount) + parseFloat(this.state.promoDiscount) + parseFloat(this.state.redeemedPints/10)).toString(),
+                "totalPromoDisc": (parseFloat(this.state.totalDiscount) + parseFloat(this.state.promoDiscount) + parseFloat(this.state.redeemedPints / 10)).toString(),
                 "taxAmount": 0,
                 "totalManualDisc": 0,
                 "discApprovedBy": null,
                 "discType": null,
                 "approvedBy": 5218,
-                "netPayableAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints/10)).toString(),
+                "netPayableAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
                 "offlineNumber": null,
                 "customerDetails": {
                     "name": this.state.customerName,
@@ -451,20 +450,20 @@ class Payment extends Component {
                 },
                 "dlSlip": [],
                 "lineItemsReVo": this.state.lineItemIdAdd
-            }
-            console.log(params)
+            };
+            console.log(params);
             axios.post(NewSaleService.createOrder(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     alert("Order created " + res.data["result"]);
                     const params = {
-                        "amount": JSON.stringify((parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints/10)).toString()),
+                        "amount": JSON.stringify((parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString()),
                         "info": "order creations",
                         "newsaleId": res.data["result"],
-                    }
+                    };
 
                     axios.post(NewSaleService.payment(), params).then((res) => {
                         // this.setState({isPayment: false});
-                        const data = JSON.parse(res.data["result"])
+                        const data = JSON.parse(res.data["result"]);
                         //console.log()
                         var options = {
                             description: 'Transaction',
@@ -480,43 +479,42 @@ class Payment extends Component {
                                 contact: "9999999999",
                             },
                             theme: { color: '#F37254' }
-                        }
-                        console.log(options)
+                        };
+                        console.log(options);
                         RazorpayCheckout.open(options).then((data) => {
                             // handle success
-                            this.setState({ tableData: [] })
+                            this.setState({ tableData: [] });
                             alert(`Success: ${data.razorpay_payment_id}`);
                             this.props.route.params.onGoBack();
                             this.props.navigation.goBack();
                             //this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
                         }).catch((error) => {
-                            console.log(error)
+                            console.log(error);
                             // handle failure
                             alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
                         });
-                    })
-                    this.setState({ loading: false })
+                    });
+                    this.setState({ loading: false });
                 }
                 else {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     alert("duplicate record already exists");
                 }
             }
-            )
+            );
         }
         else {
-            alert('Payment for this tab implementation inprogress')
+            alert('Payment for this tab implementation inprogress');
         }
-    }
+    };
 
     redeemPoints() {
-        this.setState({ flagredeem: true })
-        this.setState({ modalVisible: true });
+        this.setState({ flagredeem: true, modalVisible: true });
     }
 
 
     verifyCustomer() {
-        this.setState({ loyaltyPoints: '' })
+        this.setState({ loyaltyPoints: '' });
         if (this.state.mobileNumber.length !== 10) {
             alert('please Enter a customer valid mobile number');
         }
@@ -524,29 +522,28 @@ class Payment extends Component {
             const params = {
                 "invoiceNumber": null,
                 "mobileNumber": this.state.mobileNumber,
-            }
-            console.log(params)
-            this.setState({ loading: true })
+            };
+            console.log(params);
+            this.setState({ loading: true });
             axios.post(PromotionsService.searchLoyaltyPoints(),
                 params).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
-                        this.setState({ loading: false })
+                        this.setState({ loading: false });
                         let len = res.data["result"].length;
-                        console.log(res.data["result"])
+                        console.log(res.data["result"]);
                         if (len > 0) {
                             for (let i = 0; i < len; i++) {
-                                let number = res.data["result"][i]
-                                this.setState({ loyaltyPoints: number.loyaltyPoints })
+                                let number = res.data["result"][i];
+                                this.setState({ loyaltyPoints: number.loyaltyPoints });
 
-                                console.log(this.state.loyaltyPoints)
+                                console.log(this.state.loyaltyPoints);
                             }
                         }
                     }
                 }).catch(() => {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false, notfound: "Not Found" });
                     //  alert('No Records Found')
-                    this.setState({ notfound: "not found" })
-                })
+                });
         }
     }
 
@@ -613,7 +610,7 @@ class Payment extends Component {
                                             CASH
                                         </Text>
 
-                                    </View>
+                                    </View>;
                                 }
                                 if (item.key === 2) {
                                     return <View style={{
@@ -636,7 +633,7 @@ class Payment extends Component {
                                             CARD
                                         </Text>
 
-                                    </View>
+                                    </View>;
                                 }
                                 if (item.key === 3) {
                                     return <View style={{
@@ -659,7 +656,7 @@ class Payment extends Component {
                                             GET QR
                                         </Text>
 
-                                    </View>
+                                    </View>;
 
                                 }
                                 if (item.key === 4) {
@@ -683,7 +680,7 @@ class Payment extends Component {
                                             UPI
                                         </Text>
 
-                                    </View>
+                                    </View>;
                                 }
                                 if (item.key === 5) {
                                     return <View style={{
@@ -708,7 +705,7 @@ class Payment extends Component {
                                             KHATA
                                         </Text>
 
-                                    </View>
+                                    </View>;
                                 }
                             }}
                             ListFooterComponent={<View style={{ width: 15 }}></View>}
@@ -812,7 +809,7 @@ class Payment extends Component {
                         {this.state.loyaltyPoints !== "" && this.state.redeemedPints === "0" && (
                             <View style={{ backgroundColor: '#ffffff', marginTop: 0 }}>
                                 <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10 }}> LOYALTY POINTS  {this.state.loyaltyPoints} </Text>
-                                <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10, marginBottom: 10 }}> VALUE  {(parseInt(this.state.loyaltyPoints) /10).toString()} </Text>
+                                <Text style={{ fontSize: 12, fontFamily: 'medium', color: '#ED1C24', marginLeft: 10, marginTop: 10, marginBottom: 10 }}> VALUE  {(parseInt(this.state.loyaltyPoints) / 10).toString()} </Text>
                             </View>
                         )}
 
@@ -825,11 +822,11 @@ class Payment extends Component {
 
                         {this.state.loyaltyPoints !== "" && this.state.redeemedPints !== "0" && (
                             <View style={{ backgroundColor: '#ffffff', marginTop: 0 }}>
-                            <TouchableOpacity
-                                style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -40 }}
-                                onPress={() => this.clearRedemption()} >
-                                <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
-                            </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{ borderRadius: 5, width: 90, height: 20, alignSelf: 'flex-end', marginTop: -40 }}
+                                    onPress={() => this.clearRedemption()} >
+                                    <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
+                                </TouchableOpacity>
                             </View>
                         )}
 
@@ -1301,7 +1298,7 @@ class Payment extends Component {
                                 fontSize: 14, position: 'absolute',
                             }}>
                                 ₹  {this.state.totalDiscount} </Text>
-                                <Text style={{
+                            <Text style={{
                                 color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 120, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                 fontSize: 14, position: 'absolute',
                             }}>
@@ -1312,7 +1309,7 @@ class Payment extends Component {
                             }}>
                                 ₹  {this.state.promoDiscount} </Text>
 
-                                <Text style={{
+                            <Text style={{
                                 color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 150, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                 fontSize: 14, position: 'absolute',
                             }}>
@@ -1321,7 +1318,7 @@ class Payment extends Component {
                                 color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 150, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                 fontSize: 14, position: 'absolute',
                             }}>
-                                ₹  {(parseInt(this.state.redeemedPints)/10).toString()} </Text>
+                                ₹  {(parseInt(this.state.redeemedPints) / 10).toString()} </Text>
 
                             <Text style={{
                                 color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, justifyContent: 'center', textAlign: 'center', marginTop: 10,
@@ -1332,7 +1329,7 @@ class Payment extends Component {
                                 color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                 fontSize: 20, position: 'absolute',
                             }}>
-                                ₹ {(parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints/10)).toString()} </Text>
+                                ₹ {(parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString()} </Text>
 
                             <View style={styles.TopcontainerforPay}>
                                 <TouchableOpacity
@@ -1346,10 +1343,10 @@ class Payment extends Component {
                     </View>
                 </ScrollView >
             </View>
-        )
+        );
     }
 }
-export default Payment
+export default Payment;
 
 const pickerSelectStyles = StyleSheet.create({
     placeholder: {
@@ -1390,7 +1387,7 @@ const pickerSelectStyles = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 
 const styles = StyleSheet.create({

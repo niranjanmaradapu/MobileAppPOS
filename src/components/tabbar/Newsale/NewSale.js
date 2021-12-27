@@ -1,31 +1,29 @@
-import React, { Component, useState } from 'react'
-import { View, Image, FlatList, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-var deviceWidth = Dimensions.get('window').width;
-import Constants from 'expo-constants';
-import Modal from "react-native-modal";
-import CreateCustomerService from '../../services/CreateCustomerService';
-import axios from 'axios';
-import NewSaleService from '../../services/NewSaleService';
+import NetInfo from "@react-native-community/netinfo";
 import { DrawerActions } from '@react-navigation/native';
+import axios from 'axios';
+import Constants from 'expo-constants';
+import React, { Component } from 'react';
+import { Alert, Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import RNBeep from 'react-native-a-beep';
+import { RNCamera } from 'react-native-camera';
+import Device from 'react-native-device-detection';
+import { SearchBar } from "react-native-elements";
+import ImagePicker from 'react-native-image-crop-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from "react-native-modal";
+import RNPickerSelect from 'react-native-picker-select';
+import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
-import { ListItem, SearchBar } from "react-native-elements";
+import Loader from '../../loader';
+import CreateCustomerService from '../../services/CreateCustomerService';
+import InventoryService from '../../services/InventoryService';
+import LoginService from '../../services/LoginService';
+import NewSaleService from '../../services/NewSaleService';
+var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
-import { RNCamera } from 'react-native-camera';
-import BarcodeMask from 'react-native-barcode-mask';
-import NetInfo from "@react-native-community/netinfo";
-import RNBeep from 'react-native-a-beep';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { Alert } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
-import Loader from '../../loader';
-import InventoryService from '../../services/InventoryService';
-import RNPickerSelect from 'react-native-picker-select';
-import { Chevron } from 'react-native-shapes';
-import LoginService from '../../services/LoginService';
-import Device from 'react-native-device-detection'
 
 class NewSale extends Component {
   constructor(props) {
@@ -84,7 +82,7 @@ class NewSale extends Component {
         type: RNCamera.Constants.Type.back,
         flashMode: RNCamera.Constants.FlashMode.auto,
       }
-    }
+    };
   }
 
   handleMenuButtonClick() {
@@ -119,28 +117,28 @@ class NewSale extends Component {
   //  }
 
   async componentDidMount() {
-    var domainStringId = ""
-    var storeStringId = ""
+    var domainStringId = "";
+    var storeStringId = "";
     AsyncStorage.getItem("domainDataId").then((value) => {
-      domainStringId = value
-      this.setState({ domainId: parseInt(domainStringId) })
-      console.log("domain data ids" + this.state.domainId)
+      domainStringId = value;
+      this.setState({ domainId: parseInt(domainStringId) });
+      console.log("domain data ids" + this.state.domainId);
 
     }).catch(() => {
-      console.log('there is error getting domainDataId')
-    })
+      console.log('there is error getting domainDataId');
+    });
 
     AsyncStorage.getItem("storeId").then((value) => {
-      storeStringId = value
-      this.setState({ storeId: parseInt(storeStringId) })
-      console.log(this.state.storeId)
-      console.log("cssafsfs" + this.state.storeId)
+      storeStringId = value;
+      this.setState({ storeId: parseInt(storeStringId) });
+      console.log(this.state.storeId);
+      console.log("cssafsfs" + this.state.storeId);
     }).catch(() => {
-      console.log('there is error getting storeId')
-    })
-    this.barcodeDBStore()
-    this.getItems()
-    this.synccreateInventoryOfflineToOnline()
+      console.log('there is error getting storeId');
+    });
+    this.barcodeDBStore();
+    this.getItems();
+    this.synccreateInventoryOfflineToOnline();
   }
 
   synccreateInventoryOfflineToOnline = () => {
@@ -155,12 +153,12 @@ class NewSale extends Component {
               let len = res.rows.length;
               if (len > 0) {
                 for (let i = 0; i < len; i++) {
-                  let item = res.rows.item(i)
-                  let barcode = item["barcode"]
-                  let promoDisc = item["promoDisc"]
-                  let itemDesc = item["itemDesc"]
-                  let netAmount = String(item["netAmount"])
-                  let qty = String(item["qty"])
+                  let item = res.rows.item(i);
+                  let barcode = item["barcode"];
+                  let promoDisc = item["promoDisc"];
+                  let itemDesc = item["itemDesc"];
+                  let netAmount = String(item["netAmount"]);
+                  let qty = String(item["qty"]);
 
                   const params = {
                     //required 
@@ -182,8 +180,8 @@ class NewSale extends Component {
                     "length": 35,
                     "productValidity": "",
                     "empId": 1
-                  }
-                  console.log('params are' + JSON.stringify(params))
+                  };
+                  console.log('params are' + JSON.stringify(params));
                   axios.post(InventoryService.createProduct(), params).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
                       createdb.transaction(txn => {
@@ -192,9 +190,9 @@ class NewSale extends Component {
                           [barcode],
                           (sqlTxn, res) => {
                             console.log("deleted successfully");
-                            this.setState({ tableData: [] })
+                            this.setState({ tableData: [] });
                             // this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'cash' })
-                            this.props.navigation.navigate('Home')
+                            this.props.navigation.navigate('Home');
                           },
                           error => {
                             console.log("error on search category " + error.message);
@@ -219,17 +217,17 @@ class NewSale extends Component {
           );
         });
       }
-    })
-  }
+    });
+  };
 
   invoiceUpdate() {
-    this.setState({ tableData: [] })
-    alert('payment created successfully')
+    this.setState({ tableData: [] });
+    alert('payment created successfully');
   }
 
   pay = () => {
-    var lineItems = []
-    var lineItemIds = []
+    var lineItems = [];
+    var lineItemIds = [];
     for (let i = 0; i < this.state.tableData.length; i++) {
       lineItems.push({
         itemPrice: this.state.tableData[i].netamount,
@@ -238,21 +236,21 @@ class NewSale extends Component {
         netValue: this.state.tableData[i].netamount - this.state.tableData[i].promoDisc,
         barCode: this.state.tableData[i].barcode,
         domainId: this.state.domainId,
-      })
+      });
     }
-    this.setState({ loading: true })
+    this.setState({ loading: true });
     // const params = lineItems
     console.log(lineItems);
-    console.log('params are' + JSON.stringify(lineItems))
-    this.setState({ loading: true })
+    console.log('params are' + JSON.stringify(lineItems));
+    this.setState({ loading: true });
     axios.post(NewSaleService.saveLineItems(), lineItems).then((res) => {
       if (res.data && res.data["isSuccess"] === "true") {
-        lineItemIds.push(JSON.parse(res.data["result"]))
+        lineItemIds.push(JSON.parse(res.data["result"]));
         // 
         console.log(lineItemIds + `line items saved successfully`);
-        var lineItemIdAdd = []
+        var lineItemIdAdd = [];
         for (let i = 0; i < lineItemIds[0].length; i++) {
-          lineItemIdAdd.push({ lineItemId: lineItemIds[0][i] })
+          lineItemIdAdd.push({ lineItemId: lineItemIds[0][i] });
         }
         //console.log(params)
         this.props.navigation.navigate('Payment', {
@@ -266,23 +264,21 @@ class NewSale extends Component {
       }
 
       else {
-        this.setState({ loading: false })
+        this.setState({ loading: false });
         alert("duplicate record already exists");
       }
     }
     );
-  }
+  };
 
   getItems = () => {
-    this.setState({ arrayData: [] })
-    this.setState({ temp: [] })
-    this.setState({ search: null })
+    this.setState({ arrayData: [], temp: [], search: null });
     NetInfo.addEventListener(state => {
       if (state.isConnected) {
         axios.post(InventoryService.getAllBarcodes(), { "storeId": this.state.storeId }).then((res) => {
           if (res.data && res.data["isSuccess"] === "true") {
             let len = res.data["result"].length;
-            console.log("get products lenth" + len)
+            console.log("get products lenth" + len);
             //setInterval(() => {
             db.transaction(txn => {
               txn.executeSql(
@@ -295,7 +291,7 @@ class NewSale extends Component {
                   console.log("error on adding category " + error.message);
                 },
               );
-            })
+            });
 
             db.transaction(txn => {
               txn.executeSql(
@@ -311,24 +307,24 @@ class NewSale extends Component {
             });
             if (len > 0) {
               for (let i = 0; i < len; i++) {
-                let item = res.data["result"][i]
-                console.log(item)
-                let barcode = String(item["barcodeId"])
-                let itemDesc = String(item["name"])
-                let qty = item["stockValue"]
-                let mrp = item['costPrice']
-                let promoDisc = item['tyecode']
-                let netAmount = item['costPrice']
-                let salesMan = item['empId']
-                let createdDate = String(item['createdDate'])
-                let lastModified = String(item['lastModified'])
-                let uom = item["uom"]
-                let storeId = item["storeId"]
-                let domainDataId = item["domainDataId"]
-                let productItemid = item["productItemId"]
-                let productuomm = item["uom"]
-                this.setState({ productuom: productuomm })
-                this.setState({ productItemId: productItemid })
+                let item = res.data["result"][i];
+                console.log(item);
+                let barcode = String(item["barcodeId"]);
+                let itemDesc = String(item["name"]);
+                let qty = item["stockValue"];
+                let mrp = item['costPrice'];
+                let promoDisc = item['tyecode'];
+                let netAmount = item['costPrice'];
+                let salesMan = item['empId'];
+                let createdDate = String(item['createdDate']);
+                let lastModified = String(item['lastModified']);
+                let uom = item["uom"];
+                let storeId = item["storeId"];
+                let domainDataId = item["domainDataId"];
+                let productItemid = item["productItemId"];
+                let productuomm = item["uom"];
+                this.setState({ productuom: productuomm });
+                this.setState({ productItemId: productItemid });
                 db.transaction(txn => {
                   txn.executeSql(
                     'INSERT INTO tbl_item ( barcode, itemDesc, qty, mrp, promoDisc, netAmount, salesMan, createdDate, lastModified,itemImage,uom,storeId,domainDataId) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
@@ -346,35 +342,35 @@ class NewSale extends Component {
                             if (len > 0) {
                               let results = [];
                               if (this.state.arrayData.length > 0) {
-                                return
+                                return;
                               }
                               for (let i = 0; i < len; i++) {
-                                let item = res.rows.item(i)
+                                let item = res.rows.item(i);
 
-                                let sno = String(this.state.tableData.length + 1)
-                                let barcode = item["barcode"]
+                                let sno = String(this.state.tableData.length + 1);
+                                let barcode = item["barcode"];
 
-                                let itemDesc = item["itemDesc"]
+                                let itemDesc = item["itemDesc"];
                                 console.log(barcode + "added to table----");
-                                let netAmount = String(item["netAmount"])
-                                let qty = String(item["qty"])
-                                let uom = String(item["uom"])
-                                let lastModified = parseInt(item["lastModified"])
-                                let totalAmount = String(item["netAmount"])
-                                let image = item['itemImage']
-                                console.log('uom are' + lastModified)
+                                let netAmount = String(item["netAmount"]);
+                                let qty = String(item["qty"]);
+                                let uom = String(item["uom"]);
+                                let lastModified = parseInt(item["lastModified"]);
+                                let totalAmount = String(item["netAmount"]);
+                                let image = item['itemImage'];
+                                console.log('uom are' + lastModified);
                                 // console.log(res.rows + "added to table----");
-                                this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image, productItemId: lastModified, productuom: uom })
+                                this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image, productItemId: lastModified, productuom: uom });
                                 if (this.state.arrayData.length === 1) {
-                                  this.setState({ arrayData: this.state.arrayData })
+                                  this.setState({ arrayData: this.state.arrayData });
                                 }
-                                this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, promoDisc: promoDisc, qty: qty, netamount: netAmount, image: image, productItemId: lastModified, productuom: uom })
+                                this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, promoDisc: promoDisc, qty: qty, netamount: netAmount, image: image, productItemId: lastModified, productuom: uom });
 
                               }
 
-                              console.log(this.state.arrayData)
+                              console.log(this.state.arrayData);
                             }
-                            return
+                            return;
                           },
                           error => {
                             console.log("error on getting categories " + error.message);
@@ -393,7 +389,7 @@ class NewSale extends Component {
 
           }
 
-        })
+        });
       }
       else {
         db.transaction(txn => {
@@ -405,23 +401,23 @@ class NewSale extends Component {
               if (len > 0) {
                 let results = [];
                 for (let i = 0; i < len; i++) {
-                  let item = res.rows.item(i)
-                  let sno = String(this.state.tableData.length + 1)
-                  let barcode = item["barcode"]
-                  let itemDesc = item["itemDesc"]
-                  let netAmount = String(item["netAmount"])
-                  let qty = String(item["qty"])
-                  let totalAmount = String(item["netAmount"])
-                  let image = item['itemImage']
+                  let item = res.rows.item(i);
+                  let sno = String(this.state.tableData.length + 1);
+                  let barcode = item["barcode"];
+                  let itemDesc = item["itemDesc"];
+                  let netAmount = String(item["netAmount"]);
+                  let qty = String(item["qty"]);
+                  let totalAmount = String(item["netAmount"]);
+                  let image = item['itemImage'];
 
-                  this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image, productItemId: this.state.productItemId, productuom: this.state.productuom })
+                  this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image, productItemId: this.state.productItemId, productuom: this.state.productuom });
                   if (this.state.arrayData.length === 1) {
-                    this.setState({ arrayData: this.state.arrayData })
+                    this.setState({ arrayData: this.state.arrayData });
                   }
-                  this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                  this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image });
 
                 }
-                console.log(this.state.arrayData)
+                console.log(this.state.arrayData);
               }
             },
             error => {
@@ -441,17 +437,19 @@ class NewSale extends Component {
 
 
   setResult = (results) => {
-    console.log('vinod data ---------' + len)
-  }
+    console.log('vinod data ---------' + len);
+  };
 
   addAction = (item, index) => {
-    console.log('vinod data ---------' + item.barcode)
-    this.setState({ barcodeId: item.barcode })
-    this.barcodeDBStore()
-    this.setState({ flagone: true })
-    this.setState({ flagtwo: false })
-    this.setState({ flagthree: false })
-    this.setState({ flagfour: false })
+    console.log('vinod data ---------' + item.barcode);
+    this.setState({
+      barcodeId: item.barcode,
+      flagone: true,
+      flagtwo: false,
+      flagthree: false,
+      flagfour: false,
+    });
+    this.barcodeDBStore();
     // const qtyarr = [...this.state.arrayData];
     // //this.setState({ barcodeId: text })
     // let sno = String(this.state.tableData.length + 1)
@@ -476,7 +474,7 @@ class NewSale extends Component {
     // this.setState({ flagtwo: false })
     // this.setState({ flagthree: false })
     // this.setState({ flagfour: false })
-  }
+  };
 
   renderHeader = () => {
     return <View>
@@ -497,12 +495,12 @@ class NewSale extends Component {
 
       {/* this.props.navigation.navigate('AuthNavigation') */}
 
-    </View>
+    </View>;
 
   };
 
   updateSearch = search => {
-    let text = search.toLowerCase()
+    let text = search.toLowerCase();
     this.setState({ text }, () => {
       if ('' == text) {
         this.setState({
@@ -531,50 +529,50 @@ class NewSale extends Component {
           let len = res.rows.length;
           if (len > 0) {
             for (let i = 0; i < len; i++) {
-              let item = res.rows.item(i)
-              let sno = String(this.state.tableData.length + 1)
-              let barcode = item["barcode"]
-              let itemDesc = item["itemDesc"]
-              let netAmount = String(item["netAmount"])
-              let promoDisc = item["promoDisc"]
-              let qty = "1"//String(item["qty"])
-              let totalAmount = String(item["netAmount"])
-              let image = item['itemImage']
-              this.state.quantity = qty
+              let item = res.rows.item(i);
+              let sno = String(this.state.tableData.length + 1);
+              let barcode = item["barcode"];
+              let itemDesc = item["itemDesc"];
+              let netAmount = String(item["netAmount"]);
+              let promoDisc = item["promoDisc"];
+              let qty = "1";//String(item["qty"])
+              let totalAmount = String(item["netAmount"]);
+              let image = item['itemImage'];
+              this.state.quantity = qty;
 
-              this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
-              this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
-              this.state.totalDiscount = parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1)
+              this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString();
+              this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1);
+              this.state.totalDiscount = parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1);
 
               if (this.state.tableData.length > 0) {
                 for (let i = 0; i < this.state.tableData.length; i++) {
                   if (this.state.barcodeId == this.state.tableData[i].barcode) {
-                    { RNBeep.beep() }
+                    { RNBeep.beep(); }
                     console.log("search categoryvinod" + JSON.stringify(res.rows.length));
                     const qtyarr = [...this.state.tableData];
-                    qtyarr[i].qty = String(parseInt(qtyarr[i].qty) + 1) //parseInt(item["qty"]))
-                    this.setState({ tableData: qtyarr })
+                    qtyarr[i].qty = String(parseInt(qtyarr[i].qty) + 1); //parseInt(item["qty"]))
+                    this.setState({ tableData: qtyarr });
                     // this.setState({ totalAmount: parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1) })
                     // this.setState({ totalDiscount: parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1) })
-                    return
+                    return;
                   }
                   // this.state.totalQty = this.state.totalQty + item["qty"]
                   // this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
 
 
                 }
-                { RNBeep.beep() }
+                { RNBeep.beep(); }
                 // this.setState({ totalAmount: this.state.totalAmount })
                 // this.setState({ totalDiscount: this.state.totalDiscount })
-                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image });
               }
               else {
-                { RNBeep.beep() }
+                { RNBeep.beep(); }
                 // this.state.totalQty = this.state.totalQty + item["qty"]
                 // this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
                 // this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
                 // this.state.totalDiscount = parseInt(this.state.totalDiscount) + parseInt(item["promoDisc"] * 1)
-                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image });
               }
               //parse this.state.totalAmount + item["netAmount"]
               // this.state.tableData.push([sno, barcode, itemDesc, netAmount, qty, netAmount])
@@ -582,117 +580,120 @@ class NewSale extends Component {
           }
           else {
             if (this.state.barcodeId.length > 0) {
-              alert('No product related with this barcode')
+              alert('No product related with this barcode');
             }
           }
-          this.setState({ flagone: true })
-          this.setState({ flagtwo: false })
-          this.setState({ flagthree: false })
-          this.setState({ flagfour: false })
-          console.log(JSON.stringify(this.state.tableData.length))
-          console.log(JSON.stringify(totalQty))
+          this.setState({
+            flagone: true,
+            flagtwo: false,
+            flagthree: false,
+            flagfour: false,
+          });
+          console.log(JSON.stringify(this.state.tableData.length));
+          console.log(JSON.stringify(totalQty));
         },
         error => {
 
         },
       );
     });
-  }
+  };
 
   modelCancel() {
-    this.setState({ inventoryDelete: false });
-    this.setState({ lineItemDelete: false });
-    this.setState({ flagqtyModelOpen: false });
-    this.setState({ flagCustomerOpen: false })
-
-    this.setState({ modalVisible: false });
+    this.setState({
+      inventoryDelete: false,
+      lineItemDelete: false,
+      flagqtyModelOpen: false,
+      flagCustomerOpen: false,
+      modalVisible: false
+    });
   }
 
   handleInventoryBarcode = (text) => {
-    this.setState({ inventoryBarcodeId: text })
-  }
+    this.setState({ inventoryBarcodeId: text });
+  };
   handleInventoryProductName = (text) => {
-    this.setState({ inventoryProductName: text })
-  }
+    this.setState({ inventoryProductName: text });
+  };
   handleInventoryQuantity = (value) => {
     this.setState({ inventoryQuantity: value });
-  }
+  };
 
   handleInventoryMRP = (text) => {
-    this.setState({ inventoryMRP: text })
-  }
+    this.setState({ inventoryMRP: text });
+  };
   handleInventoryDiscount = (text) => {
-    this.setState({ inventoryDiscount: text })
+    this.setState({ inventoryDiscount: text });
     // console.log(this.state.inventoryMRP)
     // console.log(text)
     // this.setState({ inventoryNetAmount: (parseInt(this.state.inventoryMRP) - parseInt(text)).toString() })
-  }
+  };
   handleInventoryNetAmount = (text) => {
     this.setState({ inventoryNetAmount: text });
-  }
+  };
 
   handleMobileNumber = (text) => {
-    this.setState({ mobileNumber: text })
-  }
+    this.setState({ mobileNumber: text });
+  };
   handleAltNumber = (text) => {
-    this.setState({ altMobileNo: text })
-  }
+    this.setState({ altMobileNo: text });
+  };
   handlename = (value) => {
     this.setState({ name: value });
-  }
+  };
 
   handleGender = (text) => {
-    this.setState({ gender: text })
-  }
+    this.setState({ gender: text });
+  };
   handleGstnumber = (text) => {
-    this.setState({ gstNumber: text })
-  }
+    this.setState({ gstNumber: text });
+  };
   handledob = (value) => {
     this.setState({ dob: value });
-  }
+  };
 
   handleaddress = (value) => {
     this.setState({ address: value });
-  }
+  };
 
   handleBarCode = (text) => {
-    this.setState({ barcodeId: text })
+    this.setState({ barcodeId: text });
 
 
-  }
+  };
 
   handleCustomerPhoneNumber = (text) => {
     this.setState({ customerPhoneNumber: text });
-  }
+  };
 
   handleCustomerName = (text) => {
     this.setState({ customerName: text });
-  }
+  };
 
   handleCustomerEmail = (text) => {
     this.setState({ customerEmail: text });
-  }
+  };
 
   handleCustomerAddress = (text) => {
     this.setState({ customerAddress: text });
-  }
+  };
 
   handleCustomerGSTNumber = (text) => {
     this.setState({ customerGSTNumber: text });
-  }
+  };
 
   handlecustomerGender = (text) => {
     this.setState({ customerGender: text });
-  }
+  };
 
   addCustomer() {
     if (this.state.customerPhoneNumber.length != 10) {
       alert('Please Enter valid mobile number');
-      return
+      return;
     }
     else if (this.state.customerName.length === 0) {
       alert('Please Enter customer name');
-      return
+      return;
     }
     // else if (this.state.customerGender.length === 0) {
     //   alert('Please Enter customer gender');
@@ -745,53 +746,45 @@ class NewSale extends Component {
       "clientId": "",
       "isConfigUser": false,
       "clientDomain": []
-    }
-    this.setState({ loading: true })
+    };
+    this.setState({ loading: true });
     axios.post(LoginService.createUser(), params).then((res) => {
       if (res.data && res.data["isSuccess"] === "true") {
-        this.setState({ flagCustomerOpen: false })
-        this.setState({ modalVisible: false });
-        this.setState({ loading: false })
+        this.setState({ flagCustomerOpen: false, modalVisible: false, loading: false });
         //alert("create customer" + JSON.stringify(res.data["result"].body));
       }
       else {
-        this.setState({ loading: false })
-        this.setState({ flagCustomerOpen: false })
-        this.setState({ modalVisible: false });
+        this.setState({ loading: false, flagCustomerOpen: false, modalVisible: false });
         // alert("create customer" + JSON.stringify(res.data["result"].body));
       }
     }
     ).catch(() => {
-      this.setState({ loading: false })
-      this.setState({ flagCustomerOpen: false })
-      this.setState({ modalVisible: false });
-      alert("create customer adding not successfully")
-    })
+      this.setState({ loading: false, flagCustomerOpen: false, modalVisible: false });
+      alert("create customer adding not successfully");
+    });
   }
 
   getUserDetails = () => {
     const params = {
       "phoneNo": this.state.customerPhoneNumber,
-    }
+    };
     axios.post(LoginService.getUser(), params).then((res) => {
       if (res.data && res.data["isSuccess"] === "true") {
-        this.setState({ customerName: res.data["result"][0].userName });
+        this.setState({ customerGender: res.data["result"][0].gender, customerName: res.data["result"][0].userName });
         //this.setState({ customerEmail: res.data["result"][0].userName });
-        this.setState({ customerGender: res.data["result"][0].gender });
         // this.setState({ customerAddress: res.data["result"][0].gender });
 
         // alert("get customer" + JSON.stringify(res.data["result"]));
       }
       else {
-        this.setState({ loading: false })
+        this.setState({ loading: false });
       }
     }
     ).catch(() => {
-      this.setState({ flagCustomerOpen: false })
-      this.setState({ modalVisible: false });
+      this.setState({ flagCustomerOpen: false, modalVisible: false });
       // alert("create customer adding not successfully")
-    })
-  }
+    });
+  };
 
 
 
@@ -840,25 +833,26 @@ class NewSale extends Component {
             "length": 35,
             "productValidity": "",
             "empId": 1
-          }
-          console.log('params are' + JSON.stringify(params))
-          this.setState({ loading: true })
+          };
+          console.log('params are' + JSON.stringify(params));
+          this.setState({ loading: true });
           axios.post(InventoryService.createProduct(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
-              this.setState({ loading: false })
+              this.setState({ loading: false });
               console.log(`inventory added successfully`);
-              this.setState({ arrayData: [] })
-              this.setState({ image: '' })
-              this.setState({ store: '' })
-              this.setState({ temp: [] })
-              this.setState({ search: null })
-              this.getItems()
-              this.setState({ flagone: false })
-              this.setState({ flagtwo: false })
-              this.setState({ flagthree: true })
+              this.setState({
+                arrayData: [],
+                image: '',
+                store: '',
+                temp: [],
+                flagone: false,
+                flagtwo: false,
+                flagthree: true
+              });
+              this.getItems();
             }
             else {
-              this.setState({ loading: false })
+              this.setState({ loading: false });
               alert("duplicate record already exists");
             }
           }
@@ -893,7 +887,7 @@ class NewSale extends Component {
             );
           });
         }
-      })
+      });
     }
   }
 
@@ -905,7 +899,7 @@ class NewSale extends Component {
         axios.get(InventoryService.getUOM()).then((res) => {
           if (res.data["result"]) {
             for (var i = 0; i < res.data["result"].length; i++) {
-              console.log('getuom' + res.data["result"][i].uomName)
+              console.log('getuom' + res.data["result"][i].uomName);
               uom.push({
                 value: res.data["result"][i].uomName,//id
                 label: res.data["result"][i].uomName,
@@ -915,43 +909,43 @@ class NewSale extends Component {
           }
           this.setState({
             uom: uom,
-          })
+          });
           AsyncStorage.setItem("uomData", JSON.stringify(uom)).then(() => {
-            console.log('table data saved')
+            console.log('table data saved');
           }).catch(() => {
-            console.log('there is error saving token')
-          })
-          console.log(this.state.uom)
+            console.log('there is error saving token');
+          });
+          console.log(this.state.uom);
         });
       }
       else {
         const value = AsyncStorage.getItem("uomData");
-        console.log('value is---->' + JSON.stringify(value))
+        console.log('value is---->' + JSON.stringify(value));
         this.setState({
           uom: value,
-        })
+        });
       }
-    })
+    });
   }
 
 
 
 
   endEditing() {
-    console.log("end edited")
+    console.log("end edited");
     if (this.state.customerPhoneNumber.length > 0) {
-      this.getUserDetails()
+      this.getUserDetails();
     } else {
-      this.barcodeDBStore()
+      this.barcodeDBStore();
     }
   }
 
 
 
   handleQty = (text) => {
-    this.setState({ quantity: text })
+    this.setState({ quantity: text });
     // this.componentDidMount()
-  }
+  };
 
 
   modelCreate() {
@@ -964,15 +958,15 @@ class NewSale extends Component {
       "dob": "2021-06-21T18:30:00.000Z",
       "anniversary": "1",
       "address": this.state.address,
-    }
-    console.log('obj' + JSON.stringify(params))
-    console.log(CreateCustomerService.createCustomer())
+    };
+    console.log('obj' + JSON.stringify(params));
+    console.log(CreateCustomerService.createCustomer());
     axios.post(CreateCustomerService.createCustomer(), params).then((res) => {
-      console.log(res)
+      console.log(res);
       if (res.data.statusCode === "OK") {
-        this.setState({ modalVisible: false });
         // toast.success(res.data.body);
         this.setState({
+          modalVisible: false,
           mobileNumber: "",
           altMobileNo: "",
           name: "",
@@ -981,7 +975,7 @@ class NewSale extends Component {
           dob: "",
           anniversary: "",
           address: ""
-        })
+        });
 
       }
       else {
@@ -993,80 +987,72 @@ class NewSale extends Component {
 
 
   menuAction() {
-    this.props.navigation.dispatch(DrawerActions.openDrawer())
+    this.props.navigation.dispatch(DrawerActions.openDrawer());
   }
 
   topbarAction1() {
-    this.setState({ inventoryDelete: false });
-    this.setState({ modalVisible: false });
-    this.setState({ flagone: true })
-    this.setState({ flagtwo: false })
-    this.setState({ flagthree: false })
-    this.setState({ flagfour: false })
-    this.synccreateInventoryOfflineToOnline()
+    this.setState({ inventoryDelete: false, modalVisible: false, flagone: true, flagtwo: false, flagthree: false, flagfour: false });
+    this.synccreateInventoryOfflineToOnline();
   }
 
 
   topbarAction2() {
-    this.setState({ inventoryDelete: false });
-    this.setState({ modalVisible: false });
-    this.setState({ inventoryBarcodeId: '' });
-    this.setState({ inventoryProductName: '' });
-    this.setState({ inventoryQuantity: '' });
-    this.setState({ inventoryMRP: '' });
-    this.setState({ inventoryDiscount: '' });
-    this.setState({ inventoryNetAmount: '' });
+    this.setState({
+      inventoryDelete: false,
+      modalVisible: false,
+      inventoryBarcodeId: '',
+      inventoryProductName: '',
+      inventoryQuantity: '',
+      inventoryMRP: '',
+      inventoryDiscount: '',
+      inventoryNetAmount: '',
+      modalVisible: true,
+      flagone: false,
+      flagtwo: false,
+      flagthree: false,
+      flagfour: false
 
-    this.setState({ modalVisible: true });
-    this.setState({ flagone: false })
-    this.setState({ flagtwo: true })
-    this.setState({ flagthree: false })
-    this.setState({ flagfour: false })
+    });
     //this.synccreateInventoryOfflineToOnline()
-    this.getUOM()
+    this.getUOM();
   }
 
 
   topbarAction3() {
-    this.setState({ inventoryDelete: false });
-    this.setState({ modalVisible: false });
-    this.setState({ arrayData: [] })
-    this.setState({ temp: [] })
-    this.setState({ search: null })
-    this.setState({ flagone: false })
-    this.setState({ flagtwo: false })
-    this.setState({ flagthree: true })
-    this.setState({ flagfour: false })
-    this.synccreateInventoryOfflineToOnline()
-    this.getItems()
+    this.setState({
+      inventoryDelete: false,
+      modalVisible: false,
+      arrayData: [],
+      temp: [],
+      search: null,
+      flagone: false,
+      flagtwo: false,
+      flagthree: true,
+      flagfour: false
+    });
+    this.synccreateInventoryOfflineToOnline();
+    this.getItems();
   }
 
 
   topbarAction4() {
-    this.setState({ flagone: false })
-    this.setState({ flagtwo: false })
-    this.setState({ flagthree: false })
-    this.setState({ flagfour: true })
+    this.setState({ flagone: false, flagtwo: false, flagthree: false, flagfour: true });
   }
 
   refresh() {
     if (global.barcodeId != 'something') {
-      this.setState({ barcodeId: global.barcodeId })
-      this.barcodeDBStore()
+      this.setState({ barcodeId: global.barcodeId });
+      this.barcodeDBStore();
     }
 
-    this.setState({ flagone: true })
-    this.setState({ flagtwo: false })
-    this.setState({ flagthree: false })
-    this.setState({ flagfour: false })
-    // }
+    this.setState({ flagone: true, flagtwo: false, flagthree: false, flagfour: false });
   }
 
   allProductsrefresh() {
-    console.log(global.productname)
-    this.setState({ search: global.productname })
-    console.log('serach text is' + this.state.search)
-    search = global.productname
+    console.log(global.productname);
+    this.setState({ search: global.productname });
+    console.log('serach text is' + this.state.search);
+    search = global.productname;
     this.setState({ search }, () => {
       if ('' == search) {
         this.setState({
@@ -1080,28 +1066,25 @@ class NewSale extends Component {
         return { itemdesc, netamount, barcode, qty, image };
       });
     });
-    this.forceUpdate()
+    this.forceUpdate();
   }
 
   getBarcode() {
     //if( global.barcodeId != 'something'){
-    this.setState({ inventoryBarcodeId: global.barcodeId })
-    this.setState({ flagone: false })
-    this.setState({ flagtwo: true })
-    this.setState({ flagthree: false })
+    this.setState({ inventoryBarcodeId: global.barcodeId, flagone: false, flagtwo: true, flagthree: false });
     // }
   }
 
   refreshGetBarCode() {
     if (global.barcodeId != 'something') {
-      this.setState({ inventoryBarcodeId: global.barcodeId })
+      this.setState({ inventoryBarcodeId: global.barcodeId });
     }
   }
 
 
   navigateToGetBarCode() {
-    console.log('tapped')
-    global.barcodeId = 'something'
+    console.log('tapped');
+    global.barcodeId = 'something';
     this.props.navigation.navigate('ScanBarCode', {
       isFromNewSale: false, isFromAddProduct: true,
       onGoBack: () => this.refreshGetBarCode(),
@@ -1110,7 +1093,7 @@ class NewSale extends Component {
 
 
   navigateToScanCode() {
-    global.barcodeId = 'something'
+    global.barcodeId = 'something';
     //this.setState({ barcodeId: global.barcodeId })
     this.props.navigation.navigate('ScanBarCode', {
       onGoBack: () => this.refresh(),
@@ -1134,12 +1117,12 @@ class NewSale extends Component {
   updateQtyForTable = (text, index) => {
     const qtyarr = [...this.state.tableData];
     qtyarr[index].qty = text;
-    this.setState({ tableData: qtyarr })
+    this.setState({ tableData: qtyarr });
     // this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(text)).toString()
-    this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
-    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
-    this.state.totalDiscount = (parseInt(this.state.totalDiscount) + parseInt(qtyarr[index].promoDisc)).toString()
-  }
+    this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString();
+    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString();
+    this.state.totalDiscount = (parseInt(this.state.totalDiscount) + parseInt(qtyarr[index].promoDisc)).toString();
+  };
 
   incrementForTable = (item, index) => {
     const qtyarr = [...this.state.tableData];
@@ -1147,62 +1130,60 @@ class NewSale extends Component {
     // var priceFor1 = parseInt(item.netAmount)
     // var price = priceFor1  * additem;
     // qtyarr[index].netamount = price.toString()
-    qtyarr[index].qty = additem.toString()
-    this.setState({ tableData: qtyarr })
+    qtyarr[index].qty = additem.toString();
+    this.setState({ tableData: qtyarr });
 
-    this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString()
+    this.state.totalQty = (parseInt(this.state.totalQty) + 1).toString();
     // var minumsValue = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
     //console.log('minusdd' + minumsValue)
     //this.state.totalQty = parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)
     // this.state.totalQty =  (parseInt(this.state.totalQty) + parseInt(qtyarr[index].qty)).toString()
-    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString()
-    this.state.totalDiscount = (parseInt(this.state.totalDiscount) + parseInt(qtyarr[index].promoDisc)).toString()
+    this.state.totalAmount = (parseInt(this.state.totalAmount) + parseInt(qtyarr[index].netamount)).toString();
+    this.state.totalDiscount = (parseInt(this.state.totalDiscount) + parseInt(qtyarr[index].promoDisc)).toString();
 
-  }
+  };
 
   decreamentForTable = (item, index) => {
     if (item.qty == 1) {
-      return
+      return;
     }
     const qtyarr = [...this.state.tableData];
     var additem = parseInt(qtyarr[index].qty) - 1;
-    qtyarr[index].qty = additem.toString()
+    qtyarr[index].qty = additem.toString();
     if (qtyarr[index].qty > 0) {
-      this.setState({ tableData: qtyarr })
+      this.setState({ tableData: qtyarr });
     }
 
-    this.state.totalQty = (parseInt(this.state.totalQty) - 1).toString()
+    this.state.totalQty = (parseInt(this.state.totalQty) - 1).toString();
     //this.state.totalQty = (parseInt(this.state.totalQty) - parseInt(qtyarr[index].qty)).toString()
-    this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(qtyarr[index].netamount)).toString()
-    this.state.totalDiscount = (parseInt(this.state.totalDiscount) - parseInt(qtyarr[index].promoDisc)).toString()
+    this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(qtyarr[index].netamount)).toString();
+    this.state.totalDiscount = (parseInt(this.state.totalDiscount) - parseInt(qtyarr[index].promoDisc)).toString();
 
-  }
+  };
 
 
 
   updateQty = (text, index) => {
     const qtyarr = [...this.state.arrayData];
     qtyarr[index].qty = text;
-    this.setState({ arrayData: qtyarr })
-  }
+    this.setState({ arrayData: qtyarr });
+  };
 
   updateQtyValue = (text, index) => {
     const qtyarr = [...this.state.arrayData];
     //qtyarr[index].qty = text;
-    this.setState({ arrayData: qtyarr })
-  }
+    this.setState({ arrayData: qtyarr });
+  };
 
   manageQunatity = (item, index) => {
 
-    this.setState({ flagqtyModelOpen: true })
-    this.setState({ modalVisible: true });
+    this.setState({ flagqtyModelOpen: true, modalVisible: true });
 
-  }
+  };
 
   selectedQty = (item, index) => {
-    console.log('-------ITEM TAPPED')
-    this.setState({ flagqtyModelOpen: false })
-    this.setState({ modalVisible: false });
+    console.log('-------ITEM TAPPED');
+    this.setState({ flagqtyModelOpen: false, modalVisible: false });
   };
 
   increment = (item, index) => {
@@ -1212,7 +1193,7 @@ class NewSale extends Component {
     // var priceFor1 = parseInt(item.netAmount)
     // var price = priceFor1  * additem;
     // qtyarr[index].netamount = price.toString()
-    qtyarr[index].qty = additem.toString()
+    qtyarr[index].qty = additem.toString();
     db.transaction(txn => {
       txn.executeSql(
         'UPDATE tbl_item set qty=? where barcode=?',
@@ -1225,14 +1206,14 @@ class NewSale extends Component {
         },
       );
     });
-    this.setState({ arrayData: qtyarr })
+    this.setState({ arrayData: qtyarr });
 
-  }
+  };
 
   decreament = (item, index) => {
     const qtyarr = [...this.state.arrayData];
     var additem = parseInt(qtyarr[index].qty) - 1;
-    qtyarr[index].qty = additem.toString()
+    qtyarr[index].qty = additem.toString();
     db.transaction(txn => {
       txn.executeSql(
         'UPDATE tbl_item set qty=? where barcode=?',
@@ -1245,12 +1226,12 @@ class NewSale extends Component {
         },
       );
     });
-    this.setState({ arrayData: qtyarr })
+    this.setState({ arrayData: qtyarr });
     if (qtyarr[index].qty > 0) {
-      this.setState({ arrayData: qtyarr })
+      this.setState({ arrayData: qtyarr });
     }
 
-  }
+  };
 
   pickSingleWithCameraForProductsAdd(cropping, mediaType = 'photo') {
     ImagePicker.openCamera({
@@ -1262,9 +1243,9 @@ class NewSale extends Component {
     })
       .then((image) => {
         console.log('received image', image);
-        this.setState({ flagqtyModelOpen: false })
-        this.setState({ modalVisible: false });
         this.setState({
+          flagqtyModelOpen: false,
+          modalVisible: false,
           image: {
             uri: image.path,
             width: image.width,
@@ -1273,11 +1254,10 @@ class NewSale extends Component {
           },
           images: null,
         });
-        this.getImageNameByScanForProductsAdd()
+        this.getImageNameByScanForProductsAdd();
       })
       .catch((e) => {
-        this.setState({ flagqtyModelOpen: false })
-        this.setState({ modalVisible: false });
+        this.setState({ flagqtyModelOpen: false, modalVisible: false });
         console.log(e);
         Alert.alert(e.message ? e.message : e);
       });
@@ -1303,7 +1283,7 @@ class NewSale extends Component {
     })
       .then((image) => {
         console.log('received image', image);
-        this.setState({ flagqtyModelOpen: false })
+        this.setState({ flagqtyModelOpen: false });
         this.setState({ modalVisible: false });
         this.setState({
           image: {
@@ -1314,11 +1294,10 @@ class NewSale extends Component {
           },
           images: null,
         });
-        this.getImageNameByScanForProductsAdd()
+        this.getImageNameByScanForProductsAdd();
       })
       .catch((e) => {
-        this.setState({ flagqtyModelOpen: false })
-        this.setState({ modalVisible: false });
+        this.setState({ flagqtyModelOpen: false, modalVisible: false });
         console.log(e);
         Alert.alert(e.message ? e.message : e);
       });
@@ -1336,9 +1315,9 @@ class NewSale extends Component {
     })
       .then((image) => {
         console.log('received image', image);
-        this.setState({ flagqtyModelOpen: false })
-        this.setState({ modalVisible: false });
         this.setState({
+          flagqtyModelOpen: false,
+          modalVisible: false,
           image: {
             uri: image.path,
             width: image.width,
@@ -1347,11 +1326,10 @@ class NewSale extends Component {
           },
           images: null,
         });
-        this.getImageNameByScan()
+        this.getImageNameByScan();
       })
       .catch((e) => {
-        this.setState({ flagqtyModelOpen: false })
-        this.setState({ modalVisible: false });
+        this.setState({ flagqtyModelOpen: false, modalVisible: false });
         console.log(e);
         Alert.alert(e.message ? e.message : e);
       });
@@ -1377,10 +1355,10 @@ class NewSale extends Component {
     })
       .then((image) => {
         console.log('received image', image);
-        this.setState({ flagqtyModelOpen: false })
-        this.setState({ modalVisible: false });
         this.setState({
           image: {
+            flagqtyModelOpen: false,
+            modalVisible: false,
             uri: image.path,
             width: image.width,
             height: image.height,
@@ -1388,11 +1366,10 @@ class NewSale extends Component {
           },
           images: null,
         });
-        this.getImageNameByScan()
+        this.getImageNameByScan();
       })
       .catch((e) => {
-        this.setState({ flagqtyModelOpen: false })
-        this.setState({ modalVisible: false });
+        this.setState({ flagqtyModelOpen: false, modalVisible: false });
         console.log(e);
         Alert.alert(e.message ? e.message : e);
       });
@@ -1408,11 +1385,8 @@ class NewSale extends Component {
 
 
   cancel() {
-    console.log('clicked')
-    this.setState({ flagCustomerOpen: false })
-    //this.setState({ modalVisible: true });
-    this.setState({ flagqtyModelOpen: false })
-    this.setState({ modalVisible: false });
+    console.log('clicked');
+    this.setState({ flagCustomerOpen: false, flagqtyModelOpen: false, modalVisible: false });
   }
 
   async getImageNameByScanForProductsAdd() {
@@ -1433,13 +1407,13 @@ class NewSale extends Component {
         //const productname = response.data.result[0].name
         if (response.data) {
           console.log("response :", response.data.result[0].name);
-          this.setState({ inventoryProductName: response.data.result[0].name })
-          this.forceUpdate()
+          this.setState({ inventoryProductName: response.data.result[0].name });
+          this.forceUpdate();
         }
       })
       .catch(function (error) {
         console.log(error);
-      })
+      });
   }
 
   getImageNameByScan() {
@@ -1462,9 +1436,9 @@ class NewSale extends Component {
           console.log("response :", global.productname);
           // this.setState({ inventoryProductName: response.data.result[0].name})
           // if (global.productname == "something") {
-          { RNBeep.beep() }
-          global.productname = response.data.result[0].name
-          this.allProductsrefresh()
+          { RNBeep.beep(); }
+          global.productname = response.data.result[0].name;
+          this.allProductsrefresh();
           //    }
         }
 
@@ -1472,12 +1446,12 @@ class NewSale extends Component {
       .catch(function (error) {
         console.log(error);
 
-      })
+      });
 
   }
 
   deleteInventory = (item, index) => {
-    console.log('barcode id is' + item.barcode)
+    console.log('barcode id is' + item.barcode);
     axios.delete(InventoryService.deleteBarcode(), {
       params: {
         //barcodeId=1811759398
@@ -1487,51 +1461,44 @@ class NewSale extends Component {
       if (res.data && res.data["isSuccess"] === "true") {
         const list = this.state.arrayData;
         list.splice(index, 1);
-        this.setState({ arrayData: list });
-        this.setState({ inventoryDelete: false });
-        this.setState({ modalVisible: false });
+        this.setState({ arrayData: list, inventoryDelete: false, modalVisible: false });
       }
       else {
         alert('Issue in delete barcode and having' + res.data["error"]);
       }
     }
     );
-  }
+  };
 
   handledeleteaction = (item, index) => {
-    this.setState({ inventoryDelete: true });
-    this.setState({ modalVisible: true });
-  }
+    this.setState({ inventoryDelete: true, modalVisible: true });
+  };
 
   deleteLineItem = (item, index) => {
-    this.setState({ lineItemDelete: false });
-    this.setState({ modalVisible: false });
+    this.setState({ lineItemDelete: false, modalVisible: false });
     const list = this.state.tableData;
     list.splice(index, 1);
     this.setState({ tableData: list });
     if (this.state.tableData.length == 0) {
-      this.setState({ totalQty: 0 })
-      this.setState({ totalAmount: 0 })
-      this.setState({ totalDiscount: 0 })
-      return
+      this.setState({ totalQty: 0, totalAmount: 0, totalDiscount: 0 });
+      return;
     }
-    this.state.totalQty = (parseInt(this.state.totalQty) - item.qty).toString()
-    this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(item.netamount)).toString()
+    this.state.totalQty = (parseInt(this.state.totalQty) - item.qty).toString();
+    this.state.totalAmount = (parseInt(this.state.totalAmount) - parseInt(item.netamount)).toString();
     if (item.promoDisc === null) {
-      this.state.totalDiscount = (parseInt(this.state.totalDiscount) - 0).toString()
+      this.state.totalDiscount = (parseInt(this.state.totalDiscount) - 0).toString();
     }
     else {
-      this.state.totalDiscount = (parseInt(this.state.totalDiscount) - parseInt(item.promoDisc)).toString()
+      this.state.totalDiscount = (parseInt(this.state.totalDiscount) - parseInt(item.promoDisc)).toString();
     }
-  }
+  };
 
 
 
 
   handlenewsaledeleteaction = (item, index) => {
-    this.setState({ lineItemDelete: true });
-    this.setState({ modalVisible: true });
-  }
+    this.setState({ lineItemDelete: true, modalVisible: true });
+  };
 
   handleeditaction = (item, index) => {
 
@@ -1547,10 +1514,10 @@ class NewSale extends Component {
       onGoBack: () => this.refreshProductsAfterEdit(),
     });
 
-  }
+  };
 
   refreshProductsAfterEdit() {
-    this.barcodeDBStore()
+    this.barcodeDBStore();
     // this.setState({ flagone: false })
     // this.setState({ flagtwo: false })
     // this.setState({ flagthree: true })
@@ -1562,32 +1529,33 @@ class NewSale extends Component {
 
   handleUOM = (value) => {
     this.setState({ store: value });
-  }
+  };
 
 
 
   tagCustomer() {
-    this.setState({ customerEmail: "" })
-    this.setState({ customerPhoneNumber: "" })
-    this.setState({ customerName: "" })
-    this.setState({ customerGender: "" })
-    this.setState({ customerAddress: "" })
-    this.setState({ customerGSTNumber: "" })
-
-    this.setState({ flagCustomerOpen: true })
-    this.setState({ modalVisible: true });
+    this.setState({
+      customerEmail: "",
+      customerPhoneNumber: "",
+      customerName: "",
+      customerGender: "",
+      customerAddress: "",
+      customerGSTNumber: "",
+      flagCustomerOpen: true,
+      mocalVisible: true
+    });
   }
 
 
 
 
   render() {
-    console.log(global.barcodeId)
+    console.log(global.barcodeId);
     AsyncStorage.getItem("tokenkey").then((value) => {
-      console.log(value)
+      console.log(value);
     }).catch(() => {
-      console.log('there is error getting token')
-    })
+      console.log('there is error getting token');
+    });
     const state = this.state;
 
     const element = (data, index) => (
@@ -1871,7 +1839,7 @@ class NewSale extends Component {
                       autoCapitalize="none"
                       value={this.state.inventoryQuantity}
                       onChangeText={this.handleInventoryQuantity}
-                      ref={inputemail => { this.emailValueInput = inputemail }} />
+                      ref={inputemail => { this.emailValueInput = inputemail; }} />
 
                     {/* <TouchableOpacity style={{
                         position: 'absolute',
@@ -1911,7 +1879,7 @@ class NewSale extends Component {
                     autoCapitalize="none"
                     value={this.state.inventoryMRP}
                     onChangeText={this.handleInventoryMRP}
-                    ref={inputemail => { this.emailValueInput = inputemail }} />
+                    ref={inputemail => { this.emailValueInput = inputemail; }} />
 
                   <View>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -2705,10 +2673,10 @@ class NewSale extends Component {
 
 
       </View>
-    )
+    );
   }
 }
-export default NewSale
+export default NewSale;
 
 
 const pickerSelectStyles_mobile = StyleSheet.create({
@@ -2751,7 +2719,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
     // fontSize: 16,
     // borderRadius: 3,
   },
-})
+});
 
 const pickerSelectStyles_tablet = StyleSheet.create({
   placeholder: {
@@ -2793,7 +2761,7 @@ const pickerSelectStyles_tablet = StyleSheet.create({
     // fontSize: 16,
     // borderRadius: 3,
   },
-})
+});
 
 const styles = StyleSheet.create({
   safeArea: {

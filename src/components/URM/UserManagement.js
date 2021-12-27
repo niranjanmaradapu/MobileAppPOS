@@ -1,14 +1,12 @@
-import React, { Component } from 'react'
-import { View, Image, Text, Button, FlatList, TouchableOpacity, Switch, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
-import Modal from 'react-native-modal';
-import axios from 'axios';
-import Loader from "../loader";
-import DatePicker from 'react-native-date-picker'
-import Device from 'react-native-device-detection'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import Loader from "../loader";
 
 
 var deviceWidth = Dimensions.get("window").width;
@@ -22,7 +20,7 @@ export default class UserManagement extends Component {
             flagOne: true,
             flagTwo: false,
             flagFilterRoles: false,
-            flagFiterUsers: false,
+            flagFilterUsers: false,
             modalVisible: true,
             createdDate: "",
             date: new Date(),
@@ -31,30 +29,28 @@ export default class UserManagement extends Component {
             userType: "",
             branch: "",
             rolesData: [1, 2],
-            usersData: [1,2],
+            usersData: [1, 2],
             roleDelete: false,
             userDelete: false,
-        }
+        };
     }
 
     filterAction() {
         if (this.state.flagOne === true) {
-            this.setState({ flagFilterRoles: true })
+            this.setState({ flagFilterRoles: true });
         } else {
-            this.setState({ flagFilterRoles: false })
+            this.setState({ flagFilterRoles: false });
         }
         if (this.state.flagTwo === true) {
-            this.setState({ flagFiterUsers: true })
+            this.setState({ flagFilterUsers: true });
         } else {
-            this.setState({ flagFiterUsers: false })
+            this.setState({ flagFilterUsers: false });
         }
-        this.setState({ modalVisible: true })
+        this.setState({ modalVisible: true });
     }
 
     modelCancel() {
-        this.setState({ modalVisible: false });
-        this.setState({ flagFilterRoles: false });
-        this.setState({ flagFiterUsers: false });
+        this.setState({ modalVisible: false, flagFilterRoles: false, flagFilterUsers: false });
     }
 
     navigateToCreateRoles() {
@@ -79,43 +75,41 @@ export default class UserManagement extends Component {
     }
 
     filterDatepickerClicked() {
-        this.setState({ datepickerOpen: true })
+        this.setState({ datepickerOpen: true });
     }
 
     filterDatepickerDoneClicked() {
         // if (parseInt(this.state.date.getDate()) < 10) {
-        this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() })
+        this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
         // }
-        this.setState({ doneButtonClicked: true, datepickerOpen: false })
     }
 
     filterDatepickerCancelClicked() {
-        this.setState({ date: new Date() })
-        this.setState({ datepickerOpen: false })
+        this.setState({ date: new Date(), datepickerOpen: false });
     }
 
     handleCreatedBy = (value) => {
-        this.setState({ createdBy: value })
-    }
+        this.setState({ createdBy: value });
+    };
 
     handleRole = (value) => {
-        this.setState({ role: value })
-    }
+        this.setState({ role: value });
+    };
 
     handleUSerType = (value) => {
-        this.setState({ userType: value })
-    }
+        this.setState({ userType: value });
+    };
 
     handleBranch = (value) => {
-        this.setState({ branch: value })
-    }
+        this.setState({ branch: value });
+    };
 
     applyRoleFilter() {
-        alert("Applied Roles")
+        alert("Applied Roles");
     }
 
     applyUserFilter() {
-        alert("Applied User")
+        alert("Applied User");
     }
 
     deleteUser(item, index) {
@@ -129,12 +123,10 @@ export default class UserManagement extends Component {
     }
 
     handleuserdeleteaction(item, index) {
-        this.setState({ modalVisible: true })
-        this.setState({ userDelete: true })
+        this.setState({ modalVisible: true, userDelete: true });
     }
     handleRoledeleteaction(item, index) {
-        this.setState({ modalVisible: true })
-        this.setState({ roleDelete: true })
+        this.setState({ modalVisible: true, roleDelete: true });
     }
 
     getAllRoles() {
@@ -146,27 +138,27 @@ export default class UserManagement extends Component {
     }
 
     updateRoles() {
-        this.getAllRoles()
+        this.getAllRoles();
     }
 
     updateUsers() {
-        this.getAllUsers()
+        this.getAllUsers();
     }
 
     handleedituser(item, index) {
-        this.props.navigation.navigate('EditUser', 
-        {
-            item: item, isEdit: true,
-            onGoBack: () => this.updateUsers(),
-        });
+        this.props.navigation.navigate('EditUser',
+            {
+                item: item, isEdit: true,
+                onGoBack: () => this.updateUsers(),
+            });
     }
 
     handleeditRole(item, index) {
-        this.props.navigation.navigate('EditRole', 
-        {
-            item: item, isEdit: true,
-            onGoBack: () => this.updateRoles(),
-        });
+        this.props.navigation.navigate('EditRole',
+            {
+                item: item, isEdit: true,
+                onGoBack: () => this.updateRoles(),
+            });
     }
 
     handleRole(item, index) {
@@ -230,7 +222,7 @@ export default class UserManagement extends Component {
                             renderItem={({ item, index }) => (
                                 <View style={Device.isTablet ? styles.flatlistContainer_tablet : styles.flatlistContainer_mobile}>
                                     <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
-                                    <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
+                                        <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
                                         <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>ROLE: {"\n"}{item.roleName}</Text>
                                         <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>DOMAIN: {item.domain} </Text>
                                         <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>CREATED BY: {item.createdBy}</Text>
@@ -531,7 +523,7 @@ export default class UserManagement extends Component {
                         </View>
                     )}
 
-                    {this.state.flagFiterUsers && (
+                    {this.state.flagFilterUsers && (
                         <View>
                             <Modal isVisible={this.state.modalVisible}>
                                 <View style={Device.isTablet ? styles.filterBarcodeContainer_tablet : styles.filterBarcodeContainer_mobile} >
@@ -594,7 +586,7 @@ export default class UserManagement extends Component {
 
                 </SafeAreaView>
             </View>
-        )
+        );
     }
 }
 
@@ -638,7 +630,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 const pickerSelectStyles_tablet = StyleSheet.create({
     placeholder: {
@@ -680,7 +672,7 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -1202,7 +1194,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
 
-})
+});
 
 // Styles For Flat-Lists
 
@@ -1362,4 +1354,4 @@ const flats = StyleSheet.create({
         fontSize: 21,
         color: '#353C40'
     },
-})
+});

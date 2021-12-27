@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, Image, SafeAreaView } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-var deviceheight = Dimensions.get('window').height;
-import LoginService from '../services/LoginService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { Component } from 'react';
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loader from '../loader';
+import LoginService from '../services/LoginService';
+var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
-import I18n from 'react-native-i18n';
-import Device from 'react-native-device-detection'
 
 
 const data = [
@@ -48,18 +48,18 @@ export default class Login extends Component {
             roleName: '',
 
 
-        }
+        };
         console.log(process.env.REACT_APP_BASE_URL);
     }
 
     toggleRememberMe = value => {
-        this.setState({ rememberMe: value })
+        this.setState({ rememberMe: value });
         if (value === true) {
             this.rememberUser();
         } else {
             this.forgetUser();
         }
-    }
+    };
 
     forgetUser = async () => {
         try {
@@ -69,17 +69,17 @@ export default class Login extends Component {
     };
 
     handleEmail = (text) => {
-        this.setState({ userName: text })
-    }
+        this.setState({ userName: text });
+    };
     handlePassword = (text) => {
-        this.setState({ password: text })
-    }
+        this.setState({ password: text });
+    };
     handleStore = (value) => {
         this.setState({ store: value });
-    }
+    };
 
     registerClient() {
-        this.props.navigation.navigate('RegisterClient')
+        this.props.navigation.navigate('RegisterClient');
     }
 
 
@@ -96,7 +96,7 @@ export default class Login extends Component {
                 "email": this.state.userName, //"+919493926067",
                 "password": this.state.password, //"Mani@1123",
                 //"storeName": this.state.store,//"kphb",
-            }
+            };
             AsyncStorage.setItem("username", this.state.userName);
             AsyncStorage.removeItem('tokenkey');
             AsyncStorage.removeItem('custom:clientId1');
@@ -104,10 +104,11 @@ export default class Login extends Component {
             AsyncStorage.removeItem('domainDataId');
             AsyncStorage.removeItem('storeId');
 
-            console.log(LoginService.getAuth() + JSON.stringify(params))
-            this.setState({ loading: true })
+            console.log(LoginService.getAuth() + JSON.stringify(params));
+            this.setState({ loading: true });
             axios.post(LoginService.getAuth(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
+
                     if (res.data.result.authenticationResult) {
                         const token = res.data.result.authenticationResult.idToken
                         //==============================Token Key & phone number save ===================//
@@ -180,13 +181,13 @@ export default class Login extends Component {
                             console.log(this.state.roleName);
                         }
                     }
+
                 }
                 else {
-                    this.setState({ loading: false })
                     alert('Invalid Credentials');
-                    this.emailValueInput.clear()
-                    this.passwordValueInput.clear()
-                    this.setState({ userName: '', password: '', selectedOption: null })
+                    this.emailValueInput.clear();
+                    this.passwordValueInput.clear();
+                    this.setState({ userName: '', password: '', selectedOption: null, loading: false });
                 }
 
 
@@ -200,21 +201,21 @@ export default class Login extends Component {
 
     async getDomainsList() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
-        console.log('vinodddd' + clientId)
+        console.log('vinodddd' + clientId);
         axios.get(LoginService.getDomainsList() + clientId).then((res) => {
             if (res.data["result"][0]) {
-                console.log('sdasdasdsadasdsasfsfssaf' + res.data["result"])
+                console.log('sdasdasdsadasdsasfsfssaf' + res.data["result"]);
                 if (res.data["result"].length > 1) {
-                    this.props.navigation.navigate('SelectDomain')
+                    this.props.navigation.navigate('SelectDomain');
                 }
                 else {
                     AsyncStorage.setItem("domainDataId", String(res.data.result[0].clientDomainaId)).then(() => {
                         // console.log
 
                     }).catch(() => {
-                        console.log('there is error saving token')
-                    })
-                    this.getstoresForSuperAdmin()
+                        console.log('there is error saving token');
+                    });
+                    this.getstoresForSuperAdmin();
                 }
             }
         });
@@ -225,21 +226,23 @@ export default class Login extends Component {
         const username = await AsyncStorage.getItem("domainDataId");
         const params = {
             "clientDomianId": username
-        }
-        console.log('sfsdfsdff' + params)
+        };
+        console.log('sfsdfsdff' + params);
         axios.get(LoginService.getUserStoresForSuperAdmin(), { params }).then((res) => {
             let len = res.data["result"].length;
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
                     if (res.data["result"].length > 1) {
+
                         this.props.navigation.navigate('SelectStore', { isFromDomain: false })
+
                     }
                     else {
                         AsyncStorage.setItem("storeId", String(res.data.result[0].id)).then(() => {
                         }).catch(() => {
-                            console.log('there is error saving storeName')
-                        })
-                        this.props.navigation.navigate('HomeNavigation')
+                            console.log('there is error saving storeName');
+                        });
+                        this.props.navigation.navigate('HomeNavigation');
                     }
                 }
             }
@@ -253,24 +256,26 @@ export default class Login extends Component {
         axios.get(LoginService.getUserStores() + username).then((res) => {
             if (res.data["result"]) {
                 for (var i = 0; i < res.data["result"].length; i++) {
-                    let number = res.data.result[i]
-                    const myArray = []
+                    let number = res.data.result[i];
+                    const myArray = [];
                     myArray = number.split(":");
-                    this.state.storeNames.push({ name: myArray[0], id: myArray[1] })
+                    this.state.storeNames.push({ name: myArray[0], id: myArray[1] });
 
                 }
-                this.setState({ storeNames: this.state.storeNames })
+                this.setState({ storeNames: this.state.storeNames });
                 AsyncStorage.setItem("storeId", (this.state.storeNames[0].id).toString()).then(() => {
                 }).catch(() => {
-                    console.log('there is error saving token')
-                })
+                    console.log('there is error saving token');
+                });
 
 
                 if (this.state.storeNames.length === 1) {
-                    this.props.navigation.navigate('HomeNavigation')
+                    this.props.navigation.navigate('HomeNavigation');
                 }
                 else {
+
                     this.props.navigation.navigate('SelectStore', { isFromDomain: false })
+
                 }
             }
         });
@@ -279,7 +284,9 @@ export default class Login extends Component {
 
 
     forgotPassword() {
+
      this.props.navigation.navigate('ForgotPassword', { username: this.state.userName });
+
     }
 
     async componentDidMount() {
@@ -326,7 +333,7 @@ export default class Login extends Component {
                                     autoCapitalize="none"
                                     onChangeText={this.handleEmail}
                                     value={this.state.userName}
-                                    ref={inputemail => { this.emailValueInput = inputemail }} />
+                                    ref={inputemail => { this.emailValueInput = inputemail; }} />
 
 
                                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -337,7 +344,7 @@ export default class Login extends Component {
                                     autoCapitalize="none"
                                     onChangeText={this.handlePassword}
                                     value={this.state.password}
-                                    ref={inputpassword => { this.passwordValueInput = inputpassword }} />
+                                    ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
 
                                 <View>
                                     <View style={{ flexDirection: "column" }}>
@@ -385,7 +392,7 @@ export default class Login extends Component {
                 </View>
 
             </KeyboardAwareScrollView>
-        )
+        );
     }
 }
 
@@ -420,7 +427,7 @@ const pickerSelectStyles = StyleSheet.create({
         borderWidth: 5,
         fontSize: 14,
     },
-})
+});
 
 const styles = StyleSheet.create({
     logoImage: {
@@ -604,7 +611,7 @@ const styles = StyleSheet.create({
         fontFamily: "bold",
         textDecorationLine: 'underline'
     },
-})
+});;
 
 // Unused Styles
 // {

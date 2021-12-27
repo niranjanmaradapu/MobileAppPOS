@@ -1,20 +1,19 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native';
-var deviceWidth = Dimensions.get('window').width;
-import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import { openDatabase } from 'react-native-sqlite-storage';
-// Connction to access the pre-populated db
-const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
+import Constants from 'expo-constants';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import { Alert } from 'react-native';
-import Modal from "react-native-modal";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import PromotionsService from '../../services/PromotionsService';
+import { openDatabase } from 'react-native-sqlite-storage';
 import Loader from '../../loader';
+import PromotionsService from '../../services/PromotionsService';
+var deviceWidth = Dimensions.get('window').width;
+// Connction to access the pre-populated db
+const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 
 class EditPool extends Component {
     constructor(props) {
@@ -71,27 +70,29 @@ class EditPool extends Component {
                 type: RNCamera.Constants.Type.back,
                 flashMode: RNCamera.Constants.FlashMode.auto,
             }
-        }
+        };
     }
 
     async componentDidMount() {
         this.setState({
             item: this.props.route.params.item
         });
-        console.log(this.state.item)
-        this.setState({ selectedPoolType: this.props.route.params.item.poolType })
-        this.setState({ arrayData: this.props.route.params.item.ruleVo })
-        this.setState({ selectedPoolName: this.props.route.params.item.poolName })
+        console.log(this.state.item);
+        this.setState({
+            selectedPoolType: this.props.route.params.item.poolType,
+            arrayData: this.props.route.params.item.ruleVo,
+            selectedPoolName: this.props.route.params.item.poolName
+        });
 
-        var domainStringId = ""
+        var domainStringId = "";
         AsyncStorage.getItem("domainDataId").then((value) => {
-            domainStringId = value
-            this.setState({ domainId: parseInt(domainStringId) })
-            console.log("domain data id" + this.state.domainId)
+            domainStringId = value;
+            this.setState({ domainId: parseInt(domainStringId) });
+            console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
-            console.log('there is error getting domainDataId')
-        })
+            console.log('there is error getting domainDataId');
+        });
     }
 
 
@@ -117,7 +118,7 @@ class EditPool extends Component {
             alert('You need atleast two rules for create pool');
         }
         else {
-            this.setState({ loading: true })
+            this.setState({ loading: true });
             const username = await AsyncStorage.getItem("username");
             const params = {
                 //required 
@@ -129,18 +130,18 @@ class EditPool extends Component {
                 "poolType": this.state.selectedPoolType,
                 "ruleVo": this.state.arrayData,
                 "poolId": this.props.route.params.item.poolId,
-            }
-            console.log('params are' + JSON.stringify(params))
-            this.setState({ loading: true })
+            };
+            console.log('params are' + JSON.stringify(params));
+            this.setState({ loading: true });
             axios.post(PromotionsService.updatePool(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     // this.props.route.params.onGoBack();
                     this.props.route.params.onGoBack();
                     this.props.navigation.goBack();
                 }
                 else {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     alert("duplicate record already exists");
                 }
             }
@@ -150,8 +151,8 @@ class EditPool extends Component {
 
 
     refresh() {
-        this.setState({ productname: global.productname })
-        console.log('search' + this.state.productname)
+        this.setState({ productname: global.productname });
+        console.log('search' + this.state.productname);
     }
 
 
@@ -165,37 +166,39 @@ class EditPool extends Component {
     }
 
     addPoolRool() {
-        this.setState({ updateRool: false });
-        this.setState({ selectedColumnName: "" })
-        this.setState({ selectedOperator: "" })
-        this.setState({ productmrp: "" })
-        this.setState({ modalVisible: true });
-        this.setState({ flagCustomerOpen: true });
+        this.setState({
+            updateRool: false,
+            selectedColumnName: "",
+            selectedOperator: "",
+            productmrp: "",
+            modalVisible: true,
+            flagCustomerOpen: true
+        });
     }
 
     handlePoolType = (value) => {
         this.setState({ selectedPoolType: value });
-    }
+    };
 
     handleColumnName = (value) => {
         this.setState({ selectedColumnName: value });
-    }
+    };
 
     handleValue = (value) => {
         this.setState({ productmrp: value });
-    }
+    };
 
 
 
     handledeleteaction = (item, index) => {
         if (this.state.arrayData.length == 2) {
-            alert('You need atleast two rules for create pool')
-            return
+            alert('You need atleast two rules for create pool');
+            return;
         }
         const list = this.state.arrayData;
         list.splice(index, 1);
         this.setState({ arrayData: list });
-    }
+    };
 
 
     addruleName() {
@@ -204,34 +207,35 @@ class EditPool extends Component {
             editArray[this.state.selectedIndex].columnName = this.state.selectedColumnName;
             editArray[this.state.selectedIndex].operatorSymbol = this.state.selectedOperator;
             editArray[this.state.selectedIndex].givenValue = this.state.productmrp;
-            this.setState({ arrayData: editArray });
-            this.setState({ modalVisible: false });
+            this.setState({ arrayData: editArray, modalVisible: false });
 
         }
         else {
-            this.state.arrayData.push({ columnName: this.state.selectedColumnName, operatorSymbol: this.state.selectedOperator, givenValue: this.state.productmrp })
+            this.state.arrayData.push({ columnName: this.state.selectedColumnName, operatorSymbol: this.state.selectedOperator, givenValue: this.state.productmrp });
             this.setState({ modalVisible: false });
         }
     }
 
     handlePoolName = (value) => {
         this.setState({ selectedPoolName: value });
-    }
+    };
 
 
     handleOperator = (value) => {
         this.setState({ selectedOperator: value });
-    }
+    };
 
     handleeditaction = (item, index) => {
-        this.setState({ selectedIndex: index });
-        this.setState({ modalVisible: true });
-        this.setState({ updateRool: true });
-        this.setState({ flagCustomerOpen: true });
-        this.setState({ selectedColumnName: item.columnName })
-        this.setState({ selectedOperator: item.operatorSymbol })
-        this.setState({ productmrp: String(item.givenValue) })
-    }
+        this.setState({
+            selectedIndex: index,
+            modalVisible: true,
+            updateRool: true,
+            flagCustomerOpen: true,
+            selectedColumnName: item.columnName,
+            selectedOperator: item.operatorSymbol,
+            productmrp: String(item.givenValue)
+        });
+    };
 
 
 
@@ -283,7 +287,7 @@ class EditPool extends Component {
                                 autoCapitalize="none"
                                 value={this.state.selectedPoolName}
                                 onChangeText={this.handlePoolName}
-                                ref={inputemail => { this.emailValueInput = inputemail }} />
+                                ref={inputemail => { this.emailValueInput = inputemail; }} />
 
 
                             <View style={{
@@ -670,10 +674,10 @@ class EditPool extends Component {
                 {/* </KeyboardAwareScrollView> */}
             </View>
 
-        )
+        );
     }
 }
-export default EditPool
+export default EditPool;
 
 
 const pickerSelectStyles = StyleSheet.create({
@@ -716,7 +720,7 @@ const pickerSelectStyles = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 const styles = StyleSheet.create({
     safeArea: {

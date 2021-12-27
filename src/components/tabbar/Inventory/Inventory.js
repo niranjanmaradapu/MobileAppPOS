@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import { View, Image, Text, Button, FlatList, TouchableOpacity, Switch, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
-import Modal from 'react-native-modal';
-import axios from 'axios';
-import Loader from "../../loader";
-import DatePicker from 'react-native-date-picker'
-import InventoryService from '../../services/InventoryService';
-import Device from 'react-native-device-detection'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from 'react-native-modal';
+import Loader from "../../loader";
+import InventoryService from '../../services/InventoryService';
 
 var deviceWidth = Dimensions.get("window").width;
 
@@ -40,7 +40,7 @@ export default class Inventory extends Component {
             barcodeDelete: false,
             storeId: 1,
             storeName: "",
-        }
+        };
     }
 
     handleBackButtonClick() {
@@ -54,91 +54,91 @@ export default class Inventory extends Component {
 
 
     componentDidMount() {
-        var domainStringId = ""
-        var storeStringId = ""
-        var storeName = ""
+        var domainStringId = "";
+        var storeStringId = "";
+        var storeName = "";
         AsyncStorage.getItem("domainDataId").then((value) => {
-            domainStringId = value
-            this.setState({ domainId: parseInt(domainStringId) })
-            console.log("domain data id" + this.state.domainId)
+            domainStringId = value;
+            this.setState({ domainId: parseInt(domainStringId) });
+            console.log("domain data id" + this.state.domainId);
 
 
         }).catch(() => {
-            console.log('there is error getting domainDataId')
-        })
+            console.log('there is error getting domainDataId');
+        });
 
         AsyncStorage.getItem("storeId").then((value) => {
-            storeStringId = value
-            this.setState({ storeId: parseInt(storeStringId) })
-            console.log(this.state.storeId)
-            this.getAllBarcodes()
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) });
+            console.log(this.state.storeId);
+            this.getAllBarcodes();
 
         }).catch(() => {
-            console.log('there is error getting storeId')
-        })
+            console.log('there is error getting storeId');
+        });
 
         AsyncStorage.getItem("storeName").then((value) => {
-            storeName = value
-            this.setState({ storeName: storeName })
+            storeName = value;
+            this.setState({ storeName: storeName });
         }).catch(() => {
-            console.log('there is error getting storeId')
-        })
+            console.log('there is error getting storeId');
+        });
     }
 
     getAllBarcodes() {
-        this.setState({ barcodesData: [] })
+        this.setState({ barcodesData: [] });
         const params = {
             "fromDate": this.state.startDate,
             "toDate": this.state.endDate,
             "barcode": this.state.barCodeId,
             "storeId": this.state.storeId
-        }
-        console.log("sdsad" + this.state.endDate)
-        this.setState({ loading: true })
+        };
+        console.log("sdsad" + this.state.endDate);
+        this.setState({ loading: true });
         axios.post(InventoryService.getTextileBarcodes(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 if (res.data["result"]) {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     for (var i = 0; i < res.data["result"].length; i++) {
-                        this.state.barcodesData.push(res.data["result"][i])
+                        this.state.barcodesData.push(res.data["result"][i]);
                         // console.log(res.data["result"][i].productTextile.empId)
 
                     }
                 }
 
-                this.setState({ barcodesData: this.state.barcodesData })
+                this.setState({ barcodesData: this.state.barcodesData });
 
             }
-        })
+        });
     }
 
 
     getbarcodeTexttileAdjustments() {
-        this.setState({ reBarcodesData: [] })
+        this.setState({ reBarcodesData: [] });
         const params = {
             "fromDate": this.state.startDate,
             "toDate": this.state.endDate,
             "currentBarcodeId": this.state.barCodeId,
             "storeId": this.state.storeId
-        }
-        console.log("cssafsfssdsfdsfsdsadasd" + this.state.storeId)
-        this.setState({ loading: true })
+        };
+        console.log("cssafsfssdsfdsfsdsadasd" + this.state.storeId);
+        this.setState({ loading: true });
         axios.post(InventoryService.getbarcodeTexttileAdjustments(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
-                console.log(res.data["result"])
+                console.log(res.data["result"]);
                 if (res.data["result"]) {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     for (var i = 0; i < res.data["result"].length; i++) {
-                        this.state.reBarcodesData.push(res.data["result"][i])
+                        this.state.reBarcodesData.push(res.data["result"][i]);
 
 
                     }
                 }
 
-                this.setState({ reBarcodesData: this.state.reBarcodesData })
+                this.setState({ reBarcodesData: this.state.reBarcodesData });
 
             }
-        })
+        });
 
     }
 
@@ -146,25 +146,13 @@ export default class Inventory extends Component {
 
 
     topbarAction1() {
-        this.setState({ startDate: "" });
-        this.setState({ endDate: "" });
-        this.setState({ barCodeId: "" });
-        this.setState({ doneButtonClicked: false });
-        this.setState({ enddoneButtonClicked: false });
-        this.setState({ flagone: true })
-        this.setState({ flagtwo: false })
-        this.getAllBarcodes()
+        this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false });
+        this.getAllBarcodes();
     }
 
     topbarAction2() {
-        this.setState({ startDate: "" });
-        this.setState({ endDate: "" });
-        this.setState({ barCodeId: "" });
-        this.setState({ doneButtonClicked: false });
-        this.setState({ enddoneButtonClicked: false });
-        this.setState({ flagone: false })
-        this.setState({ flagtwo: true })
-        this.getbarcodeTexttileAdjustments()
+        this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: false, flagtwo: true });
+        this.getbarcodeTexttileAdjustments();
     }
 
     navigateToAddBarcode() {
@@ -196,70 +184,58 @@ export default class Inventory extends Component {
     }
 
     modelCancel() {
-        this.setState({ inventoryDelete: false });
-        this.setState({ flagFilterBarcodeOpen: false });
-        this.setState({ flagFilterReBarcodeOpen: false });
-        this.setState({ modalVisible: false });
+        this.setState({ inventoryDelete: false, flagFilterBarcodeOpen: false, flagFilterReBarcodeOpen: false, modalVisible: false });
     }
 
     datepickerClicked() {
-        this.setState({ datepickerOpen: true })
+        this.setState({ datepickerOpen: true });
     }
 
     enddatepickerClicked() {
-        this.setState({ datepickerendOpen: true })
+        this.setState({ datepickerendOpen: true });
     }
 
     datepickerDoneClicked() {
         if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
         }
         else {
-            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
 
-        this.setState({ doneButtonClicked: true })
-        //this.setState({date:this.state.})
-        this.setState({ datepickerOpen: false })
-        this.setState({ datepickerendOpen: false })
+        this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
         if (parseInt(this.state.enddate.getDate()) < 10) {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() });
         }
         else {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
-        this.setState({ enddoneButtonClicked: true })
-        this.setState({ datepickerOpen: false })
-        this.setState({ datepickerendOpen: false })
+        this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
 
     datepickerCancelClicked() {
-        this.setState({ date: new Date() })
-        this.setState({ enddate: new Date() })
-        this.setState({ datepickerOpen: false })
-        this.setState({ datepickerendOpen: false })
+        this.setState({ date: new Date(), endDate: new Date(), datepickerOpen: false, datepickerendOpen: false });
     }
 
     handlebarCodeId() {
-        this.setState({ barCodeId: value })
+        this.setState({ barCodeId: value });
     }
 
     applyBarcodeFilter() {
-        this.getAllBarcodes()
+        this.getAllBarcodes();
         this.setState({ modalVisible: false });
     }
     applyReBarcodeFilter() {
-        this.getbarcodeTexttileAdjustments()
+        this.getbarcodeTexttileAdjustments();
         this.setState({ modalVisible: false });
     }
 
     handlebarcodedeleteaction(item, index) {
-        this.setState({ inventoryDelete: true });
-        this.setState({ modalVisible: true });
+        this.setState({ inventoryDelete: true, modalVisible: true });
 
         // axios.delete(InventoryService.deleteTextileBarcode(), {
         //     params: {
@@ -280,25 +256,25 @@ export default class Inventory extends Component {
 
     print = (item, index) => {
 
-    }
+    };
 
 
     seeDetails = (item, index) => {
-        this.setState({ barcodesData: [] })
+        this.setState({ barcodesData: [] });
         const params = {
             "fromDate": "",
             "toDate": "",
             "barcode": item.currentBarcodeId,
             "storeId": this.state.storeId
-        }
-        console.log("cssafsfssdsfdsfsdsadasd" + this.state.storeId)
+        };
+        console.log("cssafsfssdsfdsfsdsadasd" + this.state.storeId);
         // this.setState({ loading: true })
         axios.post(InventoryService.getTextileBarcodes(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 if (res.data["result"]) {
                     //  this.setState({ loading: false })
                     for (var i = 0; i < res.data["result"].length; i++) {
-                        this.state.barcodesData.push(res.data["result"][i])
+                        this.state.barcodesData.push(res.data["result"][i]);
                         // console.log(res.data["result"][i].productTextile.empId)
                         this.props.navigation.navigate('ViewReBarcode'
                             , {
@@ -309,13 +285,13 @@ export default class Inventory extends Component {
                     }
                 }
 
-                this.setState({ barcodesData: this.state.barcodesData })
+                this.setState({ barcodesData: this.state.barcodesData });
 
             }
-        })
+        });
 
 
-    }
+    };
 
     deleteInventory = (item, index) => {
         axios.delete(InventoryService.deleteTextileBarcode(), {
@@ -327,19 +303,17 @@ export default class Inventory extends Component {
             if (res.data && res.data["isSuccess"] === "true") {
                 const list = this.state.barcodesData;
                 list.splice(index, 1);
-                this.setState({ barcodesData: list });
-                this.setState({ inventoryDelete: false });
-                this.setState({ modalVisible: false });
+                this.setState({ barcodesData: list, inventoryDelete: false, modalVisible: false });
             }
             else {
                 alert('Issue in delete barcode and having' + res.data["error"]);
             }
         }
         );
-    }
+    };
 
     updateBarcodes() {
-        this.getAllBarcodes()
+        this.getAllBarcodes();
     }
 
     handleeditbarcode(item, index) {
@@ -765,7 +739,7 @@ export default class Inventory extends Component {
                     </View>
                 )}
             </View>
-        )
+        );
     }
 }
 
@@ -1249,7 +1223,7 @@ const styles = StyleSheet.create({
         height: 160,
     },
 
-})
+});
 
 // Styles For Flat-Lists
 
@@ -1469,4 +1443,4 @@ const flats = StyleSheet.create({
         fontSize: 21,
         color: '#353C40'
     },
-})
+});

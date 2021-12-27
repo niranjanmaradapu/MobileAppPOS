@@ -1,20 +1,17 @@
-import React, { Component, useState } from 'react'
-import { View, Image, FlatList, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-var deviceWidth = Dimensions.get('window').width;
+import axios from 'axios';
 import Constants from 'expo-constants';
-import { openDatabase } from 'react-native-sqlite-storage';
+import React, { Component } from 'react';
+import { Alert, Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import RNBeep from 'react-native-a-beep';
+import { RNCamera } from 'react-native-camera';
 import { SearchBar } from "react-native-elements";
+import ImagePicker from 'react-native-image-crop-picker';
+import Modal from "react-native-modal";
+import { openDatabase } from 'react-native-sqlite-storage';
+import NewSaleService from '../../services/NewSaleService';
+var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
-import { RNCamera } from 'react-native-camera';
-import NetInfo from "@react-native-community/netinfo";
-import RNBeep from 'react-native-a-beep';
-import { Alert } from 'react-native';
-import Modal from "react-native-modal";
-import ImagePicker from 'react-native-image-crop-picker';
-import axios from 'axios';
-import NewSaleService from '../../services/NewSaleService';
 
 
 class Products extends Component {
@@ -61,7 +58,7 @@ class Products extends Component {
                 type: RNCamera.Constants.Type.back,
                 flashMode: RNCamera.Constants.FlashMode.auto,
             }
-        }
+        };
     }
 
 
@@ -69,15 +66,13 @@ class Products extends Component {
         // this.setState({ arrayData: [] })
         // this.setState({ temp: [] })
         // this.setState({ search: null })
-        this.barcodeDBStore()
-        this.getItems()
+        this.barcodeDBStore();
+        this.getItems();
 
     }
 
     getItems = () => {
-        this.setState({ arrayData: [] })
-        this.setState({ temp: [] })
-        this.setState({ search: null })
+        this.setState({ arrayData: [], temp: [], search: null });
         db.transaction(txn => {
             txn.executeSql(
                 `SELECT * FROM tbl_item`,
@@ -87,23 +82,23 @@ class Products extends Component {
                     if (len > 0) {
                         let results = [];
                         for (let i = 0; i < len; i++) {
-                            let item = res.rows.item(i)
-                            let sno = String(this.state.tableData.length + 1)
-                            let barcode = item["barcode"]
-                            let itemDesc = item["itemDesc"]
-                            let netAmount = String(item["netAmount"])
-                            let qty = String(item["qty"])
-                            let totalAmount = String(item["netAmount"])
-                            let image = item['itemImage']
+                            let item = res.rows.item(i);
+                            let sno = String(this.state.tableData.length + 1);
+                            let barcode = item["barcode"];
+                            let itemDesc = item["itemDesc"];
+                            let netAmount = String(item["netAmount"]);
+                            let qty = String(item["qty"]);
+                            let totalAmount = String(item["netAmount"]);
+                            let image = item['itemImage'];
 
-                            this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                            this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image });
                             if (this.state.arrayData.length === 1) {
-                                this.setState({ arrayData: this.state.arrayData })
+                                this.setState({ arrayData: this.state.arrayData });
                             }
-                            this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                            this.state.temp.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image });
 
                         }
-                        console.log(this.state.arrayData)
+                        console.log(this.state.arrayData);
                     }
                 },
                 error => {
@@ -123,9 +118,9 @@ class Products extends Component {
         })
             .then((image) => {
                 console.log('received image', image);
-                this.setState({ flagqtyModelOpen: false })
-                this.setState({ modalVisible: false });
                 this.setState({
+                    flagqtyModelOpen: false,
+                    modalVisible: false,
                     image: {
                         uri: image.path,
                         width: image.width,
@@ -134,11 +129,10 @@ class Products extends Component {
                     },
                     images: null,
                 });
-                this.getImageNameByScan()
+                this.getImageNameByScan();
             })
             .catch((e) => {
-                this.setState({ flagqtyModelOpen: false })
-                this.setState({ modalVisible: false });
+                this.setState({ flagqtyModelOpen: false, modalVisible: false });
                 console.log(e);
                 Alert.alert(e.message ? e.message : e);
             });
@@ -164,9 +158,9 @@ class Products extends Component {
         })
             .then((image) => {
                 console.log('received image', image);
-                this.setState({ flagqtyModelOpen: false })
-                this.setState({ modalVisible: false });
                 this.setState({
+                    flagqtyModelOpen: false,
+                    modalVisible: false,
                     image: {
                         uri: image.path,
                         width: image.width,
@@ -175,11 +169,10 @@ class Products extends Component {
                     },
                     images: null,
                 });
-                this.getImageNameByScan()
+                this.getImageNameByScan();
             })
             .catch((e) => {
-                this.setState({ flagqtyModelOpen: false })
-                this.setState({ modalVisible: false });
+                this.setState({ flagqtyModelOpen: false, modalVisible: false });
                 console.log(e);
                 Alert.alert(e.message ? e.message : e);
             });
@@ -208,9 +201,9 @@ class Products extends Component {
                     console.log("response :", global.productname);
                     // this.setState({ inventoryProductName: response.data.result[0].name})
                     // if (global.productname == "something") {
-                    { RNBeep.beep() }
-                    global.productname = response.data.result[0].name
-                    this.refresh()
+                    { RNBeep.beep(); }
+                    global.productname = response.data.result[0].name;
+                    this.refresh();
                     //    }
                 }
 
@@ -218,26 +211,25 @@ class Products extends Component {
             .catch(function (error) {
                 console.log(error);
 
-            })
+            });
 
     }
 
     cancel() {
-        console.log('clicked')
+        console.log('clicked');
         //this.setState({ modalVisible: true });
-        this.setState({ flagqtyModelOpen: false })
-        this.setState({ modalVisible: false });
+        this.setState({ flagqtyModelOpen: false, modalVisible: false });
     }
 
 
 
     addAction = (item, index) => {
-        console.log('vinod data ---------' + item.barcode)
-        this.setState({ barcodeId: item.barcode })
-        this.barcodeDBStore()
-        console.log('vinod data ---------' + this.state.tableData)
-        this.props.navigation.navigate('NewSale', { tableData: this.state.tableData, isFromProducts: true, onGoBack: () => this.refreshTableData() },)
-    }
+        console.log('vinod data ---------' + item.barcode);
+        this.setState({ barcodeId: item.barcode });
+        this.barcodeDBStore();
+        console.log('vinod data ---------' + this.state.tableData);
+        this.props.navigation.navigate('NewSale', { tableData: this.state.tableData, isFromProducts: true, onGoBack: () => this.refreshTableData() },);
+    };
 
 
     updateSearch = search => {
@@ -269,53 +261,52 @@ class Products extends Component {
                     let len = res.rows.length;
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let item = res.rows.item(i)
-                            let sno = String(this.state.tableData.length + 1)
-                            let barcode = item["barcode"]
-                            let itemDesc = item["itemDesc"]
-                            let netAmount = String(item["netAmount"])
-                            let qty = "1"//String(item["qty"])
-                            let totalAmount = String(item["netAmount"])
-                            let image = item['itemImage']
-                            this.state.quantity = qty
+                            let item = res.rows.item(i);
+                            let sno = String(this.state.tableData.length + 1);
+                            let barcode = item["barcode"];
+                            let itemDesc = item["itemDesc"];
+                            let netAmount = String(item["netAmount"]);
+                            let qty = "1";//String(item["qty"])
+                            let totalAmount = String(item["netAmount"]);
+                            let image = item['itemImage'];
+                            this.state.quantity = qty;
 
                             if (this.state.tableData.length > 0) {
                                 for (let i = 0; i < this.state.tableData.length; i++) {
                                     if (this.state.barcodeId == this.state.tableData[i].barcode) {
-                                        { RNBeep.beep() }
+                                        { RNBeep.beep(); }
                                         console.log("search category" + JSON.stringify(res.rows.length));
                                         const qtyarr = [...this.state.tableData];
-                                        qtyarr[i].qty = String(parseInt(qtyarr[i].qty) + 1) //parseInt(item["qty"]))
-                                        this.setState({ tableData: qtyarr })
-                                        this.setState({ totalAmount: this.state.totalAmount })
-                                        return
+                                        qtyarr[i].qty = String(parseInt(qtyarr[i].qty) + 1); //parseInt(item["qty"]))
+                                        this.setState({ tableData: qtyarr, totalAmount: this.state.totalAmount });
+                                        return;
                                     }
-                                    this.state.totalQty = this.state.totalQty + item["qty"]
-                                    this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
+                                    this.state.totalQty = this.state.totalQty + item["qty"];
+                                    this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1);
                                 }
-                                { RNBeep.beep() }
-                                this.setState({ totalAmount: this.state.totalAmount })
-                                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                                { RNBeep.beep(); }
+                                this.setState({ totalAmount: this.state.totalAmount });
+                                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image });
                             }
                             else {
-                                { RNBeep.beep() }
-                                this.state.totalQty = this.state.totalQty + item["qty"]
-                                this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1)
-                                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image })
+                                { RNBeep.beep(); }
+                                this.state.totalQty = this.state.totalQty + item["qty"];
+                                this.state.totalAmount = parseInt(this.state.totalAmount) + parseInt(item["netAmount"] * 1);
+                                this.state.tableData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, netamount: netAmount, qty: qty, netamount: netAmount, image: image });
 
                             }
                         }
                     }
 
-                    console.log(JSON.stringify(this.state.tableData))
-                    console.log(JSON.stringify(totalQty))
+                    console.log(JSON.stringify(this.state.tableData));
+                    console.log(JSON.stringify(totalQty));
                 },
                 error => {
                     console.log("error on search category " + error.message);
                 },
             );
         });
-    }
+    };
 
     refreshTableData() {
         this.setState({ tableData: this.state.tableData });
@@ -323,13 +314,13 @@ class Products extends Component {
 
     refresh() {
         //if( global.barcodeId != 'something'){
-        console.log(global.productname)
+        console.log(global.productname);
 
-        this.setState({ search: global.productname })
-        console.log('serach text is' + this.state.search)
+        this.setState({ search: global.productname });
+        console.log('serach text is' + this.state.search);
 
         // {this.updateSearch(global.productname)}
-        search = global.productname
+        search = global.productname;
         this.setState({ search }, () => {
             if ('' == search) {
                 this.setState({
@@ -343,19 +334,19 @@ class Products extends Component {
                 return { itemdesc, netamount, barcode, qty, image };
             });
         });
-        this.forceUpdate()
+        this.forceUpdate();
         // this.state.search
         // }
     }
 
     getBarcode() {
         //if( global.barcodeId != 'something'){
-        this.setState({ inventoryBarcodeId: global.barcodeId })
+        this.setState({ inventoryBarcodeId: global.barcodeId });
         // }
     }
 
     navigateToGetBarCode() {
-        global.barcodeId = 'something'
+        global.barcodeId = 'something';
         //this.setState({ barcodeId: global.barcodeId })
         this.props.navigation.navigate('ScanBarCode', {
             onGoBack: () => this.getBarcode(),
@@ -363,8 +354,7 @@ class Products extends Component {
     }
 
     navigateToImageScanner() {
-        this.setState({ flagqtyModelOpen: true })
-        this.setState({ modalVisible: true });
+        this.setState({ flagqtyModelOpen: true, modalVisible: true });
         // global.productname = 'something'
         // //this.setState({ barcodeId: global.barcodeId })
         // this.props.navigation.navigate('ImageScanner', {
@@ -377,7 +367,7 @@ class Products extends Component {
         const list = this.state.arrayData;
         list.splice(index, 1);
         this.setState({ arrayData: list });
-    }
+    };
 
     addnew() {
         this.props.navigation.navigate('ProductAdd', {
@@ -386,9 +376,9 @@ class Products extends Component {
     }
 
     refreshallProducts() {
-        this.setState({ arrayData: [] })
-        this.barcodeDBStore()
-        this.getItems()
+        this.setState({ arrayData: [] });
+        this.barcodeDBStore();
+        this.getItems();
     }
 
 
@@ -577,10 +567,10 @@ class Products extends Component {
                 </View>
             </View>
             //   </ScrollView>
-        )
+        );
     }
 }
-export default Products
+export default Products;
 
 
 const pickerSelectStyles = StyleSheet.create({
@@ -613,7 +603,7 @@ const pickerSelectStyles = StyleSheet.create({
         fontSize: 16,
         borderRadius: 3,
     },
-})
+});
 
 
 const styles = StyleSheet.create({

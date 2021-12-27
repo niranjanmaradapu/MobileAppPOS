@@ -36,14 +36,12 @@ export default class AddUser extends Component {
 
     datepickerDoneClicked() {
         // if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ dob: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() })
+        this.setState({ dob: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false })
         // }
-        this.setState({  doneButtonClicked: true, datepickerOpen: false })
     }
 
     datepickerCancelClicked() {
-        this.setState({ date: new Date() })
-        this.setState({ datepickerOpen: false })
+        this.setState({ date: new Date(), datepickerOpen: false })
     }
 
     handleBackButtonClick() {
