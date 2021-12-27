@@ -36,14 +36,17 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'chetan',
+            userName: 'veera',
             password: 'Otsi@123',
             dropValue: '',
             store: 0,
             user: {
                 name: "prasannaaa"
             },
-            storeNames: []
+            storeNames: [],
+            sessionData: '',
+            roleName: '',
+
 
         };
         console.log(process.env.REACT_APP_BASE_URL);
@@ -105,44 +108,80 @@ export default class Login extends Component {
             this.setState({ loading: true });
             axios.post(LoginService.getAuth(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    const token = res.data.result.authenticationResult.idToken;
-                    //==============================Token Key & phone number save ===================//
-                    AsyncStorage.setItem("tokenkey", JSON.stringify(token)).then(() => {
-                    }).catch(() => {
-                        console.log('there is error saving token');
-                    });
 
-                    AsyncStorage.getItem("tokenkey").then((value) => {
-                        var finalToken = value.replace('"', '');
-                        console.log(finalToken);
-                        axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken };
-                        //console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
-                    });
+                    if (res.data.result.authenticationResult) {
+                        const token = res.data.result.authenticationResult.idToken
+                        //==============================Token Key & phone number save ===================//
+                        AsyncStorage.setItem("tokenkey", JSON.stringify(token)).then(() => {
+                        }).catch(() => {
+                            console.log('there is error saving token')
+                        })
 
-                    AsyncStorage.setItem("phone_number", jwt_decode(token)["phone_number"]).then(() => {
-                        // console.log
-                    }).catch(() => {
-                        console.log('there is error saving domainDataId');
-                    });
+                        AsyncStorage.getItem("tokenkey").then((value) => {
+                            var finalToken = value.replace('"', '');
+                            console.log(finalToken);
+                            axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken }
+                            //console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
+                        })
 
-                    //==============================Navigation===================//
-                    if (jwt_decode(token)["custom:isSuperAdmin"] === "true") {
-                        AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
+                        AsyncStorage.setItem("phone_number", jwt_decode(token)["phone_number"]).then(() => {
                             // console.log
                         }).catch(() => {
-                            console.log('there is error saving domainDataId');
-                        });
-                        this.getDomainsList();
-                    } else {
-                        AsyncStorage.setItem("domainDataId", jwt_decode(token)["custom:domianId1"]).then(() => {
-                            // console.log
-                        }).catch(() => {
-                            console.log('there is error saving domainDataId');
-                        });
-                        this.getstoresForNormalUser();
+                            console.log('there is error saving domainDataId')
+                        })
+
+                        //==============================Navigation===================//
+                        if (jwt_decode(token)["custom:isSuperAdmin"] === "true") {
+                            AsyncStorage.setItem("custom:isSuperAdmin", "true").then(() => {
+                                // console.log
+                            }).catch(() => {
+                               
+                            })
+
+                            AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
+                                // console.log
+                            }).catch(() => {
+                                console.log('there is error saving domainDataId')
+                            })
+                            this.getDomainsList()
+                        }
+                        else if (jwt_decode(token)["custom:isConfigUser"] === "true") {
+                            AsyncStorage.setItem("custom:isConfigUser", "true").then(() => {
+                                // console.log
+                            }).catch(() => {
+                               
+                            })
+
+                            this.props.navigation.navigate('HomeNavigation')
+                        }
+                         else {
+                            AsyncStorage.setItem("domainDataId", jwt_decode(token)["custom:domianId1"]).then(() => {
+                                // console.log
+                            }).catch(() => {
+                                console.log('there is error saving domainDataId')
+                            })
+                            this.getstoresForNormalUser()
+                        }
+
+                        this.setState({ loading: false })
+                    }
+                    else {
+                        if (res.data.result.challengeName === "NEW_PASSWORD_REQUIRED") {
+
+                            const roleData = res.data.result
+                                ? JSON.parse(res.data.result.challengeParameters.userAttributes)
+                                : "";
+                            this.props.navigation.navigate('ManagePassword', {
+                                session: res.data.result.session,
+                                roleName: roleData["custom:roleName"],
+                                userName:this.state.userName,
+                                password:this.state.password,
+                            });
+                            console.log(this.state.sessionData)
+                            console.log(this.state.roleName);
+                        }
                     }
 
-                    this.setState({ loading: false });
                 }
                 else {
                     alert('Invalid Credentials');
@@ -150,7 +189,11 @@ export default class Login extends Component {
                     this.passwordValueInput.clear();
                     this.setState({ userName: '', password: '', selectedOption: null, loading: false });
                 }
+
+
             }
+
+
             );
         }
     }
@@ -190,7 +233,9 @@ export default class Login extends Component {
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
                     if (res.data["result"].length > 1) {
-                        this.props.navigation.navigate('SelectStore', { isFromDomain: false });
+
+                        this.props.navigation.navigate('SelectStore', { isFromDomain: false })
+
                     }
                     else {
                         AsyncStorage.setItem("storeId", String(res.data.result[0].id)).then(() => {
@@ -228,7 +273,9 @@ export default class Login extends Component {
                     this.props.navigation.navigate('HomeNavigation');
                 }
                 else {
-                    this.props.navigation.navigate('SelectStore', { isFromDomain: false });
+
+                    this.props.navigation.navigate('SelectStore', { isFromDomain: false })
+
                 }
             }
         });
@@ -237,31 +284,9 @@ export default class Login extends Component {
 
 
     forgotPassword() {
-        const params = {
-            "username": this.state.userName, //"+919493926067",
-            //"storeName": this.state.store,//"kphb",
-        };
-        AsyncStorage.setItem("username", this.state.userName);
-        console.log(LoginService.forgotPasswordCodeSent() + JSON.stringify(params));
-        // this.setState({ loading: true })
-        axios.post(LoginService.forgotPasswordCodeSent(), null, {
-            params: {
-                "username": this.state.userName
-            }
-        }).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                //  this.setState({ loading: false })
-                this.props.navigation.navigate('ForgotPassword', { username: this.state.userName });
-            }
-            else {
-                this.setState({ loading: false });
-                alert('Invalid Credentials');
-                // this.props.navigation.goBack(null);
-                // this.state.store = ""
-                // this.state.store.clear()
-            }
-        }
-        );
+
+     this.props.navigation.navigate('ForgotPassword', { username: this.state.userName });
+
     }
 
     async componentDidMount() {

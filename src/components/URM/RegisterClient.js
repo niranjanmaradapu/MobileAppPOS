@@ -6,6 +6,7 @@ var deviceWidth = Dimensions.get('window').width;
 import Device from 'react-native-device-detection';
 import Loader from '../loader';
 import axios from 'axios';
+import UrmService from '../services/UrmService';
 
 class RegisterClient extends Component {
     constructor(props) {
@@ -13,15 +14,15 @@ class RegisterClient extends Component {
         this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             userName: '',
-            organization:"",
-            mobile:'',
-            userEmail:"",
-            address:"",
+            organization: "",
+            mobile: '',
+            userEmail: "",
+            address: "",
         }
     }
 
     componentDidMount() {
-     
+
 
     }
     handleBackButtonClick() {
@@ -48,7 +49,7 @@ class RegisterClient extends Component {
         this.setState({ address: text })
     }
 
-   
+
 
     create() {
         if (this.state.userName.length === 0) {
@@ -60,36 +61,66 @@ class RegisterClient extends Component {
             alert('You must enter a email');
         }
         else {
-            alert('Please enter correct code recieved in mail');
-            this.props.navigation.navigate('ManagePassword')
-            // this.props.navigation.goBack(null);
-            //         const params = {
-            //             "username": this.state.userName, //"+919493926067",
-            //             "confirmarionCode": this.state.code, //"Mani@1123",
-            //             "newPassword": this.state.newPassword,
-            //             //"storeName": this.state.store,//"kphb",
-            //         }
-            //         AsyncStorage.setItem("username", this.state.userName);
-            //         console.log(LoginService.getAuth() + JSON.stringify(params))
-            //         this.setState({ loading: true })
-            //         axios.post(LoginService.forgotPassword(),null, { params: {
-            //             "username": this.state.userName, //"+919493926067",
-            //             "confirmarionCode": this.state.code, //"Mani@1123",
-            //             "newPassword": this.state.newPassword,
-            //            }}).then((res) => {
-            //             if (res.data && res.data["isSuccess"] === "true") {
-            //             this.setState({ loading: false })
-            //             this.props.navigation.goBack(null);
-            //         }
-            //             else {
-            //                 this.setState({ loading: false })
-            //                 alert('Invalid Credentials');
-            //                // this.props.navigation.goBack(null);
-            //                // this.state.store = ""
-            //                 // this.state.store.clear()
-            //             }
-            //         }
-            //         );
+            this.setState({ loading: true })
+            const obj = {
+                name: this.state.userName,
+                organizationName: this.state.organization,
+                address: this.state.address,
+                mobile: "+91".concat(this.state.mobile),
+                email: this.state.userEmail,
+            }
+            console.log('params are' + JSON.stringify(obj))
+            this.setState({ loading: true })
+            axios.post(UrmService.registerUser(), obj).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    const clientId = res.data.result.split(":");
+                    const clientObj = {
+                        email: this.state.userEmail,
+                        phoneNumber: "+91".concat(this.state.mobile),
+                        birthDate: "",
+                        gender: "",
+                        name: this.state.userName,
+                        username: this.state.userName.concat("_config_user"),
+                        tempPassword: "Otsi@1234",
+                        parentId: "",
+                        domianId: "",
+                        address: "",
+                        role: {
+                            roleName: "config_user",
+                        },
+                        roleName: "config_user",
+                        stores: [],
+                        clientId: clientId[1],
+                        isConfigUser: "true",
+                        clientDomain: [],
+                        isSuperAdmin: "false",
+                        createdBy: "NA",
+                    }
+
+                    axios.post(UrmService.saveUser(), clientObj).then((res) => {
+                        console.log(res);
+                        if (res) {
+                            alert("Username and Password are sent to  respective mailId");
+                            this.setState({
+                                userName: '',
+                                organization: "",
+                                mobile: '',
+                                userEmail: "",
+                                address: "",
+                            });
+                            this.setState({ loading: false })
+                            //  this.props.route.params.onGoBack();
+                            this.props.navigation.goBack();
+                        }
+                    })
+
+                }
+                else {
+                    this.setState({ loading: false })
+                    alert("duplicate record already exists");
+                }
+            }
+            );
         }
     }
 
@@ -103,15 +134,15 @@ class RegisterClient extends Component {
                         loading={this.state.loading} />
                 }
                 <SafeAreaView style={styles.mainContainer}>
-                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                    <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/backButton.png')} />
-                    </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                        Register New Client
-                    </Text>
-                </View>
-                <TextInput
+                    <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
+                        <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
+                            <Image source={require('../assets/images/backButton.png')} />
+                        </TouchableOpacity>
+                        <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                            Register New Client
+                        </Text>
+                    </View>
+                    <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Name"
@@ -182,8 +213,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-     // Styles For Mobile
-     viewsWidth_mobile: {
+    // Styles For Mobile
+    viewsWidth_mobile: {
         backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',

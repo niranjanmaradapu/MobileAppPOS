@@ -33,8 +33,8 @@ export default class Inventory extends Component {
             endDate: "",
             date: new Date(),
             enddate: new Date(),
-            barcodesData: [1, 2],
-            reBarcodesData: [1, 2],
+            barcodesData: [],
+            reBarcodesData: [],
             deleteBarcodeId: "",
             deleteBarcoeIndex: "",
             barcodeDelete: false,
@@ -386,10 +386,10 @@ export default class Inventory extends Component {
                                 <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
                                     <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
                                     <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>BARCODE: {"\n"}{item.barcode}</Text>
-                                    <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}> {"LIST PRICE:" + item.barcode} </Text>
+                                    <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>LIST PRICE:  {"\n"} ₹{item.productTextile.itemMrp} </Text>
                                     <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>STORE: {this.state.storeName}</Text>
-                                    <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {11}</Text>
-                                    <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>VALUE: {1000}</Text>
+                                    <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.productTextile.qty}</Text>
+                                    <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>VALUE: ₹{item.productTextile.value}</Text>
 
                                     {this.state.inventoryDelete && (
                                         <View>
@@ -1009,7 +1009,7 @@ const styles = StyleSheet.create({
     backButton_tablet: {
         position: 'absolute',
         left: 10,
-        top: 25,
+        top: 38,
         width: 90,
         height: 90,
     },
