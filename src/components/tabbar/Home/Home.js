@@ -7,12 +7,23 @@ import Constants from 'expo-constants';
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
 const dummmydata = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }, { key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
 import Device from 'react-native-device-detection';
+import axios from 'axios';
+import UrmService from '../../services/UrmService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            privilages:[],
         }
+    }
+
+
+    componentDidMount() {
+       
+
+      
     }
 
 
@@ -494,7 +505,7 @@ const styles = StyleSheet.create({
     menuButton_tablet: {
         position: 'absolute',
         left: 10,
-        top: 25,
+        top: 38,
         width: 90,
         height: 90,
     },

@@ -1074,7 +1074,7 @@ const styles = StyleSheet.create({
     menuButton_tablet: {
         position: 'absolute',
         left: 10,
-        top: 25,
+        top: 38,
         width: 90,
         height: 90,
     },
