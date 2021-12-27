@@ -820,54 +820,12 @@ class Promo extends Component {
 
                 </View>
 
-                <View style={styles.Topcontainer}>
-                    <TouchableOpacity style={{
-                        borderColor: '#353C40',
-                        height: 32,
-                        width: "33.3%",
-                        borderBottomLeftRadius: 5,
-                        borderTopLeftRadius: 5,
-                        borderLeftWidth: 1,
-                        borderTopWidth: 1,
-                        borderBottomWidth: 1,
-                        backgroundColor: this.state.flagone ? "#353C40" : "#FFFFFF",
-                        alignSelf: "flex-start",
-                        // //marginHorizontal: "1%",
-                        // marginBottom: 6,
-
-                    }}
+                <View style={Device.isTablet ? styles.modalContainer_tablet : styles.modalContainer_mobile}>
+                    <TouchableOpacity style={[this.state.flagone ? styles.modalActive : styles.modalInActive, Device.isTablet ? styles.modalButton_tablet : styles.modalButton_mobile, styles.modalButton1]}
                         onPress={() => this.topbarAction1()} >
-                        <View style={{
-                            //   borderColor: '#ED1C24',
-                            //   height: 50,
-                            //   width: "33.3%",
-                            //   borderBottomLeftRadius: 5,
-                            //   borderTopLeftRadius: 5,
-                            //   borderLeftWidth: 1,
-                            //   borderTopWidth: 1,
-                            //   borderBottomWidth: 1,
-                            //  backgroundColor: this.state.flagone ?  "#ED1C24" : "#FFFFFF",
-                            //  alignSelf: "flex-start",
-                            //  // //marginHorizontal: "1%",
-                            //  // marginBottom: 6,
-                        }}>
+                        <View>
 
-                            <Text style={{
-                                // borderColor: '#ED1C24',
-                                height: 32,
-                                width: 100,
-                                //   borderBottomLeftRadius: 5,
-                                //  borderTopLeftRadius: 5,
-                                //   borderBottomWidth: 1,
-                                //   borderTopWidth: 1,
-                                //   borderRightWidth: 1,
-                                color: this.state.flagone ? "#FFFFFF" : "#353C40",
-                                marginTop: 5,
-                                fontFamily: "medium",
-                                fontSize: 12,
-                                textAlign: 'center',
-                                alignItems: 'center',
-                            }}> Pools </Text>
+                            <Text style={[Device.isTablet ? styles.modalButtonText_tablet : styles.modalButtonText_mobile, this.state.flagone ? styles.modalActiveText : styles.modalInActiveText]}> Pools </Text>
 
 
                             {/* <Image source={this.state.flagone ? require('../assets/images/topSelect.png') : null} style={{
@@ -876,85 +834,22 @@ class Promo extends Component {
 
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{
-                        borderColor: '#353C40',
-                        height: 32,
-                        width: "33.3%",
-                        //  borderBottomLeftRadius: 5,
-                        //  borderTopLeftRadius: 5,
-                        borderLeftWidth: 1,
-                        borderTopWidth: 1,
-                        borderBottomWidth: 1,
-                        backgroundColor: this.state.flagtwo ? "#353C40" : "#FFFFFF",
-                        alignSelf: "flex-start",
-                    }}
+                    <TouchableOpacity style={[this.state.flagtwo ? styles.modalActive : styles.modalInActive, Device.isTablet ? styles.modalButton_tablet : styles.modalButton_mobile, styles.modalButton1]}
                         onPress={() => this.topbarAction2()} >
-                        <View style={{
-                            //   borderColor: '#ED1C24',
-                            //   height: 50,
-                            //   width: "33.3%",
-                            //   borderBottomLeftRadius: 5,
-                            //   borderTopLeftRadius: 5,
-                            //   borderBottomWidth: 1,
-                            //   borderTopWidth: 1,
-                            //   borderLeftWidth: 1,
-                            //  backgroundColor: this.state.flagone ?  "#ED1C24" : "#FFFFFF",
-                            //  alignSelf: "flex-start",
-                            //  // //marginHorizontal: "1%",
-                            //  // marginBottom: 6,
-                            //   width: "33.3%",
-                            //  // height: 50,
-                        }}>
+                        <View>
 
-                            <Text style={{
-                                borderColor: '#353C40',
-                                height: 32,
-                                width: 100,
-                                color: this.state.flagtwo ? "#FFFFFF" : "#353C40",
-                                marginTop: 5,
-                                fontFamily: "medium",
-                                fontSize: 12, textAlign: 'center', width: 100,
-
-                            }}> Manage Promo </Text>
+                            <Text style={[Device.isTablet ? styles.modalButtonText_tablet : styles.modalButtonText_mobile, this.state.flagtwo ? styles.modalActiveText : styles.modalInActiveText]}> Manage Promo </Text>
                             {/* <Image source={this.state.flagtwo ? require('../assets/images/topSelect.png') : null} style={{
                                 left: 30, marginTop: 5,
                             }} /> */}
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{
-                        borderColor: '#353C40',
-                        height: 32,
-                        width: "33.3%",
-                        borderBottomRightRadius: 5,
-                        borderTopRightRadius: 5,
-                        borderRightWidth: 1,
-                        borderLeftWidth: 1,
-                        borderTopWidth: 1,
-                        borderBottomWidth: 1,
-                        backgroundColor: this.state.flagthree ? "#353C40" : "#FFFFFF",
-                        alignSelf: "flex-start",
-                    }}
+                    <TouchableOpacity style={[this.state.flagthree ? styles.modalActive : styles.modalInActive, Device.isTablet ? styles.modalButton_tablet : styles.modalButton_mobile, styles.modalButton1]}
                         onPress={() => this.topbarAction3()} >
-                        <View style={{
-                            // backgroundColor: this.state.flagthree ? "#1CA2FF" : "#ED1C24",
-                            // alignSelf: "flex-start",
-                            // //marginHorizontal: "1%",
-                            // marginBottom: 6,
-                            // width: "33.3%",
-                            // height: 50,
-                            // textAlign: "center",
-                        }}>
+                        <View>
 
-                            <Text style={{
-                                borderColor: '#353C40',
-                                height: 32,
-                                width: 100,
-                                color: this.state.flagthree ? "#FFFFFF" : "#353C40",
-                                marginTop: 5,
-                                fontFamily: "medium",
-                                fontSize: 12, textAlign: 'center', width: 100,
-                            }}> Loyalty Points  </Text>
+                            <Text style={[Device.isTablet ? styles.modalButtonText_tablet : styles.modalButtonText_mobile, this.state.flagthree ? styles.modalActiveText : styles.modalInActiveText]}> Loyalty Points  </Text>
                             {/* <Image source={this.state.flagthree ? require('../assets/images/topSelect.png') : null} style={{
                                 left: 30, marginTop: 5,
                             }} /> */}
@@ -962,15 +857,7 @@ class Promo extends Component {
                     </TouchableOpacity>
                 </View>
                 {this.state.flagone && (
-                    <TouchableOpacity style={{
-                        position: 'absolute',
-                        left: 115,
-                        top: 147,
-                        width: 32,
-                        height: 30,
-                        borderColor: "lightgray",
-                        // borderRadius:5,
-                    }} onPress={() => this.togglePoolsActiveStatus()}>
+                    <TouchableOpacity style={Device.isTablet ? styles.actInactSwitch_tablet : styles.actInactSwitch_mobile} onPress={() => this.togglePoolsActiveStatus()}>
                         <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.poolsactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
                     </TouchableOpacity>
                 )}
@@ -978,9 +865,9 @@ class Promo extends Component {
 
                 {this.state.flagone && (
                     <TouchableOpacity
-                        style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 95, height: 32, }}
+                        style={Device.isTablet ? styles.actInactSwitchTextButton_tablet : styles.actInactSwitchTextButton_mobile}
                     >
-                        <Text style={{ fontSize: 16, fontFamily: 'regular', color: '#707070', marginLeft: 10, marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('Only active')} </Text>
+                        <Text style={Device.isTablet ? styles.actInactSwitchText_tablet : styles.actInactSwitchText_mobile}> {('Only active')} </Text>
                     </TouchableOpacity>
 
                 )}
@@ -988,9 +875,9 @@ class Promo extends Component {
                 {this.state.flagone && (
 
                     <TouchableOpacity
-                        style={{ position: 'absolute', right: 20, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
+                        style={Device.isTablet ? styles.navigationButton_tablet : styles.navigationButton_mobile}
                         onPress={() => this.navigateToAddPool()} >
-                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD POOL')} </Text>
+                        <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {('ADD POOL')} </Text>
                     </TouchableOpacity>
 
                 )}
@@ -998,7 +885,7 @@ class Promo extends Component {
                 {this.state.flagone && (
                     <FlatList
                         data={this.state.poolsData}
-                        style={{ marginTop: 40, }}
+                        style={{ marginTop: Device.isTablet ? 50 : 40, }}
                         scrollEnabled={
                             true
                         }
@@ -1191,15 +1078,7 @@ class Promo extends Component {
 
                 {this.state.flagtwo && (
 
-                    <TouchableOpacity style={{
-                        position: 'absolute',
-                        left: 115,
-                        top: 147,
-                        width: 32,
-                        height: 30,
-
-                        // borderRadius:5,
-                    }} onPress={() => this.togglePromoActiveStatus()}>
+                    <TouchableOpacity style={Device.isTablet ? styles.actInactSwitch_tablet : styles.actInactSwitch_mobile} onPress={() => this.togglePromoActiveStatus()}>
                         <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.promoactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
                     </TouchableOpacity>
                 )}
@@ -1207,9 +1086,9 @@ class Promo extends Component {
 
                 {this.state.flagtwo && (
                     <TouchableOpacity
-                        style={{ position: 'absolute', left: 10, top: 150, borderRadius: 5, width: 95, height: 32 }}
+                        style={Device.isTablet ? styles.actInactSwitchTextButton_tablet : styles.actInactSwitchTextButton_mobile}
                     >
-                        <Text style={{ fontSize: 16, fontFamily: 'regular', color: '#707070', marginLeft: 10, marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('Only active')} </Text>
+                        <Text style={Device.isTablet ? styles.actInactSwitchText_tablet : styles.actInactSwitchText_mobile}> {('Only active')} </Text>
                     </TouchableOpacity>
 
                 )}
@@ -1218,9 +1097,9 @@ class Promo extends Component {
                 {this.state.flagtwo && (
 
                     <TouchableOpacity
-                        style={{ position: 'absolute', right: 140, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
+                        style={Device.isTablet ? styles.navigationButton2_tablet : styles.navigationButton2_mobile}                    
                         onPress={() => this.navigateToAddPromo()} >
-                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD PROMO')} </Text>
+                        <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {('ADD PROMO')} </Text>
                     </TouchableOpacity>
 
                 )}
@@ -1228,9 +1107,9 @@ class Promo extends Component {
                 {this.state.flagtwo && (
 
                     <TouchableOpacity
-                        style={{ position: 'absolute', right: 20, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 100, height: 32, }}
+                        style={[Device.isTablet ? styles.navigationButton_tablet : styles.navigationButton_mobile, {width: Device.isTablet ? 150 : 90}]}                    
                         onPress={() => this.addStore()} >
-                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD TO STORE')} </Text>
+                        <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {('ADD TO STORE')} </Text>
                     </TouchableOpacity>
 
                 )}
@@ -1238,7 +1117,7 @@ class Promo extends Component {
                 {this.state.flagtwo && (
                     <FlatList
                         data={this.state.promoData}
-                        style={{ marginTop: 40, }}
+                        style={{ marginTop: Device.isTablet ? 50 : 40, }}
                         keyExtractor={item => item}
                         renderItem={({ item, index }) => (
                             <View style={{
@@ -1439,9 +1318,9 @@ class Promo extends Component {
                 {this.state.flagthree && (
 
                     <TouchableOpacity
-                        style={{ position: 'absolute', right: 20, top: 150, backgroundColor: '#ED1C24', borderRadius: 5, width: 90, height: 32, }}
+                        style={Device.isTablet ? styles.navigationButton_tablet : styles.navigationButton_mobile}
                         onPress={() => this.navigateToAddLoyalty()} >
-                        <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginTop: 8, textAlign: 'center', alignSelf: 'center' }}> {('ADD LOYALTY')} </Text>
+                        <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {('ADD LOYALTY')} </Text>
                     </TouchableOpacity>
 
                 )}
@@ -1449,7 +1328,7 @@ class Promo extends Component {
                 {this.state.flagthree && (
                     <FlatList
                         data={this.state.loyaltyData}
-                        style={{ marginTop: 40, }}
+                        style={{ marginTop: Device.isTablet ? 50 : 40, }}
                         keyExtractor={item => item}
                         renderItem={({ item, index }) => (
                             <View style={{
@@ -1552,59 +1431,20 @@ class Promo extends Component {
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
 
-                            <View style={{
-                                width: deviceWidth,
-                                alignItems: 'center',
-                                marginLeft: -20,
-                                backgroundColor: "#ffffff",
-                                height: 400,
-                                position: 'absolute',
-                                bottom: -20,
-                            }}>
+                            <View style={Device.isTablet ? styles.filterBarcodeContainer_tablet : styles.filterBarcodeContainer_mobile}>
                                 <KeyboardAwareScrollView KeyboardAwareScrollView
                                     enableOnAndroid={true}>
-                                    <Text style={{
-                                        position: 'absolute',
-                                        left: 20,
-                                        top: 15,
-                                        width: 300,
-                                        height: 20,
-                                        fontFamily: 'medium',
-                                        fontSize: 16,
-                                        color: '#353C40'
-                                    }}> Filter by </Text>
+                                    <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Filter by </Text>
 
-                                    <TouchableOpacity style={{
-                                        position: 'absolute',
-                                        right: 20,
-                                        top: 8,
-                                        width: 50, height: 50,
-                                    }} onPress={() => this.modelCancel()}>
-                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                    <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
-                                    <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                    <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
                                     </Text>
                                     <View style={{ marginTop: 10, width: deviceWidth, }}>
-                                        <View style={{
-                                            justifyContent: 'center',
-                                            margin: 20,
-                                            height: 44,
-                                            marginTop: 5,
-                                            marginBottom: 10,
-                                            borderColor: '#8F9EB717',
-                                            borderRadius: 3,
-                                            backgroundColor: '#FBFBFB',
-                                            borderWidth: 1,
-                                            fontFamily: 'regular',
-                                            paddingLeft: 15,
-                                            fontSize: 14,
-                                        }} >
-                                            <RNPickerSelect style={{
-                                                color: '#8F9EB717',
-                                                fontWeight: 'regular',
-                                                fontSize: 15
-                                            }}
+                                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
+                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                                 placeholder={{
                                                     label: 'SELECT CREATED BY',
 
@@ -1614,32 +1454,15 @@ class Promo extends Component {
                                                 }}
                                                 items={this.state.createdByArray}
                                                 onValueChange={this.handleCreatedBy}
-                                                style={pickerSelectStyles}
+                                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                 value={this.state.selectedcreatedBy}
                                                 useNativeAndroidPickerStyle={false}
 
                                             />
                                         </View>
 
-                                        <View style={{
-                                            justifyContent: 'center',
-                                            margin: 20,
-                                            height: 44,
-                                            marginTop: 5,
-                                            marginBottom: 10,
-                                            borderColor: '#8F9EB717',
-                                            borderRadius: 3,
-                                            backgroundColor: '#FBFBFB',
-                                            borderWidth: 1,
-                                            fontFamily: 'regular',
-                                            paddingLeft: 15,
-                                            fontSize: 14,
-                                        }} >
-                                            <RNPickerSelect style={{
-                                                color: '#8F9EB717',
-                                                fontWeight: 'regular',
-                                                fontSize: 15
-                                            }}
+                                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
+                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                                 placeholder={{
                                                     label: 'SELECT POOL TYPE',
 
@@ -1653,32 +1476,15 @@ class Promo extends Component {
                                                     { label: 'Both', value: 'Both' },
                                                 ]}
                                                 onValueChange={this.handlePoolType}
-                                                style={pickerSelectStyles}
+                                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                 value={this.state.selectedPoolType}
                                                 useNativeAndroidPickerStyle={false}
 
                                             />
                                         </View>
 
-                                        <View style={{
-                                            justifyContent: 'center',
-                                            margin: 20,
-                                            height: 44,
-                                            marginTop: 5,
-                                            marginBottom: 10,
-                                            borderColor: '#8F9EB717',
-                                            borderRadius: 3,
-                                            backgroundColor: '#FBFBFB',
-                                            borderWidth: 1,
-                                            fontFamily: 'regular',
-                                            paddingLeft: 15,
-                                            fontSize: 14,
-                                        }} >
-                                            <RNPickerSelect style={{
-                                                color: '#8F9EB717',
-                                                fontWeight: 'regular',
-                                                fontSize: 15
-                                            }}
+                                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
+                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                                 placeholder={{
                                                     label: 'SELECT STATUS',
 
@@ -1691,7 +1497,7 @@ class Promo extends Component {
                                                     { label: 'Inactive', value: 'Inactive' },
                                                 ]}
                                                 onValueChange={this.handleStatusBy}
-                                                style={pickerSelectStyles}
+                                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                 value={this.state.selectedStatus}
                                                 useNativeAndroidPickerStyle={false}
 
@@ -1699,35 +1505,17 @@ class Promo extends Component {
                                         </View>
                                     </View>
                                     <TouchableOpacity
-                                        style={{
-                                            width: deviceWidth - 40,
-                                            marginLeft: 20,
-                                            marginRight: 20,
-                                            marginTop: 20,
-                                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                        }} onPress={() => this.applyFilter()}
+                                        style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile} onPress={() => this.applyFilter()}
                                     >
-                                        <Text style={{
-                                            textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                            fontFamily: "regular"
-                                        }}  > APPLY </Text>
+                                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}  > APPLY </Text>
 
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
-                                        style={{
-                                            width: deviceWidth - 40,
-                                            marginLeft: 20,
-                                            marginRight: 20,
-                                            marginTop: 20,
-                                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                        }} onPress={() => this.modelCancel()}
+                                        style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
+                                        onPress={() => this.modelCancel()}
                                     >
-                                        <Text style={{
-                                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                            fontFamily: "regular"
-                                        }}  > CANCEL </Text>
-
+                                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}> CANCEL </Text>
                                     </TouchableOpacity>
                                 </KeyboardAwareScrollView>
                             </View>
@@ -1739,59 +1527,20 @@ class Promo extends Component {
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
 
-                            <View style={{
-                                width: deviceWidth,
-                                alignItems: 'center',
-                                marginLeft: -20,
-                                backgroundColor: "#ffffff",
-                                height: 520,
-                                position: 'absolute',
-                                bottom: -20,
-                            }}>
+                            <View style={Device.isTablet ? styles.filterBarcodeContainer_tablet : styles.filterBarcodeContainer_mobile}>
                                 <KeyboardAwareScrollView KeyboardAwareScrollView
                                     enableOnAndroid={true}>
-                                    <Text style={{
-                                        position: 'absolute',
-                                        left: 20,
-                                        top: 15,
-                                        width: 300,
-                                        height: 20,
-                                        fontFamily: 'medium',
-                                        fontSize: 16,
-                                        color: '#353C40'
-                                    }}> Filter by </Text>
+                                    <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Filter by </Text>
 
-                                    <TouchableOpacity style={{
-                                        position: 'absolute',
-                                        right: 20,
-                                        top: 8,
-                                        width: 50, height: 50,
-                                    }} onPress={() => this.modelCancel()}>
-                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
-                                    <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                    <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
                                     </Text>
                                     <View style={{ marginTop: 10, width: deviceWidth, }}>
-                                        <View style={{
-                                            justifyContent: 'center',
-                                            margin: 20,
-                                            height: 44,
-                                            marginTop: 5,
-                                            marginBottom: 10,
-                                            borderColor: '#8F9EB717',
-                                            borderRadius: 3,
-                                            backgroundColor: '#FBFBFB',
-                                            borderWidth: 1,
-                                            fontFamily: 'regular',
-                                            paddingLeft: 15,
-                                            fontSize: 14,
-                                        }} >
-                                            <RNPickerSelect style={{
-                                                color: '#8F9EB717',
-                                                fontWeight: 'regular',
-                                                fontSize: 15
-                                            }}
+                                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
+                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                                 placeholder={{
                                                     label: 'SELECT STORE',
 
@@ -1801,13 +1550,14 @@ class Promo extends Component {
                                                 }}
                                                 items={this.state.storeNames}
                                                 onValueChange={this.handleSelectStore}
-                                                style={pickerSelectStyles}
+                                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                 value={this.state.selectedStore}
                                                 useNativeAndroidPickerStyle={false}
                                             />
                                         </View>
 
-                                        <TextInput style={styles.input}
+                                        <TextInput 
+                                            style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                             underlineColorAndroid="transparent"
                                             placeholder="PROMO NAME"
                                             placeholderTextColor="#6F6F6F"
@@ -1824,7 +1574,7 @@ class Promo extends Component {
                                             width: 300,
                                             height: 20,
                                             fontFamily: 'regular',
-                                            fontSize: 12,
+                                            fontSize: Device.isTablet ? 17 : 12,
                                             color: '#353C40'
                                         }}> Start Date </Text>
                                         <TouchableOpacity
@@ -1832,10 +1582,12 @@ class Promo extends Component {
                                                 width: deviceWidth - 40,
                                                 marginLeft: 20,
                                                 marginRight: 20,
-                                                marginTop: 10,
+                                                height: Device.isTablet ? 54 : 44,
+                                                marginTop: Device.isTable ? 20 : 10,
                                                 borderColor: '#8F9EB717',
-                                                borderRadius: 3,
-                                                height: 50, backgroundColor: "#F6F6F6", borderRadius: 5,
+                                                borderRadius: 3, 
+                                                backgroundColor: "#F6F6F6", 
+                                                borderRadius: 5,
                                             }} testID="openModal"
 
                                             onPress={() => this.datepickerClicked()}
@@ -1855,7 +1607,7 @@ class Promo extends Component {
                                             width: 300,
                                             height: 20,
                                             fontFamily: 'regular',
-                                            fontSize: 12,
+                                            fontSize: Device.isTablet ? 17 :12,
                                             color: '#353C40'
                                         }}> End Date </Text>
 
@@ -1864,10 +1616,12 @@ class Promo extends Component {
                                                 width: deviceWidth - 40,
                                                 marginLeft: 20,
                                                 marginRight: 20,
-                                                marginTop: 10,
+                                                height: Device.isTablet ? 54 : 44,
+                                                marginTop: Device.isTable ? 20 : 10,
                                                 borderColor: '#8F9EB717',
                                                 borderRadius: 3,
-                                                height: 50, backgroundColor: "#F6F6F6", borderRadius: 5,
+                                                backgroundColor: "#F6F6F6",
+                                                borderRadius: 5,
                                             }} testID="openModal"
 
                                             onPress={() => this.enddatepickerClicked()}
@@ -1954,25 +1708,8 @@ class Promo extends Component {
                                         )}
 
 
-                                        <View style={{
-                                            justifyContent: 'center',
-                                            margin: 20,
-                                            height: 44,
-                                            marginTop: 5,
-                                            marginBottom: 10,
-                                            borderColor: '#8F9EB717',
-                                            borderRadius: 3,
-                                            backgroundColor: '#FBFBFB',
-                                            borderWidth: 1,
-                                            fontFamily: 'regular',
-                                            paddingLeft: 15,
-                                            fontSize: 14,
-                                        }} >
-                                            <RNPickerSelect style={{
-                                                color: '#8F9EB717',
-                                                fontWeight: 'regular',
-                                                fontSize: 15
-                                            }}
+                                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
+                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                                 placeholder={{
                                                     label: 'SELECT STATUS',
 
@@ -1985,7 +1722,7 @@ class Promo extends Component {
                                                     { label: 'Inactive', value: 'Inactive' },
                                                 ]}
                                                 onValueChange={this.handleStatusBy}
-                                                style={pickerSelectStyles}
+                                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                 value={this.state.selectedStatus}
                                                 useNativeAndroidPickerStyle={false}
 
@@ -1993,34 +1730,16 @@ class Promo extends Component {
                                         </View>
                                     </View>
                                     <TouchableOpacity
-                                        style={{
-                                            width: deviceWidth - 40,
-                                            marginLeft: 20,
-                                            marginRight: 20,
-                                            marginTop: 20,
-                                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                        }} onPress={() => this.applyFilterForPromotions()}
+                                        style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile} onPress={() => this.applyFilterForPromotions()}
                                     >
-                                        <Text style={{
-                                            textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                            fontFamily: "regular"
-                                        }}  > APPLY </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > APPLY </Text>
 
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
-                                        style={{
-                                            width: deviceWidth - 40,
-                                            marginLeft: 20,
-                                            marginRight: 20,
-                                            marginTop: 20,
-                                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                        }} onPress={() => this.modelCancel()}
+                                        style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
                                     >
-                                        <Text style={{
-                                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                            fontFamily: "regular"
-                                        }}  > CANCEL </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
 
                                     </TouchableOpacity>
                                 </KeyboardAwareScrollView>
@@ -2232,7 +1951,7 @@ class Promo extends Component {
                                                 }}
                                                 items={this.state.uom}
                                                 onValueChange={this.handleUOM}
-                                                style={pickerSelectStyles}
+                                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                 value={this.state.productuom}
                                                 useNativeAndroidPickerStyle={false}
 
@@ -2287,7 +2006,7 @@ class Promo extends Component {
                                                     }}
                                                     items={this.state.uom}
                                                     onValueChange={this.handleUOM}
-                                                    style={pickerSelectStyles}
+                                                    style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                     value={this.state.productuom}
                                                     useNativeAndroidPickerStyle={false}
 
@@ -2418,7 +2137,7 @@ class Promo extends Component {
                                                 }}
 
                                                 onValueChange={this.handleSelectPromotionType}
-                                                style={pickerSelectStyles}
+                                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                 value={this.state.selectedPromotionType}
                                                 useNativeAndroidPickerStyle={false}
 
@@ -2454,7 +2173,7 @@ class Promo extends Component {
                                                 }}
                                                 // items={this.state.uom}
                                                 onValueChange={this.handlePromotionName}
-                                                style={pickerSelectStyles}
+                                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                 value={this.state.selectedPromotionName}
                                                 useNativeAndroidPickerStyle={false}
 
@@ -2489,7 +2208,7 @@ class Promo extends Component {
                                                 }}
                                                 items={this.state.storeNames}
                                                 onValueChange={this.handleSelectStore}
-                                                style={pickerSelectStyles}
+                                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                 value={this.state.selectedStore}
                                                 useNativeAndroidPickerStyle={false}
 
@@ -2685,8 +2404,7 @@ class Promo extends Component {
 }
 export default Promo
 
-
-const pickerSelectStyles = StyleSheet.create({
+const pickerSelectStyles_mobile = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
@@ -2728,6 +2446,47 @@ const pickerSelectStyles = StyleSheet.create({
     },
 })
 
+const pickerSelectStyles_tablet = StyleSheet.create({
+    placeholder: {
+        color: "#6F6F6F",
+        fontFamily: "regular",
+        fontSize: 20,
+    },
+    inputIOS: {
+        justifyContent: 'center',
+        height: 52,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 20,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+    },
+    inputAndroid: {
+        justifyContent: 'center',
+        height: 52,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 20,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+        color: '#001B4A',
+
+        // marginLeft: 20,
+        // marginRight: 20,
+        // marginTop: 10,
+        // height: 40,
+        // backgroundColor: '#ffffff',
+        // borderBottomColor: '#456CAF55',
+        // color: '#001B4A',
+        // fontFamily: "bold",
+        // fontSize: 16,
+        // borderRadius: 3,
+    },
+})
 
 
 const styles = StyleSheet.create({
@@ -3153,6 +2912,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
 
+
+    modalActive: {
+        backgroundColor: '#000000',
+    },
+    modalInActive: {
+        backgroundColor: '#ffffff',
+    },
+    modalActiveText: {
+        color: '#ffffff',
+    },
+    modalInActiveText: {
+        color: '#000000',
+    },
+
     // Styles For Mobile
     viewsWidth_mobile: {
         backgroundColor: '#ffffff',
@@ -3177,6 +2950,241 @@ const styles = StyleSheet.create({
         fontFamily: 'bold',
         fontSize: 18,
         color: '#353C40'
+    },
+     modalContainer_mobile: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignSelf: 'center',
+        borderRadius: 5,
+        marginTop: 20,
+        borderColor: '#ED1C24',
+        width: '100%',
+        height: 50,
+    },
+    modalButton_mobile: {
+        borderColor: '#353C40',
+        height: 32,
+        width: "33.3%",
+        borderWidth: 1,
+        alignSelf: "flex-start",
+    },
+    modalButtonText_mobile: {
+        height: 32,
+        width: 100,
+        marginTop: 5,
+        fontFamily: "medium",
+        fontSize: 12,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    navigationButton_mobile: {
+        position: 'absolute',
+        right: 30,
+        top: 150,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 90,
+        height: 32,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    navigationButton2_mobile: {
+        position: 'absolute',
+        right: 130,
+        top: 150,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 90,
+        height: 32,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    navigationButtonText_mobile: {
+        fontSize: 12,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginTop: 8,
+        textAlign: 'center',
+        alignSelf: 'center'
+    },
+    actInactSwitch_mobile: {
+        position: 'absolute',
+        left: 115,
+        top: 150,
+        width: 32,
+        height: 30,
+        borderColor: "lightgray",
+        // borderRadius:5,
+    },
+    actInactSwitchTextButton_mobile: { 
+        position: 'absolute', 
+        left: 10, 
+        top: 150, 
+        borderRadius: 5, 
+        width: 95, 
+        height: 32, 
+    },
+    actInactSwitchText_mobile: { 
+        fontSize: 16, 
+        fontFamily: 'regular', 
+        color: '#707070', 
+        marginLeft: 10, 
+        marginTop: 8, 
+        textAlign: 'center', 
+        alignSelf: 'center' 
+    },
+    filterBarcodeContainer_mobile: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -20,
+        backgroundColor: "#ffffff",
+        height: 500,
+        position: 'absolute',
+        bottom: -20,
+    },
+    filterByTitle_mobile: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 20,
+        fontFamily: 'medium',
+        fontSize: 16,
+        color: '#353C40'
+    },
+    filterByTitleDecoration_mobile: {
+        height: 1,
+        width: deviceWidth,
+        backgroundColor: 'lightgray',
+        marginTop: 50,
+    },
+    filterCloseButton_mobile: {
+        position: 'absolute',
+        right: 8,
+        top: 15,
+        width: 50, height: 50,
+    },
+    filterCloseImage_mobile: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 12,
+        position: 'absolute',
+        top: 10,
+        right: 0,
+    },
+    filterDateButton_mobile: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        height: 50,
+        backgroundColor: "#F6F6F6",
+        borderRadius: 5,
+    },
+    filterDateButtonText_mobile: {
+        marginLeft: 16,
+        marginTop: 20,
+        color: "#6F6F6F",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+    datePickerContainer_mobile: {
+        height: 280,
+        width: deviceWidth,
+        backgroundColor: '#ffffff'
+    },
+    datePickerButton_mobile: {
+        position: 'absolute',
+        left: 20,
+        top: 10,
+        height: 30,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    datePickerEndButton_mobile: {
+        position: 'absolute',
+        right: 20,
+        top: 10,
+        height: 30,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    datePickerButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 5,
+        color: "#ffffff",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+    input_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    filterApplyButton_mobile: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 50,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    filterButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#ffffff",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+    filterCancelButton_mobile: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 50,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    filterButtonCancelText_mobile: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#000000",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+    rnSelect_mobile: {
+        color: '#8F9EB7',
+        fontSize: 15
+    },
+    rnSelectContainer_mobile: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
     },
 
     // Styles For Tablet
@@ -3203,5 +3211,249 @@ const styles = StyleSheet.create({
         fontFamily: 'bold',
         fontSize: 24,
         color: '#353C40'
+    },
+    modalContainer_tablet: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignSelf: 'center',
+        borderRadius: 5,
+        marginTop: 20,
+        borderColor: '#ED1C24',
+        width: '100%',
+        height: 50,
+    },
+    modalButton_tablet: {
+        borderColor: '#353C40',
+        height: 42,
+        width: "33.3%",
+        borderWidth: 1,
+        alignSelf: "flex-start",
+    },
+    modalButtonText_tablet: {
+        height: 42,
+        width: 210,
+        marginTop: 5,
+        fontFamily: "medium",
+        fontSize: 17,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    navigationButton_tablet: {
+        position: 'absolute',
+        right: 30,
+        top: 170,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 120,
+        height: 32,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    navigationButton2_tablet: {
+        position: 'absolute',
+        right: 200,
+        top: 170,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 120,
+        height: 32,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    navigationButtonText_tablet: {
+        fontSize: 17,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginTop: 6,
+        textAlign: 'center',
+        alignSelf: 'center'
+    },
+    actInactSwitch_tablet: {
+        position: 'absolute',
+        left: 140,
+        top: 172,
+        width: 42,
+        height: 40,
+        borderColor: "lightgray",
+        // borderRadius:5,
+    },
+    actInactSwitchTextButton_tablet: { 
+        position: 'absolute', 
+        left: 10, 
+        top: 169, 
+        borderRadius: 5, 
+        width: 125, 
+        height: 32, 
+    },
+    actInactSwitchText_tablet: { 
+        fontSize: 21, 
+        fontFamily: 'regular', 
+        color: '#707070', 
+        marginLeft: 10, 
+        marginTop: 8, 
+        textAlign: 'center', 
+        alignSelf: 'center' 
+    },
+    filterBarcodeContainer_tablet: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -40,
+        backgroundColor: "#ffffff",
+        height: 600,
+        position: 'absolute',
+        bottom: -40,
+    },
+    filterByTitle_tablet: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 30,
+        fontFamily: 'medium',
+        fontSize: 21,
+        color: '#353C40'
+    },
+    filterByTitleDecoration_tablet: {
+        height: 1,
+        width: deviceWidth,
+        backgroundColor: 'lightgray',
+        marginTop: 60,
+    },
+    filterCloseButton_tablet: {
+        position: 'absolute',
+        right: 24,
+        top: 10,
+        width: 60, height: 60,
+    },
+    filterCloseImage_tablet: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 17,
+        position: 'absolute',
+        top: 10,
+        right: 24,
+    },
+    filterDateButton_tablet: {
+        width: deviceWidth - 30,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        height: 60,
+        backgroundColor: "#F6F6F6",
+        borderRadius: 5,
+    },
+    filterDateButtonText_tablet: {
+        marginLeft: 16,
+        marginTop: 20,
+        color: "#6F6F6F",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    datePickerButton_tablet: {
+        position: 'absolute',
+        left: 20,
+        top: 10,
+        height: 40,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    datePickerButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 5,
+        color: "#ffffff",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    datePickerEndButton_tablet: {
+        position: 'absolute',
+        right: 20,
+        top: 10,
+        height: 40,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    input_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    filterApplyButton_tablet: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 60,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    filterButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#ffffff",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    filterCancelButton_tablet: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 60,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    filterButtonCancelText_tablet: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#000000",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    flatlistContainer_tablet: {
+        height: 160,
+        backgroundColor: '#FBFBFB',
+        borderBottomWidth: 5,
+        borderBottomColor: '#FFFFFF',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    flatlistSubContainer_tablet: {
+        flexDirection: 'column',
+        width: '100%',
+        height: 160,
+    },
+    rnSelect_tablet: {
+        color: '#8F9EB7',
+        fontSize: 20
+    },
+    rnSelectContainer_tablet: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
     },
 });

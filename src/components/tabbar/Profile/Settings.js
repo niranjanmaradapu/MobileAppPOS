@@ -268,20 +268,10 @@ class Settings extends Component {
 
                                 <View style={{ marginTop: 0, width: deviceWidth }}>
 
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> NAME: </Text>
 
-
-                                    <Text style={{
-                                        position: 'absolute',
-                                        left: 20,
-                                        top: 0,
-                                        width: 300,
-                                        height: 20,
-                                        fontFamily: 'regular',
-                                        fontSize: 12,
-                                        color: '#353C40'
-                                    }}> NAME: </Text>
-
-                                    <TextInput style={styles.barcodeinput}
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
                                         placeholder="NAME"
                                         editable={false} selectTextOnFocus={false}
@@ -294,42 +284,26 @@ class Settings extends Component {
 
 
                                 </View>
-
-                                <Text style={{
-                                    position: 'absolute',
-                                    left: 20,
-                                    top: 220,
-                                    width: 300,
-                                    height: 20,
-                                    fontFamily: 'regular',
-                                    fontSize: 12,
-                                    color: '#353C40'
-                                }}> DIGIGNATION: </Text>
-
-                                <TextInput style={styles.barcodeinput}
-                                    editable={false} selectTextOnFocus={false}
-                                    underlineColorAndroid="transparent"
-                                    placeholder="DIGIGNATION"
-                                    placeholderTextColor="#353C4050"
-                                    textAlignVertical="center"
-                                    autoCapitalize="none"
-                                    value={this.state.role}
-                                    onChangeText={this.handleRole}
-                                />
-
                                 <View>
-                                    <Text style={{
-                                        position: 'absolute',
-                                        left: 20,
-                                        top: 0,
-                                        width: 300,
-                                        height: 20,
-                                        fontFamily: 'regular',
-                                        fontSize: 12,
-                                        color: '#353C40'
-                                    }}> EMAIL: </Text>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> DIGIGNATION: </Text>
 
-                                    <TextInput style={styles.phoneinput}
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        editable={false} selectTextOnFocus={false}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="DIGIGNATION"
+                                        placeholderTextColor="#353C4050"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.role}
+                                        onChangeText={this.handleRole}
+                                    />
+                                </View>
+                                <View>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> EMAIL: </Text>
+
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
                                         placeholder="EMAIL"
                                         placeholderTextColor="#353C4050"
@@ -350,18 +324,10 @@ class Settings extends Component {
                                 </View>
 
                                 <View>
-                                    <Text style={{
-                                        position: 'absolute',
-                                        left: 20,
-                                        top: 0,
-                                        width: 300,
-                                        height: 20,
-                                        fontFamily: 'regular',
-                                        fontSize: 12,
-                                        color: '#353C40'
-                                    }}> MOBILE NUMBER: </Text>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> MOBILE NUMBER: </Text>
 
-                                    <TextInput style={styles.phoneinput}
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
                                         placeholder="MOBILE NUMBER"
                                         placeholderTextColor="#353C4050"
@@ -371,111 +337,68 @@ class Settings extends Component {
                                         onChangeText={this.handleMobileNumber}
                                     />
                                 </View>
+                                <View>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> GENDER: </Text>
 
-                                <Text style={{
-                                    position: 'absolute',
-                                    left: 20,
-                                    top: 445,
-                                    width: 300,
-                                    height: 20,
-                                    fontFamily: 'regular',
-                                    fontSize: 12,
-                                    color: '#353C40'
-                                }}> GENDER: </Text>
+                                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
+                                        <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            placeholder={{
+                                                label: 'SELECT GENDER',
+                                                value: " ",
+                                            }}
+                                            Icon={() => {
+                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                            }}
+                                            items={[
+                                                { label: 'MALE', value: 'MALE' },
+                                                { label: 'FEMALE', value: 'FEMALE' },
+                                                { label: 'PREFER NOT TO SAY', value: 'PREFER NOT TO SAY' },
+                                            ]}
+                                            onValueChange={this.handleGender}
+                                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                            value={this.state.selectedGender}
+                                            useNativeAndroidPickerStyle={false}
 
-                                <View style={{
-                                    justifyContent: 'center',
-                                    margin: 20,
-                                    height: 44,
-                                    marginTop: 25,
-                                    marginBottom: 10,
-                                    borderColor: '#8F9EB717',
-                                    borderRadius: 3,
-                                    backgroundColor: '#FBFBFB',
-                                    borderWidth: 1,
-                                    fontFamily: 'regular',
-                                    paddingLeft: 15,
-                                    fontSize: 14,
-                                }} >
-                                    <RNPickerSelect style={{
-                                        color: '#8F9EB717',
-                                        fontWeight: 'regular',
-                                        fontSize: 15
-                                    }}
-                                        placeholder={{
-                                            label: 'SELECT GENDER',
-                                            value: " ",
-                                        }}
-                                        Icon={() => {
-                                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                        }}
-                                        items={[
-                                            { label: 'MALE', value: 'MALE' },
-                                            { label: 'FEMALE', value: 'FEMALE' },
-                                            { label: 'PREFER NOT TO SAY', value: 'PREFER NOT TO SAY' },
-                                        ]}
-                                        onValueChange={this.handleGender}
-                                        style={pickerSelectStyles}
-                                        value={this.state.selectedGender}
-                                        useNativeAndroidPickerStyle={false}
-
-                                    />
+                                        />
+                                    </View>
                                 </View>
 
 
-
-
-                                <Text style={{
-                                    position: 'absolute',
-                                    left: 20,
-                                    top: 525,
-                                    width: 300,
-                                    height: 20,
-                                    fontFamily: 'regular',
-                                    fontSize: 12,
-                                    color: '#353C40'
-                                }}> DATE OF BIRTH: </Text>
-
-                                <TouchableOpacity
-                                    style={{
-                                        justifyContent: 'center',
-                                        margin: 20,
-                                        height: 44,
-                                        marginTop: 25,
-                                        marginBottom: 10,
-                                        borderColor: '#8F9EB717',
-                                        borderRadius: 3,
-                                        backgroundColor: '#FBFBFB',
-                                        borderWidth: 1,
-                                        fontFamily: 'regular',
-                                        paddingLeft: 15,
-                                        fontSize: 14,
-                                    }} testID="openModal"
-
-                                    onPress={() => this.datepickerClicked()}
-                                >
-                                    <Text style={{
-                                        marginLeft: 0, marginTop: 0, color: "#6F6F6F", fontSize: 15,
-                                        fontFamily: "regular"
-                                    }}  > {this.state.dateOfBirth} </Text>
-                                    <Image style={{ position: 'absolute', top: 5, right: 0, }} source={require('../../assets/images/calender.png')} />
-                                </TouchableOpacity>
-
-
                                 <View>
-                                    <Text style={{
-                                        position: 'absolute',
-                                        left: 20,
-                                        top: 0,
-                                        width: 300,
-                                        height: 20,
-                                        fontFamily: 'regular',
-                                        fontSize: 12,
-                                        color: '#353C40'
-                                    }}> ADDRESS: </Text>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> DATE OF BIRTH: </Text>
+
+                                    <TouchableOpacity
+                                        style={{
+                                            justifyContent: 'center',
+                                            margin: 20,
+                                            height: Device.isTablet ? 54 : 44,
+                                            marginTop: Device.isTable ? 25 : 15,
+                                            marginBottom: Device.isTablet ? 25 : 15,
+                                            borderColor: '#8F9EB717',
+                                            borderRadius: 3,
+                                            backgroundColor: '#FBFBFB',
+                                            borderWidth: 1,
+                                            fontFamily: 'regular',
+                                            paddingLeft: 15,
+                                            fontSize: Device.isTablet ? 20 : 14,
+                                        }} testID="openModal"
+
+                                        onPress={() => this.datepickerClicked()}
+                                    >
+                                        <Text style={{
+                                            marginLeft: 0, marginTop: 0, color: "#6F6F6F", fontSize: Device.isTablet ? 20 : 14,
+                                            fontFamily: "regular"
+                                        }}  > {this.state.dateOfBirth} </Text>
+                                        <Image style={{ position: 'absolute', top: 5, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                    </TouchableOpacity>
+
+                                </View>
+                                <View>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> ADDRESS: </Text>
 
 
-                                    <TextInput style={styles.phoneinput}
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
                                         placeholder="ADDRESS"
                                         placeholderTextColor="#353C4050"
@@ -504,16 +427,10 @@ class Settings extends Component {
 
 
                                 <TouchableOpacity
-                                    style={{
-                                        margin: 20,
-                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                    }} onPress={() => this.profileUpdate()}
+                                    style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+                                    onPress={() => this.profileUpdate()}
                                 >
-                                    <Text style={{
-                                        textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                        fontFamily: "regular"
-                                    }}  > SAVE </Text>
-
+                                    <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}> SAVE </Text>
                                 </TouchableOpacity>
                             </View>
 
@@ -564,9 +481,9 @@ class Settings extends Component {
 }
 export default Settings;
 
-const pickerSelectStyles = StyleSheet.create({
+const pickerSelectStyles_mobile = StyleSheet.create({
     placeholder: {
-        color: "#353C4050",
+        color: "#6F6F6F",
         fontFamily: "regular",
         fontSize: 15,
     },
@@ -591,6 +508,7 @@ const pickerSelectStyles = StyleSheet.create({
         fontSize: 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
+        color: '#001B4A',
 
         // marginLeft: 20,
         // marginRight: 20,
@@ -598,7 +516,49 @@ const pickerSelectStyles = StyleSheet.create({
         // height: 40,
         // backgroundColor: '#ffffff',
         // borderBottomColor: '#456CAF55',
+        // color: '#001B4A',
+        // fontFamily: "bold",
+        // fontSize: 16,
+        // borderRadius: 3,
+    },
+});
+
+const pickerSelectStyles_tablet = StyleSheet.create({
+    placeholder: {
+        color: "#6F6F6F",
+        fontFamily: "regular",
+        fontSize: 20,
+    },
+    inputIOS: {
+        justifyContent: 'center',
+        height: 52,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 20,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+    },
+    inputAndroid: {
+        justifyContent: 'center',
+        height: 52,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 20,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
         color: '#001B4A',
+
+        // marginLeft: 20,
+        // marginRight: 20,
+        // marginTop: 10,
+        // height: 40,
+        // backgroundColor: '#ffffff',
+        // borderBottomColor: '#456CAF55',
+        // color: '#001B4A',
         // fontFamily: "bold",
         // fontSize: 16,
         // borderRadius: 3,
@@ -1063,6 +1023,63 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#353C40'
     },
+    input_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 15,
+        marginBottom: 15,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    inputHeader_mobile: {
+        position: 'absolute',
+        left: 20,
+        top: 0,
+        width: 300,
+        height: 20,
+        fontFamily: 'regular',
+        fontSize: 12,
+        color: '#353C40'
+    },
+    rnSelect_mobile: {
+        color: '#8F9EB7',
+        fontSize: 15
+    },
+    rnSelectContainer_mobile: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 44,
+        marginTop: 15,
+        marginBottom: 15,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    saveButton_mobile: {
+        margin: 8,
+        height: 50,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+        marginBottom: 40,
+    },
+    saveButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#ffffff",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
 
     // Styles For Tablet
     viewsWidth_tablet: {
@@ -1088,5 +1105,62 @@ const styles = StyleSheet.create({
         fontFamily: 'bold',
         fontSize: 24,
         color: '#353C40'
+    },
+    input_tablet: {
+        justifyContent: 'center',
+        marginLeft: 25,
+        marginRight: 25,
+        height: 54,
+        marginTop: 20,
+        marginBottom: 20,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    inputHeader_tablet: {
+        position: 'absolute',
+        left: 20,
+        top: -5,
+        width: 300,
+        height: 20,
+        fontFamily: 'regular',
+        fontSize: 17,
+        color: '#353C40'
+    },
+    rnSelect_tablet: {
+        color: '#8F9EB7',
+        fontSize: 20
+    },
+    rnSelectContainer_tablet: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 54,
+        marginTop: 25,
+        marginBottom: 25,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    saveButton_tablet: {
+        margin: 8,
+        height: 60,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+        marginBottom: 50,
+    },
+    saveButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#ffffff",
+        fontSize: 20,
+        fontFamily: "regular"
     },
 });
