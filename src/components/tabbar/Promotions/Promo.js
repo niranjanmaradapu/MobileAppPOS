@@ -22,7 +22,7 @@ class Promo extends Component {
         this.camera = null;
         this.barcodeCodes = [];
         this.state = {
-            barcodeId: "",  
+            barcodeId: "",
             flagone: true,
             flagtwo: false,
             flagthree: false,
@@ -70,20 +70,20 @@ class Promo extends Component {
             storeNamesArray: [],
             storeNames: [],
             storeId: 1,
-        }
+        };
     }
 
     async componentDidMount() {
-        var domainStringId = ""
+        var domainStringId = "";
         AsyncStorage.getItem("domainDataId").then((value) => {
-            domainStringId = value
-            this.setState({ domainId: parseInt(domainStringId) })
-            console.log("domain data id" + this.state.domainId)
-            this.getAllpools()
+            domainStringId = value;
+            this.setState({ domainId: parseInt(domainStringId) });
+            console.log("domain data id" + this.state.domainId);
+            this.getAllpools();
 
         }).catch(() => {
-            console.log('there is error getting domainDataId')
-        })
+            console.log('there is error getting domainDataId');
+        });
 
 
         const username = await AsyncStorage.getItem("username");
@@ -91,20 +91,20 @@ class Promo extends Component {
         axios.get(LoginService.getUserStores() + username).then((res) => {
             if (res.data["result"]) {
                 for (var i = 0; i < res.data["result"].length; i++) {
-                    let number = res.data.result[i]
-                    const myArray = []
+                    let number = res.data.result[i];
+                    const myArray = [];
                     myArray = number.split(":");
-                    this.state.storeNamesArray.push({ name: myArray[0], id: myArray[1] })
-                    console.log(this.state.storeNamesArray)
+                    this.state.storeNamesArray.push({ name: myArray[0], id: myArray[1] });
+                    console.log(this.state.storeNamesArray);
                     storeNames.push({
                         value: this.state.storeNamesArray[i].name,
                         label: this.state.storeNamesArray[i].name
                     });
                     this.setState({
                         storeNames: storeNames,
-                    })
+                    });
 
-                    this.setState({ storeNamesArray: this.state.storeNamesArray })
+                    this.setState({ storeNamesArray: this.state.storeNamesArray });
 
                 }
 
@@ -143,139 +143,139 @@ class Promo extends Component {
 
 
     getAllpools = () => {
-        this.setState({ poolsData: [], loading: true })
+        this.setState({ poolsData: [], loading: true });
         const params = {
             "domainId": this.state.domainId,
             "isActive": true
-        }
-        console.log(this.state.domainId)
+        };
+        console.log(this.state.domainId);
         axios.get(PromotionsService.getAllPools(),
             { params }).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     let len = res.data["result"]["poolvo"].length;
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let number = res.data["result"]["poolvo"][i]
+                            let number = res.data["result"]["poolvo"][i];
                             if (number.createdBy != null) {
-                                this.state.createdByTempArray.push({ label: number.createdBy, value: number.createdBy })
+                                this.state.createdByTempArray.push({ label: number.createdBy, value: number.createdBy });
                             }
 
-                            this.setState({ createdByTempArray: this.state.createdByTempArray })
+                            this.setState({ createdByTempArray: this.state.createdByTempArray });
 
                             if (this.state.poolsactiveStatus === false) {
                                 if (number.isActive == false) {
-                                    this.state.poolsData.push(number)
+                                    this.state.poolsData.push(number);
                                 }
 
                             }
                             if (this.state.poolsactiveStatus === true) {
                                 if (number.isActive == true) {
-                                    console.log('----addedactivepools')
-                                    this.state.poolsData.push(number)
+                                    console.log('----addedactivepools');
+                                    this.state.poolsData.push(number);
                                 }
 
                             }
-                            this.setState({ poolsData: this.state.poolsData })
+                            this.setState({ poolsData: this.state.poolsData });
 
                         }
                     }
                     this.state.createdByTempArray.forEach(obj => {
                         if (!this.state.createdByArray.some(o => o.value === obj.value)) {
-                            this.state.createdByArray.push({ ...obj })
+                            this.state.createdByArray.push({ ...obj });
                         }
-                        this.setState({ createdByArray: this.state.createdByArray })
+                        this.setState({ createdByArray: this.state.createdByArray });
                     });
 
-                    return
+                    return;
                 }
             }).catch(() => {
-                this.setState({ loading: false })
-                alert('No Records Found')
-            })
+                this.setState({ loading: false });
+                alert('No Records Found');
+            });
 
     };
 
 
     getLoyaltyPoints = () => {
-        this.setState({ loyaltyData: [], loading: true })
+        this.setState({ loyaltyData: [], loading: true });
         const params = {
 
-        }
-        console.log(this.state.domainId)
+        };
+        console.log(this.state.domainId);
         axios.get(PromotionsService.getLoyaltyPoints(),
             { params }).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     let len = res.data["result"].length;
-                    console.log(res.data["result"])
+                    console.log(res.data["result"]);
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let number = res.data["result"][i]
-                            this.state.loyaltyData.push(number)
+                            let number = res.data["result"][i];
+                            this.state.loyaltyData.push(number);
 
 
                         }
-                        this.setState({ loyaltyData: this.state.loyaltyData })
+                        this.setState({ loyaltyData: this.state.loyaltyData });
                     }
-                    return
+                    return;
                 }
             }).catch(() => {
-                this.setState({ loading: false })
-                alert('No Records Found')
-            })
+                this.setState({ loading: false });
+                alert('No Records Found');
+            });
     };
 
 
     getAllPromotions = () => {
-        this.setState({ promoData: [], promoNamesArray: [], loading: true })
+        this.setState({ promoData: [], promoNamesArray: [], loading: true });
 
         const params = {
             "domainId": this.state.domainId,
             "flag": true
-        }
-        console.log(this.state.domainId)
+        };
+        console.log(this.state.domainId);
         axios.get(PromotionsService.getAllPromotions(),
             { params }).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     let len = res.data["result"]["promovo"].length;
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let number = res.data["result"]["promovo"][i]
-                            this.state.promoNamesArray.push({ label: number.promotionName, value: number.promotionName })
+                            let number = res.data["result"]["promovo"][i];
+                            this.state.promoNamesArray.push({ label: number.promotionName, value: number.promotionName });
 
                             if (this.state.promoactiveStatus === false) {
                                 if (number.isActive == false) {
-                                    this.state.promoData.push(number)
+                                    this.state.promoData.push(number);
                                 }
                             }
                             if (this.state.promoactiveStatus === true) {
                                 if (number.isActive == true) {
-                                    console.log('----addedactivepools')
-                                    this.state.promoData.push(number)
+                                    console.log('----addedactivepools');
+                                    this.state.promoData.push(number);
                                 }
 
                             }
-                            this.setState({ promoData: this.state.promoData, promoNamesArray: this.state.promoNamesArray })
+                            this.setState({ promoData: this.state.promoData, promoNamesArray: this.state.promoNamesArray });
 
                         }
                     }
-                    return
+                    return;
                 }
             }).catch(() => {
-                this.setState({ loading: false })
-                alert('No Records Found')
-            })
+                this.setState({ loading: false });
+                alert('No Records Found');
+            });
     };
 
     getFilteredLoyaltyPoints = () => {
-        this.setState({ loyaltyData: [], loading: true })
+        this.setState({ loyaltyData: [], loading: true });
         if (this.state.invoiceNumber === "") {
-            this.state.invoiceNumber = null
+            this.state.invoiceNumber = null;
         }
         if (this.state.loyaltyMobileNumber === "") {
-            this.state.loyaltyMobileNumber = null
+            this.state.loyaltyMobileNumber = null;
         }
         if (this.state.invoiceNumber === "") {
             alert('please Enter Invoice Number');
@@ -286,47 +286,47 @@ class Promo extends Component {
         const params = {
             "invoiceNumber": this.state.invoiceNumber,
             "mobileNumber": this.state.loyaltyMobileNumber,
-        }
-        console.log(params)
-        this.setState({ loading: true })
+        };
+        console.log(params);
+        this.setState({ loading: true });
         axios.post(PromotionsService.searchLoyaltyPoints(),
             params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     let len = res.data["result"].length;
-                    console.log(res.data["result"])
+                    console.log(res.data["result"]);
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let number = res.data["result"][i]
-                            this.state.loyaltyData.push(number)
+                            let number = res.data["result"][i];
+                            this.state.loyaltyData.push(number);
                             this.setState({ flagFilterLoyaltyOpen: false, modalVisible: false });
                         }
-                        this.setState({ loyaltyData: this.state.loyaltyData })
+                        this.setState({ loyaltyData: this.state.loyaltyData });
                     }
                 }
             }).catch(() => {
-                this.setState({ loading: false })
-                alert('No Records Found')
-            })
-    }
+                this.setState({ loading: false });
+                alert('No Records Found');
+            });
+    };
 
 
     getFilteredpromotions = () => {
-        this.setState({ promoData: [], loading: true })
+        this.setState({ promoData: [], loading: true });
         if (this.state.selectedPromotionName === "") {
-            this.state.selectedPromotionName = null
+            this.state.selectedPromotionName = null;
         }
         if (this.state.selectedStatus === "") {
-            this.state.selectedStatus = null
+            this.state.selectedStatus = null;
         }
         if (this.state.selectedStore === "") {
-            this.state.selectedStore = null
+            this.state.selectedStore = null;
         }
         if (this.state.startDate === "") {
-            this.state.startDate = null
+            this.state.startDate = null;
         }
         if (this.state.endDate === "") {
-            this.state.endDate = null
+            this.state.endDate = null;
         }
         const params = {
             "startDate": this.state.startDate,
@@ -334,64 +334,64 @@ class Promo extends Component {
             "promotionName": this.state.selectedPromotionName,
             "promotionStatus": this.state.selectedStatus,
             "storeName": this.state.selectedStore,
-        }
-        console.log(params)
-        this.setState({ loading: true })
+        };
+        console.log(params);
+        this.setState({ loading: true });
         axios.post(PromotionsService.promoSearch(),
             params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     let len = res.data.result.length;
-                    console.log(res.data)
+                    console.log(res.data);
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let number = res.data.result[i]
-                            console.log(number)
-                            this.state.promoData.push(number)
-                            this.setState({ promoData: this.state.promoData })
+                            let number = res.data.result[i];
+                            console.log(number);
+                            this.state.promoData.push(number);
+                            this.setState({ promoData: this.state.promoData });
                         }
                     }
                 }
             }).catch(() => {
-                this.setState({ loading: false })
-                alert('No Records Found')
-            })
-    }
+                this.setState({ loading: false });
+                alert('No Records Found');
+            });
+    };
 
     getFilteredpools = () => {
-        this.setState({ poolsData: [], loading: true })
+        this.setState({ poolsData: [], loading: true });
         if (this.state.selectedcreatedBy === "") {
-            this.state.selectedcreatedBy = null
+            this.state.selectedcreatedBy = null;
         }
         if (this.state.selectedPoolType === "") {
-            this.state.selectedPoolType = null
+            this.state.selectedPoolType = null;
         }
         const params = {
             "createdBy": this.state.selectedcreatedBy,
             "poolType": this.state.selectedPoolType,
             "isActive": this.state.poolsactiveStatus
-        }
-        console.log(params)
-        this.setState({ loading: true })
+        };
+        console.log(params);
+        this.setState({ loading: true });
         axios.post(PromotionsService.poolSearch(),
             params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     let len = res.data.result.length;
 
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let number = res.data.result[i]
-                            console.log(number)
-                            this.state.poolsData.push(number)
-                            this.setState({ poolsData: this.state.poolsData })
+                            let number = res.data.result[i];
+                            console.log(number);
+                            this.state.poolsData.push(number);
+                            this.setState({ poolsData: this.state.poolsData });
                         }
                     }
                 }
             }).catch(() => {
-                this.setState({ loading: false })
-                alert('No Records Found')
-            })
+                this.setState({ loading: false });
+                alert('No Records Found');
+            });
         // const params = {
         //     "domainId": this.state.domainId,
         //     "isActive": true
@@ -432,40 +432,40 @@ class Promo extends Component {
     };
 
     topbarAction1() {
-        this.setState({ flagone: true, flagtwo: false, flagthree: false })
-        this.getAllpools()
+        this.setState({ flagone: true, flagtwo: false, flagthree: false });
+        this.getAllpools();
     }
 
 
     topbarAction2() {
-        this.setState({ flagone: false, flagtwo: true, flagthree: false })
-        this.getAllPromotions()
+        this.setState({ flagone: false, flagtwo: true, flagthree: false });
+        this.getAllPromotions();
     }
 
 
     topbarAction3() {
-        this.setState({ flagone: false, flagtwo: false, flagthree: true })
-        this.getLoyaltyPoints()
+        this.setState({ flagone: false, flagtwo: false, flagthree: true });
+        this.getLoyaltyPoints();
     }
 
     handleeditaction = (item, index) => {
 
-    }
+    };
 
     handledeleteaction = (item, index) => {
 
-    }
+    };
 
     handleloyaltyMobileNumber = (value) => {
         this.setState({ loyaltyMobileNumber: value });
-    }
+    };
 
     handleInvoicenumber = (value) => {
         this.setState({ invoiceNumber: value });
-    }
+    };
 
     filterAction() {
-        this.setState({ 
+        this.setState({
             selectedPromotionName: "",
             selectedStatus: "",
             selectedcreatedBy: "",
@@ -495,7 +495,7 @@ class Promo extends Component {
     }
 
     modelCancel() {
-        this.setState({ 
+        this.setState({
             flagFilterOpen: false,
             flagFilterLoyaltyOpen: false,
             flagFilterPromoOpen: false,
@@ -524,10 +524,10 @@ class Promo extends Component {
     }
 
     refteshLoyalty() {
-        this.getLoyaltyPoints()
+        this.getLoyaltyPoints();
     }
     addStore() {
-        this.setState({ 
+        this.setState({
             selectedPromotionType: "",
             selectedPromotionName: "",
             selectedStore: "",
@@ -542,28 +542,28 @@ class Promo extends Component {
     }
 
     datepickerCancelClicked() {
-        this.setState({ date: new Date(), endDate: new Date(), datepickerOpen: false, datepickerendOpen: false })
+        this.setState({ date: new Date(), endDate: new Date(), datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerDoneClicked() {
         if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
         }
         else {
-            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
 
-        this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false })
+        this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
         if (parseInt(this.state.enddate.getDate()) < 10) {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() });
         }
         else {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
-        this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false })
+        this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     navigateToAddPool() {
@@ -574,24 +574,24 @@ class Promo extends Component {
     }
 
     togglePoolsActiveStatus() {
-        this.getAllpools()
+        this.getAllpools();
         if (this.state.poolsactiveStatus === false) {
 
-            this.setState({ poolsactiveStatus: true })
+            this.setState({ poolsactiveStatus: true });
         }
         else {
 
-            this.setState({ poolsactiveStatus: false })
+            this.setState({ poolsactiveStatus: false });
         }
     }
 
     togglePromoActiveStatus() {
-        this.getAllPromotions()
+        this.getAllPromotions();
         if (this.state.promoactiveStatus === true) {
-            this.setState({ promoactiveStatus: false })
+            this.setState({ promoactiveStatus: false });
         }
         else {
-            this.setState({ promoactiveStatus: true })
+            this.setState({ promoactiveStatus: true });
         }
     }
 
@@ -599,98 +599,98 @@ class Promo extends Component {
 
     chargeExtra() {
         if (this.state.chargeExtra === true) {
-            this.setState({ chargeExtra: false })
+            this.setState({ chargeExtra: false });
         }
         else {
-            this.setState({ chargeExtra: true })
+            this.setState({ chargeExtra: true });
         }
 
     }
 
     datepickerClicked() {
-        console.log('button clicked')
+        console.log('button clicked');
 
-        this.setState({ datepickerOpen: true })
+        this.setState({ datepickerOpen: true });
 
     }
 
     enddatepickerClicked() {
-        this.setState({ datepickerOpen: false, datepickerendOpen: true })
+        this.setState({ datepickerOpen: false, datepickerendOpen: true });
     }
 
     refteshPools() {
-        console.log('---------refreshed')
-        this.getAllpools()
+        console.log('---------refreshed');
+        this.getAllpools();
     }
 
     refteshPromo() {
-        this.getAllPromotions()
+        this.getAllPromotions();
     }
 
     updatePools() {
-        console.log('---------refreshed')
-        this.getAllpools()
+        console.log('---------refreshed');
+        this.getAllpools();
     }
 
     updatePromotions() {
-        this.getAllPromotions()
+        this.getAllPromotions();
     }
 
     handleCreatedBy = (value) => {
         this.setState({ selectedcreatedBy: value });
-    }
+    };
 
     handleSelectPromotionType = (value) => {
         this.setState({ selectedPromotionType: value });
-    }
+    };
 
     handlePromotionName = (value) => {
         this.setState({ selectedPromotionName: value });
-    }
+    };
 
     handleSelectStore = (value) => {
 
         for (let i = 0; i < this.state.storeNamesArray.length; i++) {
             if (this.state.storeNamesArray[i].name === value) {
-                this.setState({ selectedstoreId: this.state.storeNamesArray[i].id })
+                this.setState({ selectedstoreId: this.state.storeNamesArray[i].id });
             }
         }
-        console.log('store id is' + this.state.storeNamesArray[0].name)
+        console.log('store id is' + this.state.storeNamesArray[0].name);
         this.setState({ selectedStore: value });
-    }
+    };
 
     handleStatusBy = (value) => {
         this.setState({ selectedStatus: value });
 
-    }
+    };
 
     handlePoolType = (value) => {
         this.setState({ selectedPoolType: value });
 
-    }
+    };
 
     applyFilterForPromotions() {
-        this.getFilteredpromotions()
+        this.getFilteredpromotions();
         this.setState({ modalVisible: false });
     }
 
     applyFilter() {
         if (this.state.selectedStatus == "Active") {
-            this.setState({ poolsactiveStatus: true })
+            this.setState({ poolsactiveStatus: true });
         }
         else if (this.state.selectedStatus == "Inactive") {
-            this.setState({ poolsactiveStatus: false })
+            this.setState({ poolsactiveStatus: false });
         }
         else {
-            this.setState({ poolsactiveStatus: true })
+            this.setState({ poolsactiveStatus: true });
         }
 
         if (this.state.selectedStatus != "" && this.state.selectedcreatedBy === "" && this.state.selectedPoolType === "") {
-            console.log('open filter with status only')
-            this.getAllpools()
+            console.log('open filter with status only');
+            this.getAllpools();
         }
         else {
-            this.getFilteredpools()
+            this.getFilteredpools();
         }
         this.setState({ modalVisible: false });
     }
@@ -702,7 +702,7 @@ class Promo extends Component {
             }
         }).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
-                this.getAllPromotions()
+                this.getAllPromotions();
                 this.setState({ promoDelete: false, modalVisible: false });
             }
             else {
@@ -710,18 +710,18 @@ class Promo extends Component {
             }
         }
         );
-    }
+    };
 
     handlepromodeleteaction = (item, index) => {
         this.setState({ delelePromoId: item.promoId, delelePromoIndex: item.delelePromoIndex, promoDelete: true, modalVisible: true });
-    }
+    };
 
     handlepooleditaction = (item, index) => {
         this.props.navigation.navigate('EditPool', {
             item: item,
             onGoBack: () => this.updatePools(),
         });
-    }
+    };
 
     handleeditpromoaction = (item, index) => {
         this.props.navigation.navigate('AddPromo'
@@ -729,7 +729,7 @@ class Promo extends Component {
                 item: item, isEdit: true,
                 onGoBack: () => this.updatePromotions(),
             });
-    }
+    };
 
 
 
@@ -753,18 +753,18 @@ class Promo extends Component {
                 },
                 "startDate": this.state.startDate,
                 "endDate": this.state.endDate,
-            }
-            console.log('store--' + params)
+            };
+            console.log('store--' + params);
 
-            console.log('params are' + JSON.stringify(params))
-            this.setState({ loading: true })
+            console.log('params are' + JSON.stringify(params));
+            this.setState({ loading: true });
             axios.post(PromotionsService.addPromoStore(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false, flagAddPromo: false, modalVisible: false })
+                    this.setState({ loading: false, flagAddPromo: false, modalVisible: false });
 
                 }
                 else {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     // this.setState({ loading: false })
                     alert("duplicate record already exists");
                 }
@@ -781,7 +781,7 @@ class Promo extends Component {
             }
         }).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
-                this.getAllpools()
+                this.getAllpools();
                 this.setState({ poolsDelete: false, modalVisible: false });
             }
             else {
@@ -789,11 +789,11 @@ class Promo extends Component {
             }
         }
         );
-    }
+    };
 
     handlepooldeleteaction = (item, index) => {
         this.setState({ poolsDelete: true, modalVisible: true });
-    }
+    };
 
     handleMenuButtonClick() {
         this.props.navigation.openDrawer();
@@ -1097,7 +1097,7 @@ class Promo extends Component {
                 {this.state.flagtwo && (
 
                     <TouchableOpacity
-                        style={Device.isTablet ? styles.navigationButton2_tablet : styles.navigationButton2_mobile}                    
+                        style={Device.isTablet ? styles.navigationButton2_tablet : styles.navigationButton2_mobile}
                         onPress={() => this.navigateToAddPromo()} >
                         <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {('ADD PROMO')} </Text>
                     </TouchableOpacity>
@@ -1107,7 +1107,7 @@ class Promo extends Component {
                 {this.state.flagtwo && (
 
                     <TouchableOpacity
-                        style={[Device.isTablet ? styles.navigationButton_tablet : styles.navigationButton_mobile, {width: Device.isTablet ? 150 : 90}]}                    
+                        style={[Device.isTablet ? styles.navigationButton_tablet : styles.navigationButton_mobile, { width: Device.isTablet ? 150 : 90 }]}
                         onPress={() => this.addStore()} >
                         <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {('ADD TO STORE')} </Text>
                     </TouchableOpacity>
@@ -1391,7 +1391,7 @@ class Promo extends Component {
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
 
-                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, {height: Device.isTablet ? 500 : 400}]}>
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 500 : 400 }]}>
                                 <KeyboardAwareScrollView KeyboardAwareScrollView
                                     enableOnAndroid={true}>
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Filter by </Text>
@@ -1487,12 +1487,12 @@ class Promo extends Component {
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
 
-                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, {height: Device.isTablet ? 650 : 500}]}>
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 650 : 500 }]}>
                                 <KeyboardAwareScrollView KeyboardAwareScrollView
                                     enableOnAndroid={true}>
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Filter by </Text>
 
-                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                    <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
                                         <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
@@ -1516,7 +1516,7 @@ class Promo extends Component {
                                             />
                                         </View>
 
-                                        <TextInput 
+                                        <TextInput
                                             style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                             underlineColorAndroid="transparent"
                                             placeholder="PROMO NAME"
@@ -1546,8 +1546,8 @@ class Promo extends Component {
                                                 marginTop: 5,
                                                 marginBottom: 10,
                                                 borderColor: '#8F9EB717',
-                                                borderRadius: 3, 
-                                                backgroundColor: "#F6F6F6", 
+                                                borderRadius: 3,
+                                                backgroundColor: "#F6F6F6",
                                                 borderRadius: 5,
                                             }} testID="openModal"
 
@@ -1713,7 +1713,7 @@ class Promo extends Component {
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
 
-                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, {height: Device.isTablet ? 450 : 350}]}>
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 450 : 350 }]}>
                                 <KeyboardAwareScrollView KeyboardAwareScrollView
                                     enableOnAndroid={true}>
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Filter by </Text>
@@ -1725,7 +1725,7 @@ class Promo extends Component {
                                     <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
                                     </Text>
                                     <View style={{ marginTop: 10, width: deviceWidth, }}>
-                                        <TextInput 
+                                        <TextInput
                                             style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                             underlineColorAndroid="transparent"
                                             placeholder="INVOICE NUMBER"
@@ -1736,7 +1736,7 @@ class Promo extends Component {
                                             onChangeText={this.handleInvoicenumber}
                                         />
 
-                                        <TextInput 
+                                        <TextInput
                                             style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                             underlineColorAndroid="transparent"
                                             placeholder="MOBILE NUMBER"
@@ -1748,7 +1748,7 @@ class Promo extends Component {
                                         />
 
                                         <TouchableOpacity
-                                            style={Device.isTablet ? styles.filterApplyButton_tablet: styles.filterApplyButton_mobile} onPress={() => this.getFilteredLoyaltyPoints()}
+                                            style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile} onPress={() => this.getFilteredLoyaltyPoints()}
                                         >
                                             <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > APPLY </Text>
 
@@ -2033,8 +2033,8 @@ class Promo extends Component {
                                                 marginBottom: 10,
                                                 borderColor: '#8F9EB717',
                                                 borderRadius: 3,
-                                                height: Device.isTablet ? 54 : 44, 
-                                                backgroundColor: "#F6F6F6", 
+                                                height: Device.isTablet ? 54 : 44,
+                                                backgroundColor: "#F6F6F6",
                                                 borderRadius: 5,
                                             }} testID="openModal"
 
@@ -2068,7 +2068,7 @@ class Promo extends Component {
                                                 marginBottom: 10,
                                                 borderColor: '#8F9EB717',
                                                 borderRadius: 3,
-                                                height: Device.isTablet ? 54 : 44, 
+                                                height: Device.isTablet ? 54 : 44,
                                                 backgroundColor: "#F6F6F6", borderRadius: 5,
                                             }} testID="openModal"
 
@@ -2183,10 +2183,10 @@ class Promo extends Component {
 
 
             </View>
-        )
+        );
     }
 }
-export default Promo
+export default Promo;
 
 const pickerSelectStyles_mobile = StyleSheet.create({
     placeholder: {
@@ -2228,7 +2228,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 const pickerSelectStyles_tablet = StyleSheet.create({
     placeholder: {
@@ -2270,7 +2270,7 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 
 const styles = StyleSheet.create({
@@ -2735,7 +2735,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#353C40'
     },
-     modalContainer_mobile: {
+    modalContainer_mobile: {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
@@ -2801,22 +2801,22 @@ const styles = StyleSheet.create({
         borderColor: "lightgray",
         // borderRadius:5,
     },
-    actInactSwitchTextButton_mobile: { 
-        position: 'absolute', 
-        left: 10, 
-        top: 150, 
-        borderRadius: 5, 
-        width: 95, 
-        height: 32, 
+    actInactSwitchTextButton_mobile: {
+        position: 'absolute',
+        left: 10,
+        top: 150,
+        borderRadius: 5,
+        width: 95,
+        height: 32,
     },
-    actInactSwitchText_mobile: { 
-        fontSize: 16, 
-        fontFamily: 'regular', 
-        color: '#707070', 
-        marginLeft: 10, 
-        marginTop: 8, 
-        textAlign: 'center', 
-        alignSelf: 'center' 
+    actInactSwitchText_mobile: {
+        fontSize: 16,
+        fontFamily: 'regular',
+        color: '#707070',
+        marginLeft: 10,
+        marginTop: 8,
+        textAlign: 'center',
+        alignSelf: 'center'
     },
     filterMainContainer_mobile: {
         width: deviceWidth,
@@ -3062,22 +3062,22 @@ const styles = StyleSheet.create({
         borderColor: "lightgray",
         // borderRadius:5,
     },
-    actInactSwitchTextButton_tablet: { 
-        position: 'absolute', 
-        left: 10, 
-        top: 169, 
-        borderRadius: 5, 
-        width: 125, 
-        height: 32, 
+    actInactSwitchTextButton_tablet: {
+        position: 'absolute',
+        left: 10,
+        top: 169,
+        borderRadius: 5,
+        width: 125,
+        height: 32,
     },
-    actInactSwitchText_tablet: { 
-        fontSize: 21, 
-        fontFamily: 'regular', 
-        color: '#707070', 
-        marginLeft: 10, 
-        marginTop: 8, 
-        textAlign: 'center', 
-        alignSelf: 'center' 
+    actInactSwitchText_tablet: {
+        fontSize: 21,
+        fontFamily: 'regular',
+        color: '#707070',
+        marginLeft: 10,
+        marginTop: 8,
+        textAlign: 'center',
+        alignSelf: 'center'
     },
     filterMainContainer_tablet: {
         width: deviceWidth,
