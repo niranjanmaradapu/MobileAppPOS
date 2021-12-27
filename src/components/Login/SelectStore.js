@@ -8,6 +8,7 @@ I18n.fallbacks = true;
 I18n.defaultLocale = 'en';
 const data = [{ key: "Vijayawada" }, { key: "Kakinada" }, { key: "Anakapalli" }];
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Device from 'react-native-device-detection';
 
 export default class SelectStore extends React.Component {
     constructor(props) {
@@ -153,10 +154,7 @@ export default class SelectStore extends React.Component {
           }}> {'Stores'} </Text>
           </View>
                  )}
-                    <Text style={{
-                        color: "#353C40", fontSize: 30, fontFamily: "bold", marginLeft: 20, marginTop: 100, flexDirection: 'column',
-                        justifyContent: 'center',
-                    }}> {('Select the Store')} </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {('Select the Store')} </Text>
                     <FlatList
                         style={{ width: deviceWidth, marginTop: 50, marginBottom: 100, }}
                         //scrollEnabled={false}
@@ -168,10 +166,10 @@ export default class SelectStore extends React.Component {
                                 <View style={{
                                     borderBottomColor: 'lightgray', borderBottomWidth: 0.6, marginLeft: this.state.selectedItem === index ? 0 : 0, marginRight: this.state.selectedItem === index ? 0 : 0, backgroundColor: this.state.selectedItem === index ? '#ED1C24' : '#ffffff'
                                 }}>
-                                    <View style={{ flexDirection: 'column', width: '100%', height: 80 }}>
-                                        <Text style={{
-                                            fontSize: 18, marginTop: 30, marginLeft: 20, fontFamily: 'medium', color: this.state.selectedItem === index ? '#ffffff' : '#353C40'
-                                        }}>
+                                    <View style={Device.isTablet ? styles.domainButton_tablet : styles.domainButton_mobile}>
+                                        <Text style={[Device.isTablet ? styles.domainButtonText_tablet : styles.domainButtonText_mobile ,{
+                                             color: this.state.selectedItem === index ? '#ffffff' : '#353C40'
+                                        }]}>
                                             {item.name}
                                         </Text>
                                         <Image source={this.state.selectedItem === index ? require('../assets/images/langselect.png') : require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 30 }} />
@@ -183,9 +181,9 @@ export default class SelectStore extends React.Component {
                     />
                 </View>
                 <TouchableOpacity
-                    style={styles.signInButton}
+                    style={Device.isTablet ? styles.continueButton_tablet : styles.continueButton_mobiile}
                     onPress={() => this.letsGoButtonAction()} >
-                    <Text style={styles.signInButtonText}> {('CONTINUE')} </Text>
+                    <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {('CONTINUE')} </Text>
                 </TouchableOpacity>
             </View>
 
@@ -238,30 +236,85 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#FFFFFF",
     },
-    signInButton: {
+        // Styles For Mobile
+        headerTitle_mobile: {
+            color: "#353C40", 
+            fontSize: 30, 
+            fontFamily: "bold", 
+            marginLeft: 20, 
+            marginTop: 100, 
+            flexDirection: 'column',
+            justifyContent: 'center',
+        },
+        domainButton_mobile: {
+            flexDirection: 'column', 
+            width: '100%', 
+            height: 80 
+        },
+        domainButtonText_mobile: {
+            fontSize: 18, 
+            marginTop: 30, 
+            marginLeft: 20, 
+            fontFamily: 'medium',
+        },
+        continueButton_mobiile: {
+            backgroundColor: '#ED1C24',
+            justifyContent: 'center',
+            position: 'absolute',
+            marginLeft: 20,
+            width: deviceWidth - 40,
+            bottom: 30,
+            height: 44,
+            borderRadius: 10,
+            fontWeight: 'bold',
+            // marginBottom:100,
+        },
+        continueButtonText_mobile: {
+            color: 'white',
+            justifyContent: 'center',
+            alignSelf: 'center',
+            fontSize: 14,
+            fontFamily: "regular",
+        },
+
+     // Styles For Tablet
+     headerTitle_tablet: {
+        color: "#353C40", 
+        fontSize: 40, 
+        fontFamily: "bold", 
+        marginLeft: 20, 
+        marginTop: 100, 
+        flexDirection: 'column',
+        justifyContent: 'center',
+    },
+     domainButton_tablet: {
+        flexDirection: 'column', 
+        width: '100%', 
+        height: 100 
+    },
+    domainButtonText_tablet: {
+        fontSize: 28, 
+        marginTop: 30, 
+        marginLeft: 20, 
+        fontFamily: 'medium',
+    },
+    continueButton_tablet: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         position: 'absolute',
         marginLeft: 20,
         width: deviceWidth - 40,
         bottom: 30,
-        height: 44,
+        height: 60,
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
     },
-    viewswidth: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 24,
-        height: 84,
-      },
-    signInButtonText: {
+    continueButtonText_tablet: {
         color: 'white',
         justifyContent: 'center',
         alignSelf: 'center',
-        fontSize: 14,
+        fontSize: 20,
         fontFamily: "regular",
     },
 

@@ -7,6 +7,7 @@ import I18n, { getLanguages } from 'react-native-i18n';
 I18n.fallbacks = true;
 I18n.defaultLocale = 'en';
 const data = [{ key: "English" }, { key: "हिंदी" }, { key: "తెలుగు" }];
+import Device from 'react-native-device-detection';
 
 
 // Available languages
@@ -98,10 +99,10 @@ export default class LanguageSelection extends React.Component {
                                 }}>
 
 
-                                    <View style={{ flexDirection: 'column', width: '100%', height: 80 }}>
-                                        <Text style={{
-                                            fontSize: 18, marginTop: 30, marginLeft: 20, fontFamily: 'medium', color: this.state.selectedItem === index ? '#ffffff' : '#353C40'
-                                        }}>
+                                    <View style={Device.isTablet ? styles.langaugeButton_tablet : styles.langaugeButton_mobile}>
+                                        <Text style={[Device.isTablet ? styles.languageButtonText_tablet : styles.languageButtonText_mobile ,{
+                                             color: this.state.selectedItem === index ? '#ffffff' : '#353C40'
+                                        }]}>
                                             {item.key}
                                         </Text>
                                         <Image source={this.state.selectedItem === index ? require('./assets/images/langselect.png') : require('./assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 30 }} />
@@ -119,9 +120,9 @@ export default class LanguageSelection extends React.Component {
 
 
                 <TouchableOpacity
-                    style={styles.signInButton}
+                    style={Device.isTablet ? styles.continueButton_tablet : styles.continueButton_mobiile}
                     onPress={() => this.letsGoButtonAction()} >
-                    <Text style={styles.signInButtonText}> {('CONTINUE')} </Text>
+                    <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {('CONTINUE')} </Text>
                 </TouchableOpacity>
             </View>
 
@@ -175,7 +176,20 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#FFFFFF",
     },
-    signInButton: {
+    
+    // Styles For Mobile
+    langaugeButton_mobile: {
+        flexDirection: 'column', 
+        width: '100%', 
+        height: 80 
+    },
+    languageButtonText_mobile: {
+        fontSize: 18, 
+        marginTop: 30, 
+        marginLeft: 20, 
+        fontFamily: 'medium',
+    },
+    continueButton_mobiile: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         position: 'absolute',
@@ -187,7 +201,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         // marginBottom:100,
     },
-    signInButtonText: {
+    continueButtonText_mobile: {
         color: 'white',
         justifyContent: 'center',
         alignSelf: 'center',
@@ -195,4 +209,35 @@ const styles = StyleSheet.create({
         fontFamily: "regular",
     },
 
+    // Styles For Tablet
+    langaugeButton_tablet: {
+        flexDirection: 'column', 
+        width: '100%', 
+        height: 100 
+    },
+    languageButtonText_tablet: {
+        fontSize: 28, 
+        marginTop: 30, 
+        marginLeft: 20, 
+        fontFamily: 'medium',
+    },
+    continueButton_tablet: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        position: 'absolute',
+        marginLeft: 20,
+        width: deviceWidth - 40,
+        bottom: 30,
+        height: 60,
+        borderRadius: 10,
+        fontWeight: 'bold',
+        // marginBottom:100,
+    },
+    continueButtonText_tablet: {
+        color: 'white',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        fontSize: 20,
+        fontFamily: "regular",
+    },
 })

@@ -13,6 +13,7 @@ import Loader from '../../loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginService from '../../services/LoginService';
 import { ThemeConsumer } from 'react-native-elements';
+import Device from 'react-native-device-detection';
 
 
 
@@ -22,7 +23,7 @@ class Promo extends Component {
         this.camera = null;
         this.barcodeCodes = [];
         this.state = {
-            barcodeId: "",
+            barcodeId: "",  
             flagone: true,
             flagtwo: false,
             flagthree: false,
@@ -668,11 +669,11 @@ class Promo extends Component {
     }
 
     handleSelectStore = (value) => {
-        
+
         for (let i = 0; i < this.state.storeNamesArray.length; i++) {
             if (this.state.storeNamesArray[i].name === value) {
                 this.setState({ selectedstoreId: this.state.storeNamesArray[i].id })
-            }   
+            }
         }
         console.log('store id is' + this.state.storeNamesArray[0].name)
         this.setState({ selectedStore: value });
@@ -823,7 +824,7 @@ class Promo extends Component {
         this.setState({ modalVisible: true });
     }
 
-    handleBackButtonClick() {
+    handleMenuButtonClick() {
         this.props.navigation.openDrawer();
     }
 
@@ -835,26 +836,11 @@ class Promo extends Component {
                     <Loader
                         loading={this.state.loading} />
                 }
-                <View style={styles.viewswidth}>
-                <TouchableOpacity style={{
-                position: 'absolute',
-                left: 10,
-                top: 30,
-                width: 40,
-                height: 40,
-            }} onPress={() => this.handleBackButtonClick()}>
-                <Image source={require('../../assets/images/menu.png')} />
-            </TouchableOpacity>
-                    <Text style={{
-                         position: 'absolute',
-                         left: 70,
-                         top: 47,
-                         width: 300,
-                         height: 20,
-                         fontFamily: 'bold',
-                         fontSize: 18,
-                         color: '#353C40'
-                    }}> Promotions & Loyalty </Text>
+                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
+                    <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
+                        <Image source={require('../../assets/images/menu.png')} />
+                    </TouchableOpacity>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Promotions & Loyalty </Text>
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
                         onPress={() => this.filterAction()} >
@@ -3194,5 +3180,57 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+
+    // Styles For Mobile
+    viewsWidth_mobile: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 24,
+        height: 84,
+    },
+    menuButton_mobile: {
+        position: 'absolute',
+        left: 10,
+        top: 30,
+        width: 40,
+        height: 40,
+    },
+    headerTitle_mobile: {
+        position: 'absolute',
+        left: 70,
+        top: 47,
+        width: 300,
+        height: 25,
+        fontFamily: 'bold',
+        fontSize: 18,
+        color: '#353C40'
+    },
+
+    // Styles For Tablet
+    viewsWidth_tablet: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 28,
+        height: 90,
+    },
+    menuButton_tablet: {
+        position: 'absolute',
+        left: 10,
+        top: 25,
+        width: 90,
+        height: 90,
+    },
+    headerTitle_tablet: {
+        position: 'absolute',
+        left: 70,
+        top: 40,
+        width: 300,
+        height: 40,
+        fontFamily: 'bold',
+        fontSize: 24,
+        color: '#353C40'
+    },
 });

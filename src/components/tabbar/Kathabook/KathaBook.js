@@ -2,6 +2,7 @@ import React, { Component, useState } from 'react'
 import { View, Image, FlatList, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
+import Device from 'react-native-device-detection'
 
 class KathaBook extends Component {
     constructor(props) {
@@ -14,21 +15,19 @@ class KathaBook extends Component {
         }
     }
 
+    handleMenuButtonClick() {
+        this.props.navigation.openDrawer();
+    }
+
 
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <View style={styles.viewswidth}>
-                    <Text style={{
-                        position: 'absolute',
-                        left: 10,
-                        top: 55,
-                        width: 300,
-                        height: 20,
-                        fontFamily: 'bold',
-                        fontSize: 18,
-                        color: '#353C40'
-                    }}> KATHA BOOK </Text>
+                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
+                    <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
+                        <Image source={require('../../assets/images/menu.png')} />
+                    </TouchableOpacity>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> KATHA BOOK </Text>
 
                 </View>
 
@@ -473,5 +472,57 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+
+    // Styles For Mobile
+    viewsWidth_mobile: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 24,
+        height: 84,
+    },
+    menuButton_mobile: {
+        position: 'absolute',
+        left: 10,
+        top: 30,
+        width: 40,
+        height: 40,
+    },
+    headerTitle_mobile: {
+        position: 'absolute',
+        left: 70,
+        top: 47,
+        width: 300,
+        height: 25,
+        fontFamily: 'bold',
+        fontSize: 18,
+        color: '#353C40'
+    },
+
+    // Styles For Tablet
+    viewsWidth_tablet: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 28,
+        height: 90,
+    },
+    menuButton_tablet: {
+        position: 'absolute',
+        left: 10,
+        top: 25,
+        width: 90,
+        height: 90,
+    },
+    headerTitle_tablet: {
+        position: 'absolute',
+        left: 70,
+        top: 40,
+        width: 300,
+        height: 40,
+        fontFamily: 'bold',
+        fontSize: 24,
+        color: '#353C40'
+    },
 });

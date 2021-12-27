@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ProfileService from '../../services/ProfileService';
 import axios from 'axios';
 import Loader from '../../loader';
+import Device from 'react-native-device-detection';
 
 
 
@@ -172,7 +173,7 @@ class Settings extends Component {
         this.props.navigation.push('Login');
     }
 
-    handleBackButtonClick() {
+    handleMenuButtonClick() {
         this.props.navigation.openDrawer();
         // this.props.navigation.navigate('Home')
     }
@@ -182,27 +183,12 @@ class Settings extends Component {
         return (
 
             <View style={{ flex: 1 }}>
-                <View style={styles.viewswidth}>
+                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
 
-                    <TouchableOpacity style={{
-                        position: 'absolute',
-                        left: 10,
-                        top: 30,
-                        width: 40,
-                        height: 40,
-                    }} onPress={() => this.handleBackButtonClick()}>
+                    <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
                         <Image source={require('../../assets/images/menu.png')} />
                     </TouchableOpacity>
-                    <Text style={{
-                        position: 'absolute',
-                        left: 70,
-                        top: 47,
-                        width: 300,
-                        height: 20,
-                        fontFamily: 'bold',
-                        fontSize: 18,
-                        color: '#353C40'
-                    }}> Settings </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Settings </Text>
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
                         onPress={() => this.signOut()} >
@@ -1049,5 +1035,57 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+
+    // Styles For Mobile
+    viewsWidth_mobile: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 24,
+        height: 84,
+    },
+    menuButton_mobile: {
+        position: 'absolute',
+        left: 10,
+        top: 30,
+        width: 40,
+        height: 40,
+    },
+    headerTitle_mobile: {
+        position: 'absolute',
+        left: 70,
+        top: 47,
+        width: 300,
+        height: 25,
+        fontFamily: 'bold',
+        fontSize: 18,
+        color: '#353C40'
+    },
+
+    // Styles For Tablet
+    viewsWidth_tablet: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 28,
+        height: 90,
+    },
+    menuButton_tablet: {
+        position: 'absolute',
+        left: 10,
+        top: 25,
+        width: 90,
+        height: 90,
+    },
+    headerTitle_tablet: {
+        position: 'absolute',
+        left: 70,
+        top: 40,
+        width: 300,
+        height: 40,
+        fontFamily: 'bold',
+        fontSize: 24,
+        color: '#353C40'
+    },
 });

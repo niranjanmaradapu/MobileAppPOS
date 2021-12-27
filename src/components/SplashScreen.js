@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Device from 'react-native-device-detection';
+
 
 
 export default class SplashScreen extends React.Component {
@@ -31,8 +33,8 @@ export default class SplashScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Image source={require('./assets/images/welcomeLogo.png')} style={styles.logoImage} />
-                <Text style={{ textAlign: 'center', color: "#353C40", position: 'absolute', bottom: 70, fontSize: 14 }}> POWERED BY OTSI </Text>
+                <Image source={require('./assets/images/welcomeLogo.png')} style={Device.isTablet ? styles.logoImage_tablet : styles.logoImage_mobile} />
+                <Text style={Device.isTablet ? styles.splashText_tablet : styles.splashText_mobile}> POWERED BY OTSI </Text>
             </View>
         )
     }
@@ -41,7 +43,7 @@ export default class SplashScreen extends React.Component {
 
 
 const styles = StyleSheet.create({
-    logoImage: {
+    logoImage_mobile: {
         alignSelf: 'center',
         width: 177,
         height: 219,
@@ -51,6 +53,26 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#FFFFFF",
+    },
+    splashText_mobile: {
+        textAlign: 'center', 
+        color: "#353C40", 
+        position: 'absolute', 
+        bottom: 70, 
+        fontSize: 14
+    },
+
+    logoImage_tablet: {
+        alignSelf: 'center',
+        width: 207,
+        height: 259,
+    },
+    splashText_tablet: {
+        textAlign: 'center', 
+        color: "#353C40", 
+        position: 'absolute', 
+        bottom: 70, 
+        fontSize: 24
     }
 
 })
