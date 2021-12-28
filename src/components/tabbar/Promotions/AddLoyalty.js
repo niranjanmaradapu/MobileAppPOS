@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
 import Loader from '../../loader';
 import PromotionsService from '../../services/PromotionsService';
 var deviceWidth = Dimensions.get('window').width;
@@ -122,35 +123,20 @@ class AddLoyalty extends Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: '#fff' }}>
+            <View style={styles.mainContainer}>
                 {this.state.loading &&
                     <Loader
                         loading={this.state.loading} />
                 }
-                <View style={styles.viewswidth}>
-                    <TouchableOpacity style={{
-                        position: 'absolute',
-                        left: 10,
-                        top: 30,
-                        width: 40,
-                        height: 40,
-                    }} onPress={() => this.handleBackButtonClick()}>
+                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
+                    <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
                         <Image source={require('../../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={{
-                        position: 'absolute',
-                        left: 70,
-                        top: 47,
-                        width: 300,
-                        height: 20,
-                        fontFamily: 'bold',
-                        fontSize: 18,
-                        color: '#353C40'
-                    }}> Add Loyalty Points </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Add Loyalty Points </Text>
                 </View>
                 <View style={{ marginTop: 30, width: deviceWidth, }}>
-                    <Text style={styles.subheading} >Loyalty points details</Text>
-                    <TextInput style={styles.input}
+                    <Text style={Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile} >Loyalty points details</Text>
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="INVOICE NO"
                         placeholderTextColor="#6F6F6F"
@@ -162,7 +148,7 @@ class AddLoyalty extends Component {
                         onEndEditing={() => this.endEditing()}
                     />
 
-                    <TextInput style={styles.input}
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="NAME"
                         placeholderTextColor="#6F6F6F"
@@ -171,7 +157,7 @@ class AddLoyalty extends Component {
                         value={this.state.name}
                         onChangeText={this.handleName}
                     />
-                    <TextInput style={styles.input}
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="MOBILE NO"
                         placeholderTextColor="#6F6F6F"
@@ -181,7 +167,7 @@ class AddLoyalty extends Component {
                         onChangeText={this.handleMobileNumber}
                     />
 
-                    <TextInput style={styles.input}
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="AMMOUNT PAID"
                         editable={false} selectTextOnFocus={false}
@@ -191,27 +177,15 @@ class AddLoyalty extends Component {
                         value={this.state.payableAmount}
                     />
                     <TouchableOpacity
-                        style={{
-                            margin: 8,
-                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                        }} onPress={() => this.saveLoyalty()}
+                        style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile} onPress={() => this.saveLoyalty()}
                     >
-                        <Text style={{
-                            textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                            fontFamily: "regular"
-                        }}  > SAVE </Text>
+                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}  > SAVE </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={{
-                            margin: 8,
-                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                        }} onPress={() => this.cancel()}
+                        style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile} onPress={() => this.cancel()}
                     >
-                        <Text style={{
-                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                            fontFamily: "regular"
-                        }}  > CANCEL </Text>
+                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}  > CANCEL </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -222,14 +196,47 @@ class AddLoyalty extends Component {
 export default AddLoyalty;
 
 const styles = StyleSheet.create({
-    viewswidth: {
+    mainContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    loading: {
+        flex: 1,
+        justifyContent: 'center'
+        // alignItems: 'center',
+    },
+    // Styles For Mobile
+    viewsWidth_mobile: {
         backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
         height: 84,
     },
-    input: {
+    backButton_mobile: {
+        position: 'absolute',
+        left: 10,
+        top: 30,
+        width: 40,
+        height: 40,
+    },
+    headerTitle_mobile: {
+        position: 'absolute',
+        left: 70,
+        top: 47,
+        width: 300,
+        height: 20,
+        fontFamily: 'bold',
+        fontSize: 18,
+        color: '#353C40'
+    },
+    subheading_mobile: {
+        fontFamily: 'medium',
+        fontSize: 16,
+        color: "red",
+        marginLeft: 20,
+    },
+    input_mobile: {
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
@@ -244,15 +251,109 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
-    subheading: {
+    saveButton_mobile: {
+        margin: 8,
+        height: 50,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    saveButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#ffffff",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+    cancelButton_mobile: {
+        margin: 8,
+        height: 50,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    cancelButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#353C4050",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+
+    // Styles For Tablet
+    viewsWidth_tablet: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 28,
+        height: 90,
+    },
+    backButton_tablet: {
+        position: 'absolute',
+        left: 10,
+        top: 25,
+        width: 90,
+        height: 90,
+    },
+    headerTitle_tablet: {
+        position: 'absolute',
+        left: 70,
+        top: 40,
+        width: 300,
+        height: 40,
+        fontFamily: 'bold',
+        fontSize: 24,
+        color: '#353C40'
+    },
+    subheading_tablet: {
         fontFamily: 'medium',
-        fontSize: 16,
+        fontSize: 21,
         color: "red",
         marginLeft: 20,
     },
-    loading: {
-        flex: 1,
-        justifyContent: 'center'
-        // alignItems: 'center',
+    input_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
     },
+    saveButton_tablet: {
+        margin: 8,
+        height: 60,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    saveButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#ffffff",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    cancelButton_tablet: {
+        margin: 8,
+        height: 60,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    cancelButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#353C4050",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+
+
 });

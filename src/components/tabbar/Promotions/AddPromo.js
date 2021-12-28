@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
 import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
@@ -11,7 +12,6 @@ import PromotionsService from '../../services/PromotionsService';
 var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
-
 
 class AddPromo extends Component {
     constructor(props) {
@@ -281,37 +281,22 @@ class AddPromo extends Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: '#ffffff' }} >
+            <View style={styles.mainContainer} >
                 {this.state.loading &&
                     <Loader
                         loading={this.state.loading} />
                 }
 
-                <View style={styles.viewswidth}>
-                    <TouchableOpacity style={{
-                        position: 'absolute',
-                        left: 10,
-                        top: 30,
-                        width: 40,
-                        height: 40,
-                    }} onPress={() => this.handleBackButtonClick()}>
+                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
+                    <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
                         <Image source={require('../../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={{
-                        position: 'absolute',
-                        left: 70,
-                        top: 47,
-                        width: 300,
-                        height: 20,
-                        fontFamily: 'bold',
-                        fontSize: 18,
-                        color: '#353C40'
-                    }}> {this.state.isEdit == true ? 'Edit Promo' : 'Add Promo'} </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {this.state.isEdit == true ? 'Edit Promo' : 'Add Promo'} </Text>
                 </View>
                 <ScrollView>
                     <View style={{ marginTop: 30, width: deviceWidth, }}>
-                        <Text style={styles.promoname}>Promo code details</Text>
-                        <TextInput style={styles.input}
+                        <Text style={Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile}>Promo code details</Text>
+                        <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                             underlineColorAndroid="transparent"
                             placeholder="PROMOTION NAME"
                             placeholderTextColor="#6F6F6F"
@@ -321,25 +306,8 @@ class AddPromo extends Component {
                             onChangeText={this.handlePromotionName}
                         />
 
-                        <View style={{
-                            justifyContent: 'center',
-                            margin: 20,
-                            height: 44,
-                            marginTop: 5,
-                            marginBottom: 10,
-                            borderColor: '#8F9EB717',
-                            borderRadius: 3,
-                            backgroundColor: '#FBFBFB',
-                            borderWidth: 1,
-                            fontFamily: 'regular',
-                            paddingLeft: 15,
-                            fontSize: 14,
-                        }} >
-                            <RNPickerSelect style={{
-                                color: '#8F9EB717',
-                                fontWeight: 'regular',
-                                fontSize: 15
-                            }}
+                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
+                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                 placeholder={{
                                     label: 'PROMOTION APPLY TYPE',
 
@@ -356,7 +324,7 @@ class AddPromo extends Component {
                                     { label: 'PoolValueRatio', value: 'PoolValueRatio' },
                                 ]}
                                 onValueChange={this.handlePromoApplyname}
-                                style={pickerSelectStyles}
+                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                 value={this.state.selectedPromoApplyName}
                                 useNativeAndroidPickerStyle={false}
 
@@ -364,7 +332,7 @@ class AddPromo extends Component {
                         </View>
 
 
-                        <TextInput style={styles.input}
+                        <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                             underlineColorAndroid="transparent"
                             placeholder="DESCRIPTION"
                             placeholderTextColor="#6F6F6F"
@@ -374,7 +342,7 @@ class AddPromo extends Component {
                             onChangeText={this.handleDescription}
                         />
 
-                        <TextInput style={styles.input}
+                        <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                             underlineColorAndroid="transparent"
                             placeholder="PRINT NAME ON SALE BILL"
                             placeholderTextColor="#6F6F6F"
@@ -386,25 +354,8 @@ class AddPromo extends Component {
 
 
 
-                        <View style={{
-                            justifyContent: 'center',
-                            margin: 20,
-                            height: 44,
-                            marginTop: 5,
-                            marginBottom: 10,
-                            borderColor: '#8F9EB717',
-                            borderRadius: 3,
-                            backgroundColor: '#FBFBFB',
-                            borderWidth: 1,
-                            fontFamily: 'regular',
-                            paddingLeft: 15,
-                            fontSize: 14,
-                        }} >
-                            <RNPickerSelect style={{
-                                color: '#8F9EB717',
-                                fontWeight: 'regular',
-                                fontSize: 15
-                            }}
+                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
+                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                 placeholder={{
                                     label: 'APPLICABILITY',
 
@@ -417,7 +368,7 @@ class AddPromo extends Component {
                                     { label: 'promotionForWholeBill', value: 'promotionForWholeBill' },
                                 ]}
                                 onValueChange={this.handleApplicability}
-                                style={pickerSelectStyles}
+                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                 value={this.state.selectedApplicability}
                                 useNativeAndroidPickerStyle={false}
 
@@ -432,7 +383,7 @@ class AddPromo extends Component {
                             onPress={() => this.chargeExtra()}
                         >
                             <Text style={{
-                                marginLeft: 40, marginTop: 11, color: "#6F6F6F", fontSize: 15,
+                                marginLeft: 40, marginTop: 11, color: "#6F6F6F", fontSize: Device.isTablet ? 20 : 15,
                                 fontFamily: "regular", width: 200,
                             }}  > {'Charge Tax Entra'} </Text>
 
@@ -442,27 +393,8 @@ class AddPromo extends Component {
                         </TouchableOpacity>
 
                         {this.state.chargeExtra && (
-                            <View style={{
-                                justifyContent: 'center',
-                                margin: 20,
-                                width: deviceWidth / 2 - 20,
-                                height: 44,
-                                marginTop: -30,
-                                marginLeft: deviceWidth / 2,
-                                marginBottom: 10,
-                                borderColor: '#8F9EB717',
-                                borderRadius: 3,
-                                backgroundColor: '#FBFBFB',
-                                borderWidth: 1,
-                                fontFamily: 'regular',
-                                paddingLeft: 15,
-                                fontSize: 14,
-                            }} >
-                                <RNPickerSelect style={{
-                                    color: '#8F9EB717',
-                                    fontWeight: 'regular',
-                                    fontSize: 15
-                                }}
+                            <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
+                                <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                     placeholder={{
                                         label: 'SELECT TAX %',
 
@@ -472,7 +404,7 @@ class AddPromo extends Component {
                                     }}
                                     items={this.state.uom}
                                     onValueChange={this.handleUOM}
-                                    style={pickerSelectStyles}
+                                    style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                     value={this.state.productuom}
                                     useNativeAndroidPickerStyle={false}
 
@@ -480,8 +412,8 @@ class AddPromo extends Component {
                             </View>
                         )}
 
-                        <Text style={styles.buypooltitle}>Buy Pool Defination</Text>
-                        <TextInput style={styles.input}
+                        <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 10 }]}>Buy Pool Defination</Text>
+                        <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                             underlineColorAndroid="transparent"
                             placeholder="BUY ANY"
                             keyboardType='name-phone-pad'
@@ -535,51 +467,54 @@ class AddPromo extends Component {
                                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
                                 }}>
 
-                                    <View style={{ flexDirection: 'column', width: '100%', height: 80, borderTopWidth: 10, borderColor: '#F6F6F6' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', width: '100%', height: 80, borderTopWidth: 10, borderColor: '#F6F6F6', paddingTop: Device.isTablet ? 0 : 10 }}>
 
-                                        <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
-                                            POOL NAME
-                                        </Text>
-                                        <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                            {item.poolName}
-                                        </Text>
+                                        <View>
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
+                                                POOL NAME
+                                            </Text>
+                                            <Text style={{ fontSize: Device.isTablet ? 19 : 14, fontFamily: 'medium', color: '#353C40' }}>
+                                                {item.poolName}
+                                            </Text>
+                                        </View>
 
-                                        <Text style={{
-                                            fontSize: 12, marginTop: -30, marginLeft: deviceWidth / 2 - 100, fontFamily: 'regular', color: '#808080', justifyContent: 'center', //Centered horizontally
-                                            alignItems: 'center', //Centered vertically
-                                            flex: 1
-                                        }}>
-                                            Pool Ration
-                                        </Text>
-                                        <Text style={{
-                                            fontSize: 14, marginTop: -20, marginLeft: deviceWidth / 2 - 100, fontFamily: 'medium', color: '#353C40', justifyContent: 'center', //Centered horizontally
-                                            alignItems: 'center', //Centered vertically
-                                            flex: 1
-                                        }}>
-                                            {'0'}
-                                        </Text>
+                                        <View>
+                                            <Text style={{
+                                                fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080', //Centered horizontally
 
-                                        <Text style={{
-                                            fontSize: 12, marginTop: -50, marginLeft: deviceWidth / 2, fontFamily: 'regular', color: '#808080', justifyContent: 'center', //Centered horizontally
-                                            alignItems: 'center', //Centered vertically
-                                            flex: 1
-                                        }}>
-                                            Benefit Type
-                                        </Text>
-                                        <Text style={{
-                                            fontSize: 14, marginTop: -20, marginLeft: deviceWidth / 2, fontFamily: 'medium', color: '#353C40', justifyContent: 'center', //Centered horizontally
-                                            alignItems: 'center', //Centered vertically
-                                            flex: 1
-                                        }}>
-                                            {"-"}
-                                        </Text>
+                                            }}>
+                                                Pool Ration
+                                            </Text>
+                                            <Text style={{
+                                                fontSize: Device.isTablet ? 19 : 14, fontFamily: 'medium', color: '#353C40', //Centered horizontally
 
-                                        <Text style={{ fontSize: 12, position: 'absolute', right: 30, top: 20, fontFamily: 'regular', color: '#808080' }}>
-                                            Discount Type
-                                        </Text>
-                                        <Text style={{ fontSize: 12, position: 'absolute', right: 30, top: 37, fontFamily: 'medium', color: '#353C40', alignItems: 'center' }}>
-                                            {'-'}
-                                        </Text>
+                                            }}>
+                                                {'0'}
+                                            </Text>
+                                        </View>
+
+                                        <View>
+                                            <Text style={{
+                                                fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080', //Centered horizontally
+
+                                            }}>
+                                                Benefit Type
+                                            </Text>
+                                            <Text style={{
+                                                fontSize: Device.isTablet ? 19 : 14, fontFamily: 'medium', color: '#353C40', //Centered horizontally
+
+                                            }}>
+                                                {"-"}
+                                            </Text>
+                                        </View>
+                                        <View>
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
+                                                Discount Type
+                                            </Text>
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'medium', color: '#353C40', alignItems: 'center' }}>
+                                                {'-'}
+                                            </Text>
+                                        </View>
                                     </View>
                                 </View>
                                 // }
@@ -588,37 +523,25 @@ class AddPromo extends Component {
 
                         <TouchableOpacity onPress={() => this.addPools()}>
 
-                            <Text style={styles.navigationalbuttonstext}>+ Add Pools</Text>
+                            <Text style={Device.isTablet ? styles.navigationbuttonstext_tablet : styles.navigationbuttonstext_mobile}>+ Add Pools</Text>
 
                         </TouchableOpacity>
 
                         <TouchableOpacity onPress={() => this.addBenfits()}>
-                            <Text style={styles.navigationalbuttonstext}>+ Add Benifits</Text>
+                            <Text style={Device.isTablet ? styles.navigationbuttonstext_tablet : styles.navigationbuttonstext_mobile}>+ Add Benifits</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                            style={{
-                                margin: 8,
-                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                            }} onPress={() => this.savePromo()}
+                            style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile} onPress={() => this.savePromo()}
                         >
-                            <Text style={{
-                                textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                fontFamily: "regular"
-                            }}  > SAVE </Text>
+                            <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}  > SAVE </Text>
 
                         </TouchableOpacity>
 
                         <TouchableOpacity
-                            style={{
-                                margin: 8,
-                                height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                            }} onPress={() => this.cancel()}
+                            style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile} onPress={() => this.cancel()}
                         >
-                            <Text style={{
-                                textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                fontFamily: "regular"
-                            }}  > CANCEL </Text>
+                            <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}  > CANCEL </Text>
 
                         </TouchableOpacity>
 
@@ -628,37 +551,15 @@ class AddPromo extends Component {
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
                             <View
-                                style={{
-                                    width: deviceWidth,
-                                    alignItems: 'center',
-                                    marginLeft: -20,
-                                    backgroundColor: "#ffffff",
-                                    height: 400,
-                                    position: 'absolute',
-                                    bottom: -20,
-                                }}
+                                style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}
                             >
 
-                                <Text style={{
-                                    position: 'absolute',
-                                    left: 20,
-                                    top: 15,
-                                    width: 300,
-                                    height: 20,
-                                    fontFamily: 'medium',
-                                    fontSize: 16,
-                                    color: '#353C40'
-                                }}> {'Add Buy Pools'} </Text>
+                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> {'Add Buy Pools'} </Text>
 
 
 
-                                <TouchableOpacity style={{
-                                    position: 'absolute',
-                                    right: 20,
-                                    top: 8,
-                                    width: 50, height: 50,
-                                }} onPress={() => this.modelCancel()}>
-                                    <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../../assets/images/modelcancel.png')} />
                                 </TouchableOpacity>
 
                                 <ScrollView style={{ marginTop: 50 }}>
@@ -677,7 +578,7 @@ class AddPromo extends Component {
 
                                                     <View style={{ flexDirection: 'column', width: '100%', height: 40 }}>
                                                         <Text style={{
-                                                            fontSize: 14, marginTop: 5, marginLeft: 50, fontFamily: 'regular', color: '#353C40'
+                                                            fontSize: Device.isTablet ? 19 : 14, marginTop: 5, marginLeft: 50, fontFamily: 'regular', color: '#353C40'
                                                         }}>
                                                             {item.poolName}
                                                         </Text>
@@ -692,34 +593,17 @@ class AddPromo extends Component {
                                     />
 
                                     <TouchableOpacity
-                                        style={{
-                                            width: deviceWidth - 40,
-                                            marginLeft: 20,
-                                            marginRight: 20,
-                                            marginTop: 20,
-                                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                        }} onPress={() => this.addPoolName()}
+                                        style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+                                        onPress={() => this.addPoolName()}
                                     >
-                                        <Text style={{
-                                            textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                            fontFamily: "regular"
-                                        }}  > {this.state.updateRool == true ? 'UPDATE' : 'ADD'} </Text>
+                                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}  > {this.state.updateRool == true ? 'UPDATE' : 'ADD'} </Text>
 
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
-                                        style={{
-                                            width: deviceWidth - 40,
-                                            marginLeft: 20,
-                                            marginRight: 20,
-                                            marginTop: 20,
-                                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                        }} onPress={() => this.modelCancel()}
+                                        style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile} onPress={() => this.modelCancel()}
                                     >
-                                        <Text style={{
-                                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                            fontFamily: "regular"
-                                        }}  > CANCEL </Text>
+                                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}  > CANCEL </Text>
 
                                     </TouchableOpacity>
                                 </ScrollView>
@@ -736,7 +620,7 @@ class AddPromo extends Component {
 }
 export default AddPromo;
 
-const pickerSelectStyles = StyleSheet.create({
+const pickerSelectStyles_mobile = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
@@ -778,8 +662,126 @@ const pickerSelectStyles = StyleSheet.create({
     },
 });
 
+const pickerSelectStyles_tablet = StyleSheet.create({
+    placeholder: {
+        color: "#6F6F6F",
+        fontFamily: "regular",
+        fontSize: 20,
+    },
+    inputIOS: {
+        justifyContent: 'center',
+        height: 52,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 20,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+    },
+    inputAndroid: {
+        justifyContent: 'center',
+        height: 52,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 20,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+        color: '#001B4A',
+
+        // marginLeft: 20,
+        // marginRight: 20,
+        // marginTop: 10,
+        // height: 40,
+        // backgroundColor: '#ffffff',
+        // borderBottomColor: '#456CAF55',
+        // color: '#001B4A',
+        // fontFamily: "bold",
+        // fontSize: 16,
+        // borderRadius: 3,
+    },
+});
+
+const promoFlats = StyleSheet.create({
+    // Styles For Mobile
+    nameHeader_mobile: {
+        fontSize: 12,
+        marginLeft: 16, marginTop: 20,
+        fontFamily: 'regular',
+        color: '#808080'
+    },
+    nameBody_mobile: {
+        fontSize: 14,
+        marginLeft: 16,
+        marginTop: 0,
+        fontFamily: 'medium',
+        color: '#353C40'
+    },
+
+    // Styles For Tablet
+    nameHeader_tablet: {
+        fontSize: 17,
+        marginLeft: 16,
+        marginTop: 20,
+        fontFamily: 'regular',
+        color: '#808080'
+    },
+    nameBody_tablet: {
+        fontSize: Device.isTablet ? 19 : 14,
+        marginLeft: 16,
+        marginTop: 0,
+        fontFamily: 'medium',
+        color: '#353C40'
+    },
+});
+
 const styles = StyleSheet.create({
-    input: {
+    mainContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
+    imagealign: {
+        marginTop: 16,
+        marginRight: 20,
+    },
+    bottomContainer: {
+        margin: 50,
+    },
+
+    // Styles For Mobile
+    viewsWidth_mobile: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 24,
+        height: 84,
+    },
+    backButton_mobile: {
+        position: 'absolute',
+        left: 10,
+        top: 30,
+        width: 40,
+        height: 40,
+    },
+    headerTitle_mobile: {
+        position: 'absolute',
+        left: 70,
+        top: 47,
+        width: 300,
+        height: 20,
+        fontFamily: 'bold',
+        fontSize: 18,
+        color: '#353C40'
+    },
+    subheading_mobile: {
+        fontFamily: 'medium',
+        fontSize: 16,
+        color: "red",
+        marginLeft: 20,
+    },
+    input_mobile: {
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
@@ -794,34 +796,53 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
-    imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+    rnSelect_mobile: {
+        color: '#8F9EB7',
+        fontSize: 15
     },
-    viewswidth: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
+    rnSelectContainer_mobile: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    saveButton_mobile: {
+        margin: 8,
+        height: 50,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    saveButtonText_mobile: {
         textAlign: 'center',
-        fontSize: 24,
-        height: 84,
+        marginTop: 15,
+        color: "#ffffff",
+        fontSize: 15,
+        fontFamily: "regular"
     },
-    promoname: {
-        fontFamily: 'medium',
-        fontSize: 16,
-        color: "red",
-        marginLeft: 20,
+    cancelButton_mobile: {
+        margin: 8,
+        height: 50,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
     },
-    buypooltitle: {
-        fontFamily: 'medium',
-        fontSize: 16,
-        color: 'red',
-        marginTop: 25,
-        marginBottom: 16,
-        marginLeft: 20,
+    cancelButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#353C4050",
+        fontSize: 15,
+        fontFamily: "regular",
     },
-    navigationalbuttons: {
-    },
-    navigationalbuttonstext: {
+    navigationbuttonstext_mobile: {
         color: 'red',
         fontSize: 16,
         marginTop: 10,
@@ -831,5 +852,185 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline',
         textDecorationColor: 'red',
     },
-});
+    filterMainContainer_mobile: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -20,
+        backgroundColor: "#ffffff",
+        position: 'absolute',
+        bottom: -20,
+    },
+    filterByTitle_mobile: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 20,
+        fontFamily: 'medium',
+        fontSize: 16,
+        color: '#353C40'
+    },
+    filterByTitleDecoration_mobile: {
+        height: 1,
+        width: deviceWidth,
+        backgroundColor: 'lightgray',
+        marginTop: 50,
+    },
+    filterCloseButton_mobile: {
+        position: 'absolute',
+        right: 8,
+        top: 15,
+        width: 50, height: 50,
+    },
+    filterCloseImage_mobile: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 12,
+        position: 'absolute',
+        top: 10,
+        right: 0,
+    },
 
+    // Styles For Tablet
+    viewsWidth_tablet: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 28,
+        height: 90,
+    },
+    backButton_tablet: {
+        position: 'absolute',
+        left: 10,
+        top: 25,
+        width: 90,
+        height: 90,
+    },
+    headerTitle_tablet: {
+        position: 'absolute',
+        left: 70,
+        top: 40,
+        width: 300,
+        height: 40,
+        fontFamily: 'bold',
+        fontSize: 24,
+        color: '#353C40'
+    },
+    subheading_tablet: {
+        fontFamily: 'medium',
+        fontSize: 21,
+        color: "red",
+        marginLeft: 20,
+    },
+    input_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    rnSelect_tablet: {
+        color: '#8F9EB7',
+        fontSize: 20
+    },
+    rnSelectContainer_tablet: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    navigationbuttonstext_tablet: {
+        color: 'red',
+        fontSize: 21,
+        marginTop: 10,
+        marginBottom: 15,
+        textAlign: 'center',
+        fontFamily: 'regular',
+        textDecorationLine: 'underline',
+        textDecorationColor: 'red',
+    },
+    saveButton_tablet: {
+        margin: 8,
+        height: 60,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    saveButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#ffffff",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    cancelButton_tablet: {
+        margin: 8,
+        height: 60,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    cancelButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#353C4050",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    filterMainContainer_tablet: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -40,
+        backgroundColor: "#ffffff",
+        height: 600,
+        position: 'absolute',
+        bottom: -40,
+    },
+    filterByTitle_tablet: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 30,
+        fontFamily: 'medium',
+        fontSize: 21,
+        color: '#353C40'
+    },
+    filterByTitleDecoration_tablet: {
+        height: 1,
+        width: deviceWidth,
+        backgroundColor: 'lightgray',
+        marginTop: 60,
+    },
+    filterCloseButton_tablet: {
+        position: 'absolute',
+        right: 24,
+        top: 10,
+        width: 60, height: 60,
+    },
+    filterCloseImage_tablet: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 17,
+        position: 'absolute',
+        top: 10,
+        right: 24,
+    },
+
+});

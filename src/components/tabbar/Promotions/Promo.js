@@ -39,7 +39,7 @@ class Promo extends Component {
             selectedcreatedBy: "",
             poolsData: [1, 2],
             promoData: [1, 2],
-            loyaltyData: [],
+            loyaltyData: [1, 2],
             productuom: "",
             selectedPromotionType: "",
             selectedPromotionName: "",
@@ -892,39 +892,39 @@ class Promo extends Component {
                         keyExtractor={item => item}
                         renderItem={({ item, index }) => (
                             <View style={{
-                                height: 140,
+                                height: Device.isTablet ? 190 : 140,
                                 backgroundColor: '#FBFBFB',
                                 borderBottomWidth: 5,
                                 borderBottomColor: '#FFFFFF',
                                 flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
                             }}>
-                                <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
-                                    <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
+                                <View style={{ flexDirection: 'column', width: '100%', height: Device.isTablet ? 190 : 140, }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 21 : 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
                                         Pool id: #{String(item.poolId)}
                                     </Text>
 
-                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
                                         POOL NAME
                                     </Text>
-                                    <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 19 : 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
                                         {item.poolName}
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                         CREATED BY
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
                                         {item.createdBy}
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 150, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 150, marginTop: Device.isTablet ? -45 : -30, fontFamily: 'regular', color: '#808080' }}>
                                         CREATED ON
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 150, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 150, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
                                         {item.createdDate}
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 150, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 150, marginTop: Device.isTablet ? -90 : -65, fontFamily: 'regular', color: '#808080' }}>
                                         TYPE
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 150, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 150, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
                                         {item.poolType}
                                     </Text>
                                 </View>
@@ -933,76 +933,37 @@ class Promo extends Component {
                                     <View>
                                         <Modal isVisible={this.state.modalVisible}>
 
-                                            <View style={{
-                                                width: deviceWidth,
-                                                alignItems: 'center',
-                                                marginLeft: -20,
-                                                backgroundColor: "#ffffff",
-                                                height: 260,
-                                                position: 'absolute',
-                                                bottom: -20,
-                                            }}>
+                                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
 
-                                                <Text style={{
-                                                    position: 'absolute',
-                                                    left: 20,
-                                                    top: 15,
-                                                    width: 300,
-                                                    height: 20,
-                                                    fontFamily: 'medium',
-                                                    fontSize: 16,
-                                                    color: '#353C40'
-                                                }}> Delete Pool </Text>
+                                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Pool </Text>
 
-                                                <TouchableOpacity style={{
-                                                    position: 'absolute',
-                                                    right: 20,
-                                                    top: 7,
-                                                    width: 50, height: 50,
-                                                }} onPress={() => this.modelCancel()}>
-                                                    <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
-                                                </TouchableOpacity>
+                                            <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                                <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
 
                                                 <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
                                                 </Text>
                                                 <Text style={{
                                                     position: 'absolute',
                                                     top: 70,
-                                                    height: 20,
+                                                    height: Device.isTablet ? 40 : 20,
                                                     textAlign: 'center',
                                                     fontFamily: 'regular',
-                                                    fontSize: 18,
+                                                    fontSize: Device.isTablet ? 23 : 18,
+                                                    marginBottom: Device.isTablet ? 25 : 0,
                                                     color: '#353C40'
                                                 }}> Are you sure want to delete pool?  </Text>
                                                 <TouchableOpacity
-                                                    style={{
-                                                        width: deviceWidth - 40,
-                                                        marginLeft: 20,
-                                                        marginRight: 20,
-                                                        marginTop: 60,
-                                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                    }} onPress={() => this.deletePool(item, index)}
+                                                    style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]} onPress={() => this.deletePool(item, index)}
                                                 >
-                                                    <Text style={{
-                                                        textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                                        fontFamily: "regular"
-                                                    }}  > DELETE </Text>
+                                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
 
                                                 </TouchableOpacity>
 
                                                 <TouchableOpacity
-                                                    style={{
-                                                        width: deviceWidth - 40,
-                                                        marginLeft: 20,
-                                                        marginRight: 20,
-                                                        marginTop: 20,
-                                                        height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                                    }} onPress={() => this.modelCancel()}
+                                                    style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
                                                 >
-                                                    <Text style={{
-                                                        textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                                        fontFamily: "regular"
-                                                    }}  > CANCEL </Text>
+                                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
 
                                                 </TouchableOpacity>
                                             </View>
@@ -1014,18 +975,20 @@ class Promo extends Component {
                                         position: 'absolute',
                                         right: 20,
                                         top: 20,
-                                        width: 50,
-                                        height: 24, backgroundColor: "#C1FCB0", borderRadius: 5,
+                                        width: Device.isTablet ? 70 : 50,
+                                        height: Device.isTablet ? 34 : 24,  
+                                        backgroundColor: "#C1FCB0", borderRadius: 5,
                                     } : {
                                         position: 'absolute',
                                         right: 20,
                                         top: 20,
-                                        width: 50,
-                                        height: 24, backgroundColor: "#FCB0BA", borderRadius: 5,
+                                        width: Device.isTablet ? 70 : 50,
+                                        height: Device.isTablet ? 34 : 24,  
+                                        backgroundColor: "#FCB0BA", borderRadius: 5,
                                     }}
                                 >
                                     <Text style={{
-                                        textAlign: 'center', marginTop: 5, color: "#353C40", fontSize: 12,
+                                        textAlign: 'center', marginTop: 5, color: "#353C40", fontSize: Device.isTablet ? 17 : 12,
                                         fontFamily: "regular"
                                     }}  > {item.isActive == true ? 'Active' : 'Inactive'} </Text>
 
@@ -1121,48 +1084,48 @@ class Promo extends Component {
                         keyExtractor={item => item}
                         renderItem={({ item, index }) => (
                             <View style={{
-                                height: 140,
+                                height: Device.isTablet ? 190 : 140,
                                 backgroundColor: '#FBFBFB',
                                 borderBottomWidth: 5,
                                 borderBottomColor: '#FFFFFF',
                                 flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
                             }}>
-                                <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
-                                    <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
+                                <View style={{ flexDirection: 'column', width: '100%', height: Device.isTablet ? 190 : 140, }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 21 : 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
                                         Promo id: #{String(item.promoId)}
                                     </Text>
 
-                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
                                         PROMO NAME
                                     </Text>
-                                    <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 19 : 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
                                         {String(item.promotionName)}
                                     </Text>
 
-                                    <Text style={{ position: "absolute", fontSize: 12, right: 20, marginTop: 60, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ position: "absolute", fontSize: Device.isTablet ? 17 : 12, right: 20, marginTop: Device.isTablet ? 70 : 60, fontFamily: 'regular', color: '#808080' }}>
                                         PRIORITY
                                     </Text>
-                                    <Text style={{ position: "absolute", fontSize: 12, right: 20, marginTop: 75, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ position: "absolute", fontSize: Device.isTablet ? 17 : 12, right: 20, marginTop: Device.isTablet ? 85 : 75, fontFamily: 'regular', color: '#353C40' }}>
                                         {String(item.priority)}
                                     </Text>
 
-                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                         START DATE
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
                                         {item.startDate}
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 170, marginTop: Device.isTablet ? -40 : -30, fontFamily: 'regular', color: '#808080' }}>
                                         END DATE
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
                                         {item.endDate}
                                     </Text>
 
-                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 170, marginTop: Device.isTablet ? -95 : -65, fontFamily: 'regular', color: '#808080' }}>
                                         STORE
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 170, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
                                         -
                                     </Text>
 
@@ -1175,17 +1138,19 @@ class Promo extends Component {
                                         right: 20,
                                         top: 20,
                                         width: 50,
-                                        height: 24, backgroundColor: "#C1FCB0", borderRadius: 5,
+                                        height: 24, 
+                                        backgroundColor: "#C1FCB0", borderRadius: 5,
                                     } : {
                                         position: 'absolute',
                                         right: 20,
                                         top: 20,
-                                        width: 50,
-                                        height: 24, backgroundColor: "#FCB0BA", borderRadius: 5,
+                                        width: Device.isTablet ? 70 : 50,
+                                        height: Device.isTablet ? 34 : 24, 
+                                        backgroundColor: "#FCB0BA", borderRadius: 5,
                                     }}
                                 >
                                     <Text style={{
-                                        textAlign: 'center', marginTop: 5, color: "#353C40", fontSize: 12,
+                                        textAlign: 'center', marginTop: 5, color: "#353C40", fontSize: Device.isTablet ? 17 : 12,
                                         fontFamily: "regular"
                                     }}  > {item.isActive == true ? 'Active' : 'Inactive'} </Text>
 
@@ -1195,9 +1160,9 @@ class Promo extends Component {
                                     <View>
                                         <Modal isVisible={this.state.modalVisible}>
 
-                                            <View style={Device.isTablet ? styles.filterBarcodeContainer_tablet : styles.filterBarcodeContainer_mobile}>
+                                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, {height: Device.isTablet ? 350 : 250}]}>
 
-                                                <Text tyle={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Promotion </Text>
+                                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Promotion </Text>
 
                                                 <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
                                                     <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../../assets/images/modelcancel.png')} />
@@ -1208,14 +1173,16 @@ class Promo extends Component {
                                                 <Text style={{
                                                     position: 'absolute',
                                                     top: 70,
-                                                    height: 20,
+                                                    height: Device.isTablet ? 40 : 20,
                                                     textAlign: 'center',
                                                     fontFamily: 'regular',
                                                     fontSize: Device.isTablet ? 23 : 18,
+                                                    marginBottom: Device.isTablet ? 25 : 0,
                                                     color: '#353C40'
+
                                                 }}> Are you sure want to delete Promotion?  </Text>
                                                 <TouchableOpacity
-                                                    style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile} onPress={() => this.deletePromotion(item, index)}
+                                                    style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, {marginTop: Device.isTablet ? 75 : 55}]} onPress={() => this.deletePromotion(item, index)}
                                                 >
                                                     <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
 
@@ -1234,7 +1201,7 @@ class Promo extends Component {
                                 <TouchableOpacity style={{
                                     position: 'absolute',
                                     right: 50,
-                                    top: 90,
+                                    top: Device.isTablet ? 130 : 90,
                                     width: 30,
                                     height: 30,
                                     borderBottomLeftRadius: 5,
@@ -1249,7 +1216,7 @@ class Promo extends Component {
                                 <TouchableOpacity style={{
                                     position: 'absolute',
                                     right: 20,
-                                    top: 90,
+                                    top: Device.isTablet ? 130 : 90,
                                     width: 30,
                                     height: 30,
                                     borderBottomRightRadius: 5,
@@ -1298,47 +1265,49 @@ class Promo extends Component {
                                 borderBottomColor: '#FFFFFF',
                                 flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
                             }}>
-                                <View style={{ flexDirection: 'column', width: '100%', height: 140, }}>
-                                    <Text style={{ fontSize: 16, marginLeft: 16, marginTop: 20, fontFamily: 'medium', color: '#ED1C24' }}>
+                                <View style={{ flexDirection: 'column', width: '100%', height: 140, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingLeft: Device.isTablet ? 25 : 15, paddingRight: Device.isTablet ? 25 : 15 }}>
+                                    <View>
+                                    <Text style={{ fontSize: Device.isTablet ? 21 : 16, marginBottom: 15, fontFamily: 'medium', color: '#ED1C24' }}>
                                         {item.customerName}
                                     </Text>
 
-                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
                                         MOBILE NUMBER
                                     </Text>
-                                    <Text style={{ fontSize: 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 19 : 14, fontFamily: 'medium', color: '#353C40' }}>
                                         {item.mobileNumber}
                                     </Text>
-
-
-
-                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
                                         EXPIRY DATE
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 16, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#353C40' }}>
                                         {item.expiredDate}
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 250, marginTop: -30, fontFamily: 'regular', color: '#808080' }}>
+                                    </View>
+
+                                    <View>
+                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginTop: Device.isTablet ? 45 : 30, fontFamily: 'regular', color: '#808080' }}>
                                         POINTS VALUE
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 250, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#353C40' }}>
                                         {item.loyaltyPoints}
                                     </Text>
 
-                                    <Text style={{ fontSize: 12, marginLeft: 250, marginTop: -65, fontFamily: 'regular', color: '#808080' }}>
+                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12,  fontFamily: 'regular', color: '#808080' }}>
                                         LOYALTY POINTS
                                     </Text>
-                                    <Text style={{ fontSize: 12, marginLeft: 250, marginTop: 0, fontFamily: 'regular', color: '#353C40' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#353C40' }}>
                                         ₹ {item.invoiceAmount}
                                     </Text>
-
-                                    <Text style={{ position: "absolute", fontSize: 12, right: 60, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
+                                    </View>
+                                    <View>
+                                    <Text style={{  fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
                                         INVOICE NUMBER
                                     </Text>
-                                    <Text style={{ position: "absolute", fontSize: 12, right: 60, marginTop: 35, fontFamily: 'regular', color: '#353C40' }}>
+                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#353C40' }}>
                                         {String(item.invoiceNumber)}
                                     </Text>
-
+                                    </View>
                                 </View>
 
 
@@ -1598,31 +1567,15 @@ class Promo extends Component {
                                         {this.state.datepickerOpen && this.state.flagtwo && (
                                             <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
                                                 <TouchableOpacity
-                                                    style={{
-                                                        position: 'absolute',
-                                                        left: 20,
-                                                        top: 10,
-                                                        height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                    }} onPress={() => this.datepickerCancelClicked()}
+                                                    style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
                                                 >
-                                                    <Text style={{
-                                                        textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                        fontFamily: "regular"
-                                                    }}  > Cancel </Text>
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
 
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
-                                                    style={{
-                                                        position: 'absolute',
-                                                        right: 20,
-                                                        top: 10,
-                                                        height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                    }} onPress={() => this.datepickerDoneClicked()}
+                                                    style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerDoneClicked()}
                                                 >
-                                                    <Text style={{
-                                                        textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                        fontFamily: "regular"
-                                                    }}  > Done </Text>
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
 
                                                 </TouchableOpacity>
                                                 <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
@@ -1635,30 +1588,14 @@ class Promo extends Component {
                                         {this.state.datepickerendOpen && this.state.flagtwo && (
                                             <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
                                                 <TouchableOpacity
-                                                    style={{
-                                                        position: 'absolute',
-                                                        left: 20,
-                                                        top: 10,
-                                                        height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                    }} onPress={() => this.datepickerCancelClicked()}
+                                                    style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
                                                 >
-                                                    <Text style={{
-                                                        textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                        fontFamily: "regular"
-                                                    }}  > Cancel </Text>
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity
-                                                    style={{
-                                                        position: 'absolute',
-                                                        right: 20,
-                                                        top: 10,
-                                                        height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                    }} onPress={() => this.datepickerendDoneClicked()}
+                                                    style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerendDoneClicked()}
                                                 >
-                                                    <Text style={{
-                                                        textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                        fontFamily: "regular"
-                                                    }}  > Done </Text>
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
 
                                                 </TouchableOpacity>
                                                 <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
@@ -2085,31 +2022,15 @@ class Promo extends Component {
                                     {this.state.datepickerOpen && this.state.flagtwo && (
                                         <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
                                             <TouchableOpacity
-                                                style={{
-                                                    position: 'absolute',
-                                                    left: 20,
-                                                    top: 10,
-                                                    height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                }} onPress={() => this.datepickerCancelClicked()}
+                                                style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
                                             >
-                                                <Text style={{
-                                                    textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                    fontFamily: "regular"
-                                                }}  > Cancel </Text>
+                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
 
                                             </TouchableOpacity>
                                             <TouchableOpacity
-                                                style={{
-                                                    position: 'absolute',
-                                                    right: 20,
-                                                    top: 10,
-                                                    height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                }} onPress={() => this.datepickerDoneClicked()}
+                                                style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerDoneClicked()}
                                             >
-                                                <Text style={{
-                                                    textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                    fontFamily: "regular"
-                                                }}  > Done </Text>
+                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
 
                                             </TouchableOpacity>
                                             <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
@@ -2122,31 +2043,15 @@ class Promo extends Component {
                                     {this.state.datepickerendOpen && this.state.flagtwo && (
                                         <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
                                             <TouchableOpacity
-                                                style={{
-                                                    position: 'absolute',
-                                                    left: 20,
-                                                    top: 10,
-                                                    height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                }} onPress={() => this.datepickerCancelClicked()}
+                                                style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
                                             >
-                                                <Text style={{
-                                                    textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                    fontFamily: "regular"
-                                                }}  > Cancel </Text>
+                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
 
                                             </TouchableOpacity>
                                             <TouchableOpacity
-                                                style={{
-                                                    position: 'absolute',
-                                                    right: 20,
-                                                    top: 10,
-                                                    height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                }} onPress={() => this.datepickerendDoneClicked()}
+                                                style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerendDoneClicked()}
                                             >
-                                                <Text style={{
-                                                    textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                    fontFamily: "regular"
-                                                }}  > Done </Text>
+                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
 
                                             </TouchableOpacity>
                                             <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
@@ -2823,7 +2728,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -20,
         backgroundColor: "#ffffff",
-        height: 500,
         position: 'absolute',
         bottom: -20,
     },
