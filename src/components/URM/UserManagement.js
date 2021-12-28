@@ -58,7 +58,7 @@ export default class UserManagement extends Component {
     }
 
     handleBackButtonClick() {
-        this.props.navigation.navigate('Home');
+        this.props.navigation.openDrawer();
     }
 
     navigateToAddUsers() {

@@ -11,12 +11,21 @@ import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
 import Loader from '../../loader';
 import ProfileService from '../../services/ProfileService';
+import UrmService from '../../services/UrmService';
 var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
 
-
+global.previlage1 = '';
+global.previlage2 = '';
+global.previlage3 = '';
+global.previlage4 = '';
+global.previlage5 = '';
+global.previlage6 = '';
+global.previlage7 = '';
+global.previlage8 = '';
+global.domainName = ''
 
 
 class Settings extends Component {
@@ -36,6 +45,10 @@ class Settings extends Component {
             dateOfBirth: "",
             address: "",
             userId: 0,
+            domainNamesArray: [],
+            domainNames: [],
+            selectedDomain: "",
+
         };
     }
 
@@ -61,6 +74,30 @@ class Settings extends Component {
 
     handleAddress = (value) => {
         this.setState({ address: value });
+    };
+
+    handleDomain = (value) => {
+        for (let i = 0; i < this.state.domainNamesArray.length; i++) {
+            if (this.state.domainNamesArray[i].name === value) {
+                AsyncStorage.setItem("domainDataId", (this.state.domainNamesArray[i].id).toString()).then(() => {
+                    // console.log
+
+                }).catch(() => {
+                    console.log('there is error saving token')
+                })
+                global.domainName = this.state.domainNamesArray[i].name
+                AsyncStorage.setItem("domainName", this.state.domainNamesArray[i].name).then(() => {
+                    // console.log
+
+                }).catch(() => {
+                    console.log('there is error saving token')
+                })
+
+            }
+        }
+        console.log('store id is' + this.state.domainNamesArray[0].name);
+
+        this.setState({ selectedDomain: value });
     };
 
     datepickerCancelClicked() {
@@ -134,6 +171,69 @@ class Settings extends Component {
     }
 
     async componentDidMount() {
+        var isSuperAdmin = "";
+        AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
+            if (value === "true") {
+                var clientId = "";
+                var domainNames = [];
+                AsyncStorage.getItem("custom:clientId1").then((value) => {
+                    clientId = value;
+                    console.log(clientId)
+                    axios.get(UrmService.getDomains() + clientId).then((res) => {
+                        if (res.data && res.data["isSuccess"] === "true") {
+                            for (var i = 0; i < res.data["result"].length; i++) {
+                                let number = res.data.result[i];
+                                console.log(number);
+                                this.state.domainNamesArray.push({ name: number.domaiName, id: number.clientDomainaId });
+                                console.log(this.state.domainNamesArray);
+                                domainNames.push({
+                                    value: this.state.domainNamesArray[i].name,
+                                    label: this.state.domainNamesArray[i].name
+                                });
+                                this.setState({
+                                    domainNames: domainNames,
+                                });
+                                this.setState({ domainNamesArray: this.state.domainNamesArray });
+                            }
+                        }
+
+                    });
+                }).catch(() => {
+                    console.log('there is error getting phone numner');
+                });
+            }
+            else {
+                AsyncStorage.getItem("domainDataId").then((value) => {
+                    console.log('sdasfsafsafsfaasf' + value)
+                    var domainNames = [];
+                    axios.get(UrmService.getDomainName() + value).then((res) => {
+                        if (res.data && res.data["isSuccess"] === "true") {
+
+                            let number = res.data.result;
+                            console.log(res.data.result);
+                            this.state.domainNamesArray.push({ name: number.domaiName, id: number.clientDomainaId });
+                            console.log(this.state.domainNamesArray[0].name);
+                            domainNames.push({
+                                value: this.state.domainNamesArray[0].name,
+                                label: this.state.domainNamesArray[0].name
+                            });
+                            this.setState({
+                                domainNames: domainNames,
+                            });
+                            this.setState({ domainNamesArray: this.state.domainNamesArray });
+                        }
+
+                    });
+
+                }).catch(() => {
+                    console.log('there is error saving token')
+                })
+            }
+
+        }).catch(() => {
+            console.log('there is error getting storeId')
+        })
+
         var phonenumber = "";
         AsyncStorage.getItem("phone_number").then((value) => {
             phonenumber = value;
@@ -165,7 +265,121 @@ class Settings extends Component {
             this.setState({ loading: false });
             alert('No user details get');
         });
+        this.domainChange()
     }
+
+    async domainChange(){
+        AsyncStorage.getItem("domainName").then((value) => {
+            global.domainName = value
+        }).catch(() => {
+            console.log('there is error getting storeId')
+        })  
+
+        AsyncStorage.getItem("custom:isConfigUser").then((value) => {
+            if(value === "true"){
+                global.previlage7 = 'URM Portal';
+                global.previlage5 = 'Accounting Portal';
+                alert('No user details get');
+            }
+            else{
+                AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
+                    if(value === "true") { 
+                        var domainId = "1"
+                        if(global.domainName === "Textile"){
+                            domainId = "1"
+                        }
+                        else if(global.domainName === "Retail"){
+                            domainId = "2"
+                        }
+                        else if(global.domainName === "Electrical & Electronics"){
+                            domainId = "3"
+                        }
+
+                        axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
+                            if (res.data && res.data["isSuccess"] === "true") {
+                                console.log(res.data)
+                                let len = res.data["result"].length;
+                                console.log(len)
+                                if (len > 0) {
+                                    for (let i = 0; i < len; i++) {
+                                        let previlage = res.data["result"][i]
+                                        if (previlage.name === "Dashboard") {
+                                            global.previlage1 = 'Dashboard';
+                                        }
+                                        if (previlage.name === "Customer Portal") {
+                                            global.previlage2 = 'Customer Portal';
+                                        }
+                                        if (previlage.name === "Inventory Portal") {
+                                            global.previlage3 = 'Inventory Portal';
+                                        }
+                                        if (previlage.name === "Promotions & Loyalty") {
+                                            global.previlage4 = 'Promotions & Loyalty';
+                                        }
+                                        if (previlage.name === "Accounting Portal") {
+                                            global.previlage5 = 'Accounting Portal';
+                                        }
+                                        if (previlage.name === "Reports") {
+                                            global.previlage6 = 'Reports';
+                                        }
+                                        if (previlage.name === "URM Portal") {
+                                            global.previlage7 = 'URM Portal';
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        console.log('vinod-------> privlage by name')
+                            AsyncStorage.getItem("rolename").then((value) => {
+                        axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
+                            if (res.data && res.data["isSuccess"] === "true") {
+                                console.log(res.data)
+                                let len = res.data["result"].parentPrivilages.length;
+                               // console.log(.name)
+                                if (len > 0) {
+                                    for (let i = 0; i < len; i++) {
+                                        let previlage = res.data["result"].parentPrivilages[i]
+                                        
+                                        if (previlage.name === "Dashboard") {
+                                            global.previlage1 = 'Dashboard';
+                                        }
+                                        if (previlage.name === "Customer Portal") {
+                                            global.previlage2 = 'Customer Portal';
+                                        }
+                                        if (previlage.name === "Inventory Portal") {
+                                            global.previlage3 = 'Inventory Portal';
+                                        }
+                                        if (previlage.name === "Promotions & Loyalty") {
+                                            global.previlage4 = 'Promotions & Loyalty';
+                                        }
+                                        if (previlage.name === "Accounting Portal") {
+                                            global.previlage5 = 'Accounting Portal';
+                                        }
+                                        if (previlage.name === "Reports") {
+                                            global.previlage6 = 'Reports';
+                                        }
+                                        if (previlage.name === "URM Portal") {
+                                            global.previlage7 = 'URM Portal';
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        }).catch(() => {
+                            console.log('there is error saving domainDataId')
+                        })
+
+                    }
+                }).catch(() => {
+                    console.log('there is error getting storeId')
+                })        
+            }
+        }).catch(() => {
+            console.log('there is error getting storeId')
+        })
+    }
+
 
 
 
@@ -359,6 +573,26 @@ class Settings extends Component {
                                             value={this.state.selectedGender}
                                             useNativeAndroidPickerStyle={false}
 
+                                        />
+                                    </View>
+                                </View>
+
+                                <View>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> DOMAIN: </Text>
+                                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
+                                        <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            placeholder={{
+                                                label: 'SELECT DOMAIN',
+
+                                            }}
+                                            Icon={() => {
+                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                            }}
+                                            items={this.state.domainNames}
+                                            onValueChange={this.handleDomain}
+                                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                            value={this.state.selectedDomain}
+                                            useNativeAndroidPickerStyle={false}
                                         />
                                     </View>
                                 </View>
