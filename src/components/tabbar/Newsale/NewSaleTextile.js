@@ -12,21 +12,8 @@ import UrmService from '../../services/UrmService';
 import ProfileService from '../../services/ProfileService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-global.previlage1 = '';
-global.previlage2 = '';
-global.previlage3 = '';
-global.previlage4 = '';
-global.previlage5 = '';
-global.previlage6 = '';
-global.previlage7 = '';
-global.previlage8 = '';
-global.isSuperAdmin = '';
-global.isConfigUser = '';
-global.username = ''
-global.userrole = ''
-global.domainName = ''
 
-class Home extends Component {
+class NewSaleTextile extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,128 +23,6 @@ class Home extends Component {
 
 
     async componentDidMount() { 
-        AsyncStorage.getItem("domainName").then((value) => {
-            global.domainName = value
-        }).catch(() => {
-            console.log('there is error getting storeId')
-        })  
-
-        AsyncStorage.getItem("custom:isConfigUser").then((value) => {
-            if(value === "true"){
-                global.previlage7 = 'URM Portal';
-                global.previlage5 = 'Accounting Portal';
-            }
-            else{
-                AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
-                    if(value === "true") { 
-                        var domainId = "1"
-                        if(global.domainName === "Textile"){
-                            domainId = "1"
-                        }
-                        else if(global.domainName === "Retail"){
-                            domainId = "2"
-                        }
-                        else if(global.domainName === "Electrical & Electronics"){
-                            domainId = "3"
-                        }
-
-                        axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
-                            if (res.data && res.data["isSuccess"] === "true") {
-                                console.log(res.data)
-                                let len = res.data["result"].length;
-                                console.log(len)
-                                if (len > 0) {
-                                    for (let i = 0; i < len; i++) {
-                                        let previlage = res.data["result"][i]
-                                        if (previlage.name === "Dashboard") {
-                                            global.previlage1 = 'Dashboard';
-                                        }
-                                        if (previlage.name === "Customer Portal") {
-                                            global.previlage2 = 'Customer Portal';
-                                        }
-                                        if (previlage.name === "Inventory Portal") {
-                                            global.previlage3 = 'Inventory Portal';
-                                        }
-                                        if (previlage.name === "Promotions & Loyalty") {
-                                            global.previlage4 = 'Promotions & Loyalty';
-                                        }
-                                        if (previlage.name === "Accounting Portal") {
-                                            global.previlage5 = 'Accounting Portal';
-                                        }
-                                        if (previlage.name === "Reports") {
-                                            global.previlage6 = 'Reports';
-                                        }
-                                        if (previlage.name === "URM Portal") {
-                                            global.previlage7 = 'URM Portal';
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                    }
-                    else {
-                        console.log('vinod-------> privlage by name')
-                            AsyncStorage.getItem("rolename").then((value) => {
-                        axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
-                            if (res.data && res.data["isSuccess"] === "true") {
-                                console.log(res.data)
-                                let len = res.data["result"].parentPrivilages.length;
-                               // console.log(.name)
-                                if (len > 0) {
-                                    for (let i = 0; i < len; i++) {
-                                        let previlage = res.data["result"].parentPrivilages[i]
-                                        
-                                        if (previlage.name === "Dashboard") {
-                                            global.previlage1 = 'Dashboard';
-                                        }
-                                        if (previlage.name === "Customer Portal") {
-                                            global.previlage2 = 'Customer Portal';
-                                        }
-                                        if (previlage.name === "Inventory Portal") {
-                                            global.previlage3 = 'Inventory Portal';
-                                        }
-                                        if (previlage.name === "Promotions & Loyalty") {
-                                            global.previlage4 = 'Promotions & Loyalty';
-                                        }
-                                        if (previlage.name === "Accounting Portal") {
-                                            global.previlage5 = 'Accounting Portal';
-                                        }
-                                        if (previlage.name === "Reports") {
-                                            global.previlage6 = 'Reports';
-                                        }
-                                        if (previlage.name === "URM Portal") {
-                                            global.previlage7 = 'URM Portal';
-                                        }
-                                    }
-                                }
-                            }
-                        });
-                        }).catch(() => {
-                            console.log('there is error saving domainDataId')
-                        })
-
-                    }
-                }).catch(() => {
-                    console.log('there is error getting storeId')
-                })        
-            }
-        }).catch(() => {
-            console.log('there is error getting storeId')
-        })
-
-     
-       
-        const username = await AsyncStorage.getItem("username");
-        axios.get(ProfileService.getUser() + username).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                global.username = res.data["result"].userName;
-                global.userrole = res.data["result"].roleName;
-            }
-        }).catch(() => {
-            this.setState({ loading: false });
-            alert('No user details get');
-        });
-
        
     }
 
@@ -335,7 +200,7 @@ class Home extends Component {
         )
     }
 }
-export default Home
+export default NewSaleTextile
 
 
 const styles = StyleSheet.create({

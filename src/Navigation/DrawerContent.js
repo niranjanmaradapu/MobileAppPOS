@@ -61,7 +61,7 @@ export function DrawerContent(props) {
 
                     <Drawer.Section style={styles.drawerSection}>
 
-                        {/* {global.previlage1 === "Dashboard" && ( */}
+                        {global.previlage1 === "Dashboard" && (
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <Icon
@@ -73,7 +73,7 @@ export function DrawerContent(props) {
                             label="Home"
                             onPress={() => { props.navigation.navigate('Home') }}
                         />
-                        {/* )} */}
+                        )} 
 
                         {global.previlage2 === "Customer Portal" && global.domainName == "Retail" && (
                             <DrawerItem
@@ -96,7 +96,7 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="Customer Portal"
-                                onPress={() => { props.navigation.navigate('') }}
+                                onPress={() => { props.navigation.navigate('NewSaleTextileNavigation') }}
                             />
                         )}
 

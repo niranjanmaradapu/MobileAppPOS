@@ -274,7 +274,7 @@ class Settings extends Component {
         }).catch(() => {
             console.log('there is error getting storeId')
         })  
-        
+
         AsyncStorage.getItem("custom:isConfigUser").then((value) => {
             if(value === "true"){
                 global.previlage7 = 'URM Portal';
@@ -331,7 +331,8 @@ class Settings extends Component {
                     }
                     else {
                         console.log('vinod-------> privlage by name')
-                        axios.get(UrmService.getPrivillagesByRoleName() + "textilesalesman").then((res) => {
+                            AsyncStorage.getItem("rolename").then((value) => {
+                        axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
                             if (res.data && res.data["isSuccess"] === "true") {
                                 console.log(res.data)
                                 let len = res.data["result"].parentPrivilages.length;
@@ -365,6 +366,10 @@ class Settings extends Component {
                                 }
                             }
                         });
+                        }).catch(() => {
+                            console.log('there is error saving domainDataId')
+                        })
+
                     }
                 }).catch(() => {
                     console.log('there is error getting storeId')
