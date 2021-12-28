@@ -22,90 +22,27 @@ import UrmService from '../components/services/UrmService';
 
 
 
-global.previlage1 = '';
-global.previlage2 = '';
-global.previlage3 = '';
-global.previlage4 = '';
-global.previlage5 = '';
-global.previlage6 = '';
-global.previlage7 = '';
-global.previlage8 = '';
-global.isSuperAdmin = '';
-global.isConfigUser = '';
+
 
 export function DrawerContent(props) {
-
-
-    AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
-        global.isSuperAdmin = value
-    }).catch(() => {
-        console.log('there is error getting storeId')
-    })
-
-    AsyncStorage.getItem("custom:isConfigUser").then((value) => {
-        global.isConfigUser = value
-    }).catch(() => {
-        console.log('there is error getting storeId')
-    })
-
-    if(global.isSuperAdmin === "true") { 
-        axios.get(UrmService.getPrivillagesForDomain() + "1").then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                console.log(res.data)
-                let len = res.data["result"].length;
-                console.log(len)
-                if (len > 0) {
-                    for (let i = 0; i < len; i++) {
-                        let previlage = res.data["result"][i]
-                        if (previlage.name === "Dashboard") {
-                            global.previlage1 = 'Dashboard';
-                        }
-                        if (previlage.name === "Customer Portal") {
-                            global.previlage2 = 'Customer Portal';
-                        }
-                        if (previlage.name === "Inventory Portal") {
-                            global.previlage3 = 'Inventory Portal';
-                        }
-                        if (previlage.name === "Promotions & Loyalty") {
-                            global.previlage4 = 'Promotions & Loyalty';
-                        }
-                        if (previlage.name === "Accounting Portal") {
-                            global.previlage5 = 'Accounting Portal';
-                        }
-                        if (previlage.name === "Reports") {
-                            global.previlage6 = 'Reports';
-                        }
-                        if (previlage.name === "URM Portal") {
-                            global.previlage7 = 'URM Portal';
-                        }
-                    }
-                }
-            }
-        });
-    }
-    else {
-    }
-
-    
-
-
     return (
         <View style={{ flex: 1 }}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
-                <Image
-                                style={styles.logoimage}
-                                source={require('../components/assets/images/sidemenulogo.png')}
-                              ></Image>
+                    <Image
+                        style={styles.logoimage}
+                        source={require('../components/assets/images/sidemenulogo.png')}
+                    ></Image>
                     <View style={styles.userInfoSection}>
-                        <View style={{ flexDirection: 'row', marginTop: 10,backgroundColor:'#ED1C24',marginLeft:-20, }}>
+                        <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ED1C24', marginLeft: -20, }}>
                             <Image
                                 style={styles.image}
                                 source={require('../components/assets/images/profilepic.png')}
                                 resizeMode={"cover"} ></Image>
-                            <View style={{ marginLeft: 15, flexDirection: 'column',height:100 }}>
-                                <Title style={styles.title}>Vinod Magham</Title>
-                                <Caption style={styles.caption}>Software Engineer</Caption>
+                            <View style={{ marginLeft: 15, flexDirection: 'column', height: 100 }}>
+                                <Title style={styles.title}>{global.username}</Title>
+                                <Caption style={styles.middelcaption}>{global.domainName}</Caption>
+                                <Caption style={styles.caption}>{global.userrole}</Caption>
                             </View>
                         </View>
 
@@ -124,39 +61,65 @@ export function DrawerContent(props) {
 
                     <Drawer.Section style={styles.drawerSection}>
 
-                        {global.previlage1 === "Dashboard" && (
-                            <DrawerItem
-                                icon={({ color, size }) => (
-                                    <Icon
+                        {/* {global.previlage1 === "Dashboard" && ( */}
+                        <DrawerItem
+                            icon={({ color, size }) => (
+                                <Icon
                                     name="home"
                                     color={color}
                                     size={size}
                                 />
-                                )}
-                                label="Home"
-                                onPress={() => { props.navigation.navigate('Home') }}
-                            />)}
+                            )}
+                            label="Home"
+                            onPress={() => { props.navigation.navigate('Home') }}
+                        />
+                        {/* )} */}
 
-                        {global.previlage2 === "Customer Portal" && (
+                        {global.previlage2 === "Customer Portal" && global.domainName == "Retail" && (
                             <DrawerItem
                                 icon={({ color, size }) => (
                                     <Image
-                                    style={styles.sidemenuimage}
-                                    source={require('../components/assets/images/customerportal.png')}
+                                        style={styles.sidemenuimage}
+                                        source={require('../components/assets/images/customerportal.png')}
                                     ></Image>
                                 )}
                                 label="Customer Portal"
                                 onPress={() => { props.navigation.navigate('NewSaleNavigation') }}
                             />
                         )}
-
-
-                        {global.previlage3 === "Inventory Portal" && (
+                        {global.previlage2 === "Customer Portal" && global.domainName == "Textile" && (
                             <DrawerItem
                                 icon={({ color, size }) => (
                                     <Image
-                                    style={styles.sidemenuimage}
-                                    source={require('../components/assets/images/inventoryportal.png')}
+                                        style={styles.sidemenuimage}
+                                        source={require('../components/assets/images/customerportal.png')}
+                                    ></Image>
+                                )}
+                                label="Customer Portal"
+                                onPress={() => { props.navigation.navigate('') }}
+                            />
+                        )}
+
+
+                        {global.previlage3 === "Inventory Portal" && global.domainName == "Retail" && (
+                            <DrawerItem
+                                icon={({ color, size }) => (
+                                    <Image
+                                        style={styles.sidemenuimage}
+                                        source={require('../components/assets/images/inventoryportal.png')}
+                                    ></Image>
+                                )}
+                                label="Inventory Portal"
+                                onPress={() => { props.navigation.navigate('NewSaleNavigation') }}
+                            />
+                        )}
+
+                        {global.previlage3 === "Inventory Portal" && global.domainName == "Textile" && (
+                            <DrawerItem
+                                icon={({ color, size }) => (
+                                    <Image
+                                        style={styles.sidemenuimage}
+                                        source={require('../components/assets/images/inventoryportal.png')}
                                     ></Image>
                                 )}
                                 label="Inventory Portal"
@@ -168,8 +131,8 @@ export function DrawerContent(props) {
                             <DrawerItem
                                 icon={({ color, size }) => (
                                     <Image
-                                    style={styles.sidemenuimage}
-                                    source={require('../components/assets/images/promotions.png')}
+                                        style={styles.sidemenuimage}
+                                        source={require('../components/assets/images/promotions.png')}
                                     ></Image>
                                 )}
                                 label="Promotions & Loyalty"
@@ -180,8 +143,8 @@ export function DrawerContent(props) {
                             <DrawerItem
                                 icon={({ color, size }) => (
                                     <Image
-                                    style={styles.sidemenuimage}
-                                    source={require('../components/assets/images/accounting.png')}
+                                        style={styles.sidemenuimage}
+                                        source={require('../components/assets/images/accounting.png')}
                                     ></Image>
                                 )}
                                 label="Accounting Portal"
@@ -193,12 +156,12 @@ export function DrawerContent(props) {
                             <DrawerItem
                                 icon={({ color, size }) => (
                                     <Image
-                                    style={styles.sidemenuimage}
-                                    source={require('../components/assets/images/reports.png')}
+                                        style={styles.sidemenuimage}
+                                        source={require('../components/assets/images/reports.png')}
                                     ></Image>
                                 )}
                                 label="Reports"
-                                onPress={() => { props.navigation.navigate('InventoryNavigation') }}
+                                onPress={() => { props.navigation.navigate('') }}
                             />
                         )}
 
@@ -206,8 +169,8 @@ export function DrawerContent(props) {
                             <DrawerItem
                                 icon={({ color, size }) => (
                                     <Image
-                                    style={styles.sidemenuimage}
-                                    source={require('../components/assets/images/urmportal.png')}
+                                        style={styles.sidemenuimage}
+                                        source={require('../components/assets/images/urmportal.png')}
                                     ></Image>
                                 )}
                                 label="URM Portal"
@@ -217,8 +180,8 @@ export function DrawerContent(props) {
                         <DrawerItem
                             icon={({ color, size }) => (
                                 <Image
-                                style={styles.sidemenuimage}
-                                source={require('../components/assets/images/sidesettings.png')}
+                                    style={styles.sidemenuimage}
+                                    source={require('../components/assets/images/sidesettings.png')}
                                 ></Image>
                             )}
                             label="Profile Settings"
@@ -255,30 +218,35 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 16,
-        marginTop: 3,
-        fontWeight:'bold',
-        color:'#ffffff',
-        marginTop:25,
+        marginTop: 20,
+        fontWeight: 'bold',
+        color: '#ffffff',
     },
     caption: {
         fontSize: 14,
         lineHeight: 14,
-        color:'#ffffff',
+        color: '#ffffff',
     },
-    logoimage:{
-       width:150, 
-       height:60,
-       marginTop:20, 
-       marginLeft:20,
+    middelcaption: {
+        marginTop: 0,
+        fontSize: 14,
+        lineHeight: 14,
+        color: '#ffffff',
     },
-    image:{
-        marginTop:20, 
-        marginLeft:20,
-     },
-    sidemenuimage:{
-       width:20,
-       height:20
-     },
+    logoimage: {
+        width: 150,
+        height: 60,
+        marginTop: 20,
+        marginLeft: 20,
+    },
+    image: {
+        marginTop: 20,
+        marginLeft: 20,
+    },
+    sidemenuimage: {
+        width: 20,
+        height: 20
+    },
     row: {
         marginTop: 20,
         flexDirection: 'row',

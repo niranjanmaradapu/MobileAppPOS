@@ -40,6 +40,12 @@ export default class SelectDomain extends React.Component {
                     }).catch(() => {
                         console.log('there is error saving token')
                     })
+                    AsyncStorage.setItem("domainName", res.data.result[0].domaiName).then(() => {
+                        // console.log
+                       
+                    }).catch(() => {
+                        console.log('there is error saving token')
+                    })
                     this.setState({ domainData: this.state.domainData })
                 }
             } 
@@ -57,6 +63,12 @@ export default class SelectDomain extends React.Component {
         console.log('asdsadsd is' + item.clientDomainaId)
         // if (index == 0) {
             AsyncStorage.setItem("domainDataId", (item.clientDomainaId).toString()).then(() => {
+                // console.log
+               
+            }).catch(() => {
+                console.log('there is error saving token')
+            })
+            AsyncStorage.setItem("domainName", item.domaiName).then(() => {
                 // console.log
                
             }).catch(() => {

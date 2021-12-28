@@ -20,6 +20,14 @@ class UrmService {
     getPrivillagesByRoleName(){
         return REACT_NATIVE_APP_BASE_URL + '/user-management/roles/privilagesByName/' 
     }
+
+    getDomainName(){
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/client/domian/'  
+    } 
+
+    getDomains(){
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/client/getDomiansForClient/'  
+    } 
 }
 export default new UrmService()
 

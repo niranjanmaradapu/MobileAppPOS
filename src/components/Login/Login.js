@@ -11,6 +11,7 @@ import LoginService from '../services/LoginService';
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
+import UrmService from '../services/UrmService';
 
 
 const data = [
@@ -36,7 +37,7 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'veera',
+            userName: 'chetan',
             password: 'Otsi@123',
             dropValue: '',
             store: 0,
@@ -103,6 +104,9 @@ export default class Login extends Component {
             AsyncStorage.removeItem('phone_number');
             AsyncStorage.removeItem('domainDataId');
             AsyncStorage.removeItem('storeId');
+            AsyncStorage.removeItem('custom:isSuperAdmin');
+            AsyncStorage.removeItem('custom:isConfigUser');
+            AsyncStorage.removeItem('domainName');
 
             console.log(LoginService.getAuth() + JSON.stringify(params));
             this.setState({ loading: true });
@@ -137,6 +141,11 @@ export default class Login extends Component {
                             }).catch(() => {
                                
                             })
+                            AsyncStorage.setItem("custom:isConfigUser", "false").then(() => {
+                                // console.log
+                            }).catch(() => {
+                               
+                            })
 
                             AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
                                 // console.log
@@ -146,6 +155,7 @@ export default class Login extends Component {
                             this.getDomainsList()
                         }
                         else if (jwt_decode(token)["custom:isConfigUser"] === "true") {
+                           
                             AsyncStorage.setItem("custom:isConfigUser", "true").then(() => {
                                 // console.log
                             }).catch(() => {
@@ -156,12 +166,21 @@ export default class Login extends Component {
                         }
                          else {
                             AsyncStorage.setItem("domainDataId", jwt_decode(token)["custom:domianId1"]).then(() => {
+                                this.getDomainsForNormalUser()
                                 // console.log
                             }).catch(() => {
                                 console.log('there is error saving domainDataId')
                             })
+                           
                             this.getstoresForNormalUser()
                         }
+
+                        const clientDomainId = user["custom:clientDomians"].split(",")[0];
+                        AsyncStorage.setItem("clientDomainId", JSON.stringify(clientDomainId)).then(() => {
+                        }).catch(() => {
+                            console.log('there is error saving token')
+                        })
+
 
                         this.setState({ loading: false })
                     }
@@ -201,7 +220,7 @@ export default class Login extends Component {
 
     async getDomainsList() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
-        console.log('vinodddd' + clientId);
+       
         axios.get(LoginService.getDomainsList() + clientId).then((res) => {
             if (res.data["result"][0]) {
                 console.log('sdasdasdsadasdsasfsfssaf' + res.data["result"]);
@@ -209,16 +228,45 @@ export default class Login extends Component {
                     this.props.navigation.navigate('SelectDomain');
                 }
                 else {
+                    console.log('vinoddddgfgfgdgg');
                     AsyncStorage.setItem("domainDataId", String(res.data.result[0].clientDomainaId)).then(() => {
                         // console.log
 
                     }).catch(() => {
                         console.log('there is error saving token');
                     });
+                    AsyncStorage.setItem("domainName", res.data.result[0].domaiName).then(() => {
+                        // console.log
+                       
+                    }).catch(() => {
+                        console.log('there is error saving token')
+                    })
                     this.getstoresForSuperAdmin();
                 }
             }
         });
+    }
+
+    async getDomainsForNormalUser() {
+        AsyncStorage.getItem("domainDataId").then((value) => {
+            console.log('sdasfsafsafsfaasf' + value)
+            var domainNames = [];
+            axios.get(UrmService.getDomainName() + value).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                        console.log(res.data.result);
+                        AsyncStorage.setItem("domainName", res.data.result.domaiName).then(() => {
+                            // console.log
+                           
+                        }).catch(() => {
+                            console.log('there is error saving token')
+                        })
+                }
+           
+            });
+
+        }).catch(() => {
+            console.log('there is error saving token')
+        })
     }
 
 
