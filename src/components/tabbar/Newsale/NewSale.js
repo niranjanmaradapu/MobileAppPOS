@@ -1008,7 +1008,7 @@ class NewSale extends Component {
       inventoryNetAmount: '',
       modalVisible: true,
       flagone: false,
-      flagtwo: false,
+      flagtwo: true,
       flagthree: false,
       flagfour: false
 
