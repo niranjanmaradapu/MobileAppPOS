@@ -46,7 +46,6 @@ class Home extends Component {
             if(value === "true"){
                 global.previlage7 = 'URM Portal';
                 global.previlage5 = 'Accounting Portal';
-                alert('No user details get');
             }
             else{
                 AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
