@@ -4,8 +4,7 @@ var deviceWidth = Dimensions.get('window').width;
 import { DrawerActions } from '@react-navigation/native';
 var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
-const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
-const dummmydata = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }, { key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
+const data = [true, false, false, false, false, false, false, false, false];
 import Device from 'react-native-device-detection';
 import axios from 'axios';
 import UrmService from '../../services/UrmService';
@@ -17,14 +16,73 @@ class NewSaleTextile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            privilages:[],
+            privilages: [],
+            flagone: true,
+            flagtwo: false,
+            flagthree: false,
+            flagfour: false,
+            selectedcolor: '',
+            subPrivilages: "",
+
         }
     }
 
 
-    async componentDidMount() { 
-       
+    async componentDidMount() {
+        AsyncStorage.getItem("rolename").then((value) => {
+            axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
+                if (res.data && res.data["isSuccess"] === "true") {
+                    let len = res.data["result"].parentPrivilages.length;
+                    let length = res.data["result"].subPrivilages.length;
+                    // console.log(.name)
+                    if (len > 0) {
+                        for (let i = 0; i < len; i++) {
+                            let previlage = res.data["result"].parentPrivilages[i]
+                            if (previlage.name === "Customer Portal") {
+                              
+                                    if (length > 0) {
+                                        for (let i = 0; i < length; i++) {
+                                            if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
+                                            let subprivilage = res.data["result"].subPrivilages[i]
+                                            if (i === 0) {
+                                                this.state.privilages.push({ bool: true, name: subprivilage.name });
+                                            }
+                                            else {
+                                                this.state.privilages.push({ bool: false, name: subprivilage.name });
+                                            }
+                                        }
+                                        this.setState({ privilages: this.state.privilages });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            });
+        }).catch(() => {
+            console.log('there is error saving domainDataId')
+        })
+
+
+
     }
+
+    topbarAction1 = (item, index) => {
+        if (this.state.privilages[index].bool === true) {
+            this.state.privilages[index].bool = false
+        }
+        else {
+            this.state.privilages[index].bool = true
+        }
+        for (let i = 0; i < this.state.privilages.length; i++) {
+            if (index != i) {
+                this.state.privilages[i].bool = false
+            }
+            this.setState({ privilages: this.state.privilages });
+        }
+    }
+
 
 
     statatics() {
@@ -49,150 +107,37 @@ class NewSaleTextile extends Component {
                     <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
                         <Image source={require('../../assets/images/menu.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Home </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Customer Portal </Text>
                 </View>
 
                 <ScrollView>
                     <View style={styles.container}>
-                        <Image
-                            style={styles.image}
-                            source={require('../../assets/images/profilepic.png')}
-                            resizeMode={"cover"} // <- needs to be "cover" for borderRadius to take effect on Android
-                        />
-                        <Text style={{ fontSize: 26, fontFamily: 'regular', color: '#353C40', marginLeft: 10, marginTop: 20 }}> {('Welcome,')} </Text>
-                        <Text style={{ fontSize: 26, fontFamily: 'bold', color: '#353C40', marginLeft: 10, marginTop: 0 }}> {('Vinod Magham')} </Text>
+
                         <FlatList
                             style={styles.flatList}
                             horizontal
-                            data={data}
+                            data={this.state.privilages}
                             showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false}
-                            renderItem={({ item, index }) => {
-                                if (item.key === 1) {
-                                    return <View style={{
-                                        height: 120,
-                                        width: 250,
-                                        borderWidth: 1,
-                                        backgroundColor: "#33D087",
-                                        borderColor: '#ffffff',
-                                        borderRadius: 10,
-                                        marginLeft: 10,
-                                    }}>
-                                        <Image source={require('../../assets/images/todaysales.png')} style={{
-                                            marginLeft: 20, marginTop: 40,
-                                        }} />
-                                        <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
-                                            Today's Sales
-                                        </Text>
-                                        <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                            ₹ 14,221.50
-                                        </Text>
-                                    </View>
-                                }
-                                if (item.key === 2) {
-                                    return <View style={{
-                                        height: 120,
-                                        width: 250,
-                                        borderWidth: 1,
-                                        backgroundColor: "#37CBE4",
-                                        borderColor: '#ffffff',
-                                        borderRadius: 10,
-                                        marginLeft: 10,
-                                    }}>
-                                        <Image source={require('../../assets/images/monthlysales.png')} style={{
-                                            marginLeft: 20, marginTop: 40,
-                                        }} />
-                                        <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
-                                            Monthly's Sales
-                                        </Text>
-                                        <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                            ₹ 14,221.50
-                                        </Text>
-                                    </View>
-                                }
-                                if (item.key === 3) {
-                                    return <View style={{
-                                        height: 120,
-                                        width: 250,
-                                        borderWidth: 1,
-                                        backgroundColor: "#fc9834",
-                                        borderColor: '#ffffff',
-                                        borderRadius: 10,
-                                        marginLeft: 10,
-                                    }}>
-                                        <Image source={require('../../assets/images/monthlysales.png')} style={{
-                                            marginLeft: 20, marginTop: 40,
-                                        }} />
-                                        <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, marginLeft: 60, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
-                                            This month sales v/s Last month
-                                        </Text>
-                                        <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 60, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                            + 18.75%
-                                        </Text>
-                                    </View>
+                            renderItem={({ item, index }) => (
+                                <TouchableOpacity style={{
+                                    height: 36,
+                                    width: 200,
+                                    borderWidth: 1,
+                                    backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
+                                    borderColor: item.bool ? '#ED1C24' : '#858585',
+                                    borderRadius: 5,
+                                    marginLeft: 10,
+                                }} onPress={() => this.topbarAction1(item, index)} >
 
-                                }
-                                if (item.key === 4) {
-                                    return <View style={{
-                                        height: 120,
-                                        width: 250,
-                                        borderWidth: 1,
-                                        backgroundColor: "#00C656",
-                                        borderColor: '#ffffff',
-                                        borderRadius: 10,
-                                        marginLeft: 10,
-                                    }}>
-                                        <Image source={require('../../assets/images/monthlysales.png')} style={{
-                                            marginLeft: 20, marginTop: 40,
-                                        }} />
-                                        <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, marginLeft: 20, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
-                                            Today total Orders
-                                        </Text>
-                                        <Text style={{ fontSize: 15, marginTop: 0, alignItems: 'center', alignSelf: 'center', fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                            55
-                                        </Text>
-                                    </View>
-                                }
-                            }}
+                                    <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
+                                        {item.name}
+                                    </Text>
+                                </TouchableOpacity>
+                            )}
                             ListFooterComponent={<View style={{ width: 15 }}></View>}
                         />
-                        <View style={{ height: 40, backgroundColor: '#ffffff', width: deviceWidth, marginTop: 0, }}>
 
-                            <Text onPress={() => this.statatics()} style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', position: 'absolute', right: 20, top: 20, }}> {('STATISTICS >')} </Text>
-
-                        </View>
-
-                        <View style={{ height: 50, backgroundColor: '#e6e6e6', width: deviceWidth, marginTop: 0, }}>
-                            <Text style={{ fontSize: 14, fontFamily: 'bold', color: '#353C40', marginLeft: 10, marginTop: 20 }}> {('Recent orders')} </Text>
-                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', position: 'absolute', right: 20, top: 20, }}> {('SEE ALL >')} </Text>
-                        </View>
-                        <FlatList
-                            ListHeaderComponent={this.renderHeader}
-                            data={dummmydata}
-                            keyExtractor={item => item.email}
-                            renderItem={({ item, index }) => (
-                                <View style={{
-                                    height: 60,
-                                    backgroundColor: 'white',
-                                    borderBottomWidth: 5,
-                                    borderBottomColor: '#e6e6e6',
-                                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-                                }}>
-                                    <View style={{ flexDirection: 'column', width: '100%', height: 60, }}>
-                                        <Image source={require('../../assets/images/iconmonstr-credit-card-thin.png')} style={{
-                                            position: 'absolute', left: 20, top: 25,
-                                        }} />
-                                        <Text style={{ fontSize: 12, marginTop: 16, marginLeft: 60, fontFamily: 'medium', color: "#222222" }}>
-                                            Order Id #6123{item.itemdesc}
-                                        </Text>
-                                        <Text style={{ fontSize: 10, marginLeft: 60, fontFamily: 'regular', color: '#828282', }}>
-                                            Today, 10:45AM
-                                        </Text>
-                                        <Text style={{ fontSize: 16, fontFamily: 'medium', color: '#FE7C19', position: 'absolute', right: 20, top: 20, }}> {('₹ 14,221.50')} </Text>
-                                    </View>
-                                </View>
-                            )}
-                        />
 
                     </View>
                 </ScrollView >

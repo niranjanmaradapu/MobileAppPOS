@@ -90,7 +90,7 @@ export default class Login extends Component {
     };
 
     registerClient() {
-        this.props.navigation.navigate('RegisterClient');
+        this.props.navigation.navigate('NewSaleTextile');
     }
 
 

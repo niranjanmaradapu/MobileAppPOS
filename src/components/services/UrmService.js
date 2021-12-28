@@ -28,6 +28,10 @@ class UrmService {
     getDomains(){
         return REACT_NATIVE_APP_BASE_URL + '/user-management/client/getDomiansForClient/'  
     } 
+
+    getPrivilegesByName(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/roles/privilagesByName/"
+    } 
 }
 export default new UrmService()
 
