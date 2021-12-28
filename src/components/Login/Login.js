@@ -12,6 +12,7 @@ var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
 import UrmService from '../services/UrmService';
+import ProfileService from '../services/ProfileService';
 
 
 const data = [
@@ -37,6 +38,9 @@ global.previlage5 = '';
 global.previlage6 = '';
 global.previlage7 = '';
 global.previlage8 = '';
+global.username = ''
+global.userrole = ''
+global.domainName = ''
 
 
 
@@ -95,7 +99,7 @@ export default class Login extends Component {
 
 
 
-    login() {
+     login() {
         AsyncStorage.removeItem('tokenkey');
         if (this.state.userName.length === 0) {
             alert('You must enter a Usename');
@@ -171,6 +175,18 @@ export default class Login extends Component {
                             }).catch(() => {
 
                             })
+                         
+                            axios.get(ProfileService.getUser() + this.state.userName).then((res) => {
+                                if (res.data && res.data["isSuccess"] === "true") {
+                                    global.username = res.data["result"].userName;
+                                    global.userrole = res.data["result"].roleName;
+                                    global.domainName = '';
+                                }
+                            }).catch(() => {
+                                this.setState({ loading: false });
+                                alert('No user details get');
+                            });
+
                             global.previlage1 = '';
                             global.previlage2 = '';
                             global.previlage3 = '';
