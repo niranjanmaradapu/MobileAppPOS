@@ -30,41 +30,54 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            privilages:[],
+            privilages: [],
         }
     }
 
 
-    async componentDidMount() { 
+    async componentDidMount() {
         AsyncStorage.getItem("domainName").then((value) => {
             global.domainName = value
         }).catch(() => {
             console.log('there is error getting storeId')
-        }) 
-        
+        })
+
         AsyncStorage.getItem("rolename").then((value) => {
             global.userrole = value;
         }).catch(() => {
             console.log('there is error getting storeId')
-        }) 
+        })
+
+        global.previlage1 = '';
+        global.previlage2 = '';
+        global.previlage3 = '';
+        global.previlage4 = '';
+        global.previlage5 = '';
+        global.previlage6 = '';
+        global.previlage7 = '';
+        global.previlage8 = '';
+        global.isSuperAdmin = '';
+        global.isConfigUser = '';
+        global.username = ''
+   
 
 
         AsyncStorage.getItem("custom:isConfigUser").then((value) => {
-            if(value === "true"){
+            if (value === "true") {
                 global.previlage7 = 'URM Portal';
                 global.previlage5 = 'Accounting Portal';
             }
-            else{
+            else {
                 AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
-                    if(value === "true") { 
+                    if (value === "true") {
                         var domainId = "1"
-                        if(global.domainName === "Textile"){
+                        if (global.domainName === "Textile") {
                             domainId = "1"
                         }
-                        else if(global.domainName === "Retail"){
+                        else if (global.domainName === "Retail") {
                             domainId = "2"
                         }
-                        else if(global.domainName === "Electrical & Electronics"){
+                        else if (global.domainName === "Electrical & Electronics") {
                             domainId = "3"
                         }
 
@@ -103,43 +116,42 @@ class Home extends Component {
                         });
                     }
                     else {
-                        console.log('vinod-------> privlage by name')
-                            AsyncStorage.getItem("rolename").then((value) => {
-                                global.userrole = value;
-                        axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
-                            if (res.data && res.data["isSuccess"] === "true") {
-                                console.log(res.data)
-                                let len = res.data["result"].parentPrivilages.length;
-                               // console.log(.name)
-                                if (len > 0) {
-                                    for (let i = 0; i < len; i++) {
-                                        let previlage = res.data["result"].parentPrivilages[i]
-                                        
-                                        if (previlage.name === "Dashboard") {
-                                            global.previlage1 = 'Dashboard';
-                                        }
-                                        if (previlage.name === "Customer Portal") {
-                                            global.previlage2 = 'Customer Portal';
-                                        }
-                                        if (previlage.name === "Inventory Portal") {
-                                            global.previlage3 = 'Inventory Portal';
-                                        }
-                                        if (previlage.name === "Promotions & Loyalty") {
-                                            global.previlage4 = 'Promotions & Loyalty';
-                                        }
-                                        if (previlage.name === "Accounting Portal") {
-                                            global.previlage5 = 'Accounting Portal';
-                                        }
-                                        if (previlage.name === "Reports") {
-                                            global.previlage6 = 'Reports';
-                                        }
-                                        if (previlage.name === "URM Portal") {
-                                            global.previlage7 = 'URM Portal';
+                        console.log('vinod-------> privlage by name1111')
+                        AsyncStorage.getItem("rolename").then((value) => {
+                            global.userrole = value;
+                            axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
+                                if (res.data && res.data["isSuccess"] === "true") {
+                                    console.log(res.data)
+                                    let len = res.data["result"].parentPrivilages.length;
+                                    // console.log(.name)
+                                    if (len > 0) {
+                                        for (let i = 0; i < len; i++) {
+                                            let previlage = res.data["result"].parentPrivilages[i]
+                                            if (previlage.name === "Dashboard") {
+                                                global.previlage1 = 'Dashboard';
+                                            }
+                                            if (previlage.name === "Customer Portal") {
+                                                global.previlage2 = 'Customer Portal';
+                                            }
+                                            if (previlage.name === "Inventory Portal") {
+                                                global.previlage3 = 'Inventory Portal';
+                                            }
+                                            if (previlage.name === "Promotions & Loyalty") {
+                                                global.previlage4 = 'Promotions & Loyalty';
+                                            }
+                                            if (previlage.name === "Accounting Portal") {
+                                                global.previlage5 = 'Accounting Portal';
+                                            }
+                                            if (previlage.name === "Reports") {
+                                                global.previlage6 = 'Reports';
+                                            }
+                                            if (previlage.name === "URM Portal") {
+                                                global.previlage7 = 'URM Portal';
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        });
+                            });
                         }).catch(() => {
                             console.log('there is error saving domainDataId')
                         })
@@ -147,14 +159,14 @@ class Home extends Component {
                     }
                 }).catch(() => {
                     console.log('there is error getting storeId')
-                })        
+                })
             }
         }).catch(() => {
             console.log('there is error getting storeId')
         })
 
-     
-       
+
+
         const username = await AsyncStorage.getItem("username");
         axios.get(ProfileService.getUser() + username).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
@@ -165,7 +177,7 @@ class Home extends Component {
             alert('No user details get');
         });
 
-       
+
     }
 
 
