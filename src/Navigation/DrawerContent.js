@@ -148,7 +148,7 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="Accounting Portal"
-                                onPress={() => { props.navigation.navigate('') }}
+                                onPress={() => { props.navigation.navigate('AccountingNaviagtion') }}
                             />
                         )}
 

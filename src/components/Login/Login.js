@@ -41,6 +41,7 @@ global.previlage8 = '';
 global.username = ''
 global.userrole = ''
 global.domainName = ''
+global.userrole = ''
 
 
 
@@ -148,6 +149,13 @@ export default class Login extends Component {
                             console.log('there is error saving domainDataId')
                         })
 
+                        AsyncStorage.setItem("rolename", jwt_decode(token)["custom:roleName"]).then(() => {
+                             
+                            // console.log
+                        }).catch(() => {
+                            console.log('there is error saving domainDataId')
+                        })
+
                         //==============================Navigation===================//
                         if (jwt_decode(token)["custom:isSuperAdmin"] === "true") {
                             AsyncStorage.setItem("custom:isSuperAdmin", "true").then(() => {
@@ -179,7 +187,6 @@ export default class Login extends Component {
                             axios.get(ProfileService.getUser() + this.state.userName).then((res) => {
                                 if (res.data && res.data["isSuccess"] === "true") {
                                     global.username = res.data["result"].userName;
-                                    global.userrole = res.data["result"].roleName;
                                     global.domainName = '';
                                 }
                             }).catch(() => {
@@ -194,18 +201,20 @@ export default class Login extends Component {
                             global.previlage6 = '';
                             global.previlage7 = 'URM Portal';
                             global.previlage5 = 'Accounting Portal';
+                            AsyncStorage.getItem("rolename").then((value) => {
+                                global.userrole = value;
+                            }).catch(() => {
+                                console.log('there is error getting storeId')
+                            }) 
+                    
 
 
                             this.props.navigation.navigate('UrmNavigation')
                         }
                         else {
+                            this.getDomainsForNormalUser()
 
-                            AsyncStorage.setItem("rolename", jwt_decode(token)["custom:roleName"]).then(() => {
-                                this.getDomainsForNormalUser()
-                                // console.log
-                            }).catch(() => {
-                                console.log('there is error saving domainDataId')
-                            })
+                           
                             AsyncStorage.setItem("domainDataId", jwt_decode(token)["custom:domianId1"]).then(() => {
                                 this.getDomainsForNormalUser()
                                 // console.log

@@ -15,7 +15,7 @@ import UrmService from '../services/UrmService';
 var deviceWidth = Dimensions.get("window").width;
 
 
-export default class UserManagement extends Component {
+export default class AccountManagement extends Component {
 
     constructor(props) {
         super(props);
@@ -46,10 +46,10 @@ export default class UserManagement extends Component {
             if (value === "true") {
                 for (let i = 0; i < 2; i++) {
                 if (i === 0) {
-                    this.state.privilages.push({ bool: true, name: "Users" });
+                    this.state.privilages.push({ bool: true, name: "Domains" });
                 }
                 else {
-                    this.state.privilages.push({ bool: false, name: "Roles" });
+                    this.state.privilages.push({ bool: false, name: "Stores" });
                 }
             }
                 this.setState({ privilages: this.state.privilages });
@@ -75,7 +75,7 @@ export default class UserManagement extends Component {
                                     if (len > 0) {
                                         for (let i = 0; i < len; i++) {
                                             let previlage = res.data["result"][i]
-                                            if (previlage.name === "URM Portal") {
+                                            if (previlage.name === "Accounting Portal") {
                                                 for (let i = 0; i < previlage.subPrivillages.length; i++) {
                                                     console.log(previlage.subPrivillages[i].parentPrivillageId)
                                                     if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
@@ -109,7 +109,7 @@ export default class UserManagement extends Component {
                                     if (len > 0) {
                                         for (let i = 0; i < len; i++) {
                                             let previlage = res.data["result"].parentPrivilages[i]
-                                            if (previlage.name === "Customer Portal") {
+                                            if (previlage.name === "Accounting Portal") {
                                               
                                                     if (length > 0) {
                                                         for (let i = 0; i < length; i++) {

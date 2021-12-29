@@ -40,7 +40,14 @@ class Home extends Component {
             global.domainName = value
         }).catch(() => {
             console.log('there is error getting storeId')
-        })  
+        }) 
+        
+        AsyncStorage.getItem("rolename").then((value) => {
+            global.userrole = value;
+        }).catch(() => {
+            console.log('there is error getting storeId')
+        }) 
+
 
         AsyncStorage.getItem("custom:isConfigUser").then((value) => {
             if(value === "true"){
@@ -98,6 +105,7 @@ class Home extends Component {
                     else {
                         console.log('vinod-------> privlage by name')
                             AsyncStorage.getItem("rolename").then((value) => {
+                                global.userrole = value;
                         axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
                             if (res.data && res.data["isSuccess"] === "true") {
                                 console.log(res.data)
@@ -151,7 +159,6 @@ class Home extends Component {
         axios.get(ProfileService.getUser() + username).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 global.username = res.data["result"].userName;
-                global.userrole = res.data["result"].roleName;
             }
         }).catch(() => {
             this.setState({ loading: false });

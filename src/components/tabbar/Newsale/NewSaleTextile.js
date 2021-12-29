@@ -29,6 +29,51 @@ class NewSaleTextile extends Component {
 
 
     async componentDidMount() {
+        AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
+            if (value === "true") {
+                var domainId = "1"
+                if (global.domainName === "Textile") {
+                    domainId = "1"
+                }
+                else if (global.domainName === "Retail") {
+                    domainId = "2"
+                }
+                else if (global.domainName === "Electrical & Electronics") {
+                    domainId = "3"
+                }
+
+                axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
+                    if (res.data && res.data["isSuccess"] === "true") {
+                        let len = res.data["result"].length;
+                        if (len > 0) {
+                            if (len > 0) {
+                                for (let i = 0; i < len; i++) {
+                                    let previlage = res.data["result"][i]
+                                    if (previlage.name === "Customer Portal") {
+                                        for (let i = 0; i < previlage.subPrivillages.length; i++) {
+                                            console.log(previlage.subPrivillages[i].parentPrivillageId)
+                                            if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
+                                                let subprivilage = previlage.subPrivillages[i]
+                                                if(subprivilage.name === "Dashboard"){
+                                                    this.setState({ flagOne: false, flagTwo: false });
+                                                }
+                                                if (i === 0) {
+                                                    this.state.privilages.push({ bool: true, name: subprivilage.name });
+                                                }
+                                                else {
+                                                    this.state.privilages.push({ bool: false, name: subprivilage.name });
+                                                }
+                                            }
+                                        }
+                                    }
+                                    this.setState({ privilages: this.state.privilages });
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            else {
         AsyncStorage.getItem("rolename").then((value) => {
             axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
@@ -58,13 +103,15 @@ class NewSaleTextile extends Component {
                         }
                     }
                 }
-
-            });
+            })
         }).catch(() => {
             console.log('there is error saving domainDataId')
         })
 
-
+    }
+}).catch(() => {
+    console.log('there is error getting storeId')
+})        
 
     }
 
