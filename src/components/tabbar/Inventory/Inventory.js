@@ -774,21 +774,21 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        height: 84,
+        height:Device.isAndroid ? 70 : 84,
     },
     backButton_mobile: {
         position: 'absolute',
         left: 10,
-        top: 30,
+        bottom: 0,
         width: 40,
         height: 40,
     },
     headerTitle_mobile: {
         position: 'absolute',
         left: 70,
-        top: 47,
+        bottom: 10,
         width: 300,
-        height: 20,
+        height: 25,
         fontFamily: 'bold',
         fontSize: 18,
         color: '#353C40'
@@ -796,7 +796,7 @@ const styles = StyleSheet.create({
     filterButton_mobile: {
         position: 'absolute',
         right: 20,
-        top: 40,
+         bottom:5,
         backgroundColor: '#ffffff',
         borderRadius: 5,
         width: 30,
@@ -833,7 +833,7 @@ const styles = StyleSheet.create({
     addBarcodeButton_mobile: {
         position: 'absolute',
         right: 70,
-        top: 40,
+        bottom:5,
         backgroundColor: '#ED1C24',
         borderRadius: 5,
         width: 110,

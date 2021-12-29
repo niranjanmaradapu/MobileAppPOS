@@ -7,12 +7,11 @@ import Constants from 'expo-constants';
 const data = [true, false, false, false, false, false, false, false, false];
 import Device from 'react-native-device-detection';
 import axios from 'axios';
-import UrmService from '../../services/UrmService';
-import ProfileService from '../../services/ProfileService';
+import UrmService from '../services/UrmService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-class NewSaleTextile extends Component {
+class Reports extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -49,7 +48,7 @@ class NewSaleTextile extends Component {
                             if (len > 0) {
                                 for (let i = 0; i < len; i++) {
                                     let previlage = res.data["result"][i]
-                                    if (previlage.name === "Customer Portal") {
+                                    if (previlage.name === "Reports") {
                                         for (let i = 0; i < previlage.subPrivillages.length; i++) {
                                             console.log(previlage.subPrivillages[i].parentPrivillageId)
                                             if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
@@ -83,7 +82,7 @@ class NewSaleTextile extends Component {
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
                             let previlage = res.data["result"].parentPrivilages[i]
-                            if (previlage.name === "Customer Portal") {
+                            if (previlage.name === "Reports") {
                               
                                     if (length > 0) {
                                         for (let i = 0; i < length; i++) {
@@ -152,9 +151,9 @@ class NewSaleTextile extends Component {
             <View style={styles.container}>
                 <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
                     <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
-                        <Image source={require('../../assets/images/menu.png')} />
+                        <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Customer Portal </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Reports </Text>
                 </View>
 
                 <ScrollView>
@@ -192,7 +191,7 @@ class NewSaleTextile extends Component {
         )
     }
 }
-export default NewSaleTextile
+export default Reports
 
 
 const styles = StyleSheet.create({
