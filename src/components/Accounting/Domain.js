@@ -17,10 +17,10 @@ export default class Domain extends Component {
                         <View style={Device.isTablet ? styles.flatlistContainer_tablet : styles.flatlistContainer_mobile}>
                             <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
                                 <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S NO: {index + 1} </Text>
-                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>DOMAIN: {"\n"}</Text>
-                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>CREATED BY:  </Text>
-                                <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>CREATED DATE:  </Text>
-                                <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>DESCRIPTION:  </Text>
+                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>DOMAIN: {"\n"} {item.domaiName}</Text>
+                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>CREATED BY:   {"\n"} {item.createdBy}</Text>
+                                <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>CREATED DATE: {"\n"} {item.createdDate}  </Text>
+                                <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>DESCRIPTION: {"\n"}      {item.discription}  </Text>
                             </View>
                         </View>
                     )}
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
     flatlistContainer_mobile: {
-        height: 140,
+        height: 150,
         backgroundColor: '#FBFBFB',
         borderBottomWidth: 5,
         borderBottomColor: '#FFFFFF',
@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
     flatlistContainer_tablet: {
-        height: 160,
+        height: 170,
         backgroundColor: '#FBFBFB',
         borderBottomWidth: 5,
         borderBottomColor: '#FFFFFF',

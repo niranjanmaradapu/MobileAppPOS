@@ -41,8 +41,9 @@ export function DrawerContent(props) {
                                 resizeMode={"cover"} ></Image>
                             <View style={{ marginLeft: 15, flexDirection: 'column', height: 100 }}>
                                 <Title style={styles.title}>{global.username}</Title>
-                                <Caption style={styles.middelcaption}>{global.domainName}</Caption>
                                 <Caption style={styles.caption}>{global.userrole}</Caption>
+                                <Caption style={styles.middelcaption}>{global.domainName}</Caption>
+                            
                             </View>
                         </View>
 

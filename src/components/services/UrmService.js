@@ -32,6 +32,38 @@ class UrmService {
     getPrivilegesByName(){
         return REACT_NATIVE_APP_BASE_URL + "/user-management/roles/privilagesByName/"
     } 
+
+    getMasterDomains(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/client/getMasterDomains"
+    } 
+
+    getDomains(){
+    return REACT_NATIVE_APP_BASE_URL + "/user-management/client/getDomiansForClient"
+    }
+
+    saveDomain(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/client/assignDomianToClient"
+    }
+
+    saveStore(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/createStore"
+    }
+ 
+    getAllStores(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/getClientStores/"
+    } 
+
+    getStates(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/allStates"  
+    } 
+
+    getDistricts(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/getDistrict"
+    }
+
+    getStoresBySearch(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/getStoresWithFilter"
+    } 
 }
 export default new UrmService()
 

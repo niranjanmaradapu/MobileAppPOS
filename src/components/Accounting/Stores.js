@@ -5,7 +5,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-
+import UrmService from '../services/UrmService';
+import axios from 'axios';
 var deviceWidth = Dimensions.get("window").width;
 
 export class Stores extends Component {
@@ -30,6 +31,18 @@ export class Stores extends Component {
         this.setState({ storesDelete: true, modalVisible: true });
     }
 
+    handleeditStore(item, index) {
+        // this.props.navigation.navigate('AddStore'
+        // , {
+        //     item: item, isEdit: true,
+        //     onGoBack: () => this.updateStore(),
+        // });
+    }
+
+    updateStore(){
+
+    }
+
     modelCancel() {
         this.props.modelCancelCallback();
     }
@@ -44,18 +57,18 @@ export class Stores extends Component {
                     <View style={Device.isTablet ? styles.flatlistContainer_tablet : styles.flatlistContainer_mobile}>
                         <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
                             <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >STORE ID: {index + 1} </Text>
-                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>STORE NAME: {"\n"}</Text>
-                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>DOMAIN:  </Text>
-                            <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>LOCATION:  </Text>
-                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>CREATED BY:</Text>
-                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>CREATED DATE: </Text>
+                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>STORE NAME: {"\n"} {item.name}</Text>
+                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>DOMAIN: {"\n"} {item.clientDomianlId.domaiName} </Text>
+                            <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>LOCATION:  {"\n"} {item.cityId} </Text>
+                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>CREATED BY: {"\n"} {item.createdBy}</Text>
+                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>CREATED DATE: {"\n"} {item.createdDate} </Text>
                             {this.state.storesDelete && (
                                 <View>
                                     <Modal isVisible={this.state.modalVisible}>
 
                                         <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
 
-                                            <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Pool </Text>
+                                            <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Store </Text>
 
                                             <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.storeModelCancel()}>
                                                 <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
@@ -107,6 +120,7 @@ export class Stores extends Component {
 
 export class FilterStores extends Component {
 
+
     constructor(props) {
         super(props);
         this.state = {
@@ -114,8 +128,93 @@ export class FilterStores extends Component {
             storeDistrict: "",
             storeState: "",
             modalFalse: false,
+            statesArray: [],
+            states: [],
+            stateId: 0,
+            statecode: '',
+            dictrictArray: [],
+            dictricts: [],
+            dictrictId: 0,
         };
     }
+
+    async componentDidMount() {
+        this.getMasterStatesList()
+    }
+
+
+    getMasterStatesList() {
+        this.setState({ states: [] });
+        this.setState({ loading: false });
+        var states = [];
+        axios.get(UrmService.getStates()).then((res) => {
+            if (res.data["result"]) {
+
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    this.state.statesArray.push({ name: res.data["result"][i].stateName, id: res.data["result"][i].stateId, code: res.data["result"][i].stateCode })
+                    states.push({
+                        value: this.state.statesArray[i].name,
+                        label: this.state.statesArray[i].name
+                    });
+                    this.setState({
+                        states: states,
+                    })
+                    this.setState({ statesArray: this.state.statesArray })
+                }
+            }
+
+        });
+    }
+
+    handleStoreState = (value) => {
+        for (let i = 0; i < this.state.statesArray.length; i++) {
+            if (this.state.statesArray[i].name === value) {
+                this.setState({ stateId: this.state.statesArray[i].id })
+                this.setState({ statecode: this.state.statesArray[i].code })
+
+            }
+        }
+        this.getMasterDistrictsList()
+        this.setState({ storeState: value })
+    }
+
+
+    getMasterDistrictsList() {
+        this.setState({ dictricts: [] });
+        this.setState({ dictrictArray: [] });
+        this.setState({ loading: false });
+        var dictricts = [];
+        const params = {
+            "stateCode": this.state.statecode
+        };
+        axios.get(UrmService.getDistricts(), { params }).then((res) => {
+            if (res.data["result"]) {
+                console.log(res.data)
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    this.state.dictrictArray.push({ name: res.data["result"][i].districtName, id: res.data["result"][i].districtId })
+                    dictricts.push({
+                        value: this.state.dictrictArray[i].name,
+                        label: this.state.dictrictArray[i].name
+                    });
+                    this.setState({
+                        dictricts: dictricts,
+                    })
+                    this.setState({ dictrictArray: this.state.dictrictArray })
+                }
+            }
+
+        });
+    }
+
+    handleDistrict = (value) => {
+        for (let i = 0; i < this.state.dictrictArray.length; i++) {
+            if (this.state.dictrictArray[i].name === value) {
+                this.setState({ districtId: this.state.dictrictArray[i].id })
+            }
+        }
+        this.setState({ storeDistrict: value })
+    }
+
 
     handleCity = (value) => {
         this.setState({ city: value });
@@ -130,7 +229,22 @@ export class FilterStores extends Component {
     };
 
     applyStoreFilter() {
-        alert("Applied");
+      //  alert("Applied");
+        const searchStore = {
+            "stateId": this.state.stateId,
+            "cityId": this.state.searchCity,
+            "districtId": this.state.dictrictId,
+            "storeName": null
+        }
+
+        axios.post(UrmService.getStoresBySearch(), searchStore).then((res) => {
+            if (res) {
+                this.setState({ stores: res.data.result});
+                this.props.modelCancelCallback();
+            } else {
+            }
+
+        });
     }
 
     modelCancel() {
@@ -151,41 +265,41 @@ export class FilterStores extends Component {
                         </Text>
 
                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                            <RNPickerSelect
-                                style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                                placeholder={{
-                                    label: 'STATE'
-                                }}
-                                Icon={() => {
-                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                }}
-                                items={this.state.storeState}
-                                onValueChange={this.handleStore}
-                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                                value={this.state.state}
-                                useNativeAndroidPickerStyle={false}
-                            />
-                        </View>
-                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                            <RNPickerSelect
-                                style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                                placeholder={{
-                                    label: 'DISTRICT'
-                                }}
-                                Icon={() => {
-                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                }}
-                                items={this.state.storeDistrict}
-                                onValueChange={this.handleDistrict}
-                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                                value={this.state.storeDistrict}
-                                useNativeAndroidPickerStyle={false}
-                            />
-                        </View>
+                        <RNPickerSelect
+                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                            placeholder={{
+                                label: 'STATE'
+                            }}
+                            Icon={() => {
+                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                            }}
+                            items={this.state.states}
+                            onValueChange={this.handleStoreState}
+                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            value={this.state.storeState}
+                            useNativeAndroidPickerStyle={false}
+                        />
+                    </View>
+                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                        <RNPickerSelect
+                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                            placeholder={{
+                                label: 'DISTRICT'
+                            }}
+                            Icon={() => {
+                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                            }}
+                            items={this.state.dictricts}
+                            onValueChange={this.handleDistrict}
+                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            value={this.state.storeDistrict}
+                            useNativeAndroidPickerStyle={false}
+                        />
+                    </View>
                         <TextInput
                             style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                             underlineColorAndroid="transparent"
-                            placeholder="STATE"
+                            placeholder="CITY"
                             placeholderTextColor="#6F6F6F"
                             textAlignVertical="center"
                             autoCapitalize="none"
@@ -305,7 +419,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -20,
         backgroundColor: "#ffffff",
-        height: 500,
+        height: 400,
         position: 'absolute',
         bottom: -20,
     },
@@ -389,7 +503,7 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
     flatlistContainer_mobile: {
-        height: 140,
+        height: 150,
         backgroundColor: '#FBFBFB',
         borderBottomWidth: 5,
         borderBottomColor: '#FFFFFF',
@@ -427,7 +541,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -40,
         backgroundColor: "#ffffff",
-        height: 600,
+        height: 500,
         position: 'absolute',
         bottom: -40,
     },
@@ -511,7 +625,7 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
     flatlistContainer_tablet: {
-        height: 160,
+        height: 200,
         backgroundColor: '#FBFBFB',
         borderBottomWidth: 5,
         borderBottomColor: '#FFFFFF',
@@ -551,7 +665,7 @@ const flats = StyleSheet.create({
     mainText_mobile: {
         fontSize: 16,
         marginLeft: 16,
-        marginTop: 10,
+        marginTop: 0,
         marginBottom: 10,
         fontFamily: 'medium',
         color: '#ED1C24',
@@ -567,7 +681,7 @@ const flats = StyleSheet.create({
     commonText_mobile: {
         fontSize: 12,
         marginBottom: 10,
-        marginTop: -90,
+        marginTop: -125,
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
@@ -630,7 +744,7 @@ const flats = StyleSheet.create({
     mainText_tablet: {
         fontSize: 21,
         marginLeft: 16,
-        marginTop: 10,
+        marginTop: 0,
         marginBottom: 10,
         fontFamily: 'medium',
         color: '#ED1C24',
@@ -646,7 +760,7 @@ const flats = StyleSheet.create({
     commonText_tablet: {
         fontSize: 17,
         marginBottom: 10,
-        marginTop: -120,
+        marginTop: -160,
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',

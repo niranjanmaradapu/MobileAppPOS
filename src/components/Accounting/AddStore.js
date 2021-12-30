@@ -4,6 +4,10 @@ import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../loader';
+import UrmService from '../services/UrmService';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoginService from '../services/LoginService';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -21,8 +25,139 @@ export default class AddStore extends Component {
             area: "",
             address: "",
             domain: "",
+            clientId: 0,
+            statesArray: [],
+            states: [],
+            stateId: 0,
+            statecode: '',
+            dictrictArray: [],
+            dictricts: [],
+            dictrictId: 0,
+            domainsArray: [],
+            domains: [],
+            domainId: 0,
         };
     }
+
+    async componentDidMount() {
+        const clientId = await AsyncStorage.getItem("custom:clientId1");
+        this.setState({ clientId: clientId });
+        this.getDomainsList()
+        this.getMasterStatesList()
+    }
+
+    getDomainsList() {
+        this.setState({ domains: [] });
+        var domains = [];
+        axios.get(LoginService.getDomainsList() + this.state.clientId).then((res) => {
+            if (res.data["result"]) {
+                let len = res.data["result"].length;
+                if (len > 0) {
+                    for (let i = 0; i < len; i++) {
+                        let number = res.data.result[i]
+                        this.state.domainsArray.push({ name: number.domaiName, id: number.clientDomainaId })
+                        domains.push({
+                            value: this.state.domainsArray[i].name,
+                            label: this.state.domainsArray[i].name
+                        });
+                        this.setState({
+                            domains: domains,
+                        })
+
+                        this.setState({ domainsArray: this.state.domainsArray })
+
+                    }
+                    console.log(this.state.domains)
+                }
+            }
+        }).catch(() => {
+            this.setState({ loading: false });
+        });
+    }
+
+    handleDomain = (value) => {
+        for (let i = 0; i < this.state.domainsArray.length; i++) {
+            if (this.state.domainsArray[i].name === value) {
+                this.setState({ domainId: this.state.domainsArray[i].id })
+            }
+        }
+        this.setState({ domain: value })
+    }
+
+
+
+    getMasterStatesList() {
+        this.setState({ states: [] });
+        this.setState({ loading: false });
+        var states = [];
+        axios.get(UrmService.getStates()).then((res) => {
+            if (res.data["result"]) {
+
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    this.state.statesArray.push({ name: res.data["result"][i].stateName, id: res.data["result"][i].stateId, code: res.data["result"][i].stateCode })
+                    states.push({
+                        value: this.state.statesArray[i].name,
+                        label: this.state.statesArray[i].name
+                    });
+                    this.setState({
+                        states: states,
+                    })
+                    this.setState({ statesArray: this.state.statesArray })
+                }
+            }
+
+        });
+    }
+
+    handleStoreState = (value) => {
+        for (let i = 0; i < this.state.statesArray.length; i++) {
+            if (this.state.statesArray[i].name === value) {
+                this.setState({ stateId: this.state.statesArray[i].id })
+                this.setState({ statecode: this.state.statesArray[i].code })
+
+            }
+        }
+        this.getMasterDistrictsList()
+        this.setState({ storeState: value })
+    }
+
+
+    getMasterDistrictsList() {
+        this.setState({ dictricts: [] });
+        this.setState({ dictrictArray: [] });
+        this.setState({ loading: false });
+        var dictricts = [];
+        const params = {
+            "stateCode": this.state.statecode
+        };
+        axios.get(UrmService.getDistricts(), { params }).then((res) => {
+            if (res.data["result"]) {
+                console.log(res.data)
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    this.state.dictrictArray.push({ name: res.data["result"][i].districtName, id: res.data["result"][i].districtId })
+                    dictricts.push({
+                        value: this.state.dictrictArray[i].name,
+                        label: this.state.dictrictArray[i].name
+                    });
+                    this.setState({
+                        dictricts: dictricts,
+                    })
+                    this.setState({ dictrictArray: this.state.dictrictArray })
+                }
+            }
+
+        });
+    }
+
+    handleDistrict = (value) => {
+        for (let i = 0; i < this.state.dictrictArray.length; i++) {
+            if (this.state.dictrictArray[i].name === value) {
+                this.setState({ districtId: this.state.dictrictArray[i].id })
+            }
+        }
+        this.setState({ storeDistrict: value })
+    }
+
 
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
@@ -46,41 +181,66 @@ export default class AddStore extends Component {
         this.setState({ city: value });
     };
 
-    handleDistrict = (value) => {
-        this.setState({ storeDistrict: value });
-    };
 
     handleGstNumber = (value) => {
         this.setState({ gstNumber: value });
     };
 
-    handleDomain = (value) => {
-        this.setState({ domain: value });
-    };
+
 
     handleMobile = (value) => {
         this.setState({ mobile: value });
     };
 
-    handleStoreState = (value) => {
-        this.setState({ storeState: value });
-    };
 
     handleStoreName = (value) => {
         this.setState({ storeName: value });
     };
 
     saveStore() {
-        if (this.state.storeName === "") {
-            alert("Please Enter Store Name");
+       
+        if (this.state.storeState === "") {
+            alert("Please Enter State");
         } else if (this.state.storeDistrict === "") {
             alert("Please Enter District");
-        } else if (this.state.storeState === "") {
-            alert("Please Enter State");
         } else if (this.state.domain === "") {
             alert("Please Enter Domain");
+        } else if (this.state.storeName === "") {
+            alert("Please Enter Store Name");
         } else {
-            alert("saved The store");
+            const saveObj = {
+                "name": this.state.storeName,
+                "stateId": this.state.stateId,
+                "districtId": this.state.dictrictId,
+                "cityId": this.state.city,
+                "area": this.state.area,
+                "address": this.state.address,
+                "phoneNumber": this.state.mobile,
+                "domainId": this.state.domainId,
+                "createdBy": global.username,
+                "stateCode": this.state.statecode,
+                "gstNumber": this.state.gstNumber,
+                "clientId":this.state.clientId
+            }
+            console.log('params are' + JSON.stringify(saveObj))
+            this.setState({ loading: true })
+            axios.post(UrmService.saveStore(), saveObj).then((res) => {
+                console.log(res.data)
+              if (res.data && res.data["isSuccess"] === "true") {
+                //  this.props.route.params.onGoBack();
+                  this.props.navigation.goBack();
+              }
+              else {
+                this.setState({ loading: false })
+                alert(res.data.message);
+              }
+            }
+            ).catch(() => {
+              this.setState({ loading: false });
+          });
+    
+
+
         }
     }
 
@@ -119,7 +279,7 @@ export default class AddStore extends Component {
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
-                            items={this.state.storeState}
+                            items={this.state.states}
                             onValueChange={this.handleStoreState}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                             value={this.state.storeState}
@@ -135,7 +295,7 @@ export default class AddStore extends Component {
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
-                            items={this.state.storeDistrict}
+                            items={this.state.dictricts}
                             onValueChange={this.handleDistrict}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                             value={this.state.storeDistrict}
@@ -145,7 +305,7 @@ export default class AddStore extends Component {
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="STATE"
+                        placeholder="CITY"
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
@@ -199,7 +359,7 @@ export default class AddStore extends Component {
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
-                            items={this.state.domain}
+                            items={this.state.domains}
                             onValueChange={this.handleDomain}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                             value={this.state.domain}

@@ -52,7 +52,7 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'chetan',
+            userName: 'veera',
             password: 'Otsi@123',
             dropValue: '',
             store: 0,
@@ -155,6 +155,12 @@ export default class Login extends Component {
                             console.log('there is error saving domainDataId')
                         })
 
+                        AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
+                            // console.log
+                        }).catch(() => {
+                            console.log('there is error saving domainDataId')
+                        })
+
                         //==============================Navigation===================//
                         if (jwt_decode(token)["custom:isSuperAdmin"] === "true") {
                             AsyncStorage.setItem("custom:isSuperAdmin", "true").then(() => {
@@ -168,11 +174,7 @@ export default class Login extends Component {
 
                             })
 
-                            AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
-                                // console.log
-                            }).catch(() => {
-                                console.log('there is error saving domainDataId')
-                            })
+                           
                             this.getDomainsList()
                         }
                         else if (jwt_decode(token)["custom:isConfigUser"] === "true") {
@@ -208,7 +210,7 @@ export default class Login extends Component {
                     
 
 
-                            this.props.navigation.navigate('UrmNavigation')
+                            this.props.navigation.navigate('HomeNavigation')
                         }
                         else {
                             this.getDomainsForNormalUser()
@@ -224,11 +226,11 @@ export default class Login extends Component {
                             this.getstoresForNormalUser()
                         }
 
-                        const clientDomainId = user["custom:clientDomians"].split(",")[0];
-                        AsyncStorage.setItem("clientDomainId", JSON.stringify(clientDomainId)).then(() => {
-                        }).catch(() => {
-                            console.log('there is error saving token')
-                        })
+                        // const clientDomainId = user["custom:clientDomians"].split(",")[0];
+                        // AsyncStorage.setItem("clientDomainId", JSON.stringify(clientDomainId)).then(() => {
+                        // }).catch(() => {
+                        //     console.log('there is error saving token')
+                        // })
 
 
                         this.setState({ loading: false })
@@ -357,7 +359,6 @@ export default class Login extends Component {
                     const myArray = [];
                     myArray = number.split(":");
                     this.state.storeNames.push({ name: myArray[0], id: myArray[1] });
-
                 }
                 this.setState({ storeNames: this.state.storeNames });
                 AsyncStorage.setItem("storeId", (this.state.storeNames[0].id).toString()).then(() => {
@@ -370,9 +371,7 @@ export default class Login extends Component {
                     this.props.navigation.navigate('HomeNavigation');
                 }
                 else {
-
                     this.props.navigation.navigate('SelectStore', { isFromDomain: false })
-
                 }
             }
         });

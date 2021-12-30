@@ -4,6 +4,9 @@ import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../loader';
+import UrmService from '../services/UrmService';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 var deviceWidth = Dimensions.get('window').width;
 export default class AddDomain extends Component {
@@ -12,7 +15,11 @@ export default class AddDomain extends Component {
         super(props);
         this.state = {
             domain: "",
+            clientId:0,
             description: "",
+            domainsArray:[],
+            domains:[],
+            domainId:0,
         };
     }
 
@@ -21,21 +28,91 @@ export default class AddDomain extends Component {
         return true;
     }
 
+    async componentDidMount() {
+        const clientId = await AsyncStorage.getItem("custom:clientId1");
+        this.setState({ clientId: clientId });
+
+        this.getMasterDomainsList()
+    }
+
+    
+
+   getMasterDomainsList(){
+        this.setState({ domains: [] });
+        this.setState({ loading: false });
+        var domains = [];
+        axios.get(UrmService.getMasterDomains()).then((res) => {
+        if (res.data["result"]) {
+            for (var i = 0; i < res.data["result"].length; i++) {
+                this.state.domainsArray.push({ name: res.data["result"][i].channelName, id:  res.data["result"][i].id })
+                domains.push({
+                    value: this.state.domainsArray[i].name,
+                    label: this.state.domainsArray[i].name
+                });
+                this.setState({
+                    domains: domains,
+                })
+                this.setState({ domainsArray: this.state.domainsArray })
+            }
+        }
+        
+    });
+}
+
+handleDomain = (value) => {
+    for (let i = 0; i < this.state.domainsArray.length; i++) {
+        if (this.state.domainsArray[i].name === value) {
+          this.setState({ domainId: this.state.domainsArray[i].id })
+        }   
+    }
+    this.setState({ domain: value })
+}
+
+
     cancel() {
         this.props.navigation.goBack(null);
         return true;
     }
 
-    handleDomain = (value) => {
-        this.setState({ domain: value });
-    };
+   
 
     handleDescription = (value) => {
         this.setState({ description: value });
     };
 
     saveDomain() {
-        alert("saved domain");
+        if (this.state.domain.length === 0) {
+            alert("please select the domain");
+        }
+        else if(this.state.description.length === 0) {
+            alert("please enter description");
+        }
+        else {
+            const obj = {
+                "name": this.state.domain,
+                "discription": this.state.description,
+                "masterDomianId": this.state.domainId,
+                "clientId": this.state.clientId,
+                "createdBy": global.username
+            }
+              console.log('params are' + JSON.stringify(obj))
+              this.setState({ loading: true })
+              axios.post(UrmService.saveDomain(), obj).then((res) => {
+                  console.log(res.data)
+                if (res.data && res.data["isSuccess"] === "true") {
+                    this.props.route.params.onGoBack();
+                    this.props.navigation.goBack();
+                }
+                else {
+                  this.setState({ loading: false })
+                  alert(res.data.message);
+                }
+              }
+              ).catch(() => {
+                this.setState({ loading: false });
+            });
+           
+        }
     }
 
 
@@ -64,12 +141,16 @@ export default class AddDomain extends Component {
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
-                            items={this.state.domain}
+                            items={this.state.domains}
                             onValueChange={this.handleDomain}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                             value={this.state.domain}
                             useNativeAndroidPickerStyle={false}
                         />
+
+
+                       
+                          
                     </View>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
