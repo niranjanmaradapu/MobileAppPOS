@@ -3187,25 +3187,25 @@ const styles = StyleSheet.create({
     width: deviceWidth,
     textAlign: 'center',
     fontSize: 24,
-    height: 84,
-  },
-  menuButton_mobile: {
+    height:Device.isAndroid ? 70 : 84,
+},
+menuButton_mobile: {
     position: 'absolute',
     left: 10,
-    top: 30,
+    bottom: 0,
     width: 40,
     height: 40,
-  },
-  headerTitle_mobile: {
+},
+headerTitle_mobile: {
     position: 'absolute',
     left: 70,
-    top: 47,
+    bottom: 10,
     width: 300,
     height: 25,
     fontFamily: 'bold',
     fontSize: 18,
     color: '#353C40'
-  },
+},
   input_mobile: {
     justifyContent: 'center',
     marginLeft: 20,

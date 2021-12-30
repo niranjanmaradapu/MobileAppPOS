@@ -813,7 +813,7 @@ class Promo extends Component {
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Promotions & Loyalty </Text>
                     <TouchableOpacity
-                        style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
+                        style={{ position: 'absolute', right: 20, bottom:5, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
                         onPress={() => this.filterAction()} >
                         <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/promofilter.png')} />
                     </TouchableOpacity>
@@ -2621,19 +2621,19 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        height: 84,
+        height:Device.isAndroid ? 70 : 84,
     },
     menuButton_mobile: {
         position: 'absolute',
         left: 10,
-        top: 30,
+        bottom: 0,
         width: 40,
         height: 40,
     },
     headerTitle_mobile: {
         position: 'absolute',
         left: 70,
-        top: 47,
+        bottom: 10,
         width: 300,
         height: 25,
         fontFamily: 'bold',

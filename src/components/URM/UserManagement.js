@@ -322,7 +322,7 @@ export default class UserManagement extends Component {
                             <Image source={require('../assets/images/menu.png')} />
                         </TouchableOpacity>
                         <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                            Register Client
+                            URM Portal
                         </Text>
                         {this.state.flagTwo && (
                             <TouchableOpacity style={Device.isTablet ? styles.addBarcodeButton_tablet : styles.addBarcodeButton_mobile} onPress={() => this.navigateToCreateRoles()}>
@@ -893,19 +893,19 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        height: 84,
+        height:Device.isAndroid ? 70 : 84,
     },
     backButton_mobile: {
         position: 'absolute',
         left: 10,
-        top: 30,
+        bottom: 0,
         width: 40,
         height: 40,
     },
     headerTitle_mobile: {
         position: 'absolute',
         left: 70,
-        top: 47,
+        bottom: 10,
         width: 300,
         height: 25,
         fontFamily: 'bold',
@@ -915,7 +915,7 @@ const styles = StyleSheet.create({
     filterButton_mobile: {
         position: 'absolute',
         right: 20,
-        top: 40,
+         bottom:5,
         backgroundColor: '#ffffff',
         borderRadius: 5,
         width: 30,
@@ -952,7 +952,7 @@ const styles = StyleSheet.create({
     addBarcodeButton_mobile: {
         position: 'absolute',
         right: 70,
-        top: 40,
+         bottom:5,
         backgroundColor: '#ED1C24',
         borderRadius: 5,
         width: 110,
