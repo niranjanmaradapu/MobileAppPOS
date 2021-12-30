@@ -13,6 +13,7 @@ import Dashboard from './Dashboard';
 import { DebitNotes } from "./DebitNotes";
 import Domain from './Domain.js';
 import { FilterStores, Stores } from './Stores.js';
+import LoginService from '../services/LoginService';
 
 
 var deviceWidth = Dimensions.get("window").width;
@@ -33,22 +34,24 @@ export default class AccountManagement extends Component {
             flagDomain: false,
             flagFilterStore: false,
             modalVisible: true,
-            storesDelete: false,
             privilages: [],
-            stores: [1, 2],
-            domains: [1, 2],
+
+            stores: [],
+            domains: [],
+            storesDelete: false,
+
         };
     }
 
 
     async componentDidMount() {
-
         this.setState({ privilages: [] });
         AsyncStorage.getItem("custom:isConfigUser").then((value) => {
             if (value === "true") {
+                this.setState({ flagStore: false, flagDomain: true, flagDashboard: false });
                 for (let i = 0; i < 2; i++) {
                     if (i === 0) {
-                        this.state.privilages.push({ bool: true, name: "Domains" });
+                        this.state.privilages.push({ bool: true, name: "Domain" });
                     }
                     else {
                         this.state.privilages.push({ bool: false, name: "Stores" });
@@ -148,8 +151,59 @@ export default class AccountManagement extends Component {
         }).catch(() => {
             console.log('there is error getting storeId');
         });
-
+        this.getDomainsList()
     }
+
+
+
+    async getDomainsList() {
+        this.setState({ domains: [] });
+        const clientId = await AsyncStorage.getItem("custom:clientId1");
+        this.setState({ loading: true });
+        axios.get(LoginService.getDomainsList() + clientId).then((res) => {
+            let len = res.data["result"].length;
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    let number = res.data.result[i]
+                    console.log('sfsdfdfsdfdsfsfsdfs' + number)
+                    console.log(number)
+                    this.setState({ loading: false });
+                    this.state.domains.push(number)
+
+                    this.setState({ domains: this.state.domains })
+                }
+            }
+        }).catch(() => {
+            this.setState({ loading: false });
+        });
+    }
+
+    async getStoresList() {
+        this.setState({ stores: [] });
+        const clientId = await AsyncStorage.getItem("custom:clientId1");
+        this.setState({ loading: true });
+        const params = {
+            "clientId": clientId
+        };
+        axios.get(UrmService.getAllStores(),{params}).then((res) => {
+            console.log('adsdsadsd' + res.data)
+            let len = res.data["result"].length;
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    let number = res.data.result[i]
+                    console.log('sfsdfdfsdfdsfsfsdfs' + number)
+                    console.log(number)
+                    this.setState({ loading: false });
+                    this.state.stores.push(number)
+
+                    this.setState({ stores: this.state.stores })
+                }
+            }
+        }).catch(() => {
+            this.setState({ loading: false });
+        });
+    }
+
 
     filterAction() {
         if (this.state.flagStore === true) {
@@ -158,6 +212,7 @@ export default class AccountManagement extends Component {
     }
 
     topbarAction = (item, index) => {
+
         if (item.name === "Dashboard") {
             this.setState({ flagDashboard: true });
         } else {
@@ -183,17 +238,25 @@ export default class AccountManagement extends Component {
         } else {
             this.setState({ flagHSNCode: false });
         }
-        if (item.name === "Stores") {
-            this.setState({ flagStore: true, flagShowFilterButton: true });
+   
 
-        } else {
-            this.setState({ flagStore: false, flagShowFilterButton: false });
-        }
         if (item.name === "Domain") {
+            this.getDomainsList()
             this.setState({ flagDomain: true });
         } else {
             this.setState({ flagDomain: false });
         }
+
+        if (item.name === "Stores") {
+            this.getStoresList()
+            this.setState({ flagStore: true });
+        }
+        else {
+            this.setState({ flagStore: false });
+        }
+
+        
+        
 
         if (this.state.privilages[index].bool === true) {
             this.state.privilages[index].bool = false;
@@ -227,7 +290,16 @@ export default class AccountManagement extends Component {
     }
 
     navigateToAddDomain() {
-        this.props.navigation.navigate('AddDomain');
+        this.props.navigation.navigate('AddDomain', {
+            onGoBack: () => this.getDomains(),
+        });
+    }
+
+    getDomains() {
+        this.getDomainsList()
+    }
+    getStores(){
+        this.getStores()
     }
 
     handlemenuButtonClick() {
@@ -235,7 +307,9 @@ export default class AccountManagement extends Component {
     }
 
     navigateToAddStores() {
-        this.props.navigation.navigate('AddStore');
+        this.props.navigation.navigate('AddStore',{
+            onGoBack: () => this.getStores(),
+        });
     }
 
     modelClose = () => {
@@ -282,8 +356,13 @@ export default class AccountManagement extends Component {
                             </TouchableOpacity>
                         )}
 
-
-
+                        {this.state.flagStore && (
+                            <TouchableOpacity
+                                style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                onPress={() => this.filterAction()} >
+                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                            </TouchableOpacity>
+                        )}
 
                     </View>
                     <ScrollView>

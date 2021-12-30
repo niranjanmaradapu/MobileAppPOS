@@ -176,9 +176,6 @@ export default class UserManagement extends Component {
       
     }
 
-
-
-
     filterAction() {
         if (this.state.flagTwo === true) {
             this.setState({ flagFilterRoles: true });

@@ -6,6 +6,8 @@ import SelectDomain from '../components/Login/SelectDomain';
 import SelectStore from '../components/Login/SelectStore';
 import ForgotPassword from '../components/Login/ForgotPassword';
 import RegisterClient from '../components/URM/RegisterClient';
+import ManagePassword from '../components/URM/ManagePassword';
+import UpdateNewpassword from '../components/Login/UpdateNewpassword';
 
 
 const Stack = createStackNavigator();
@@ -20,6 +22,8 @@ export default class HomeNavigation extends React.Component {
                 <Stack.Screen name="ForgotPassword" options={{ headerShown: false }} component={ForgotPassword} />
                 <Stack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
                 <Stack.Screen name="RegisterClient" options={{ headerShown: false }} component={RegisterClient} />
+                <Stack.Screen name="UpdateNewpassword" options={{ headerShown: false }} component={UpdateNewpassword} />
+                <Stack.Screen name="ManagePassword" options={{ headerShown: false }} component={ManagePassword} />
             </Stack.Navigator>
         );
     }
