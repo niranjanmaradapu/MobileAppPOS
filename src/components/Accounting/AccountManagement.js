@@ -6,7 +6,11 @@ import Device from 'react-native-device-detection';
 import { ScrollView } from 'react-native-gesture-handler';
 import Loader from "../loader";
 import UrmService from '../services/UrmService';
+import CreateHSNCode from './CreateHSNCode';
+import CreateTaxMaster from './CreateTaxMaster';
+import { CreditNotes, FilterCreditNotes } from './CreditNotes';
 import Dashboard from './Dashboard';
+import { DebitNotes } from "./DebitNotes";
 import Domain from './Domain.js';
 import { FilterStores, Stores } from './Stores.js';
 
@@ -19,15 +23,20 @@ export default class AccountManagement extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            flagShowFilterButton: false,
             flagDashboard: true,
+            flagCreditNotes: false,
+            flagDebitNotes: false,
+            flagTaxMaster: false,
+            flagHSNCode: false,
             flagStore: false,
             flagDomain: false,
             flagFilterStore: false,
-            privilages: [],
             modalVisible: true,
+            storesDelete: false,
+            privilages: [],
             stores: [1, 2],
             domains: [1, 2],
-            storesDelete: false,
         };
     }
 
@@ -149,32 +158,49 @@ export default class AccountManagement extends Component {
     }
 
     topbarAction = (item, index) => {
-        if (item.name === "Stores") {
-            this.setState({ flagStore: true });
-
+        if (item.name === "Dashboard") {
+            this.setState({ flagDashboard: true });
+        } else {
+            this.setState({ flagDashboard: false });
         }
-        else {
-            this.setState({ flagStore: false });
+        if (item.name === "Credit Notes") {
+            this.setState({ flagCreditNotes: true, flagShowFilterButton: true });
+        } else {
+            this.setState({ flagCreditNotes: false, flagShowFilterButton: false });
+        }
+        if (item.name === "Debit Notes") {
+            this.setState({ flagDebitNotes: true, flagShowFilterButton: true });
+        } else {
+            this.setState({ flagDebitNotes: false, flagShowFilterButton: false });
+        }
+        if (item.name === "Create Tax Master") {
+            this.setState({ flagTaxMaster: true });
+        } else {
+            this.setState({ flagTaxMaster: false });
+        }
+        if (item.name === "Create HSN Code") {
+            this.setState({ flagHSNCode: true });
+        } else {
+            this.setState({ flagHSNCode: false });
+        }
+        if (item.name === "Stores") {
+            this.setState({ flagStore: true, flagShowFilterButton: true });
+
+        } else {
+            this.setState({ flagStore: false, flagShowFilterButton: false });
         }
         if (item.name === "Domain") {
             this.setState({ flagDomain: true });
-        }
-        else {
+        } else {
             this.setState({ flagDomain: false });
-        }
-        if (item.name === "Dashboard") {
-            this.setState({ flagDashboard: true });
-        }
-        else {
-            this.setState({ flagDashboard: false });
         }
 
         if (this.state.privilages[index].bool === true) {
             this.state.privilages[index].bool = false;
-        }
-        else {
+        } else {
             this.state.privilages[index].bool = true;
         }
+
         for (let i = 0; i < this.state.privilages.length; i++) {
             if (index != i) {
                 this.state.privilages[i].bool = false;
@@ -197,7 +223,7 @@ export default class AccountManagement extends Component {
     }
 
     modelCancel() {
-        this.setState({ modalVisible: false, flagFilterDomain: false, flagFilterStore: false });
+        this.setState({ modalVisible: false, flagFilterCreditNotes: false, flagFilterStore: false });
     }
 
     navigateToAddDomain() {
@@ -236,21 +262,29 @@ export default class AccountManagement extends Component {
                         <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
                             Accounting
                         </Text>
+                        {this.state.flagShowFilterButton && (
+                            <TouchableOpacity
+                                style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                onPress={() => this.filterAction()} >
+                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                            </TouchableOpacity>
+                        )}
+
                         {this.state.flagDomain && (
                             <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToAddDomain()}>
                                 <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Domain</Text>
                             </TouchableOpacity>
                         )}
+
                         {this.state.flagStore && (
                             <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToAddStores()}>
                                 <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Store</Text>
                             </TouchableOpacity>
                         )}
-                        <TouchableOpacity
-                            style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
-                            onPress={() => this.filterAction()} >
-                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
-                        </TouchableOpacity>
+
+
+
+
                     </View>
                     <ScrollView>
                         <View style={styles.container}>
@@ -284,6 +318,22 @@ export default class AccountManagement extends Component {
                                 <Dashboard />
                             )}
 
+                            {this.state.flagCreditNotes && (
+                                <CreditNotes />
+                            )}
+
+                            {this.state.flagDebitNotes && (
+                                <DebitNotes />
+                            )}
+
+                            {this.state.flagTaxMaster && (
+                                <CreateTaxMaster />
+                            )}
+
+                            {this.state.flagHSNCode && (
+                                <CreateHSNCode />
+                            )}
+
                             {this.state.flagStore && (
                                 <Stores
                                     stores={this.state.stores}
@@ -296,6 +346,13 @@ export default class AccountManagement extends Component {
                                 />
                             )}
 
+                            {this.state.flagFilterCreditNotes && (
+                                <FilterCreditNotes
+                                    modalVisible={this.state.modalVisible}
+                                    modelCancelCallback={this.modelCancel}
+                                />
+                            )}
+
                             {this.state.flagFilterStore && (
                                 <View>
                                     <FilterStores
@@ -304,6 +361,8 @@ export default class AccountManagement extends Component {
                                     />
                                 </View>
                             )}
+
+
 
                         </View>
                     </ScrollView>
@@ -462,7 +521,7 @@ const styles = StyleSheet.create({
     filterButton_mobile: {
         position: 'absolute',
         right: 20,
-         bottom:5,
+        bottom: 5,
         backgroundColor: '#ffffff',
         borderRadius: 5,
         width: 30,
