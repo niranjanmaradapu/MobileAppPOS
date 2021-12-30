@@ -1,15 +1,14 @@
-import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, ScrollView, TextInput, TouchableOpacity, View } from 'react-native';
-import DatePicker from 'react-native-date-picker';
-import Device from 'react-native-device-detection';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Modal from 'react-native-modal';
-import RNPickerSelect from 'react-native-picker-select';
-import { Chevron } from 'react-native-shapes';
-import Loader from "../loader";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
+import { ScrollView } from 'react-native-gesture-handler';
+import Loader from "../loader";
 import UrmService from '../services/UrmService';
+import Dashboard from './Dashboard';
+import Domain from './Domain.js';
+import { FilterStores, Stores } from './Stores.js';
 
 
 var deviceWidth = Dimensions.get("window").width;
@@ -20,52 +19,46 @@ export default class AccountManagement extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            flagOne: true,
-            flagTwo: false,
-            flagFilterRoles: false,
-            flagFilterUsers: false,
-            modalVisible: true,
-            createdDate: "",
-            date: new Date(),
-            role: "",
-            createdBy: "",
-            userType: "",
-            branch: "",
-            rolesData: [1, 2],
-            usersData: [1, 2],
-            roleDelete: false,
-            userDelete: false,
+            flagDashboard: true,
+            flagStore: false,
+            flagDomain: false,
+            flagFilterStore: false,
             privilages: [],
+            modalVisible: true,
+            stores: [1, 2],
+            domains: [1, 2],
+            storesDelete: false,
         };
     }
 
 
     async componentDidMount() {
+
         this.setState({ privilages: [] });
         AsyncStorage.getItem("custom:isConfigUser").then((value) => {
             if (value === "true") {
                 for (let i = 0; i < 2; i++) {
-                if (i === 0) {
-                    this.state.privilages.push({ bool: true, name: "Domains" });
+                    if (i === 0) {
+                        this.state.privilages.push({ bool: true, name: "Domains" });
+                    }
+                    else {
+                        this.state.privilages.push({ bool: false, name: "Stores" });
+                    }
                 }
-                else {
-                    this.state.privilages.push({ bool: false, name: "Stores" });
-                }
-            }
                 this.setState({ privilages: this.state.privilages });
             }
             else {
                 AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
                     if (value === "true") {
-                        var domainId = "1"
+                        var domainId = "1";
                         if (global.domainName === "Textile") {
-                            domainId = "1"
+                            domainId = "1";
                         }
                         else if (global.domainName === "Retail") {
-                            domainId = "2"
+                            domainId = "2";
                         }
                         else if (global.domainName === "Electrical & Electronics") {
-                            domainId = "3"
+                            domainId = "3";
                         }
 
                         axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
@@ -74,14 +67,14 @@ export default class AccountManagement extends Component {
                                 if (len > 0) {
                                     if (len > 0) {
                                         for (let i = 0; i < len; i++) {
-                                            let previlage = res.data["result"][i]
+                                            let previlage = res.data["result"][i];
                                             if (previlage.name === "Accounting Portal") {
                                                 for (let i = 0; i < previlage.subPrivillages.length; i++) {
-                                                    console.log(previlage.subPrivillages[i].parentPrivillageId)
+                                                    console.log(previlage.subPrivillages[i].parentPrivillageId);
                                                     if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
-                                                        let subprivilage = previlage.subPrivillages[i]
-                                                        if(subprivilage.name === "Dashboard"){
-                                                            this.setState({ flagOne: false, flagTwo: false });
+                                                        let subprivilage = previlage.subPrivillages[i];
+                                                        if (subprivilage.name === "Dashboard") {
+                                                            this.setState({ flagStore: false, flagDomain: false });
                                                         }
                                                         if (i === 0) {
                                                             this.state.privilages.push({ bool: true, name: subprivilage.name });
@@ -108,15 +101,15 @@ export default class AccountManagement extends Component {
                                     // console.log(.name)
                                     if (len > 0) {
                                         for (let i = 0; i < len; i++) {
-                                            let previlage = res.data["result"].parentPrivilages[i]
+                                            let previlage = res.data["result"].parentPrivilages[i];
                                             if (previlage.name === "Accounting Portal") {
-                                              
-                                                    if (length > 0) {
-                                                        for (let i = 0; i < length; i++) {
-                                                            if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
-                                                            let subprivilage = res.data["result"].subPrivilages[i]
-                                                            if(subprivilage.name === "Dashboard"){
-                                                                this.setState({ flagOne: false, flagTwo: false });
+
+                                                if (length > 0) {
+                                                    for (let i = 0; i < length; i++) {
+                                                        if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
+                                                            let subprivilage = res.data["result"].subPrivilages[i];
+                                                            if (subprivilage.name === "Dashboard") {
+                                                                this.setState({ flagStore: false, flagDomain: false });
                                                             }
                                                             if (i === 0) {
                                                                 this.state.privilages.push({ bool: true, name: subprivilage.name });
@@ -132,182 +125,101 @@ export default class AccountManagement extends Component {
                                         }
                                     }
                                 }
-                
+
                             });
                         }).catch(() => {
-                            console.log('there is error saving domainDataId')
-                        })
+                            console.log('there is error saving domainDataId');
+                        });
 
                     }
                 }).catch(() => {
-                    console.log('there is error getting storeId')
-                })
+                    console.log('there is error getting storeId');
+                });
             }
         }).catch(() => {
-            console.log('there is error getting storeId')
-        })
+            console.log('there is error getting storeId');
+        });
 
+    }
+
+    filterAction() {
+        if (this.state.flagStore === true) {
+            this.setState({ flagFilterStore: true });
+        }
     }
 
     topbarAction = (item, index) => {
-        if(item.name === "Users"){
-            this.setState({ flagOne: true, flagTwo: false });
-          
+        if (item.name === "Stores") {
+            this.setState({ flagStore: true });
+
         }
-        else if(item.name === "Roles"){
-            this.setState({ flagTwo: true, flagOne: false });  
+        else {
+            this.setState({ flagStore: false });
         }
-        else if(item.name === "Dashboard"){
-            this.setState({ flagTwo: false, flagOne: false });  
+        if (item.name === "Domain") {
+            this.setState({ flagDomain: true });
+        }
+        else {
+            this.setState({ flagDomain: false });
+        }
+        if (item.name === "Dashboard") {
+            this.setState({ flagDashboard: true });
+        }
+        else {
+            this.setState({ flagDashboard: false });
         }
 
         if (this.state.privilages[index].bool === true) {
-            this.state.privilages[index].bool = false
+            this.state.privilages[index].bool = false;
         }
         else {
-            this.state.privilages[index].bool = true
+            this.state.privilages[index].bool = true;
         }
         for (let i = 0; i < this.state.privilages.length; i++) {
             if (index != i) {
-                this.state.privilages[i].bool = false
+                this.state.privilages[i].bool = false;
             }
             this.setState({ privilages: this.state.privilages });
         }
-      
-    }
+
+    };
 
 
 
 
     filterAction() {
-        if (this.state.flagTwo === true) {
-            this.setState({ flagFilterRoles: true });
+        if (this.state.flagStore === true) {
+            this.setState({ flagFilterStore: true });
         } else {
-            this.setState({ flagFilterRoles: false });
-        }
-        if (this.state.flagOne === true) {
-            this.setState({ flagFilterUsers: true });
-        } else {
-            this.setState({ flagFilterUsers: false });
+            this.setState({ flagFilterStore: false });
         }
         this.setState({ modalVisible: true });
     }
 
     modelCancel() {
-        this.setState({ modalVisible: false, flagFilterRoles: false, flagFilterUsers: false });
+        this.setState({ modalVisible: false, flagFilterDomain: false, flagFilterStore: false });
     }
 
-    navigateToCreateRoles() {
-        this.props.navigation.navigate('CreateRole');
+    navigateToAddDomain() {
+        this.props.navigation.navigate('AddDomain');
     }
 
-    handleBackButtonClick() {
+    handlemenuButtonClick() {
         this.props.navigation.openDrawer();
     }
 
-    navigateToAddUsers() {
-        this.props.navigation.navigate('AddUser');
+    navigateToAddStores() {
+        this.props.navigation.navigate('AddStore');
     }
 
-    topbarAction1() {
-        this.setState({ flagOne: true, flagTwo: false });
-        // this.setState({ flagTwo: false })
-    }
-
-    topbarAction2() {
-        this.setState({ flagTwo: true, flagOne: false });
-    }
-
-    filterDatepickerClicked() {
-        this.setState({ datepickerOpen: true });
-    }
-
-    filterDatepickerDoneClicked() {
-        // if (parseInt(this.state.date.getDate()) < 10) {
-        this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
-        // }
-    }
-
-    filterDatepickerCancelClicked() {
-        this.setState({ date: new Date(), datepickerOpen: false });
-    }
-
-    handleCreatedBy = (value) => {
-        this.setState({ createdBy: value });
+    modelClose = () => {
+        this.modelCancel();
     };
 
-    handleRole = (value) => {
-        this.setState({ role: value });
-    };
 
-    handleUSerType = (value) => {
-        this.setState({ userType: value });
-    };
 
-    handleBranch = (value) => {
-        this.setState({ branch: value });
-    };
 
-    applyRoleFilter() {
-        alert("Applied Roles");
-    }
 
-    applyUserFilter() {
-        alert("Applied User");
-    }
-
-    deleteUser(item, index) {
-        alert("you have deleted the user");
-        this.setState({ modalVisible: false });
-    }
-
-    deleteRole(item, index) {
-        alert("you have deleted the role");
-        this.setState({ modalVisible: false });
-    }
-
-    handleuserdeleteaction(item, index) {
-        this.setState({ modalVisible: true, userDelete: true });
-    }
-    handleRoledeleteaction(item, index) {
-        this.setState({ modalVisible: true, roleDelete: true });
-    }
-
-    getAllRoles() {
-
-    }
-
-    getAllUsers() {
-
-    }
-
-    updateRoles() {
-        this.getAllRoles();
-    }
-
-    updateUsers() {
-        this.getAllUsers();
-    }
-
-    handleedituser(item, index) {
-        this.props.navigation.navigate('EditUser',
-            {
-                item: item, isEdit: true,
-                onGoBack: () => this.updateUsers(),
-            });
-    }
-
-    handleeditRole(item, index) {
-        this.props.navigation.navigate('EditRole',
-            {
-                item: item, isEdit: true,
-                onGoBack: () => this.updateRoles(),
-            });
-    }
-
-    handleRole(item, index) {
-        this.props.navigation.navigate('EditRole');
-    }
 
     render() {
         return (
@@ -318,20 +230,20 @@ export default class AccountManagement extends Component {
                 }
                 <SafeAreaView style={styles.mainContainer}>
                     <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                        <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
+                        <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handlemenuButtonClick()}>
                             <Image source={require('../assets/images/menu.png')} />
                         </TouchableOpacity>
                         <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                            Register Client
+                            Accounting
                         </Text>
-                        {this.state.flagTwo && (
-                            <TouchableOpacity style={Device.isTablet ? styles.addBarcodeButton_tablet : styles.addBarcodeButton_mobile} onPress={() => this.navigateToCreateRoles()}>
-                                <Text style={Device.isTablet ? styles.addBarcodeButtonText_tablet : styles.addBarcodeButtonText_mobile}>Create Role</Text>
+                        {this.state.flagDomain && (
+                            <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToAddDomain()}>
+                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Domain</Text>
                             </TouchableOpacity>
                         )}
-                        {this.state.flagOne && (
-                            <TouchableOpacity style={Device.isTablet ? styles.addBarcodeButton_tablet : styles.addBarcodeButton_mobile} onPress={() => this.navigateToAddUsers()}>
-                                <Text style={Device.isTablet ? styles.addBarcodeButtonText_tablet : styles.addBarcodeButtonText_mobile}>Add User</Text>
+                        {this.state.flagStore && (
+                            <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToAddStores()}>
+                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Store</Text>
                             </TouchableOpacity>
                         )}
                         <TouchableOpacity
@@ -340,7 +252,6 @@ export default class AccountManagement extends Component {
                             <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
                         </TouchableOpacity>
                     </View>
-
                     <ScrollView>
                         <View style={styles.container}>
 
@@ -369,397 +280,33 @@ export default class AccountManagement extends Component {
                                 ListFooterComponent={<View style={{ width: 15 }}></View>}
                             />
 
+                            {this.state.flagDashboard && (
+                                <Dashboard />
+                            )}
 
-                        </View>
-                   
-                    {/* <View style={Device.isTablet ? styles.modalContainer_tablet : styles.modalContainer_mobile}>
-                        <TouchableOpacity style={[this.state.flagOne ? styles.modalActive : styles.modalInActive, Device.isTablet ? styles.modalButton_tablet : styles.modalButton_mobile, styles.modalButton1]}
-                            onPress={() => this.topbarAction1()} >
-                            <View>
-                                <Text style={[Device.isTablet ? styles.modalButtonText_tablet : styles.modalButtonText_mobile, this.state.flagOne ? styles.modalActiveText : styles.modalInActiveText]}>
-                                    Roles
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[this.state.flagTwo ? styles.modalActive : styles.modalInActive, Device.isTablet ? styles.modalButton_tablet : styles.modalButton_mobile, styles.modalButton2]}
-                            onPress={() => this.topbarAction2()} >
-                            <View>
-                                <Text style={[Device.isTablet ? styles.modalButtonText_tablet : styles.modalButtonText_mobile, this.state.flagTwo ? styles.modalActiveText : styles.modalInActiveText]} >
-                                    Users
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View> */}
-                    {this.state.flagOne && (
-                        <FlatList
-                            data={this.state.rolesData}
-                            style={{ marginTop: 20, }}
-                            scrollEnabled={true}
-                            renderItem={({ item, index }) => (
-                                <View style={Device.isTablet ? styles.flatlistContainer_tablet : styles.flatlistContainer_mobile}>
-                                    <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
-                                        <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
-                                        <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>ROLE: {"\n"}{item.roleName}</Text>
-                                        <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>DOMAIN: {item.domain} </Text>
-                                        <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>CREATED BY: {item.createdBy}</Text>
-                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>USER COUNT:  {item.userCount}</Text>
-                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>DESCRIPTION: {item.description}</Text>
-                                        {this.state.roleDelete && (
-                                            <View>
-                                                <Modal isVisible={this.state.modalVisible}>
-                                                    <View style={{
-                                                        width: deviceWidth,
-                                                        alignItems: 'center',
-                                                        marginLeft: -20,
-                                                        backgroundColor: "#ffffff",
-                                                        height: 260,
-                                                        position: 'absolute',
-                                                        bottom: -20,
-                                                    }}>
-                                                        <Text style={{
-                                                            position: 'absolute',
-                                                            left: 20,
-                                                            top: 15,
-                                                            width: 300,
-                                                            height: 20,
-                                                            fontFamily: 'medium',
-                                                            fontSize: 16,
-                                                            color: '#353C40'
-                                                        }}> Delete Role </Text>
-                                                        <TouchableOpacity style={{
-                                                            position: 'absolute',
-                                                            right: 20,
-                                                            top: 7,
-                                                            width: 50, height: 50,
-                                                        }} onPress={() => this.modelCancel()}>
-                                                            <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
-                                                        </TouchableOpacity>
+                            {this.state.flagStore && (
+                                <Stores
+                                    stores={this.state.stores}
+                                />
+                            )}
 
-                                                        <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                                        </Text>
-                                                        <Text style={{
-                                                            position: 'absolute',
-                                                            top: 70,
-                                                            height: 20,
-                                                            textAlign: 'center',
-                                                            fontFamily: 'regular',
-                                                            fontSize: 18,
-                                                            color: '#353C40'
-                                                        }}> Are you sure want to delete Role?  </Text>
-                                                        <TouchableOpacity
-                                                            style={{
-                                                                width: deviceWidth - 40,
-                                                                marginLeft: 20,
-                                                                marginRight: 20,
-                                                                marginTop: 60,
-                                                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                            }} onPress={() => this.deleteRole(item, index)}
-                                                        >
-                                                            <Text style={{
-                                                                textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                                                fontFamily: "regular"
-                                                            }}  > DELETE </Text>
+                            {this.state.flagDomain && (
+                                <Domain
+                                    domains={this.state.domains}
+                                />
+                            )}
 
-                                                        </TouchableOpacity>
-
-                                                        <TouchableOpacity
-                                                            style={{
-                                                                width: deviceWidth - 40,
-                                                                marginLeft: 20,
-                                                                marginRight: 20,
-                                                                marginTop: 20,
-                                                                height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                                            }} onPress={() => this.modelCancel()}
-                                                        >
-                                                            <Text style={{
-                                                                textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                                                fontFamily: "regular"
-                                                            }}  > CANCEL </Text>
-
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                </Modal>
-                                            </View>
-                                        )}
-                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditRole(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
-                                        </TouchableOpacity>
-
-                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleRoledeleteaction(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
-                                        </TouchableOpacity>
-                                    </View>
+                            {this.state.flagFilterStore && (
+                                <View>
+                                    <FilterStores
+                                        modalVisible={this.state.modalVisible}
+                                        modelCancelCallback={this.modelClose}
+                                    />
                                 </View>
                             )}
-                        />
-                    )}
-                    {this.state.flagTwo && (
-                        <FlatList
-                            data={this.state.usersData}
-                            style={{ marginTop: 20, }}
-                            scrollEnabled={true}
-                            renderItem={({ item, index }) => (
-                                <View style={Device.isTablet ? styles.flatlistContainer_tablet : styles.flatlistContainer_mobile}>
-                                    <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
-                                        <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >USER.ID: {item.userId} </Text>
-                                        <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>USER NAME: {"\n"}{item.userName}</Text>
-                                        <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>ROLE: {item.role} </Text>
-                                        <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>STORE NAME: {item.storeName}</Text>
-                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>CREATED DATE:  {"11-12-2021"}</Text>
-                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>STATUS: {"Active"}</Text>
-                                        {this.state.userDelete && (
-                                            <View>
-                                                <Modal isVisible={this.state.modalVisible}>
-                                                    <View style={{
-                                                        width: deviceWidth,
-                                                        alignItems: 'center',
-                                                        marginLeft: -20,
-                                                        backgroundColor: "#ffffff",
-                                                        height: 260,
-                                                        position: 'absolute',
-                                                        bottom: -20,
-                                                    }}>
-                                                        <Text style={{
-                                                            position: 'absolute',
-                                                            left: 20,
-                                                            top: 15,
-                                                            width: 300,
-                                                            height: 20,
-                                                            fontFamily: 'medium',
-                                                            fontSize: 16,
-                                                            color: '#353C40'
-                                                        }}> Delete User </Text>
-                                                        <TouchableOpacity style={{
-                                                            position: 'absolute',
-                                                            right: 20,
-                                                            top: 7,
-                                                            width: 50, height: 50,
-                                                        }} onPress={() => this.modelCancel()}>
-                                                            <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
-                                                        </TouchableOpacity>
 
-                                                        <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                                        </Text>
-                                                        <Text style={{
-                                                            position: 'absolute',
-                                                            top: 70,
-                                                            height: 20,
-                                                            textAlign: 'center',
-                                                            fontFamily: 'regular',
-                                                            fontSize: 18,
-                                                            color: '#353C40'
-                                                        }}> Are you sure want to delete User?  </Text>
-                                                        <TouchableOpacity
-                                                            style={{
-                                                                width: deviceWidth - 40,
-                                                                marginLeft: 20,
-                                                                marginRight: 20,
-                                                                marginTop: 60,
-                                                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                            }} onPress={() => this.deleteUser(item, index)}
-                                                        >
-                                                            <Text style={{
-                                                                textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                                                fontFamily: "regular"
-                                                            }}  > DELETE </Text>
-
-                                                        </TouchableOpacity>
-
-                                                        <TouchableOpacity
-                                                            style={{
-                                                                width: deviceWidth - 40,
-                                                                marginLeft: 20,
-                                                                marginRight: 20,
-                                                                marginTop: 20,
-                                                                height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                                            }} onPress={() => this.modelCancel()}
-                                                        >
-                                                            <Text style={{
-                                                                textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                                                fontFamily: "regular"
-                                                            }}  > CANCEL </Text>
-
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                </Modal>
-                                            </View>
-                                        )}
-                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleedituser(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
-                                        </TouchableOpacity>
-
-                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleuserdeleteaction(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            )}
-                        />
-                    )}
-                    {this.state.flagFilterRoles && (
-                        <View>
-                            <Modal isVisible={this.state.modalVisible}>
-                                <View style={Device.isTablet ? styles.filterBarcodeContainer_tablet : styles.filterBarcodeContainer_mobile} >
-                                    <KeyboardAwareScrollView enableOnAndroid={true} >
-                                        <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
-                                        <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                            <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
-                                        </TouchableOpacity>
-                                        <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                                        </Text>
-
-                                        <TextInput
-                                            style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                            underlineColorAndroid="transparent"
-                                            placeholder="ROLE"
-                                            placeholderTextColor="#6F6F6F"
-                                            textAlignVertical="center"
-                                            autoCapitalize="none"
-                                            value={this.state.role}
-                                            onChangeText={this.handleRole}
-                                        />
-                                        <TextInput
-                                            style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                            underlineColorAndroid="transparent"
-                                            placeholder="CREATED BY"
-                                            placeholderTextColor="#6F6F6F"
-                                            textAlignVertical="center"
-                                            autoCapitalize="none"
-                                            value={this.state.createdBy}
-                                            onChangeText={this.handleCreatedBy}
-                                        />
-                                        <TouchableOpacity
-                                            style={{
-                                                width: deviceWidth - 40,
-                                                marginLeft: 20,
-                                                marginRight: 20,
-                                                marginTop: 10,
-                                                borderColor: '#8F9EB717',
-                                                borderRadius: 3,
-                                                height: 50, backgroundColor: "#F6F6F6", borderRadius: 5,
-                                            }} testID="openModal"
-
-                                            onPress={() => this.filterDatepickerClicked()}
-                                        >
-                                            <Text style={{
-                                                marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
-                                                fontFamily: "regular"
-                                            }}  > {this.state.doneButtonClicked == false ? 'CREATED DATE' : this.state.createdDate} </Text>
-                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
-                                        </TouchableOpacity>
-                                        {this.state.datepickerOpen && (
-                                            <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
-                                                <TouchableOpacity
-                                                    style={{
-                                                        position: 'absolute',
-                                                        left: 20,
-                                                        top: 10,
-                                                        height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                    }} onPress={() => this.filterDatepickerCancelClicked()}
-                                                >
-                                                    <Text style={{
-                                                        textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                        fontFamily: "regular"
-                                                    }}  > Cancel </Text>
-
-                                                </TouchableOpacity>
-                                                <TouchableOpacity
-                                                    style={{
-                                                        position: 'absolute',
-                                                        right: 20,
-                                                        top: 10,
-                                                        height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                    }} onPress={() => this.filterDatepickerDoneClicked()}
-                                                >
-                                                    <Text style={{
-                                                        textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                                        fontFamily: "regular"
-                                                    }}  > Done </Text>
-
-                                                </TouchableOpacity>
-                                                <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
-                                                    date={this.state.date}
-                                                    mode={'date'}
-                                                    onDateChange={(date) => this.setState({ date })}
-                                                />
-                                            </View>
-                                        )}
-
-                                        <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
-                                            onPress={() => this.applyRoleFilter()}>
-                                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
-                                            onPress={() => this.modelCancel()}>
-                                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
-                                        </TouchableOpacity>
-                                    </KeyboardAwareScrollView>
-                                </View>
-                            </Modal>
                         </View>
-                    )}
-
-                    {this.state.flagFilterUsers && (
-                        <View>
-                            <Modal isVisible={this.state.modalVisible}>
-                                <View style={Device.isTablet ? styles.filterBarcodeContainer_tablet : styles.filterBarcodeContainer_mobile} >
-                                    <KeyboardAwareScrollView enableOnAndroid={true} >
-                                        <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
-                                        <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                            <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
-                                        </TouchableOpacity>
-                                        <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                                        </Text>
-                                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                                            <RNPickerSelect
-                                                style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                                                placeholder={{
-                                                    label: 'USER TYPE'
-                                                }}
-                                                Icon={() => {
-                                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                                }}
-                                                items={this.state.userType}
-                                                onValueChange={this.handleUSerType}
-                                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                                                value={this.state.userType}
-                                                useNativeAndroidPickerStyle={false}
-                                            />
-                                        </View>
-                                        <TextInput
-                                            style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                            underlineColorAndroid="transparent"
-                                            placeholder="ROLE"
-                                            placeholderTextColor="#6F6F6F"
-                                            textAlignVertical="center"
-                                            autoCapitalize="none"
-                                            value={this.state.role}
-                                            onChangeText={this.handleRole}
-                                        />
-                                        <TextInput
-                                            style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                            underlineColorAndroid="transparent"
-                                            placeholder="STORE/BRANCH"
-                                            placeholderTextColor="#6F6F6F"
-                                            textAlignVertical="center"
-                                            autoCapitalize="none"
-                                            value={this.state.branch}
-                                            onChangeText={this.handleBranch}
-                                        />
-                                        <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
-                                            onPress={() => this.applyUserFilter()}>
-                                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
-                                            onPress={() => this.modelCancel()}>
-                                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
-                                        </TouchableOpacity>
-                                    </KeyboardAwareScrollView>
-                                </View>
-                            </Modal>
-                        </View>
-                    )}
- </ScrollView >
+                    </ScrollView>
                 </SafeAreaView>
             </View>
         );
@@ -893,19 +440,19 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        height: 84,
+        height: Device.isAndroid ? 70 : 84,
     },
-    backButton_mobile: {
+    menuButton_mobile: {
         position: 'absolute',
         left: 10,
-        top: 30,
+        bottom: 5,
         width: 40,
         height: 40,
     },
     headerTitle_mobile: {
         position: 'absolute',
         left: 70,
-        top: 47,
+        bottom: 10,
         width: 300,
         height: 25,
         fontFamily: 'bold',
@@ -915,7 +462,7 @@ const styles = StyleSheet.create({
     filterButton_mobile: {
         position: 'absolute',
         right: 20,
-        top: 40,
+        bottom: 10,
         backgroundColor: '#ffffff',
         borderRadius: 5,
         width: 30,
@@ -949,10 +496,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
     },
-    addBarcodeButton_mobile: {
+    navigationToButton_mobile: {
         position: 'absolute',
         right: 70,
-        top: 40,
+        bottom: 10,
         backgroundColor: '#ED1C24',
         borderRadius: 5,
         width: 110,
@@ -960,7 +507,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
     },
-    addBarcodeButtonText_mobile: {
+    navigationToButtonText_mobile: {
         fontSize: 12,
         fontFamily: 'regular',
         color: '#ffffff',
@@ -1143,7 +690,7 @@ const styles = StyleSheet.create({
         fontSize: 28,
         height: 90,
     },
-    backButton_tablet: {
+    menuButton_tablet: {
         position: 'absolute',
         left: 10,
         top: 38,
@@ -1197,7 +744,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
     },
-    addBarcodeButton_tablet: {
+    navigationToButton_tablet: {
         position: 'absolute',
         right: 70,
         top: 40,
@@ -1208,7 +755,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignItems: 'center',
     },
-    addBarcodeButtonText_tablet: {
+    navigationToButtonText_tablet: {
         fontSize: 17,
         fontFamily: 'regular',
         color: '#ffffff',
