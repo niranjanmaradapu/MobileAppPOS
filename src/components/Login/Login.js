@@ -95,10 +95,9 @@ export default class Login extends Component {
     };
 
     registerClient() {
-        this.props.navigation.navigate('NewSaleTextile');
+        console.log('adsadasdd')
+        this.props.navigation.navigate('RegisterClient');
     }
-
-
 
      login() {
         AsyncStorage.removeItem('tokenkey');

@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
     filterButton_mobile: {
         position: 'absolute',
         right: 20,
-        bottom: 10,
+         bottom:5,
         backgroundColor: '#ffffff',
         borderRadius: 5,
         width: 30,

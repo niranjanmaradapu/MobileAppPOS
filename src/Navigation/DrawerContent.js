@@ -161,7 +161,7 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="Reports"
-                                onPress={() => { props.navigation.navigate('') }}
+                                onPress={() => { props.navigation.navigate('ReportsNavigation') }}
                             />
                         )}
 
