@@ -813,7 +813,7 @@ class Promo extends Component {
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Promotions & Loyalty </Text>
                     <TouchableOpacity
-                        style={{ position: 'absolute', right: 20, bottom:5, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
+                        style={{ position: 'absolute', right: 20, bottom: 5, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
                         onPress={() => this.filterAction()} >
                         <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/promofilter.png')} />
                     </TouchableOpacity>
@@ -885,7 +885,7 @@ class Promo extends Component {
                 {this.state.flagone && (
                     <FlatList
                         data={this.state.poolsData}
-                        style={{ marginTop: Device.isTablet ? 50 : 40, }}
+                        style={{ marginTop: 50, }}
                         scrollEnabled={
                             true
                         }
@@ -937,9 +937,9 @@ class Promo extends Component {
 
                                                 <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Pool </Text>
 
-                                            <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../../assets/images/modelcancel.png')} />
-                                            </TouchableOpacity>
+                                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                                </TouchableOpacity>
 
                                                 <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
                                                 </Text>
@@ -976,14 +976,14 @@ class Promo extends Component {
                                         right: 20,
                                         top: 20,
                                         width: Device.isTablet ? 70 : 50,
-                                        height: Device.isTablet ? 34 : 24,  
+                                        height: Device.isTablet ? 34 : 24,
                                         backgroundColor: "#C1FCB0", borderRadius: 5,
                                     } : {
                                         position: 'absolute',
                                         right: 20,
                                         top: 20,
                                         width: Device.isTablet ? 70 : 50,
-                                        height: Device.isTablet ? 34 : 24,  
+                                        height: Device.isTablet ? 34 : 24,
                                         backgroundColor: "#FCB0BA", borderRadius: 5,
                                     }}
                                 >
@@ -1080,7 +1080,7 @@ class Promo extends Component {
                 {this.state.flagtwo && (
                     <FlatList
                         data={this.state.promoData}
-                        style={{ marginTop: Device.isTablet ? 50 : 40, }}
+                        style={{ marginTop: 50, }}
                         keyExtractor={item => item}
                         renderItem={({ item, index }) => (
                             <View style={{
@@ -1138,14 +1138,14 @@ class Promo extends Component {
                                         right: 20,
                                         top: 20,
                                         width: 50,
-                                        height: 24, 
+                                        height: 24,
                                         backgroundColor: "#C1FCB0", borderRadius: 5,
                                     } : {
                                         position: 'absolute',
                                         right: 20,
                                         top: 20,
                                         width: Device.isTablet ? 70 : 50,
-                                        height: Device.isTablet ? 34 : 24, 
+                                        height: Device.isTablet ? 34 : 24,
                                         backgroundColor: "#FCB0BA", borderRadius: 5,
                                     }}
                                 >
@@ -1160,7 +1160,7 @@ class Promo extends Component {
                                     <View>
                                         <Modal isVisible={this.state.modalVisible}>
 
-                                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, {height: Device.isTablet ? 350 : 250}]}>
+                                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
 
                                                 <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Promotion </Text>
 
@@ -1182,7 +1182,7 @@ class Promo extends Component {
 
                                                 }}> Are you sure want to delete Promotion?  </Text>
                                                 <TouchableOpacity
-                                                    style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, {marginTop: Device.isTablet ? 75 : 55}]} onPress={() => this.deletePromotion(item, index)}
+                                                    style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]} onPress={() => this.deletePromotion(item, index)}
                                                 >
                                                     <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
 
@@ -1254,8 +1254,8 @@ class Promo extends Component {
 
                 {this.state.flagthree && (
                     <FlatList
+                        style={{ marginTop: 50, }}
                         data={this.state.loyaltyData}
-                        style={{ marginTop: Device.isTablet ? 50 : 40, }}
                         keyExtractor={item => item}
                         renderItem={({ item, index }) => (
                             <View style={{
@@ -1267,46 +1267,46 @@ class Promo extends Component {
                             }}>
                                 <View style={{ flexDirection: 'column', width: '100%', height: 140, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingLeft: Device.isTablet ? 25 : 15, paddingRight: Device.isTablet ? 25 : 15 }}>
                                     <View>
-                                    <Text style={{ fontSize: Device.isTablet ? 21 : 16, marginBottom: 15, fontFamily: 'medium', color: '#ED1C24' }}>
-                                        {item.customerName}
-                                    </Text>
+                                        <Text style={{ fontSize: Device.isTablet ? 21 : 16, marginBottom: 15, fontFamily: 'medium', color: '#ED1C24' }}>
+                                            {item.customerName}
+                                        </Text>
 
-                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
-                                        MOBILE NUMBER
-                                    </Text>
-                                    <Text style={{ fontSize: Device.isTablet ? 19 : 14, fontFamily: 'medium', color: '#353C40' }}>
-                                        {item.mobileNumber}
-                                    </Text>
-                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
-                                        EXPIRY DATE
-                                    </Text>
-                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#353C40' }}>
-                                        {item.expiredDate}
-                                    </Text>
+                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
+                                            MOBILE NUMBER
+                                        </Text>
+                                        <Text style={{ fontSize: Device.isTablet ? 19 : 14, fontFamily: 'medium', color: '#353C40' }}>
+                                            {item.mobileNumber}
+                                        </Text>
+                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
+                                            EXPIRY DATE
+                                        </Text>
+                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#353C40' }}>
+                                            {item.expiredDate}
+                                        </Text>
                                     </View>
 
                                     <View>
                                         <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginTop: Device.isTablet ? 45 : 30, fontFamily: 'regular', color: '#808080' }}>
-                                        POINTS VALUE
-                                    </Text>
+                                            POINTS VALUE
+                                        </Text>
                                         <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#353C40' }}>
-                                        {item.loyaltyPoints}
-                                    </Text>
+                                            {item.loyaltyPoints}
+                                        </Text>
 
-                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12,  fontFamily: 'regular', color: '#808080' }}>
-                                        LOYALTY POINTS
-                                    </Text>
-                                    <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#353C40' }}>
-                                        ₹ {item.invoiceAmount}
-                                    </Text>
+                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
+                                            LOYALTY POINTS
+                                        </Text>
+                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#353C40' }}>
+                                            ₹ {item.invoiceAmount}
+                                        </Text>
                                     </View>
                                     <View>
-                                    <Text style={{  fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
-                                        INVOICE NUMBER
-                                    </Text>
+                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
+                                            INVOICE NUMBER
+                                        </Text>
                                         <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#353C40' }}>
-                                        {String(item.invoiceNumber)}
-                                    </Text>
+                                            {String(item.invoiceNumber)}
+                                        </Text>
                                     </View>
                                 </View>
 
@@ -2621,7 +2621,7 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        height:Device.isAndroid ? 70 : 84,
+        height: Device.isAndroid ? 70 : 84,
     },
     menuButton_mobile: {
         position: 'absolute',

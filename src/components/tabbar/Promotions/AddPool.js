@@ -303,21 +303,22 @@ class AddPool extends Component {
 
 
                         </View>
-
-                        <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 20 }]}>
-                            Pool Rules
-                        </Text>
-                        <TouchableOpacity
-                            style={{ position: 'absolute', right: 20, top: 180, borderRadius: 5, borderColor: "#ED1C24", backgroundColor: '#ffffff', width: Device.isTablet ? 120 : 90, height: Device.isTablet ? 38 : 28, borderWidth: 1, marginTop: 7 }}
-                            onPress={() => this.addPoolRool()} >
-                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#ED1C24', marginTop: 4, textAlign: 'center', alignSelf: 'center', borderRadius: 5, borderColor: "#ED1C24", }}> {('Add Pool Rule')} </Text>
-                        </TouchableOpacity>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 50 }}>
+                            <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 7 }]}>
+                                Pool Rules
+                            </Text>
+                            <TouchableOpacity
+                                style={{ borderRadius: 5, borderColor: "#ED1C24", backgroundColor: '#ffffff', width: Device.isTablet ? 120 : 90, height: Device.isTablet ? 38 : 28, borderWidth: 1, marginTop: 7, marginRight: 20 }}
+                                onPress={() => this.addPoolRool()} >
+                                <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#ED1C24', marginTop: 7, textAlign: 'center', alignSelf: 'center', borderRadius: 5, borderColor: "#ED1C24", }}> {('Add Pool Rule')} </Text>
+                            </TouchableOpacity>
+                        </View>
 
 
                         <ScrollView>
                             <FlatList
                                 data={this.state.arrayData}
-                                style={{ marginTop: 40, }}
+                                style={{ marginTop: 20, }}
                                 onEndReached={this.onEndReached.bind(this)}
 
                                 ref={(ref) => { this.listRef = ref; }}
@@ -413,7 +414,7 @@ class AddPool extends Component {
                             <TouchableOpacity
                                 style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile} onPress={() => this.cancel()}
                             >
-                                <Text style={Device.isTablet ? styles.cancelButtonText_tablet : pickerSelectStyles_mobile}  > CANCEL </Text>
+                                <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}  > CANCEL </Text>
 
                             </TouchableOpacity>
 
@@ -422,7 +423,7 @@ class AddPool extends Component {
                             <View>
                                 <Modal isVisible={this.state.modalVisible}>
 
-                                    <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: 500 }]}>
+                                    <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 500 : 400 }]}>
                                         <KeyboardAwareScrollView KeyboardAwareScrollView
                                             enableOnAndroid={true}>
                                             <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> {this.state.updateRool == true ? 'Update pool rule' : 'Add pool rule'} </Text>
