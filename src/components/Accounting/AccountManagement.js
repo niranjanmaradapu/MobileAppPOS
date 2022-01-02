@@ -5,15 +5,15 @@ import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableO
 import Device from 'react-native-device-detection';
 import { ScrollView } from 'react-native-gesture-handler';
 import Loader from "../loader";
+import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 import CreateHSNCode from './CreateHSNCode';
 import CreateTaxMaster from './CreateTaxMaster';
 import { CreditNotes, FilterCreditNotes } from './CreditNotes';
 import Dashboard from './Dashboard';
-import { DebitNotes } from "./DebitNotes";
+import { DebitNotes, FilterDebitNotes } from "./DebitNotes";
 import Domain from './Domain.js';
 import { FilterStores, Stores } from './Stores.js';
-import LoginService from '../services/LoginService';
 
 
 var deviceWidth = Dimensions.get("window").width;
@@ -32,10 +32,15 @@ export default class AccountManagement extends Component {
             flagHSNCode: false,
             flagStore: false,
             flagDomain: false,
+            flagFilterCreditNotes: false,
+            flagFilterDebitNotes: false,
             flagFilterStore: false,
             modalVisible: true,
             privilages: [],
-
+            creditNotes: [1, 2],
+            debitNotes: [1, 2],
+            taxMaster: [1, 2],
+            hsnCode: [1, 2],
             stores: [],
             domains: [],
             storesDelete: false,
@@ -151,7 +156,7 @@ export default class AccountManagement extends Component {
         }).catch(() => {
             console.log('there is error getting storeId');
         });
-        this.getDomainsList()
+        this.getDomainsList();
     }
 
 
@@ -164,13 +169,13 @@ export default class AccountManagement extends Component {
             let len = res.data["result"].length;
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
-                    let number = res.data.result[i]
-                    console.log('sfsdfdfsdfdsfsfsdfs' + number)
-                    console.log(number)
+                    let number = res.data.result[i];
+                    console.log('sfsdfdfsdfdsfsfsdfs' + number);
+                    console.log(number);
                     this.setState({ loading: false });
-                    this.state.domains.push(number)
+                    this.state.domains.push(number);
 
-                    this.setState({ domains: this.state.domains })
+                    this.setState({ domains: this.state.domains });
                 }
             }
         }).catch(() => {
@@ -185,18 +190,18 @@ export default class AccountManagement extends Component {
         const params = {
             "clientId": clientId
         };
-        axios.get(UrmService.getAllStores(),{params}).then((res) => {
-            console.log('adsdsadsd' + res.data)
+        axios.get(UrmService.getAllStores(), { params }).then((res) => {
+            console.log('adsdsadsd' + res.data);
             let len = res.data["result"].length;
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
-                    let number = res.data.result[i]
-                    console.log('sfsdfdfsdfdsfsfsdfs' + number)
-                    console.log(number)
+                    let number = res.data.result[i];
+                    console.log('sfsdfdfsdfdsfsfsdfs' + number);
+                    console.log(number);
                     this.setState({ loading: false });
-                    this.state.stores.push(number)
+                    this.state.stores.push(number);
 
-                    this.setState({ stores: this.state.stores })
+                    this.setState({ stores: this.state.stores });
                 }
             }
         }).catch(() => {
@@ -206,6 +211,7 @@ export default class AccountManagement extends Component {
 
 
     filterAction() {
+
         if (this.state.flagStore === true) {
             this.setState({ flagFilterStore: true });
         }
@@ -219,14 +225,14 @@ export default class AccountManagement extends Component {
             this.setState({ flagDashboard: false });
         }
         if (item.name === "Credit Notes") {
-            this.setState({ flagCreditNotes: true, flagShowFilterButton: true });
+            this.setState({ flagCreditNotes: true });
         } else {
-            this.setState({ flagCreditNotes: false, flagShowFilterButton: false });
+            this.setState({ flagCreditNotes: false });
         }
         if (item.name === "Debit Notes") {
-            this.setState({ flagDebitNotes: true, flagShowFilterButton: true });
+            this.setState({ flagDebitNotes: true });
         } else {
-            this.setState({ flagDebitNotes: false, flagShowFilterButton: false });
+            this.setState({ flagDebitNotes: false });
         }
         if (item.name === "Create Tax Master") {
             this.setState({ flagTaxMaster: true });
@@ -238,25 +244,25 @@ export default class AccountManagement extends Component {
         } else {
             this.setState({ flagHSNCode: false });
         }
-   
+
 
         if (item.name === "Domain") {
-            this.getDomainsList()
+            this.getDomainsList();
             this.setState({ flagDomain: true });
         } else {
             this.setState({ flagDomain: false });
         }
 
         if (item.name === "Stores") {
-            this.getStoresList()
+            this.getStoresList();
             this.setState({ flagStore: true });
         }
         else {
             this.setState({ flagStore: false });
         }
 
-        
-        
+
+
 
         if (this.state.privilages[index].bool === true) {
             this.state.privilages[index].bool = false;
@@ -277,6 +283,16 @@ export default class AccountManagement extends Component {
 
 
     filterAction() {
+        if (this.state.flagCreditNotes === true) {
+            this.setState({ flagFilterCreditNotes: true });
+        } else {
+            this.setState({ flagFilterCreditNotes: false });
+        }
+        if (this.state.flagDebitNotes === true) {
+            this.setState({ flagFilterDebitNotes: true });
+        } else {
+            this.setState({ flagFilterDebitNotes: false });
+        }
         if (this.state.flagStore === true) {
             this.setState({ flagFilterStore: true });
         } else {
@@ -286,29 +302,46 @@ export default class AccountManagement extends Component {
     }
 
     modelCancel() {
-        this.setState({ modalVisible: false, flagFilterCreditNotes: false, flagFilterStore: false });
+        this.setState({ modalVisible: false, flagFilterCreditNotes: false, flagFilterStore: false, flagCreditNotes: false });
     }
 
-    navigateToAddDomain() {
-        this.props.navigation.navigate('AddDomain', {
-            onGoBack: () => this.getDomains(),
-        });
-    }
 
     getDomains() {
-        this.getDomainsList()
+        this.getDomainsList();
     }
-    getStores(){
-        this.getStores()
+    getStores() {
+        this.getStores();
     }
 
     handlemenuButtonClick() {
         this.props.navigation.openDrawer();
     }
 
+    navigateToAddCreditNotes() {
+        this.props.navigation.navigate('AddCreditNotes');
+    }
+
+    navigateToAdDebitNotes() {
+        this.props.navigation.navigate('AddDebitNotes');
+    }
+
+    navigateToAddHsnCode() {
+        this.props.navigation.navigate('AddHsnCode');
+    }
+
+    navigateToAddTax() {
+        this.props.navigation.navigate('AddTaxMaster');
+    }
+
     navigateToAddStores() {
-        this.props.navigation.navigate('AddStore',{
+        this.props.navigation.navigate('AddStore', {
             onGoBack: () => this.getStores(),
+        });
+    }
+
+    navigateToAddDomain() {
+        this.props.navigation.navigate('AddDomain', {
+            onGoBack: () => this.getDomains(),
         });
     }
 
@@ -336,7 +369,14 @@ export default class AccountManagement extends Component {
                         <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
                             Accounting
                         </Text>
-                        {this.state.flagShowFilterButton && (
+
+                        {this.state.flagCreditNotes && (
+                            <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToAddCreditNotes()}>
+                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Credit</Text>
+                            </TouchableOpacity>
+                        )}
+
+                        {this.state.flagCreditNotes && (
                             <TouchableOpacity
                                 style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
                                 onPress={() => this.filterAction()} >
@@ -344,9 +384,29 @@ export default class AccountManagement extends Component {
                             </TouchableOpacity>
                         )}
 
-                        {this.state.flagDomain && (
-                            <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToAddDomain()}>
-                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Domain</Text>
+                        {this.state.flagDebitNotes && (
+                            <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToAdDebitNotes()}>
+                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Debit</Text>
+                            </TouchableOpacity>
+                        )}
+
+                        {this.state.flagDebitNotes && (
+                            <TouchableOpacity
+                                style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                onPress={() => this.filterAction()} >
+                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                            </TouchableOpacity>
+                        )}
+
+                        {this.state.flagHSNCode && (
+                            <TouchableOpacity style={Device.isTablet ? styles.onlyNavigationToButton_tablet : styles.onlyNavigationToButton_mobile} onPress={() => this.navigateToAddHsnCode()}>
+                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add HSN</Text>
+                            </TouchableOpacity>
+                        )}
+
+                        {this.state.flagTaxMaster && (
+                            <TouchableOpacity style={Device.isTablet ? styles.onlyNavigationToButton_tablet : styles.onlyNavigationToButton_mobile} onPress={() => this.navigateToAddTax()}>
+                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Tax</Text>
                             </TouchableOpacity>
                         )}
 
@@ -361,6 +421,12 @@ export default class AccountManagement extends Component {
                                 style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
                                 onPress={() => this.filterAction()} >
                                 <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                            </TouchableOpacity>
+                        )}
+
+                        {this.state.flagDomain && (
+                            <TouchableOpacity style={Device.isTablet ? styles.onlyNavigationToButton_tablet : styles.onlyNavigationToButton_mobile} onPress={() => this.navigateToAddDomain()}>
+                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Domain</Text>
                             </TouchableOpacity>
                         )}
 
@@ -398,37 +464,58 @@ export default class AccountManagement extends Component {
                             )}
 
                             {this.state.flagCreditNotes && (
-                                <CreditNotes />
+                                <CreditNotes
+                                    creditNotes={this.state.creditNotes}
+                                    navigation={this.props.navigation}
+                                />
                             )}
 
                             {this.state.flagDebitNotes && (
-                                <DebitNotes />
+                                <DebitNotes
+                                    debitNotes={this.state.debitNotes}
+                                    navigation={this.props.navigation}
+                                />
                             )}
 
                             {this.state.flagTaxMaster && (
-                                <CreateTaxMaster />
+                                <CreateTaxMaster
+                                    taxMaster={this.state.taxMaster}
+                                    navigation={this.props.navigation}
+                                />
                             )}
 
                             {this.state.flagHSNCode && (
-                                <CreateHSNCode />
+                                <CreateHSNCode
+                                    hsnCode={this.state.hsnCode}
+                                    navigation={this.props.navigation}
+                                />
                             )}
 
                             {this.state.flagStore && (
                                 <Stores
                                     stores={this.state.stores}
+                                    navigation={this.props.navigation}
                                 />
                             )}
 
                             {this.state.flagDomain && (
                                 <Domain
                                     domains={this.state.domains}
+                                    navigation={this.props.navigation}
                                 />
                             )}
 
                             {this.state.flagFilterCreditNotes && (
                                 <FilterCreditNotes
                                     modalVisible={this.state.modalVisible}
-                                    modelCancelCallback={this.modelCancel}
+                                    modelCancelCallback={this.modelClose}
+                                />
+                            )}
+
+                            {this.state.flagFilterDebitNotes && (
+                                <FilterDebitNotes
+                                    modalVisible={this.state.modalVisible}
+                                    modelCancelCallback={this.modelClose}
                                 />
                             )}
 
@@ -637,6 +724,17 @@ const styles = StyleSheet.create({
     navigationToButton_mobile: {
         position: 'absolute',
         right: 70,
+        bottom: 10,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 110,
+        height: 32,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    onlyNavigationToButton_mobile: {
+        position: 'absolute',
+        right: 20,
         bottom: 10,
         backgroundColor: '#ED1C24',
         borderRadius: 5,
@@ -885,6 +983,17 @@ const styles = StyleSheet.create({
     navigationToButton_tablet: {
         position: 'absolute',
         right: 70,
+        top: 40,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 110,
+        height: 32,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    onlyNavigationToButton_tablet: {
+        position: 'absolute',
+        right: 20,
         top: 40,
         backgroundColor: '#ED1C24',
         borderRadius: 5,
