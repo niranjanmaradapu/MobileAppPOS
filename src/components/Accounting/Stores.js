@@ -32,6 +32,7 @@ export class Stores extends Component {
     }
 
     handleeditStore(item, index) {
+        console.log(item)
         this.props.navigation.navigate('AddStore'
             , {
                 item: item, isEdit: true,
@@ -40,7 +41,7 @@ export class Stores extends Component {
     }
 
     updateStore() {
-
+       // this.props.getStoresList()
     }
 
     modelCancel() {
@@ -702,7 +703,7 @@ const flats = StyleSheet.create({
         height: 140
     },
     flatlistTextAccent_mobile: {
-        fontFamily: 'Medium',
+        fontFamily: 'medium',
         fontSize: 16,
         color: '#ED1C24'
     },
@@ -755,7 +756,7 @@ const flats = StyleSheet.create({
         height: 160
     },
     flatlistTextAccent_tablet: {
-        fontFamily: 'Medium',
+        fontFamily: 'medium',
         fontSize: 21,
         color: '#ED1C24'
     },
