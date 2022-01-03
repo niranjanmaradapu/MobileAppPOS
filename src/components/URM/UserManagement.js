@@ -29,18 +29,21 @@ export default class UserManagement extends Component {
             date: new Date(),
             role: "",
             createdBy: "",
-            userType: "",
             branch: "",
-            rolesData: [1, 2],
-            usersData: [1, 2],
+            rolesData: [],
+            usersData: [],
             roleDelete: false,
             userDelete: false,
             privilages: [],
+            clientId:0,
+            doneButtonClicked:false,
         };
     }
 
 
     async componentDidMount() {
+        const clientId = await AsyncStorage.getItem("custom:clientId1");
+        this.setState({ clientId: clientId });
         this.setState({ privilages: [] });
         AsyncStorage.getItem("custom:isConfigUser").then((value) => {
             if (value === "true") {
@@ -146,7 +149,67 @@ export default class UserManagement extends Component {
         }).catch(() => {
             console.log('there is error getting storeId')
         })
+        this.getAllUsers()
+        this.getRolesList()
+    }
 
+    getRolesList() {
+        this.setState({ rolesData: [] });
+        this.setState({ loading: true });
+     
+        axios.get(UrmService.getAllRoles() + this.state.clientId).then((res) => {
+            let len = res.data["result"].length;
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    let number = res.data.result[i];
+                   // console.log('sfsdfdfsdfdsfsfsdfs' + number);
+                    console.log(number);
+                    this.setState({ loading: false });
+                    this.state.rolesData.push(number);
+
+                   this.setState({ rolesData: this.state.rolesData });
+                }
+            }
+        }).catch(() => {
+            this.setState({ loading: false });
+        });
+    }
+
+    getAllUsers() {
+        this.setState({ usersData: [] });
+        this.setState({ loading: true });
+     
+        axios.get(UrmService.getAllUsers() + this.state.clientId).then((res) => {
+            //console.log('sfsdfdfsdfdsfsfsdfs' + res.data);
+            let len = res.data["result"].length;
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    let number = res.data.result[i];
+                    console.log(number);
+                    this.setState({ loading: false });
+                   
+                   // console.log('sadsddsad' + number.stores);
+                   let len = number.stores.length;
+                   number.storeName = ""
+                   if (len > 0) {
+                    for (let i = 0; i < len; i++) {
+                        if(number.storeName === ""){
+                            number.storeName = number.storeName + number.stores[i].name  
+                        }
+                        else{
+                            number.storeName = number.storeName + "," + number.stores[i].name 
+                        }
+                    }
+                }
+                    this.state.usersData.push(number);
+                  
+
+                   this.setState({ usersData: this.state.usersData });
+                }
+            }
+        }).catch(() => {
+            this.setState({ loading: false });
+        });
     }
 
     topbarAction = (item, index) => {
@@ -207,11 +270,13 @@ export default class UserManagement extends Component {
     }
 
     topbarAction1() {
+        this.getAllUsers()
         this.setState({ flagOne: true, flagTwo: false });
         // this.setState({ flagTwo: false })
     }
 
     topbarAction2() {
+        this.getRolesList()
         this.setState({ flagTwo: true, flagOne: false });
     }
 
@@ -220,9 +285,12 @@ export default class UserManagement extends Component {
     }
 
     filterDatepickerDoneClicked() {
-        // if (parseInt(this.state.date.getDate()) < 10) {
+         if (parseInt(this.state.date.getDate()) < 10) {
         this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
-        // }
+         }
+         else{
+            this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });   
+         }
     }
 
     filterDatepickerCancelClicked() {
@@ -246,11 +314,45 @@ export default class UserManagement extends Component {
     };
 
     applyRoleFilter() {
-        alert("Applied Roles");
+        this.setState({ rolesData: [] });
+        const searchRole = {
+            "roleName": this.state.role ? this.state.role : null,
+            "createdBy": this.state.createdBy ? this.state.createdBy : null,
+            "createdDate": this.state.createdDate ? this.state.createdDate : null
+        }
+        console.log(searchRole)
+    axios.post(UrmService.getRolesBySearch(), searchRole).then((res) => {
+        if (res) {
+            this.setState({ rolesData: res.data.result, modalVisible: false,createdDate:"",role:"",createdBy:""});
+         
+        } else {
+            this.setState({ rolesData: res.data.result, modalVisible: false,createdDate:"",role:"",createdBy:""});
+        }
+
+    });
     }
 
     applyUserFilter() {
-        alert("Applied User");
+        const obj = {
+            "id": null,
+            "phoneNo": null,
+            "name": null,
+            "active":this.state.userType === "Active" ? "True" : "False",
+            "inActive":this.state.userType === "InActive" ? "True" : "False",
+            "roleName": this.state.role ? this.state.role : null,
+            "storeName": this.state.createdBy ? this.state.createdBy : null
+            }
+            this.setState({ usersData: [] });
+            console.log(obj)
+        axios.post(UrmService.getUserBySearch(), obj).then((res) => {
+            if (res) {
+                this.setState({ usersData: res.data.result, modalVisible: false,userType:"",role:"",createdBy:""});
+             
+            } else {
+                this.setState({ usersData: res.data.result, modalVisible: false,userType:"",role:"",createdBy:""});
+            }
+
+        });
     }
 
     deleteUser(item, index) {
@@ -270,13 +372,7 @@ export default class UserManagement extends Component {
         this.setState({ modalVisible: true, roleDelete: true });
     }
 
-    getAllRoles() {
-
-    }
-
-    getAllUsers() {
-
-    }
+  
 
     updateRoles() {
         this.getAllRoles();
@@ -387,7 +483,7 @@ export default class UserManagement extends Component {
                             </View>
                         </TouchableOpacity>
                     </View> */}
-                    {this.state.flagOne && (
+                    {this.state.flagTwo && (
                         <FlatList
                             data={this.state.rolesData}
                             style={{ marginTop: 20, }}
@@ -397,10 +493,10 @@ export default class UserManagement extends Component {
                                     <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
                                         <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
                                         <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>ROLE: {"\n"}{item.roleName}</Text>
-                                        <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>DOMAIN: {item.domain} </Text>
-                                        <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>CREATED BY: {item.createdBy}</Text>
-                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>USER COUNT:  {item.userCount}</Text>
-                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>DESCRIPTION: {item.description}</Text>
+                                        <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>DOMAIN: {"\n"}{item.clientDomainVo.domaiName} </Text>
+                                        <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>CREATED BY: {"\n"}{item.createdBy}</Text>
+                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>USER COUNT:  {item.usersCount}</Text>
+                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>DESCRIPTION: {"\n"}{item.discription}</Text>
                                         {this.state.roleDelete && (
                                             <View>
                                                 <Modal isVisible={this.state.modalVisible}>
@@ -490,20 +586,20 @@ export default class UserManagement extends Component {
                             )}
                         />
                     )}
-                    {this.state.flagTwo && (
+                    {this.state.flagOne && (
                         <FlatList
                             data={this.state.usersData}
                             style={{ marginTop: 20, }}
                             scrollEnabled={true}
                             renderItem={({ item, index }) => (
-                                <View style={Device.isTablet ? styles.flatlistContainer_tablet : styles.flatlistContainer_mobile}>
+                                <View style={Device.isTablet ? styles.flatlistContainer2_tablet : styles.flatlistContainer2_mobile}>
                                     <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
-                                        <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >USER.ID: {item.userId} </Text>
+                                        <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >USER ID: {"\n"}{item.userId} </Text>
                                         <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>USER NAME: {"\n"}{item.userName}</Text>
-                                        <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>ROLE: {item.role} </Text>
-                                        <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>STORE NAME: {item.storeName}</Text>
-                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>CREATED DATE:  {"11-12-2021"}</Text>
-                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>STATUS: {"Active"}</Text>
+                                        <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>ROLE: {"\n"}{item.roleName} </Text>
+                                        <Text style={Device.isTablet ? flats.commonText_tablet2 : flats.commonText_mobile2}>STORE NAME: {"\n"}{item.storeName}</Text>
+                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>CREATED DATE: {"\n"}{item.createdDate}</Text>
+                                        <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>STATUS: {"\n"}{item.active ? "active" : "Inactive"}</Text>
                                         {this.state.userDelete && (
                                             <View>
                                                 <Modal isVisible={this.state.modalVisible}>
@@ -716,7 +812,10 @@ export default class UserManagement extends Component {
                                                 Icon={() => {
                                                     return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                                 }}
-                                                items={this.state.userType}
+                                                items={[
+                                                    { label: 'Active', value: 'Active' },
+                                                    { label: 'InActive', value: 'InActive' },
+                                                ]}
                                                 onValueChange={this.handleUSerType}
                                                 style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                 value={this.state.userType}
@@ -970,7 +1069,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -20,
         backgroundColor: "#ffffff",
-        height: 500,
+        height: 400,
         position: 'absolute',
         bottom: -20,
     },
@@ -1108,6 +1207,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center'
     },
+    flatlistContainer2_mobile: {
+        height: 180,
+        backgroundColor: '#FBFBFB',
+        borderBottomWidth: 5,
+        borderBottomColor: '#FFFFFF',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
     flatlistSubContainer_mobile: {
         flexDirection: 'column',
         width: '100%',
@@ -1218,7 +1326,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -40,
         backgroundColor: "#ffffff",
-        height: 600,
+        height: 500,
         position: 'absolute',
         bottom: -40,
     },
@@ -1351,10 +1459,19 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center'
     },
+    flatlistContainer2_tablet: {
+        height: 220,
+        backgroundColor: '#FBFBFB',
+        borderBottomWidth: 5,
+        borderBottomColor: '#FFFFFF',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
     flatlistSubContainer_tablet: {
         flexDirection: 'column',
         width: '100%',
-        height: 160,
+        height: 185,
     },
     rnSelect_tablet: {
         color: '#8F9EB7',
@@ -1399,7 +1516,16 @@ const flats = StyleSheet.create({
     commonText_mobile: {
         fontSize: 12,
         marginBottom: 10,
-        marginTop: -90,
+        marginTop: -125,
+        alignSelf: 'center',
+        textAlign: 'center',
+        fontFamily: 'regular',
+        color: '#808080'
+    },
+    commonText_mobile2: {
+        fontSize: 12,
+        marginBottom: 10,
+        marginTop: -145,
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
@@ -1462,7 +1588,7 @@ const flats = StyleSheet.create({
     mainText_tablet: {
         fontSize: 21,
         marginLeft: 16,
-        marginTop: 10,
+        marginTop: 20,
         marginBottom: 10,
         fontFamily: 'medium',
         color: '#ED1C24',
@@ -1478,7 +1604,16 @@ const flats = StyleSheet.create({
     commonText_tablet: {
         fontSize: 17,
         marginBottom: 10,
-        marginTop: -120,
+        marginTop: -155,
+        alignSelf: 'center',
+        textAlign: 'center',
+        fontFamily: 'regular',
+        color: '#808080'
+    },
+    commonText_tablet2: {
+        fontSize: 17,
+        marginBottom: 10,
+        marginTop: -190,
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',

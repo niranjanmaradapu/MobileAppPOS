@@ -310,7 +310,7 @@ export default class AccountManagement extends Component {
         this.getDomainsList();
     }
     getStores() {
-        this.getStores();
+        this.getStoresList()
     }
 
     handlemenuButtonClick() {
@@ -335,6 +335,7 @@ export default class AccountManagement extends Component {
 
     navigateToAddStores() {
         this.props.navigation.navigate('AddStore', {
+            isEdit: false,
             onGoBack: () => this.getStores(),
         });
     }
@@ -348,6 +349,10 @@ export default class AccountManagement extends Component {
     modelClose = () => {
         this.modelCancel();
     };
+
+    arrayDataAssign(){
+        this.setState({ stores: false });  
+    }
 
 
 
@@ -523,6 +528,7 @@ export default class AccountManagement extends Component {
                                 <View>
                                     <FilterStores
                                         modalVisible={this.state.modalVisible}
+                                        // storesArrayCallBack={this.arrayDataAssign}
                                         modelCancelCallback={this.modelClose}
                                     />
                                 </View>

@@ -36,12 +36,37 @@ export default class AddStore extends Component {
             domainsArray: [],
             domains: [],
             domainId: 0,
+            storeId: 0,
+            navtext: '',
+            isEdit:false,
         };
     }
 
     async componentDidMount() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
         this.setState({ clientId: clientId });
+        this.setState({ isEdit: this.props.route.params.isEdit});
+        console.log('sdasd' + this.props.route.params.item.id)
+      if(this.state.isEdit === true){
+        this.setState({
+            stateId: this.props.route.params.item.stateId,
+            statecode: this.props.route.params.item.stateCode,
+            dictrictId: this.props.route.params.item.districtId,
+            city: this.props.route.params.item.cityId,
+            area: this.props.route.params.item.area,
+            mobile: this.props.route.params.item.phoneNumber,
+            address: this.props.route.params.item.address,
+            domainId: this.props.route.params.item.clientDomianlId.clientDomainaId,
+            storeName: this.props.route.params.item.name,
+        });
+        this.setState({ navtext:'Edit Store' })
+    }
+    else{
+        this.setState({ navtext: 'Add Store' })
+    }
+      
+
+
         this.getDomainsList()
         this.getMasterStatesList()
     }
@@ -65,6 +90,10 @@ export default class AddStore extends Component {
                         })
 
                         this.setState({ domainsArray: this.state.domainsArray })
+                        if (this.state.domainsArray[i].id === this.state.domainId) {
+                            this.setState({ domain: this.state.domainsArray[i].name })
+                            return
+                        }
 
                     }
                     console.log(this.state.domains)
@@ -94,6 +123,8 @@ export default class AddStore extends Component {
             if (res.data["result"]) {
 
                 for (var i = 0; i < res.data["result"].length; i++) {
+
+
                     this.state.statesArray.push({ name: res.data["result"][i].stateName, id: res.data["result"][i].stateId, code: res.data["result"][i].stateCode })
                     states.push({
                         value: this.state.statesArray[i].name,
@@ -103,6 +134,12 @@ export default class AddStore extends Component {
                         states: states,
                     })
                     this.setState({ statesArray: this.state.statesArray })
+                    if (this.state.statesArray[i].id === this.state.stateId) {
+                        console.log('stateId is' + this.state.statesArray[i].name)
+                        this.setState({ storeState: this.state.statesArray[i].name })
+                        this.getMasterDistrictsList()
+                        return
+                    }
                 }
             }
 
@@ -132,7 +169,7 @@ export default class AddStore extends Component {
         };
         axios.get(UrmService.getDistricts(), { params }).then((res) => {
             if (res.data["result"]) {
-                console.log(res.data)
+                // console.log(res.data)
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.dictrictArray.push({ name: res.data["result"][i].districtName, id: res.data["result"][i].districtId })
                     dictricts.push({
@@ -143,6 +180,10 @@ export default class AddStore extends Component {
                         dictricts: dictricts,
                     })
                     this.setState({ dictrictArray: this.state.dictrictArray })
+                    if (this.state.dictrictArray[i].id === this.state.dictrictId) {
+                        //  console.log('stateId is' + this.state.dictrictArray[i].name)
+                        this.setState({ storeDistrict: this.state.dictrictArray[i].name })
+                    }
                 }
             }
 
@@ -198,7 +239,6 @@ export default class AddStore extends Component {
     };
 
     saveStore() {
-       
         if (this.state.storeState === "") {
             alert("Please Enter State");
         } else if (this.state.storeDistrict === "") {
@@ -208,39 +248,71 @@ export default class AddStore extends Component {
         } else if (this.state.storeName === "") {
             alert("Please Enter Store Name");
         } else {
-            const saveObj = {
-                "name": this.state.storeName,
-                "stateId": this.state.stateId,
-                "districtId": this.state.dictrictId,
-                "cityId": this.state.city,
-                "area": this.state.area,
-                "address": this.state.address,
-                "phoneNumber": this.state.mobile,
-                "domainId": this.state.domainId,
-                "createdBy": global.username,
-                "stateCode": this.state.statecode,
-                "gstNumber": this.state.gstNumber,
-                "clientId":this.state.clientId
+            if(this.state.isEdit === false){
+                const saveObj = {
+                    "name": this.state.storeName,
+                    "stateId": this.state.stateId,
+                    "districtId": this.state.dictrictId,
+                    "cityId": this.state.city,
+                    "area": this.state.area,
+                    "address": this.state.address,
+                    "phoneNumber": this.state.mobile,
+                    "domainId": this.state.domainId,
+                    "createdBy": global.username,
+                    "stateCode": this.state.statecode,
+                    "gstNumber": this.state.gstNumber,
+                    "clientId": this.state.clientId
+                }
+                console.log('params are' + JSON.stringify(saveObj))
+                this.setState({ loading: true })
+                axios.post(UrmService.saveStore(), saveObj).then((res) => {
+                    console.log(res.data)
+                    if (res.data && res.data["isSuccess"] === "true") {
+                     //  this.props.route.params.onGoBack();
+                        this.props.navigation.goBack();
+                    }
+                    else {
+                        this.setState({ loading: false })
+                        alert(res.data.message);
+                    }
+                }
+                ).catch(() => {
+                    this.setState({ loading: false });
+                });
             }
-            console.log('params are' + JSON.stringify(saveObj))
-            this.setState({ loading: true })
-            axios.post(UrmService.saveStore(), saveObj).then((res) => {
-                console.log(res.data)
-              if (res.data && res.data["isSuccess"] === "true") {
-                //  this.props.route.params.onGoBack();
-                  this.props.navigation.goBack();
-              }
-              else {
-                this.setState({ loading: false })
-                alert(res.data.message);
-              }
+            else {
+                const saveObj = {
+                    "id": this.state.storeId,
+                    "name": this.state.storeName,
+                    "stateId": this.state.stateId,
+                    "districtId": this.state.dictrictId,
+                    "cityId": this.state.city,
+                    "area": this.state.area,
+                    "address": this.state.address,
+                    "phoneNumber": this.state.mobile,
+                    "domainId": this.state.domainId,
+                    "createdBy": global.username,
+                    "stateCode": this.state.statecode,
+                    "gstNumber": this.state.gstNumber,
+                    "clientId": this.state.clientId
+                }
+                console.log(saveObj)
+                this.setState({ loading: true })
+                axios.put(UrmService.editStore(), saveObj).then((res) => {
+                    if (res.data && res.data["isSuccess"] === "true") {
+                        this.setState({ loading: false })
+                       // this.props.route.params.onGoBack();
+                        this.props.navigation.goBack();
+                    }
+                    else {
+                        this.setState({ loading: false })
+                        alert("duplicate record already exists");
+                    }
+                }
+                ).catch(() => {
+                    this.setState({ loading: false });
+                });
             }
-            ).catch(() => {
-              this.setState({ loading: false });
-          });
-    
-
-
         }
     }
 
@@ -258,7 +330,7 @@ export default class AddStore extends Component {
                         <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                        Add Store
+                        {this.state.navtext}
                     </Text>
                 </View>
                 <ScrollView>
@@ -376,6 +448,20 @@ export default class AddStore extends Component {
                         value={this.state.storeName}
                         onChangeText={this.handleStoreName}
                     />
+                   {this.state.isEdit === true && (
+                    <TextInput
+                        style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
+                        underlineColorAndroid="transparent"
+                        placeholder="GST NUMBER"
+                        placeholderTextColor="#6F6F6F"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        value={this.state.gstNumber}
+                        editable={false} selectTextOnFocus={false}
+                        onChangeText={this.handleGstNumber}
+                    />
+                   )}
+                   {this.state.isEdit === false && (
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -386,6 +472,8 @@ export default class AddStore extends Component {
                         value={this.state.gstNumber}
                         onChangeText={this.handleGstNumber}
                     />
+                   )}
+
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.saveStore()}>
                         <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
@@ -539,6 +627,21 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
+    input_mobile_edit: {
+    justifyContent: 'center',
+    marginLeft: 20,
+    marginRight: 20,
+    height: 44,
+    marginTop: 5,
+    marginBottom: 10,
+    borderColor: '#DCE3F2',
+    borderRadius: 3,
+    backgroundColor: '#DCE3F2',
+    borderWidth: 1,
+    fontFamily: 'regular',
+    paddingLeft: 15,
+    fontSize: 14,
+    },
     saveButton_mobile: {
         margin: 8,
         height: 50,
@@ -639,6 +742,21 @@ const styles = StyleSheet.create({
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 20,
+    },
+    input_tablet_edit: {
+    justifyContent: 'center',
+    marginLeft: 20,
+    marginRight: 20,
+    height: 54,
+    marginTop: 5,
+    marginBottom: 10,
+    borderColor: '#DCE3F2',
+    borderRadius: 3,
+    backgroundColor: '#DCE3F2',
+    borderWidth: 1,
+    fontFamily: 'regular',
+    paddingLeft: 15,
+    fontSize: 14,
     },
     saveButton_tablet: {
         margin: 8,

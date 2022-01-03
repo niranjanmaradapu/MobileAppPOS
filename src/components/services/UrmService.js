@@ -48,6 +48,10 @@ class UrmService {
     saveStore(){
         return REACT_NATIVE_APP_BASE_URL + "/user-management/store/createStore"
     }
+
+    editStore(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/store"
+    } 
  
     getAllStores(){
         return REACT_NATIVE_APP_BASE_URL + "/user-management/store/getClientStores/"
@@ -64,6 +68,27 @@ class UrmService {
     getStoresBySearch(){
         return REACT_NATIVE_APP_BASE_URL + "/user-management/store/getStoresWithFilter"
     } 
+
+    getRolesByDomainId(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/roles//getRolesForDomian/"
+    }
+
+    getAllRoles(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/roles/getRolesForClient/"
+    }
+
+    getAllUsers(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/user/getallUsers/"
+    } 
+
+    getUserBySearch(){
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/user/getUser"
+    }
+
+    getRolesBySearch(){
+        return REACT_NATIVE_APP_BASE_URL +  "/user-management/roles/rolesWithFilter"
+    }
+    
 }
 export default new UrmService()
 
