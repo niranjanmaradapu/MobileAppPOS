@@ -127,6 +127,8 @@ export class FilterCreditNotes extends Component {
             storeName: "",
             stores: [],
             fromDate: "",
+            startDate: "",
+            endDate: "",
             toDate: "",
             datepickerOpen: false,
             datepickerendOpen: false,
@@ -166,23 +168,23 @@ export class FilterCreditNotes extends Component {
     }
 
     datepickerDoneClicked() {
-        if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ fromDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
-        }
-        else {
-            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
-        }
+        // if (parseInt(this.state.date.getDate()) < 10) {
+        //     this.setState({ fromDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
+        // }
+        // else {
+        this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
+        // }
 
         this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
-        if (parseInt(this.state.enddate.getDate()) < 10) {
-            this.setState({ toDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() });
-        }
-        else {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
-        }
+        // if (parseInt(this.state.enddate.getDate()) < 10) {
+        //     this.setState({ toDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() });
+        // }
+        // else {
+        this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
+        // }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
@@ -227,7 +229,7 @@ export class FilterCreditNotes extends Component {
                             >
                                 <Text
                                     style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
-                                >{this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate}</Text>
+                                >{this.state.startDate == "" ? 'START DATE' : this.state.startDate}</Text>
                                 <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                             </TouchableOpacity>
                             {this.state.datepickerOpen && (
@@ -258,7 +260,7 @@ export class FilterCreditNotes extends Component {
                             >
                                 <Text
                                     style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
-                                >{this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate}</Text>
+                                >{this.state.endDate == "" ? 'END DATE' : this.state.endDate}</Text>
                                 <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                             </TouchableOpacity>
                             {this.state.datepickerendOpen && (
@@ -396,6 +398,12 @@ const pickerSelectStyles_tablet = StyleSheet.create({
 
 
 const styles = StyleSheet.create({
+
+    imagealign: {
+        marginTop: 16,
+        marginRight: 20,
+    },
+
     // Styles For Mobile
 
     filterMainContainer_mobile: {
@@ -431,9 +439,11 @@ const styles = StyleSheet.create({
     },
     filterDateButton_mobile: {
         width: deviceWidth - 40,
+        marginTop: 5,
+        marginBottom: 10,
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 10,
+        paddingLeft: 15,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         height: 50,
@@ -641,10 +651,12 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
     filterDateButton_tablet: {
-        width: deviceWidth - 30,
+        width: deviceWidth - 40,
+        marginTop: 5,
+        marginBottom: 10,
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 10,
+        paddingLeft: 15,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         height: 60,

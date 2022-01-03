@@ -7,10 +7,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Loader from "../loader";
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
+import AccountingDashboard from './AccountingDashboard';
 import CreateHSNCode from './CreateHSNCode';
 import CreateTaxMaster from './CreateTaxMaster';
 import { CreditNotes, FilterCreditNotes } from './CreditNotes';
-import Dashboard from './Dashboard';
 import { DebitNotes, FilterDebitNotes } from "./DebitNotes";
 import Domain from './Domain.js';
 import { FilterStores, Stores } from './Stores.js';
@@ -302,7 +302,7 @@ export default class AccountManagement extends Component {
     }
 
     modelCancel() {
-        this.setState({ modalVisible: false, flagFilterCreditNotes: false, flagFilterStore: false, flagCreditNotes: false });
+        this.setState({ modalVisible: false, flagFilterCreditNotes: false, flagFilterStore: false, flagFilterCreditNotes: false, flagFilterDebitNotes: false });
     }
 
 
@@ -465,7 +465,7 @@ export default class AccountManagement extends Component {
                             />
 
                             {this.state.flagDashboard && (
-                                <Dashboard />
+                                <AccountingDashboard />
                             )}
 
                             {this.state.flagCreditNotes && (

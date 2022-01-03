@@ -127,6 +127,8 @@ export class FilterDebitNotes extends Component {
             stores: [],
             fromDate: "",
             toDate: "",
+            startDate: "",
+            endDate: "",
             datepickerOpen: false,
             datepickerendOpen: false,
         };
@@ -226,7 +228,7 @@ export class FilterDebitNotes extends Component {
                             >
                                 <Text
                                     style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
-                                >{this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate}</Text>
+                                >{this.state.startDate == "" ? 'START DATE' : this.state.startDate}</Text>
                                 <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                             </TouchableOpacity>
                             {this.state.datepickerOpen && (
@@ -257,7 +259,7 @@ export class FilterDebitNotes extends Component {
                             >
                                 <Text
                                     style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
-                                >{this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate}</Text>
+                                >{this.state.endDate == "" ? 'END DATE' : this.state.endDate}</Text>
                                 <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                             </TouchableOpacity>
                             {this.state.datepickerendOpen && (
@@ -395,6 +397,12 @@ const pickerSelectStyles_tablet = StyleSheet.create({
 
 
 const styles = StyleSheet.create({
+
+    imagealign: {
+        marginTop: 16,
+        marginRight: 20,
+    },
+
     // Styles For Mobile
 
     filterMainContainer_mobile: {
@@ -430,9 +438,11 @@ const styles = StyleSheet.create({
     },
     filterDateButton_mobile: {
         width: deviceWidth - 40,
+        marginTop: 5,
+        marginBottom: 10,
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 10,
+        paddingLeft: 15,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         height: 50,
@@ -640,10 +650,12 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
     filterDateButton_tablet: {
-        width: deviceWidth - 30,
+        width: deviceWidth - 40,
+        marginTop: 5,
+        marginBottom: 10,
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 10,
+        paddingLeft: 15,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         height: 60,

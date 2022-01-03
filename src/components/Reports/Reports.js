@@ -1,14 +1,20 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, ScrollView, FlatList } from 'react-native';
-var deviceWidth = Dimensions.get('window').width;
-import { DrawerActions } from '@react-navigation/native';
-var deviceWidth = Dimensions.get('window').width;
-import Constants from 'expo-constants';
-const data = [true, false, false, false, false, false, false, false, false];
-import Device from 'react-native-device-detection';
-import axios from 'axios';
-import UrmService from '../services/UrmService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DrawerActions } from '@react-navigation/native';
+import axios from 'axios';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
+import UrmService from '../services/UrmService';
+import { FilterGoodsReturn, GoodsReturn } from './GoodsReturn';
+import { FilterListOfBarcodes, ListOfBarcodes } from './ListOfBarcodes';
+import { FilterEstimationSlip, ListOfEstimationSlip } from './ListOfEstimationSlip';
+import { FilterListofPromotions, ListOfPromotions } from './ListOfPromotions';
+import { FilterNewSalesReport, NewSaleReport } from './NewSaleReport';
+import ReportsDashboard from './ReportsDashboard';
+import { FilterSalesSummary, SalesSumary } from './SalesSumary';
+var deviceWidth = Dimensions.get('window').width;
+var deviceWidth = Dimensions.get('window').width;
+const data = [true, false, false, false, false, false, false, false, false];
 
 
 class Reports extends Component {
@@ -22,23 +28,37 @@ class Reports extends Component {
             flagfour: false,
             selectedcolor: '',
             subPrivilages: "",
-
-        }
+            flagDashboard: true,
+            flagNewSale: false,
+            flagGoodsReturn: false,
+            flagSalesSummary: false,
+            flagListBarcodes: false,
+            flagEstimationSlip: false,
+            flagListPromotions: false,
+            flagFilterDashboard: false,
+            flagFilterEstimationSlip: false,
+            flagFilterGoodsReturn: false,
+            flagFilterListBarcodes: false,
+            flagFilterListPromotions: false,
+            flagFilterNewSale: false,
+            flagFilterSalesSumary: false,
+            modalVisible: true,
+        };
     }
 
 
     async componentDidMount() {
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
             if (value === "true") {
-                var domainId = "1"
+                var domainId = "1";
                 if (global.domainName === "Textile") {
-                    domainId = "1"
+                    domainId = "1";
                 }
                 else if (global.domainName === "Retail") {
-                    domainId = "2"
+                    domainId = "2";
                 }
                 else if (global.domainName === "Electrical & Electronics") {
-                    domainId = "3"
+                    domainId = "3";
                 }
 
                 axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
@@ -47,13 +67,13 @@ class Reports extends Component {
                         if (len > 0) {
                             if (len > 0) {
                                 for (let i = 0; i < len; i++) {
-                                    let previlage = res.data["result"][i]
+                                    let previlage = res.data["result"][i];
                                     if (previlage.name === "Reports") {
                                         for (let i = 0; i < previlage.subPrivillages.length; i++) {
-                                            console.log(previlage.subPrivillages[i].parentPrivillageId)
+                                            console.log(previlage.subPrivillages[i].parentPrivillageId);
                                             if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
-                                                let subprivilage = previlage.subPrivillages[i]
-                                                if(subprivilage.name === "Dashboard"){
+                                                let subprivilage = previlage.subPrivillages[i];
+                                                if (subprivilage.name === "Dashboard") {
                                                     this.setState({ flagOne: false, flagTwo: false });
                                                 }
                                                 if (i === 0) {
@@ -73,77 +93,153 @@ class Reports extends Component {
                 });
             }
             else {
-        AsyncStorage.getItem("rolename").then((value) => {
-            axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
-                if (res.data && res.data["isSuccess"] === "true") {
-                    let len = res.data["result"].parentPrivilages.length;
-                    let length = res.data["result"].subPrivilages.length;
-                    // console.log(.name)
-                    if (len > 0) {
-                        for (let i = 0; i < len; i++) {
-                            let previlage = res.data["result"].parentPrivilages[i]
-                            if (previlage.name === "Reports") {
-                              
-                                    if (length > 0) {
-                                        for (let i = 0; i < length; i++) {
-                                            if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
-                                            let subprivilage = res.data["result"].subPrivilages[i]
-                                            if (i === 0) {
-                                                this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                            }
-                                            else {
-                                                this.state.privilages.push({ bool: false, name: subprivilage.name });
+                AsyncStorage.getItem("rolename").then((value) => {
+                    axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
+                        if (res.data && res.data["isSuccess"] === "true") {
+                            let len = res.data["result"].parentPrivilages.length;
+                            let length = res.data["result"].subPrivilages.length;
+                            // console.log(.name)
+                            if (len > 0) {
+                                for (let i = 0; i < len; i++) {
+                                    let previlage = res.data["result"].parentPrivilages[i];
+                                    if (previlage.name === "Reports") {
+
+                                        if (length > 0) {
+                                            for (let i = 0; i < length; i++) {
+                                                if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
+                                                    let subprivilage = res.data["result"].subPrivilages[i];
+                                                    if (i === 0) {
+                                                        this.state.privilages.push({ bool: true, name: subprivilage.name });
+                                                    }
+                                                    else {
+                                                        this.state.privilages.push({ bool: false, name: subprivilage.name });
+                                                    }
+                                                }
+                                                this.setState({ privilages: this.state.privilages });
                                             }
                                         }
-                                        this.setState({ privilages: this.state.privilages });
                                     }
                                 }
                             }
                         }
-                    }
-                }
-            })
-        }).catch(() => {
-            console.log('there is error saving domainDataId')
-        })
+                    });
+                }).catch(() => {
+                    console.log('there is error saving domainDataId');
+                });
 
-    }
-}).catch(() => {
-    console.log('there is error getting storeId')
-})        
+            }
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
 
     }
 
     topbarAction1 = (item, index) => {
+
+        if (item.name === "Dashboard") {
+            this.setState({ flagDashboard: true });
+        } else {
+            this.setState({ flagDashboard: false });
+        }
+        if (item.name === "List of Estimation Slip") {
+            this.setState({ flagEstimationSlip: true });
+        } else {
+            this.setState({ flagEstimationSlip: false });
+        }
+        if (item.name === "New Sale Report") {
+            this.setState({ flagNewSale: true });
+        } else {
+            this.setState({ flagNewSale: false });
+        }
+        if (item.name === "Goods Return") {
+            this.setState({ flagGoodsReturn: true });
+        } else {
+            this.setState({ flagGoodsReturn: false });
+        }
+        if (item.name === "Sales Summary") {
+            this.setState({ flagSalesSummary: true });
+        } else {
+            this.setState({ flagSalesSummary: false });
+        }
+        if (item.name === "List of Barcodes") {
+            this.setState({ flagListBarcodes: true });
+        } else {
+            this.setState({ flagListBarcodes: false });
+        }
+        if (item.name === "List of promotions") {
+            this.setState({ flagListPromotions: true });
+        } else {
+            this.setState({ flagListPromotions: false });
+        }
+
         if (this.state.privilages[index].bool === true) {
-            this.state.privilages[index].bool = false
+            this.state.privilages[index].bool = false;
         }
         else {
-            this.state.privilages[index].bool = true
+            this.state.privilages[index].bool = true;
         }
         for (let i = 0; i < this.state.privilages.length; i++) {
             if (index != i) {
-                this.state.privilages[i].bool = false
+                this.state.privilages[i].bool = false;
             }
             this.setState({ privilages: this.state.privilages });
+        }
+    };
+
+    filterAction() {
+        if (this.state.flagDashboard === true) {
+            this.setState({ flagFilterDashboard: true });
+        } else {
+            this.setState({ flagFilterDashboard: false });
+        }
+        if (this.state.flagEstimationSlip === true) {
+            this.setState({ flagFilterEstimationSlip: true });
+        } else {
+            this.setState({ flagFilterEstimationSlip: false });
+        }
+        if (this.state.flagNewSale === true) {
+            this.setState({ flagFilterNewSale: true });
+        } else {
+            this.setState({ flagFilterNewSale: false });
+        }
+        if (this.state.flagGoodsReturn === true) {
+            this.setState({ flagFilterGoodsReturn: true });
+        } else {
+            this.setState({ flagFilterGoodsReturn: false });
+        }
+        if (this.state.flagSalesSummary === true) {
+            this.setState({ flagFilterSalesSumary: true });
+        } else {
+            this.setState({ flagFilterSalesSumary: false });
+        }
+        if (this.state.flagListBarcodes === true) {
+            this.setState({ flagFilterListBarcodes: true });
+        } else {
+            this.setState({ flagFilterListBarcodes: false });
+        }
+        if (this.state.flagListPromotions === true) {
+            this.setState({ flagFilterListPromotions: true });
+        } else {
+            this.setState({ flagFilterListPromotions: false });
         }
     }
 
 
 
     statatics() {
-        this.props.navigation.navigate('Statitics')
+        this.props.navigation.navigate('Statitics');
     }
 
 
     menuAction() {
-        this.props.navigation.dispatch(DrawerActions.openDrawer())
+        this.props.navigation.dispatch(DrawerActions.openDrawer());
     }
 
     handleMenuButtonClick() {
         this.props.navigation.openDrawer();
         // this.props.navigation.navigate('Home')
     }
+
 
 
     render() {
@@ -154,8 +250,12 @@ class Reports extends Component {
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Reports </Text>
+                    <TouchableOpacity
+                        style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                        onPress={() => this.filterAction()} >
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                    </TouchableOpacity>
                 </View>
-
                 <ScrollView>
                     <View style={styles.container}>
 
@@ -184,110 +284,161 @@ class Reports extends Component {
                             ListFooterComponent={<View style={{ width: 15 }}></View>}
                         />
 
+                        {this.state.flagDashboard && (
+                            <ReportsDashboard />
+                        )}
+
+                        {this.state.flagFilterDashboard && (
+                            <Text>hey</Text>
+                        )}
+
+                        {this.state.flagEstimationSlip && (
+                            <ListOfEstimationSlip />
+                        )}
+
+                        {this.state.flagFilterEstimationSlip && (
+                            <FilterEstimationSlip />
+                        )}
+
+                        {this.state.flagGoodsReturn && (
+                            <GoodsReturn />
+                        )}
+
+                        {this.state.flagFilterGoodsReturn && (
+                            <FilterGoodsReturn />
+                        )}
+
+                        {this.state.flagNewSale && (
+                            <NewSaleReport />
+                        )}
+
+                        {this.state.flagFilterNewSale && (
+                            <FilterNewSalesReport />
+                        )}
+
+                        {this.state.flagSalesSummary && (
+                            <SalesSumary />
+                        )}
+
+                        {this.state.flagFilterSalesSumary && (
+                            <FilterSalesSummary />
+                        )}
+
+                        {this.state.flagListBarcodes && (
+                            <ListOfBarcodes />
+                        )}
+
+                        {this.state.flagFilterListBarcodes && (
+                            <FilterListOfBarcodes />
+                        )}
+
+                        {this.state.flagListPromotions && (
+                            <ListOfPromotions />
+                        )}
+
+                        {this.state.flagFilterListPromotions && (
+                            <FilterListofPromotions />
+                        )}
 
                     </View>
                 </ScrollView >
             </View>
-        )
+        );
     }
 }
-export default Reports
+export default Reports;
 
+const pickerSelectStyles_mobile = StyleSheet.create({
+    placeholder: {
+        color: "#6F6F6F",
+        fontFamily: "regular",
+        fontSize: 15,
+    },
+    inputIOS: {
+        justifyContent: 'center',
+        height: 42,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+    },
+    inputAndroid: {
+        justifyContent: 'center',
+        height: 42,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+        color: '#001B4A',
+
+        // marginLeft: 20,
+        // marginRight: 20,
+        // marginTop: 10,
+        // height: 40,
+        // backgroundColor: '#ffffff',
+        // borderBottomColor: '#456CAF55',
+        // color: '#001B4A',
+        // fontFamily: "bold",
+        // fontSize: 16,
+        // borderRadius: 3,
+    },
+});
+
+const pickerSelectStyles_tablet = StyleSheet.create({
+    placeholder: {
+        color: "#6F6F6F",
+        fontFamily: "regular",
+        fontSize: 20,
+    },
+    inputIOS: {
+        justifyContent: 'center',
+        height: 52,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 20,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+    },
+    inputAndroid: {
+        justifyContent: 'center',
+        height: 52,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 20,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+        color: '#001B4A',
+
+        // marginLeft: 20,
+        // marginRight: 20,
+        // marginTop: 10,
+        // height: 40,
+        // backgroundColor: '#ffffff',
+        // borderBottomColor: '#456CAF55',
+        // color: '#001B4A',
+        // fontFamily: "bold",
+        // fontSize: 16,
+        // borderRadius: 3,
+    },
+});
 
 const styles = StyleSheet.create({
-    safeArea: {
+    mainContainer: {
         flex: 1,
-        justifyContent: 'center',
-        backgroundColor: '#FAFAFF'
     },
-    image: {
-        marginTop: 40,
-        marginLeft: 10,
-        width: 80,
-        height: 80,
-        borderWidth: 0,
-        borderRadius: 40,
-    },
-    viewswidth: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 24,
-        height: 84,
-    },
-    input: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 40,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: 'white',
-        borderWidth: 1,
-        fontFamily: 'semibold',
-        fontSize: 10,
-    },
-    signInButton: {
-        backgroundColor: '#0196FD',
-        justifyContent: 'center',
-        marginLeft: 30,
-        marginRight: 30,
-        marginTop: 50,
-        height: 55,
-        borderRadius: 30,
-        fontWeight: 'bold',
-        // marginBottom:100,
-    },
-    signInButtonText: {
-        color: 'white',
-        alignSelf: 'center',
-        fontSize: 14,
-        fontFamily: "regular",
-    },
-    signInFieldStyle: {
-        color: '#456CAF55',
-        marginLeft: 20,
-        marginTop: 5,
-        fontSize: 12,
-        fontFamily: "regular",
-    },
-    findIteminput: {
-        marginLeft: 30,
-        marginRight: 30,
-        marginTop: 20,
-        marginBottom: 1000,
-        height: 50,
-        backgroundColor: "#DEF1FF",
-        borderRadius: 10,
-        color: '#001B4A',
-        fontFamily: "regular",
-        fontSize: 12,
-    },
-    signUptext: {
-        marginTop: 40,
-        fontFamily: "regular",
-        alignSelf: 'center',
-        color: '#FFFFFF',
-        fontSize: 28,
-    },
-    saleBillsText: {
-        marginLeft: 0,
-        marginTop: -20,
-        marginBottom: 10,
-        fontFamily: "bold",
-        color: '#0F2851',
-        fontSize: 14,
-    },
-    tablecontainer: {
-        flex: 1,
-        // width:deviceWidth,
-        marginLeft: 20,
+    imagealign: {
+        marginTop: 16,
         marginRight: 20,
-        padding: 20,
-        paddingTop: 30,
-        backgroundColor: '#FFFFFF',
-        borderRadius: 10,
     },
     container: {
         flex: 1,
@@ -297,166 +448,25 @@ const styles = StyleSheet.create({
     flatList: {
         marginTop: 20
     },
-    flatlistbox: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 150,
-        width: 220,
-        borderWidth: 1,
-        backgroundColor: "#00C656",
-        borderColor: '#ffffff',
-        borderRadius: 10,
-        marginLeft: 10,
-        //  paddingHorizontal: 15,
-        // padding:15,
-        // marginRight: 15,
+    modalActive: {
+        backgroundColor: '#000000',
     },
-
-    head: {
-        height: 45,
-        borderColor: '#FAFAFF',
-        borderWidth: 1,
-        borderRadius: 10,
+    modalInActive: {
+        backgroundColor: '#ffffff',
     },
-    text: {
-        margin: 6,
-        color: "#0196FD",
-        fontFamily: "semibold",
-        fontSize: 11,
+    modalActiveText: {
+        color: '#ffffff',
     },
-    textData: {
-        margin: 6,
-        color: "#48596B",
-        fontFamily: "regular",
-        fontSize: 10,
+    modalInActiveText: {
+        color: '#000000',
     },
-
-    Topcontainer: {
-        flexDirection: 'row',
-        marginLeft: 0,
-        marginRight: 0,
-        width: '100%',
-        backgroundColor: 'grey',
-        height: 50
+    modalButton1: {
+        borderBottomLeftRadius: 5,
+        borderTopLeftRadius: 5,
     },
-
-    TopcontainerforModel: {
-        flexDirection: 'row',
-        marginLeft: 0,
-        marginRight: 0,
-        marginTop: 10,
-        width: '100%',
-        backgroundColor: 'grey',
-        borderRadius: 20,
-        height: 50,
-    },
-    redbox: {
-        backgroundColor: "#1CA2FF",
-        alignSelf: "flex-start",
-
-        //marginHorizontal: "1%",
-        marginBottom: 6,
-        width: "25%",
-        height: 45,
-        textAlign: "center",
-    },
-    bluebox: {
-        backgroundColor: "#0196FD",
-        alignSelf: "flex-start",
-        //marginHorizontal: "1%",
-        marginBottom: 6,
-        width: "25%",
-        height: 45,
-        textAlign: "center",
-    },
-    blackbox: {
-        backgroundColor: "#0196FD",
-        alignSelf: "flex-start",
-        //marginHorizontal: "1%",
-        marginBottom: 6,
-        width: "25%",
-        height: 45,
-        textAlign: "center",
-    },
-    greenbox: {
-        backgroundColor: "#0196FD",
-        alignSelf: "flex-start",
-        //marginHorizontal: "1%",
-        marginBottom: 6,
-        width: "25%",
-        height: 45,
-        textAlign: "center",
-    },
-    tabBar: {
-        flexDirection: 'row',
-        paddingTop: Constants.statusBarHeight,
-    },
-    tabItem: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 16,
-    },
-    box: {
-        width: 50,
-        height: 50,
-    },
-    row: {
-        flexDirection: "row",
-        flexWrap: "wrap",
-    },
-    button: {
-        paddingHorizontal: 8,
-        paddingVertical: 6,
-        //borderRadius: 4,
-        backgroundColor: "#0196FD",
-        alignSelf: "flex-start",
-        //marginHorizontal: "1%",
-        marginBottom: 6,
-        width: "25%",
-        height: 45,
-        textAlign: "center",
-    },
-    selected: {
-        backgroundColor: "#BBE3FF",
-        borderWidth: 0,
-        backgroundColor: "#0196FD",
-    },
-    buttonLabel: {
-        textAlign: "center",
-        color: "#BBE3FF",
-        fontFamily: "regular",
-        fontSize: 14,
-    },
-    selectedLabel: {
-        color: "white",
-        textAlign: "center",
-        alignSelf: "center",
-        marginTop: 10,
-        fontFamily: "regular",
-        fontSize: 14,
-    },
-    label: {
-        textAlign: "center",
-        marginBottom: 10,
-        fontSize: 24,
-    },
-
-    //model
-    modelcontainer: {
-        alignItems: 'center',
-        backgroundColor: '#ede3f2',
-        padding: 100
-    },
-    modal: {
-        flex: 1,
-        alignItems: 'center',
-        backgroundColor: '#f7021a',
-        padding: 100
-    },
-    modeltext: {
-        color: '#3f2949',
-        marginTop: 10
+    modalButton2: {
+        borderBottomRightRadius: 5,
+        borderTopRightRadius: 5,
     },
 
     // Styles For Mobile
@@ -465,12 +475,12 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        height:Device.isAndroid ? 70 : 84,
+        height: Device.isAndroid ? 70 : 84,
     },
     menuButton_mobile: {
         position: 'absolute',
         left: 10,
-        bottom: 0,
+        bottom: 5,
         width: 40,
         height: 40,
     },
@@ -484,6 +494,240 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#353C40'
     },
+    filterButton_mobile: {
+        position: 'absolute',
+        right: 20,
+        bottom: 5,
+        backgroundColor: '#ffffff',
+        borderRadius: 5,
+        width: 30,
+        height: 32,
+    },
+    modalContainer_mobile: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignSelf: 'center',
+        marginRight: 20,
+        borderRadius: 5,
+        marginTop: 20,
+        borderColor: '#ED1C24',
+        width: '100%',
+        height: 50,
+    },
+    modalButton_mobile: {
+        borderColor: '#353C40',
+        height: 32,
+        width: "33.3%",
+        borderWidth: 1,
+        alignSelf: "flex-start",
+    },
+    modalButtonText_mobile: {
+        height: 32,
+        width: 100,
+        marginTop: 5,
+        fontFamily: "medium",
+        fontSize: 12,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    navigationToButton_mobile: {
+        position: 'absolute',
+        right: 70,
+        bottom: 10,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 110,
+        height: 32,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    onlyNavigationToButton_mobile: {
+        position: 'absolute',
+        right: 20,
+        bottom: 10,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 110,
+        height: 32,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    navigationToButtonText_mobile: {
+        fontSize: 12,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginTop: 8,
+        textAlign: 'center',
+        alignSelf: 'center'
+    },
+    filterBarcodeContainer_mobile: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -20,
+        backgroundColor: "#ffffff",
+        height: 500,
+        position: 'absolute',
+        bottom: -20,
+    },
+    filterByTitle_mobile: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 20,
+        fontFamily: 'medium',
+        fontSize: 16,
+        color: '#353C40'
+    },
+    filterByTitleDecoration_mobile: {
+        height: 1,
+        width: deviceWidth,
+        backgroundColor: 'lightgray',
+        marginTop: 50,
+    },
+    filterCloseButton_mobile: {
+        position: 'absolute',
+        right: 8,
+        top: 15,
+        width: 50, height: 50,
+    },
+    filterCloseImage_mobile: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 12,
+        position: 'absolute',
+        top: 10,
+        right: 0,
+    },
+    filterDateButton_mobile: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        height: 50,
+        backgroundColor: "#F6F6F6",
+        borderRadius: 5,
+    },
+    filterDateButtonText_mobile: {
+        marginLeft: 16,
+        marginTop: 20,
+        color: "#6F6F6F",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+    datePickerContainer_mobile: {
+        height: 280,
+        width: deviceWidth,
+        backgroundColor: '#ffffff'
+    },
+    datePickerButton_mobile: {
+        position: 'absolute',
+        left: 20,
+        top: 10,
+        height: 30,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    datePickerEndButton_mobile: {
+        position: 'absolute',
+        right: 20,
+        top: 10,
+        height: 30,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    datePickerButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 5,
+        color: "#ffffff",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+    input_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    filterApplyButton_mobile: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 50,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    filterButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#ffffff",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+    filterCancelButton_mobile: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 50,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    filterButtonCancelText_mobile: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#000000",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+    flatlistContainer_mobile: {
+        height: 140,
+        backgroundColor: '#FBFBFB',
+        borderBottomWidth: 5,
+        borderBottomColor: '#FFFFFF',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    flatlistSubContainer_mobile: {
+        flexDirection: 'column',
+        width: '100%',
+        height: 140,
+    },
+    rnSelect_mobile: {
+        color: '#8F9EB7',
+        fontSize: 15
+    },
+    rnSelectContainer_mobile: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+
     // Styles For Tablet
     viewsWidth_tablet: {
         backgroundColor: '#ffffff',
@@ -507,6 +751,395 @@ const styles = StyleSheet.create({
         height: 40,
         fontFamily: 'bold',
         fontSize: 24,
+        color: '#353C40'
+    },
+    filterButton_tablet: {
+        position: 'absolute',
+        right: 20,
+        top: 40,
+        backgroundColor: '#ffffff',
+        borderRadius: 5,
+        width: 35,
+        height: 37,
+    },
+    modalContainer_tablet: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignSelf: 'center',
+        marginRight: 20,
+        borderRadius: 5,
+        marginTop: 20,
+        borderColor: '#ED1C24',
+        width: '100%',
+        height: 50,
+    },
+    modalButton_tablet: {
+        borderColor: '#353C40',
+        height: 42,
+        width: "33.3%",
+        borderWidth: 1,
+        alignSelf: "flex-start",
+    },
+    modalButtonText_tablet: {
+        height: 42,
+        width: 210,
+        marginTop: 5,
+        fontFamily: "medium",
+        fontSize: 17,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    navigationToButton_tablet: {
+        position: 'absolute',
+        right: 70,
+        top: 40,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 110,
+        height: 32,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    onlyNavigationToButton_tablet: {
+        position: 'absolute',
+        right: 20,
+        top: 40,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 110,
+        height: 32,
+        textAlign: 'center',
+        alignItems: 'center',
+    },
+    navigationToButtonText_tablet: {
+        fontSize: 17,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginTop: 6,
+        textAlign: 'center',
+        alignSelf: 'center'
+    },
+    filterBarcodeContainer_tablet: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -40,
+        backgroundColor: "#ffffff",
+        height: 600,
+        position: 'absolute',
+        bottom: -40,
+    },
+    filterByTitle_tablet: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 30,
+        fontFamily: 'medium',
+        fontSize: 21,
+        color: '#353C40'
+    },
+    filterByTitleDecoration_tablet: {
+        height: 1,
+        width: deviceWidth,
+        backgroundColor: 'lightgray',
+        marginTop: 60,
+    },
+    filterCloseButton_tablet: {
+        position: 'absolute',
+        right: 24,
+        top: 10,
+        width: 60, height: 60,
+    },
+    filterCloseImage_tablet: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 17,
+        position: 'absolute',
+        top: 10,
+        right: 24,
+    },
+    filterDateButton_tablet: {
+        width: deviceWidth - 30,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        height: 60,
+        backgroundColor: "#F6F6F6",
+        borderRadius: 5,
+    },
+    filterDateButtonText_tablet: {
+        marginLeft: 16,
+        marginTop: 20,
+        color: "#6F6F6F",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    datePickerButton_tablet: {
+        position: 'absolute',
+        left: 20,
+        top: 10,
+        height: 40,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    datePickerButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 5,
+        color: "#ffffff",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    datePickerEndButton_tablet: {
+        position: 'absolute',
+        right: 20,
+        top: 10,
+        height: 40,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    input_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    filterApplyButton_tablet: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 60,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    filterButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#ffffff",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    filterCancelButton_tablet: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 60,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    filterButtonCancelText_tablet: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#000000",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    flatlistContainer_tablet: {
+        height: 160,
+        backgroundColor: '#FBFBFB',
+        borderBottomWidth: 5,
+        borderBottomColor: '#FFFFFF',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    flatlistSubContainer_tablet: {
+        flexDirection: 'column',
+        width: '100%',
+        height: 160,
+    },
+    rnSelect_tablet: {
+        color: '#8F9EB7',
+        fontSize: 20
+    },
+    rnSelectContainer_tablet: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+
+});
+
+// Styles For Flat-Lists
+
+const flats = StyleSheet.create({
+    mainText_mobile: {
+        fontSize: 16,
+        marginLeft: 16,
+        marginTop: 10,
+        marginBottom: 10,
+        fontFamily: 'medium',
+        color: '#ED1C24',
+    },
+    subText_mobile: {
+        fontSize: 12,
+        marginLeft: 16,
+        marginTop: 10,
+        marginBottom: 10,
+        fontFamily: 'medium',
+        color: '#353C40'
+    },
+    commonText_mobile: {
+        fontSize: 12,
+        marginBottom: 10,
+        marginTop: -90,
+        alignSelf: 'center',
+        textAlign: 'center',
+        fontFamily: 'regular',
+        color: '#808080'
+    },
+    commonTextsub_mobile: {
+        fontSize: 12,
+        marginBottom: 10,
+        marginTop: 10,
+        alignSelf: 'center',
+        textAlign: 'center',
+        fontFamily: 'regular',
+        color: '#808080'
+    },
+    editButton_mobile: {
+        position: 'absolute',
+        right: 50,
+        top: 90,
+        width: 30,
+        height: 30,
+        borderBottomLeftRadius: 5,
+        borderTopLeftRadius: 5,
+        borderWidth: 1,
+        borderColor: "lightgray",
+        // borderRadius:5,
+    },
+    deleteButton_mobile: {
+        position: 'absolute',
+        right: 20,
+        top: 90,
+        width: 30,
+        height: 30,
+        borderBottomRightRadius: 5,
+        borderTopRightRadius: 5,
+        borderWidth: 1,
+        borderColor: "lightgray",
+    },
+    deleteBarcodeContainer_mobile: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -20,
+        backgroundColor: "#ffffff",
+        height: 260,
+        position: 'absolute',
+        bottom: -20,
+    },
+    deleteBarcodeHeading_mobile: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 20,
+        fontFamily: 'medium',
+        fontSize: 16,
+        color: '#353C40'
+    },
+
+    // Tablet styles
+
+    mainText_tablet: {
+        fontSize: 21,
+        marginLeft: 16,
+        marginTop: 10,
+        marginBottom: 10,
+        fontFamily: 'medium',
+        color: '#ED1C24',
+    },
+    subText_tablet: {
+        fontSize: 17,
+        marginLeft: 16,
+        marginTop: 10,
+        marginBottom: 10,
+        fontFamily: 'medium',
+        color: '#353C40'
+    },
+    commonText_tablet: {
+        fontSize: 17,
+        marginBottom: 10,
+        marginTop: -120,
+        alignSelf: 'center',
+        textAlign: 'center',
+        fontFamily: 'regular',
+        color: '#808080'
+    },
+    commonTextsub_tablet: {
+        fontSize: 17,
+        marginBottom: 10,
+        marginTop: 10,
+        alignSelf: 'center',
+        textAlign: 'center',
+        fontFamily: 'regular',
+        color: '#808080'
+    },
+    editButton_tablet: {
+        position: 'absolute',
+        right: 50,
+        top: 90,
+        width: 30,
+        height: 40,
+        borderBottomLeftRadius: 5,
+        borderTopLeftRadius: 5,
+        borderWidth: 1,
+        borderColor: "lightgray",
+        // borderRadius:5,
+    },
+    deleteButton_tablet: {
+        position: 'absolute',
+        right: 20,
+        top: 90,
+        width: 30,
+        height: 40,
+        borderBottomRightRadius: 5,
+        borderTopRightRadius: 5,
+        borderWidth: 1,
+        borderColor: "lightgray",
+    },
+    deleteBarcodeContainer_tablet: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -20,
+        backgroundColor: "#ffffff",
+        height: 280,
+        position: 'absolute',
+        bottom: -20,
+    },
+    deleteBarcodeHeading_tablet: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 30,
+        fontFamily: 'medium',
+        fontSize: 21,
         color: '#353C40'
     },
 });
