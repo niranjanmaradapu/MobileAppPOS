@@ -302,7 +302,7 @@ export default class AccountManagement extends Component {
     }
 
     modelCancel() {
-        this.setState({ modalVisible: false, flagFilterCreditNotes: false, flagFilterStore: false, flagCreditNotes: false });
+        this.setState({ modalVisible: false, flagFilterCreditNotes: false, flagFilterStore: false, flagFilterCreditNotes: false, flagFilterDebitNotes: false });
     }
 
 
