@@ -37,9 +37,6 @@ class UrmService {
         return REACT_NATIVE_APP_BASE_URL + "/user-management/client/getMasterDomains"
     } 
 
-    getDomains(){
-    return REACT_NATIVE_APP_BASE_URL + "/user-management/client/getDomiansForClient"
-    }
 
     saveDomain(){
         return REACT_NATIVE_APP_BASE_URL + "/user-management/client/assignDomianToClient"
@@ -88,6 +85,10 @@ class UrmService {
     getRolesBySearch(){
         return REACT_NATIVE_APP_BASE_URL +  "/user-management/roles/rolesWithFilter"
     }
+
+    saveRole(){
+        return REACT_NATIVE_APP_BASE_URL +  "/user-management/roles/createRole"
+    } 
     
 }
 export default new UrmService()

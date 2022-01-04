@@ -258,8 +258,16 @@ export default class UserManagement extends Component {
     }
 
     navigateToCreateRoles() {
-        this.props.navigation.navigate('CreateRole');
+        this.props.navigation.navigate('CreateRole', {
+            onGoBack: () => this.refresh(),
+        });
     }
+
+    refresh(){
+        this.getRolesList()
+    }
+
+
 
     handleBackButtonClick() {
         this.props.navigation.openDrawer();

@@ -46,7 +46,6 @@ export default class AddStore extends Component {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
         this.setState({ clientId: clientId });
         this.setState({ isEdit: this.props.route.params.isEdit});
-        console.log('sdasd' + this.props.route.params.item.id)
       if(this.state.isEdit === true){
         this.setState({
             stateId: this.props.route.params.item.stateId,
@@ -92,7 +91,7 @@ export default class AddStore extends Component {
                         this.setState({ domainsArray: this.state.domainsArray })
                         if (this.state.domainsArray[i].id === this.state.domainId) {
                             this.setState({ domain: this.state.domainsArray[i].name })
-                            return
+
                         }
 
                     }
@@ -138,7 +137,6 @@ export default class AddStore extends Component {
                         console.log('stateId is' + this.state.statesArray[i].name)
                         this.setState({ storeState: this.state.statesArray[i].name })
                         this.getMasterDistrictsList()
-                        return
                     }
                 }
             }
