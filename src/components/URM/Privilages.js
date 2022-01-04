@@ -24,20 +24,20 @@ export default class Privilages extends Component {
     }
 
     async componentDidMount() {
-        this.setState({ domain: this.props.route.params.domain })
+      //  this.setState({ domain: this.props.route.params.domain })
+        console.log('domain is' + this.props.route.params.domain)
         this.getPrivilages()
     }
 
 
     getPrivilages() {
-        var domainId = "1"
-        if (this.state.domain === "Textile") {
+        if (this.props.route.params.domain === "Textile") {
             domainId = "1"
         }
-        else if (this.state.domain === "Retail") {
+        else if (this.props.route.params.domain === "Retail") {
             domainId = "2"
         }
-        else if (this.state.domain === "Electrical & Electronics") {
+        else if (this.props.route.params.domain === "Electrical & Electronics") {
             domainId = "3"
         }
         axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
