@@ -21,11 +21,10 @@ class Reports extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            // Header Array
             privilages: [],
-            flagone: true,
-            flagtwo: false,
-            flagthree: false,
-            flagfour: false,
+
+            // Navigation Flags
             selectedcolor: '',
             subPrivilages: "",
             flagDashboard: true,
@@ -43,6 +42,14 @@ class Reports extends Component {
             flagFilterNewSale: false,
             flagFilterSalesSumary: false,
             modalVisible: true,
+
+            // Component Arrays
+            estimationSlip: [1, 2],
+            newSale: [1, 2],
+            goodsReturn: [1, 2],
+            salesSumary: [1, 2],
+            listBarcodes: [1, 2],
+            listPromotions: [1, 2],
         };
     }
 
@@ -141,7 +148,7 @@ class Reports extends Component {
         } else {
             this.setState({ flagDashboard: false });
         }
-        if (item.name === "List of Estimation Slip") {
+        if (item.name === "List Of Estimation Slip") {
             this.setState({ flagEstimationSlip: true });
         } else {
             this.setState({ flagEstimationSlip: false });
@@ -226,6 +233,7 @@ class Reports extends Component {
 
 
 
+
     statatics() {
         this.props.navigation.navigate('Statitics');
     }
@@ -240,6 +248,13 @@ class Reports extends Component {
         // this.props.navigation.navigate('Home')
     }
 
+    modelClose() {
+        this.setState({ modalVisible: false });
+    }
+
+    modelCancel = () => {
+        this.modelClose();
+    };
 
 
     render() {
@@ -293,55 +308,85 @@ class Reports extends Component {
                         )}
 
                         {this.state.flagEstimationSlip && (
-                            <ListOfEstimationSlip />
+                            <ListOfEstimationSlip
+                                estimationSlip={this.state.estimationSlip}
+                            />
                         )}
 
                         {this.state.flagFilterEstimationSlip && (
-                            <FilterEstimationSlip />
+                            <FilterEstimationSlip
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
                         )}
 
                         {this.state.flagGoodsReturn && (
-                            <GoodsReturn />
+                            <GoodsReturn
+                                goodsReturn={this.state.goodsReturn}
+                            />
                         )}
 
                         {this.state.flagFilterGoodsReturn && (
-                            <FilterGoodsReturn />
+                            <FilterGoodsReturn
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
                         )}
 
                         {this.state.flagNewSale && (
-                            <NewSaleReport />
+                            <NewSaleReport
+                                newSale={this.state.newSale}
+                            />
                         )}
 
                         {this.state.flagFilterNewSale && (
-                            <FilterNewSalesReport />
+                            <FilterNewSalesReport
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
                         )}
 
                         {this.state.flagSalesSummary && (
-                            <SalesSumary />
+                            <SalesSumary
+                                salesSumary={this.state.salesSumary}
+                            />
                         )}
 
                         {this.state.flagFilterSalesSumary && (
-                            <FilterSalesSummary />
+                            <FilterSalesSummary
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
                         )}
 
                         {this.state.flagListBarcodes && (
-                            <ListOfBarcodes />
+                            <ListOfBarcodes
+                                listBarcodes={this.state.listBarcodes}
+                            />
                         )}
 
                         {this.state.flagFilterListBarcodes && (
-                            <FilterListOfBarcodes />
+                            <FilterListOfBarcodes
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
                         )}
 
                         {this.state.flagListPromotions && (
-                            <ListOfPromotions />
+                            <ListOfPromotions
+                                listPromotions={this.state.listPromotions}
+                            />
                         )}
 
                         {this.state.flagFilterListPromotions && (
-                            <FilterListofPromotions />
+                            <FilterListofPromotions
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
                         )}
 
                     </View>
-                </ScrollView >
+                </ScrollView>
             </View>
         );
     }
