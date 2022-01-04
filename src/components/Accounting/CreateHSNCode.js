@@ -299,7 +299,7 @@ const flats = StyleSheet.create({
         height: 140
     },
     flatlistTextAccent_mobile: {
-        fontFamily: 'Medium',
+        fontFamily: 'medium',
         fontSize: 16,
         color: '#ED1C24'
     },
@@ -352,7 +352,7 @@ const flats = StyleSheet.create({
         height: 160
     },
     flatlistTextAccent_tablet: {
-        fontFamily: 'Medium',
+        fontFamily: 'medium',
         fontSize: 21,
         color: '#ED1C24'
     },

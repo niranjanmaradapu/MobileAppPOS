@@ -32,7 +32,7 @@ export class Stores extends Component {
     }
 
     handleeditStore(item, index) {
-        console.log(item)
+        console.log(item);
         this.props.navigation.navigate('AddStore'
             , {
                 item: item, isEdit: true,
@@ -41,7 +41,7 @@ export class Stores extends Component {
     }
 
     updateStore() {
-       // this.props.getStoresList()
+        // this.props.getStoresList()
     }
 
     modelCancel() {
@@ -51,36 +51,36 @@ export class Stores extends Component {
     render() {
         return (
             <View>
-            <FlatList
-                data={this.props.stores}
-                style={{ marginTop: 20, }}
-                scrollEnabled={true}
-                renderItem={({ item, index }) => (
-                    <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
-                        <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
-                            <View style={flats.text}>
-                                <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >STORE ID: {index + 1} </Text>
-                                <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>STORE NAME: {"\n"} {item.name}</Text>
-                                <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>DOMAIN: {"\n"} {item.clientDomianlId.domaiName} </Text>
-                            </View>
-                            <View style={flats.text}>
-                                <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>LOCATION:  {"\n"} {item.cityId} </Text>
-                                <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>CREATED BY: {"\n"} {item.createdBy}</Text>
-                                <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>CREATED DATE: {"\n"} {item.createdDate} </Text>
-                            </View>
-                            <View style={flats.buttons}>
-                                <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditStore(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
-                                </TouchableOpacity>
+                <FlatList
+                    data={this.props.stores}
+                    style={{ marginTop: 20, }}
+                    scrollEnabled={true}
+                    renderItem={({ item, index }) => (
+                        <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
+                            <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
+                                <View style={flats.text}>
+                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >STORE ID: {index + 1} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>STORE NAME: {"\n"} {item.name}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>DOMAIN: {"\n"} {item.clientDomianlId.domaiName} </Text>
+                                </View>
+                                <View style={flats.text}>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>LOCATION:  {"\n"} {item.cityId} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>CREATED BY: {"\n"} {item.createdBy}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>CREATED DATE: {"\n"} {item.createdDate} </Text>
+                                </View>
+                                <View style={flats.buttons}>
+                                    <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditStore(item, index)}>
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                    </TouchableOpacity>
 
-                                <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handledeleteStore(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
-                                </TouchableOpacity>
+                                    <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handledeleteStore(item, index)}>
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                )}
-            />
+                    )}
+                />
                 {this.state.storesDelete && (
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
@@ -144,6 +144,7 @@ export class FilterStores extends Component {
             dictrictArray: [],
             dictricts: [],
             dictrictId: 0,
+            filterStores: [],
         };
     }
 
@@ -240,17 +241,20 @@ export class FilterStores extends Component {
     applyStoreFilter() {
         //  alert("Applied");
         const searchStore = {
-            "stateId": this.state.stateId,
-            "cityId": this.state.searchCity,
-            "districtId": this.state.dictrictId,
+            "stateId": this.state.storeState,
+            "cityId": this.state.city,
+            "districtId": this.state.storeDistrict,
             "storeName": null
         };
 
         axios.post(UrmService.getStoresBySearch(), searchStore).then((res) => {
             if (res) {
-                this.setState({ stores: res.data.result });
+                this.setState({ filterStores: res.data.result });
+                this.props.childParams(this.state.filterStores);
+                console.log(res.data);
                 this.props.modelCancelCallback();
             } else {
+                this.props.modelCancelCallback();
             }
 
         });
