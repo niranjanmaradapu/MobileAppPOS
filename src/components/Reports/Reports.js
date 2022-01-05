@@ -195,40 +195,41 @@ class Reports extends Component {
 
     filterAction() {
         if (this.state.flagDashboard === true) {
-            this.setState({ flagFilterDashboard: true });
+            this.setState({ flagFilterDashboard: true, modalVisible: true });
         } else {
             this.setState({ flagFilterDashboard: false });
         }
         if (this.state.flagEstimationSlip === true) {
-            this.setState({ flagFilterEstimationSlip: true });
+            this.setState({ flagFilterEstimationSlip: true, modalVisible: true });
         } else {
             this.setState({ flagFilterEstimationSlip: false });
         }
         if (this.state.flagNewSale === true) {
-            this.setState({ flagFilterNewSale: true });
+            this.setState({ flagFilterNewSale: true, modalVisible: true });
         } else {
             this.setState({ flagFilterNewSale: false });
         }
         if (this.state.flagGoodsReturn === true) {
-            this.setState({ flagFilterGoodsReturn: true });
+            this.setState({ flagFilterGoodsReturn: true, modalVisible: true });
         } else {
             this.setState({ flagFilterGoodsReturn: false });
         }
         if (this.state.flagSalesSummary === true) {
-            this.setState({ flagFilterSalesSumary: true });
+            this.setState({ flagFilterSalesSumary: true, modalVisible: true });
         } else {
             this.setState({ flagFilterSalesSumary: false });
         }
         if (this.state.flagListBarcodes === true) {
-            this.setState({ flagFilterListBarcodes: true });
+            this.setState({ flagFilterListBarcodes: true, modalVisible: true });
         } else {
             this.setState({ flagFilterListBarcodes: false });
         }
         if (this.state.flagListPromotions === true) {
-            this.setState({ flagFilterListPromotions: true });
+            this.setState({ flagFilterListPromotions: true, modalVisible: true });
         } else {
             this.setState({ flagFilterListPromotions: false });
         }
+        this.setState({ modalVisible: true });
     }
 
 
@@ -320,19 +321,6 @@ class Reports extends Component {
                             />
                         )}
 
-                        {this.state.flagGoodsReturn && (
-                            <GoodsReturn
-                                goodsReturn={this.state.goodsReturn}
-                            />
-                        )}
-
-                        {this.state.flagFilterGoodsReturn && (
-                            <FilterGoodsReturn
-                                modalVisible={this.state.modalVisible}
-                                modelCancelCallback={this.modelCancel}
-                            />
-                        )}
-
                         {this.state.flagNewSale && (
                             <NewSaleReport
                                 newSale={this.state.newSale}
@@ -341,6 +329,19 @@ class Reports extends Component {
 
                         {this.state.flagFilterNewSale && (
                             <FilterNewSalesReport
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
+                        )}
+
+                        {this.state.flagGoodsReturn && (
+                            <GoodsReturn
+                                goodsReturn={this.state.goodsReturn}
+                            />
+                        )}
+
+                        {this.state.flagFilterGoodsReturn && (
+                            <FilterGoodsReturn
                                 modalVisible={this.state.modalVisible}
                                 modelCancelCallback={this.modelCancel}
                             />

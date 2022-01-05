@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-
+import DatePicker from 'react-native-date-picker';
 var deviceWidth = Dimensions.get("window").width;
 
 export class ListOfEstimationSlip extends Component {
@@ -124,6 +124,7 @@ export class FilterEstimationSlip extends Component {
             datepickerOpen: false,
             datepickerendOpen: false,
             
+            statuses: [],
             dsStatus: "",
             dsNumber: "",
             barcode: "",
