@@ -276,8 +276,17 @@ export default class UserManagement extends Component {
     }
 
     navigateToAddUsers() {
-        this.props.navigation.navigate('AddUser');
+        this.props.navigation.navigate('AddUser', {
+            isEdit: false,
+            onGoBack: () => this.refreshUsers(),
+        });
     }
+
+    refreshUsers(){
+        this.getAllUsers()
+    }
+
+
 
     topbarAction1() {
         this.getAllUsers()

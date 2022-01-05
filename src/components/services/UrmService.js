@@ -93,6 +93,14 @@ class UrmService {
     editRole(){
         return REACT_NATIVE_APP_BASE_URL +  "/user-management/roles/updateRole"
     } 
+
+    saveUser(){
+        return REACT_NATIVE_APP_BASE_URL +  "/user-management/auth/createUser"
+    } 
+
+    editUser(){
+        return REACT_NATIVE_APP_BASE_URL +  "/user-management/user/updateUser"
+    } 
 }
 export default new UrmService()
 

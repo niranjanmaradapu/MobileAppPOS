@@ -199,6 +199,7 @@ export default class CreateRole extends Component {
     }
 
     handleDomain = (value) => {
+        this.setState({ domain: value })
         for (let i = 0; i < this.state.domainsArray.length; i++) {
             if (this.state.domainsArray[i].name === value) {
                 this.setState({ domainId: this.state.domainsArray[i].id })
