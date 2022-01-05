@@ -40,7 +40,7 @@ export class NewSaleReport extends Component {
                         <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >STORE ID: {index + 1} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S NO: {index + 1} </Text>
                                     <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>INVOICE NUMBER: {"\n"} { }</Text>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>EMP ID: {"\n"} { } </Text>
                                 </View>

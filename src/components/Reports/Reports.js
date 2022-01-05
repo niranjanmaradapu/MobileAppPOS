@@ -4,6 +4,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import ListOfEstimationSlipsService from '../services/reports/ListOfEstimationSlipsService';
 import UrmService from '../services/UrmService';
 import { FilterGoodsReturn, GoodsReturn } from './GoodsReturn';
 import { FilterListOfBarcodes, ListOfBarcodes } from './ListOfBarcodes';
@@ -139,6 +140,8 @@ class Reports extends Component {
             console.log('there is error getting storeId');
         });
 
+        this.getEstimationSlip();
+
     }
 
     topbarAction1 = (item, index) => {
@@ -256,6 +259,15 @@ class Reports extends Component {
     modelCancel = () => {
         this.modelClose();
     };
+
+
+    //          List Of Estimation Slip Service Api
+    async getEstimationSlip() {
+        ListOfEstimationSlipsService.getEstimationSlips(obj).then((res) => {
+            console.log("data", res.data);
+        });
+    }
+
 
 
     render() {

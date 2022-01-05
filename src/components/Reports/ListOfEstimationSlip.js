@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import DatePicker from 'react-native-date-picker';
 var deviceWidth = Dimensions.get("window").width;
 
 export class ListOfEstimationSlip extends Component {
@@ -14,7 +14,7 @@ export class ListOfEstimationSlip extends Component {
         super(props);
         this.state = {
             deleteEstimationSlip: false,
-            modalVisible: true,
+        modalVisible: true,
         };
     }
 
