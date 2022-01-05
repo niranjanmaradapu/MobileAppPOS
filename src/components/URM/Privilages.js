@@ -13,8 +13,10 @@ export default class Privilages extends Component {
             domain: "",
             previlages: [],
             domain: "",
-            parentsList: [],
-            childlist: [],
+            parentlist: [],
+            child: [],
+            childlist:[],
+            isselected: [],
         }
     }
 
@@ -24,8 +26,10 @@ export default class Privilages extends Component {
     }
 
     async componentDidMount() {
-      //  this.setState({ domain: this.props.route.params.domain })
-        console.log('domain is' + this.props.route.params.domain)
+        this.setState({
+            parentlist: this.props.route.params.parentlist,
+            child: this.props.route.params.child,
+        })
         this.getPrivilages()
     }
 
@@ -40,6 +44,7 @@ export default class Privilages extends Component {
         else if (this.props.route.params.domain === "Electrical & Electronics") {
             domainId = "3"
         }
+        global.privilages = []
         axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 let len = res.data["result"].length;
@@ -51,20 +56,59 @@ export default class Privilages extends Component {
                             if (previlage.subPrivillages !== null) {
                                 let len = previlage.subPrivillages.length
                                 var subprivilagesArray = [];
+                                var namesArray = [];
+                                var parentarray = [];
                                 if (len > 0) {
                                     for (let i = 0; i < len; i++) {
+
                                         if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                             let subprivilage = previlage.subPrivillages[i];
-                                            subprivilagesArray.push({ name: subprivilage.name, selectedindex: 0, description:subprivilage.description,subPrivillage:subprivilage })
-                                            console.log(subprivilagesArray)
+                                           
+                                            for (let i = 0; i < this.state.parentlist.length; i++) {
+                                             if (this.state.parentlist[i].name === previlage.name){
+                                                if (parentarray.includes(previlage.name)) {
+                                               
+                                                }
+                                                else{
+                                                    parentarray.push(previlage.name)
+                                                }
+                                             }
+                                            }
+                                            console.log(parentarray)
+                                            if (parentarray.includes(previlage.name)) {
+                                                for (let i = 0; i < this.state.child.length; i++) {
+                                                    if (subprivilage.name === this.state.child[i].name) {
+                                                        if (namesArray.includes(subprivilage.name)) {
+                                                        }
+                                                        else{
+                                                        this.state.childlist.push({ title: subprivilage.name, description: subprivilage.description, parent: previlage.name, id: previlage.id, subPrivillages: subprivilage });
+                                                        subprivilagesArray.push({ name: subprivilage.name, selectedindex: 1, description: subprivilage.description, subPrivillage: subprivilage })
+                                                        namesArray.push(subprivilage.name)
+                                                        }
+                                                    
+                                                }
+                                                } 
+                                            }
+                                            else {
+                                            
+                                        }
+                                            if (namesArray.includes(subprivilage.name)) {
+
+                                            }
+                                            else {
+                                                subprivilagesArray.push({ name: subprivilage.name, selectedindex: 0, description: subprivilage.description, subPrivillage: subprivilage })
+                                            }
+
                                         }
                                     }
 
                                 }
+                               
                             }
-                            this.state.previlages.push({ title: previlage.name, data: subprivilagesArray,id:previlage.id});
+                            this.state.previlages.push({ title: previlage.name, data: subprivilagesArray, id: previlage.id });
                             this.setState({ previlages: this.state.previlages })
-                           // console.log(this.state.previlages[0].id)
+                            this.setState({ childlist: this.state.childlist })
+
                         }
                     }
                 }
@@ -73,7 +117,10 @@ export default class Privilages extends Component {
     }
 
     saveRole() {
+        global.privilages = []
+       
         global.privilages = this.state.childlist
+        console.log('sadsadsadsa' + global.privilages.length)
         this.props.route.params.onGoBack();
         this.props.navigation.goBack();
     }
@@ -81,7 +128,7 @@ export default class Privilages extends Component {
     selectedPrivilage = (item, index, section) => {
         if (item.selectedindex === 0) {
             item.selectedindex = 1
-            this.state.childlist.push({ title: item.name, description: item.description,parent:section.title,id:section.id,subPrivillages:item.subPrivillage });
+            this.state.childlist.push({ title: item.name, description: item.description, parent: section.title, id: section.id, subPrivillages: item.subPrivillage });
         }
         else {
             item.selectedindex = 0
@@ -89,7 +136,7 @@ export default class Privilages extends Component {
             list.splice(index, 1);
             this.setState({ childlist: list });
         }
-      
+
         this.setState({ previlages: this.state.previlages })
         console.log(this.state.childlist)
     };
@@ -108,7 +155,7 @@ export default class Privilages extends Component {
                         <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                        Create Role
+                        Privilages
                     </Text>
                 </View>
 
@@ -128,13 +175,6 @@ export default class Privilages extends Component {
                                 {item.selectedindex === 0 && (
                                     <Image source={require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
                                 )}
-                                {/* {this.state.selectedItem === item && (
-                                 <Image source={require('../assets/images/selected.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
-                                    )} */}
-
-                                {/* <Image source={require('../assets/images/selected.png')} style={{ position: 'absolute', right: 20, top: 15 }} /> */}
-
-                                {/* <Image source={this.state.selectedItem === item ? require('../assets/images/selected.png') : require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 15 }} /> */}
                             </View>
 
                             {/* </View> */}

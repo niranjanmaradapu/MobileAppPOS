@@ -37,6 +37,7 @@ export default class UserManagement extends Component {
             privilages: [],
             clientId:0,
             doneButtonClicked:false,
+            navtext: ''
         };
     }
 
@@ -259,6 +260,7 @@ export default class UserManagement extends Component {
 
     navigateToCreateRoles() {
         this.props.navigation.navigate('CreateRole', {
+            isEdit: false,
             onGoBack: () => this.refresh(),
         });
     }
@@ -399,11 +401,15 @@ export default class UserManagement extends Component {
     }
 
     handleeditRole(item, index) {
-        this.props.navigation.navigate('EditRole',
+        this.props.navigation.navigate('CreateRole',
             {
                 item: item, isEdit: true,
                 onGoBack: () => this.updateRoles(),
             });
+    }
+
+    updateRoles(){
+        this.getRolesList()
     }
 
     handleRole(item, index) {

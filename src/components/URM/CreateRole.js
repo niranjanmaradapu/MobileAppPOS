@@ -22,18 +22,36 @@ export default class CreateRole extends Component {
             domain: "",
             previlage: [],
             domains: [],
-            domainsArray:[],
-            clientId:0,
-            arrayData:[],
-            domainId:0,
-            roles:[],
-            parentlist:[],
-            childlist:[],
+            domainsArray: [],
+            clientId: 0,
+            arrayData: [],
+            domainId: 0,
+            roles: [],
+            parentlist: [],
+            childlist: [],
+            isEdit: false,
+            roleId:0,
         }
     }
 
     async componentDidMount() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
+        this.setState({ isEdit: this.props.route.params.isEdit});
+        console.log(this.props.route.params.item)
+        if (this.state.isEdit === true) {
+            this.setState({
+                description: this.props.route.params.item.discription,
+                role: this.props.route.params.item.roleName,
+                domain: this.props.route.params.item.clientDomainVo.domaiName,
+                roles: this.props.route.params.item.subPrivilageVo,
+                parentlist: this.props.route.params.item.parentPrivilageVo,
+                roleId: this.props.route.params.item.roleId
+            });
+            this.setState({ navtext:'Edit Role' })
+        }
+        else{
+            this.setState({ navtext: 'Add Role' })
+        }
         this.setState({ clientId: clientId });
         this.getDomainsList()
     }
@@ -58,9 +76,10 @@ export default class CreateRole extends Component {
                         })
 
                         this.setState({ domainsArray: this.state.domainsArray })
-                        this.setState({ domain: this.state.domainsArray[0].name })
-                        this.setState({ domainId: this.state.domainsArray[0].id })
-
+                        if (this.state.isEdit === false) {
+                            this.setState({ domain: this.state.domainsArray[0].name })
+                            this.setState({ domainId: this.state.domainsArray[0].id })
+                        }
                     }
                     console.log(this.state.domains)
                 }
@@ -92,62 +111,91 @@ export default class CreateRole extends Component {
             alert("Please Enter description");
         } else if (this.state.domain === "") {
             alert("Please Select Domain");
-        } 
-         else {
-        const saveObj = {
+        }
+        else {
+            if(this.state.isEdit === false){
+            const saveObj = {
                 "roleName": this.state.role,
                 "description": this.state.description,
                 "clientDomianId": this.state.domainId,
                 "createdBy": global.username,
                 "parentPrivilages": this.state.parentlist,
-                "subPrivillages":this.state.childlist,
-        }
+                "subPrivillages": this.state.childlist,
+            }
 
-        console.log('params are' + JSON.stringify(saveObj))
-        this.setState({ loading: true })
-        axios.post(UrmService.saveRole(), saveObj).then((res) => {
-            console.log(res.data)
-            if (res.data && res.data["isSuccess"] === "true") {
-                global.privilages = []
-               this.props.route.params.onGoBack();
-                this.props.navigation.goBack();
+            console.log('params are' + JSON.stringify(saveObj))
+            this.setState({ loading: true })
+            axios.post(UrmService.saveRole(), saveObj).then((res) => {
+                console.log(res.data)
+                if (res.data && res.data["isSuccess"] === "true") {
+                    global.privilages = []
+                    this.props.route.params.onGoBack();
+                    this.props.navigation.goBack();
+                }
+                else {
+                    this.setState({ loading: false })
+                    alert(res.data.message);
+                }
             }
-            else {
-                this.setState({ loading: false })
-                alert(res.data.message);
-            }
+            ).catch(() => {
+                this.setState({ loading: false });
+            });
         }
-        ).catch(() => {
-            this.setState({ loading: false });
-        });
-    }
+        else{
+            const saveObj = {
+                "roleName": this.state.role,
+                "description": this.state.description,
+                "clientDomianId": this.state.domainId,
+                "createdBy": global.username,
+                "parentPrivilages": this.state.parentlist,
+                "subPrivillages": this.state.childlist,
+                "roleId":this.state.roleId,
+            }
+
+            console.log('params are' + JSON.stringify(saveObj))
+            this.setState({ loading: true })
+            axios.put(UrmService.editRole(), saveObj).then((res) => {
+                console.log(res.data)
+                if (res.data && res.data["isSuccess"] === "true") {
+                    global.privilages = []
+                    this.props.route.params.onGoBack();
+                    this.props.navigation.goBack();
+                }
+                else {
+                    this.setState({ loading: false })
+                    alert(res.data.message);
+                }
+            }
+            ).catch(() => {
+                this.setState({ loading: false });
+            });
+
+        }
+        }
     }
 
     handleRole = (value) => {
         this.setState({ role: value });
     }
 
-    privilageMapping(){
+    privilageMapping() {
         global.privilages = []
         this.props.navigation.navigate('Privilages', {
-            domain:this.state.domain,
+            domain: this.state.domain,child:this.state.roles,parentlist:this.state.parentlist,
             onGoBack: () => this.refresh(),
         });
     }
 
     refresh() {
         this.setState({ parentlist: [] });
-        this.setState({ childlist: [] });
-        this.setState({roles:global.privilages})
+        this.setState({ childlist: [] }); 
+        this.state.roles = []
         for (let i = 0; i < global.privilages.length; i++) {
-        // if(global.privilages[i].parent === this.state.parentlist[i]){
-
-        // }
-         this.state.parentlist.push({name:global.privilages[i].parent,id:global.privilages[i].id})
-         this.state.childlist.push(global.privilages[i].subPrivillages)
-         this.setState({ parentlist: this.state.parentlist,childlist:this.state.childlist })
+            this.state.parentlist.push({ name: global.privilages[i].parent, id: global.privilages[i].id })
+            this.state.childlist.push(global.privilages[i].subPrivillages)
+            this.state.roles.push(global.privilages[i].subPrivillages)
+            this.setState({ parentlist: this.state.parentlist, childlist: this.state.childlist,roles:this.state.roles })
         }
-     console.log('sdsdsf' + global.privilages)
     }
 
     handleDomain = (value) => {
@@ -174,7 +222,7 @@ export default class CreateRole extends Component {
                         <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                        Create Role
+                        {this.state.navtext}
                     </Text>
                 </View>
                 <ScrollView>
@@ -213,59 +261,59 @@ export default class CreateRole extends Component {
                         />
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 50 }}>
-                            <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 7 }]}>
-                                Privileges
-                            </Text>
-                            <TouchableOpacity
-                                style={{ borderRadius: 5, borderColor: "#ED1C24", backgroundColor: '#ffffff', width: Device.isTablet ? 140 : 110, height: Device.isTablet ? 38 : 28, borderWidth: 1, marginTop: 7, marginRight: 20 }}
-                                onPress={() => this.privilageMapping()} >
-                                <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#ED1C24', marginTop: 7, textAlign: 'center', alignSelf: 'center', borderRadius: 5, borderColor: "#ED1C24", }}> {('Privilege Mapping')} </Text>
-                            </TouchableOpacity>
-                        </View>
+                        <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 7 }]}>
+                            Privileges
+                        </Text>
+                        <TouchableOpacity
+                            style={{ borderRadius: 5, borderColor: "#ED1C24", backgroundColor: '#ffffff', width: Device.isTablet ? 140 : 110, height: Device.isTablet ? 38 : 28, borderWidth: 1, marginTop: 7, marginRight: 20 }}
+                            onPress={() => this.privilageMapping()} >
+                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#ED1C24', marginTop: 7, textAlign: 'center', alignSelf: 'center', borderRadius: 5, borderColor: "#ED1C24", }}> {('Privilege Mapping')} </Text>
+                        </TouchableOpacity>
+                    </View>
 
                     <ScrollView>
-                            <FlatList
-                                data={this.state.roles}
-                                style={{ marginTop: 20, }}
-                                onEndReached={this.onEndReached.bind(this)}
+                        <FlatList
+                            data={this.state.roles}
+                            style={{ marginTop: 20, }}
+                            onEndReached={this.onEndReached.bind(this)}
 
-                                ref={(ref) => { this.listRef = ref; }}
-                                keyExtractor={item => item}
-                                renderItem={({ item, index }) => (
-                                    <View style={{
-                                        height: Device.isTablet ? 80 : 130,
-                                        backgroundColor: '#FFFFFF',
-                                        borderBottomWidth: 5,
-                                        borderBottomColor: '#FFFFFF',
-                                        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-                                    }}>
-                                        <View style={{ flexDirection: 'column', width: '100%', height: 80, borderTopWidth: 10, borderColor: '#F6F6F6' }}>
+                            ref={(ref) => { this.listRef = ref; }}
+                            keyExtractor={item => item}
+                            renderItem={({ item, index }) => (
+                                <View style={{
+                                    height: Device.isTablet ? 80 : 130,
+                                    backgroundColor: '#FFFFFF',
+                                    borderBottomWidth: 5,
+                                    borderBottomColor: '#FFFFFF',
+                                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+                                }}>
+                                    <View style={{ flexDirection: 'column', width: '100%', height: 80, borderTopWidth: 10, borderColor: '#F6F6F6' }}>
 
-                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
-                                                PRIVILEGE
-                                            </Text>
-                                            <Text style={{ fontSize: Device.isTablet ? 19 : 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
-                                              {item.title}
-                                            </Text>
+                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: 16, marginTop: 20, fontFamily: 'regular', color: '#808080' }}>
+                                            PRIVILEGE
+                                        </Text>
+                                        <Text style={{ fontSize: Device.isTablet ? 19 : 14, marginLeft: 16, marginTop: 0, fontFamily: 'medium', color: '#353C40' }}>
+                                            {item.name}
+                                        </Text>
 
-                                            <Text style={Device.isTablet ? poolflats.operatorHeader_tablet : poolflats.operatorHeader_mobile}>
-                                                DESCRIPTION
-                                            </Text>
-                                            <Text style={Device.isTablet ? poolflats.operatorValue_tablet : poolflats.operatorValue_mobile}>
+                                        <Text style={Device.isTablet ? poolflats.operatorHeader_tablet : poolflats.operatorHeader_mobile}>
+                                            DESCRIPTION
+                                        </Text>
+                                        <Text style={Device.isTablet ? poolflats.operatorValue_tablet : poolflats.operatorValue_mobile}>
                                             {item.description}
-                                            </Text>
+                                        </Text>
 
-                                            {/* <Text style={Device.isTablet ? poolflats.valueHeader_tablet : poolflats.valueHeader_mobile}>
+                                        {/* <Text style={Device.isTablet ? poolflats.valueHeader_tablet : poolflats.valueHeader_mobile}>
                                                 VALUES
                                             </Text>
                                             <Text style={Device.isTablet ? poolflats.valueBody_tablet : poolflats.valueBody_mobile}>
                                                dsfsfsf
                                             </Text> */}
-                                        </View>
+                                    </View>
 
 
 
-                                        {/* <TouchableOpacity style={Device.isTablet ? poolflats.editButton_tablet : poolflats.editButton_mobile} onPress={() => this.handleeditaction(item, index)}>
+                                    {/* <TouchableOpacity style={Device.isTablet ? poolflats.editButton_tablet : poolflats.editButton_mobile} onPress={() => this.handleeditaction(item, index)}>
                                             <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
                                         </TouchableOpacity>
                                         <View style={{
@@ -293,27 +341,27 @@ export default class CreateRole extends Component {
 
                                         </View> */}
 
-                                    </View>
+                                </View>
 
 
-                                )}
+                            )}
 
 
-                            />
-                            <View style={{ flexDirection: 'column', width: deviceWidth, backgroundColor: "#F6F6F6", marginTop: 20, }}>
-                                <Text style={{
-                                    fontSize: Device.isTablet ? 19 : 14, marginTop: 50, height: 100, fontFamily: 'regular', color: '#808080', textAlign: 'center', //Centered horizontally
-                                    alignItems: 'center', //Centered vertically
-                                    flex: 1
-                                }}>
-                                    add more privileges buy clicking on Privilege Mapping button
+                        />
+                        <View style={{ flexDirection: 'column', width: deviceWidth, backgroundColor: "#F6F6F6", marginTop: 20, }}>
+                            <Text style={{
+                                fontSize: Device.isTablet ? 19 : 14, marginTop: 50, height: 100, fontFamily: 'regular', color: '#808080', textAlign: 'center', //Centered horizontally
+                                alignItems: 'center', //Centered vertically
+                                flex: 1
+                            }}>
+                                add more privileges buy clicking on Privilege Mapping button
 
-                                </Text>
+                            </Text>
 
-                            </View>
+                        </View>
 
-                            
-                        </ScrollView>
+
+                    </ScrollView>
 
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.saveRole()}>
@@ -494,29 +542,29 @@ const styles = StyleSheet.create({
     },
     saveButton_mobile: {
         margin: 8,
-        height: 50, 
-        backgroundColor: "#ED1C24", 
+        height: 50,
+        backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
-    saveButtonText_mobile:{
-        textAlign: 'center', 
-        marginTop: 15, 
-        color: "#ffffff", 
+    saveButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#ffffff",
         fontSize: 15,
         fontFamily: "regular"
     },
     cancelButton_mobile: {
         margin: 8,
-        height: 50, 
-        backgroundColor: "#ffffff", 
-        borderRadius: 5, 
-        borderWidth: 1, 
+        height: 50,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
         borderColor: "#353C4050",
     },
     cancelButtonText_mobile: {
-        textAlign: 'center', 
-        marginTop: 15, 
-        color: "#353C4050", 
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#353C4050",
         fontSize: 15,
         fontFamily: "regular"
     },
@@ -587,29 +635,29 @@ const styles = StyleSheet.create({
     },
     saveButton_tablet: {
         margin: 8,
-        height: 60, 
-        backgroundColor: "#ED1C24", 
+        height: 60,
+        backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     saveButtonText_tablet: {
-        textAlign: 'center', 
-        marginTop: 15, 
-        color: "#ffffff", 
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#ffffff",
         fontSize: 20,
         fontFamily: "regular"
     },
     cancelButton_tablet: {
         margin: 8,
-        height: 60, 
-        backgroundColor: "#ffffff", 
-        borderRadius: 5, 
-        borderWidth: 1, 
+        height: 60,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
         borderColor: "#353C4050",
     },
     cancelButtonText_tablet: {
-        textAlign: 'center', 
+        textAlign: 'center',
         marginTop: 15,
-        color: "#353C4050", 
+        color: "#353C4050",
         fontSize: 20,
         fontFamily: "regular"
     },
