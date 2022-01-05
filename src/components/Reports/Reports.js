@@ -4,6 +4,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import ListOfEstimationSlipsService from '../services/reports/ListOfEstimationSlipsService';
 import UrmService from '../services/UrmService';
 import { FilterGoodsReturn, GoodsReturn } from './GoodsReturn';
 import { FilterListOfBarcodes, ListOfBarcodes } from './ListOfBarcodes';
@@ -21,11 +22,10 @@ class Reports extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            // Header Array
             privilages: [],
-            flagone: true,
-            flagtwo: false,
-            flagthree: false,
-            flagfour: false,
+
+            // Navigation Flags
             selectedcolor: '',
             subPrivilages: "",
             flagDashboard: true,
@@ -43,6 +43,14 @@ class Reports extends Component {
             flagFilterNewSale: false,
             flagFilterSalesSumary: false,
             modalVisible: true,
+
+            // Component Arrays
+            estimationSlip: [1, 2],
+            newSale: [1, 2],
+            goodsReturn: [1, 2],
+            salesSumary: [1, 2],
+            listBarcodes: [1, 2],
+            listPromotions: [1, 2],
         };
     }
 
@@ -132,6 +140,8 @@ class Reports extends Component {
             console.log('there is error getting storeId');
         });
 
+        this.getEstimationSlip();
+
     }
 
     topbarAction1 = (item, index) => {
@@ -141,7 +151,7 @@ class Reports extends Component {
         } else {
             this.setState({ flagDashboard: false });
         }
-        if (item.name === "List of Estimation Slip") {
+        if (item.name === "List Of Estimation Slip") {
             this.setState({ flagEstimationSlip: true });
         } else {
             this.setState({ flagEstimationSlip: false });
@@ -188,41 +198,43 @@ class Reports extends Component {
 
     filterAction() {
         if (this.state.flagDashboard === true) {
-            this.setState({ flagFilterDashboard: true });
+            this.setState({ flagFilterDashboard: true, modalVisible: true });
         } else {
             this.setState({ flagFilterDashboard: false });
         }
         if (this.state.flagEstimationSlip === true) {
-            this.setState({ flagFilterEstimationSlip: true });
+            this.setState({ flagFilterEstimationSlip: true, modalVisible: true });
         } else {
             this.setState({ flagFilterEstimationSlip: false });
         }
         if (this.state.flagNewSale === true) {
-            this.setState({ flagFilterNewSale: true });
+            this.setState({ flagFilterNewSale: true, modalVisible: true });
         } else {
             this.setState({ flagFilterNewSale: false });
         }
         if (this.state.flagGoodsReturn === true) {
-            this.setState({ flagFilterGoodsReturn: true });
+            this.setState({ flagFilterGoodsReturn: true, modalVisible: true });
         } else {
             this.setState({ flagFilterGoodsReturn: false });
         }
         if (this.state.flagSalesSummary === true) {
-            this.setState({ flagFilterSalesSumary: true });
+            this.setState({ flagFilterSalesSumary: true, modalVisible: true });
         } else {
             this.setState({ flagFilterSalesSumary: false });
         }
         if (this.state.flagListBarcodes === true) {
-            this.setState({ flagFilterListBarcodes: true });
+            this.setState({ flagFilterListBarcodes: true, modalVisible: true });
         } else {
             this.setState({ flagFilterListBarcodes: false });
         }
         if (this.state.flagListPromotions === true) {
-            this.setState({ flagFilterListPromotions: true });
+            this.setState({ flagFilterListPromotions: true, modalVisible: true });
         } else {
             this.setState({ flagFilterListPromotions: false });
         }
+        this.setState({ modalVisible: true });
     }
+
 
 
 
@@ -238,6 +250,22 @@ class Reports extends Component {
     handleMenuButtonClick() {
         this.props.navigation.openDrawer();
         // this.props.navigation.navigate('Home')
+    }
+
+    modelClose() {
+        this.setState({ modalVisible: false });
+    }
+
+    modelCancel = () => {
+        this.modelClose();
+    };
+
+
+    //          List Of Estimation Slip Service Api
+    async getEstimationSlip() {
+        ListOfEstimationSlipsService.getEstimationSlips(obj).then((res) => {
+            console.log("data", res.data);
+        });
     }
 
 
@@ -293,55 +321,85 @@ class Reports extends Component {
                         )}
 
                         {this.state.flagEstimationSlip && (
-                            <ListOfEstimationSlip />
+                            <ListOfEstimationSlip
+                                estimationSlip={this.state.estimationSlip}
+                            />
                         )}
 
                         {this.state.flagFilterEstimationSlip && (
-                            <FilterEstimationSlip />
-                        )}
-
-                        {this.state.flagGoodsReturn && (
-                            <GoodsReturn />
-                        )}
-
-                        {this.state.flagFilterGoodsReturn && (
-                            <FilterGoodsReturn />
+                            <FilterEstimationSlip
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
                         )}
 
                         {this.state.flagNewSale && (
-                            <NewSaleReport />
+                            <NewSaleReport
+                                newSale={this.state.newSale}
+                            />
                         )}
 
                         {this.state.flagFilterNewSale && (
-                            <FilterNewSalesReport />
+                            <FilterNewSalesReport
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
+                        )}
+
+                        {this.state.flagGoodsReturn && (
+                            <GoodsReturn
+                                goodsReturn={this.state.goodsReturn}
+                            />
+                        )}
+
+                        {this.state.flagFilterGoodsReturn && (
+                            <FilterGoodsReturn
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
                         )}
 
                         {this.state.flagSalesSummary && (
-                            <SalesSumary />
+                            <SalesSumary
+                                salesSumary={this.state.salesSumary}
+                            />
                         )}
 
                         {this.state.flagFilterSalesSumary && (
-                            <FilterSalesSummary />
+                            <FilterSalesSummary
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
                         )}
 
                         {this.state.flagListBarcodes && (
-                            <ListOfBarcodes />
+                            <ListOfBarcodes
+                                listBarcodes={this.state.listBarcodes}
+                            />
                         )}
 
                         {this.state.flagFilterListBarcodes && (
-                            <FilterListOfBarcodes />
+                            <FilterListOfBarcodes
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
                         )}
 
                         {this.state.flagListPromotions && (
-                            <ListOfPromotions />
+                            <ListOfPromotions
+                                listPromotions={this.state.listPromotions}
+                            />
                         )}
 
                         {this.state.flagFilterListPromotions && (
-                            <FilterListofPromotions />
+                            <FilterListofPromotions
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={this.modelCancel}
+                            />
                         )}
 
                     </View>
-                </ScrollView >
+                </ScrollView>
             </View>
         );
     }
