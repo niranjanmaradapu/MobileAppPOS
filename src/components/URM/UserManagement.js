@@ -37,6 +37,7 @@ export default class UserManagement extends Component {
             privilages: [],
             clientId:0,
             doneButtonClicked:false,
+            navtext: ''
         };
     }
 
@@ -258,16 +259,34 @@ export default class UserManagement extends Component {
     }
 
     navigateToCreateRoles() {
-        this.props.navigation.navigate('CreateRole');
+        this.props.navigation.navigate('CreateRole', {
+            isEdit: false,
+            onGoBack: () => this.refresh(),
+        });
     }
+
+    refresh(){
+        this.getRolesList()
+    }
+
+
 
     handleBackButtonClick() {
         this.props.navigation.openDrawer();
     }
 
     navigateToAddUsers() {
-        this.props.navigation.navigate('AddUser');
+        this.props.navigation.navigate('AddUser', {
+            isEdit: false,
+            onGoBack: () => this.refreshUsers(),
+        });
     }
+
+    refreshUsers(){
+        this.getAllUsers()
+    }
+
+
 
     topbarAction1() {
         this.getAllUsers()
@@ -391,11 +410,15 @@ export default class UserManagement extends Component {
     }
 
     handleeditRole(item, index) {
-        this.props.navigation.navigate('EditRole',
+        this.props.navigation.navigate('CreateRole',
             {
                 item: item, isEdit: true,
                 onGoBack: () => this.updateRoles(),
             });
+    }
+
+    updateRoles(){
+        this.getRolesList()
     }
 
     handleRole(item, index) {

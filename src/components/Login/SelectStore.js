@@ -158,7 +158,9 @@ export default class SelectStore extends React.Component {
                     <FlatList
                         style={{ width: deviceWidth, marginTop: 50, marginBottom: 100, }}
                         //scrollEnabled={false}
-                        ListHeaderComponent={this.renderHeader}
+                        ListHeaderComponent={() => {
+                            return (<Text>Header</Text>)
+                          }}
                         data={this.state.storeData}
                         keyExtractor={item => item}
                         renderItem={({ item, index }) => (
