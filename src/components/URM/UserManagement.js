@@ -402,7 +402,7 @@ export default class UserManagement extends Component {
     }
 
     handleedituser(item, index) {
-        this.props.navigation.navigate('EditUser',
+        this.props.navigation.navigate('AddUser',
             {
                 item: item, isEdit: true,
                 onGoBack: () => this.updateUsers(),

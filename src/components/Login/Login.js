@@ -237,7 +237,7 @@ export default class Login extends Component {
                     }
                     else {
                         if (res.data.result.challengeName === "NEW_PASSWORD_REQUIRED") {
-
+                            this.setState({ loading: false });
                             const roleData = res.data.result
                                 ? JSON.parse(res.data.result.challengeParameters.userAttributes)
                                 : "";
@@ -251,7 +251,7 @@ export default class Login extends Component {
                             console.log(this.state.roleName);
                         }
                     }
-
+                  
                 }
                 else {
                     alert('Invalid Credentials');

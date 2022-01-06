@@ -24,6 +24,7 @@ export default class ManagePassword extends Component {
     }
 
     async componentDidMount() {
+      //  this.setState({ loading: false })
         this.setState({ userName: this.props.route.params.userName })
         this.setState({ roleName: this.props.route.params.roleName })
         this.setState({ session: this.props.route.params.session })
