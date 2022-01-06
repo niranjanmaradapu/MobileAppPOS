@@ -6,6 +6,7 @@ var deviceWidth = Dimensions.get('window').width;
 import Device from 'react-native-device-detection';
 import LoginService from '../services/LoginService';
 import axios from 'axios';
+import Loader from '../loader';
 
 class ForgotPassword extends Component {
     constructor(props) {
@@ -50,8 +51,10 @@ class ForgotPassword extends Component {
             alert('You must enter a Usename');
         } 
         else {
+            this.setState({ loading: true });
             axios.get(LoginService.sendVerificationCode() + this.state.userName).then((res) => {
                 if (res) {
+                    this.setState({ loading: false });
                     alert("Confirmation Code Sent to mail");
                     this.props.navigation.navigate('UpdateNewpassword', { userName: this.state.userName });  
                 }
@@ -65,11 +68,11 @@ class ForgotPassword extends Component {
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
-                {/* <View style={styles.container}>
+              
                     {this.state.loading &&
                     <Loader
                     loading={this.state.loading} />
-                }  */}
+                }  
                 <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
 
                     <View style={styles.container}>
@@ -276,7 +279,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 100,
+        marginTop: 20,
         width: deviceWidth - 40,
         height: 50,
         borderRadius: 10,
@@ -342,7 +345,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 100,
+        marginTop: 20,
         width: deviceWidth - 40,
         height: 60,
         borderRadius: 10,

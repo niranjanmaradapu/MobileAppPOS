@@ -6,6 +6,7 @@ var deviceWidth = Dimensions.get('window').width;
 import Device from 'react-native-device-detection';
 import LoginService from '../services/LoginService';
 import axios from 'axios';
+import Loader from '../loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class UpdateNewpassword extends Component {
@@ -82,11 +83,11 @@ class UpdateNewpassword extends Component {
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
-                {/* <View style={styles.container}>
+               
                     {this.state.loading &&
                     <Loader
                     loading={this.state.loading} />
-                }  */}
+                } 
                 <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
 
                     <View style={styles.container}>
@@ -295,7 +296,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 100,
+        marginTop: 20,
         width: deviceWidth - 40,
         height: 50,
         borderRadius: 10,
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 100,
+        marginTop: 20,
         width: deviceWidth - 40,
         height: 60,
         borderRadius: 10,
