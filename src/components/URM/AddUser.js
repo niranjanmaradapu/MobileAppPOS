@@ -35,25 +35,56 @@ export default class AddUser extends Component {
             domainId: 0,
             domainsArray: [],
             storesArray: [],
+            storesTempArray: [],
+            selectededitStoresArray: [],
+            selectedTempStoresArray: [],
+            selectedStoresArray: [],
+            selectedStoresFinalArray: [],
             rolesArray: [],
             roleId: 0,
             roles: [],
             clientId: 0,
             storeId: 0,
             isEdit: false,
-            adminRole:'',
-            storeNames:[],
+            adminRole: '',
+            storeNames: [],
+            navtext: '',
+            userId: 0,
         }
     }
 
     async componentDidMount() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
+      
+        this.setState({ isEdit: this.props.route.params.isEdit });
+        if (this.state.isEdit === true) {
+            this.setState({
+                userId: this.props.route.params.item.userId,
+                name: this.props.route.params.item.userName,
+                gender: this.props.route.params.item.gender,
+                dob: this.props.route.params.item.dob,
+                email: this.props.route.params.item.email,
+                address: this.props.route.params.item.address,
+                issuperAdmin: this.props.route.params.item.superAdmin,
+                domainId: this.props.route.params.item.domian,
+                role: this.props.route.params.item.roleName,
+                selectededitStoresArray: this.props.route.params.item.stores,
+            });
+
+            // if (this.props.route.params.item.phoneNumber !== null) {
+            //     this.setState({ mobile: this.props.route.params.item.phoneNumber })
+            // }
+            this.setState({ navtext: 'Edit User' })
+        }
+        else {
+            this.setState({ navtext: 'Add User' })
+        }
         this.setState({ clientId: clientId });
         this.getDomainsList()
     }
 
     async getDomainsList() {
-        this.setState({ domains: [],domainsArray: []  });
+        this.setState({ domains: [], domainsArray: [] });
         var domains = [];
         axios.get(LoginService.getDomainsList() + this.state.clientId).then((res) => {
             if (res.data["result"]) {
@@ -61,7 +92,6 @@ export default class AddUser extends Component {
                 if (len > 0) {
                     for (let i = 0; i < len; i++) {
                         let number = res.data.result[i]
-
                         this.state.domainsArray.push({ name: number.domaiName, id: number.clientDomainaId })
                         domains.push({
                             value: this.state.domainsArray[i].name,
@@ -70,13 +100,21 @@ export default class AddUser extends Component {
                         this.setState({
                             domains: domains,
                         })
-
                         this.setState({ domainsArray: this.state.domainsArray })
-                        //  if (this.state.isEdit === false) {
+                        this.getRoles()
+                    }
+                    if (this.state.isEdit === true) {
+                        for (let i = 0; i < this.state.domainsArray.length; i++) {
+                            if (this.state.domainsArray[i].id === this.state.domainId) {
+                                this.setState({ domain: this.state.domainsArray[i].name })
+                            }
+                        }
+                    }
+
+                    if (this.state.isEdit === false) {
                         this.setState({ domain: this.state.domainsArray[0].name })
                         this.setState({ domainId: this.state.domainsArray[0].id })
                         this.getStores()
-                        this.getRoles()
                     }
                 }
             }
@@ -89,39 +127,81 @@ export default class AddUser extends Component {
         const params = {
             "clientDomianId": this.state.domainId
         };
-       // console.log('sfsdfsdff' + this.state.domainId);
+        // console.log('sfsdfsdff' + this.state.domainId);
 
-        this.setState({ stores: [],storesArray: [] });
+        this.setState({ stores: [], storesArray: [] });
         var stores = [];
+        this.state.storesArray = [];
         axios.get(LoginService.getUserStoresForSuperAdmin(), { params }).then((res) => {
             let len = res.data["result"].length;
+            var namesArray = [];
             if (len > 0) {
+
+                this.setState({ stores: [], storesArray: [], storesTempArray: [] });
                 for (let i = 0; i < len; i++) {
                     let number = res.data.result[i]
-                    this.state.storesArray.push({ name: number.name, id: number.id })
-                    stores.push({
-                        value: this.state.storesArray[i].name,
-                        label: this.state.storesArray[i].name
-                    });
-                    this.setState({
-                        stores: stores,
-                    })
+
+
+                    if (this.state.selectededitStoresArray.length > 0) {
+                        for (let i = 0; i < this.state.selectededitStoresArray.length; i++) {
+                            namesArray.push(this.state.selectededitStoresArray[i].name)
+                        }
+                        if (namesArray.includes(number.name)) {
+                           this.state.selectedTempStoresArray.push({ name: number.name, id: number.id });
+                            this.state.storesTempArray.push({ name: number.name, id: number.id, selectedindex: 1 })
+                        }
+                        else {
+                            this.state.storesTempArray.push({ name: number.name, id: number.id, selectedindex: 0 })
+                        }
+                    } else {
+                        this.state.storesTempArray.push({ name: number.name, id: number.id, selectedindex: 0 })
+                    }
+
+
+
+
                 }
-                this.setState({ storesArray: this.state.storesArray })
             }
+            this.state.selectedTempStoresArray.forEach(obj => {
+                if (!this.state.selectedStoresArray.some(o => o.name === obj.name)) {
+                    this.state.selectedStoresArray.push({ ...obj });
+
+                }
+                this.setState({ selectedStoresArray: this.state.selectedStoresArray });
+            });
+
+
+            this.state.storesTempArray.forEach(obj => {
+                if (!this.state.storesArray.some(o => o.name === obj.name)) {
+                    this.state.storesArray.push({ ...obj });
+
+                }
+                this.setState({ storesArray: this.state.storesArray });
+            });
+
+            // for (let i = 0; i < this.state.storesArray.length; i++) {
+            //         if (namesArray.includes(this.state.storesArray[i].name)) {
+            //             this.state.storesArray.push({ name: number.name, id: number.id,selectedindex: 1 })
+            //         }
+            //         else{
+            //             this.state.storesArray.push({ name: number.name, id: number.id,selectedindex: 0 })
+            //         }
+            //     }
+
+
         }).catch(() => {
             this.setState({ loading: false });
         });
-
     }
 
     getRoles() {
-        this.setState({ roles: [],rolesArray: [] });
+        this.setState({ roles: [], rolesArray: [] });
         var roles = [];
         axios.get(UrmService.getRolesByDomainId() + this.state.domainId).then((res) => {
             let len = res.data["result"].length;
-          //  console.log(res.data["result"])
+            //  console.log(res.data["result"])
             if (len > 0) {
+                this.setState({ roles: [], rolesArray: [] });
                 for (let i = 0; i < len; i++) {
                     let number = res.data.result[i]
                     this.state.rolesArray.push({ name: number.roleName, id: number.roleId })
@@ -134,7 +214,7 @@ export default class AddUser extends Component {
                     })
                 }
                 this.setState({ rolesArray: this.state.rolesArray })
-              //  console.log(this.state.rolesArray)
+                //  console.log(this.state.rolesArray)
             }
         }).catch(() => {
             this.setState({ loading: false });
@@ -148,16 +228,16 @@ export default class AddUser extends Component {
 
     datepickerDoneClicked() {
         if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
-            this.setState({ dob:"0" + this.state.date.getDate()  + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
+            this.setState({ dob: "0" + this.state.date.getDate() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
         }
         else if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ dob:"0" + this.state.date.getDate()  + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
+            this.setState({ dob: "0" + this.state.date.getDate() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
         }
         else if (parseInt(this.state.date.getMonth()) < 10) {
-            this.setState({ dob:this.state.date.getDate()  + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
+            this.setState({ dob: this.state.date.getDate() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
         }
         else {
-            this.setState({ dob:this.state.date.getDate()  + "-" + (this.state.date.getMonth() + 1) + "-" +  this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
+            this.setState({ dob: this.state.date.getDate() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
         }
     }
 
@@ -171,15 +251,14 @@ export default class AddUser extends Component {
     }
 
     handleDomain = (value) => {
-        this.setState({ domain: value })
-        this.setState({ domainId: 0 })
         for (let i = 0; i < this.state.domainsArray.length; i++) {
             if (this.state.domainsArray[i].name === value) {
-                this.setState({ domainId: this.state.domainsArray[i].id,stores: [], storesArray: [] })
-                this.getStores()
-                this.getRoles()
+                this.setState({ domainId: this.state.domainsArray[i].id, stores: [], storesArray: [] })
             }
         }
+        this.setState({ domain: value })
+        this.getStores()
+        this.getRoles()
 
     }
 
@@ -187,8 +266,8 @@ export default class AddUser extends Component {
         this.setState({ store: value })
         for (let i = 0; i < this.state.storesArray.length; i++) {
             if (this.state.storesArray[i].name === value) {
-                this.state.storeNames.push({name:this.state.storesArray[i].name})
-                this.setState({ storeId: this.state.storesArray[i].id,storeNames:this.state.storeNames })
+                this.state.storeNames.push({ name: this.state.storesArray[i].name })
+                this.setState({ storeId: this.state.storesArray[i].id, storeNames: this.state.storeNames })
             }
         }
     }
@@ -201,6 +280,23 @@ export default class AddUser extends Component {
             }
         }
     }
+
+    selectedPrivilage = (item, index) => {
+        if (item.selectedindex === 0) {
+            item.selectedindex = 1
+            this.state.selectedStoresArray.push({ name: item.name, id: item.id,selectedindex:1 });
+        }
+        else {
+            console.log('vinodffsfdsfsdfd')
+            item.selectedindex = 0
+          //  const list = this.state.selectedStoresArray;
+            this.state.selectedStoresArray.splice(index, 1);
+            this.setState({ selectedStoresArray: this.state.selectedStoresArray });
+        }
+       
+     
+        this.setState({ storesArray: this.state.storesArray })
+    };
 
     handleName = (value) => {
         this.setState({ name: value });
@@ -233,67 +329,122 @@ export default class AddUser extends Component {
 
     }
 
-    getPrivilegesByDomainId(){
-    axios.get(UrmService.getPrivillagesForDomain() + 0).then((res) => {
-        if (res.data && res.data["isSuccess"] === "true") {
-            let len = res.data["result"].length;
-          this.setState({adminRole: res.data.result[0].name });
-             console.log(this.state.adminRole)
-        }
-    });
-}
+    getPrivilegesByDomainId() {
+        axios.get(UrmService.getPrivillagesForDomain() + 0).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+                let len = res.data["result"].length;
+                this.setState({ adminRole: res.data.result[0].name });
+                console.log(this.state.adminRole)
+            }
+        });
+    }
 
     saveUser() {
+        for (let i = 0; i < this.state.selectedStoresArray.length; i++) {
+            if(this.state.selectedStoresArray[i].selectedindex === 1){
+                this.state.selectedStoresFinalArray.push({name:this.state.selectedStoresArray[i].name,id:this.state.selectedStoresArray[i].id})
+            }
+        }
+        console.log(this.state.selectedStoresFinalArray)
         if (this.state.name === "") {
             alert("Please Enter Name");
-        } else if (this.state.mobile.length !== 10) {
-            alert("Please Enter correct mobile number");
-        } else if (this.state.email === "") {
+        }
+        else if (this.state.mobile.length !== 10) {
+            alert('You must enter a valid mobile number');
+        }
+        else if (this.state.email === "") {
             alert("Please Enter email");
         }
         else {
-            const clientDomain = this.state.domainId !== 0 ? this.state.domainId : this.state.clientId;
-            const saveObj = {
-                "email": this.state.email,
-                "phoneNumber": "+91".concat(this.state.mobile),
-                "birthDate": this.state.dob,
-                "gender": this.state.gender,
-                "name": this.state.name,
-                "username": this.state.name,
-                "assginedStores": "kphb",
-                "parentId": "1",
-                "domianId": this.state.domainId,
-                "address": this.state.address,
-                "role": {
+            if (this.state.isEdit === false) {
+                const clientDomain = this.state.domainId !== 0 ? this.state.domainId : this.state.clientId;
+                const saveObj = {
+                    "email": this.state.email,
+                    "phoneNumber": "+91".concat(this.state.mobile),
+                    "birthDate": this.state.dob,
+                    "gender": this.state.gender,
+                    "name": this.state.name,
+                    "username": this.state.name,
+                    "assginedStores": "kphb",
+                    "parentId": "1",
+                    "domianId": this.state.domainId,
+                    "address": this.state.address,
+                    "role": {
+                        "roleName": this.state.isSuperAdmin ? this.state.adminRole : this.state.role,
+                    },
                     "roleName": this.state.isSuperAdmin ? this.state.adminRole : this.state.role,
-                },
-                "roleName": this.state.isSuperAdmin ? this.state.adminRole : this.state.role,
-                "stores": this.state.storeNames,
-                "clientId": this.state.clientId,
-                "isConfigUser": "false",
-                "clientDomain": [clientDomain],
-                "isSuperAdmin": JSON.stringify(this.state.isSuperAdmin),
-                "createdBy": global.username,
+                    "stores": this.state.selectedStoresFinalArray,
+                    "clientId": this.state.clientId,
+                    "isConfigUser": "false",
+                    "clientDomain": [clientDomain],
+                    "isSuperAdmin": JSON.stringify(this.state.isSuperAdmin),
+                    "createdBy": global.username,
+
+                }
+                console.log('params are' + JSON.stringify(saveObj))
+                this.setState({ loading: true })
+                axios.post(UrmService.saveUser(), saveObj).then((res) => {
+                    if (res.data && res.data["isSuccess"] === "true") {
+                        global.privilages = []
+                        this.props.route.params.onGoBack();
+                        this.props.navigation.goBack();
+                    }
+                    else {
+                        this.setState({ loading: false })
+                        alert(res.data.message);
+                    }
+                }
+                ).catch(() => {
+                    this.setState({ loading: false });
+                });
 
             }
-            console.log('params are' + JSON.stringify(saveObj))
-            this.setState({ loading: true })
-            axios.post(UrmService.saveUser(), saveObj).then((res) => {
-                if (res.data && res.data["isSuccess"] === "true") {
-                    global.privilages = []
-                    this.props.route.params.onGoBack();
-                    this.props.navigation.goBack();
-                }
-                else {
-                    this.setState({ loading: false })
-                    alert(res.data.message);
-                }
-            }
-            ).catch(() => {
-                this.setState({ loading: false });
-            });
+            else {
+                const clientDomain = this.state.domainId !== 0 ? this.state.domainId : this.state.clientId;
+                const saveObj = {
+                    "email": this.state.email,
+                    "userId": this.state.userId,
+                    "phoneNumber": "+91".concat(this.state.mobile),
+                    "birthDate": this.state.dob,
+                    "gender": this.state.gender,
+                    "name": this.state.name,
+                    "username": this.state.name,
+                    "assginedStores": "kphb",
+                    "parentId": "1",
+                    "domianId": this.state.domainId,
+                    "address": this.state.address,
+                    "role": {
+                        "roleName": this.state.isSuperAdmin ? this.state.adminRole : this.state.role,
+                    },
+                    "roleName": this.state.isSuperAdmin ? this.state.adminRole : this.state.role,
+                    "stores": this.state.selectedStoresArray,
+                    "clientId": this.state.clientId,
+                    "isConfigUser": "false",
+                    "clientDomain": [clientDomain],
+                    "isSuperAdmin": JSON.stringify(this.state.isSuperAdmin),
+                    "createdBy": global.username,
 
+                }
+                console.log('params are' + JSON.stringify(saveObj))
+                this.setState({ loading: true })
+                axios.put(UrmService.editUser(), saveObj).then((res) => {
+                    if (res.data && res.data["isSuccess"] === "true") {
+                        global.privilages = []
+                        this.props.route.params.onGoBack();
+                        this.props.navigation.goBack();
+                    }
+                    else {
+                        this.setState({ loading: false })
+                        alert(res.data.message);
+                    }
+                }
+                ).catch(() => {
+                    this.setState({ loading: false });
+                });
+
+            }
         }
+
 
     }
 
@@ -312,7 +463,7 @@ export default class AddUser extends Component {
                         <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                        Add User
+                        {this.state.navtext}
                     </Text>
                 </View>
                 <ScrollView>
@@ -327,7 +478,7 @@ export default class AddUser extends Component {
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
-                        value={this.state.userName}
+                        value={this.state.name}
                         onChangeText={this.handleName}
                     />
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
@@ -366,7 +517,7 @@ export default class AddUser extends Component {
                         <Text style={{
                             marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
                             fontFamily: "regular"
-                        }}  > {this.state.doneButtonClicked == false ? 'DoB' : this.state.dob} </Text>
+                        }}  > {this.state.dob === '' ? 'DoB' : this.state.dob} </Text>
                         <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                     </TouchableOpacity>
 
@@ -440,22 +591,57 @@ export default class AddUser extends Component {
                         </View>
                     )}
                     {this.state.isSuperAdmin === false && (
-                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                            <RNPickerSelect
-                                style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                                placeholder={{
-                                    label: 'Select Store'
-                                }}
-                                Icon={() => {
-                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                }}
-                                items={this.state.stores}
-                                onValueChange={this.handleStore}
-                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                                value={this.state.store}
-                                useNativeAndroidPickerStyle={false}
-                            />
-                        </View>
+                        // <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                        //     <RNPickerSelect
+                        //         style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                        //         placeholder={{
+                        //             label: 'Select Store'
+                        //         }}
+                        //         Icon={() => {
+                        //             return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                        //         }}
+                        //         items={this.state.stores}
+                        //         onValueChange={this.handleStore}
+                        //         style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                        //         value={this.state.store}
+                        //         useNativeAndroidPickerStyle={false}
+                        //     />
+                        // </View>
+                        // <SectionList
+                        // sections={this.state.previlages}
+                        // renderSectionHeader={({ section }) => <Text style={Device.isTablet ? styles.sectionHeaderTablet : styles.sectionHeaderMobile}>{section.title}</Text>}
+                        // renderItem={({ item, index, section }) => (
+
+                        <FlatList
+                            data={this.state.storesArray}
+                            style={{ marginTop: 10, }}
+                            scrollEnabled={true}
+                            renderItem={({ item, index }) => (
+                                <TouchableOpacity onPress={() => this.selectedPrivilage(item, index)}>
+
+                                    <View style={Device.isTablet ? styles.item : styles.item}>
+                                        <Text>
+                                            {item.name}
+                                        </Text>
+
+
+                                        {item.selectedindex === 1 && (
+                                            <Image source={require('../assets/images/selected.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
+                                        )}
+                                        {item.selectedindex === 0 && (
+                                            <Image source={require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
+                                        )}
+                                    </View>
+
+
+                                    {/* </View> */}
+                                </TouchableOpacity>
+
+
+
+                            )}
+                        />
+
                     )}
                     {this.state.isSuperAdmin === false && (
                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
@@ -624,6 +810,15 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         margin: 50,
+    },
+    item: {
+        padding: 15,
+        fontSize: 18,
+        height: 44,
+        backgroundColor: '#ffffff',
+        fontSize: 18,
+        fontFamily: 'medium',
+        color: '#353C40',
     },
 
     // Styles For Mobile
