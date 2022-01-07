@@ -1,16 +1,17 @@
+
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DrawerActions } from '@react-navigation/native';
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
-import ListOfEstimationSlipsService from '../services/reports/ListOfEstimationSlipsService';
 import UrmService from '../services/UrmService';
 import { FilterGoodsReturn, GoodsReturn } from './GoodsReturn';
 import { FilterListOfBarcodes, ListOfBarcodes } from './ListOfBarcodes';
-import { FilterEstimationSlip, ListOfEstimationSlip } from './ListOfEstimationSlip';
+import { ListOfEstimationSlip } from './ListOfEstimationSlip';
 import { FilterListofPromotions, ListOfPromotions } from './ListOfPromotions';
-import { FilterNewSalesReport, NewSaleReport } from './NewSaleReport';
+import NewSaleReport from './NewSaleReport';
 import ReportsDashboard from './ReportsDashboard';
 import { FilterSalesSummary, SalesSumary } from './SalesSumary';
 var deviceWidth = Dimensions.get('window').width;
@@ -51,6 +52,7 @@ class Reports extends Component {
             salesSumary: [1, 2],
             listBarcodes: [1, 2],
             listPromotions: [1, 2],
+            sbList: [],
         };
     }
 
@@ -142,6 +144,7 @@ class Reports extends Component {
 
         this.getEstimationSlip();
 
+        this.getSaleBills();
     }
 
     topbarAction1 = (item, index) => {
@@ -261,14 +264,6 @@ class Reports extends Component {
     };
 
 
-    //          List Of Estimation Slip Service Api
-    async getEstimationSlip() {
-        ListOfEstimationSlipsService.getEstimationSlips(obj).then((res) => {
-            console.log("data", res.data);
-        });
-    }
-
-
 
     render() {
         return (
@@ -323,12 +318,8 @@ class Reports extends Component {
                         {this.state.flagEstimationSlip && (
                             <ListOfEstimationSlip
                                 estimationSlip={this.state.estimationSlip}
-                            />
-                        )}
-
-                        {this.state.flagFilterEstimationSlip && (
-                            <FilterEstimationSlip
                                 modalVisible={this.state.modalVisible}
+                                flagFilterEstimationSlip={this.state.flagFilterEstimationSlip}
                                 modelCancelCallback={this.modelCancel}
                             />
                         )}
@@ -336,13 +327,9 @@ class Reports extends Component {
                         {this.state.flagNewSale && (
                             <NewSaleReport
                                 newSale={this.state.newSale}
-                            />
-                        )}
-
-                        {this.state.flagFilterNewSale && (
-                            <FilterNewSalesReport
                                 modalVisible={this.state.modalVisible}
                                 modelCancelCallback={this.modelCancel}
+                                flagFilterNewSale={this.state.flagFilterNewSale}
                             />
                         )}
 
