@@ -9,36 +9,6 @@ import { Chevron } from 'react-native-shapes';
 var deviceWidth = Dimensions.get("window").width;
 
 export class ListOfBarcodes extends Component {
-    render() {
-        return (
-            <View>
-                <FlatList
-                    data={this.props.listBarcodes}
-                    style={{ marginTop: 20 }}
-                    scrollEnabled={true}
-                    renderItem={({ item, index }) => (
-                        <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
-                            <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
-                                <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >SNO: {index + 1} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>BARCODE: {"\n"} { }</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE STORE: {"\n"} { } </Text>
-                                </View>
-                                <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >EMP ID: { } </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"\n"} { }</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE MRP: {"\n"} { }</Text>
-                                </View>
-                            </View>
-                        </View>
-                    )}
-                />
-            </View>
-        );
-    }
-}
-
-export class FilterListOfBarcodes extends Component {
 
     constructor(props) {
         super(props);
@@ -120,152 +90,177 @@ export class FilterListOfBarcodes extends Component {
         this.props.modelCancelCallback();
     }
 
-
-
     render() {
         return (
             <View>
-                <Modal isVisible={this.props.modalVisible}>
-                    <View style={Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile} >
-                        <KeyboardAwareScrollView enableOnAndroid={true} >
-                            <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
-                            <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
-                            </TouchableOpacity>
-                            <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                            </Text>
-                            <TouchableOpacity
-                                style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
-                                testID="openModal"
-                                onPress={() => this.datepickerClicked()}
-                            >
-                                <Text
-                                    style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
-                                >{this.state.startDate == "" ? 'START DATE' : this.state.startDate}</Text>
-                                <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
-                            </TouchableOpacity>
-                            {this.state.datepickerOpen && (
-                                <View style={{ height: 280, width: deviceWidth, backgroundColor: '#ffffff' }}>
-                                    <TouchableOpacity
-                                        style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
-                                    >
-                                        <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
-
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerDoneClicked()}
-                                    >
-                                        <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
-
-                                    </TouchableOpacity>
-                                    <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
-                                        date={this.state.date}
-                                        mode={'date'}
-                                        onDateChange={(date) => this.setState({ date })}
-                                    />
+                <FlatList
+                    data={this.props.listBarcodes}
+                    style={{ marginTop: 20 }}
+                    scrollEnabled={true}
+                    renderItem={({ item, index }) => (
+                        <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
+                            <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
+                                <View style={flats.text}>
+                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >SNO: {index + 1} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>BARCODE: {"\n"} { }</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE STORE: {"\n"} { } </Text>
                                 </View>
-                            )}
-                            <TouchableOpacity
-                                style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
-                                testID="openModal"
-                                onPress={() => this.enddatepickerClicked()}
-                            >
-                                <Text
-                                    style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
-                                >{this.state.endDate == "" ? 'END DATE' : this.state.endDate}</Text>
-                                <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
-                            </TouchableOpacity>
-                            {this.state.datepickerendOpen && (
-                                <View style={{ height: 280, width: deviceWidth, backgroundColor: '#ffffff' }}>
-                                    <TouchableOpacity
-                                        style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
-                                    >
-                                        <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerendDoneClicked()}
-                                    >
-                                        <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
-
-                                    </TouchableOpacity>
-                                    <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
-                                        date={this.state.enddate}
-                                        mode={'date'}
-                                        onDateChange={(enddate) => this.setState({ enddate })}
-                                    />
+                                <View style={flats.text}>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >EMP ID: { } </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"\n"} { }</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE MRP: {"\n"} { }</Text>
                                 </View>
-                            )}
-                            <TextInput
-                                style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                underlineColorAndroid="transparent"
-                                placeholder="BARCODE"
-                                placeholderTextColor="#6F6F6F"
-                                textAlignVertical="center"
-                                autoCapitalize="none"
-                                value={this.state.barCode}
-                                onChangeText={this.handleBarCode}
-                            />
-                            <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                                <RNPickerSelect
-                                    style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                                    placeholder={{
-                                        label: 'SELECT STORE'
-                                    }}
-                                    Icon={() => {
-                                        return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                    }}
-                                    items={this.state.sotres}
-                                    onValueChange={this.handleSelectStores}
-                                    style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                                    value={this.state.selectedStore}
-                                    useNativeAndroidPickerStyle={false}
-                                />
                             </View>
-                            <TextInput
-                                style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                underlineColorAndroid="transparent"
-                                placeholder="EMP ID"
-                                placeholderTextColor="#6F6F6F"
-                                textAlignVertical="center"
-                                autoCapitalize="none"
-                                value={this.state.empId}
-                                onChangeText={this.handleEmpId}
-                            />
-                            <TextInput
-                                style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                underlineColorAndroid="transparent"
-                                placeholder="PRICE <"
-                                placeholderTextColor="#6F6F6F"
-                                textAlignVertical="center"
-                                autoCapitalize="none"
-                                value={this.state.fromPrice}
-                                onChangeText={this.handleFromPrice}
-                            />
-                            <TextInput
-                                style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                underlineColorAndroid="transparent"
-                                placeholder="PRICE >"
-                                placeholderTextColor="#6F6F6F"
-                                textAlignVertical="center"
-                                autoCapitalize="none"
-                                value={this.state.toPrice}
-                                onChangeText={this.handleToPrice}
-                            />
-                            <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
-                                onPress={() => this.applyListBarcodes()}>
-                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
-                                onPress={() => this.modelCancel()}>
-                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
-                            </TouchableOpacity>
-                        </KeyboardAwareScrollView>
+                        </View>
+                    )}
+                />
+                {this.props.flagFilterListBarcodes && (
+                    <View>
+                        <Modal isVisible={this.props.modalVisible}>
+                            <View style={Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile} >
+                                <KeyboardAwareScrollView enableOnAndroid={true} >
+                                    <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
+                                    <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                    </TouchableOpacity>
+                                    <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
+                                    </Text>
+                                    <TouchableOpacity
+                                        style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
+                                        testID="openModal"
+                                        onPress={() => this.datepickerClicked()}
+                                    >
+                                        <Text
+                                            style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
+                                        >{this.state.startDate == "" ? 'START DATE' : this.state.startDate}</Text>
+                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                    </TouchableOpacity>
+                                    {this.state.datepickerOpen && (
+                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: '#ffffff' }}>
+                                            <TouchableOpacity
+                                                style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
+                                            >
+                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
+
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerDoneClicked()}
+                                            >
+                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
+
+                                            </TouchableOpacity>
+                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                                date={this.state.date}
+                                                mode={'date'}
+                                                onDateChange={(date) => this.setState({ date })}
+                                            />
+                                        </View>
+                                    )}
+                                    <TouchableOpacity
+                                        style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
+                                        testID="openModal"
+                                        onPress={() => this.enddatepickerClicked()}
+                                    >
+                                        <Text
+                                            style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
+                                        >{this.state.endDate == "" ? 'END DATE' : this.state.endDate}</Text>
+                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                    </TouchableOpacity>
+                                    {this.state.datepickerendOpen && (
+                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: '#ffffff' }}>
+                                            <TouchableOpacity
+                                                style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
+                                            >
+                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
+                                            </TouchableOpacity>
+                                            <TouchableOpacity
+                                                style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerendDoneClicked()}
+                                            >
+                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
+
+                                            </TouchableOpacity>
+                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                                date={this.state.enddate}
+                                                mode={'date'}
+                                                onDateChange={(enddate) => this.setState({ enddate })}
+                                            />
+                                        </View>
+                                    )}
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="BARCODE"
+                                        placeholderTextColor="#6F6F6F"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.barCode}
+                                        onChangeText={this.handleBarCode}
+                                    />
+                                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                                        <RNPickerSelect
+                                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            placeholder={{
+                                                label: 'SELECT STORE'
+                                            }}
+                                            Icon={() => {
+                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                            }}
+                                            items={this.state.sotres}
+                                            onValueChange={this.handleSelectStores}
+                                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                            value={this.state.selectedStore}
+                                            useNativeAndroidPickerStyle={false}
+                                        />
+                                    </View>
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="EMP ID"
+                                        placeholderTextColor="#6F6F6F"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.empId}
+                                        onChangeText={this.handleEmpId}
+                                    />
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="PRICE <"
+                                        placeholderTextColor="#6F6F6F"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.fromPrice}
+                                        onChangeText={this.handleFromPrice}
+                                    />
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="PRICE >"
+                                        placeholderTextColor="#6F6F6F"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.toPrice}
+                                        onChangeText={this.handleToPrice}
+                                    />
+                                    <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
+                                        onPress={() => this.applyListBarcodes()}>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
+                                        onPress={() => this.modelCancel()}>
+                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
+                                    </TouchableOpacity>
+                                </KeyboardAwareScrollView>
+                            </View>
+                        </Modal>
                     </View>
-                </Modal>
+                )}
             </View>
         );
     }
 }
+
+
 
 const pickerSelectStyles_mobile = StyleSheet.create({
     placeholder: {

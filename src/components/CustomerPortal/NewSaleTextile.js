@@ -1,24 +1,34 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView, ScrollView, FlatList } from 'react-native';
-var deviceWidth = Dimensions.get('window').width;
-import { DrawerActions } from '@react-navigation/native';
-var deviceWidth = Dimensions.get('window').width;
-import Constants from 'expo-constants';
-const data = [true, false, false, false, false, false, false, false, false];
-import Device from 'react-native-device-detection';
-import axios from 'axios';
-import UrmService from '../services/UrmService';
-import ProfileService from '../services/ProfileService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DrawerActions } from '@react-navigation/native';
+import axios from 'axios';
+import Constants from 'expo-constants';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
+import UrmService from '../services/UrmService';
+import AddCustomer from './AddCustomer';
+import DayClosure from './DayClosure';
 import GenerateEstimationSlip from './GenerateEstimationSlip';
+import GenerateInvoiceSlip from './GenerateInvoiceSlip';
+import GenerateReturnSlip from './GenerateReturnSlip';
+import GiftVocher from './GiftVocher';
+var deviceWidth = Dimensions.get('window').width;
+var deviceWidth = Dimensions.get('window').width;
+const data = [true, false, false, false, false, false, false, false, false];
 
 
 class NewSaleTextile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            flaggenerateestimationSlip: true,
+            flagGenerateEstimationSlip: true,
+            flagGenerateInvoice: false,
+            flagGenerateReturnSlip: false,
+            falgAddCustomer: false,
+            flagGiftVoucher: false,
+            flagDayClosure: false,
             flaggenerateInvoice: false,
+
             privilages: [],
             flagone: true,
             flagtwo: false,
@@ -28,22 +38,22 @@ class NewSaleTextile extends Component {
             subPrivilages: "",
             barcodes: [1, 2],
 
-        }
+        };
     }
 
 
     async componentDidMount() {
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
             if (value === "true") {
-                var domainId = "1"
+                var domainId = "1";
                 if (global.domainName === "Textile") {
-                    domainId = "1"
+                    domainId = "1";
                 }
                 else if (global.domainName === "Retail") {
-                    domainId = "2"
+                    domainId = "2";
                 }
                 else if (global.domainName === "Electrical & Electronics") {
-                    domainId = "3"
+                    domainId = "3";
                 }
 
                 axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
@@ -52,13 +62,13 @@ class NewSaleTextile extends Component {
                         if (len > 0) {
                             if (len > 0) {
                                 for (let i = 0; i < len; i++) {
-                                    let previlage = res.data["result"][i]
+                                    let previlage = res.data["result"][i];
                                     if (previlage.name === "Customer Portal") {
                                         for (let i = 0; i < previlage.subPrivillages.length; i++) {
-                                            console.log(previlage.subPrivillages[i].parentPrivillageId)
+                                            console.log(previlage.subPrivillages[i].parentPrivillageId);
                                             if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
-                                                let subprivilage = previlage.subPrivillages[i]
-                                                if(subprivilage.name === "Dashboard"){
+                                                let subprivilage = previlage.subPrivillages[i];
+                                                if (subprivilage.name === "Dashboard") {
                                                     this.setState({ flagOne: false, flagTwo: false });
                                                 }
                                                 if (i === 0) {
@@ -78,76 +88,95 @@ class NewSaleTextile extends Component {
                 });
             }
             else {
-        AsyncStorage.getItem("rolename").then((value) => {
-            axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
-                if (res.data && res.data["isSuccess"] === "true") {
-                    let len = res.data["result"].parentPrivilages.length;
-                    let length = res.data["result"].subPrivilages.length;
-                    // console.log(.name)
-                    if (len > 0) {
-                        for (let i = 0; i < len; i++) {
-                            let previlage = res.data["result"].parentPrivilages[i]
-                            if (previlage.name === "Customer Portal") {
-                              
-                                    if (length > 0) {
-                                        for (let i = 0; i < length; i++) {
-                                            if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
-                                            let subprivilage = res.data["result"].subPrivilages[i]
-                                            if (i === 0) {
-                                                this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                            }
-                                            else {
-                                                this.state.privilages.push({ bool: false, name: subprivilage.name });
+                AsyncStorage.getItem("rolename").then((value) => {
+                    axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
+                        if (res.data && res.data["isSuccess"] === "true") {
+                            let len = res.data["result"].parentPrivilages.length;
+                            let length = res.data["result"].subPrivilages.length;
+                            // console.log(.name)
+                            if (len > 0) {
+                                for (let i = 0; i < len; i++) {
+                                    let previlage = res.data["result"].parentPrivilages[i];
+                                    if (previlage.name === "Customer Portal") {
+
+                                        if (length > 0) {
+                                            for (let i = 0; i < length; i++) {
+                                                if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
+                                                    let subprivilage = res.data["result"].subPrivilages[i];
+                                                    if (i === 0) {
+                                                        this.state.privilages.push({ bool: true, name: subprivilage.name });
+                                                    }
+                                                    else {
+                                                        this.state.privilages.push({ bool: false, name: subprivilage.name });
+                                                    }
+                                                }
+                                                this.setState({ privilages: this.state.privilages });
                                             }
                                         }
-                                        this.setState({ privilages: this.state.privilages });
                                     }
                                 }
                             }
                         }
-                    }
-                }
-            })
-        }).catch(() => {
-            console.log('there is error saving domainDataId')
-        })
+                    });
+                }).catch(() => {
+                    console.log('there is error saving domainDataId');
+                });
 
-    }
-}).catch(() => {
-    console.log('there is error getting storeId')
-})        
+            }
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
 
     }
 
     topbarAction1 = (item, index) => {
-        console.log('vinosdsadsadsad')
-            if (item.name === "Generate Estimation Slip") {
-              
-                this.setState({ flaggenerateestimationSlip: true });
-            } else {
-                this.setState({ flaggenerateestimationSlip: false });
-            }
 
-            if (item.name === "Generate Invoice") {
-                this.setState({ flaggenerateInvoice: true });
-            } else {
-                this.setState({ flaggenerateInvoice: false });
-            }
-        
+        if (item.name === "Generate Estimation Slip") {
+            this.setState({ flagGenerateEstimationSlip: true });
+        } else {
+            this.setState({ flagGenerateEstimationSlip: false });
+        }
+        if (item.name === "Generate Invoice") {
+            this.setState({ flagGenerateInvoice: true });
+        } else {
+            this.setState({ flagGenerateInvoice: false });
+        }
+        if (item.name === "Generate Return Slip") {
+            this.setState({ flagGenerateReturnSlip: true });
+        } else {
+            this.setState({ flagGenerateReturnSlip: false });
+        }
+        if (item.name === "Add Customer") {
+            this.setState({ falgAddCustomer: true });
+        } else {
+            this.setState({ falgAddCustomer: false });
+        }
+        if (item.name === "Gift Voucher") {
+            this.setState({ flagGiftVoucher: true });
+        } else {
+            this.setState({ flagGiftVoucher: false });
+        }
+        if (item.name === "Day Closure Activity") {
+            this.setState({ flagDayClosure: true });
+        } else {
+            this.setState({ flagDayClosure: false });
+        }
+
+
 
         if (this.state.privilages[index].bool === true) {
-            this.state.privilages[index].bool = false
+            this.state.privilages[index].bool = false;
         }
         else {
-            this.state.privilages[index].bool = true
+            this.state.privilages[index].bool = true;
         }
         for (let i = 0; i < this.state.privilages.length; i++) {
             if (index != i) {
-                this.state.privilages[i].bool = false
+                this.state.privilages[i].bool = false;
             }
             this.setState({ privilages: this.state.privilages });
         }
-    }
+    };
 
     navigateToGenerateEstimationSlip() {
         this.props.navigation.navigate('GenerateEstimationSlip');
@@ -156,12 +185,12 @@ class NewSaleTextile extends Component {
 
 
     statatics() {
-        this.props.navigation.navigate('Statitics')
+        this.props.navigation.navigate('Statitics');
     }
 
 
     menuAction() {
-        this.props.navigation.dispatch(DrawerActions.openDrawer())
+        this.props.navigation.dispatch(DrawerActions.openDrawer());
     }
 
     handleMenuButtonClick() {
@@ -178,20 +207,7 @@ class NewSaleTextile extends Component {
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Customer Portal </Text>
-
-                    {this.state.flaggenerateestimationSlip && (
-                            <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToGenerateEstimationSlip()}>
-                            </TouchableOpacity>
-                        )}
-                          
                 </View>
-                {this.state.flaggenerateestimationSlip && (
-                                <GenerateEstimationSlip
-                                barcodes={this.state.barcodes}
-                                    navigation={this.props.navigation}
-                                />
-                            )}
-
                 <ScrollView>
                     <View style={styles.container}>
 
@@ -220,14 +236,40 @@ class NewSaleTextile extends Component {
                             ListFooterComponent={<View style={{ width: 15 }}></View>}
                         />
 
+                        {this.state.flagGenerateEstimationSlip && (
+                            <GenerateEstimationSlip />
+                        )}
+
+                        {this.state.flagGenerateInvoice && (
+                            <GenerateInvoiceSlip />
+                        )}
+
+                        {this.state.flagGenerateReturnSlip && (
+                            <GenerateReturnSlip />
+                        )}
+
+                        {this.state.falgAddCustomer && (
+                            <AddCustomer />
+                        )}
+
+                        {this.state.flagGiftVoucher && (
+                            <GiftVocher />
+                        )}
+
+                        {this.state.flagDayClosure && (
+                            <DayClosure />
+                        )}
 
                     </View>
                 </ScrollView >
+
+
+
             </View>
-        )
+        );
     }
 }
-export default NewSaleTextile
+export default NewSaleTextile;
 
 
 const styles = StyleSheet.create({
@@ -501,7 +543,7 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        height:Device.isAndroid ? 70 : 84,
+        height: Device.isAndroid ? 70 : 84,
     },
     navigationToButton_mobile: {
         position: 'absolute',
