@@ -97,7 +97,7 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="Customer Portal"
-                                onPress={() => { props.navigation.navigate('NewSaleTextileNavigation') }}
+                                onPress={() => { props.navigation.navigate('CustomerNavigation') }}
                             />
                         )}
 

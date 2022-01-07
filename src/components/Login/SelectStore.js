@@ -159,7 +159,7 @@ export default class SelectStore extends React.Component {
                         style={{ width: deviceWidth, marginTop: 50, marginBottom: 100, }}
                         //scrollEnabled={false}
                         ListHeaderComponent={() => {
-                            return (<Text>Header</Text>)
+                            return (<Text></Text>)
                           }}
                         data={this.state.storeData}
                         keyExtractor={item => item}
