@@ -8,7 +8,6 @@ import { DrawerContent } from './DrawerContent';
 import UrmNavigation from './UrmNavigation';
 import NewSaleNavigation from './NewSaleNavigation';
 import Home from '../components/tabbar/Home/Home';
-import NewSaleTextileNavigation from './NewSaleTextitleNavigation';
 import AccountingNaviagtion from './AccountingNavigation';
 import ReportsNavigation from './ReportsNavigation';
 import CustomerNavigation from './CustomerNavigation';
@@ -27,7 +26,7 @@ export default class SideNavigation extends React.Component {
                 <Drawer.Screen name="AccountingNaviagtion" options={{ headerShown: false }} component={AccountingNaviagtion} />
                 <Drawer.Screen name="CustomerNavigation" options={{ headerShown: false }} component={CustomerNavigation} />
                 <Drawer.Screen name="NewSaleNavigation" options={{ headerShown: false }} component={NewSaleNavigation} />
-                <Drawer.Screen name="NewSaleTextileNavigation" options={{ headerShown: false }} component={NewSaleTextileNavigation} />
+                {/* <Drawer.Screen name="NewSaleTextileNavigation" options={{ headerShown: false }} component={NewSaleTextileNavigation} /> */}
             </Drawer.Navigator>
         );
     }

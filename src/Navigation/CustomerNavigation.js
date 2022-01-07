@@ -1,6 +1,6 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import NewSaleTextile from '../components/tabbar/Newsale/NewSaleTextile';
+import NewSaleTextile from '../components/CustomerPortal/NewSaleTextile';
 import GenerateEstimationSlip from '../components/CustomerPortal/GenerateEstimationSlip';
 
 
