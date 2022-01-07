@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
-import colors from '../../colors.json';
-import ListOfReportsGraphsService from '../services/reports/ListOfReportsGraphsService';
+// import ListOfReportsGraphsService from '../services/reports/ListOfReportsGraphsService';
 
 export default class ReportsDashboard extends Component {
 
@@ -18,36 +17,36 @@ export default class ReportsDashboard extends Component {
     //     this.getSalesSummary();
     // }
 
-    getInvoicesGenerated() {
-        ListOfReportsGraphsService.getInvoicesGenerated().then(res => {
-            if (res) {
-                this.setState({ invoicesGenerted: res.data.result },
-                    () => {
-                        let indexName = [];
-                        let indexCount = [];
-                        let indexColor = [];
+    // getInvoicesGenerated() {
+    //     ListOfReportsGraphsService.getInvoicesGenerated().then(res => {
+    //         if (res) {
+    //             this.setState({ invoicesGenerted: res.data.result },
+    //                 () => {
+    //                     let indexName = [];
+    //                     let indexCount = [];
+    //                     let indexColor = [];
 
-                        this.state.invoicesGenerted.forEach(data => {
-                            indexName.push(data.month);
-                            indexCount.push(data.amount);
-                        });
+    //                     this.state.invoicesGenerted.forEach(data => {
+    //                         indexName.push(data.month);
+    //                         indexCount.push(data.amount);
+    //                     });
 
-                        colors.forEach(data => {
-                            indexColor.push(data.normalColorCode);
-                        });
+    //                     colors.forEach(data => {
+    //                         indexColor.push(data.normalColorCode);
+    //                     });
 
-                        this.setState({
-                            invoicesChart: {
-                                labels: indexName,
-                                data: indexCount,
-                                color: indexColor,
-                            }
-                        });
-                    });
+    //                     this.setState({
+    //                         invoicesChart: {
+    //                             labels: indexName,
+    //                             data: indexCount,
+    //                             color: indexColor,
+    //                         }
+    //                     });
+    //                 });
 
-            }
-        });
-    }
+    //         }
+    //     });
+    // }
 
     render() {
         return (
