@@ -198,6 +198,14 @@ class NewSaleTextile extends Component {
         // this.props.navigation.navigate('Home')
     }
 
+    navigateToScanCode() {
+        global.barcodeId = 'something';
+        //this.setState({ barcodeId: global.barcodeId })
+        this.props.navigation.navigate('ScanBarCode', {
+          onGoBack: () => this.refresh(),
+        });
+      }
+
 
     render() {
         return (
@@ -207,7 +215,16 @@ class NewSaleTextile extends Component {
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Customer Portal </Text>
+                   
+                    {this.state.flagGenerateEstimationSlip && (
+          <TouchableOpacity
+            style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
+            onPress={() => this.navigateToScanCode()} >
+            <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {('ITEM SCAN')} </Text>
+          </TouchableOpacity>
+                    )}
                 </View>
+
                 <ScrollView>
                     <View style={styles.container}>
 
@@ -584,6 +601,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#353C40'
     },
+    navButton_mobile: {
+        position: 'absolute',
+        right: 20, top: 37,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 105,
+        height: 32,
+    },
     // Styles For Tablet
     viewsWidth_tablet: {
         backgroundColor: '#ffffff',
@@ -599,6 +624,14 @@ const styles = StyleSheet.create({
         width: 90,
         height: 90,
     },
+    navButton_tablet: {
+        position: 'absolute',
+        right: 20, top: 27,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 155,
+        height: 42,
+      },
     headerTitle_tablet: {
         position: 'absolute',
         left: 70,
@@ -608,5 +641,21 @@ const styles = StyleSheet.create({
         fontFamily: 'bold',
         fontSize: 24,
         color: '#353C40'
+    },
+    navButtonText_tablet: {
+        fontSize: 17,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginLeft: 10,
+        marginTop: 8,
+        alignSelf: 'center'
+    },
+    navButtonText_mobile: {
+        fontSize: 12,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginLeft: 10,
+        marginTop: 8,
+        alignSelf: 'center'
     },
 });

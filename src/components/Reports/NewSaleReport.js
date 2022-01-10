@@ -9,6 +9,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import ReportsService from '../services/ReportsService';
 var deviceWidth = Dimensions.get("window").width;
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class NewSaleReport extends Component {
 
@@ -32,33 +33,67 @@ export default class NewSaleReport extends Component {
             sbList: [1, 2],
             sbDetailsList: [1, 2],
             isView: false,
+            domainId:0,
+            storeId:0,
         };
     }
 
     componentDidMount() {
-        this.getSaleBills();
+        AsyncStorage.getItem("domainDataId").then((value) => {
+            domainStringId = value
+            this.setState({ domainId: parseInt(domainStringId) })
+            console.log("domain data id" + this.state.domainId)
+           
+
+        }).catch(() => {
+            console.log('there is error getting domainDataId')
+        })
+
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) });
+            console.log(this.state.storeId);
+            this.getSaleBills();
+
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
+
+       
     }
 
 
     async getSaleBills() {
         this.setState({ sbList: [] });
+       
         const obj = {
-            dateFrom: '2022-01-07',
-            dateTo: '2022-01-07',
-            customerMobile: this.state.mobile ? this.state.mobile : undefined,
-            billStatus: this.state.billPosition ? this.state.billPosition : undefined,
-            invoiceNumber: this.state.invoiceNumber ? this.state.invoiceNumber : undefined,
-            empId: this.state.empId ? this.state.empId : undefined,
-        };
-        axios.get(ReportsService.NewSaleReport(obj)).then((response) => {
-            console.log("New Sale Reports");
-            console.log(response.data.result);
-            this.setState({
-                sbList: response.data.result.newSaleVo,
-                sbDetailsList: response.data.result.newSaleVo,
-                modalVisible: false
-            });
-        });
+            "dateFrom":"2021-11-10",
+            "dateTo":"2021-11-11",
+            invoiceNumber:  null,
+            custMobileNumber: null,
+            billStatus: null,
+            storeId:this.state.storeId,
+            domainId:this.state.domainId
+          };
+       
+              console.log('params are' + JSON.stringify(obj))
+              this.setState({ loading: true })
+              console.log(ReportsService.newSaleReports())
+                axios.post(ReportsService.newSaleReports(), obj).then((res) => {
+                  console.log(res.data)
+                if (res.data && res.data["isSuccess"] === "true") {
+                    // this.props.route.params.onGoBack();
+                    // this.props.navigation.goBack();
+                }
+                else {
+                  alert(res.data.message);
+                }
+              }
+              ).catch(() => {
+               // alert('error');
+                this.setState({ loading: false });
+            }); 
+
     }
 
     handledeleteNewSale() {

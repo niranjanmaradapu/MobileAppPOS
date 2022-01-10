@@ -3,11 +3,11 @@ const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097';
 class ReportsService {
 
     estimationSlips() {
-        return REACT_NATIVE_APP_BASE_URL + '/new-sale/newsale/getlistofdeliveryslips';
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getlistofdeliveryslips"
     }
 
-    newSaleReports(data) {
-        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getlistofsalebills" + data;
+    newSaleReports() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getlistofsalebills"
     }
 
     deliverySlipsList() {

@@ -8,7 +8,7 @@ import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import ReportsService from '../services/ReportsService';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 var deviceWidth = Dimensions.get("window").width;
 
 export class ListOfEstimationSlip extends Component {
@@ -32,24 +32,51 @@ export class ListOfEstimationSlip extends Component {
             dsStatus: "",
             dsNumber: "",
             barcode: "",
+            storeId:0,
         };
     }
 
     componentDidMount() {
-        this.getEstimationSlip();
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) });
+            console.log(this.state.storeId);
+            this.getEstimationSlip();
+
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
+
     }
 
     getEstimationSlip() {
         const obj = {
-            dateFrom: "2022-01-07",
-            dateTo: "2022-01-07",
-        };
-
-        console.log("estiamtion");
-        axios.get(ReportsService.estimationSlips(), { obj }).then((res) => {
-            console.log(res);
-        });
-
+            "dateFrom":"2021-11-10",
+            "dateTo":"2021-11-11",
+            status:  null,
+            barcode: null,
+            dsNumber: null,
+            storeId:this.state.storeId,
+          };
+       
+          
+              console.log('params are' + JSON.stringify(obj))
+              this.setState({ loading: true })
+              console.log(ReportsService.estimationSlips())
+                axios.post(ReportsService.estimationSlips(), obj).then((res) => {
+                  console.log(res.data)
+                if (res.data && res.data["isSuccess"] === "true") {
+                    // this.props.route.params.onGoBack();
+                    // this.props.navigation.goBack();
+                }
+                else {
+                  alert(res.data.message);
+                }
+              }
+              ).catch(() => {
+               // alert('error');
+                this.setState({ loading: false });
+            }); 
     }
 
     handledeleteEstimationSlip(item, index) {
@@ -146,12 +173,19 @@ export class ListOfEstimationSlip extends Component {
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >NET AMMOUNT: { } </Text>
                                     <View style={flats.buttons}>
-                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handledeleteEstimationSlip(item, index)}>
+                                        {/* <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handledeleteEstimationSlip(item, index)}>
                                             <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
                                         </TouchableOpacity>
                                         <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleviewEstimationSlip(item, index)}>
-                                            <Text>View</Text>
-                                        </TouchableOpacity>
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                        </TouchableOpacity> */}
+                                          <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteEstimationSlip(item, index)}>
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewEstimationSlip(item, index)}>
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/eye.png')} />
+                                    </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>
@@ -780,7 +814,7 @@ const flats = StyleSheet.create({
         color: '#808080'
     },
     editButton_mobile: {
-        width: 50,
+        width: 30,
         height: 30,
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
@@ -838,7 +872,7 @@ const flats = StyleSheet.create({
         color: '#808080'
     },
     editButton_tablet: {
-        width: 80,
+        width: 40,
         height: 40,
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
