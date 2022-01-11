@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import { ScrollView } from 'react-native-gesture-handler';
-import Loader from "../loader";
+import Loader from "../../commonUtils/loader";
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 import AccountingDashboard from './AccountingDashboard';

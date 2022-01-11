@@ -9,9 +9,9 @@ import Device from 'react-native-device-detection';
 
 // Available languages
 I18n.translations = {
-    'en': require('./assets/translations/en'),
-    'te': require('./assets/translations/te'),
-    'hi': require('./assets/translations/hi'),
+    'en': require('../assets/translations/en'),
+    'te': require('../assets/translations/te'),
+    'hi': require('../assets/translations/hi'),
 };
 
 export default class Welcome extends React.Component {
@@ -47,7 +47,7 @@ export default class Welcome extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Image source={require('./assets/images/letsGo.png')} style={Device.isTablet ? styles.logoImage_tablet : styles.logoImage_mobile} />
+                <Image source={require('../assets/images/letsGo.png')} style={Device.isTablet ? styles.logoImage_tablet : styles.logoImage_mobile} />
                 <View style={Device.isTablet ? styles.headerContainer_tablet : styles.headerContainer_mobile}>
                     <Text style={Device.isTablet ? styles.headerGreeting_tablet : styles.headerGreeting_mobile}> {I18n.t('Get Started')} </Text>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t('Lets explore the world Best Retail & Textiles')} </Text>

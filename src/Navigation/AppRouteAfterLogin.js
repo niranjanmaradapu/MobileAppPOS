@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack'
 import React from 'react'
 import HomeNavigation from './HomeNavigation';
-import SplashScreen from '../components/SplashScreen';
+import SplashScreen from '../components/Welcome/SplashScreen';
 
 const Stack = createStackNavigator();
 function AppRouteAfterLogin() {

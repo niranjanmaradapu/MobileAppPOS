@@ -15,7 +15,7 @@ import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
-import Loader from '../loader';
+import Loader from '../../commonUtils/loader';
 import CreateCustomerService from '../services/CreateCustomerService';
 import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
@@ -88,6 +88,11 @@ class GenerateInvoiceSlip extends Component {
 
     handleMenuButtonClick() {
         this.props.navigation.openDrawer();
+    }
+
+    cancel() {
+        this.props.navigation.goBack(null);
+        return true;
     }
 
 

@@ -9,9 +9,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import Loader from '../../loader';
-import LoginService from '../../services/LoginService';
-import PromotionsService from '../../services/PromotionsService';
+import Loader from '../../commonUtils/loader';
+import LoginService from '../services/LoginService';
+import PromotionsService from '../services/PromotionsService';
 var deviceWidth = Dimensions.get('window').width;
 
 
@@ -809,13 +809,13 @@ class Promo extends Component {
                 }
                 <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
                     <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
-                        <Image source={require('../../assets/images/menu.png')} />
+                        <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Promotions & Loyalty </Text>
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 20, bottom: 5, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
                         onPress={() => this.filterAction()} >
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/promofilter.png')} />
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
                     </TouchableOpacity>
 
                 </View>
@@ -858,7 +858,7 @@ class Promo extends Component {
                 </View>
                 {this.state.flagone && (
                     <TouchableOpacity style={Device.isTablet ? styles.actInactSwitch_tablet : styles.actInactSwitch_mobile} onPress={() => this.togglePoolsActiveStatus()}>
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.poolsactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.poolsactiveStatus ? require('../assets/images/switchunabled.png') : require('../assets/images/switchdisabled.png')} />
                     </TouchableOpacity>
                 )}
 
@@ -938,7 +938,7 @@ class Promo extends Component {
                                                 <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Pool </Text>
 
                                                 <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                                 </TouchableOpacity>
 
                                                 <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
@@ -1007,7 +1007,7 @@ class Promo extends Component {
                                     borderColor: "lightgray",
                                     // borderRadius:5,
                                 }} onPress={() => this.handlepooleditaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
@@ -1021,7 +1021,7 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handlepooldeleteaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
                                 </TouchableOpacity>
                                 <View style={{
                                     backgroundColor: 'grey',
@@ -1042,7 +1042,7 @@ class Promo extends Component {
                 {this.state.flagtwo && (
 
                     <TouchableOpacity style={Device.isTablet ? styles.actInactSwitch_tablet : styles.actInactSwitch_mobile} onPress={() => this.togglePromoActiveStatus()}>
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.promoactiveStatus ? require('../../assets/images/switchunabled.png') : require('../../assets/images/switchdisabled.png')} />
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.promoactiveStatus ? require('../assets/images/switchunabled.png') : require('../assets/images/switchdisabled.png')} />
                     </TouchableOpacity>
                 )}
 
@@ -1165,7 +1165,7 @@ class Promo extends Component {
                                                 <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Promotion </Text>
 
                                                 <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                                 </TouchableOpacity>
 
                                                 <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
@@ -1210,7 +1210,7 @@ class Promo extends Component {
                                     borderColor: "lightgray",
                                     // borderRadius:5,
                                 }} onPress={() => this.handleeditpromoaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
@@ -1224,7 +1224,7 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handlepromodeleteaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
                                 </TouchableOpacity>
                                 <View style={{
                                     backgroundColor: 'grey',
@@ -1323,7 +1323,7 @@ class Promo extends Component {
                                     borderColor: "lightgray",
                                     // borderRadius:5,
                                 }} onPress={() => this.handleeditloyaltyaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
@@ -1337,7 +1337,7 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handledeleteloyaltyaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
                                 </TouchableOpacity> */}
                                 <View style={{
                                     backgroundColor: 'grey',
@@ -1366,7 +1366,7 @@ class Promo extends Component {
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Filter by </Text>
 
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
                                     <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
@@ -1462,7 +1462,7 @@ class Promo extends Component {
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Filter by </Text>
 
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
                                     <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
@@ -1526,7 +1526,7 @@ class Promo extends Component {
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: Device.isTablet ? 20 : 15,
                                                 fontFamily: "regular"
                                             }}  > {this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate} </Text>
-                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
 
@@ -1561,7 +1561,7 @@ class Promo extends Component {
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: Device.isTablet ? 20 : 15,
                                                 fontFamily: "regular"
                                             }}  > {this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate} </Text>
-                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
                                         {this.state.datepickerOpen && this.state.flagtwo && (
@@ -1656,7 +1656,7 @@ class Promo extends Component {
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Filter by </Text>
 
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
                                     <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
@@ -1736,7 +1736,7 @@ class Promo extends Component {
                                         top: 8,
                                         width: 50, height: 50,
                                     }} onPress={() => this.modelCancel()}>
-                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
                                     <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
@@ -1816,7 +1816,7 @@ class Promo extends Component {
 
                                             <Image style={{ position: 'absolute', top: 10, left: 20, }} source={
                                                 //require('../assets/images/chargeunselect.png')}
-                                                this.state.chargeExtra ? require('../../assets/images/chargeselect.png') : require('../../assets/images/chargeunselect.png')} />
+                                                this.state.chargeExtra ? require('../assets/images/chargeselect.png') : require('../assets/images/chargeunselect.png')} />
                                         </TouchableOpacity>
 
                                         {this.state.chargeExtra && (
@@ -1872,7 +1872,7 @@ class Promo extends Component {
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Add promo to store </Text>
 
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
                                     <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
@@ -1981,7 +1981,7 @@ class Promo extends Component {
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: Device.isTablet ? 20 : 15,
                                                 fontFamily: "regular"
                                             }}  > {this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate} </Text>
-                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
 
@@ -2015,7 +2015,7 @@ class Promo extends Component {
                                                 marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: Device.isTablet ? 20 : 15,
                                                 fontFamily: "regular"
                                             }}  > {this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate} </Text>
-                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                            <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                                         </TouchableOpacity>
 
                                     </View>

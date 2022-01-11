@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native';
 import { Chevron } from 'react-native-shapes';
-import Loader from '../../loader';
+import Loader from '../../commonUtils/loader';
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
-import InventoryService from '../../services/InventoryService';
-import LoginService from '../../services/LoginService';
+import InventoryService from '../services/InventoryService';
+import LoginService from '../services/LoginService';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 var deviceWidth = Dimensions.get('window').width;
 
- class ViewReBarcode extends Component {
+ class EditBarcode extends Component {
 
     constructor(props){
         super(props);
@@ -90,9 +90,9 @@ var deviceWidth = Dimensions.get('window').width;
           })   
       //('dasdsadsadsad' + this.props.route.params.item)
         this.setState({ 
-            divisionId: this.props.route.params.item.division,
-            sectionId: this.props.route.params.item.section,
-            subsectionId: this.props.route.params.item.subSection,
+            divisionId: this.props.route.params.item.division, 
+            sectionId: this.props.route.params.item.section, 
+            subsectionId: this.props.route.params.item.subSection, 
             catogirieId: this.props.route.params.item.category,
             colour: this.props.route.params.item.colour,
             batchNo: this.props.route.params.item.batchNo,
@@ -105,7 +105,7 @@ var deviceWidth = Dimensions.get('window').width;
             quantity: String(this.props.route.params.item.productTextile.qty),
             productTextileId: this.props.route.params.item.productTextile.productTextileId,
             barcodeTextileId: this.props.route.params.item.barcodeTextileId
-        })
+        });
         this.getAllDivisions()
         this.getAllCatogiries()
         this.getAllHSNCodes()
@@ -472,9 +472,9 @@ var deviceWidth = Dimensions.get('window').width;
                 }
                 <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
                     <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../../assets/images/backButton.png')} />
+                        <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Re-Barcode Details </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Edit Barcode </Text>
                 </View>
                 <ScrollView>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
@@ -575,14 +575,13 @@ var deviceWidth = Dimensions.get('window').width;
                             editable={false} selectTextOnFocus={false}
                             onChangeText={this.handleCostPrice}
                         />
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    <TextInput style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
                             underlineColorAndroid="transparent"
                             placeholder="List Price"
                             placeholderTextColor="#6F6F6F"
                             textAlignVertical="center"
                             autoCapitalize="none"
                             value={this.state.listPrice}
-                            editable={false} selectTextOnFocus={false}
                             onChangeText={this.handleListPrice}
                         />
                         <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -633,17 +632,19 @@ var deviceWidth = Dimensions.get('window').width;
                             onChangeText={this.handleStore}
                         />
                         
-                        <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        <TextInput style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
                             underlineColorAndroid="transparent"
                             placeholder="QTY"
                             placeholderTextColor="#6F6F6F"
                             textAlignVertical="center"
                             autoCapitalize="none"
                             value={this.state.quantity}
-                            editable={false} selectTextOnFocus={false}
                             onChangeText={this.handleQuantity}
                         />
-                    
+                        <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+                            onPress={() => this.saveBarcode()}>
+                            <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                        </TouchableOpacity>
                         <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
                             onPress={() => this.cancel()}>
                             <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>CANCEL</Text>
@@ -655,7 +656,7 @@ var deviceWidth = Dimensions.get('window').width;
     }
 }
 
-export default ViewReBarcode;
+export default EditBarcode;
 
 const pickerSelectStyles_mobile = StyleSheet.create({
     placeholder: {

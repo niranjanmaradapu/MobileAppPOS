@@ -6,7 +6,7 @@ var deviceWidth = Dimensions.get('window').width;
 import Device from 'react-native-device-detection';
 import LoginService from '../services/LoginService';
 import axios from 'axios';
-import Loader from '../loader';
+import Loader from '../../commonUtils/loader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class UpdateNewpassword extends Component {

@@ -1,13 +1,12 @@
-import Settings from '../components/tabbar/Profile/Settings';
+import Settings from '../components/Profile/Settings';
 import * as React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import BottomTabBar from './BottomTabBar';
 import PromoNavigation from './PromoNavigation';
 import InventoryNavigation from './InventoryNavigation';
 import { DrawerContent } from './DrawerContent';
 import UrmNavigation from './UrmNavigation';
 import NewSaleNavigation from './NewSaleNavigation';
-import Home from '../components/tabbar/Home/Home';
+import Home from '../components/Home/Home';
 import AccountingNaviagtion from './AccountingNavigation';
 import ReportsNavigation from './ReportsNavigation';
 import CustomerNavigation from './CustomerNavigation';

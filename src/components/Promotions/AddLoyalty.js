@@ -3,8 +3,8 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
-import Loader from '../../loader';
-import PromotionsService from '../../services/PromotionsService';
+import Loader from '../../commonUtils/loader';
+import PromotionsService from '../services/PromotionsService';
 var deviceWidth = Dimensions.get('window').width;
 
 class AddLoyalty extends Component {
@@ -130,7 +130,7 @@ class AddLoyalty extends Component {
                 }
                 <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
                     <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../../assets/images/backButton.png')} />
+                        <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Add Loyalty Points </Text>
                 </View>

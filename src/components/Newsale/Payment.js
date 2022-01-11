@@ -9,10 +9,10 @@ import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import RazorpayCheckout from 'react-native-razorpay';
 import { Chevron } from 'react-native-shapes';
-import Loader from '../../loader';
-import LoginService from '../../services/LoginService';
-import NewSaleService from '../../services/NewSaleService';
-import PromotionsService from '../../services/PromotionsService';
+import Loader from '../../commonUtils/loader';
+import LoginService from '../services/LoginService';
+import NewSaleService from '../services/NewSaleService';
+import PromotionsService from '../services/PromotionsService';
 var deviceWidth = Dimensions.get('window').width;
 var deviceWidth = Dimensions.get('window').width;
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }, { key: 5 }];
@@ -564,7 +564,7 @@ class Payment extends Component {
                         width: 40,
                         height: 40,
                     }} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../../assets/images/backButton.png')} />
+                        <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={{
                         position: 'absolute',
@@ -602,7 +602,7 @@ class Payment extends Component {
                                         <TouchableOpacity style={{
                                             marginLeft: 0, marginTop: 0,
                                         }} onPress={() => this.cashAction()}>
-                                            <Image source={this.state.flagOne ? require('../../assets/images/cashselect.png') : require('../../assets/images/cashunselect.png')} style={{
+                                            <Image source={this.state.flagOne ? require('../assets/images/cashselect.png') : require('../assets/images/cashunselect.png')} style={{
                                                 marginLeft: 0, marginTop: 0,
                                             }} />
                                         </TouchableOpacity>
@@ -625,7 +625,7 @@ class Payment extends Component {
                                         <TouchableOpacity style={{
                                             marginLeft: 0, marginTop: 0,
                                         }} onPress={() => this.cardAction()}>
-                                            <Image source={this.state.flagTwo ? require('../../assets/images/cardselect.png') : require('../../assets/images/cashunselect.png')} style={{
+                                            <Image source={this.state.flagTwo ? require('../assets/images/cardselect.png') : require('../assets/images/cashunselect.png')} style={{
                                                 marginLeft: 0, marginTop: 0,
                                             }} />
                                         </TouchableOpacity>
@@ -648,7 +648,7 @@ class Payment extends Component {
                                         <TouchableOpacity style={{
                                             marginLeft: 0, marginTop: 0,
                                         }} onPress={() => this.qrAction()}>
-                                            <Image source={this.state.flagThree ? require('../../assets/images/qrselect.png') : require('../../assets/images/qrunselect.png')} style={{
+                                            <Image source={this.state.flagThree ? require('../assets/images/qrselect.png') : require('../assets/images/qrunselect.png')} style={{
                                                 marginLeft: 0, marginTop: 0,
                                             }} />
                                         </TouchableOpacity>
@@ -672,7 +672,7 @@ class Payment extends Component {
                                         <TouchableOpacity style={{
                                             marginLeft: 0, marginTop: 0,
                                         }} onPress={() => this.upiAction()}>
-                                            <Image source={this.state.flagFour ? require('../../assets/images/upiselect.png') : require('../../assets/images/upiunselect.png')} style={{
+                                            <Image source={this.state.flagFour ? require('../assets/images/upiselect.png') : require('../assets/images/upiunselect.png')} style={{
                                                 marginLeft: 0, marginTop: 0,
                                             }} />
                                         </TouchableOpacity>
@@ -697,7 +697,7 @@ class Payment extends Component {
                                         <TouchableOpacity style={{
                                             marginLeft: 0, marginTop: 0,
                                         }} onPress={() => this.khathaAction()}>
-                                            <Image source={this.state.flagFive ? require('../../assets/images/kathaselect.png') : require('../../assets/images/kathaunselect.png')} style={{
+                                            <Image source={this.state.flagFive ? require('../assets/images/kathaselect.png') : require('../assets/images/kathaunselect.png')} style={{
                                                 marginLeft: 0, marginTop: 0,
                                             }} />
                                         </TouchableOpacity>
@@ -756,7 +756,7 @@ class Payment extends Component {
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, alignSelf: 'flex-end', right: 10, marginTop: -37 }}
                             >
-                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../../assets/images/notapplied.png')} />
+                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../assets/images/notapplied.png')} />
 
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('NO RECORDS')} </Text>
                             </TouchableOpacity>
@@ -777,7 +777,7 @@ class Payment extends Component {
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, alignSelf: 'flex-end', right: 10, marginTop: -37 }}
                             >
-                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../assets/images/applied.png')} />
 
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
 
@@ -788,7 +788,7 @@ class Payment extends Component {
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, position: 'absolute', right: 10,alignSelf: 'flex-end',marginTop:-37 }}
                             >
-                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../../assets/images/notapplied.png')} />
+                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../assets/images/notapplied.png')} />
 
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('NO RECORDS')} </Text>
 
@@ -799,7 +799,7 @@ class Payment extends Component {
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, position: 'absolute', right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                             >
-                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../assets/images/applied.png')} />
 
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
 
@@ -884,7 +884,7 @@ class Payment extends Component {
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                             >
-                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../assets/images/applied.png')} />
 
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
 
@@ -962,7 +962,7 @@ class Payment extends Component {
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                             >
-                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../assets/images/applied.png')} />
 
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
 
@@ -973,7 +973,7 @@ class Payment extends Component {
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                             >
-                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../assets/images/applied.png')} />
 
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
 
@@ -984,7 +984,7 @@ class Payment extends Component {
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                             >
-                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../assets/images/applied.png')} />
 
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
 
@@ -995,7 +995,7 @@ class Payment extends Component {
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, right: 10, alignSelf: 'flex-end', marginTop: -37 }}
                             >
-                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../../assets/images/applied.png')} />
+                                <Image style={{ position: 'absolute', right: 68, top: 9 }} source={require('../assets/images/applied.png')} />
 
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#28D266', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('VERIFIED')} </Text>
 
@@ -1042,7 +1042,7 @@ class Payment extends Component {
                                             top: 7,
                                             width: 50, height: 50,
                                         }} onPress={() => this.modelCancel()}>
-                                            <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                            <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
                                         </TouchableOpacity>
 
                                         <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>

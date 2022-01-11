@@ -12,9 +12,9 @@ import Device from 'react-native-device-detection';
 
 // Available languages
 I18n.translations = {
-    'en': require('./assets/translations/en'),
-    'te': require('./assets/translations/te'),
-    'hi': require('./assets/translations/hi'),
+    'en': require('../assets/translations/en'),
+    'te': require('../assets/translations/te'),
+    'hi': require('../assets/translations/hi'),
 };
 
 export default class LanguageSelection extends React.Component {
@@ -105,7 +105,7 @@ export default class LanguageSelection extends React.Component {
                                         }]}>
                                             {item.key}
                                         </Text>
-                                        <Image source={this.state.selectedItem === index ? require('./assets/images/langselect.png') : require('./assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 30 }} />
+                                        <Image source={this.state.selectedItem === index ? require('../assets/images/langselect.png') : require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 30 }} />
                                     </View>
 
                                 </View>

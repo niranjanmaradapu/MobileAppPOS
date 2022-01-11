@@ -9,7 +9,7 @@ import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import RazorpayCheckout from 'react-native-razorpay';
 import { Chevron } from 'react-native-shapes';
-import Loader from '../loader';
+import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import NewSaleService from '../services/NewSaleService';
 import PromotionsService from '../services/PromotionsService';
@@ -788,7 +788,7 @@ class TextilePayment extends Component {
                             <TouchableOpacity
                                 style={{ backgroundColor: '#FFffff', borderRadius: 5, width: 90, height: 32, position: 'absolute', right: 10,alignSelf: 'flex-end',marginTop:-37 }}
                             >
-                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../../assets/images/notapplied.png')} />
+                                <Image style={{ position: 'absolute', right: 80, top: 9 }} source={require('../assets/images/notapplied.png')} />
 
                                 <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 10, alignSelf: 'center' }}> {('NO RECORDS')} </Text>
 

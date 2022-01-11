@@ -7,8 +7,8 @@ import Constants from 'expo-constants';
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
 import Device from 'react-native-device-detection';
 import axios from 'axios';
-import UrmService from '../../services/UrmService';
-import ProfileService from '../../services/ProfileService';
+import UrmService from '../services/UrmService';
+import ProfileService from '../services/ProfileService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     BarChart,
@@ -451,7 +451,7 @@ class Home extends Component {
             <View style={styles.container}>
                 <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
                     <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
-                        <Image source={require('../../assets/images/menu.png')} />
+                        <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Home </Text>
                 </View>
@@ -460,7 +460,7 @@ class Home extends Component {
                     <View style={styles.container}>
                         {/* <Image
                             style={styles.image}
-                            source={require('../../assets/images/profilepic.png')}
+                            source={require('../assets/images/profilepic.png')}
                             resizeMode={"cover"} // <- needs to be "cover" for borderRadius to take effect on Android
                         />
                         <Text style={{ fontSize: 26, fontFamily: 'regular', color: '#353C40', marginLeft: 10, marginTop: 20 }}> {('Welcome,')} </Text>
@@ -482,7 +482,7 @@ class Home extends Component {
                                         borderRadius: 10,
                                         marginLeft: 10,
                                     }}>
-                                        <Image source={require('../../assets/images/todaysales.png')} style={{
+                                        <Image source={require('../assets/images/todaysales.png')} style={{
                                             marginLeft: 20, marginTop: 40,
                                         }} />
                                         <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
@@ -503,7 +503,7 @@ class Home extends Component {
                                         borderRadius: 10,
                                         marginLeft: 10,
                                     }}>
-                                        <Image source={require('../../assets/images/monthlysales.png')} style={{
+                                        <Image source={require('../assets/images/monthlysales.png')} style={{
                                             marginLeft: 20, marginTop: 40,
                                         }} />
                                         <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
@@ -524,7 +524,7 @@ class Home extends Component {
                                         borderRadius: 10,
                                         marginLeft: 10,
                                     }}>
-                                        <Image source={require('../../assets/images/monthlysales.png')} style={{
+                                        <Image source={require('../assets/images/monthlysales.png')} style={{
                                             marginLeft: 20, marginTop: 40,
                                         }} />
                                         <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, marginLeft: 60, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
@@ -546,7 +546,7 @@ class Home extends Component {
                                         borderRadius: 10,
                                         marginLeft: 10,
                                     }}>
-                                        <Image source={require('../../assets/images/monthlysales.png')} style={{
+                                        <Image source={require('../assets/images/monthlysales.png')} style={{
                                             marginLeft: 20, marginTop: 40,
                                         }} />
                                         <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, marginLeft: 20, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
@@ -684,7 +684,7 @@ class Home extends Component {
                                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
                                 }}>
                                     <View style={{ flexDirection: 'column', width: '100%', height: 60, }}>
-                                        <Image source={require('../../assets/images/iconmonstr-credit-card-thin.png')} style={{
+                                        <Image source={require('../assets/images/iconmonstr-credit-card-thin.png')} style={{
                                             position: 'absolute', left: 20, top: 25,
                                         }} />
                                         <Text style={{ fontSize: 12, marginTop: 16, marginLeft: 60, fontFamily: 'medium', color: "#222222" }}>

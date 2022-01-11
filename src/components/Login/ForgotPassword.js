@@ -6,7 +6,7 @@ var deviceWidth = Dimensions.get('window').width;
 import Device from 'react-native-device-detection';
 import LoginService from '../services/LoginService';
 import axios from 'axios';
-import Loader from '../loader';
+import Loader from '../../commonUtils/loader';
 
 class ForgotPassword extends Component {
     constructor(props) {

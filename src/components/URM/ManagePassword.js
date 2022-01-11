@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 var deviceWidth = Dimensions.get('window').width;
 import Device from 'react-native-device-detection';
-import Loader from '../loader';
+import Loader from '../../commonUtils/loader';
 import axios from 'axios';
 import UrmService from '../services/UrmService';
 

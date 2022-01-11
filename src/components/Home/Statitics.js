@@ -292,7 +292,7 @@ class Statitics extends Component {
                 <View style={styles.mainContainer}>
                     <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
                         <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                            <Image source={require('../../assets/images/backButton.png')} />
+                            <Image source={require('../assets/images/backButton.png')} />
                         </TouchableOpacity>
                         <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Statistics </Text>
                     </View>

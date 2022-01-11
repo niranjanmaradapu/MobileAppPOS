@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import Inventory from '../components/tabbar/Inventory/Inventory';
-import AddBarcode from '../components/tabbar/Inventory/AddBarcode';
-import EditBarcode from '../components/tabbar/Inventory/EditBarcode';
-import ViewReBarcode from '../components/tabbar/Inventory/ViewReBarcode';
+import Inventory from '../components/Inventory/Inventory';
+import AddBarcode from '../components/Inventory/AddBarcode';
+import EditBarcode from '../components/Inventory/EditBarcode';
+import ViewReBarcode from '../components/Inventory/ViewReBarcode';
 const Stack = createStackNavigator();
 export default class InventoryNavigation extends Component {
     render() {

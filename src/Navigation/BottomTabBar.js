@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
 import { Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Settings from '../components/tabbar/Profile/Settings';
+import Settings from '../components/Profile/Settings';
 import NewSaleNavigation from './NewSaleNavigation';
 import HomeNav from './HomeNav';
-import KathaBook from '../components/tabbar/Kathabook/KathaBook';
-import Promo from '../components/tabbar/Promotions/Promo';
+import KathaBook from '../components/Kathabook/KathaBook';
 import PromoNavigation from './PromoNavigation';
 import Device from 'react-native-device-detection';
 

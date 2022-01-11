@@ -9,8 +9,8 @@ import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
-import Loader from '../../loader';
-import PromotionsService from '../../services/PromotionsService';
+import Loader from '../../commonUtils/loader';
+import PromotionsService from '../services/PromotionsService';
 var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
@@ -229,7 +229,7 @@ class AddPool extends Component {
 
                 <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
                     <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../../assets/images/backButton.png')} />
+                        <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Add Pool </Text>
                 </View>
@@ -358,7 +358,7 @@ class AddPool extends Component {
 
 
                                         <TouchableOpacity style={Device.isTablet ? poolflats.editButton_tablet : poolflats.editButton_mobile} onPress={() => this.handleeditaction(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
                                         </TouchableOpacity>
                                         <View style={{
                                             backgroundColor: 'grey',
@@ -372,7 +372,7 @@ class AddPool extends Component {
 
 
                                         <TouchableOpacity style={Device.isTablet ? poolflats.deleteButton_tablet : poolflats.deleteButton_mobile} onPress={() => this.handledeleteaction(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
                                         </TouchableOpacity>
                                         <View style={{
                                             backgroundColor: 'grey',
@@ -429,7 +429,7 @@ class AddPool extends Component {
                                             <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> {this.state.updateRool == true ? 'Update pool rule' : 'Add pool rule'} </Text>
 
                                             <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                                <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
 
                                             <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native';
 import { Chevron } from 'react-native-shapes';
-import Loader from '../loader';
+import Loader from '../../commonUtils/loader';
 import axios from 'axios';
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
@@ -297,6 +297,11 @@ export default class AddUser extends Component {
      
         this.setState({ storesArray: this.state.storesArray })
     };
+
+    cancel() {
+        this.props.navigation.goBack(null);
+        return true;
+    }
 
     handleName = (value) => {
         this.setState({ name: value });

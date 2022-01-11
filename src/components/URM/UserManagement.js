@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import Loader from "../loader";
+import Loader from "../../commonUtils/loader";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import UrmService from '../services/UrmService';

@@ -1,11 +1,11 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { Component } from 'react'
-import ScanBarCode from '../components/tabbar/Newsale/ScanBarCode';
-import NewSale from '../components/tabbar/Newsale/NewSale';
-import Orders from '../components/tabbar/Newsale/Orders';
-import ImageScanner from '../components/tabbar/Newsale/ImageScanner';
-import ProductEdit from '../components/tabbar/Newsale/ProductEdit';
-import Payment from '../components/tabbar/Newsale/Payment';
+import ScanBarCode from '../components/Newsale/ScanBarCode';
+import NewSale from '../components/Newsale/NewSale';
+import Orders from '../components/Newsale/Orders';
+import ImageScanner from '../components/Newsale/ImageScanner';
+import ProductEdit from '../components/Newsale/ProductEdit';
+import Payment from '../components/Newsale/Payment';
 
 
 const Stack = createStackNavigator();

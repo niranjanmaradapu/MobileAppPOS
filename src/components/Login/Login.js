@@ -6,7 +6,7 @@ import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, Touchable
 import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Loader from '../loader';
+import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;

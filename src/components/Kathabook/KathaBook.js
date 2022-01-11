@@ -25,7 +25,7 @@ class KathaBook extends Component {
             <View style={{ flex: 1 }}>
                 <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
                     <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
-                        <Image source={require('../../assets/images/menu.png')} />
+                        <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> KATHA BOOK </Text>
 

@@ -3,7 +3,7 @@ import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOp
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import Loader from '../loader';
+import Loader from '../../commonUtils/loader';
 import UrmService from '../services/UrmService';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';

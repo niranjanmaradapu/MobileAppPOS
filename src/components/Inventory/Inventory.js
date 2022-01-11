@@ -6,8 +6,8 @@ import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
-import Loader from "../../loader";
-import InventoryService from '../../services/InventoryService';
+import Loader from "../../commonUtils/loader";
+import InventoryService from '../services/InventoryService';
 
 var deviceWidth = Dimensions.get("window").width;
 
@@ -83,6 +83,8 @@ export default class Inventory extends Component {
         }).catch(() => {
             console.log('there is error getting storeId');
         });
+
+        
     }
 
     getAllBarcodes() {
@@ -333,7 +335,7 @@ export default class Inventory extends Component {
                 }
                 <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
                     <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../../assets/images/menu.png')} />
+                        <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
                         Inventory Portal
@@ -351,7 +353,7 @@ export default class Inventory extends Component {
                     <TouchableOpacity
                         style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
                         onPress={() => this.filterAction()} >
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/promofilter.png')} />
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
                     </TouchableOpacity>
                 </View>
                 <View style={Device.isTablet ? styles.modalContainer_tablet : styles.modalContainer_mobile}>
@@ -422,7 +424,7 @@ export default class Inventory extends Component {
                                                         top: 7,
                                                         width: 50, height: 50,
                                                     }} onPress={() => this.modelCancel()}>
-                                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
 
                                                     <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
@@ -471,11 +473,11 @@ export default class Inventory extends Component {
                                             </Modal>
                                         </View>)}
                                     <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
-                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
                                     </TouchableOpacity>
 
                                     <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handlebarcodedeleteaction(item, index)}>
-                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
                                     </TouchableOpacity>
 
                                     {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{ }</Text> */}
@@ -490,7 +492,7 @@ export default class Inventory extends Component {
 
                                                     <Text style={Device.isTablet ? flats.deleteBarcodeHeading_tablet : flats.deleteBarcodeHeading_mobile}> Delete Barcode Id </Text>
                                                     <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
 
                                                     <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
@@ -538,11 +540,11 @@ export default class Inventory extends Component {
                                     <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>DATE: {"\n"}{item.fromDate}</Text>
                                 </View>
                                 <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.print(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/print.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/print.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.seeDetails(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/eye.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/eye.png')} />
                                 </TouchableOpacity>
                             </View>
                         )}
@@ -555,7 +557,7 @@ export default class Inventory extends Component {
                                 <KeyboardAwareScrollView enableOnAndroid={true} >
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
                                     <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
                                     </Text>
@@ -567,7 +569,7 @@ export default class Inventory extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
@@ -577,7 +579,7 @@ export default class Inventory extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
                                     {this.state.datepickerOpen && this.state.flagone && (
                                         <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
@@ -650,7 +652,7 @@ export default class Inventory extends Component {
                                 <KeyboardAwareScrollView enableOnAndroid={true} >
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
                                     <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
                                     </Text>
@@ -662,7 +664,7 @@ export default class Inventory extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
@@ -672,7 +674,7 @@ export default class Inventory extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
                                     {this.state.datepickerOpen && this.state.flagtwo && (
                                         <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>

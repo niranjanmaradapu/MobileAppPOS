@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { SectionList, StyleSheet, Text, Dimensions, View, TouchableOpacity, Image } from 'react-native';
 import Device from 'react-native-device-detection';
-import Loader from '../loader';
+import Loader from '../../commonUtils/loader';
 var deviceWidth = Dimensions.get('window').width;
 import axios from 'axios';
 import UrmService from '../services/UrmService';

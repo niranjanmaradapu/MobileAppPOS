@@ -8,7 +8,7 @@ import { SearchBar } from "react-native-elements";
 import ImagePicker from 'react-native-image-crop-picker';
 import Modal from "react-native-modal";
 import { openDatabase } from 'react-native-sqlite-storage';
-import NewSaleService from '../../services/NewSaleService';
+import NewSaleService from '../services/NewSaleService';
 var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
@@ -427,7 +427,7 @@ class Products extends Component {
                             right: 10,
                             top: 20,
                         }} onPress={() => this.navigateToImageScanner()}>
-                            <Image source={require('../../assets/images/barcode.png')} />
+                            <Image source={require('../assets/images/barcode.png')} />
                         </TouchableOpacity>
 
                         {/* this.props.navigation.navigate('AuthNavigation') */}
@@ -534,7 +534,7 @@ class Products extends Component {
                                     borderColor: "lightgray",
                                     // borderRadius:5,
                                 }} onPress={() => this.handleeditaction()}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
@@ -548,7 +548,7 @@ class Products extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handledeleteaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
                                 </TouchableOpacity>
                                 <View style={{
                                     backgroundColor: 'grey',

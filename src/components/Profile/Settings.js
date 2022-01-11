@@ -9,9 +9,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
-import Loader from '../../loader';
-import ProfileService from '../../services/ProfileService';
-import UrmService from '../../services/UrmService';
+import Loader from '../../commonUtils/loader';
+import ProfileService from '../services/ProfileService';
+import UrmService from '../services/UrmService';
 var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
@@ -401,14 +401,14 @@ class Settings extends Component {
                 <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
 
                     <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
-                        <Image source={require('../../assets/images/menu.png')} />
+                        <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Settings </Text>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
                         onPress={() => this.signOut()} >
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/applogout.png')} />
-                    </TouchableOpacity>
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/applogout.png')} />
+                    </TouchableOpacity> */}
 
                 </View>
 
@@ -432,7 +432,7 @@ class Settings extends Component {
                                 <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 10, alignSelf: 'center', top: -20, left: 15 }}>
                                     <Image
                                         style={{ width: 30, height: 30, borderRadius: 10, }}
-                                        source={require('../../assets/images/cameraclick.png')} />
+                                        source={require('../assets/images/cameraclick.png')} />
 
                                 </TouchableOpacity>
 
@@ -623,7 +623,7 @@ class Settings extends Component {
                                             marginLeft: 0, marginTop: 0, color: "#6F6F6F", fontSize: Device.isTablet ? 20 : 14,
                                             fontFamily: "regular"
                                         }}  > {this.state.dateOfBirth} </Text>
-                                        <Image style={{ position: 'absolute', top: 5, right: 0, }} source={require('../../assets/images/calender.png')} />
+                                        <Image style={{ position: 'absolute', top: 5, right: 0, }} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
 
                                 </View>

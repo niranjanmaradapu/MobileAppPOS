@@ -1,10 +1,10 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { Component } from 'react'
-import Promo from '../components/tabbar/Promotions/Promo';
-import AddPool from '../components/tabbar/Promotions/AddPool';
-import EditPool from '../components/tabbar/Promotions/EditPool';
-import AddPromo from '../components/tabbar/Promotions/AddPromo';
-import AddLoyalty from '../components/tabbar/Promotions/AddLoyalty';
+import Promo from '../components/Promotions/Promo';
+import AddPool from '../components/Promotions/AddPool';
+import EditPool from '../components/Promotions/EditPool';
+import AddPromo from '../components/Promotions/AddPromo';
+import AddLoyalty from '../components/Promotions/AddLoyalty';
 
 const Stack = createStackNavigator();
 export default class ProductsNavigation extends React.Component {

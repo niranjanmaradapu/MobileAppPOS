@@ -48,7 +48,7 @@ class Orders extends Component {
                                 width: 20,
                                 height: 20,
                             }} onPress={() => this.handleBackButtonClick()}>
-                                <Image source={require('../../assets/images/backButton.png')} />
+                                <Image source={require('../assets/images/backButton.png')} />
                             </TouchableOpacity>
                         </View>
 

@@ -33,7 +33,7 @@ export default class SplashScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <Image source={require('./assets/images/welcomeLogo.png')} style={Device.isTablet ? styles.logoImage_tablet : styles.logoImage_mobile} />
+                <Image source={require('../assets/images/welcomeLogo.png')} style={Device.isTablet ? styles.logoImage_tablet : styles.logoImage_mobile} />
                 <Text style={Device.isTablet ? styles.splashText_tablet : styles.splashText_mobile}> POWERED BY OTSI </Text>
             </View>
         )

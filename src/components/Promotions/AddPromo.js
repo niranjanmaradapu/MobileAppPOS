@@ -7,8 +7,8 @@ import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
-import Loader from '../../loader';
-import PromotionsService from '../../services/PromotionsService';
+import Loader from '../../commonUtils/loader';
+import PromotionsService from '../services/PromotionsService';
 var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
@@ -289,7 +289,7 @@ class AddPromo extends Component {
 
                 <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
                     <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../../assets/images/backButton.png')} />
+                        <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {this.state.isEdit == true ? 'Edit Promo' : 'Add Promo'} </Text>
                 </View>
@@ -389,7 +389,7 @@ class AddPromo extends Component {
 
                             <Image style={{ position: 'absolute', top: 10, left: 20, }} source={
                                 //require('../assets/images/chargeunselect.png')}
-                                this.state.chargeExtra ? require('../../assets/images/chargeselect.png') : require('../../assets/images/chargeunselect.png')} />
+                                this.state.chargeExtra ? require('../assets/images/chargeselect.png') : require('../assets/images/chargeunselect.png')} />
                         </TouchableOpacity>
 
                         {this.state.chargeExtra && (
@@ -559,7 +559,7 @@ class AddPromo extends Component {
 
 
                                 <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../../assets/images/modelcancel.png')} />
+                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                 </TouchableOpacity>
 
                                 <ScrollView style={{ marginTop: 50 }}>
@@ -582,7 +582,7 @@ class AddPromo extends Component {
                                                         }}>
                                                             {item.poolName}
                                                         </Text>
-                                                        <Image source={this.state.selectedItem === index ? require('../../assets/images/poolselect.png') : require('../../assets/images/poolsunselect.png')} style={{ position: 'absolute', left: 20, top: 0 }} />
+                                                        <Image source={this.state.selectedItem === index ? require('../assets/images/poolselect.png') : require('../assets/images/poolsunselect.png')} style={{ position: 'absolute', left: 20, top: 0 }} />
                                                     </View>
 
                                                 </View>

@@ -15,11 +15,11 @@ import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
-import Loader from '../../loader';
-import CreateCustomerService from '../../services/CreateCustomerService';
-import InventoryService from '../../services/InventoryService';
-import LoginService from '../../services/LoginService';
-import NewSaleService from '../../services/NewSaleService';
+import Loader from '../../commonUtils/loader';
+import CreateCustomerService from '../services/CreateCustomerService';
+import InventoryService from '../services/InventoryService';
+import LoginService from '../services/LoginService';
+import NewSaleService from '../services/NewSaleService';
 var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
@@ -490,7 +490,7 @@ class NewSale extends Component {
         right: 10,
         top: 20,
       }} onPress={() => this.navigateToImageScanner()}>
-        <Image source={require('../../assets/images/barcode.png')} />
+        <Image source={require('../assets/images/barcode.png')} />
       </TouchableOpacity>
 
       {/* this.props.navigation.navigate('AuthNavigation') */}
@@ -1583,7 +1583,7 @@ class NewSale extends Component {
         {/* <SafeAreaView> */}
         <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
           <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
-            <Image source={require('../../assets/images/menu.png')} />
+            <Image source={require('../assets/images/menu.png')} />
           </TouchableOpacity>
           <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> New Sale </Text>
           <TouchableOpacity
@@ -1643,7 +1643,7 @@ class NewSale extends Component {
               }}> NEW SALE </Text>
 
 
-              <Image source={this.state.flagone ? require('../../assets/images/topSelect.png') : null} style={{
+              <Image source={this.state.flagone ? require('../assets/images/topSelect.png') : null} style={{
                 left: 30, marginTop: 5,
               }} />
 
@@ -1689,7 +1689,7 @@ class NewSale extends Component {
                 fontSize: 14, textAlign: 'center', width: 100,
 
               }}> ADD Product </Text>
-              <Image source={this.state.flagtwo ? require('../../assets/images/topSelect.png') : null} style={{
+              <Image source={this.state.flagtwo ? require('../assets/images/topSelect.png') : null} style={{
                 left: 30, marginTop: 5,
               }} />
             </View>
@@ -1728,7 +1728,7 @@ class NewSale extends Component {
                 fontFamily: "regular",
                 fontSize: 14, textAlign: 'center', width: 100,
               }}> FIND ITEM  </Text>
-              <Image source={this.state.flagthree ? require('../../assets/images/topSelect.png') : null} style={{
+              <Image source={this.state.flagthree ? require('../assets/images/topSelect.png') : null} style={{
                 left: 30, marginTop: 5,
               }} />
             </View>
@@ -1755,7 +1755,7 @@ class NewSale extends Component {
                   <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 10, alignSelf: 'center', top: -20, left: 15 }} onPress={() => this.imageAction()}>
                     <Image
                       style={{ width: 30, height: 30, borderRadius: 10, }}
-                      source={require('../../assets/images/cameraclick.png')} />
+                      source={require('../assets/images/cameraclick.png')} />
 
                   </TouchableOpacity>
 
@@ -1815,7 +1815,7 @@ class NewSale extends Component {
                     />
 
                     <TouchableOpacity style={Device.isTablet ? styles.scanButton_tablet : styles.scanButton_mobile} onPress={() => this.navigateToGetBarCode()}>
-                      <Image style={Device.isTablet ? styles.scanButtonImage_tablet : styles.scanButtonImage_mobile} source={require('../../assets/images/addnew.png')} />
+                      <Image style={Device.isTablet ? styles.scanButtonImage_tablet : styles.scanButtonImage_mobile} source={require('../assets/images/addnew.png')} />
                       <Text style={Device.isTablet ? styles.scanButtonText_tablet : styles.scanButtonText_mobile}> scan </Text>
                     </TouchableOpacity>
                   </View>
@@ -1970,7 +1970,7 @@ class NewSale extends Component {
                   }}>
 
                     <View style={{ flexDirection: 'column', height: 120, }}>
-                      <Image source={require('../../assets/images/default.jpeg')}
+                      <Image source={require('../assets/images/default.jpeg')}
                         //source={{ uri: item.image }}
                         style={{
                           position: 'absolute', left: 20, top: 15, width: 90, height: 90,
@@ -2073,7 +2073,7 @@ class NewSale extends Component {
                         borderWidth: 1,
                         borderColor: "lightgray",
                       }} onPress={() => this.handlenewsaledeleteaction(item, index)}>
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
+                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
                       </TouchableOpacity>
                     </View>
 
@@ -2108,7 +2108,7 @@ class NewSale extends Component {
                               top: 7,
                               width: 50, height: 50,
                             }} onPress={() => this.modelCancel()}>
-                              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
                             </TouchableOpacity>
 
                             <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
@@ -2448,7 +2448,7 @@ class NewSale extends Component {
                   right: 10,
                   top: 20,
                 }} onPress={() => this.navigateToImageScanner()}>
-                  <Image source={require('../../assets/images/barcode.png')} />
+                  <Image source={require('../assets/images/barcode.png')} />
                 </TouchableOpacity>
 
                 {/* this.props.navigation.navigate('AuthNavigation') */}
@@ -2505,7 +2505,7 @@ class NewSale extends Component {
                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
                   }}>
                     <View style={{ flexDirection: 'column', width: '100%', height: 120, }}>
-                      <Image source={require('../../assets/images/default.jpeg')}
+                      <Image source={require('../assets/images/default.jpeg')}
                         //source={{ uri: item.image }} 
                         style={{
                           position: 'absolute', left: 20, top: 15, width: 90, height: 90, borderwidth: 5, borderColor: "#F6F6F6",
@@ -2560,7 +2560,7 @@ class NewSale extends Component {
                               top: 7,
                               width: 50, height: 50,
                             }} onPress={() => this.modelCancel()}>
-                              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../../assets/images/modelcancel.png')} />
+                              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
                             </TouchableOpacity>
 
                             <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
@@ -2636,7 +2636,7 @@ class NewSale extends Component {
                       borderColor: "lightgray",
                       // borderRadius:5,
                     }} onPress={() => this.handleeditaction(item, index)}>
-                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/edit.png')} />
+                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={{
@@ -2650,7 +2650,7 @@ class NewSale extends Component {
                       borderWidth: 1,
                       borderColor: "lightgray",
                     }} onPress={() => this.handledeleteaction(item, index)}>
-                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../../assets/images/delete.png')} />
+                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
                     </TouchableOpacity>
                     <View style={{
                       backgroundColor: 'grey',

@@ -224,12 +224,13 @@ const styles = StyleSheet.create({
         color: '#ffffff',
     },
     caption: {
+        marginTop: -5,
         fontSize: 14,
         lineHeight: 14,
         color: '#ffffff',
     },
     middelcaption: {
-        marginTop: 0,
+        marginTop: 2,
         fontSize: 14,
         lineHeight: 14,
         color: '#ffffff',
