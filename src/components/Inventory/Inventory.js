@@ -1,13 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity,ScrollView, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 import Loader from "../../commonUtils/loader";
 import InventoryService from '../services/InventoryService';
+import UrmService from '../services/UrmService';
 
 var deviceWidth = Dimensions.get("window").width;
 
@@ -40,6 +41,8 @@ export default class Inventory extends Component {
             barcodeDelete: false,
             storeId: 1,
             storeName: "",
+            privilages: [],
+            subPrivilages: "",
         };
     }
 
@@ -84,6 +87,91 @@ export default class Inventory extends Component {
             console.log('there is error getting storeId');
         });
 
+        AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
+            if (value === "true") {
+                var domainId = "1";
+                if (global.domainName === "Textile") {
+                    domainId = "1";
+                }
+                else if (global.domainName === "Retail") {
+                    domainId = "2";
+                }
+                else if (global.domainName === "Electrical & Electronics") {
+                    domainId = "3";
+                }
+             
+                axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
+                    if (res.data && res.data["isSuccess"] === "true") {
+                        let len = res.data["result"].length;
+                        if (len > 0) {
+                            if (len > 0) {
+                                for (let i = 0; i < len; i++) {
+                                    let previlage = res.data["result"][i];
+                                    if (previlage.name === "Inventory Portal") {
+                                        for (let i = 0; i < previlage.subPrivillages.length; i++) {
+                                            console.log(previlage.subPrivillages[i].parentPrivillageId);
+                                            if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
+                                                let subprivilage = previlage.subPrivillages[i];
+                                                if (subprivilage.name === "Dashboard") {
+                                                    this.setState({ flagOne: false, flagTwo: false });
+                                                }
+                                                if (i === 0) {
+                                                    this.state.privilages.push({ bool: true, name: subprivilage.name });
+                                                }
+                                                else {
+                                                    this.state.privilages.push({ bool: false, name: subprivilage.name });
+                                                }
+                                            }
+                                        }
+                                    }
+                                    this.setState({ privilages: this.state.privilages });
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            else {
+                AsyncStorage.getItem("rolename").then((value) => {
+                    axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
+                        if (res.data && res.data["isSuccess"] === "true") {
+                            let len = res.data["result"].parentPrivilages.length;
+                            let length = res.data["result"].subPrivilages.length;
+                            // console.log(.name)
+                            if (len > 0) {
+                                for (let i = 0; i < len; i++) {
+                                    let previlage = res.data["result"].parentPrivilages[i];
+                                    if (previlage.name === "Inventory Portal") {
+
+                                        if (length > 0) {
+                                            for (let i = 0; i < length; i++) {
+                                                if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
+                                                    let subprivilage = res.data["result"].subPrivilages[i];
+                                                    if (i === 0) {
+                                                        this.state.privilages.push({ bool: true, name: subprivilage.name });
+                                                    }
+                                                    else {
+                                                        this.state.privilages.push({ bool: false, name: subprivilage.name });
+                                                    }
+                                                }
+                                                this.setState({ privilages: this.state.privilages });
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }).catch(() => {
+                    console.log('there is error saving domainDataId');
+                });
+
+            }
+        }).catch(() => {
+            console.log('there is error getting sadasdsd');
+        });
+
+
         
     }
 
@@ -96,7 +184,7 @@ export default class Inventory extends Component {
             "storeId": this.state.storeId
         };
         console.log("sdsad" + this.state.endDate);
-        this.setState({ loading: true });
+       this.setState({ loading: true });
         axios.post(InventoryService.getTextileBarcodes(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 if (res.data["result"]) {
@@ -147,14 +235,40 @@ export default class Inventory extends Component {
 
 
 
-    topbarAction1() {
-        this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false });
-        this.getAllBarcodes();
+    topbarAction1 = (item, index) => {
+        if (item.name === "Barcode List") {
+            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false });
+            this.getAllBarcodes();
+            this.setState({ flagOne: true });
+        } else {
+            this.setState({ flagOne: false });
+        }
+        if (item.name === "Re-Barcode List") {
+            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: false, flagtwo: true });
+        this.getbarcodeTexttileAdjustments();
+            this.setState({ flagTwo: true });
+        } else {
+            this.setState({ flagTwo: false });
+        }
+
+       
+
+        if (this.state.privilages[index].bool === true) {
+            this.state.privilages[index].bool = false;
+        }
+        else {
+            this.state.privilages[index].bool = true;
+        }
+        for (let i = 0; i < this.state.privilages.length; i++) {
+            if (index != i) {
+                this.state.privilages[i].bool = false;
+            }
+            this.setState({ privilages: this.state.privilages });
+        }
     }
 
     topbarAction2() {
-        this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: false, flagtwo: true });
-        this.getbarcodeTexttileAdjustments();
+        
     }
 
     navigateToAddBarcode() {
@@ -356,25 +470,39 @@ export default class Inventory extends Component {
                         <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
                     </TouchableOpacity>
                 </View>
-                <View style={Device.isTablet ? styles.modalContainer_tablet : styles.modalContainer_mobile}>
-                    <TouchableOpacity style={[this.state.flagone ? styles.modalActive : styles.modalInActive, Device.isTablet ? styles.modalButton_tablet : styles.modalButton_mobile, styles.modalButton1]}
-                        onPress={() => this.topbarAction1()} >
-                        <View>
-                            <Text style={[Device.isTablet ? styles.modalButtonText_tablet : styles.modalButtonText_mobile, this.state.flagone ? styles.modalActiveText : styles.modalInActiveText]}>
-                                Barcode List
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[this.state.flagtwo ? styles.modalActive : styles.modalInActive, Device.isTablet ? styles.modalButton_tablet : styles.modalButton_mobile, styles.modalButton2]}
-                        onPress={() => this.topbarAction2()} >
-                        <View>
-                            <Text style={[Device.isTablet ? styles.modalButtonText_tablet : styles.modalButtonText_mobile, this.state.flagtwo ? styles.modalActiveText : styles.modalInActiveText]} >
-                                Re-Barcode List
-                            </Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>
 
+                <ScrollView>
+                    <View style={styles.container}>
+
+                        <FlatList
+                            style={styles.flatList}
+                            horizontal
+                            data={this.state.privilages}
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({ item, index }) => (
+                                <TouchableOpacity style={{
+                                    height: 36,
+                                    width: 200,
+                                    borderWidth: 1,
+                                    backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
+                                    borderColor: item.bool ? '#ED1C24' : '#858585',
+                                    borderRadius: 5,
+                                    marginLeft: 10,
+                                }} onPress={() => this.topbarAction1(item, index)} >
+
+                                    <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
+                                        {item.name}
+                                    </Text>
+                                </TouchableOpacity>
+                            )}
+                            ListFooterComponent={<View style={{ width: 15 }}></View>}
+                        />
+
+                      
+
+                    </View>
+                </ScrollView >
 
                 {this.state.flagone && (
                     <FlatList
@@ -784,6 +912,14 @@ const styles = StyleSheet.create({
         bottom: 0,
         width: 40,
         height: 40,
+    },
+    flatList: {
+        marginTop: 20
+    },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        // backgroundColor: '#FAFAFF'
     },
     headerTitle_mobile: {
         position: 'absolute',
