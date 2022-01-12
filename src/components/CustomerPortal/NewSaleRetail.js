@@ -163,7 +163,7 @@ class NewSaleRetail extends Component {
                         if (len > 0) {
                             for (let i = 0; i < len; i++) {
                                 let previlage = res.data["result"][i];
-                                if (previlage.name === "Customer Portal") {
+                                if (previlage.name === "Billing Portal") {
                                     for (let i = 0; i < previlage.subPrivillages.length; i++) {
                                         console.log(previlage.subPrivillages[i].parentPrivillageId);
                                         if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
@@ -197,7 +197,7 @@ class NewSaleRetail extends Component {
                         if (len > 0) {
                             for (let i = 0; i < len; i++) {
                                 let previlage = res.data["result"].parentPrivilages[i];
-                                if (previlage.name === "Customer Portal") {
+                                if (previlage.name === "Billing Portal") {
 
                                     if (length > 0) {
                                         for (let i = 0; i < length; i++) {
@@ -233,6 +233,7 @@ class NewSaleRetail extends Component {
 
   topbarAction1 = (item, index) => {
     if (item.name === "Generate Invoice") {
+      console.log('geneare invocie safasfsf')
         this.setState({ inventoryDelete: false, modalVisible: false, flagone: true, flagtwo: false, flagthree: false, flagfour: false });
     }
 
@@ -1059,7 +1060,7 @@ class NewSaleRetail extends Component {
       flagthree: true,
       flagfour: false
     });
-    this.synccreateInventoryOfflineToOnline();
+   // this.synccreateInventoryOfflineToOnline();
     this.getItems();
   }
 
@@ -1614,7 +1615,7 @@ class NewSaleRetail extends Component {
           <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
             <Image source={require('../assets/images/menu.png')} />
           </TouchableOpacity>
-          <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Customer Portal </Text>
+          <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Billing Portal </Text>
           <TouchableOpacity
             style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
             onPress={() => this.navigateToScanCode()} >
@@ -1815,11 +1816,11 @@ class NewSaleRetail extends Component {
                   onEndEditing={() => this.endEditing()}
                 />
 
-                {/* <TouchableOpacity
+                <TouchableOpacity
                   style={Device.isTablet ? styles.tagCustomerButton_tablet : styles.tagCustomerButton_mobile}
                   onPress={() => this.tagCustomer()} >
                   <Text style={Device.isTablet ? styles.tagCustomerButtonText_tablet : styles.tagCustomerButtonText_mobile}> {('Tag Customer')} </Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
               </View>
               <FlatList
                 //  ListHeaderComponent={this.renderHeader}
@@ -2207,7 +2208,7 @@ class NewSaleRetail extends Component {
                           { label: 'Female', value: 'female' },
                         ]}
                         onValueChange={this.handlecustomerGender}
-                        style={pickerSelectStyles}
+                        style={pickerSelectStyles_mobile}
                         value={this.state.customerGender}
                         useNativeAndroidPickerStyle={false}
 

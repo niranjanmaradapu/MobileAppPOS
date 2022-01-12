@@ -76,7 +76,7 @@ export function DrawerContent(props) {
                         />
                         )} 
 
-                        {global.previlage2 === "Customer Portal" && global.domainName == "Retail" && (
+                        {global.previlage2 === "Billing Portal" && global.domainName == "Retail" && (
                             <DrawerItem
                                 icon={({ color, size }) => (
                                     <Image
@@ -84,11 +84,11 @@ export function DrawerContent(props) {
                                         source={require('../components/assets/images/customerportal.png')}
                                     ></Image>
                                 )}
-                                label="Customer Portal"
+                                label="Billing Portal"
                                 onPress={() => { props.navigation.navigate('CustomerRetailNavigation') }}
                             />
                         )}
-                        {global.previlage2 === "Customer Portal" && global.domainName == "Textile" && (
+                        {global.previlage2 === "Billing Portal" && global.domainName == "Textile" && (
                             <DrawerItem
                                 icon={({ color, size }) => (
                                     <Image
@@ -96,7 +96,7 @@ export function DrawerContent(props) {
                                         source={require('../components/assets/images/customerportal.png')}
                                     ></Image>
                                 )}
-                                label="Customer Portal"
+                                label="Billing Portal"
                                 onPress={() => { props.navigation.navigate('CustomerNavigation') }}
                             />
                         )}

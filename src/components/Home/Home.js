@@ -342,8 +342,8 @@ class Home extends Component {
                                         if (previlage.name === "Dashboard") {
                                             global.previlage1 = 'Dashboard';
                                         }
-                                        if (previlage.name === "Customer Portal") {
-                                            global.previlage2 = 'Customer Portal';
+                                        if (previlage.name === "Billing Portal") {
+                                            global.previlage2 = 'Billing Portal';
                                         }
                                         if (previlage.name === "Inventory Portal") {
                                             global.previlage3 = 'Inventory Portal';
@@ -380,8 +380,8 @@ class Home extends Component {
                                             if (previlage.name === "Dashboard") {
                                                 global.previlage1 = 'Dashboard';
                                             }
-                                            if (previlage.name === "Customer Portal") {
-                                                global.previlage2 = 'Customer Portal';
+                                            if (previlage.name === "Billing Portal") {
+                                                global.previlage2 = 'Billing Portal';
                                             }
                                             if (previlage.name === "Inventory Portal") {
                                                 global.previlage3 = 'Inventory Portal';

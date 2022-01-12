@@ -507,7 +507,7 @@ export default class Inventory extends Component {
                 {this.state.flagone && (
                     <FlatList
                         data={this.state.barcodesData}
-                        style={{ marginTop: 20, }}
+                        style={{ marginTop: 20}}
                         scrollEnabled={true}
                         renderItem={({ item, index }) => (
                             <View
@@ -914,7 +914,8 @@ const styles = StyleSheet.create({
         height: 40,
     },
     flatList: {
-        marginTop: 20
+        marginTop: 20,
+        marginBottom:20
     },
     container: {
         flex: 1,

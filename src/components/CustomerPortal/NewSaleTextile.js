@@ -63,7 +63,7 @@ class NewSaleTextile extends Component {
                             if (len > 0) {
                                 for (let i = 0; i < len; i++) {
                                     let previlage = res.data["result"][i];
-                                    if (previlage.name === "Customer Portal") {
+                                    if (previlage.name === "Billing Portal") {
                                         for (let i = 0; i < previlage.subPrivillages.length; i++) {
                                             console.log(previlage.subPrivillages[i].parentPrivillageId);
                                             if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
@@ -97,7 +97,7 @@ class NewSaleTextile extends Component {
                             if (len > 0) {
                                 for (let i = 0; i < len; i++) {
                                     let previlage = res.data["result"].parentPrivilages[i];
-                                    if (previlage.name === "Customer Portal") {
+                                    if (previlage.name === "Billing Portal") {
 
                                         if (length > 0) {
                                             for (let i = 0; i < length; i++) {
@@ -214,7 +214,7 @@ class NewSaleTextile extends Component {
                     <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Customer Portal </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Billing Portal </Text>
                    
                     {this.state.flagGenerateEstimationSlip && (
           <TouchableOpacity

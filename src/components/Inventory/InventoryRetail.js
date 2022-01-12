@@ -76,7 +76,7 @@ class InventoryRetail extends Component {
       inventoryDelete: false,
       lineItemDelete: false,
       uom: [],
-      privilages: [{bool:true,name:"Add Barcode"},{bool:false,name:"Barcode List"}],
+      privilages: [{bool:true,name:"Add Inventory"},{bool:false,name:"Inventory List"}],
       subPrivilages: "",
       store: '',
       camera: {
@@ -273,6 +273,7 @@ class InventoryRetail extends Component {
     this.setState({ arrayData: [], temp: [], search: null });
     NetInfo.addEventListener(state => {
       if (state.isConnected) {
+      
         axios.post(InventoryService.getAllBarcodes(), { "storeId": this.state.storeId }).then((res) => {
           if (res.data && res.data["isSuccess"] === "true") {
             let len = res.data["result"].length;
@@ -358,6 +359,7 @@ class InventoryRetail extends Component {
                                 let image = item['itemImage'];
                                 console.log('uom are' + lastModified);
                                 // console.log(res.rows + "added to table----");
+                               
                                 this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image, productItemId: lastModified, productuom: uom });
                                 if (this.state.arrayData.length === 1) {
                                   this.setState({ arrayData: this.state.arrayData });
@@ -994,7 +996,7 @@ class InventoryRetail extends Component {
 //   }
 
   topbarAction1 = (item, index) => {
-    if (item.name === "Add Barcode") {
+    if (item.name === "Add Inventory") {
         this.setState({
             inventoryDelete: false,
             modalVisible: false,
@@ -1014,7 +1016,7 @@ class InventoryRetail extends Component {
           //this.synccreateInventoryOfflineToOnline()
           this.getUOM();
     }
-    if (item.name === "Barcode List") {
+    if (item.name === "Inventory List") {
         this.setState({
             inventoryDelete: false,
             modalVisible: false,
