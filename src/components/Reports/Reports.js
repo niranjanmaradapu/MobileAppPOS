@@ -16,6 +16,7 @@ import ReportsDashboard from './ReportsDashboard';
 import { SalesSumary } from './SalesSumary';
 var deviceWidth = Dimensions.get('window').width;
 var deviceWidth = Dimensions.get('window').width;
+import ReportsService from '../services/ReportsService';
 const data = [true, false, false, false, false, false, false, false, false];
 
 
@@ -46,13 +47,14 @@ class Reports extends Component {
             modalVisible: true,
 
             // Component Arrays
-            estimationSlip: [1, 2],
-            newSale: [1, 2],
+            estimationSlip: [],
+            newSale: [],
             goodsReturn: [1, 2],
             salesSumary: [1, 2],
             listBarcodes: [1, 2],
             listPromotions: [1, 2],
             sbList: [],
+            storeId:0,
         };
     }
 
@@ -152,6 +154,7 @@ class Reports extends Component {
             this.setState({ flagDashboard: false });
         }
         if (item.name === "List Of Estimation Slip") {
+            this.setState({ estimationSlip: [] });
             this.setState({ flagEstimationSlip: true });
         } else {
             this.setState({ flagEstimationSlip: false });
@@ -260,6 +263,17 @@ class Reports extends Component {
         this.modelClose();
     };
 
+    getDetails= (data) => {
+        this.setState({ estimationSlip: [] });
+        this.setState({ estimationSlip: data });
+    };
+
+    getNewsaleDetails= (data) => {
+        this.setState({ newSale: [] });
+        this.setState({ newSale: data });
+    };
+
+
 
 
     render() {
@@ -311,6 +325,7 @@ class Reports extends Component {
                         {this.state.flagEstimationSlip && (
                             <ListOfEstimationSlip
                                 estimationSlip={this.state.estimationSlip}
+                                childParams={this.getDetails}
                                 modalVisible={this.state.modalVisible}
                                 flagFilterEstimationSlip={this.state.flagFilterEstimationSlip}
                                 modelCancelCallback={this.modelCancel}
@@ -320,6 +335,7 @@ class Reports extends Component {
                         {this.state.flagNewSale && (
                             <NewSaleReport
                                 newSale={this.state.newSale}
+                                childParamNewsales={this.getNewsaleDetails}
                                 modalVisible={this.state.modalVisible}
                                 modelCancelCallback={this.modelCancel}
                                 flagFilterNewSale={this.state.flagFilterNewSale}

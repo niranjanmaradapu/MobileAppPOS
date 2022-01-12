@@ -39,21 +39,21 @@ export default class NewSaleReport extends Component {
     }
 
     componentDidMount() {
-        AsyncStorage.getItem("domainDataId").then((value) => {
-            domainStringId = value
-            this.setState({ domainId: parseInt(domainStringId) })
-            console.log("domain data id" + this.state.domainId)
-           
-
-        }).catch(() => {
-            console.log('there is error getting domainDataId')
-        })
+        if (global.domainName === "Textile") {
+            this.setState({ domainId: 1 })
+        }
+        else if (global.domainName === "Retail") {
+            this.setState({ domainId: 2 })
+        }
+        else if (global.domainName === "Electrical & Electronics") {
+            this.setState({ domainId: 3 })
+        }
 
         AsyncStorage.getItem("storeId").then((value) => {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
-            this.getSaleBills();
+          
 
         }).catch(() => {
             console.log('there is error getting storeId');
@@ -63,37 +63,46 @@ export default class NewSaleReport extends Component {
     }
 
 
-    async getSaleBills() {
-        this.setState({ sbList: [] });
-       
-        const obj = {
-            "dateFrom":"2021-11-10",
-            "dateTo":"2021-11-11",
-            invoiceNumber:  null,
-            custMobileNumber: null,
-            billStatus: null,
-            storeId:this.state.storeId,
-            domainId:this.state.domainId
-          };
-       
-              console.log('params are' + JSON.stringify(obj))
-              this.setState({ loading: true })
-              console.log(ReportsService.newSaleReports())
-                axios.post(ReportsService.newSaleReports(), obj).then((res) => {
-                  console.log(res.data)
-                if (res.data && res.data["isSuccess"] === "true") {
-                    // this.props.route.params.onGoBack();
-                    // this.props.navigation.goBack();
-                }
-                else {
-                  alert(res.data.message);
-                }
-              }
-              ).catch(() => {
-               // alert('error');
-                this.setState({ loading: false });
-            }); 
+     getSaleBills() {
+        if (this.state.startDate === "") {
+            this.state.startDate = null;
+        }
+        if (this.state.endDate === "") {
+            this.state.endDate = null;
+        }
+        if (this.state.invoiceNumber === "") {
+            this.state.invoiceNumber = null;
+        }
+        if (this.state.mobile === "") {
+            this.state.mobile = null;
+        }
+        if (this.state.billPosition === "") {
+            this.state.billPosition = null;
+        }
 
+            const obj = {
+                "dateFrom":this.state.startDate,
+                "dateTo":this.state.endDate,
+                 invoiceNumber: this.state.invoiceNumber,
+                 custMobileNumber: this.state.mobile,
+                 billStatus: this.state.billPosition,
+                 storeId: this.state.storeId,
+                 domainId: this.state.domainId
+              };
+                  console.log('params are' + JSON.stringify(obj))
+                  axios.post(ReportsService.newSaleReports(), obj).then((res) => {
+                      console.log(res.data)
+                    if (res.data && res.data["isSuccess"] === "true") {
+                        this.props.childParamNewsales(res.data.result.newSaleVo);
+                        this.props.modelCancelCallback();
+                    }
+                    else {
+                      alert(res.data.message);
+                    }
+                  }
+                  ).catch(() => {
+                    this.props.modelCancelCallback();
+                }); 
     }
 
     handledeleteNewSale() {
@@ -113,29 +122,45 @@ export default class NewSaleReport extends Component {
     }
 
     datepickerDoneClicked() {
-        // if (parseInt(this.state.date.getDate()) < 10) {
-        //     this.setState({ fromDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
-        // }
-        // else {
-        this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
-        // }
-
+        if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+        }
+        else if (parseInt(this.state.date.getDate()) < 10) {
+            this.setState({ startDate:this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate()})
+        }
+        else if (parseInt(this.state.date.getMonth()) < 10) {
+            this.setState({ startDate: this.state.date.getFullYear()  + "-0" + (this.state.date.getMonth() + 1) + "-" +  this.state.date.getDate()})
+        }
+        else {
+            this.setState({ startDate: this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()})
+        }
         this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
-        // if (parseInt(this.state.enddate.getDate()) < 10) {
-        //     this.setState({ toDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() });
-        // }
-        // else {
-        this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
-        // }
+        if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+        }
+        else if (parseInt(this.state.enddate.getDate()) < 10) {
+            this.setState({ endDate:this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate()})
+        }
+        else if (parseInt(this.state.enddate.getMonth()) < 10) {
+            this.setState({ endDate: this.state.enddate.getFullYear()  + "-0" + (this.state.enddate.getMonth() + 1) + "-" +  this.state.enddate.getDate()})
+        }
+        else {
+            this.setState({ endDate: this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()})
+        }
+
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerCancelClicked() {
         this.setState({ date: new Date(), enddate: new Date(), datepickerOpen: false, datepickerendOpen: false });
     }
+
+    handleBillPositions= (value) => {
+        this.setState({ billPosition: value });
+    };
 
     handleInvoiceNumber = (value) => {
         this.setState({ invoiceNumber: value });
@@ -159,19 +184,19 @@ export default class NewSaleReport extends Component {
         return (
             <View>
                 <FlatList
-                    data={this.state.sbList}
+                    data={this.props.newSale}
                     style={{ marginTop: 20 }}
                     scrollEnabled={true}
                     renderItem={({ item, index }) => (
                         <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S NO: {index + 1} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S.NO: {index + 1} </Text>
                                     <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>INVOICE NUMBER: {"\n"} {item.invoiceNumber}</Text>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>EMP ID: {item.empId} </Text>
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >INVOICE DATE: {item.createdDate} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >INVOICE DATE: {"\n"} {item.createdDate} </Text>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BILL POSITION: {item.status}</Text>
                                 </View>
                                 <View style={flats.text}>
@@ -306,7 +331,12 @@ export default class NewSaleReport extends Component {
                                             Icon={() => {
                                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                             }}
-                                            items={this.state.positions}
+                                              items={[
+                                                { label: 'New', value: 'New' },
+                                                { label: 'Pending', value: 'Pending' },
+                                                { label: 'Cancelled', value: 'Cancelled' },
+                                                { label: 'success', value: 'success' },
+                                            ]}
                                             onValueChange={this.handleBillPositions}
                                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                             value={this.state.billPosition}
@@ -461,7 +491,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -20,
         backgroundColor: "#ffffff",
-        height: 400,
+        height: 580,
         position: 'absolute',
         bottom: -20,
     },
@@ -617,7 +647,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -40,
         backgroundColor: "#ffffff",
-        height: 500,
+        height: 670,
         position: 'absolute',
         bottom: -40,
     },
