@@ -1,12 +1,13 @@
-import React from 'react';
-import { StyleSheet, View, Text, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
-var deviceWidth = Dimensions.get('window').width;
-import I18n, { getLanguages } from 'react-native-i18n';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import React from 'react';
+import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
+import LoginService from '../services/LoginService';
+var deviceWidth = Dimensions.get('window').width;
 I18n.fallbacks = true;
 I18n.defaultLocale = 'en';
-import axios from 'axios';
-import LoginService from '../services/LoginService';
 const data = [{ key: "Textile", image: require("../assets/images/texttile.png") }, { key: "Retail", image: require("../assets/images/retaildomain.png") }, { key: "Admin", image: require("../assets/images/admin.png") }];
 
 export default class SelectDomain extends React.Component {
@@ -15,65 +16,65 @@ export default class SelectDomain extends React.Component {
         this.state = {
             domainData: [],
             selectedItem: 0,
-        }
+        };
     }
 
     componentDidMount() {
-        this.getDomainsList()
+        this.getDomainsList();
     }
 
     async getDomainsList() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
-        console.log('dsdasdsdadsadas is' + clientId)
+        console.log('dsdasdsdadsadas is' + clientId);
         axios.get(LoginService.getDomainsList() + clientId).then((res) => {
             let len = res.data["result"].length;
-            console.log('sdasdasdsd' + len)
+            console.log('sdasdasdsd' + len);
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
-                    let number = res.data.result[i]
-                    console.log(number)
-                    
-                    this.state.domainData.push(number)
+                    let number = res.data.result[i];
+                    console.log(number);
+
+                    this.state.domainData.push(number);
                     AsyncStorage.setItem("domainDataId", (res.data.result[0].clientDomainaId).toString()).then(() => {
                         // console.log
-                       
+
                     }).catch(() => {
-                        console.log('there is error saving token')
-                    })
+                        console.log('there is error saving token');
+                    });
                     AsyncStorage.setItem("domainName", res.data.result[0].domaiName).then(() => {
                         // console.log
-                       
+
                     }).catch(() => {
-                        console.log('there is error saving token')
-                    })
-                    this.setState({ domainData: this.state.domainData })
+                        console.log('there is error saving token');
+                    });
+                    this.setState({ domainData: this.state.domainData });
                 }
-            } 
+            }
         });
     }
 
 
     letsGoButtonAction() {
-        this.props.navigation.navigate('SelectStore',{isFromDomain:true});
+        this.props.navigation.navigate('SelectStore', { isFromDomain: true });
     }
 
 
     selectedDomain = (item, index) => {
-        this.setState({ selectedItem: index })
-        console.log('asdsadsd is' + item.clientDomainaId)
+        this.setState({ selectedItem: index });
+        console.log('asdsadsd is' + item.clientDomainaId);
         // if (index == 0) {
-            AsyncStorage.setItem("domainDataId", (item.clientDomainaId).toString()).then(() => {
-                // console.log
-               
-            }).catch(() => {
-                console.log('there is error saving token')
-            })
-            AsyncStorage.setItem("domainName", item.domaiName).then(() => {
-                // console.log
-               
-            }).catch(() => {
-                console.log('there is error saving token')
-            })
+        AsyncStorage.setItem("domainDataId", (item.clientDomainaId).toString()).then(() => {
+            // console.log
+
+        }).catch(() => {
+            console.log('there is error saving token');
+        });
+        AsyncStorage.setItem("domainName", item.domaiName).then(() => {
+            // console.log
+
+        }).catch(() => {
+            console.log('there is error saving token');
+        });
     };
 
 
@@ -102,14 +103,12 @@ export default class SelectDomain extends React.Component {
 
 
                                     <View style={{ flexDirection: 'column', width: '100%', height: 100 }}>
-                                        
+
 
                                         <Image
-                                            style={{ width: 60, height: 60, borderRadius: 30, marginLeft: 30, marginTop: 20, }}
-                                            source={require("../assets/images/texttile.png") }/>
-                                        <Text style={{
-                                            fontSize: 20, fontFamily: 'medium', marginTop: -40, alignSelf: 'center', color: this.state.selectedItem === index ? '#ffffff' : '#353C40'
-                                        }}>
+                                            style={Device.isTablet ? styles.image_tablet : styles.image_mobile}
+                                            source={require("../assets/images/texttile.png")} />
+                                        <Text style={[Device.isTablet ? styles.text_tablet : styles.text_mobile, { color: this.state.selectedItem === index ? '#ffffff' : '#353C40' }]}>
                                             {item.domaiName}
                                         </Text>
                                         <Image source={this.state.selectedItem === index ? require('../assets/images/langselect.png') : require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 40 }} />
@@ -121,50 +120,18 @@ export default class SelectDomain extends React.Component {
                     />
                 </View>
                 <TouchableOpacity
-                    style={styles.signInButton}
+                    style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                     onPress={() => this.letsGoButtonAction()} >
                     <Text style={styles.signInButtonText}> {('CONTINUE')} </Text>
                 </TouchableOpacity>
             </View>
 
-        )
+        );
     }
 }
 
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        flexDirection: 'row',
-        marginLeft: 24,
-        marginRight: 24,
-        marginTop: 2,
-        height: 34,
-        borderColor: '#AAAAAA',
-        backgroundColor: 'white',
-        color: 'black',
-        textAlign: 'center',
-    },
-    inputAndroid: {
-        flexDirection: 'row',
-        width: 100,
-        // marginLeft: 24,
-        // marginRight: 24,
-        marginTop: 2,
-        height: 34,
-        borderColor: '#AAAAAA',
-        backgroundColor: 'white',
-        color: 'black',
-        textAlign: 'center',
-
-    },
-})
-
-
 
 const styles = StyleSheet.create({
-    imagealign: {
-        marginTop: 14,
-        marginRight: 10,
-    },
     logoImage: {
         alignSelf: 'center',
         width: 177,
@@ -177,24 +144,63 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#FFFFFF",
     },
-    signInButton: {
-        backgroundColor: '#ED1C24',
-        justifyContent: 'center',
-        position: 'absolute',
-        marginLeft: 20,
-        width: deviceWidth - 40,
-        bottom: 30,
-        height: 44,
-        borderRadius: 10,
-        fontWeight: 'bold',
-        // marginBottom:100,
+
+    // Mobile
+    image_mobile: {
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        marginLeft: 30,
+        marginTop: 20,
     },
-    signInButtonText: {
-        color: 'white',
-        justifyContent: 'center',
+    text_mobile: {
+        fontSize: 20,
+        fontFamily: 'medium',
+        marginTop: -40,
         alignSelf: 'center',
-        fontSize: 14,
-        fontFamily: "regular",
+    },
+    saveButton_mobile: {
+        margin: 8,
+        height: 50,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    saveButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#ffffff",
+        fontSize: 15,
+        fontFamily: "regular"
     },
 
-})
+    // Tablet
+    image_tablet: {
+        width: 90,
+        height: 90,
+        borderRadius: 30,
+        marginLeft: 30,
+        marginTop: 20,
+    },
+    text_tablet: {
+        fontSize: 30,
+        fontFamily: 'medium',
+        marginTop: -40,
+        alignSelf: 'center',
+    },
+    saveButton_tablet: {
+        margin: 8,
+        height: 60,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    saveButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#ffffff",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+
+
+
+});
