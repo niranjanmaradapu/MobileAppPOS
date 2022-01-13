@@ -7,6 +7,9 @@ import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 var deviceWidth = Dimensions.get("window").width;
+import ReportsService from '../services/ReportsService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export class ListOfBarcodes extends Component {
 
@@ -26,8 +29,30 @@ export class ListOfBarcodes extends Component {
             empId: "",
             fromPrice: "",
             toPrice: "",
+            storeId:0,
+            storeName:"",
         };
     }
+
+    componentDidMount() {
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) });
+            console.log(this.state.storeId);
+          
+
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
+
+        AsyncStorage.getItem("storeName").then((value) => {
+            this.setState({ storeName:value});
+            console.log(this.state.storeName);
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
+    }
+
 
     datepickerClicked() {
         this.setState({ datepickerOpen: true });
@@ -38,23 +63,36 @@ export class ListOfBarcodes extends Component {
     }
 
     datepickerDoneClicked() {
-        // if (parseInt(this.state.date.getDate()) < 10) {
-        //     this.setState({ fromDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
-        // }
-        // else {
-        this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
-        // }
+        if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+        }
+        else if (parseInt(this.state.date.getDate()) < 10) {
+            this.setState({ startDate:this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate()})
+        }
+        else if (parseInt(this.state.date.getMonth()) < 10) {
+            this.setState({ startDate: this.state.date.getFullYear()  + "-0" + (this.state.date.getMonth() + 1) + "-" +  this.state.date.getDate()})
+        }
+        else {
+            this.setState({ startDate: this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()})
+        }
+        
 
         this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
-        // if (parseInt(this.state.enddate.getDate()) < 10) {
-        //     this.setState({ toDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() });
-        // }
-        // else {
-        this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
-        // }
+        if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+        }
+        else if (parseInt(this.state.enddate.getDate()) < 10) {
+            this.setState({ endDate:this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate()})
+        }
+        else if (parseInt(this.state.enddate.getMonth()) < 10) {
+            this.setState({ endDate: this.state.enddate.getFullYear()  + "-0" + (this.state.enddate.getMonth() + 1) + "-" +  this.state.enddate.getDate()})
+        }
+        else {
+            this.setState({ endDate: this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()})
+        }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
@@ -83,7 +121,52 @@ export class ListOfBarcodes extends Component {
     };
 
     applyListBarcodes() {
-        alert("filters Applied");
+        if (this.state.startDate === "") {
+            this.state.startDate = null;
+        }
+        if (this.state.endDate === "") {
+            this.state.endDate = null;
+        }
+        if (this.state.barCode === "") {
+            this.state.barCode = null;
+        }
+        if (this.state.empId === "") {
+            this.state.empId = null;
+        }
+        if (this.state.fromPrice === "") {
+            this.state.fromPrice = null;
+        }
+        if (this.state.toPrice === "") {
+            this.state.toPrice = null;
+        }
+       
+        const obj = {
+            "fromDate":this.state.startDate,
+            "toDate":this.state.endDate,
+            barcodeTextileId: null,
+            barcode: this.state.barCode,
+            storeId:this.state.storeId,
+            empId: this.state.empId,
+            itemMrpLessThan:this.state.fromPrice,
+            itemMrpGreaterThan:this.state.toPrice,
+          };
+              console.log('params are' + JSON.stringify(obj))
+              axios.post(ReportsService.getListOfBarcodes(), obj).then((res) => {
+                  console.log(res.data)
+                if (res.data && res.data["isSuccess"] === "true") {
+                    this.props.childParamlistBarcodes(res.data.result);
+                   
+                   
+                    this.props.modelCancelCallback();
+                }
+                else {
+                  alert(res.data.message);
+                }
+              }
+              ).catch(() => {
+                alert('No Results Found');
+                this.props.modelCancelCallback();
+            }); 
     }
 
     modelCancel() {
@@ -102,13 +185,13 @@ export class ListOfBarcodes extends Component {
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >SNO: {index + 1} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>BARCODE: {"\n"} { }</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE STORE: {"\n"} { } </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>BARCODE: {"\n"} {item.barcode}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE STORE: {"\n"}{this.state.storeName} </Text>
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >EMP ID: { } </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"\n"} { }</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE MRP: {"\n"} { }</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >EMP ID: {"\n"}{item.productTextile.empId} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"\n"} {item.productTextile.qty}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE MRP: {"\n"} {item.productTextile.itemMrp}</Text>
                                 </View>
                             </View>
                         </View>
@@ -196,7 +279,7 @@ export class ListOfBarcodes extends Component {
                                         value={this.state.barCode}
                                         onChangeText={this.handleBarCode}
                                     />
-                                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                                    {/* <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                                         <RNPickerSelect
                                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                             placeholder={{
@@ -211,7 +294,7 @@ export class ListOfBarcodes extends Component {
                                             value={this.state.selectedStore}
                                             useNativeAndroidPickerStyle={false}
                                         />
-                                    </View>
+                                    </View> */}
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
@@ -361,7 +444,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -20,
         backgroundColor: "#ffffff",
-        height: 400,
+        height: 600,
         position: 'absolute',
         bottom: -20,
     },
@@ -517,7 +600,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -40,
         backgroundColor: "#ffffff",
-        height: 500,
+        height: 670,
         position: 'absolute',
         bottom: -40,
     },

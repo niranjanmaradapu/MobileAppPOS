@@ -49,10 +49,11 @@ class Reports extends Component {
             // Component Arrays
             estimationSlip: [],
             newSale: [],
-            goodsReturn: [1, 2],
-            salesSumary: [1, 2],
-            listBarcodes: [1, 2],
-            listPromotions: [1, 2],
+            goodsReturn: [],
+            salesSumary: [],
+            salesSumaryObject:[],
+            listBarcodes: [],
+            listPromotions: [],
             sbList: [],
             storeId:0,
         };
@@ -147,7 +148,6 @@ class Reports extends Component {
     }
 
     topbarAction1 = (item, index) => {
-
         if (item.name === "Dashboard") {
             this.setState({ flagDashboard: true });
         } else {
@@ -160,27 +160,31 @@ class Reports extends Component {
             this.setState({ flagEstimationSlip: false });
         }
         if (item.name === "New Sale Report") {
-            this.setState({ data: [] });
+            this.setState({ newSale: [] });
             this.setState({ flagNewSale: true });
         } else {
             this.setState({ flagNewSale: false });
         }
         if (item.name === "Goods Return") {
+            this.setState({ goodsReturn: [] });
             this.setState({ flagGoodsReturn: true });
         } else {
             this.setState({ flagGoodsReturn: false });
         }
         if (item.name === "Sales Summary") {
+            this.setState({ salesSumaryObject: [] });
             this.setState({ flagSalesSummary: true });
         } else {
             this.setState({ flagSalesSummary: false });
         }
         if (item.name === "List of Barcodes") {
+            this.setState({ listBarcodes: [] });
             this.setState({ flagListBarcodes: true });
         } else {
             this.setState({ flagListBarcodes: false });
         }
         if (item.name === "List of promotions") {
+            this.setState({ listPromotions: [] });
             this.setState({ flagListPromotions: true });
         } else {
             this.setState({ flagListPromotions: false });
@@ -274,6 +278,36 @@ class Reports extends Component {
         this.setState({ newSale: data });
     };
 
+    getgoodsReturn= (data) => {
+        this.setState({ goodsReturn: [] });
+        this.setState({ goodsReturn: data });
+    };
+
+    getsalesSumary= (data) => {
+        this.setState({ salesSumary: [] });
+        this.setState({ salesSumary: data });
+        console.log(this.state.salesSumary)
+    };
+
+    getsalesSumaryObject= (data) => {
+        this.setState({ salesSumaryObject: [1,2,3] });
+    }
+
+    getlistBarcodes= (data) => {
+        this.setState({ listBarcodes: [] });
+        this.setState({ listBarcodes: data });
+        console.log(this.state.listBarcodes)
+    }
+
+    getlistofPromotions= (data) => {
+        this.setState({ listPromotions: [] });
+        this.setState({ listPromotions: data });
+        console.log(this.state.listPromotions)
+    }
+
+
+
+
 
 
 
@@ -346,6 +380,7 @@ class Reports extends Component {
                         {this.state.flagGoodsReturn && (
                             <GoodsReturn
                                 goodsReturn={this.state.goodsReturn}
+                                childParamgoodsReturn={this.getgoodsReturn}
                                 modalVisible={this.state.modalVisible}
                                 modelCancelCallback={this.modelCancel}
                                 flagFilterGoodsReturn={this.state.flagFilterGoodsReturn}
@@ -356,6 +391,9 @@ class Reports extends Component {
                         {this.state.flagSalesSummary && (
                             <SalesSumary
                                 salesSumary={this.state.salesSumary}
+                                salesSumaryObject={this.state.salesSumaryObject}
+                                childParamSalesSummaryObject={this.getsalesSumaryObject}
+                                childParamSalesSummary={this.getsalesSumary}
                                 modalVisible={this.state.modalVisible}
                                 modelCancelCallback={this.modelCancel}
                                 flagFilterSalesSumary={this.state.flagFilterSalesSumary}
@@ -366,6 +404,7 @@ class Reports extends Component {
                         {this.state.flagListBarcodes && (
                             <ListOfBarcodes
                                 listBarcodes={this.state.listBarcodes}
+                                childParamlistBarcodes={this.getlistBarcodes}
                                 modalVisible={this.state.modalVisible}
                                 modelCancelCallback={this.modelCancel}
                                 flagFilterListBarcodes={this.state.flagFilterListBarcodes}
@@ -375,6 +414,7 @@ class Reports extends Component {
                         {this.state.flagListPromotions && (
                             <ListOfPromotions
                                 listPromotions={this.state.listPromotions}
+                                childParamlistofPromotions={this.getlistofPromotions}
                                 flagFilterListPromotions={this.state.flagFilterListPromotions}
                                 modalVisible={this.state.modalVisible}
                                 modelCancelCallback={this.modelCancel}

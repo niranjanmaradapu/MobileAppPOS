@@ -10,15 +10,21 @@ class ReportsService {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getlistofsalebills"
     }
 
-    deliverySlipsList() {
+    returnSlips(){
+        return REACT_NATIVE_APP_BASE_URL + "/customer/customer/getListOfReturnSlips"
+    }
+
+    saleReports() {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getsalereport";
     }
 
-    getStoresClientDomainId() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/getClientDomianStores";
+
+
+    getListOfBarcodes() {
+        return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/getAllBarcodeTextiles"
     }
 
-    promoionsList() {
+    promotionsList() {
         return REACT_NATIVE_APP_BASE_URL + "/connection-pool/promo/listOfPromotionsBySearch";
     }
 
