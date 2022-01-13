@@ -166,6 +166,7 @@ export class ListOfEstimationSlip extends Component {
                     }
                   }
                   ).catch(() => {
+                    alert('No Results Found');
                     this.props.modelCancelCallback();
                 }); 
     

@@ -101,6 +101,7 @@ export default class NewSaleReport extends Component {
                     }
                   }
                   ).catch(() => {
+                    alert('No Results Found');
                     this.props.modelCancelCallback();
                 }); 
     }

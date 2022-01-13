@@ -135,6 +135,7 @@ export class GoodsReturn extends Component {
                     }
                   }
                   ).catch(() => {
+                    alert('No Results Found');
                     this.props.modelCancelCallback();
                 }); 
     }
