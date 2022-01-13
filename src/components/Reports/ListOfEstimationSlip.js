@@ -41,43 +41,14 @@ export class ListOfEstimationSlip extends Component {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
-            this.getEstimationSlip();
+          
 
         }).catch(() => {
             console.log('there is error getting storeId');
         });
-
     }
 
-    getEstimationSlip() {
-        const obj = {
-            "dateFrom":"2021-11-10",
-            "dateTo":"2021-11-11",
-            status:  null,
-            barcode: null,
-            dsNumber: null,
-            storeId:this.state.storeId,
-          };
-       
-          
-              console.log('params are' + JSON.stringify(obj))
-              this.setState({ loading: true })
-              console.log(ReportsService.estimationSlips())
-                axios.post(ReportsService.estimationSlips(), obj).then((res) => {
-                  console.log(res.data)
-                if (res.data && res.data["isSuccess"] === "true") {
-                    // this.props.route.params.onGoBack();
-                    // this.props.navigation.goBack();
-                }
-                else {
-                  alert(res.data.message);
-                }
-              }
-              ).catch(() => {
-               // alert('error');
-                this.setState({ loading: false });
-            }); 
-    }
+   
 
     handledeleteEstimationSlip(item, index) {
         this.setState({ deleteEstimationSlip: true, modalVisible: true });
@@ -104,23 +75,36 @@ export class ListOfEstimationSlip extends Component {
     }
 
     datepickerDoneClicked() {
-        // if (parseInt(this.state.date.getDate()) < 10) {
-        //     this.setState({ fromDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
-        // }
-        // else {
-        this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
-        // }
+        if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+        }
+        else if (parseInt(this.state.date.getDate()) < 10) {
+            this.setState({ startDate:this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate()})
+        }
+        else if (parseInt(this.state.date.getMonth()) < 10) {
+            this.setState({ startDate: this.state.date.getFullYear()  + "-0" + (this.state.date.getMonth() + 1) + "-" +  this.state.date.getDate()})
+        }
+        else {
+            this.setState({ startDate: this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()})
+        }
+        
 
         this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
-        // if (parseInt(this.state.enddate.getDate()) < 10) {
-        //     this.setState({ toDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() });
-        // }
-        // else {
-        this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
-        // }
+        if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+        }
+        else if (parseInt(this.state.enddate.getDate()) < 10) {
+            this.setState({ endDate:this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate()})
+        }
+        else if (parseInt(this.state.enddate.getMonth()) < 10) {
+            this.setState({ endDate: this.state.enddate.getFullYear()  + "-0" + (this.state.enddate.getMonth() + 1) + "-" +  this.state.enddate.getDate()})
+        }
+        else {
+            this.setState({ endDate: this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()})
+        }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
@@ -141,7 +125,50 @@ export class ListOfEstimationSlip extends Component {
     }
 
     applyEstimationSlipFilter() {
-        alert("filters Applied");
+        if (this.state.startDate === "") {
+            this.state.startDate = null;
+        }
+        if (this.state.endDate === "") {
+            this.state.endDate = null;
+        }
+        if (this.state.dsStatus === "") {
+            this.state.dsStatus = null;
+        }
+        if (this.state.barcode === "") {
+            this.state.barcode = null;
+        }
+        if (this.state.dsNumber === "") {
+            this.state.dsNumber = null;
+        }
+
+            const obj = {
+                "dateFrom":this.state.startDate,
+                "dateTo":this.state.endDate,
+                status:  this.state.dsStatus,
+                barcode: this.state.barcode,
+                dsNumber: this.state.dsNumber,
+                storeId:this.state.storeId,
+              };
+           
+              
+                  console.log('params are' + JSON.stringify(obj))
+                  this.setState({ loading: true })
+                  console.log(ReportsService.estimationSlips())
+                    axios.post(ReportsService.estimationSlips(), obj).then((res) => {
+                      console.log(res.data)
+                    if (res.data && res.data["isSuccess"] === "true") {
+                        this.props.childParams(res.data.result.deliverySlipVo);
+                        this.props.modelCancelCallback();
+                        console.log(this.props.estimationSlip)
+                    }
+                    else {
+                      alert(res.data.message);
+                    }
+                  }
+                  ).catch(() => {
+                    this.props.modelCancelCallback();
+                }); 
+    
     }
 
     modelCancel() {
@@ -161,17 +188,17 @@ export class ListOfEstimationSlip extends Component {
                         <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >STORE ID: {index + 1} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>DS NUMBER: {"\n"} { }</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>DS DATE: {"\n"} { } </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S.NO: {index + 1} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}> DS NUMBER: {"\n"} {item.dsNumber}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>DS DATE: {"\n"} {item.lastModified} </Text>
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >DS STATUS: { } </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>GROSS AMMOUNT: {"\n"} { }</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>PROMO DISC: {"\n"} { } </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >DS STATUS: {item.status} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>GROSS AMMOUNT: {"\n"} ₹{item.netAmount}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>PROMO DISC: {"\n"} {item.promoDisc} </Text>
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >NET AMMOUNT: { } </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >NET AMMOUNT: ₹{item.netAmount} </Text>
                                     <View style={flats.buttons}>
                                         {/* <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handledeleteEstimationSlip(item, index)}>
                                             <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
@@ -313,12 +340,18 @@ export class ListOfEstimationSlip extends Component {
                                             Icon={() => {
                                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                             }}
-                                            items={this.state.statuses}
+                                            items={[
+                                                { label: 'Completed', value: 'Completed' },
+                                                { label: 'Pending', value: 'Pending' },
+                                                { label: 'Cancelled', value: 'Cancelled' },
+                                            ]}
                                             onValueChange={this.handleDsStatus}
                                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                             value={this.state.dsStatus}
                                             useNativeAndroidPickerStyle={false}
                                         />
+
+
                                     </View>
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -458,7 +491,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -20,
         backgroundColor: "#ffffff",
-        height: 400,
+        height: 530,
         position: 'absolute',
         bottom: -20,
     },
@@ -614,7 +647,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -40,
         backgroundColor: "#ffffff",
-        height: 500,
+        height: 600,
         position: 'absolute',
         bottom: -40,
     },
