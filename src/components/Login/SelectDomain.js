@@ -120,9 +120,9 @@ export default class SelectDomain extends React.Component {
                     />
                 </View>
                 <TouchableOpacity
-                    style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+                    style={Device.isTablet ? styles.continueButton_tablet : styles.continueButton_mobiile}
                     onPress={() => this.letsGoButtonAction()} >
-                    <Text style={styles.signInButtonText}> {('CONTINUE')} </Text>
+                     <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {('CONTINUE')} </Text>
                 </TouchableOpacity>
             </View>
 
@@ -172,33 +172,59 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: "regular"
     },
+    continueButton_mobiile: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        position: 'absolute',
+        marginLeft: 20,
+        width: deviceWidth - 40,
+        bottom: 30,
+        height: 44,
+        borderRadius: 10,
+        fontWeight: 'bold',
+        // marginBottom:100,
+    },
+    continueButtonText_mobile: {
+        color: 'white',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        fontSize: 14,
+        fontFamily: "regular",
+    },
+
 
     // Tablet
     image_tablet: {
         width: 90,
         height: 90,
-        borderRadius: 30,
+        borderRadius: 45,
         marginLeft: 30,
         marginTop: 20,
     },
     text_tablet: {
         fontSize: 30,
         fontFamily: 'medium',
-        marginTop: -40,
+        marginTop: -80,
         alignSelf: 'center',
     },
-    saveButton_tablet: {
-        margin: 8,
+    continueButton_tablet: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        position: 'absolute',
+        marginLeft: 20,
+        width: deviceWidth - 40,
+        bottom: 30,
         height: 60,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
+        borderRadius: 10,
+        fontWeight: 'bold',
+        // marginBottom:100,
     },
-    saveButtonText_tablet: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#ffffff",
+    continueButtonText_tablet: {
+        color: 'white',
+        justifyContent: 'center',
+        alignSelf: 'center',
         fontSize: 20,
-        fontFamily: "regular"
+        fontFamily: "regular",
     },
 
 

@@ -160,6 +160,7 @@ class Reports extends Component {
             this.setState({ flagEstimationSlip: false });
         }
         if (item.name === "New Sale Report") {
+            this.setState({ data: [] });
             this.setState({ flagNewSale: true });
         } else {
             this.setState({ flagNewSale: false });
