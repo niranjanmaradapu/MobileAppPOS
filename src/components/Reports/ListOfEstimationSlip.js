@@ -27,12 +27,16 @@ export class ListOfEstimationSlip extends Component {
             endDate: "",
             datepickerOpen: false,
             datepickerendOpen: false,
-
+            dsnumber: "",
+            qty:"",
+            mrp:'',
+            promodisc:'',
             statuses: [],
             dsStatus: "",
             dsNumber: "",
             barcode: "",
-            storeId:0,
+            flagViewDetail: false,
+            storeId: 0,
         };
     }
 
@@ -41,22 +45,26 @@ export class ListOfEstimationSlip extends Component {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
-          
+
 
         }).catch(() => {
             console.log('there is error getting storeId');
         });
     }
 
-   
+
 
     handledeleteEstimationSlip(item, index) {
-        this.setState({ deleteEstimationSlip: true, modalVisible: true });
+        this.setState({ deleteEstimationSlip: true, modalVisible: true, flagViewDetail: false});
     }
 
-    handleEstimationSlip(item, index) {
-        this.setState({})
+    handleviewEstimationSlip(item, index) {
+console.log(item)
+        this.setState({ dsnumber: item.dsNumber,qty:item.lineItems[0].quantity,mrp:item.netAmount,promoDisc:item.promoDisc  })
+        this.setState({ flagViewDetail: true, modalVisible: true, deleteEstimationSlip: false });
     }
+
+
 
     deleteEstimationSlip = (item, index) => {
         alert("you have deleted", index);
@@ -79,15 +87,15 @@ export class ListOfEstimationSlip extends Component {
             this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
         }
         else if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ startDate:this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate()})
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
         }
         else if (parseInt(this.state.date.getMonth()) < 10) {
-            this.setState({ startDate: this.state.date.getFullYear()  + "-0" + (this.state.date.getMonth() + 1) + "-" +  this.state.date.getDate()})
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
         }
         else {
-            this.setState({ startDate: this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()})
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
         }
-        
+
 
         this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
@@ -97,13 +105,13 @@ export class ListOfEstimationSlip extends Component {
             this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
         }
         else if (parseInt(this.state.enddate.getDate()) < 10) {
-            this.setState({ endDate:this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate()})
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
         }
         else if (parseInt(this.state.enddate.getMonth()) < 10) {
-            this.setState({ endDate: this.state.enddate.getFullYear()  + "-0" + (this.state.enddate.getMonth() + 1) + "-" +  this.state.enddate.getDate()})
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
         }
         else {
-            this.setState({ endDate: this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()})
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
         }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
@@ -141,35 +149,35 @@ export class ListOfEstimationSlip extends Component {
             this.state.dsNumber = null;
         }
 
-            const obj = {
-                "dateFrom":this.state.startDate,
-                "dateTo":this.state.endDate,
-                status:  this.state.dsStatus,
-                barcode: this.state.barcode,
-                dsNumber: this.state.dsNumber,
-                storeId:this.state.storeId,
-              };
-           
-              
-                  console.log('params are' + JSON.stringify(obj))
-                  this.setState({ loading: true })
-                  console.log(ReportsService.estimationSlips())
-                    axios.post(ReportsService.estimationSlips(), obj).then((res) => {
-                      console.log(res.data)
-                    if (res.data && res.data["isSuccess"] === "true") {
-                        this.props.childParams(res.data.result.deliverySlipVo);
-                        this.props.modelCancelCallback();
-                        console.log(this.props.estimationSlip)
-                    }
-                    else {
-                      alert(res.data.message);
-                    }
-                  }
-                  ).catch(() => {
-                    alert('No Results Found');
-                    this.props.modelCancelCallback();
-                }); 
-    
+        const obj = {
+            "dateFrom": this.state.startDate,
+            "dateTo": this.state.endDate,
+            status: this.state.dsStatus,
+            barcode: this.state.barcode,
+            dsNumber: this.state.dsNumber,
+            storeId: this.state.storeId,
+        };
+
+
+        console.log('params are' + JSON.stringify(obj))
+        this.setState({ loading: true })
+        console.log(ReportsService.estimationSlips())
+        axios.post(ReportsService.estimationSlips(), obj).then((res) => {
+            console.log(res.data)
+            if (res.data && res.data["isSuccess"] === "true") {
+                this.props.childParams(res.data.result.deliverySlipVo);
+                this.props.modelCancelCallback();
+                console.log(this.props.estimationSlip)
+            }
+            else {
+                alert(res.data.message);
+            }
+        }
+        ).catch(() => {
+            alert('No Results Found');
+            this.props.modelCancelCallback();
+        });
+
     }
 
     modelCancel() {
@@ -201,19 +209,14 @@ export class ListOfEstimationSlip extends Component {
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >NET AMMOUNT:{"\n"} ₹{item.netAmount} </Text>
                                     <View style={flats.buttons}>
-                                        {/* <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handledeleteEstimationSlip(item, index)}>
+                                        
+                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteEstimationSlip(item, index)}>
                                             <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
                                         </TouchableOpacity>
-                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleviewEstimationSlip(item, index)}>
-                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
-                                        </TouchableOpacity> */}
-                                          <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteEstimationSlip(item, index)}>
-                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
-                                    </TouchableOpacity>
 
-                                    <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewEstimationSlip(item, index)}>
-                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/eye.png')} />
-                                    </TouchableOpacity>
+                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewEstimationSlip(item, index)}>
+                                            <Image style={{ alignSelf: 'center', top: 0 }} source={require('../assets/images/eye.png')} />
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>
@@ -388,6 +391,67 @@ export class ListOfEstimationSlip extends Component {
                         </Modal>
                     </View>
                 )}
+
+                {this.state.flagViewDetail && (
+                    <View>
+                        <Modal isVisible={this.state.modalVisible}>
+
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 300 }]}>
+
+                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Estimation Slip Details </Text>
+
+                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.estimationModelCancel()}>
+                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                </TouchableOpacity>
+                                <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
+                                </Text>
+                                <Text style={Device.isTablet ? styles.viewtext_tablet : styles.viewtext_mobile} >
+                                    Delivery Slip:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext_tablet : styles.viewsubtext_mobile} >
+                                   {this.state.dsnumber} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext1_tablet : styles.viewtext1_mobile} >
+                                    SM:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext1_tablet : styles.viewsubtext1_mobile} >
+                                    - </Text>
+                                    <Text style={Device.isTablet ? styles.viewtext2_tablet : styles.viewtext2_mobile} >
+                                    QTY:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext2_tablet : styles.viewsubtext2_mobile} >
+                                {this.state.qty} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext3_tablet : styles.viewtext3_mobile} >
+                                    GROSS AMOUNT:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext3_tablet : styles.viewsubtext3_mobile} >
+                                ₹ {this.state.mrp} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext4_tablet : styles.viewtext4_mobile} >
+                                    PROMO DISCOUNT:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext4_tablet : styles.viewsubtext4_mobile} >
+                                 {this.state.promodisc} </Text>
+                                 <Text style={Device.isTablet ? styles.viewtext5_tablet : styles.viewtext5_mobile} >
+                                    NET AMOUNT:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext5_tablet : styles.viewsubtext5_mobile} >
+                                ₹ {this.state.mrp} </Text>
+
+
+                                <TouchableOpacity
+                                    style={Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile} onPress={() => this.estimationModelCancel()}
+                                >
+                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+
+                                </TouchableOpacity>
+
+
+
+                            </View>
+
+
+                        </Modal>
+                    </View>
+                )}
+
+
+
+
+
+
             </View>
         );
     }
@@ -652,6 +716,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: -40,
     },
+
     filterByTitle_tablet: {
         position: 'absolute',
         left: 20,
@@ -668,6 +733,322 @@ const styles = StyleSheet.create({
         backgroundColor: 'lightgray',
         marginTop: 60,
     },
+    //////////////
+    filterCancel_mobile: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 190,
+        height: 50,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    viewtext_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 80,
+    },
+    viewtext_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 60,
+    },
+    viewsubtext_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 80,
+    },
+    viewsubtext_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 60,
+    },
+
+    viewtext1_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 110,
+
+    },
+    viewsubtext1_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 110,
+    },
+
+    viewtext1_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 90,
+    },
+   
+    viewsubtext1_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 90,
+    },
+    viewtext2_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 140,
+
+    },
+    viewsubtext2_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 140,
+    },
+
+    viewtext2_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 120,
+    },
+   
+    viewsubtext2_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 120,
+    },
+    viewtext3_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 170,
+
+    },
+    viewsubtext3_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 170,
+    },
+
+    viewtext3_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 150,
+    },
+   
+    viewsubtext3_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 150,
+    },
+    viewtext4_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 200,
+
+    },
+    viewsubtext4_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 200,
+    },
+
+    viewtext4_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 180,
+    },
+   
+    viewsubtext4_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 180,
+    },
+    viewtext5_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 230,
+
+    },
+    viewsubtext5_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 230,
+    },
+
+    viewtext5_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 210,
+    },
+   
+    viewsubtext5_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 210,
+    },
+    filterCancel_tablet: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 210,
+        height: 60,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    ////////
     input_tablet: {
         justifyContent: 'center',
         marginLeft: 20,
@@ -811,7 +1192,6 @@ const flats = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
     },
-
 
     // flats for Mobile
     flatlistContainer_mobile: {

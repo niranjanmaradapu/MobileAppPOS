@@ -35,6 +35,24 @@ export default class NewSaleReport extends Component {
             isView: false,
             domainId:0,
             storeId:0,
+            flagViewDetail: false,
+            memono:"",
+            barocde:"",
+            section:"",
+            empId:"",
+            hsncode:"",
+            qty:"",
+            mrp:"",
+            disc:"",
+            taxableaount:"",
+            cgst:"",
+            sgst:"",
+            igst:"",
+            gst:"",
+            netamount:"",
+            customername:"",
+            mobile:"",
+            createdate:"",
         };
     }
 
@@ -107,7 +125,13 @@ export default class NewSaleReport extends Component {
     }
 
     handledeleteNewSale() {
-        this.setState({ flagDeleteNewSale: true, modalVisible: true });
+        this.setState({ flagDeleteNewSale: true, modalVisible: true , flagViewDetail: false});
+    }
+
+    handleviewNewSale(item,index){
+        console.log(item)
+        this.setState({ memono: item.invoiceNumber,barocde:item.lineItemsReVo[0].barCode,hsncode:item.lineItemsReVo[0].hsnCode,empId:item.lineItemsReVo[0].empId,qty:item.totalqQty,mrp:item.totalNetAmount,taxableaount:item.totaltaxableAmount,cgst:item.totalCgst,sgst:item.totalSgst,igst:item.totalIgst,customername:item.customerName,mobile:item.mobileNumber,createdate:item.createdDate});
+        this.setState({ flagViewDetail: true, modalVisible: true, flagDeleteNewSale: false });
     }
 
     estimationModelCancel() {
@@ -200,10 +224,24 @@ export default class NewSaleReport extends Component {
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >INVOICE DATE: {"\n"} {item.createdDate} </Text>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BILL POSITION: {item.status}</Text>
                                 </View>
-                                <View style={flats.text}>
+                                {/* <View style={flats.text}>
                                     <View style={flats.buttons}>
                                         <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handledeleteNewSale(item, index)}>
                                             <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View> */}
+
+                                <View style={flats.text}>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >NET AMMOUNT:{"\n"} ₹ {item.totalNetAmount} </Text>
+                                    <View style={flats.buttons}>
+                                        
+                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteNewSale(item, index)}>
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewNewSale(item, index)}>
+                                            <Image style={{ alignSelf: 'center', top: 0 }} source={require('../assets/images/eye.png')} />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -388,6 +426,110 @@ export default class NewSaleReport extends Component {
 
                     </View>
                 )}
+
+{this.state.flagViewDetail && (
+                    <View>
+                        <Modal isVisible={this.state.modalVisible}>
+
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 670 : 640 }]}>
+
+                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Sale bill Details </Text>
+
+                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.estimationModelCancel()}>
+                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                </TouchableOpacity>
+                                <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
+                                </Text>
+                                <Text style={Device.isTablet ? styles.viewtext_tablet : styles.viewtext_mobile} >
+                                        Memo No:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext_tablet : styles.viewsubtext_mobile} >
+                                   {this.state.memono} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext1_tablet : styles.viewtext1_mobile} >
+                                    BARCODE:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext1_tablet : styles.viewsubtext1_mobile} >
+                                {this.state.barocde} </Text>
+                                    <Text style={Device.isTablet ? styles.viewtext2_tablet : styles.viewtext2_mobile} >
+                                    SECTION:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext2_tablet : styles.viewsubtext2_mobile} >
+                                - </Text>
+                                <Text style={Device.isTablet ? styles.viewtext3_tablet : styles.viewtext3_mobile} >
+                                   EMP ID:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext3_tablet : styles.viewsubtext3_mobile} >
+                                {this.state.empId} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext4_tablet : styles.viewtext4_mobile} >
+                                    HSN CODE:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext4_tablet : styles.viewsubtext4_mobile} >
+                                 {'HSN1234'} </Text>
+                                 <Text style={Device.isTablet ? styles.viewtext5_tablet : styles.viewtext5_mobile} >
+                                    QTY:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext5_tablet : styles.viewsubtext5_mobile} >
+                                 {this.state.qty} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext6_tablet : styles.viewtext6_mobile} >
+                                        MRP:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext6_tablet : styles.viewsubtext6_mobile} >
+                                ₹ {this.state.mrp} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext7_tablet : styles.viewtext7_mobile} >
+                                    DISC:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext7_tablet : styles.viewsubtext7_mobile} >
+                                    - </Text>
+                                  
+                                <Text style={Device.isTablet ? styles.viewtext9_tablet : styles.viewtext9_mobile} >
+                                   TAXABLE AMOUNT:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext9_tablet : styles.viewsubtext9_mobile} >
+                                ₹ {this.state.taxableaount} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext10_tablet : styles.viewtext10_mobile} >
+                                    CGST:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext10_tablet : styles.viewsubtext10_mobile} >
+                                ₹ {this.state.cgst} </Text>
+                                 <Text style={Device.isTablet ? styles.viewtext11_tablet : styles.viewtext11_mobile} >
+                                    SGST:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext11_tablet : styles.viewsubtext11_mobile} >
+                                ₹ {this.state.sgst} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext12_tablet : styles.viewtext12_mobile} >
+                                    IGST:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext12_tablet : styles.viewsubtext12_mobile} >
+                                ₹ {this.state.igst} </Text>
+                                 <Text style={Device.isTablet ? styles.viewtext13_tablet : styles.viewtext13_mobile} >
+                                    NET AMOUNT:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext13_tablet : styles.viewsubtext13_mobile} >
+                                ₹ {this.state.mrp} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext8_tablet : styles.viewtext8_mobile} >
+                                    GST%:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext8_tablet : styles.viewsubtext8_mobile} >
+                                {'gst10%'} </Text>
+
+                                <Text style={Device.isTablet ? styles.viewtext14_tablet : styles.viewtext14_mobile} >
+                                    CUSTOMER:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext14_tablet : styles.viewsubtext14_mobile} >
+                                {this.state.customername} </Text>
+
+                                <Text style={Device.isTablet ? styles.viewtext15_tablet : styles.viewtext15_mobile} >
+                                    Mobile:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext15_tablet : styles.viewsubtext15_mobile} >
+                                {this.state.mobile} </Text>
+
+                                <Text style={Device.isTablet ? styles.viewtext16_tablet : styles.viewtext16_mobile} >
+                                    Date:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext16_tablet : styles.viewsubtext16_mobile} >
+                                {this.state.createdate} </Text>
+
+
+                                <TouchableOpacity
+                                    style={Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile} onPress={() => this.estimationModelCancel()}
+                                >
+                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+
+                                </TouchableOpacity>
+
+
+
+                            </View>
+
+
+                        </Modal>
+                    </View>
+                )}
+
             </View>
         );
     }
@@ -484,6 +626,869 @@ const styles = StyleSheet.create({
         marginTop: 16,
         marginRight: 20,
     },
+        //////////////
+        filterCancel_mobile: {
+            width: deviceWidth - 40,
+            marginLeft: 20,
+            marginRight: 20,
+            marginTop: 520,
+            height: 50,
+            backgroundColor: "#ffffff",
+            borderRadius: 5,
+            borderWidth: 1,
+            borderColor: "#353C4050",
+        },
+        viewtext_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 80,
+        },
+        viewtext_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 60,
+        },
+        viewsubtext_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 80,
+        },
+        viewsubtext_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 60,
+        },
+    
+        viewtext1_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 110,
+    
+        },
+        viewsubtext1_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 110,
+        },
+    
+        viewtext1_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 90,
+        },
+       
+        viewsubtext1_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 90,
+        },
+        viewtext2_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 140,
+    
+        },
+        viewsubtext2_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 140,
+        },
+    
+        viewtext2_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 120,
+        },
+       
+        viewsubtext2_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 120,
+        },
+        viewtext3_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 170,
+    
+        },
+        viewsubtext3_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 170,
+        },
+    
+        viewtext3_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 150,
+        },
+       
+        viewsubtext3_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 150,
+        },
+        viewtext4_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 200,
+    
+        },
+        viewsubtext4_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 200,
+        },
+    
+        viewtext4_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 180,
+        },
+       
+        viewsubtext4_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 180,
+        },
+        viewtext5_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 230,
+    
+        },
+        viewsubtext5_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 230,
+        },
+    
+        viewtext5_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 210,
+        },
+       
+        viewsubtext5_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 210,
+        },
+        viewtext6_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 260,
+    
+        },
+        viewsubtext6_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 260,
+        },
+    
+        viewtext6_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 240,
+        },
+       
+        viewsubtext6_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 240,
+        },
+        viewtext7_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 290,
+    
+        },
+        viewsubtext7_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 290,
+        },
+    
+        viewtext7_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 270,
+        },
+       
+        viewsubtext7_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 270,
+        },
+       
+        viewtext9_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 320,
+    
+        },
+        viewsubtext9_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 320,
+        },
+    
+        viewtext9_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 300,
+        },
+       
+        viewsubtext9_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 300,
+        },
+        viewtext10_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 350,
+    
+        },
+        viewsubtext10_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 350,
+        },
+    
+        viewtext10_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 330,
+        },
+       
+        viewsubtext10_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 330,
+        },
+        viewtext11_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 380,
+    
+        },
+        viewsubtext11_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 380,
+        },
+    
+        viewtext11_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 360,
+        },
+       
+        viewsubtext11_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 360,
+        },
+        viewtext12_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 410,
+    
+        },
+        viewsubtext12_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 410,
+        },
+    
+        viewtext12_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 390,
+        },
+       
+        viewsubtext12_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 390,
+        },
+        viewtext13_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 440,
+    
+        },
+        viewsubtext13_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 440,
+        },
+    
+        viewtext13_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top:420,
+        },
+       
+        viewsubtext13_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 420,
+        },
+        viewsubtext8_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 470,
+        },
+        viewtext8_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 470,
+    
+        },
+    
+    
+        viewtext8_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 450,
+        },
+       
+        viewsubtext8_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 450,
+        },
+        viewsubtext14_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 500,
+        },
+        viewtext14_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 500,
+    
+        },
+    
+    
+        viewtext14_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 480,
+        },
+       
+        viewsubtext14_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 480,
+        },
+        viewsubtext15_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 530,
+        },
+        viewtext15_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 530,
+    
+        },
+    
+    
+        viewtext15_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 510,
+        },
+       
+        viewsubtext15_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 510,
+        },
+        viewsubtext16_tablet: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 22,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 560,
+        },
+        viewtext16_tablet: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 22,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 560,
+    
+        },
+    
+    
+        viewtext16_mobile: {
+            color: "#353C40",
+            fontFamily: "regular",
+            alignItems: 'center',
+            left: 10,
+            fontSize: 14,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute', top: 540,
+        },
+       
+        viewsubtext16_mobile: {
+            color: "#353C40",
+            fontFamily: "bold",
+            alignItems: 'center',
+            marginLeft: 16,
+            fontSize: 14,
+            position: 'absolute',
+            right: 10,
+            justifyContent: 'center',
+            textAlign: 'center',
+            position: 'absolute',
+            top: 540,
+        },
+       
+    
+      
+        filterCancel_tablet: {
+            width: deviceWidth - 40,
+            marginLeft: 20,
+            marginRight: 20,
+            marginTop: 530,
+            height: 60,
+            backgroundColor: "#ffffff",
+            borderRadius: 5,
+            borderWidth: 1,
+            borderColor: "#353C4050",
+        },
+        ////////
 
     // Styles For Mobile
 
@@ -922,6 +1927,35 @@ const flats = StyleSheet.create({
         borderWidth: 1,
         borderColor: "lightgray",
     },
+
+       // Styles For Tablet
+       filterMainContainer_tablet: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -40,
+        backgroundColor: "#ffffff",
+        height: 600,
+        position: 'absolute',
+        bottom: -40,
+    },
+
+    filterByTitle_tablet: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 30,
+        fontFamily: 'medium',
+        fontSize: 21,
+        color: '#353C40'
+    },
+    filterByTitleDecoration_tablet: {
+        height: 1,
+        width: deviceWidth,
+        backgroundColor: 'lightgray',
+        marginTop: 60,
+    },
+
 
 
 

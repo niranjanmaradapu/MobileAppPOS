@@ -31,6 +31,12 @@ export class ListOfBarcodes extends Component {
             toPrice: "",
             storeId:0,
             storeName:"",
+            flagViewDetail: false,
+            flagdelete: false,
+            barcode:"",
+            mrp:"",
+            qty:"",
+
         };
     }
 
@@ -173,6 +179,19 @@ export class ListOfBarcodes extends Component {
         this.props.modelCancelCallback();
     }
 
+    estimationModelCancel() {
+        this.setState({ modalVisible: false });
+    }
+
+    handledeleteBarcode(){
+        this.setState({ flagdelete: true, modalVisible: true, flagViewDetail: false});
+    }
+
+    handleviewBarcode(item,index){
+        this.setState({ barcode: item.barcode, mrp: item.productTextile.itemMrp, qty: item.productTextile.qty });
+        this.setState({ flagViewDetail: true, modalVisible: true, flagdelete: false });
+    }
+
     render() {
         return (
             <View>
@@ -192,6 +211,16 @@ export class ListOfBarcodes extends Component {
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >EMP ID: {"\n"}{item.productTextile.empId} </Text>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"\n"} {item.productTextile.qty}</Text>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE MRP: {"\n"} {item.productTextile.itemMrp}</Text>
+                                    <View style={flats.buttons}>
+                                        
+                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteBarcode(item, index)}>
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewBarcode(item, index)}>
+                                            <Image style={{ alignSelf: 'center', top: 0 }} source={require('../assets/images/eye.png')} />
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
                         </View>
@@ -338,6 +367,55 @@ export class ListOfBarcodes extends Component {
                         </Modal>
                     </View>
                 )}
+
+{this.state.flagViewDetail && (
+                    <View>
+                        <Modal isVisible={this.state.modalVisible}>
+
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 300 }]}>
+
+                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Barcode Details </Text>
+
+                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.estimationModelCancel()}>
+                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                </TouchableOpacity>
+                                <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
+                                </Text>
+                                <Text style={Device.isTablet ? styles.viewtext_tablet : styles.viewtext_mobile} >
+                                    BARCODE:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext_tablet : styles.viewsubtext_mobile} >
+                                   {this.state.barcode} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext1_tablet : styles.viewtext1_mobile} >
+                                    MRP:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext1_tablet : styles.viewsubtext1_mobile} >
+                                ₹ {this.state.mrp} </Text>
+                                    <Text style={Device.isTablet ? styles.viewtext2_tablet : styles.viewtext2_mobile} >
+                                    STORE:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext2_tablet : styles.viewsubtext2_mobile} >
+                                {this.state.storeName} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext3_tablet : styles.viewtext3_mobile} >
+                                    QTY:  </Text>
+                                <Text style={Device.isTablet ? styles.viewsubtext3_tablet : styles.viewsubtext3_mobile} >
+                                 {this.state.qty} </Text>
+                                
+
+
+                                <TouchableOpacity
+                                    style={Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile} onPress={() => this.estimationModelCancel()}
+                                >
+                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+
+                                </TouchableOpacity>
+
+
+
+                            </View>
+
+
+                        </Modal>
+                    </View>
+                )}
+
             </View>
         );
     }
@@ -436,6 +514,322 @@ const styles = StyleSheet.create({
         marginTop: 16,
         marginRight: 20,
     },
+       //////////////
+       filterCancel_mobile: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 150,
+        height: 50,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    viewtext_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 80,
+    },
+    viewtext_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 60,
+    },
+    viewsubtext_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 80,
+    },
+    viewsubtext_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 60,
+    },
+
+    viewtext1_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 110,
+
+    },
+    viewsubtext1_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 110,
+    },
+
+    viewtext1_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 90,
+    },
+   
+    viewsubtext1_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 90,
+    },
+    viewtext2_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 140,
+
+    },
+    viewsubtext2_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 140,
+    },
+
+    viewtext2_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 120,
+    },
+   
+    viewsubtext2_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 120,
+    },
+    viewtext3_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 170,
+
+    },
+    viewsubtext3_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 170,
+    },
+
+    viewtext3_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 150,
+    },
+   
+    viewsubtext3_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 150,
+    },
+    viewtext4_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 200,
+
+    },
+    viewsubtext4_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 200,
+    },
+
+    viewtext4_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 180,
+    },
+   
+    viewsubtext4_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 180,
+    },
+    viewtext5_tablet: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 22,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 230,
+
+    },
+    viewsubtext5_tablet: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 22,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 230,
+    },
+
+    viewtext5_mobile: {
+        color: "#353C40",
+        fontFamily: "regular",
+        alignItems: 'center',
+        left: 10,
+        fontSize: 14,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute', top: 210,
+    },
+   
+    viewsubtext5_mobile: {
+        color: "#353C40",
+        fontFamily: "bold",
+        alignItems: 'center',
+        marginLeft: 16,
+        fontSize: 14,
+        position: 'absolute',
+        right: 10,
+        justifyContent: 'center',
+        textAlign: 'center',
+        position: 'absolute',
+        top: 210,
+    },
+    filterCancel_tablet: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 150,
+        height: 60,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    ////////
 
     // Styles For Mobile
 
