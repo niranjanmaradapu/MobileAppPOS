@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, StyleSheet, Text,TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -7,6 +7,9 @@ import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 var deviceWidth = Dimensions.get("window").width;
+import ReportsService from '../services/ReportsService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export class SalesSumary extends Component {
 
@@ -20,11 +23,41 @@ export class SalesSumary extends Component {
             endDate: "",
             fromDate: "",
             toDate: "",
-
+            storeId:0,
             sotres: [],
+            storeName:"",
             selectedStore: "",
+            domainId:0,
         };
     }
+
+    componentDidMount() {
+        if (global.domainName === "Textile") {
+            this.setState({ domainId: 1 })
+        }
+        else if (global.domainName === "Retail") {
+            this.setState({ domainId: 2 })
+        }
+        else if (global.domainName === "Electrical & Electronics") {
+            this.setState({ domainId: 3 })
+        }
+
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) });
+            console.log(this.state.storeId);
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
+
+        AsyncStorage.getItem("storeName").then((value) => {
+            this.setState({ storeName:value});
+            console.log(this.state.storeName);
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
+    }
+
 
     datepickerClicked() {
         this.setState({ datepickerOpen: true });
@@ -35,23 +68,36 @@ export class SalesSumary extends Component {
     }
 
     datepickerDoneClicked() {
-        // if (parseInt(this.state.date.getDate()) < 10) {
-        //     this.setState({ fromDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
-        // }
-        // else {
-        this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
-        // }
+        if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+        }
+        else if (parseInt(this.state.date.getDate()) < 10) {
+            this.setState({ startDate:this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate()})
+        }
+        else if (parseInt(this.state.date.getMonth()) < 10) {
+            this.setState({ startDate: this.state.date.getFullYear()  + "-0" + (this.state.date.getMonth() + 1) + "-" +  this.state.date.getDate()})
+        }
+        else {
+            this.setState({ startDate: this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()})
+        }
+        
 
         this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
-        // if (parseInt(this.state.enddate.getDate()) < 10) {
-        //     this.setState({ toDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() });
-        // }
-        // else {
-        this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
-        // }
+        if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+        }
+        else if (parseInt(this.state.enddate.getDate()) < 10) {
+            this.setState({ endDate:this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate()})
+        }
+        else if (parseInt(this.state.enddate.getMonth()) < 10) {
+            this.setState({ endDate: this.state.enddate.getFullYear()  + "-0" + (this.state.enddate.getMonth() + 1) + "-" +  this.state.enddate.getDate()})
+        }
+        else {
+            this.setState({ endDate: this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()})
+        }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
@@ -64,7 +110,40 @@ export class SalesSumary extends Component {
     };
 
     applySalesSummary() {
-        alert("filters Applied");
+        if (this.state.startDate === "") {
+            this.state.startDate = null;
+        }
+        if (this.state.endDate === "") {
+            this.state.endDate = null;
+        }
+       
+            const obj = {
+                "dateFrom":this.state.startDate,
+                "dateTo":this.state.endDate,
+                "store":{
+                    "id":this.state.storeId,
+                    "name":this.state.storeName,
+                    },
+                storeId:this.state.storeId,
+                domainId: this.state.domainId
+              };
+              console.log('params are' + JSON.stringify(obj))
+              axios.post(ReportsService.saleReports(), obj).then((res) => {
+                  console.log(res.data)
+                if (res.data && res.data["isSuccess"] === "true") {
+                    this.props.childParamSalesSummary(res.data.result);
+                    this.props.childParamSalesSummaryObject(1,2,3);
+                   
+                    this.props.modelCancelCallback();
+                }
+                else {
+                  alert(res.data.message);
+                }
+              }
+              ).catch(() => {
+                alert('No Results Found');
+                this.props.modelCancelCallback();
+            }); 
     }
 
     modelCancel() {
@@ -75,24 +154,54 @@ export class SalesSumary extends Component {
         return (
             <View>
                 <FlatList
-                    data={this.props.salesSumary}
+                    data={this.props.salesSumaryObject}
                     style={{ marginTop: 20 }}
                     scrollEnabled={true}
-                    renderItem={({ item, index }) => (
-                        <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
+                    renderItem={({ item, index }) => {
+                     if(index === 0){
+                       return <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >TRANSACTION: {index + 1} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>TOTAL MRP: {"\n"} { }</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >TRANSACTION: {"\n"}{'Sales Invoicing'} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>TOTAL MRP: {"\n"} ₹{this.props.salesSumary.salesSummery.totalMrp}</Text>
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>PROMO OFFER: {"\n"} { } </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>INVOICE AMOUNT: {"\n"} { }</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>PROMO OFFER: {"\n"} ₹{this.props.salesSumary.salesSummery.totalDiscount} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>INVOICE AMOUNT: {"\n"} ₹{this.props.salesSumary.salesSummery.billValue}</Text>
                                 </View>
                             </View>
                         </View>
-
-                    )}
+                     }
+                     if(index === 1){
+                        return <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
+                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
+                                 <View style={flats.text}>
+                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >TRANSACTION: {"\n"}{'Return Invoicing'} </Text>
+                                     <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>TOTAL MRP: {"\n"} ₹{this.props.salesSumary.retunSummery.totalMrp}</Text>
+                                 </View>
+                                 <View style={flats.text}>
+                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>PROMO OFFER: {"\n"} ₹{this.props.salesSumary.retunSummery.totalDiscount} </Text>
+                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>INVOICE AMOUNT: {"\n"} ₹{this.props.salesSumary.retunSummery.billValue}</Text>
+                                 </View>
+                             </View>
+                         </View>
+                      }
+                      if(index === 2){
+                    
+                        return <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile} >
+                             <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile}>
+                                 <View style={flats.text}>
+                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} ></Text>
+                                     <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>TOTAL MRP: {"\n"} ₹{this.props.salesSumary.totalMrp}</Text>
+                                 </View>
+                                 <View style={flats.text}>
+                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>PROMO OFFER: {"\n"} ₹{this.props.salesSumary.totalDiscount} </Text>
+                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>INVOICE AMOUNT: {"\n"} ₹{this.props.salesSumary.billValue}</Text>
+                                 </View>
+                             </View>
+                         </View>
+                      }
+                    }}
 
                 />
 
@@ -168,22 +277,16 @@ export class SalesSumary extends Component {
                                             />
                                         </View>
                                     )}
-                                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                                        <RNPickerSelect
-                                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                                            placeholder={{
-                                                label: 'SELECT STORE'
-                                            }}
-                                            Icon={() => {
-                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                            }}
-                                            items={this.state.sotres}
-                                            onValueChange={this.handleSelectStores}
-                                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                                            value={this.state.selectedStore}
-                                            useNativeAndroidPickerStyle={false}
-                                        />
-                                    </View>
+                                     <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="STORE"
+                                        placeholderTextColor="#6F6F6F"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.storeName}
+                                        onChangeText={this.handleSelectStores}
+                                    />
                                     <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
                                         onPress={() => this.applySalesSummary()}>
                                         <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
@@ -633,6 +736,16 @@ const flats = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
+    flatlistSubContainerTotal_mobile: {
+        backgroundColor: '#e4d7d7',
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+        paddingLeft: 10,
+        paddingRight: 10,
+        alignItems: 'center',
+        height: 140
+    },
     flatlistSubContainer_mobile: {
         flexDirection: 'row',
         width: '100%',
@@ -692,6 +805,16 @@ const flats = StyleSheet.create({
         justifyContent: 'space-between',
         paddingLeft: 20,
         paddingRight: 20,
+        alignItems: 'center',
+        height: 160
+    },
+    flatlistSubContainerTotal_tablet: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+        paddingLeft: 20,
+        paddingRight: 20,
+        backgroundColor:'#e4d7d7',
         alignItems: 'center',
         height: 160
     },

@@ -7,6 +7,9 @@ import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 var deviceWidth = Dimensions.get("window").width;
+import ReportsService from '../services/ReportsService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export class ListOfPromotions extends Component {
 
@@ -23,8 +26,30 @@ export class ListOfPromotions extends Component {
             promoId: "",
             sotres: [],
             selectedStore: "",
+            storeId: 0,
+            storeName: "",
         };
     }
+
+    componentDidMount() {
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) });
+            console.log(this.state.storeId);
+
+
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
+
+        AsyncStorage.getItem("storeName").then((value) => {
+            this.setState({ storeName: value });
+            console.log(this.state.storeName);
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
+    }
+
 
 
     datepickerClicked() {
@@ -36,23 +61,36 @@ export class ListOfPromotions extends Component {
     }
 
     datepickerDoneClicked() {
-        // if (parseInt(this.state.date.getDate()) < 10) {
-        //     this.setState({ fromDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
-        // }
-        // else {
-        this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
-        // }
+        if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+        }
+        else if (parseInt(this.state.date.getDate()) < 10) {
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+        }
+        else if (parseInt(this.state.date.getMonth()) < 10) {
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+        }
+        else {
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+        }
+
 
         this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
-        // if (parseInt(this.state.enddate.getDate()) < 10) {
-        //     this.setState({ toDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() });
-        // }
-        // else {
-        this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
-        // }
+        if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+        }
+        else if (parseInt(this.state.enddate.getDate()) < 10) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+        }
+        else if (parseInt(this.state.enddate.getMonth()) < 10) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+        }
+        else {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+        }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
@@ -69,7 +107,42 @@ export class ListOfPromotions extends Component {
     };
 
     applyListPromotions() {
-        alert("filters Applied");
+        if (this.state.startDate === "") {
+            this.state.startDate = null;
+        }
+        if (this.state.endDate === "") {
+            this.state.endDate = null;
+        }
+        if (this.state.promoId === "") {
+            this.state.promoId = null;
+        }
+
+
+        const obj = {
+            // "startDate":this.state.startDate,
+            // "endDate":this.state.endDate,
+            // storeName: this.state.storeName,
+            // "promoId":this.state.promoId,
+            "startDate": "2021-11-01",
+            "endDate": "2021-10-10",
+            "storeName": "Km-Patny",
+            "promoId": 1
+        };
+        console.log('params are' + JSON.stringify(obj))
+        axios.post(ReportsService.promotionsList(), obj).then((res) => {
+            console.log(res.data)
+            if (res.data && res.data["isSuccess"] === "true") {
+                this.props.childParamlistofPromotions(res.data.result);
+                this.props.modelCancelCallback();
+            }
+            else {
+                alert(res.data.message);
+            }
+        }
+        ).catch(() => {
+            alert('No Results Found');
+            this.props.modelCancelCallback();
+        });
     }
 
     modelCancel() {

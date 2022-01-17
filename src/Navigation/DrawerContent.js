@@ -128,7 +128,8 @@ export function DrawerContent(props) {
                             />
                         )}
 
-                        {global.previlage4 === "Promotions & Loyalty" && (
+           {/* //Hold For Now // */}
+                        {/* {global.previlage4 === "Promotions & Loyalty" && (
                             <DrawerItem
                                 icon={({ color, size }) => (
                                     <Image
@@ -139,7 +140,7 @@ export function DrawerContent(props) {
                                 label="Promotions & Loyalty"
                                 onPress={() => { props.navigation.navigate('PromoNavigation') }}
                             />
-                        )}
+                        )} */}
                         {global.previlage5 === "Accounting Portal" && (
                             <DrawerItem
                                 icon={({ color, size }) => (

@@ -115,7 +115,7 @@ export default class SelectStore extends React.Component {
             console.log('there is error saving storeId')
         })
 
-        AsyncStorage.setItem("storeName",id.name).then(() => {            
+        AsyncStorage.setItem("storeName",item.name).then(() => {            
         }).catch(() => {
             console.log('there is error saving token')
         })

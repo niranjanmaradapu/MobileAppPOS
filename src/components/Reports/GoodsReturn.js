@@ -5,6 +5,9 @@ import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 var deviceWidth = Dimensions.get("window").width;
+import ReportsService from '../services/ReportsService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export class GoodsReturn extends Component {
 
@@ -23,7 +26,32 @@ export class GoodsReturn extends Component {
             returnSlip: "",
             barCode: "",
             empId: "",
+            storeId:0,
+            domainId:0,
         };
+    }
+
+    componentDidMount() {
+        if (global.domainName === "Textile") {
+            this.setState({ domainId: 1 })
+        }
+        else if (global.domainName === "Retail") {
+            this.setState({ domainId: 2 })
+        }
+        else if (global.domainName === "Electrical & Electronics") {
+            this.setState({ domainId: 3 })
+        }
+
+
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) });
+            console.log(this.state.storeId);
+          
+
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
     }
 
 
@@ -36,25 +64,82 @@ export class GoodsReturn extends Component {
     }
 
     datepickerDoneClicked() {
-        // if (parseInt(this.state.date.getDate()) < 10) {
-        //     this.setState({ fromDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
-        // }
-        // else {
-        this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
-        // }
+        if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+        }
+        else if (parseInt(this.state.date.getDate()) < 10) {
+            this.setState({ startDate:this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate()})
+        }
+        else if (parseInt(this.state.date.getMonth()) < 10) {
+            this.setState({ startDate: this.state.date.getFullYear()  + "-0" + (this.state.date.getMonth() + 1) + "-" +  this.state.date.getDate()})
+        }
+        else {
+            this.setState({ startDate: this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()})
+        }
+        
 
         this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
-        // if (parseInt(this.state.enddate.getDate()) < 10) {
-        //     this.setState({ toDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() });
-        // }
-        // else {
-        this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
-        // }
+        if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+        }
+        else if (parseInt(this.state.enddate.getDate()) < 10) {
+            this.setState({ endDate:this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate()})
+        }
+        else if (parseInt(this.state.enddate.getMonth()) < 10) {
+            this.setState({ endDate: this.state.enddate.getFullYear()  + "-0" + (this.state.enddate.getMonth() + 1) + "-" +  this.state.enddate.getDate()})
+        }
+        else {
+            this.setState({ endDate: this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()})
+        }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
+
+    applyGoodsReturn() {
+        if (this.state.startDate === "") {
+            this.state.startDate = null;
+        }
+        if (this.state.endDate === "") {
+            this.state.endDate = null;
+        }
+        if (this.state.returnSlip === "") {
+            this.state.returnSlip = null;
+        }
+        if (this.state.barCode === "") {
+            this.state.barCode = null;
+        }
+        if (this.state.empId === "") {
+            this.state.empId = null;
+        }
+
+            const obj = {
+                "dateFrom":this.state.startDate,
+                "dateTo":this.state.endDate,
+                rtNumber: this.state.returnSlip,
+                barcode: this.state.barCode,
+                createdBy: this.state.empId,
+                 storeId: this.state.storeId,
+                 domainId: this.state.domainId
+              };
+                  console.log('params are' + JSON.stringify(obj))
+                  axios.post(ReportsService.returnSlips(), obj).then((res) => {
+                      console.log(res.data)
+                    if (res.data && res.data["isSuccess"] === "true") {
+                        this.props.childParamgoodsReturn(res.data.result);
+                        this.props.modelCancelCallback();
+                    }
+                    else {
+                      alert(res.data.message);
+                    }
+                  }
+                  ).catch(() => {
+                    alert('No Results Found');
+                    this.props.modelCancelCallback();
+                }); 
+    }
+
 
     datepickerCancelClicked() {
         this.setState({ date: new Date(), enddate: new Date(), datepickerOpen: false, datepickerendOpen: false });
@@ -72,18 +157,18 @@ export class GoodsReturn extends Component {
         this.setState({ empId: value });
     };
 
-    applyGoodsReturn() {
-        alert("filters Applied");
+    handledeleteNewSale() {
+        this.setState({ flagDeleteGoodsReturn: true, modalVisible: true });
     }
+
+   
 
     modelCancel() {
         this.props.modelCancelCallback();
     }
 
 
-    handleDeleteGoodsReturn() {
-        this.setState({ flagDeleteGoodsReturn: true, modalVisible: true });
-    }
+   
 
     render() {
         return (
@@ -97,13 +182,13 @@ export class GoodsReturn extends Component {
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S NO: {index + 1} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>RTS NUMBER: {"\n"} { }</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {"\n"} { } </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>RTS NUMBER: {"\n"}{item.rtNumber}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {"\n"}{item.barcodes[0].barCode} </Text>
                                 </View>
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >EMP ID: { } </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>RTS NUMBER: {"\n"} { }</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>AMOUNT: {"\n"} { }</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>RTS DATE: {"\n"} {item.createdInfo}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>AMOUNT: {"\n"} ₹{item.amount}</Text>
                                 </View>
                                 <View style={flats.text}>
                                     <View style={flats.buttons}>
@@ -336,7 +421,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -20,
         backgroundColor: "#ffffff",
-        height: 400,
+        height: 530,
         position: 'absolute',
         bottom: -20,
     },
@@ -492,7 +577,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: -40,
         backgroundColor: "#ffffff",
-        height: 500,
+        height: 600,
         position: 'absolute',
         bottom: -40,
     },
