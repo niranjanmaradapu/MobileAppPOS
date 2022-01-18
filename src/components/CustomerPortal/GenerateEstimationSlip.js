@@ -34,6 +34,7 @@ class GenerateEstimationSlip extends Component {
             quantity: '',
             totalAmount: 0,
             totalDiscount: 0,
+            saleQuantity: 0,
             gender: "Male",
             gstNumber: "",
             dob: "2021-06-21T18:30:00.000Z",
@@ -187,7 +188,7 @@ class GenerateEstimationSlip extends Component {
 
                                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                     underlineColorAndroid="transparent"
-                                    placeholder="Enter Barcode"
+                                    placeholder="ENTER BARCODE"
                                     placeholderTextColor="#6F6F6F60"
                                     textAlignVertical="center"
                                     keyboardType={'default'}
@@ -217,6 +218,7 @@ class GenerateEstimationSlip extends Component {
                                     keyboardType={'default'}
                                     autoCapitalize="none"
                                     onEndEditing
+                                    value={this.state.saleQuantity}
                                     onChangeText={(text) => this.handleQty(text)}
                                     onEndEditing={() => this.endEditing()}
                                 />
