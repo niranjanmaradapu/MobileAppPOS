@@ -1,25 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import NetInfo from "@react-native-community/netinfo";
-import { DrawerActions } from '@react-navigation/native';
-import axios from 'axios';
 import Constants from 'expo-constants';
 import React, { Component } from 'react';
-import { Alert, Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import RNBeep from 'react-native-a-beep';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import Device from 'react-native-device-detection';
-import { SearchBar } from "react-native-elements";
-import ImagePicker from 'react-native-image-crop-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
-import Loader from '../../commonUtils/loader';
-import CreateCustomerService from '../services/CreateCustomerService';
-import InventoryService from '../services/InventoryService';
-import LoginService from '../services/LoginService';
-import NewSaleService from '../services/NewSaleService';
 var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
@@ -73,8 +62,8 @@ class GenerateInvoiceSlip extends Component {
             domainId: 1,
             storeId: 1,
             tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
-            tableData: [1,2],
-            privilages: [{bool:true,name:"Tag Customer"},{bool:false,name:"Bill Level Discount"}],
+            tableData: [1, 2],
+            privilages: [{ bool: true, name: "Tag Customer" }, { bool: false, name: "Bill Level Discount" }],
             inventoryDelete: false,
             lineItemDelete: false,
             uom: [],
@@ -95,9 +84,32 @@ class GenerateInvoiceSlip extends Component {
         return true;
     }
 
+    modelCancel() {
+        this.setState({ modalVisible: false });
+    }
+
+    handlenewsaledeleteaction() {
+        this.setState({ modalVisible: true, lineItemDelete: true });
+    }
+
+    deleteLineItem() {
+        alert("you have deleted");
+    }
 
     onEndReached() {
         this.listRef.scrollToOffset({ offset: 0, animated: true });
+    }
+
+    incrementForTable() {
+
+    }
+
+    updateQty() {
+
+    }
+
+    decreamentForTable() {
+
     }
 
     topbarAction1 = (item, index) => {
@@ -113,9 +125,9 @@ class GenerateInvoiceSlip extends Component {
             }
             this.setState({ privilages: this.state.privilages });
         }
-    }
+    };
 
-    pay(){
+    pay() {
         this.props.navigation.navigate('Payment', {
             totalAmount: this.state.totalAmount, totalDiscount: this.state.totalDiscount,
             customerName: this.state.customerName, customerPhoneNumber: this.state.customerPhoneNumber,
@@ -123,9 +135,12 @@ class GenerateInvoiceSlip extends Component {
             customerGender: this.state.customerGender, lineItemIdAdd: lineItemIdAdd,
             totalQty: this.state.totalQty.toString(),
             onGoBack: () => this.invoiceUpdate(),
-          }); 
+        });
     }
 
+    handleDsNumber() {
+        
+    }
 
 
     render() {
@@ -135,10 +150,10 @@ class GenerateInvoiceSlip extends Component {
         }).catch(() => {
             console.log('there is error getting token');
         });
-       
+
         return (
             <View style={{ flex: 1 }}>
-                       
+
 
                 {this.state.flagone && (
                     <ScrollView>
@@ -150,7 +165,7 @@ class GenerateInvoiceSlip extends Component {
                                 marginTop: 10,
                             }}>
                             <View>
-                                
+
 
                                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                     underlineColorAndroid="transparent"
@@ -160,43 +175,43 @@ class GenerateInvoiceSlip extends Component {
                                     keyboardType={'default'}
                                     autoCapitalize="none"
                                     onEndEditing
-                                    onChangeText={(text) => this.handleBarCode(text)}
+                                    onChangeText={(text) => this.handleDsNumber(text)}
                                     onEndEditing={() => this.endEditing()}
                                 />
 
 
 
-                              
-                           
+
+
                             </View>
                             {this.state.tableData.length !== 0 && (
-                            <FlatList
-                            style={styles.flatList}
-                            horizontal
-                            data={this.state.privilages}
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item, index }) => (
-                                <TouchableOpacity style={{
-                                    height: 36,
-                                    width: 200,
-                                    borderWidth: 1,
-                                    backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
-                                    borderColor: item.bool ? '#ED1C24' : '#858585',
-                                    borderRadius: 5,
-                                    marginLeft: 10,
-                                }} onPress={() => this.topbarAction1(item, index)} >
+                                <FlatList
+                                    style={styles.flatList}
+                                    horizontal
+                                    data={this.state.privilages}
+                                    showsVerticalScrollIndicator={false}
+                                    showsHorizontalScrollIndicator={false}
+                                    renderItem={({ item, index }) => (
+                                        <TouchableOpacity style={{
+                                            height: 36,
+                                            width: 200,
+                                            borderWidth: 1,
+                                            backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
+                                            borderColor: item.bool ? '#ED1C24' : '#858585',
+                                            borderRadius: 5,
+                                            marginLeft: 10,
+                                        }} onPress={() => this.topbarAction1(item, index)} >
 
-                                    <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
-                                        {item.name}
-                                    </Text>
-                                </TouchableOpacity>
-                            )}
-                            ListFooterComponent={<View style={{ width: 15 }}></View>}
-                        />
+                                            <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
+                                                {item.name}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    )}
+                                    ListFooterComponent={<View style={{ width: 15 }}></View>}
+                                />
                             )}
 
-                            <FlatList style ={{marginTop:20,marginBottom:20}}
+                            <FlatList style={{ marginTop: 20, marginBottom: 20 }}
                                 //  ListHeaderComponent={this.renderHeader}
                                 data={this.state.tableData}
                                 keyExtractor={item => item.email}
@@ -208,7 +223,7 @@ class GenerateInvoiceSlip extends Component {
                                 ref={(ref) => { this.listRef = ref; }}
                                 renderItem={({ item, index }) => (
                                     <View style={{
-                                        height: 120,
+                                        height: Device.isTablet ? 240 : 140,
                                         backgroundColor: '#FFFFFF',
                                         borderBottomWidth: 5,
                                         borderBottomColor: '#FBFBFB',
@@ -216,70 +231,77 @@ class GenerateInvoiceSlip extends Component {
 
                                     }}>
 
-                                        <View style={{ flexDirection: 'column', height: 120, }}>
+                                        <View style={{ flexDirection: 'column', height: Device.isTablet ? 220 : 120, }}>
                                             <Image source={require('../assets/images/default.jpeg')}
                                                 //source={{ uri: item.image }}
                                                 style={{
-                                                    position: 'absolute', left: 20, top: 15, width: 90, height: 90,
+                                                    position: 'absolute', left: 20, top: 15, width: Device.isTablet ? 140 : 90, height: Device.isTablet ? 140 : 90,
                                                 }} />
-                                            <Text style={{ fontSize: 16, marginTop: 10, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>
+                                            <Text style={{ fontSize: Device.isTablet ? 21 : 16, marginTop: 10, marginLeft: Device.isTablet ? 180 : 130, fontFamily: 'medium', color: '#353C40' }}>
                                                 {item.itemdesc}
                                             </Text>
-                                            <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 0, fontFamily: 'regular', color: '#808080' }}>
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 0, fontFamily: 'regular', color: '#808080' }}>
                                                 ITEM:
                                             </Text>
-                                            <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 245 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
                                                 {item.qty} {item.productuom}
                                             </Text>
-                                            <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                                 QUANTITY:
                                             </Text>
-                                            <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 245 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
                                                 {item.qty} {item.productuom}
                                             </Text>
-                                           
-                                            <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+
+                                            {/* <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
                                                 {item.qty} {item.productuom}
-                                            </Text>
-                                            <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                            </Text> */}
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                                 MRP:
                                             </Text>
-                                            <Text style={{ fontSize: 12, marginLeft: 160, marginTop: -15, fontFamily: 'medium', color: '#ED1C24' }}>
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 230 : 160, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'medium', color: '#ED1C24' }}>
                                                 {/* ₹ {(parseInt(item.netamount)).toString()} */}
                                                 Rs. 1000
                                             </Text>
-                                            <Text style={{ fontSize: 12, marginLeft: 220, marginTop: -15, fontFamily: 'regular', color: '#808080' }}>
-                                            DISCOUNT: Rs. 0
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 310 : 220, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'regular', color: '#808080' }}>
+                                                DISCOUNT: Rs. 0
                                             </Text>
-                                            <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                                 GROSS AMOUNT:
                                             </Text>
-                                            
+
                                         </View>
 
                                         <View style={{
                                             flexDirection: 'row',
                                             justifyContent: 'space-around',
                                             alignItems: 'center',
-                                            height: 30,
-                                            marginLeft:-40,
-                                            marginTop:60,
-                                            marginRight: 20,
-                                            width: 90,
+                                            height: Device.isTablet ? 60 : 30,
+                                            marginLeft: -40,
+                                            marginTop: Device.isTablet ? 60 : 80,
+                                            marginRight: Device.isTablet ? 40 : 20,
+                                            width: Device.isTablet ? 150 : 90,
                                             //borderWidth:1,
                                             //borderColor:'#ED1C24',
                                             // borderRadius:3,
                                         }}>
                                             <TouchableOpacity style={{
                                                 borderColor: '#ED1C24',
-                                                height: 28,
-                                                width: 30, borderBottomLeftRadius: 3,
+                                                height: Device.isTablet ? 48 : 28,
+                                                width: Device.isTablet ? 50 : 30,
+                                                borderBottomLeftRadius: 3,
                                                 borderTopLeftRadius: 3,
                                                 borderBottomWidth: 1,
                                                 borderTopWidth: 1,
                                                 borderLeftWidth: 1, paddingLeft: 10, marginLeft: 20,
                                             }}>
-                                                <Text style={{ alignSelf: 'center', marginTop: 2, marginLeft: -10, color: '#ED1C24' }}
+                                                <Text style={{
+                                                    alignSelf: 'center',
+                                                    marginTop: 2,
+                                                    marginLeft: -10,
+                                                    fontSize: Device.isTablet ? 22 : 12,
+                                                    color: '#ED1C24'
+                                                }}
                                                     onPress={() => this.decreamentForTable(item, index)}>-</Text>
                                             </TouchableOpacity>
                                             {/* <Text> {item.qty}</Text> */}
@@ -287,8 +309,8 @@ class GenerateInvoiceSlip extends Component {
                                                 style={{
                                                     justifyContent: 'center',
                                                     margin: 20,
-                                                    height: 28,
-                                                    width: 30,
+                                                    height: Device.isTablet ? 48 : 28,
+                                                    width: Device.isTablet ? 50 : 30,
                                                     marginTop: 10,
                                                     marginBottom: 10,
                                                     borderColor: '#ED1C24',
@@ -296,8 +318,8 @@ class GenerateInvoiceSlip extends Component {
                                                     color: '#353C40',
                                                     borderWidth: 1,
                                                     fontFamily: 'regular',
-                                                    fontSize: 12,
-                                                    paddingLeft: 9,
+                                                    fontSize: Device.isTablet ? 22 : 12,
+                                                    paddingLeft: Device.isTablet ? 15 : 9,
                                                 }}
                                                 underlineColorAndroid="transparent"
                                                 placeholder="0"
@@ -308,150 +330,112 @@ class GenerateInvoiceSlip extends Component {
                                             />
                                             <TouchableOpacity style={{
                                                 borderColor: '#ED1C24',
-                                                height: 28,
-                                                width: 30, borderBottomRightRadius: 3,
+                                                height: Device.isTablet ? 48 : 28,
+                                                width: Device.isTablet ? 50 : 30, borderBottomRightRadius: 3,
                                                 borderTopRightRadius: 3,
                                                 borderBottomWidth: 1,
                                                 borderTopWidth: 1,
                                                 borderRightWidth: 1
                                             }}>
-                                                <Text style={{ alignSelf: 'center', marginTop: 2, color: '#ED1C24' }}
+                                                <Text style={{
+                                                    alignSelf: 'center',
+                                                    marginTop: 2,
+                                                    fontSize: Device.isTablet ? 22 : 12,
+                                                    color: '#ED1C24'
+                                                }}
                                                     onPress={() => this.incrementForTable(item, index)}>+</Text>
 
                                             </TouchableOpacity>
 
                                             <TouchableOpacity style={{
                                                 position: 'absolute',
-                                                right: 20,
-                                                top: -60,
-                                                width: 30,
-                                                height: 30,
+                                                right: Device.isTablet ? 40 : 20,
+                                                top: Device.isTablet ? -55 : -35,
+                                                width: Device.isTablet ? 50 : 30,
+                                                height: Device.isTablet ? 50 : 30,
                                                 borderRadius: 5,
                                                 // borderTopRightRadius: 5,
                                                 borderWidth: 1,
                                                 borderColor: "lightgray",
                                             }} onPress={() => this.handlenewsaledeleteaction(item, index)}>
-                                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                                <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
                                             </TouchableOpacity>
                                         </View>
-
-                                        {this.state.lineItemDelete && (
-                                            <View>
-                                                <Modal isVisible={this.state.modalVisible}>
-
-                                                    <View style={{
-                                                        width: deviceWidth,
-                                                        alignItems: 'center',
-                                                        marginLeft: -20,
-                                                        backgroundColor: "#ffffff",
-                                                        height: 260,
-                                                        position: 'absolute',
-                                                        bottom: -20,
-                                                    }}>
-
-                                                        <Text style={{
-                                                            position: 'absolute',
-                                                            left: 20,
-                                                            top: 15,
-                                                            width: 300,
-                                                            height: 20,
-                                                            fontFamily: 'medium',
-                                                            fontSize: 16,
-                                                            color: '#353C40'
-                                                        }}> Delete Item </Text>
-
-                                                        <TouchableOpacity style={{
-                                                            position: 'absolute',
-                                                            right: 20,
-                                                            top: 7,
-                                                            width: 50, height: 50,
-                                                        }} onPress={() => this.modelCancel()}>
-                                                            <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
-                                                        </TouchableOpacity>
-
-                                                        <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                                        </Text>
-                                                        <Text style={{
-                                                            position: 'absolute',
-                                                            top: 70,
-                                                            height: 20,
-                                                            textAlign: 'center',
-                                                            fontFamily: 'regular',
-                                                            fontSize: 18,
-                                                            color: '#353C40'
-                                                        }}> Are you sure want to delete NewSale Item?  </Text>
-                                                        <TouchableOpacity
-                                                            style={{
-                                                                width: deviceWidth - 40,
-                                                                marginLeft: 20,
-                                                                marginRight: 20,
-                                                                marginTop: 60,
-                                                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                            }} onPress={() => this.deleteLineItem(item, index)}
-                                                        >
-                                                            <Text style={{
-                                                                textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                                                fontFamily: "regular"
-                                                            }}  > DELETE </Text>
-
-                                                        </TouchableOpacity>
-
-                                                        <TouchableOpacity
-                                                            style={{
-                                                                width: deviceWidth - 40,
-                                                                marginLeft: 20,
-                                                                marginRight: 20,
-                                                                marginTop: 20,
-                                                                height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                                            }} onPress={() => this.modelCancel()}
-                                                        >
-                                                            <Text style={{
-                                                                textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                                                fontFamily: "regular"
-                                                            }}  > CANCEL </Text>
-
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                </Modal>
-                                            </View>)}
-
                                     </View>
-
-
-
                                 )}
                             />
+                            {this.state.lineItemDelete && (
+                                <View>
+                                    <Modal isVisible={this.state.modalVisible}>
+
+                                        <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
+
+                                            <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Item </Text>
+
+                                            <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                                <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+
+                                            <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                            </Text>
+                                            <Text style={{
+                                                position: 'absolute',
+                                                top: 70,
+                                                height: Device.isTablet ? 40 : 20,
+                                                textAlign: 'center',
+                                                fontFamily: 'regular',
+                                                fontSize: Device.isTablet ? 23 : 18,
+                                                marginBottom: Device.isTablet ? 25 : 0,
+                                                color: '#353C40'
+                                            }}> Are you sure want to delete NewSale Item? </Text>
+                                            <TouchableOpacity
+                                                style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]}
+                                                onPress={() => this.deleteLineItem(item, index)}
+                                            >
+                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+
+                                            </TouchableOpacity>
+
+                                            <TouchableOpacity
+                                                style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
+                                            >
+                                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+
+                                            </TouchableOpacity>
+                                        </View>
+                                    </Modal>
+                                </View>)}
                             {this.state.tableData.length != 0 && (
                                 <View style={{ width: deviceWidth, height: 220, position: 'absolute', bottom: 0, backgroundColor: '#FFFFFF' }}>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                                        fontSize: 14, position: 'absolute',
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
                                         Items </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                                        fontSize: 14, position: 'absolute',
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
                                         {this.state.totalQty} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                                        fontSize: 14, position: 'absolute',
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
                                         Discount </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                                        fontSize: 14, position: 'absolute',
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
                                         ₹ {this.state.totalAmount} </Text>
-                                   
+
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                                        fontSize: 14, position: 'absolute',
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
                                         Total </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                                        fontSize: 14, position: 'absolute',
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
                                         ₹ {(parseInt(this.state.totalAmount) - parseInt(this.state.totalDiscount)).toString()} </Text>
 
@@ -481,10 +465,10 @@ class GenerateInvoiceSlip extends Component {
                                     <View style={styles.TopcontainerforPay}>
 
                                         <TouchableOpacity
-                                            style={styles.signInButton}
+                                            style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
                                             onPress={() => this.pay()} >
 
-                                            <Text style={styles.signInButtonText}> Checkout </Text>
+                                            <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}> Checkout </Text>
                                         </TouchableOpacity>
 
 
@@ -655,10 +639,10 @@ class GenerateInvoiceSlip extends Component {
                     </View>)}
 
 
-                
-                       
-                  
-              
+
+
+
+
 
 
             </View>
@@ -1197,8 +1181,366 @@ const styles = StyleSheet.create({
     },
     input_mobile: {
         justifyContent: 'center',
+        marginLeft: deviceWidth / 2 + 30,
+        width: deviceWidth / 2 - 40,
+        height: 44,
+        marginTop: -55,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    input_mobile_normal: {
+        justifyContent: 'center',
+        marginLeft: deviceWidth / 2 + 30,
+        width: deviceWidth / 2 - 40,
+        height: 44,
+        marginTop: -55,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    input_mobile_normal_start: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        width: deviceWidth / 2,
+        height: 44,
+        marginTop: 0,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    rnSelect_mobile: {
+        color: '#8F9EB7',
+        fontSize: 15
+    },
+    rnSelectContainer_mobile: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    rnSelectContainer_mobile_newsale: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        width: deviceWidth / 2,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    saveButton_mobile: {
+        margin: 8,
+        height: 50,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    saveButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#ffffff",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+    scanButton_mobile: {
+        position: 'absolute',
+        right: 28,
+        top: 20,
+        width: 50, height: 50,
+    },
+    scanButtonImage_mobile: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 12,
+        position: 'absolute',
+        right: 30,
+    },
+    scanButtonText_mobile: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 12,
+        position: 'absolute',
+        right: 0,
+    },
+    tagCustomerButton_mobile: {
+        position: 'absolute',
+        right: 5, top: 10,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 90,
+        height: 32,
+    },
+    tagCustomerButtonText_mobile: {
+        fontSize: 12,
+        fontFamily: 'regular',
+        color: '#ffffff',
         marginLeft: 10,
-        width: deviceWidth-20,
+        marginTop: 8,
+        alignSelf: 'center'
+    },
+    navButtonText_mobile: {
+        fontSize: 12,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginLeft: 10,
+        marginTop: 8,
+        alignSelf: 'center'
+    },
+    signInButton_mobile: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        width: deviceWidth - 40,
+        height: 50,
+        borderRadius: 10,
+        fontWeight: 'bold',
+        // marginBottom:100,
+    },
+    signInButtonText_mobile: {
+        color: 'white',
+        alignSelf: 'center',
+        fontSize: 15,
+        fontFamily: "regular",
+    },
+
+    // Styles For Tablet
+    viewsWidth_tablet: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 28,
+        height: 90,
+    },
+    menuButton_tablet: {
+        position: 'absolute',
+        left: 10,
+        top: 38,
+        width: 90,
+        height: 90,
+    },
+    headerTitle_tablet: {
+        position: 'absolute',
+        left: 70,
+        top: 40,
+        width: 300,
+        height: 40,
+        fontFamily: 'bold',
+        fontSize: 24,
+        color: '#353C40'
+    },
+    input_tablet: {
+        justifyContent: 'center',
+        marginLeft: deviceWidth / 2 + 30,
+        width: deviceWidth / 2 - 50,
+        height: 55,
+        marginTop: -65,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 22,
+    },
+    input_tablet_normal: {
+        justifyContent: 'center',
+        marginLeft: deviceWidth / 2 + 30,
+        width: deviceWidth / 2 - 50,
+        height: 55,
+        marginTop: -65,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 22,
+    },
+    navButton_tablet: {
+        position: 'absolute',
+        right: 20, top: 27,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 155,
+        height: 42,
+    },
+    input_tablet_normal_start: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        width: deviceWidth / 2,
+        height: 55,
+        marginTop: 0,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 22,
+    },
+    rnSelect_tablet: {
+        color: '#8F9EB7',
+        fontSize: 20
+    },
+    rnSelectContainer_tablet: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    rnSelectContainer_tablet_newsale: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        height: 54,
+        marginTop: 5,
+        width: deviceWidth / 2,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    saveButton_tablet: {
+        margin: 8,
+        height: 60,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    saveButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 15,
+        color: "#ffffff",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    scanButton_tablet: {
+        position: 'absolute',
+        right: 28,
+        top: 20,
+        width: 70,
+        height: 70,
+    },
+    scanButtonImage_tablet: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 18,
+        position: 'absolute',
+        right: 43,
+        top: 5,
+    },
+    scanButtonText_tablet: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 18,
+        position: 'absolute',
+        right: 0,
+    },
+    tagCustomerButton_tablet: {
+        position: 'absolute',
+        right: 30, top: 15,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 120,
+        height: 42,
+    },
+    tagCustomerButtonText_tablet: {
+        fontSize: 16,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginLeft: 10,
+        marginTop: 8,
+        alignSelf: 'center'
+    },
+    navButton_tablet: {
+        position: 'absolute',
+        right: 20, top: 27,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 155,
+        height: 42,
+    },
+    navButtonText_tablet: {
+        fontSize: 17,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginLeft: 10,
+        marginTop: 8,
+        alignSelf: 'center'
+    },
+
+
+    // Styles For Mobile
+    viewsWidth_mobile: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 24,
+        height: Device.isAndroid ? 70 : 84,
+    },
+    menuButton_mobile: {
+        position: 'absolute',
+        left: 10,
+        bottom: 0,
+        width: 40,
+        height: 40,
+    },
+    headerTitle_mobile: {
+        position: 'absolute',
+        left: 70,
+        bottom: 10,
+        width: 300,
+        height: 25,
+        fontFamily: 'bold',
+        fontSize: 18,
+        color: '#353C40'
+    },
+    input_mobile: {
+        justifyContent: 'center',
+        marginLeft: 10,
+        width: deviceWidth - 20,
         height: 44,
         marginTop: 10,
         marginBottom: 10,
@@ -1228,7 +1570,7 @@ const styles = StyleSheet.create({
     input_mobile_normal_start: {
         justifyContent: 'center',
         marginLeft: 20,
-        width: deviceWidth / 2 ,
+        width: deviceWidth / 2,
         height: 44,
         marginTop: 0,
         marginBottom: 10,
@@ -1393,11 +1735,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         width: 155,
         height: 42,
-      },
+    },
     input_tablet_normal_start: {
         justifyContent: 'center',
         marginLeft: 20,
-        width: deviceWidth / 2 ,
+        width: deviceWidth / 2,
         height: 55,
         marginTop: 0,
         marginBottom: 10,
@@ -1508,6 +1850,173 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         marginTop: 8,
         alignSelf: 'center'
+    },
+
+    // Styles for mobile
+    filterMainContainer_mobile: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -20,
+        backgroundColor: "#ffffff",
+        position: 'absolute',
+        bottom: -20,
+    },
+    filterByTitle_mobile: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 20,
+        fontFamily: 'medium',
+        fontSize: 16,
+        color: '#353C40'
+    },
+    filterByTitleDecoration_mobile: {
+        height: 1,
+        width: deviceWidth,
+        backgroundColor: 'lightgray',
+        marginTop: 50,
+    },
+    filterCloseButton_mobile: {
+        position: 'absolute',
+        right: 8,
+        top: 15,
+        width: 50, height: 50,
+    },
+    filterCloseImage_mobile: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 12,
+        position: 'absolute',
+        top: 10,
+        right: 0,
+    },
+    filterApplyButton_mobile: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 50,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    filterButtonText_mobile: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#ffffff",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+    filterCancelButton_mobile: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 50,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    filterButtonCancelText_mobile: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#000000",
+        fontSize: 15,
+        fontFamily: "regular"
+    },
+
+
+    // Styles for Tablet
+    filterMainContainer_tablet: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -40,
+        backgroundColor: "#ffffff",
+        height: 600,
+        position: 'absolute',
+        bottom: -40,
+    },
+    filterByTitle_tablet: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 30,
+        fontFamily: 'medium',
+        fontSize: 21,
+        color: '#353C40'
+    },
+    filterByTitleDecoration_tablet: {
+        height: 1,
+        width: deviceWidth,
+        backgroundColor: 'lightgray',
+        marginTop: 60,
+    },
+    filterCloseButton_tablet: {
+        position: 'absolute',
+        right: 24,
+        top: 10,
+        width: 60, height: 60,
+    },
+    filterCloseImage_tablet: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 17,
+        position: 'absolute',
+        top: 10,
+        right: 24,
+    },
+    filterApplyButton_tablet: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 60,
+        backgroundColor: "#ED1C24",
+        borderRadius: 5,
+    },
+    filterButtonText_tablet: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#ffffff",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    filterCancelButton_tablet: {
+        width: deviceWidth - 40,
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        height: 60,
+        backgroundColor: "#ffffff",
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: "#353C4050",
+    },
+    filterButtonCancelText_tablet: {
+        textAlign: 'center',
+        marginTop: 20,
+        color: "#000000",
+        fontSize: 20,
+        fontFamily: "regular"
+    },
+    signInButton_tablet: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        width: deviceWidth - 40,
+        height: 60,
+        borderRadius: 10,
+        fontWeight: 'bold',
+        // marginBottom:100,
+    },
+    signInButtonText_tablet: {
+        color: 'white',
+        alignSelf: 'center',
+        fontSize: 20,
+        fontFamily: "regular",
     },
 
 });
