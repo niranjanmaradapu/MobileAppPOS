@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     },
     headerContainer_tablet: { 
         flex: 1, 
-        marginTop: 550, 
+        marginTop: 450, 
         width: deviceWidth, 
         height: 200 
     },

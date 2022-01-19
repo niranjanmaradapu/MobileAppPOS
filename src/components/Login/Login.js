@@ -52,7 +52,7 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'wrognsuper1',
+            userName: 'wrognuser1',
             password: 'Otsi@123',
             dropValue: '',
             store: 0,
