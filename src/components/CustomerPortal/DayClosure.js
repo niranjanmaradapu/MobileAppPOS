@@ -15,7 +15,7 @@ export default class DayClosure extends Component {
     }
 
     dayCloseActivity() {
-        Alert.alert('CONFIRM ACTIVITY', 'Are you sure, you want to close the register today ?', [{text: 'confirm'}, {text: 'cancel'}]);
+        Alert.alert('CONFIRM ACTIVITY', 'Are you sure, you want to close the register today ?', [{ text: 'confirm' }, { text: 'cancel' }]);
     }
 
     render() {
@@ -228,8 +228,8 @@ const flats = StyleSheet.create({
         color: '#808080'
     },
     editButton_tablet: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: 1,
@@ -237,8 +237,8 @@ const flats = StyleSheet.create({
         // borderRadius:5,
     },
     deleteButton_tablet: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: 1,

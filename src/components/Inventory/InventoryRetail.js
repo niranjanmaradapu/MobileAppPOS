@@ -76,7 +76,7 @@ class InventoryRetail extends Component {
       inventoryDelete: false,
       lineItemDelete: false,
       uom: [],
-      privilages: [{bool:true,name:"Add Inventory"},{bool:false,name:"Inventory List"}],
+      privilages: [{ bool: true, name: "Add Inventory" }, { bool: false, name: "Inventory List" }],
       subPrivilages: "",
       store: '',
       camera: {
@@ -113,7 +113,7 @@ class InventoryRetail extends Component {
     );
   }
 
-  
+
   async componentDidMount() {
     var domainStringId = "";
     var storeStringId = "";
@@ -273,7 +273,7 @@ class InventoryRetail extends Component {
     this.setState({ arrayData: [], temp: [], search: null });
     NetInfo.addEventListener(state => {
       if (state.isConnected) {
-      
+
         axios.post(InventoryService.getAllBarcodes(), { "storeId": this.state.storeId }).then((res) => {
           if (res.data && res.data["isSuccess"] === "true") {
             let len = res.data["result"].length;
@@ -359,7 +359,7 @@ class InventoryRetail extends Component {
                                 let image = item['itemImage'];
                                 console.log('uom are' + lastModified);
                                 // console.log(res.rows + "added to table----");
-                               
+
                                 this.state.arrayData.push({ sno: sno, barcode: barcode, itemdesc: itemDesc, promoDisc: promoDisc, netamount: netAmount, qty: qty, netamount: netAmount, image: image, productItemId: lastModified, productuom: uom });
                                 if (this.state.arrayData.length === 1) {
                                   this.setState({ arrayData: this.state.arrayData });
@@ -990,70 +990,70 @@ class InventoryRetail extends Component {
     this.props.navigation.dispatch(DrawerActions.openDrawer());
   }
 
-//   topbarAction1() {
-//     this.setState({ inventoryDelete: false, modalVisible: false, flagone: true, flagtwo: false, flagthree: false, flagfour: false });
-//     this.synccreateInventoryOfflineToOnline();
-//   }
+  //   topbarAction1() {
+  //     this.setState({ inventoryDelete: false, modalVisible: false, flagone: true, flagtwo: false, flagthree: false, flagfour: false });
+  //     this.synccreateInventoryOfflineToOnline();
+  //   }
 
   topbarAction1 = (item, index) => {
     if (item.name === "Add Inventory") {
-        this.setState({
-            inventoryDelete: false,
-            modalVisible: false,
-            inventoryBarcodeId: '',
-            inventoryProductName: '',
-            inventoryQuantity: '',
-            inventoryMRP: '',
-            inventoryDiscount: '',
-            inventoryNetAmount: '',
-            modalVisible: true,
-            flagone: false,
-            flagtwo: true,
-            flagthree: false,
-            flagfour: false
-      
-          });
-          //this.synccreateInventoryOfflineToOnline()
-          this.getUOM();
+      this.setState({
+        inventoryDelete: false,
+        modalVisible: false,
+        inventoryBarcodeId: '',
+        inventoryProductName: '',
+        inventoryQuantity: '',
+        inventoryMRP: '',
+        inventoryDiscount: '',
+        inventoryNetAmount: '',
+        modalVisible: true,
+        flagone: false,
+        flagtwo: true,
+        flagthree: false,
+        flagfour: false
+
+      });
+      //this.synccreateInventoryOfflineToOnline()
+      this.getUOM();
     }
     if (item.name === "Inventory List") {
-        this.setState({
-            inventoryDelete: false,
-            modalVisible: false,
-            arrayData: [],
-            temp: [],
-            search: null,
-            flagone: false,
-            flagtwo: false,
-            flagthree: true,
-            flagfour: false
-          });
-          this.synccreateInventoryOfflineToOnline();
-          this.getItems();
+      this.setState({
+        inventoryDelete: false,
+        modalVisible: false,
+        arrayData: [],
+        temp: [],
+        search: null,
+        flagone: false,
+        flagtwo: false,
+        flagthree: true,
+        flagfour: false
+      });
+      this.synccreateInventoryOfflineToOnline();
+      this.getItems();
     }
 
     if (this.state.privilages[index].bool === true) {
-        this.state.privilages[index].bool = false;
+      this.state.privilages[index].bool = false;
     }
     else {
-        this.state.privilages[index].bool = true;
+      this.state.privilages[index].bool = true;
     }
     for (let i = 0; i < this.state.privilages.length; i++) {
-        if (index != i) {
-            this.state.privilages[i].bool = false;
-        }
-        this.setState({ privilages: this.state.privilages });
+      if (index != i) {
+        this.state.privilages[i].bool = false;
+      }
+      this.setState({ privilages: this.state.privilages });
     }
-}
+  };
 
 
   topbarAction2() {
-    
+
   }
 
 
   topbarAction3() {
-   
+
   }
 
 
@@ -1617,64 +1617,256 @@ class InventoryRetail extends Component {
 
 
         <ScrollView>
-                    <View style={styles.previlagecontainer}>
+          <View style={styles.previlagecontainer}>
 
-                        <FlatList
-                            style={styles.flatList}
-                            horizontal
-                            data={this.state.privilages}
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item, index }) => (
-                                <TouchableOpacity style={{
-                                    height: 36,
-                                    width: 200,
-                                    borderWidth: 1,
-                                    backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
-                                    borderColor: item.bool ? '#ED1C24' : '#858585',
-                                    borderRadius: 5,
-                                    marginLeft: 10,
-                                }} onPress={() => this.topbarAction1(item, index)} >
+            <FlatList
+              style={styles.flatList}
+              horizontal
+              data={this.state.privilages}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item, index }) => (
+                <TouchableOpacity style={{
+                  height: 36,
+                  width: 200,
+                  borderWidth: 1,
+                  backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
+                  borderColor: item.bool ? '#ED1C24' : '#858585',
+                  borderRadius: 5,
+                  marginLeft: 10,
+                }} onPress={() => this.topbarAction1(item, index)} >
 
-                                    <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
-                                        {item.name}
-                                    </Text>
+                  <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
+                    {item.name}
+                  </Text>
+                </TouchableOpacity>
+              )}
+              ListFooterComponent={<View style={{ width: 15 }}></View>}
+            />
+
+
+
+
+
+            {this.state.flagtwo && (
+              <KeyboardAwareScrollView KeyboardAwareScrollView
+                enableOnAndroid={true}>
+                <View>
+                  {this.state.loading &&
+                    <Loader
+                      loading={this.state.loading} />
+                  }
+                  <View style={{
+                    flex: 1, justifyContent: 'center', //Centered horizontally
+                    alignItems: 'center', color: '#ffffff'
+                  }}>
+                    <View style={{ flexDirection: 'column', flex: 0, marginLeft: 0, marginTop: 30, marginRight: 0, backgroundColor: "#ffffff", borderRadius: 20, }}>
+
+                      <Image
+                        style={{ width: 80, height: 80, resizeMode: "cover", borderRadius: 40, borderColor: '#F2F2F2', alignSelf: 'center', borderWidth: 2, }}
+                        source={this.state.image}
+                      />
+                      <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 10, alignSelf: 'center', top: -20, left: 15 }} onPress={() => this.imageAction()}>
+                        <Image
+                          style={{ width: 30, height: 30, borderRadius: 10, }}
+                          source={require('../assets/images/cameraclick.png')} />
+
+                      </TouchableOpacity>
+
+
+
+
+                      {this.state.flagqtyModelOpen && (
+                        <View>
+                          <Modal isVisible={this.state.modalVisible}>
+                            <View style={{
+                              flex: 1, justifyContent: 'center', //Centered horizontally
+                              alignItems: 'center',
+                            }}>
+                              <View style={{
+                                position: 'absolute',
+                                right: 20,
+                                left: 20,
+                                alignItems: 'center',
+                                justifyContent: 'flex-start',
+                                backgroundColor: "#ffffff", borderRadius: 20,
+                              }}>
+                                <TouchableOpacity
+                                  style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
+                                  onPress={() => this.pickSingleWithCameraForProductsAdd(true)} >
+                                  <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Select Product Image With Camera')} </Text>
                                 </TouchableOpacity>
-                            )}
-                            ListFooterComponent={<View style={{ width: 15 }}></View>}
+
+                                <TouchableOpacity
+                                  style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
+                                  onPress={() => this.pickSingleForProductsAdd(true)} >
+                                  <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Select Product Image With Gallery')} </Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                  style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center', marginBottom: 20, }}
+                                  onPress={() => this.cancel()} >
+                                  <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Cancel')} </Text>
+                                </TouchableOpacity>
+
+                              </View>
+                            </View>
+                          </Modal>
+                        </View>)}
+
+
+                      <Text></Text>
+
+                      <View style={{ marginTop: 10, width: deviceWidth }}>
+                        <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                          underlineColorAndroid="transparent"
+                          placeholder="BARCODE"
+                          placeholderTextColor="#353C4050"
+                          textAlignVertical="center"
+                          autoCapitalize="none"
+                          value={this.state.inventoryBarcodeId}
+                          onChangeText={this.handleInventoryBarcode}
                         />
 
-                      
+                        <TouchableOpacity style={Device.isTablet ? styles.scanButton_tablet : styles.scanButton_mobile} onPress={() => this.navigateToGetBarCode()}>
+                          <Image style={Device.isTablet ? styles.scanButtonImage_tablet : styles.scanButtonImage_mobile} source={require('../assets/images/addnew.png')} />
+                          <Text style={Device.isTablet ? styles.scanButtonText_tablet : styles.scanButtonText_mobile}> scan </Text>
+                        </TouchableOpacity>
+                      </View>
 
-                  
- 
-        {this.state.flagtwo && (
-          <KeyboardAwareScrollView KeyboardAwareScrollView
-            enableOnAndroid={true}>
-            <View>
-              {this.state.loading &&
-                <Loader
-                  loading={this.state.loading} />
-              }
-              <View style={{
-                flex: 1, justifyContent: 'center', //Centered horizontally
-                alignItems: 'center', color: '#ffffff'
-              }}>
-                <View style={{ flexDirection: 'column', flex: 0, marginLeft: 0, marginTop: 30, marginRight: 0, backgroundColor: "#ffffff", borderRadius: 20, }}>
+                      <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        underlineColorAndroid="transparent"
+                        placeholder="PRODUCT NAME"
+                        placeholderTextColor="#353C4050"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        value={this.state.inventoryProductName}
+                        onChangeText={this.handleInventoryProductName}
+                      />
 
-                  <Image
-                    style={{ width: 80, height: 80, resizeMode: "cover", borderRadius: 40, borderColor: '#F2F2F2', alignSelf: 'center', borderWidth: 2, }}
-                    source={this.state.image}
-                  />
-                  <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 10, alignSelf: 'center', top: -20, left: 15 }} onPress={() => this.imageAction()}>
-                    <Image
-                      style={{ width: 30, height: 30, borderRadius: 10, }}
-                      source={require('../assets/images/cameraclick.png')} />
+                      <View>
+                        <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                          underlineColorAndroid="transparent"
+                          placeholder="QTY"
+                          placeholderTextColor="#353C4050"
+                          textAlignVertical="center"
+                          autoCapitalize="none"
+                          value={this.state.inventoryQuantity}
+                          onChangeText={this.handleInventoryQuantity}
+                          ref={inputemail => { this.emailValueInput = inputemail; }} />
 
-                  </TouchableOpacity>
+                        {/* <TouchableOpacity style={{
+                        position: 'absolute',
+                        right: 28,
+                        top: 20,
+                      }} >
+
+                        <Text style={{ color: '#353C4050', fontFamily: 'regular', fontSize: 14, position: 'absolute', right: 0, }}> {'Select Unit >'} </Text>
+                      </TouchableOpacity> */}
+                      </View>
+
+                      <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                        <RNPickerSelect
+                          style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                          placeholder={{
+                            label: 'SELECT UOM',
+                            value: " ",
+                          }}
+                          Icon={() => {
+                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                          }}
+                          items={this.state.uom}
+                          onValueChange={this.handleUOM}
+                          style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                          value={this.state.store}
+                          useNativeAndroidPickerStyle={false}
+
+                        />
+                      </View>
+
+
+                      <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        underlineColorAndroid="transparent"
+                        placeholder="₹ MRP"
+                        placeholderTextColor="#353C4050"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        value={this.state.inventoryMRP}
+                        onChangeText={this.handleInventoryMRP}
+                        ref={inputemail => { this.emailValueInput = inputemail; }} />
+
+                      <View>
+                        <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                          underlineColorAndroid="transparent"
+                          placeholder="₹ OFFER PRICE"
+                          placeholderTextColor="#353C4050"
+                          textAlignVertical="center"
+                          autoCapitalize="none"
+                          value={this.state.inventoryDiscount}
+                          onChangeText={this.handleInventoryDiscount}
+                        />
+
+                        {/* <TouchableOpacity style={{
+                        position: 'absolute',
+                        right: 28,
+                        top: 20,
+                      }}
+
+                      >
+                        <Text style={{ color: '#353C4050', fontFamily: 'regular', fontSize: 14, position: 'absolute', right: 0, }}> {'%'} </Text>
+                      </TouchableOpacity> */}
+
+                      </View>
 
 
 
+                      <TouchableOpacity
+                        style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile} onPress={() => this.inventoryCreate()}
+                      >
+                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}  > ADD PRODUCT </Text>
+
+                      </TouchableOpacity>
+                    </View>
+
+                  </View>
+                </View>
+              </KeyboardAwareScrollView>
+            )}
+
+
+
+
+
+
+            {this.state.flagthree && (
+
+              <View style={styles.container}>
+                <View
+                  style={{
+                    flex: 1,
+                    paddingHorizontal: 0,
+                    paddingVertical: 0,
+                    marginTop: 10,
+                  }}>
+                  <View>
+                    <SearchBar containerStyle={{ marginRight: 0 }} placeholder="Search products with Name"
+                      //inputStyle={{backgroundColor: '#FBFBFB'}}
+                      lightTheme editable={true}
+                      value={this.state.search}
+                      onChangeText={this.updateSearch} >
+                    </SearchBar>
+
+                    {/* <TouchableOpacity style={{
+                  position: 'absolute',
+                  right: 10,
+                  top: 20,
+                }} onPress={() => this.navigateToImageScanner()}>
+                  <Image source={require('../assets/images/barcode.png')} />
+                </TouchableOpacity> */}
+
+                    {/* this.props.navigation.navigate('AuthNavigation') */}
+
+                  </View>
 
                   {this.state.flagqtyModelOpen && (
                     <View>
@@ -1693,14 +1885,14 @@ class InventoryRetail extends Component {
                           }}>
                             <TouchableOpacity
                               style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
-                              onPress={() => this.pickSingleWithCameraForProductsAdd(true)} >
-                              <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Select Product Image With Camera')} </Text>
+                              onPress={() => this.pickSingleWithCamera(true)} >
+                              <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Product Image Scan With Camera')} </Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
                               style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
-                              onPress={() => this.pickSingleForProductsAdd(true)} >
-                              <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Select Product Image With Gallery')} </Text>
+                              onPress={() => this.pickSingle(true)} >
+                              <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Product Image Scan With Gallery')} </Text>
                             </TouchableOpacity>
 
                             <TouchableOpacity
@@ -1714,321 +1906,129 @@ class InventoryRetail extends Component {
                       </Modal>
                     </View>)}
 
-
-                  <Text></Text>
-
-                  <View style={{ marginTop: 10, width: deviceWidth }}>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                      underlineColorAndroid="transparent"
-                      placeholder="BARCODE"
-                      placeholderTextColor="#353C4050"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      value={this.state.inventoryBarcodeId}
-                      onChangeText={this.handleInventoryBarcode}
-                    />
-
-                    <TouchableOpacity style={Device.isTablet ? styles.scanButton_tablet : styles.scanButton_mobile} onPress={() => this.navigateToGetBarCode()}>
-                      <Image style={Device.isTablet ? styles.scanButtonImage_tablet : styles.scanButtonImage_mobile} source={require('../assets/images/addnew.png')} />
-                      <Text style={Device.isTablet ? styles.scanButtonText_tablet : styles.scanButtonText_mobile}> scan </Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    underlineColorAndroid="transparent"
-                    placeholder="PRODUCT NAME"
-                    placeholderTextColor="#353C4050"
-                    textAlignVertical="center"
-                    autoCapitalize="none"
-                    value={this.state.inventoryProductName}
-                    onChangeText={this.handleInventoryProductName}
-                  />
-
-                  <View>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                      underlineColorAndroid="transparent"
-                      placeholder="QTY"
-                      placeholderTextColor="#353C4050"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      value={this.state.inventoryQuantity}
-                      onChangeText={this.handleInventoryQuantity}
-                      ref={inputemail => { this.emailValueInput = inputemail; }} />
-
-                    {/* <TouchableOpacity style={{
-                        position: 'absolute',
-                        right: 28,
-                        top: 20,
-                      }} >
-
-                        <Text style={{ color: '#353C4050', fontFamily: 'regular', fontSize: 14, position: 'absolute', right: 0, }}> {'Select Unit >'} </Text>
-                      </TouchableOpacity> */}
-                  </View>
-
-                  <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                    <RNPickerSelect
-                      style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                      placeholder={{
-                        label: 'SELECT UOM',
-                        value: " ",
-                      }}
-                      Icon={() => {
-                        return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                      }}
-                      items={this.state.uom}
-                      onValueChange={this.handleUOM}
-                      style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                      value={this.state.store}
-                      useNativeAndroidPickerStyle={false}
-
-                    />
-                  </View>
-
-
-                  <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    underlineColorAndroid="transparent"
-                    placeholder="₹ MRP"
-                    placeholderTextColor="#353C4050"
-                    textAlignVertical="center"
-                    autoCapitalize="none"
-                    value={this.state.inventoryMRP}
-                    onChangeText={this.handleInventoryMRP}
-                    ref={inputemail => { this.emailValueInput = inputemail; }} />
-
-                  <View>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                      underlineColorAndroid="transparent"
-                      placeholder="₹ OFFER PRICE"
-                      placeholderTextColor="#353C4050"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      value={this.state.inventoryDiscount}
-                      onChangeText={this.handleInventoryDiscount}
-                    />
-
-                    {/* <TouchableOpacity style={{
-                        position: 'absolute',
-                        right: 28,
-                        top: 20,
-                      }}
-
-                      >
-                        <Text style={{ color: '#353C4050', fontFamily: 'regular', fontSize: 14, position: 'absolute', right: 0, }}> {'%'} </Text>
-                      </TouchableOpacity> */}
-
-                  </View>
-
-
-
-                  <TouchableOpacity
-                    style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile} onPress={() => this.inventoryCreate()}
-                  >
-                    <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}  > ADD PRODUCT </Text>
-
-                  </TouchableOpacity>
-                </View>
-
-              </View>
-            </View>
-          </KeyboardAwareScrollView>
-        )}
-
-
-
-
-
-
-        {this.state.flagthree && (
-
-          <View style={styles.container}>
-            <View
-              style={{
-                flex: 1,
-                paddingHorizontal: 0,
-                paddingVertical: 0,
-                marginTop: 10,
-              }}>
-              <View>
-                <SearchBar containerStyle={{ marginRight: 0 }} placeholder="Search products with Name"
-                  //inputStyle={{backgroundColor: '#FBFBFB'}}
-                  lightTheme editable={true}
-                  value={this.state.search}
-                  onChangeText={this.updateSearch} >
-                </SearchBar>
-
-                {/* <TouchableOpacity style={{
-                  position: 'absolute',
-                  right: 10,
-                  top: 20,
-                }} onPress={() => this.navigateToImageScanner()}>
-                  <Image source={require('../assets/images/barcode.png')} />
-                </TouchableOpacity> */}
-
-                {/* this.props.navigation.navigate('AuthNavigation') */}
-
-              </View>
-
-              {this.state.flagqtyModelOpen && (
-                <View>
-                  <Modal isVisible={this.state.modalVisible}>
-                    <View style={{
-                      flex: 1, justifyContent: 'center', //Centered horizontally
-                      alignItems: 'center',
-                    }}>
+                  <FlatList
+                    data={this.state.arrayData}
+                    keyExtractor={item => item.email}
+                    renderItem={({ item, index }) => (
                       <View style={{
-                        position: 'absolute',
-                        right: 20,
-                        left: 20,
-                        alignItems: 'center',
-                        justifyContent: 'flex-start',
-                        backgroundColor: "#ffffff", borderRadius: 20,
+                        height: 120,
+                        backgroundColor: '#FFFFFF',
+                        borderBottomWidth: 5,
+                        borderBottomColor: '#FBFBFB',
+                        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
                       }}>
-                        <TouchableOpacity
-                          style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
-                          onPress={() => this.pickSingleWithCamera(true)} >
-                          <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Product Image Scan With Camera')} </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                          style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
-                          onPress={() => this.pickSingle(true)} >
-                          <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Product Image Scan With Gallery')} </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                          style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center', marginBottom: 20, }}
-                          onPress={() => this.cancel()} >
-                          <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Cancel')} </Text>
-                        </TouchableOpacity>
-
-                      </View>
-                    </View>
-                  </Modal>
-                </View>)}
-
-              <FlatList
-                data={this.state.arrayData}
-                keyExtractor={item => item.email}
-                renderItem={({ item, index }) => (
-                  <View style={{
-                    height: 120,
-                    backgroundColor: '#FFFFFF',
-                    borderBottomWidth: 5,
-                    borderBottomColor: '#FBFBFB',
-                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-                  }}>
-                    <View style={{ flexDirection: 'column', width: '100%', height: 120, }}>
-                      <Image source={require('../assets/images/default.jpeg')}
-                        //source={{ uri: item.image }} 
-                        style={{
-                          position: 'absolute', left: 20, top: 15, width: 90, height: 90, borderwidth: 5, borderColor: "#F6F6F6",
-                        }} />
-                      <Text style={{ fontSize: 16, marginTop: 30, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>
-                        {item.itemdesc}
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                        QUANTITY:
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 200, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                        {item.qty} {item.productuom}
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                        PRICE/EACH:
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 210, marginTop: -16, fontFamily: 'medium', color: '#ED1C24' }}>
-                        ₹ {(parseInt(item.netamount)).toString()}
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                        BARCODE:
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 210, marginTop: -16, fontFamily: 'medium', color: '#ED1C24' }}>
-                      {item.barcode}
-                      </Text>
+                        <View style={{ flexDirection: 'column', width: '100%', height: 120, }}>
+                          <Image source={require('../assets/images/default.jpeg')}
+                            //source={{ uri: item.image }} 
+                            style={{
+                              position: 'absolute', left: 20, top: 15, width: 90, height: 90, borderwidth: 5, borderColor: "#F6F6F6",
+                            }} />
+                          <Text style={{ fontSize: 16, marginTop: 30, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>
+                            {item.itemdesc}
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                            QUANTITY:
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 200, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+                            {item.qty} {item.productuom}
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                            PRICE/EACH:
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 210, marginTop: -16, fontFamily: 'medium', color: '#ED1C24' }}>
+                            ₹ {(parseInt(item.netamount)).toString()}
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                            BARCODE:
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 210, marginTop: -16, fontFamily: 'medium', color: '#ED1C24' }}>
+                            {item.barcode}
+                          </Text>
 
 
-                    </View>
+                        </View>
 
-                    {this.state.inventoryDelete && (
-                      <View>
-                        <Modal isVisible={this.state.modalVisible}>
+                        {this.state.inventoryDelete && (
+                          <View>
+                            <Modal isVisible={this.state.modalVisible}>
 
-                          <View style={{
-                            width: deviceWidth,
-                            alignItems: 'center',
-                            marginLeft: -20,
-                            backgroundColor: "#ffffff",
-                            height: 260,
-                            position: 'absolute',
-                            bottom: -20,
-                          }}>
+                              <View style={{
+                                width: deviceWidth,
+                                alignItems: 'center',
+                                marginLeft: -20,
+                                backgroundColor: "#ffffff",
+                                height: 260,
+                                position: 'absolute',
+                                bottom: -20,
+                              }}>
 
-                            <Text style={{
-                              position: 'absolute',
-                              left: 20,
-                              top: 15,
-                              width: 300,
-                              height: 20,
-                              fontFamily: 'medium',
-                              fontSize: 16,
-                              color: '#353C40'
-                            }}> Delete Inventory </Text>
+                                <Text style={{
+                                  position: 'absolute',
+                                  left: 20,
+                                  top: 15,
+                                  width: 300,
+                                  height: 20,
+                                  fontFamily: 'medium',
+                                  fontSize: 16,
+                                  color: '#353C40'
+                                }}> Delete Inventory </Text>
 
-                            <TouchableOpacity style={{
-                              position: 'absolute',
-                              right: 20,
-                              top: 7,
-                              width: 50, height: 50,
-                            }} onPress={() => this.modelCancel()}>
-                              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
-                            </TouchableOpacity>
+                                <TouchableOpacity style={{
+                                  position: 'absolute',
+                                  right: 20,
+                                  top: 7,
+                                  width: 50, height: 50,
+                                }} onPress={() => this.modelCancel()}>
+                                  <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
+                                </TouchableOpacity>
 
-                            <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                            </Text>
-                            <Text style={{
-                              position: 'absolute',
-                              top: 70,
-                              height: 20,
-                              textAlign: 'center',
-                              fontFamily: 'regular',
-                              fontSize: 18,
-                              color: '#353C40'
-                            }}> Are you sure want to delete inventory?  </Text>
-                            <TouchableOpacity
-                              style={{
-                                width: deviceWidth - 40,
-                                marginLeft: 20,
-                                marginRight: 20,
-                                marginTop: 60,
-                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                              }} onPress={() => this.deleteInventory(item, index)}
-                            >
-                              <Text style={{
-                                textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                fontFamily: "regular"
-                              }}  > DELETE </Text>
+                                <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                </Text>
+                                <Text style={{
+                                  position: 'absolute',
+                                  top: 70,
+                                  height: 20,
+                                  textAlign: 'center',
+                                  fontFamily: 'regular',
+                                  fontSize: 18,
+                                  color: '#353C40'
+                                }}> Are you sure want to delete inventory?  </Text>
+                                <TouchableOpacity
+                                  style={{
+                                    width: deviceWidth - 40,
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                    marginTop: 60,
+                                    height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                  }} onPress={() => this.deleteInventory(item, index)}
+                                >
+                                  <Text style={{
+                                    textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                    fontFamily: "regular"
+                                  }}  > DELETE </Text>
 
-                            </TouchableOpacity>
+                                </TouchableOpacity>
 
-                            <TouchableOpacity
-                              style={{
-                                width: deviceWidth - 40,
-                                marginLeft: 20,
-                                marginRight: 20,
-                                marginTop: 20,
-                                height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                              }} onPress={() => this.modelCancel()}
-                            >
-                              <Text style={{
-                                textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                fontFamily: "regular"
-                              }}  > CANCEL </Text>
+                                <TouchableOpacity
+                                  style={{
+                                    width: deviceWidth - 40,
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                    marginTop: 20,
+                                    height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                  }} onPress={() => this.modelCancel()}
+                                >
+                                  <Text style={{
+                                    textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                    fontFamily: "regular"
+                                  }}  > CANCEL </Text>
 
-                            </TouchableOpacity>
-                          </View>
-                        </Modal>
-                      </View>)}
+                                </TouchableOpacity>
+                              </View>
+                            </Modal>
+                          </View>)}
 
-                    {/* <TouchableOpacity
+                        {/* <TouchableOpacity
                       style={{
                         fontSize: 15, fontFamily: 'regular',
                         right: 80, bottom: 10,
@@ -2043,57 +2043,58 @@ class InventoryRetail extends Component {
                         + ADD
                       </Text>
                     </TouchableOpacity> */}
-                    <TouchableOpacity style={{
-                      position: 'absolute',
-                      right: 50,
-                      top: 65,
-                      width: 30,
-                      height: 30,
-                      borderBottomLeftRadius: 5,
-                      borderTopLeftRadius: 5,
-                      borderWidth: 1,
-                      borderColor: "lightgray",
-                      // borderRadius:5,
-                    }} onPress={() => this.handleeditaction(item, index)}>
-                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
-                    </TouchableOpacity>
+                        <TouchableOpacity style={{
+                          position: 'absolute',
+                          right: 50,
+                          top: 65,
+                          width: 30,
+                          height: 30,
+                          borderBottomLeftRadius: 5,
+                          borderTopLeftRadius: 5,
+                          borderWidth: 1,
+                          borderColor: "lightgray",
+                          // borderRadius:5,
+                        }} onPress={() => this.handleeditaction(item, index)}>
+                          <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
+                        </TouchableOpacity>
 
-                    <TouchableOpacity style={{
-                      position: 'absolute',
-                      right: 20,
-                      top: 65,
-                      width: 30,
-                      height: 30,
-                      borderBottomRightRadius: 5,
-                      borderTopRightRadius: 5,
-                      borderWidth: 1,
-                      borderColor: "lightgray",
-                    }} onPress={() => this.handledeleteaction(item, index)}>
-                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
-                    </TouchableOpacity>
-                    <View style={{
-                      backgroundColor: 'grey',
-                      flexDirection: 'row',
-                      justifyContent: 'space-around',
-                      alignItems: 'center',
-                      height: 30,
-                      width: 90
-                    }}>
+                        <TouchableOpacity style={{
+                          position: 'absolute',
+                          right: 20,
+                          top: 65,
+                          width: 30,
+                          height: 30,
+                          borderBottomRightRadius: 5,
+                          borderTopRightRadius: 5,
+                          borderWidth: 1,
+                          borderColor: "lightgray",
+                        }} onPress={() => this.handledeleteaction(item, index)}>
+                          <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
 
-                    </View>
+                        </TouchableOpacity>
+                        <View style={{
+                          backgroundColor: 'grey',
+                          flexDirection: 'row',
+                          justifyContent: 'space-around',
+                          alignItems: 'center',
+                          height: 30,
+                          width: 90
+                        }}>
+
+                        </View>
 
 
-                  </View>
-                )}
-              />
-            </View>
+                      </View>
+                    )}
+                  />
+                </View>
+              </View>
+            )}
           </View>
-        )}
-          </View>
-                </ScrollView >
+        </ScrollView >
 
 
-        
+
 
 
       </View>
@@ -2378,13 +2379,13 @@ const styles = StyleSheet.create({
   },
   flatList: {
     marginTop: 20
-},
-previlagecontainer: {
+  },
+  previlagecontainer: {
     flex: 1,
     justifyContent: 'center',
-  
+
     // backgroundColor: '#FAFAFF'
-},
+  },
   head: {
     height: 45,
     borderColor: '#FAFAFF',
@@ -2620,16 +2621,16 @@ previlagecontainer: {
     width: deviceWidth,
     textAlign: 'center',
     fontSize: 24,
-    height:Device.isAndroid ? 70 : 84,
-},
-menuButton_mobile: {
+    height: Device.isAndroid ? 70 : 84,
+  },
+  menuButton_mobile: {
     position: 'absolute',
     left: 10,
     bottom: 0,
     width: 40,
     height: 40,
-},
-headerTitle_mobile: {
+  },
+  headerTitle_mobile: {
     position: 'absolute',
     left: 70,
     bottom: 10,
@@ -2638,7 +2639,7 @@ headerTitle_mobile: {
     fontFamily: 'bold',
     fontSize: 18,
     color: '#353C40'
-},
+  },
   input_mobile: {
     justifyContent: 'center',
     marginLeft: 20,

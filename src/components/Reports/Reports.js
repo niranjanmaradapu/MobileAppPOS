@@ -16,7 +16,6 @@ import ReportsDashboard from './ReportsDashboard';
 import { SalesSumary } from './SalesSumary';
 var deviceWidth = Dimensions.get('window').width;
 var deviceWidth = Dimensions.get('window').width;
-import ReportsService from '../services/ReportsService';
 const data = [true, false, false, false, false, false, false, false, false];
 
 
@@ -51,11 +50,11 @@ class Reports extends Component {
             newSale: [],
             goodsReturn: [],
             salesSumary: [],
-            salesSumaryObject:[],
+            salesSumaryObject: [],
             listBarcodes: [],
             listPromotions: [],
             sbList: [],
-            storeId:0,
+            storeId: 0,
         };
     }
 
@@ -268,42 +267,42 @@ class Reports extends Component {
         this.modelClose();
     };
 
-    getDetails= (data) => {
+    getDetails = (data) => {
         this.setState({ estimationSlip: [] });
         this.setState({ estimationSlip: data });
     };
 
-    getNewsaleDetails= (data) => {
+    getNewsaleDetails = (data) => {
         this.setState({ newSale: [] });
         this.setState({ newSale: data });
     };
 
-    getgoodsReturn= (data) => {
+    getgoodsReturn = (data) => {
         this.setState({ goodsReturn: [] });
         this.setState({ goodsReturn: data });
     };
 
-    getsalesSumary= (data) => {
+    getsalesSumary = (data) => {
         this.setState({ salesSumary: [] });
         this.setState({ salesSumary: data });
-        console.log(this.state.salesSumary)
+        console.log(this.state.salesSumary);
     };
 
-    getsalesSumaryObject= (data) => {
-        this.setState({ salesSumaryObject: [1,2,3] });
-    }
+    getsalesSumaryObject = (data) => {
+        this.setState({ salesSumaryObject: [1, 2, 3] });
+    };
 
-    getlistBarcodes= (data) => {
+    getlistBarcodes = (data) => {
         this.setState({ listBarcodes: [] });
         this.setState({ listBarcodes: data });
-        console.log(this.state.listBarcodes)
-    }
+        console.log(this.state.listBarcodes);
+    };
 
-    getlistofPromotions= (data) => {
+    getlistofPromotions = (data) => {
         this.setState({ listPromotions: [] });
         this.setState({ listPromotions: data });
-        console.log(this.state.listPromotions)
-    }
+        console.log(this.state.listPromotions);
+    };
 
 
 
@@ -518,8 +517,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     container: {
         flex: 1,

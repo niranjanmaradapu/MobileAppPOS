@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import Constants from 'expo-constants';
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity,ScrollView, View } from 'react-native';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -12,9 +12,9 @@ import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import PromotionsService from '../services/PromotionsService';
-var deviceWidth = Dimensions.get('window').width;
 import UrmService from '../services/UrmService';
-        
+var deviceWidth = Dimensions.get('window').width;
+
 
 
 
@@ -74,7 +74,7 @@ class Promo extends Component {
             storeId: 1,
             privilages: [],
             subPrivilages: "",
-        }   
+        };
     }
 
     async componentDidMount() {
@@ -127,7 +127,7 @@ class Promo extends Component {
                 else if (global.domainName === "Electrical & Electronics") {
                     domainId = "3";
                 }
-             
+
                 axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
                         let len = res.data["result"].length;
@@ -202,35 +202,35 @@ class Promo extends Component {
     }
 
     topbarAction1() {
-       
+
     }
 
 
     topbarAction2() {
-      
+
     }
 
 
     topbarAction3() {
-        
+
     }
 
     topbarAction1 = (item, index) => {
         if (item.name === "List of Pools") {
             this.setState({ flagone: true, flagtwo: false, flagthree: false });
             this.getAllpools();
-        } 
-       
+        }
+
         if (item.name === "Manage Promo") {
             this.setState({ flagone: false, flagtwo: true, flagthree: false });
             this.getAllPromotions();
-        } 
-       
+        }
+
         if (item.name === "Loyalty Points") {
             this.setState({ flagone: false, flagtwo: false, flagthree: true });
             this.getLoyaltyPoints();
-        } 
-    
+        }
+
         if (this.state.privilages[index].bool === true) {
             this.state.privilages[index].bool = false;
         }
@@ -243,7 +243,7 @@ class Promo extends Component {
             }
             this.setState({ privilages: this.state.privilages });
         }
-    }
+    };
 
 
 
@@ -536,7 +536,7 @@ class Promo extends Component {
         //     })
     };
 
-  
+
 
     handleeditaction = (item, index) => {
 
@@ -938,12 +938,12 @@ class Promo extends Component {
                             ListFooterComponent={<View style={{ width: 15 }}></View>}
                         />
 
-                      
+
 
                     </View>
                 </ScrollView >
 
-               
+
                 {this.state.flagone && (
                     <TouchableOpacity style={Device.isTablet ? styles.actInactSwitch_tablet : styles.actInactSwitch_mobile} onPress={() => this.togglePoolsActiveStatus()}>
                         <Image style={{ alignSelf: 'center', top: 5 }} source={this.state.poolsactiveStatus ? require('../assets/images/switchunabled.png') : require('../assets/images/switchdisabled.png')} />
@@ -1095,7 +1095,7 @@ class Promo extends Component {
                                     borderColor: "lightgray",
                                     // borderRadius:5,
                                 }} onPress={() => this.handlepooleditaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
@@ -1109,7 +1109,8 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handlepooldeleteaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                                 </TouchableOpacity>
                                 <View style={{
                                     backgroundColor: 'grey',
@@ -1298,7 +1299,7 @@ class Promo extends Component {
                                     borderColor: "lightgray",
                                     // borderRadius:5,
                                 }} onPress={() => this.handleeditpromoaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
@@ -1312,7 +1313,8 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handlepromodeleteaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                                 </TouchableOpacity>
                                 <View style={{
                                     backgroundColor: 'grey',
@@ -1411,7 +1413,7 @@ class Promo extends Component {
                                     borderColor: "lightgray",
                                     // borderRadius:5,
                                 }} onPress={() => this.handleeditloyaltyaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
@@ -1425,7 +1427,8 @@ class Promo extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handledeleteloyaltyaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                                 </TouchableOpacity> */}
                                 <View style={{
                                     backgroundColor: 'grey',
@@ -2351,8 +2354,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     itemscount: {
         backgroundColor: '#ED1C24',

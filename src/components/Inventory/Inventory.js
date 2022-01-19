@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity,ScrollView, View } from 'react-native';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -99,7 +99,7 @@ export default class Inventory extends Component {
                 else if (global.domainName === "Electrical & Electronics") {
                     domainId = "3";
                 }
-             
+
                 axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
                         let len = res.data["result"].length;
@@ -172,7 +172,7 @@ export default class Inventory extends Component {
         });
 
 
-        
+
     }
 
     getAllBarcodes() {
@@ -184,7 +184,7 @@ export default class Inventory extends Component {
             "storeId": this.state.storeId
         };
         console.log("sdsad" + this.state.endDate);
-       this.setState({ loading: true });
+        this.setState({ loading: true });
         axios.post(InventoryService.getTextileBarcodes(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 if (res.data["result"]) {
@@ -245,13 +245,13 @@ export default class Inventory extends Component {
         }
         if (item.name === "Re-Barcode List") {
             this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: false, flagtwo: true });
-        this.getbarcodeTexttileAdjustments();
+            this.getbarcodeTexttileAdjustments();
             this.setState({ flagTwo: true });
         } else {
             this.setState({ flagTwo: false });
         }
 
-       
+
 
         if (this.state.privilages[index].bool === true) {
             this.state.privilages[index].bool = false;
@@ -265,10 +265,10 @@ export default class Inventory extends Component {
             }
             this.setState({ privilages: this.state.privilages });
         }
-    }
+    };
 
     topbarAction2() {
-        
+
     }
 
     navigateToAddBarcode() {
@@ -499,7 +499,7 @@ export default class Inventory extends Component {
                             ListFooterComponent={<View style={{ width: 15 }}></View>}
                         />
 
-                      
+
 
                     </View>
                 </ScrollView >
@@ -507,7 +507,7 @@ export default class Inventory extends Component {
                 {this.state.flagone && (
                     <FlatList
                         data={this.state.barcodesData}
-                        style={{ marginTop: 20}}
+                        style={{ marginTop: 20 }}
                         scrollEnabled={true}
                         renderItem={({ item, index }) => (
                             <View
@@ -601,11 +601,12 @@ export default class Inventory extends Component {
                                             </Modal>
                                         </View>)}
                                     <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
-                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                        <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                     </TouchableOpacity>
 
                                     <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handlebarcodedeleteaction(item, index)}>
-                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                        <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                                     </TouchableOpacity>
 
                                     {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{ }</Text> */}
@@ -653,7 +654,7 @@ export default class Inventory extends Component {
                 {this.state.flagtwo && (
                     <FlatList
                         data={this.state.reBarcodesData}
-                        style={{ marginTop: 20, }}
+                        style={{ marginTop: 20 }}
                         scrollEnabled={true}
                         keyExtractor={item => item}
                         renderItem={({ item, index }) => (
@@ -668,11 +669,11 @@ export default class Inventory extends Component {
                                     <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>DATE: {"\n"}{item.fromDate}</Text>
                                 </View>
                                 <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.print(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/print.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/print.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.seeDetails(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/eye.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/eye.png')} />
                                 </TouchableOpacity>
                             </View>
                         )}
@@ -855,14 +856,16 @@ export default class Inventory extends Component {
                                         value={this.state.barCodeId}
                                         onChangeText={this.handlebarCodeId}
                                     />
-                                    <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
-                                        onPress={() => this.applyReBarcodeFilter()}>
-                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
-                                        onPress={() => this.modelCancel()}>
-                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
-                                    </TouchableOpacity>
+                                    <View>
+                                        <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
+                                            onPress={() => this.applyReBarcodeFilter()}>
+                                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
+                                            onPress={() => this.modelCancel()}>
+                                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </KeyboardAwareScrollView>
                             </View>
                         </Modal>
@@ -904,7 +907,7 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        height:Device.isAndroid ? 70 : 84,
+        height: Device.isAndroid ? 70 : 84,
     },
     backButton_mobile: {
         position: 'absolute',
@@ -915,7 +918,7 @@ const styles = StyleSheet.create({
     },
     flatList: {
         marginTop: 20,
-        marginBottom:20
+        marginBottom: 20
     },
     container: {
         flex: 1,
@@ -935,7 +938,7 @@ const styles = StyleSheet.create({
     filterButton_mobile: {
         position: 'absolute',
         right: 20,
-         bottom:5,
+        bottom: 5,
         backgroundColor: '#ffffff',
         borderRadius: 5,
         width: 30,
@@ -972,7 +975,7 @@ const styles = StyleSheet.create({
     addBarcodeButton_mobile: {
         position: 'absolute',
         right: 70,
-        bottom:5,
+        bottom: 5,
         backgroundColor: '#ED1C24',
         borderRadius: 5,
         width: 110,
@@ -1542,10 +1545,10 @@ const flats = StyleSheet.create({
     },
     editButton_tablet: {
         position: 'absolute',
-        right: 50,
+        right: 70,
         top: 90,
-        width: 30,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: 1,
@@ -1556,8 +1559,8 @@ const flats = StyleSheet.create({
         position: 'absolute',
         right: 20,
         top: 90,
-        width: 30,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: 1,

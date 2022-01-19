@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native';
-import { Chevron } from 'react-native-shapes';
-import Loader from '../../commonUtils/loader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Chevron } from 'react-native-shapes';
+import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 
@@ -30,14 +30,14 @@ export default class CreateRole extends Component {
             parentlist: [],
             childlist: [],
             isEdit: false,
-            roleId:0,
-        }
+            roleId: 0,
+        };
     }
 
     async componentDidMount() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
-        this.setState({ isEdit: this.props.route.params.isEdit});
-        console.log(this.props.route.params.item)
+        this.setState({ isEdit: this.props.route.params.isEdit });
+        console.log(this.props.route.params.item);
         if (this.state.isEdit === true) {
             this.setState({
                 description: this.props.route.params.item.discription,
@@ -47,13 +47,13 @@ export default class CreateRole extends Component {
                 parentlist: this.props.route.params.item.parentPrivilageVo,
                 roleId: this.props.route.params.item.roleId
             });
-            this.setState({ navtext:'Edit Role' })
+            this.setState({ navtext: 'Edit Role' });
         }
-        else{
-            this.setState({ navtext: 'Add Role' })
+        else {
+            this.setState({ navtext: 'Add Role' });
         }
         this.setState({ clientId: clientId });
-        this.getDomainsList()
+        this.getDomainsList();
     }
 
 
@@ -65,23 +65,23 @@ export default class CreateRole extends Component {
                 let len = res.data["result"].length;
                 if (len > 0) {
                     for (let i = 0; i < len; i++) {
-                        let number = res.data.result[i]
-                        this.state.domainsArray.push({ name: number.domaiName, id: number.clientDomainaId })
+                        let number = res.data.result[i];
+                        this.state.domainsArray.push({ name: number.domaiName, id: number.clientDomainaId });
                         domains.push({
                             value: this.state.domainsArray[i].name,
                             label: this.state.domainsArray[i].name
                         });
                         this.setState({
                             domains: domains,
-                        })
+                        });
 
-                        this.setState({ domainsArray: this.state.domainsArray })
+                        this.setState({ domainsArray: this.state.domainsArray });
                         if (this.state.isEdit === false) {
-                            this.setState({ domain: this.state.domainsArray[0].name })
-                            this.setState({ domainId: this.state.domainsArray[0].id })
+                            this.setState({ domain: this.state.domainsArray[0].name });
+                            this.setState({ domainId: this.state.domainsArray[0].id });
                         }
                     }
-                    console.log(this.state.domains)
+                    console.log(this.state.domains);
                 }
             }
         }).catch(() => {
@@ -90,7 +90,7 @@ export default class CreateRole extends Component {
     }
 
     handleBackButtonClick() {
-        global.privilages = []
+        global.privilages = [];
         this.props.navigation.goBack(null);
         return true;
     }
@@ -100,7 +100,7 @@ export default class CreateRole extends Component {
     }
 
     cancel() {
-        global.privilages = []
+        global.privilages = [];
         this.props.navigation.goBack(null);
     }
 
@@ -113,103 +113,103 @@ export default class CreateRole extends Component {
             alert("Please Select Domain");
         }
         else {
-            if(this.state.isEdit === false){
-            const saveObj = {
-                "roleName": this.state.role,
-                "description": this.state.description,
-                "clientDomianId": this.state.domainId,
-                "createdBy": global.username,
-                "parentPrivilages": this.state.parentlist,
-                "subPrivillages": this.state.childlist,
-            }
+            if (this.state.isEdit === false) {
+                const saveObj = {
+                    "roleName": this.state.role,
+                    "description": this.state.description,
+                    "clientDomianId": this.state.domainId,
+                    "createdBy": global.username,
+                    "parentPrivilages": this.state.parentlist,
+                    "subPrivillages": this.state.childlist,
+                };
 
-            console.log('params are' + JSON.stringify(saveObj))
-            this.setState({ loading: true })
-            axios.post(UrmService.saveRole(), saveObj).then((res) => {
-                console.log(res.data)
-                if (res.data && res.data["isSuccess"] === "true") {
-                    global.privilages = []
-                    this.props.route.params.onGoBack();
-                    this.props.navigation.goBack();
+                console.log('params are' + JSON.stringify(saveObj));
+                this.setState({ loading: true });
+                axios.post(UrmService.saveRole(), saveObj).then((res) => {
+                    console.log(res.data);
+                    if (res.data && res.data["isSuccess"] === "true") {
+                        global.privilages = [];
+                        this.props.route.params.onGoBack();
+                        this.props.navigation.goBack();
+                    }
+                    else {
+                        this.setState({ loading: false });
+                        alert(res.data.message);
+                    }
                 }
-                else {
-                    this.setState({ loading: false })
-                    alert(res.data.message);
-                }
+                ).catch(() => {
+                    this.setState({ loading: false });
+                });
             }
-            ).catch(() => {
-                this.setState({ loading: false });
-            });
-        }
-        else{
-            const saveObj = {
-                "roleName": this.state.role,
-                "description": this.state.description,
-                "clientDomianId": this.state.domainId,
-                "createdBy": global.username,
-                "parentPrivilages": this.state.parentlist,
-                "subPrivillages": this.state.childlist,
-                "roleId":this.state.roleId,
-            }
+            else {
+                const saveObj = {
+                    "roleName": this.state.role,
+                    "description": this.state.description,
+                    "clientDomianId": this.state.domainId,
+                    "createdBy": global.username,
+                    "parentPrivilages": this.state.parentlist,
+                    "subPrivillages": this.state.childlist,
+                    "roleId": this.state.roleId,
+                };
 
-            console.log('params are' + JSON.stringify(saveObj))
-            this.setState({ loading: true })
-            axios.put(UrmService.editRole(), saveObj).then((res) => {
-                console.log(res.data)
-                if (res.data && res.data["isSuccess"] === "true") {
-                    global.privilages = []
-                    this.props.route.params.onGoBack();
-                    this.props.navigation.goBack();
+                console.log('params are' + JSON.stringify(saveObj));
+                this.setState({ loading: true });
+                axios.put(UrmService.editRole(), saveObj).then((res) => {
+                    console.log(res.data);
+                    if (res.data && res.data["isSuccess"] === "true") {
+                        global.privilages = [];
+                        this.props.route.params.onGoBack();
+                        this.props.navigation.goBack();
+                    }
+                    else {
+                        this.setState({ loading: false });
+                        alert(res.data.message);
+                    }
                 }
-                else {
-                    this.setState({ loading: false })
-                    alert(res.data.message);
-                }
-            }
-            ).catch(() => {
-                this.setState({ loading: false });
-            });
+                ).catch(() => {
+                    this.setState({ loading: false });
+                });
 
-        }
+            }
         }
     }
 
     handleRole = (value) => {
         this.setState({ role: value });
-    }
+    };
 
     privilageMapping() {
-        global.privilages = []
+        global.privilages = [];
         this.props.navigation.navigate('Privilages', {
-            domain: this.state.domain,child:this.state.roles,parentlist:this.state.parentlist,
+            domain: this.state.domain, child: this.state.roles, parentlist: this.state.parentlist,
             onGoBack: () => this.refresh(),
         });
     }
 
     refresh() {
         this.setState({ parentlist: [] });
-        this.setState({ childlist: [] }); 
-        this.state.roles = []
+        this.setState({ childlist: [] });
+        this.state.roles = [];
         for (let i = 0; i < global.privilages.length; i++) {
-            this.state.parentlist.push({ name: global.privilages[i].parent, id: global.privilages[i].id })
-            this.state.childlist.push(global.privilages[i].subPrivillages)
-            this.state.roles.push(global.privilages[i].subPrivillages)
-            this.setState({ parentlist: this.state.parentlist, childlist: this.state.childlist,roles:this.state.roles })
+            this.state.parentlist.push({ name: global.privilages[i].parent, id: global.privilages[i].id });
+            this.state.childlist.push(global.privilages[i].subPrivillages);
+            this.state.roles.push(global.privilages[i].subPrivillages);
+            this.setState({ parentlist: this.state.parentlist, childlist: this.state.childlist, roles: this.state.roles });
         }
     }
 
     handleDomain = (value) => {
-        this.setState({ domain: value })
+        this.setState({ domain: value });
         for (let i = 0; i < this.state.domainsArray.length; i++) {
             if (this.state.domainsArray[i].name === value) {
-                this.setState({ domainId: this.state.domainsArray[i].id })
+                this.setState({ domainId: this.state.domainsArray[i].id });
             }
         }
-    }
+    };
 
     handleDescription = (value) => {
-        this.setState({ description: value })
-    }
+        this.setState({ description: value });
+    };
 
     render() {
         return (
@@ -315,7 +315,7 @@ export default class CreateRole extends Component {
 
 
                                     {/* <TouchableOpacity style={Device.isTablet ? poolflats.editButton_tablet : poolflats.editButton_mobile} onPress={() => this.handleeditaction(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                         </TouchableOpacity>
                                         <View style={{
                                             backgroundColor: 'grey',
@@ -329,7 +329,8 @@ export default class CreateRole extends Component {
 
 
                                         <TouchableOpacity style={Device.isTablet ? poolflats.deleteButton_tablet : poolflats.deleteButton_mobile} onPress={() => this.handledeleteaction(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                                         </TouchableOpacity>
                                         <View style={{
                                             backgroundColor: 'grey',
@@ -375,7 +376,7 @@ export default class CreateRole extends Component {
                     <View style={styles.bottomContainer} ></View>
                 </ScrollView>
             </View>
-        )
+        );
     }
 }
 
@@ -419,7 +420,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 const pickerSelectStyles_tablet = StyleSheet.create({
     placeholder: {
@@ -461,7 +462,7 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 
 
@@ -470,8 +471,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     bottomContainer: {
         margin: 50,
@@ -663,7 +664,7 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
 
-})
+});
 
 const poolflats = StyleSheet.create({
     // Styles For Mobile

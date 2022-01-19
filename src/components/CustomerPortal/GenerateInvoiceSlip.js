@@ -40,7 +40,7 @@ class GenerateInvoiceSlip extends Component {
             address: "",
             modalVisible: true,
             customerTagging: false,
-            billDiscount: false,
+            handleBillDiscount: false,
             flagone: true,
             flagqtyModelOpen: false,
             flagCustomerOpen: false,
@@ -133,9 +133,9 @@ class GenerateInvoiceSlip extends Component {
             }
             if (item.name === "Bill Level Discount") {
                 // this.setState({ customerTagging: true, modalVisible: true });
-                this.setState({ billDiscount: true, modalVisible: true });
+                this.setState({ handleBillDiscount: true, modalVisible: true });
             } else {
-                this.setState({ billDiscount: false, modalVisible: false });
+                this.setState({ handleBillDiscount: false, modalVisible: false });
             }
             if (index != i) {
                 this.state.privilages[i].bool = false;
@@ -575,10 +575,10 @@ class GenerateInvoiceSlip extends Component {
                         </Modal>
                     </View>
                 )}
-                {this.state.billDiscount && (
+                {this.state.handleBillDiscount && (
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
-                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 600 : 500 }]}>
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 500 : 400 }]}>
                                 <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Bill Level Discount </Text>
 
                                 <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
@@ -980,8 +980,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     itemscount: {
         backgroundColor: '#ED1C24',

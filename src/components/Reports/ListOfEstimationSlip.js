@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -8,7 +9,6 @@ import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import ReportsService from '../services/ReportsService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 var deviceWidth = Dimensions.get("window").width;
 
 export class ListOfEstimationSlip extends Component {
@@ -28,9 +28,9 @@ export class ListOfEstimationSlip extends Component {
             datepickerOpen: false,
             datepickerendOpen: false,
             dsnumber: "",
-            qty:"",
-            mrp:'',
-            promodisc:'',
+            qty: "",
+            mrp: '',
+            promodisc: '',
             statuses: [],
             dsStatus: "",
             dsNumber: "",
@@ -55,12 +55,12 @@ export class ListOfEstimationSlip extends Component {
 
 
     handledeleteEstimationSlip(item, index) {
-        this.setState({ deleteEstimationSlip: true, modalVisible: true, flagViewDetail: false});
+        this.setState({ deleteEstimationSlip: true, modalVisible: true, flagViewDetail: false });
     }
 
     handleviewEstimationSlip(item, index) {
-console.log(item)
-        this.setState({ dsnumber: item.dsNumber,qty:item.lineItems[0].quantity,mrp:item.netAmount,promoDisc:item.promoDisc  })
+        console.log(item);
+        this.setState({ dsnumber: item.dsNumber, qty: item.lineItems[0].quantity, mrp: item.netAmount, promoDisc: item.promoDisc });
         this.setState({ flagViewDetail: true, modalVisible: true, deleteEstimationSlip: false });
     }
 
@@ -84,16 +84,16 @@ console.log(item)
 
     datepickerDoneClicked() {
         if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
-            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
         }
         else if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
         }
         else if (parseInt(this.state.date.getMonth()) < 10) {
-            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
         else {
-            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
 
 
@@ -102,16 +102,16 @@ console.log(item)
 
     datepickerendDoneClicked() {
         if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
         }
         else if (parseInt(this.state.enddate.getDate()) < 10) {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
         }
         else if (parseInt(this.state.enddate.getMonth()) < 10) {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
         else {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
@@ -159,15 +159,15 @@ console.log(item)
         };
 
 
-        console.log('params are' + JSON.stringify(obj))
-        this.setState({ loading: true })
-        console.log(ReportsService.estimationSlips())
+        console.log('params are' + JSON.stringify(obj));
+        this.setState({ loading: true });
+        console.log(ReportsService.estimationSlips());
         axios.post(ReportsService.estimationSlips(), obj).then((res) => {
-            console.log(res.data)
+            console.log(res.data);
             if (res.data && res.data["isSuccess"] === "true") {
                 this.props.childParams(res.data.result.deliverySlipVo);
                 this.props.modelCancelCallback();
-                console.log(this.props.estimationSlip)
+                console.log(this.props.estimationSlip);
             }
             else {
                 alert(res.data.message);
@@ -209,9 +209,10 @@ console.log(item)
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >NET AMMOUNT:{"\n"} ₹{item.netAmount} </Text>
                                     <View style={flats.buttons}>
-                                        
+
                                         <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteEstimationSlip(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                                         </TouchableOpacity>
 
                                         <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewEstimationSlip(item, index)}>
@@ -408,27 +409,27 @@ console.log(item)
                                 <Text style={Device.isTablet ? styles.viewtext_tablet : styles.viewtext_mobile} >
                                     Delivery Slip:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext_tablet : styles.viewsubtext_mobile} >
-                                   {this.state.dsnumber} </Text>
+                                    {this.state.dsnumber} </Text>
                                 <Text style={Device.isTablet ? styles.viewtext1_tablet : styles.viewtext1_mobile} >
                                     SM:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext1_tablet : styles.viewsubtext1_mobile} >
                                     - </Text>
-                                    <Text style={Device.isTablet ? styles.viewtext2_tablet : styles.viewtext2_mobile} >
+                                <Text style={Device.isTablet ? styles.viewtext2_tablet : styles.viewtext2_mobile} >
                                     QTY:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext2_tablet : styles.viewsubtext2_mobile} >
-                                {this.state.qty} </Text>
+                                    {this.state.qty} </Text>
                                 <Text style={Device.isTablet ? styles.viewtext3_tablet : styles.viewtext3_mobile} >
                                     GROSS AMOUNT:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext3_tablet : styles.viewsubtext3_mobile} >
-                                ₹ {this.state.mrp} </Text>
+                                    ₹ {this.state.mrp} </Text>
                                 <Text style={Device.isTablet ? styles.viewtext4_tablet : styles.viewtext4_mobile} >
                                     PROMO DISCOUNT:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext4_tablet : styles.viewsubtext4_mobile} >
-                                 {this.state.promodisc} </Text>
-                                 <Text style={Device.isTablet ? styles.viewtext5_tablet : styles.viewtext5_mobile} >
+                                    {this.state.promodisc} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext5_tablet : styles.viewtext5_mobile} >
                                     NET AMOUNT:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext5_tablet : styles.viewsubtext5_mobile} >
-                                ₹ {this.state.mrp} </Text>
+                                    ₹ {this.state.mrp} </Text>
 
 
                                 <TouchableOpacity
@@ -545,8 +546,8 @@ const pickerSelectStyles_tablet = StyleSheet.create({
 const styles = StyleSheet.create({
 
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
 
     // Styles For Mobile
@@ -827,7 +828,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         position: 'absolute', top: 90,
     },
-   
+
     viewsubtext1_mobile: {
         color: "#353C40",
         fontFamily: "bold",
@@ -876,7 +877,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         position: 'absolute', top: 120,
     },
-   
+
     viewsubtext2_mobile: {
         color: "#353C40",
         fontFamily: "bold",
@@ -925,7 +926,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         position: 'absolute', top: 150,
     },
-   
+
     viewsubtext3_mobile: {
         color: "#353C40",
         fontFamily: "bold",
@@ -974,7 +975,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         position: 'absolute', top: 180,
     },
-   
+
     viewsubtext4_mobile: {
         color: "#353C40",
         fontFamily: "bold",
@@ -1023,7 +1024,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         position: 'absolute', top: 210,
     },
-   
+
     viewsubtext5_mobile: {
         color: "#353C40",
         fontFamily: "bold",
@@ -1286,8 +1287,8 @@ const flats = StyleSheet.create({
         color: '#808080'
     },
     editButton_tablet: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: 1,
@@ -1295,8 +1296,8 @@ const flats = StyleSheet.create({
         // borderRadius:5,
     },
     deleteButton_tablet: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: 1,

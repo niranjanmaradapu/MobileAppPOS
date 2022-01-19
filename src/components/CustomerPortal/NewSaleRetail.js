@@ -19,8 +19,8 @@ import CreateCustomerService from '../services/CreateCustomerService';
 import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
 import NewSaleService from '../services/NewSaleService';
-var deviceWidth = Dimensions.get('window').width;
 import UrmService from '../services/UrmService';
+var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
@@ -1946,7 +1946,8 @@ class NewSaleRetail extends Component {
                         borderWidth: 1,
                         borderColor: "lightgray",
                       }} onPress={() => this.handlenewsaledeleteaction(item, index)}>
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                        <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                       </TouchableOpacity>
                     </View>
 

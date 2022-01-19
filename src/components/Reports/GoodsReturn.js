@@ -1,13 +1,13 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
-var deviceWidth = Dimensions.get("window").width;
 import ReportsService from '../services/ReportsService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+var deviceWidth = Dimensions.get("window").width;
 
 export class GoodsReturn extends Component {
 
@@ -26,20 +26,20 @@ export class GoodsReturn extends Component {
             returnSlip: "",
             barCode: "",
             empId: "",
-            storeId:0,
-            domainId:0,
+            storeId: 0,
+            domainId: 0,
         };
     }
 
     componentDidMount() {
         if (global.domainName === "Textile") {
-            this.setState({ domainId: 1 })
+            this.setState({ domainId: 1 });
         }
         else if (global.domainName === "Retail") {
-            this.setState({ domainId: 2 })
+            this.setState({ domainId: 2 });
         }
         else if (global.domainName === "Electrical & Electronics") {
-            this.setState({ domainId: 3 })
+            this.setState({ domainId: 3 });
         }
 
 
@@ -47,7 +47,7 @@ export class GoodsReturn extends Component {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
-          
+
 
         }).catch(() => {
             console.log('there is error getting storeId');
@@ -65,34 +65,34 @@ export class GoodsReturn extends Component {
 
     datepickerDoneClicked() {
         if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
-            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
         }
         else if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ startDate:this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate()})
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
         }
         else if (parseInt(this.state.date.getMonth()) < 10) {
-            this.setState({ startDate: this.state.date.getFullYear()  + "-0" + (this.state.date.getMonth() + 1) + "-" +  this.state.date.getDate()})
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
         else {
-            this.setState({ startDate: this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()})
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
-        
+
 
         this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
         if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
         }
         else if (parseInt(this.state.enddate.getDate()) < 10) {
-            this.setState({ endDate:this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate()})
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
         }
         else if (parseInt(this.state.enddate.getMonth()) < 10) {
-            this.setState({ endDate: this.state.enddate.getFullYear()  + "-0" + (this.state.enddate.getMonth() + 1) + "-" +  this.state.enddate.getDate()})
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
         else {
-            this.setState({ endDate: this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()})
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
@@ -114,30 +114,30 @@ export class GoodsReturn extends Component {
             this.state.empId = null;
         }
 
-            const obj = {
-                "dateFrom":this.state.startDate,
-                "dateTo":this.state.endDate,
-                rtNumber: this.state.returnSlip,
-                barcode: this.state.barCode,
-                createdBy: this.state.empId,
-                 storeId: this.state.storeId,
-                 domainId: this.state.domainId
-              };
-                  console.log('params are' + JSON.stringify(obj))
-                  axios.post(ReportsService.returnSlips(), obj).then((res) => {
-                      console.log(res.data)
-                    if (res.data && res.data["isSuccess"] === "true") {
-                        this.props.childParamgoodsReturn(res.data.result);
-                        this.props.modelCancelCallback();
-                    }
-                    else {
-                      alert(res.data.message);
-                    }
-                  }
-                  ).catch(() => {
-                    alert('No Results Found');
-                    this.props.modelCancelCallback();
-                }); 
+        const obj = {
+            "dateFrom": this.state.startDate,
+            "dateTo": this.state.endDate,
+            rtNumber: this.state.returnSlip,
+            barcode: this.state.barCode,
+            createdBy: this.state.empId,
+            storeId: this.state.storeId,
+            domainId: this.state.domainId
+        };
+        console.log('params are' + JSON.stringify(obj));
+        axios.post(ReportsService.returnSlips(), obj).then((res) => {
+            console.log(res.data);
+            if (res.data && res.data["isSuccess"] === "true") {
+                this.props.childParamgoodsReturn(res.data.result);
+                this.props.modelCancelCallback();
+            }
+            else {
+                alert(res.data.message);
+            }
+        }
+        ).catch(() => {
+            alert('No Results Found');
+            this.props.modelCancelCallback();
+        });
     }
 
 
@@ -161,14 +161,14 @@ export class GoodsReturn extends Component {
         this.setState({ flagDeleteGoodsReturn: true, modalVisible: true });
     }
 
-   
+
 
     modelCancel() {
         this.props.modelCancelCallback();
     }
 
 
-   
+
 
     render() {
         return (
@@ -193,7 +193,8 @@ export class GoodsReturn extends Component {
                                 <View style={flats.text}>
                                     <View style={flats.buttons}>
                                         <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handledeleteNewSale(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -410,8 +411,8 @@ const pickerSelectStyles_tablet = StyleSheet.create({
 const styles = StyleSheet.create({
 
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
 
     // Styles For Mobile
@@ -835,8 +836,8 @@ const flats = StyleSheet.create({
         color: '#808080'
     },
     editButton_tablet: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: 1,
@@ -844,8 +845,8 @@ const flats = StyleSheet.create({
         // borderRadius:5,
     },
     deleteButton_tablet: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: 1,

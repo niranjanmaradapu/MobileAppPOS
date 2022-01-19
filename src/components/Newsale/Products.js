@@ -534,7 +534,7 @@ class Products extends Component {
                                     borderColor: "lightgray",
                                     // borderRadius:5,
                                 }} onPress={() => this.handleeditaction()}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                 </TouchableOpacity>
 
                                 <TouchableOpacity style={{
@@ -548,7 +548,8 @@ class Products extends Component {
                                     borderWidth: 1,
                                     borderColor: "lightgray",
                                 }} onPress={() => this.handledeleteaction(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                                 </TouchableOpacity>
                                 <View style={{
                                     backgroundColor: 'grey',

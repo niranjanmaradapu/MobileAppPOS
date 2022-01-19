@@ -4,6 +4,7 @@ import Constants from 'expo-constants';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
+import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
@@ -399,7 +400,7 @@ class EditPool extends Component {
                                             height: 30,
                                             borderColor: "lightgray",
                                         }} onPress={() => this.handleeditaction(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                         </TouchableOpacity>
                                         <View style={{
                                             backgroundColor: 'grey',
@@ -423,7 +424,8 @@ class EditPool extends Component {
 
                                             borderColor: "lightgray",
                                         }} onPress={() => this.handledeleteaction(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                                         </TouchableOpacity>
                                         <View style={{
                                             backgroundColor: 'grey',
@@ -794,8 +796,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     itemscount: {
         backgroundColor: '#ED1C24',

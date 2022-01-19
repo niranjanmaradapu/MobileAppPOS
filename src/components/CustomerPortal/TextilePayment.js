@@ -12,6 +12,7 @@ import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import NewSaleService from '../services/NewSaleService';
+import Device from 'react-native-device-detection';
 import PromotionsService from '../services/PromotionsService';
 var deviceWidth = Dimensions.get('window').width;
 var deviceWidth = Dimensions.get('window').width;
@@ -1641,8 +1642,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     selectedLabel: {
         color: "white",

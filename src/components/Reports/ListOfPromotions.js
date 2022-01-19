@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
@@ -6,10 +8,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-var deviceWidth = Dimensions.get("window").width;
 import ReportsService from '../services/ReportsService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+var deviceWidth = Dimensions.get("window").width;
 
 export class ListOfPromotions extends Component {
 
@@ -62,16 +62,16 @@ export class ListOfPromotions extends Component {
 
     datepickerDoneClicked() {
         if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
-            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
         }
         else if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
         }
         else if (parseInt(this.state.date.getMonth()) < 10) {
-            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
         else {
-            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
 
 
@@ -80,16 +80,16 @@ export class ListOfPromotions extends Component {
 
     datepickerendDoneClicked() {
         if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
         }
         else if (parseInt(this.state.enddate.getDate()) < 10) {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
         }
         else if (parseInt(this.state.enddate.getMonth()) < 10) {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
         else {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
@@ -128,9 +128,9 @@ export class ListOfPromotions extends Component {
             "storeName": "Km-Patny",
             "promoId": 1
         };
-        console.log('params are' + JSON.stringify(obj))
+        console.log('params are' + JSON.stringify(obj));
         axios.post(ReportsService.promotionsList(), obj).then((res) => {
-            console.log(res.data)
+            console.log(res.data);
             if (res.data && res.data["isSuccess"] === "true") {
                 this.props.childParamlistofPromotions(res.data.result);
                 this.props.modelCancelCallback();
@@ -378,8 +378,8 @@ const pickerSelectStyles_tablet = StyleSheet.create({
 const styles = StyleSheet.create({
 
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
 
     // Styles For Mobile
@@ -803,8 +803,8 @@ const flats = StyleSheet.create({
         color: '#808080'
     },
     editButton_tablet: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: 1,
@@ -812,8 +812,8 @@ const flats = StyleSheet.create({
         // borderRadius:5,
     },
     deleteButton_tablet: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: 1,
