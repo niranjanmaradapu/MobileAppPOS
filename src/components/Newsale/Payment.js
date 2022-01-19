@@ -10,6 +10,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import RazorpayCheckout from 'react-native-razorpay';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
+import Device from 'react-native-device-detection';
 import LoginService from '../services/LoginService';
 import NewSaleService from '../services/NewSaleService';
 import PromotionsService from '../services/PromotionsService';
@@ -1641,8 +1642,8 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     selectedLabel: {
         color: "white",

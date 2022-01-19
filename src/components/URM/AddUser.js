@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView, FlatList } from 'react-native';
-import { Chevron } from 'react-native-shapes';
-import Loader from '../../commonUtils/loader';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import DatePicker from 'react-native-date-picker'
+import { Chevron } from 'react-native-shapes';
+import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 
@@ -50,12 +50,12 @@ export default class AddUser extends Component {
             storeNames: [],
             navtext: '',
             userId: 0,
-        }
+        };
     }
 
     async componentDidMount() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
-      
+
         this.setState({ isEdit: this.props.route.params.isEdit });
         if (this.state.isEdit === true) {
             this.setState({
@@ -74,13 +74,13 @@ export default class AddUser extends Component {
             // if (this.props.route.params.item.phoneNumber !== null) {
             //     this.setState({ mobile: this.props.route.params.item.phoneNumber })
             // }
-            this.setState({ navtext: 'Edit User' })
+            this.setState({ navtext: 'Edit User' });
         }
         else {
-            this.setState({ navtext: 'Add User' })
+            this.setState({ navtext: 'Add User' });
         }
         this.setState({ clientId: clientId });
-        this.getDomainsList()
+        this.getDomainsList();
     }
 
     async getDomainsList() {
@@ -91,30 +91,30 @@ export default class AddUser extends Component {
                 let len = res.data["result"].length;
                 if (len > 0) {
                     for (let i = 0; i < len; i++) {
-                        let number = res.data.result[i]
-                        this.state.domainsArray.push({ name: number.domaiName, id: number.clientDomainaId })
+                        let number = res.data.result[i];
+                        this.state.domainsArray.push({ name: number.domaiName, id: number.clientDomainaId });
                         domains.push({
                             value: this.state.domainsArray[i].name,
                             label: this.state.domainsArray[i].name
                         });
                         this.setState({
                             domains: domains,
-                        })
-                        this.setState({ domainsArray: this.state.domainsArray })
-                        this.getRoles()
+                        });
+                        this.setState({ domainsArray: this.state.domainsArray });
+                        this.getRoles();
                     }
                     if (this.state.isEdit === true) {
                         for (let i = 0; i < this.state.domainsArray.length; i++) {
                             if (this.state.domainsArray[i].id === this.state.domainId) {
-                                this.setState({ domain: this.state.domainsArray[i].name })
+                                this.setState({ domain: this.state.domainsArray[i].name });
                             }
                         }
                     }
 
                     if (this.state.isEdit === false) {
-                        this.setState({ domain: this.state.domainsArray[0].name })
-                        this.setState({ domainId: this.state.domainsArray[0].id })
-                        this.getStores()
+                        this.setState({ domain: this.state.domainsArray[0].name });
+                        this.setState({ domainId: this.state.domainsArray[0].id });
+                        this.getStores();
                     }
                 }
             }
@@ -139,22 +139,22 @@ export default class AddUser extends Component {
 
                 this.setState({ stores: [], storesArray: [], storesTempArray: [] });
                 for (let i = 0; i < len; i++) {
-                    let number = res.data.result[i]
+                    let number = res.data.result[i];
 
 
                     if (this.state.selectededitStoresArray.length > 0) {
                         for (let i = 0; i < this.state.selectededitStoresArray.length; i++) {
-                            namesArray.push(this.state.selectededitStoresArray[i].name)
+                            namesArray.push(this.state.selectededitStoresArray[i].name);
                         }
                         if (namesArray.includes(number.name)) {
-                           this.state.selectedTempStoresArray.push({ name: number.name, id: number.id });
-                            this.state.storesTempArray.push({ name: number.name, id: number.id, selectedindex: 1 })
+                            this.state.selectedTempStoresArray.push({ name: number.name, id: number.id });
+                            this.state.storesTempArray.push({ name: number.name, id: number.id, selectedindex: 1 });
                         }
                         else {
-                            this.state.storesTempArray.push({ name: number.name, id: number.id, selectedindex: 0 })
+                            this.state.storesTempArray.push({ name: number.name, id: number.id, selectedindex: 0 });
                         }
                     } else {
-                        this.state.storesTempArray.push({ name: number.name, id: number.id, selectedindex: 0 })
+                        this.state.storesTempArray.push({ name: number.name, id: number.id, selectedindex: 0 });
                     }
 
 
@@ -203,17 +203,17 @@ export default class AddUser extends Component {
             if (len > 0) {
                 this.setState({ roles: [], rolesArray: [] });
                 for (let i = 0; i < len; i++) {
-                    let number = res.data.result[i]
-                    this.state.rolesArray.push({ name: number.roleName, id: number.roleId })
+                    let number = res.data.result[i];
+                    this.state.rolesArray.push({ name: number.roleName, id: number.roleId });
                     roles.push({
                         value: this.state.rolesArray[i].name,
                         label: this.state.rolesArray[i].name
                     });
                     this.setState({
                         roles: roles,
-                    })
+                    });
                 }
-                this.setState({ rolesArray: this.state.rolesArray })
+                this.setState({ rolesArray: this.state.rolesArray });
                 //  console.log(this.state.rolesArray)
             }
         }).catch(() => {
@@ -223,26 +223,26 @@ export default class AddUser extends Component {
     }
 
     datepickerClicked() {
-        this.setState({ datepickerOpen: true })
+        this.setState({ datepickerOpen: true });
     }
 
     datepickerDoneClicked() {
         if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
-            this.setState({ dob: "0" + this.state.date.getDate() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
+            this.setState({ dob: "0" + this.state.date.getDate() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false });
         }
         else if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ dob: "0" + this.state.date.getDate() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
+            this.setState({ dob: "0" + this.state.date.getDate() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false });
         }
         else if (parseInt(this.state.date.getMonth()) < 10) {
-            this.setState({ dob: this.state.date.getDate() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
+            this.setState({ dob: this.state.date.getDate() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false });
         }
         else {
-            this.setState({ dob: this.state.date.getDate() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false })
+            this.setState({ dob: this.state.date.getDate() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false });
         }
     }
 
     datepickerCancelClicked() {
-        this.setState({ date: new Date(), datepickerOpen: false })
+        this.setState({ date: new Date(), datepickerOpen: false });
     }
 
     handleBackButtonClick() {
@@ -253,49 +253,49 @@ export default class AddUser extends Component {
     handleDomain = (value) => {
         for (let i = 0; i < this.state.domainsArray.length; i++) {
             if (this.state.domainsArray[i].name === value) {
-                this.setState({ domainId: this.state.domainsArray[i].id, stores: [], storesArray: [] })
+                this.setState({ domainId: this.state.domainsArray[i].id, stores: [], storesArray: [] });
             }
         }
-        this.setState({ domain: value })
-        this.getStores()
-        this.getRoles()
+        this.setState({ domain: value });
+        this.getStores();
+        this.getRoles();
 
-    }
+    };
 
     handleStore = (value) => {
-        this.setState({ store: value })
+        this.setState({ store: value });
         for (let i = 0; i < this.state.storesArray.length; i++) {
             if (this.state.storesArray[i].name === value) {
-                this.state.storeNames.push({ name: this.state.storesArray[i].name })
-                this.setState({ storeId: this.state.storesArray[i].id, storeNames: this.state.storeNames })
+                this.state.storeNames.push({ name: this.state.storesArray[i].name });
+                this.setState({ storeId: this.state.storesArray[i].id, storeNames: this.state.storeNames });
             }
         }
-    }
+    };
 
     handleRole = (value) => {
-        this.setState({ role: value })
+        this.setState({ role: value });
         for (let i = 0; i < this.state.rolesArray.length; i++) {
             if (this.state.rolesArray[i].name === value) {
-                this.setState({ roleId: this.state.rolesArray[i].id })
+                this.setState({ roleId: this.state.rolesArray[i].id });
             }
         }
-    }
+    };
 
     selectedPrivilage = (item, index) => {
         if (item.selectedindex === 0) {
-            item.selectedindex = 1
-            this.state.selectedStoresArray.push({ name: item.name, id: item.id,selectedindex:1 });
+            item.selectedindex = 1;
+            this.state.selectedStoresArray.push({ name: item.name, id: item.id, selectedindex: 1 });
         }
         else {
-            console.log('vinodffsfdsfsdfd')
-            item.selectedindex = 0
-          //  const list = this.state.selectedStoresArray;
+            console.log('vinodffsfdsfsdfd');
+            item.selectedindex = 0;
+            //  const list = this.state.selectedStoresArray;
             this.state.selectedStoresArray.splice(index, 1);
             this.setState({ selectedStoresArray: this.state.selectedStoresArray });
         }
-       
-     
-        this.setState({ storesArray: this.state.storesArray })
+
+
+        this.setState({ storesArray: this.state.storesArray });
     };
 
     cancel() {
@@ -305,30 +305,30 @@ export default class AddUser extends Component {
 
     handleName = (value) => {
         this.setState({ name: value });
-    }
+    };
 
     handleAddress = (value) => {
         this.setState({ address: value });
-    }
+    };
 
     handleMobile = (value) => {
         this.setState({ mobile: value });
-    }
+    };
 
     handleEmail = (value) => {
         this.setState({ email: value });
-    }
+    };
 
     handleGender = (value) => {
-        this.setState({ gender: value })
-    }
+        this.setState({ gender: value });
+    };
 
     issuperAdmin() {
         if (this.state.isSuperAdmin === true) {
             this.setState({ isSuperAdmin: false });
         }
         else {
-            this.getPrivilegesByDomainId()
+            this.getPrivilegesByDomainId();
             this.setState({ isSuperAdmin: true });
         }
 
@@ -339,18 +339,18 @@ export default class AddUser extends Component {
             if (res.data && res.data["isSuccess"] === "true") {
                 let len = res.data["result"].length;
                 this.setState({ adminRole: res.data.result[0].name });
-                console.log(this.state.adminRole)
+                console.log(this.state.adminRole);
             }
         });
     }
 
     saveUser() {
         for (let i = 0; i < this.state.selectedStoresArray.length; i++) {
-            if(this.state.selectedStoresArray[i].selectedindex === 1){
-                this.state.selectedStoresFinalArray.push({name:this.state.selectedStoresArray[i].name,id:this.state.selectedStoresArray[i].id})
+            if (this.state.selectedStoresArray[i].selectedindex === 1) {
+                this.state.selectedStoresFinalArray.push({ name: this.state.selectedStoresArray[i].name, id: this.state.selectedStoresArray[i].id });
             }
         }
-        console.log(this.state.selectedStoresFinalArray)
+        console.log(this.state.selectedStoresFinalArray);
         if (this.state.name === "") {
             alert("Please Enter Name");
         }
@@ -385,17 +385,17 @@ export default class AddUser extends Component {
                     "isSuperAdmin": JSON.stringify(this.state.isSuperAdmin),
                     "createdBy": global.username,
 
-                }
-                console.log('params are' + JSON.stringify(saveObj))
-                this.setState({ loading: true })
+                };
+                console.log('params are' + JSON.stringify(saveObj));
+                this.setState({ loading: true });
                 axios.post(UrmService.saveUser(), saveObj).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
-                        global.privilages = []
+                        global.privilages = [];
                         this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
                     else {
-                        this.setState({ loading: false })
+                        this.setState({ loading: false });
                         alert(res.data.message);
                     }
                 }
@@ -429,17 +429,17 @@ export default class AddUser extends Component {
                     "isSuperAdmin": JSON.stringify(this.state.isSuperAdmin),
                     "createdBy": global.username,
 
-                }
-                console.log('params are' + JSON.stringify(saveObj))
-                this.setState({ loading: true })
+                };
+                console.log('params are' + JSON.stringify(saveObj));
+                this.setState({ loading: true });
                 axios.put(UrmService.editUser(), saveObj).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
-                        global.privilages = []
+                        global.privilages = [];
                         this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
                     else {
-                        this.setState({ loading: false })
+                        this.setState({ loading: false });
                         alert(res.data.message);
                     }
                 }
@@ -715,7 +715,7 @@ export default class AddUser extends Component {
                     </View>
                 )}
             </View>
-        )
+        );
     }
 }
 
@@ -759,7 +759,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 const pickerSelectStyles_tablet = StyleSheet.create({
     placeholder: {
@@ -801,7 +801,7 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 
 
@@ -810,8 +810,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     bottomContainer: {
         margin: 50,
@@ -1012,4 +1012,4 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
 
-})
+});

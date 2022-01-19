@@ -1,22 +1,22 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ScrollView } from 'react-native';
-var deviceWidth = Dimensions.get('window').width;
-import Constants from 'expo-constants';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from "@react-native-community/netinfo";
 import axios from 'axios';
-import NewSaleService from '../services/NewSaleService';
-import { openDatabase } from 'react-native-sqlite-storage';
-// Connction to access the pre-populated db
-const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
+import Constants from 'expo-constants';
+import React, { Component } from 'react';
+import { Alert, Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import { Alert } from 'react-native';
-import Modal from "react-native-modal";
 import ImagePicker from 'react-native-image-crop-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import NetInfo from "@react-native-community/netinfo";
+import { openDatabase } from 'react-native-sqlite-storage';
 import InventoryService from '../services/InventoryService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Device from 'react-native-device-detection';
+import NewSaleService from '../services/NewSaleService';
+var deviceWidth = Dimensions.get('window').width;
+// Connction to access the pre-populated db
+const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 
 
 class ProductEdit extends Component {
@@ -716,8 +716,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     itemscount: {
         backgroundColor: '#ED1C24',

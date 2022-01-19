@@ -1,13 +1,13 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
-import UrmService from '../services/UrmService';
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import LoginService from '../services/LoginService';
+import UrmService from '../services/UrmService';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -577,8 +577,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     bottomContainer: {
         margin: 50,

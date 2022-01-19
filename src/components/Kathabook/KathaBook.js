@@ -1,8 +1,8 @@
-import React, { Component, useState } from 'react'
-import { View, Image, FlatList, Animated, ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, ActivityIndicator, scrollview, SafeAreaView, ScrollView, TouchableHighlight } from 'react-native';
-var deviceWidth = Dimensions.get('window').width;
 import Constants from 'expo-constants';
-import Device from 'react-native-device-detection'
+import React, { Component } from 'react';
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
+var deviceWidth = Dimensions.get('window').width;
 
 class KathaBook extends Component {
     constructor(props) {
@@ -149,8 +149,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     itemscount: {
         backgroundColor: '#ED1C24',

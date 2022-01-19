@@ -1,10 +1,10 @@
+import axios from 'axios';
 import React, { Component } from 'react';
-import { SectionList, StyleSheet, Text, Dimensions, View, TouchableOpacity, Image } from 'react-native';
+import { Dimensions, Image, SectionList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import Loader from '../../commonUtils/loader';
-var deviceWidth = Dimensions.get('window').width;
-import axios from 'axios';
 import UrmService from '../services/UrmService';
+var deviceWidth = Dimensions.get('window').width;
 
 export default class Privilages extends Component {
     constructor(props) {
@@ -15,9 +15,9 @@ export default class Privilages extends Component {
             domain: "",
             parentlist: [],
             child: [],
-            childlist:[],
+            childlist: [],
             isselected: [],
-        }
+        };
     }
 
     handleBackButtonClick() {
@@ -29,22 +29,22 @@ export default class Privilages extends Component {
         this.setState({
             parentlist: this.props.route.params.parentlist,
             child: this.props.route.params.child,
-        })
-        this.getPrivilages()
+        });
+        this.getPrivilages();
     }
 
 
     getPrivilages() {
         if (this.props.route.params.domain === "Textile") {
-            domainId = "1"
+            domainId = "1";
         }
         else if (this.props.route.params.domain === "Retail") {
-            domainId = "2"
+            domainId = "2";
         }
         else if (this.props.route.params.domain === "Electrical & Electronics") {
-            domainId = "3"
+            domainId = "3";
         }
-        global.privilages = []
+        global.privilages = [];
         axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 let len = res.data["result"].length;
@@ -52,9 +52,9 @@ export default class Privilages extends Component {
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
                             let previlage = res.data["result"][i];
-                            console.log(previlage)
+                            console.log(previlage);
                             if (previlage.subPrivillages !== null) {
-                                let len = previlage.subPrivillages.length
+                                let len = previlage.subPrivillages.length;
                                 var subprivilagesArray = [];
                                 var namesArray = [];
                                 var parentarray = [];
@@ -63,51 +63,51 @@ export default class Privilages extends Component {
 
                                         if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                             let subprivilage = previlage.subPrivillages[i];
-                                           
+
                                             for (let i = 0; i < this.state.parentlist.length; i++) {
-                                             if (this.state.parentlist[i].name === previlage.name){
-                                                if (parentarray.includes(previlage.name)) {
-                                               
+                                                if (this.state.parentlist[i].name === previlage.name) {
+                                                    if (parentarray.includes(previlage.name)) {
+
+                                                    }
+                                                    else {
+                                                        parentarray.push(previlage.name);
+                                                    }
                                                 }
-                                                else{
-                                                    parentarray.push(previlage.name)
-                                                }
-                                             }
                                             }
-                                            console.log(parentarray)
+                                            console.log(parentarray);
                                             if (parentarray.includes(previlage.name)) {
                                                 for (let i = 0; i < this.state.child.length; i++) {
                                                     if (subprivilage.name === this.state.child[i].name) {
                                                         if (namesArray.includes(subprivilage.name)) {
                                                         }
-                                                        else{
-                                                        this.state.childlist.push({ title: subprivilage.name, description: subprivilage.description, parent: previlage.name, id: previlage.id, subPrivillages: subprivilage });
-                                                        subprivilagesArray.push({ name: subprivilage.name, selectedindex: 1, description: subprivilage.description, subPrivillage: subprivilage })
-                                                        namesArray.push(subprivilage.name)
+                                                        else {
+                                                            this.state.childlist.push({ title: subprivilage.name, description: subprivilage.description, parent: previlage.name, id: previlage.id, subPrivillages: subprivilage });
+                                                            subprivilagesArray.push({ name: subprivilage.name, selectedindex: 1, description: subprivilage.description, subPrivillage: subprivilage });
+                                                            namesArray.push(subprivilage.name);
                                                         }
-                                                    
+
+                                                    }
                                                 }
-                                                } 
                                             }
                                             else {
-                                            
-                                        }
+
+                                            }
                                             if (namesArray.includes(subprivilage.name)) {
 
                                             }
                                             else {
-                                                subprivilagesArray.push({ name: subprivilage.name, selectedindex: 0, description: subprivilage.description, subPrivillage: subprivilage })
+                                                subprivilagesArray.push({ name: subprivilage.name, selectedindex: 0, description: subprivilage.description, subPrivillage: subprivilage });
                                             }
 
                                         }
                                     }
 
                                 }
-                               
+
                             }
                             this.state.previlages.push({ title: previlage.name, data: subprivilagesArray, id: previlage.id });
-                            this.setState({ previlages: this.state.previlages })
-                            this.setState({ childlist: this.state.childlist })
+                            this.setState({ previlages: this.state.previlages });
+                            this.setState({ childlist: this.state.childlist });
 
                         }
                     }
@@ -117,28 +117,28 @@ export default class Privilages extends Component {
     }
 
     saveRole() {
-        global.privilages = []
-       
-        global.privilages = this.state.childlist
-        console.log('sadsadsadsa' + global.privilages.length)
+        global.privilages = [];
+
+        global.privilages = this.state.childlist;
+        console.log('sadsadsadsa' + global.privilages.length);
         this.props.route.params.onGoBack();
         this.props.navigation.goBack();
     }
 
     selectedPrivilage = (item, index, section) => {
         if (item.selectedindex === 0) {
-            item.selectedindex = 1
+            item.selectedindex = 1;
             this.state.childlist.push({ title: item.name, description: item.description, parent: section.title, id: section.id, subPrivillages: item.subPrivillage });
         }
         else {
-            item.selectedindex = 0
+            item.selectedindex = 0;
             const list = this.state.childlist;
             list.splice(index, 1);
             this.setState({ childlist: list });
         }
 
-        this.setState({ previlages: this.state.previlages })
-        console.log(this.state.childlist)
+        this.setState({ previlages: this.state.previlages });
+        console.log(this.state.childlist);
     };
 
 
@@ -235,7 +235,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 const pickerSelectStyles_tablet = StyleSheet.create({
     placeholder: {
@@ -277,7 +277,7 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 
 
@@ -286,8 +286,8 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     bottomContainer: {
         margin: 50,
@@ -514,4 +514,4 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
 
-})
+});

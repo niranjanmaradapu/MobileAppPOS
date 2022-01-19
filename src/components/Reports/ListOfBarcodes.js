@@ -1,15 +1,13 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
-import RNPickerSelect from 'react-native-picker-select';
-import { Chevron } from 'react-native-shapes';
-var deviceWidth = Dimensions.get("window").width;
 import ReportsService from '../services/ReportsService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+var deviceWidth = Dimensions.get("window").width;
 
 export class ListOfBarcodes extends Component {
 
@@ -29,13 +27,13 @@ export class ListOfBarcodes extends Component {
             empId: "",
             fromPrice: "",
             toPrice: "",
-            storeId:0,
-            storeName:"",
+            storeId: 0,
+            storeName: "",
             flagViewDetail: false,
             flagdelete: false,
-            barcode:"",
-            mrp:"",
-            qty:"",
+            barcode: "",
+            mrp: "",
+            qty: "",
 
         };
     }
@@ -45,14 +43,14 @@ export class ListOfBarcodes extends Component {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
-          
+
 
         }).catch(() => {
             console.log('there is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
-            this.setState({ storeName:value});
+            this.setState({ storeName: value });
             console.log(this.state.storeName);
         }).catch(() => {
             console.log('there is error getting storeId');
@@ -70,34 +68,34 @@ export class ListOfBarcodes extends Component {
 
     datepickerDoneClicked() {
         if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
-            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() })
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
         }
         else if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ startDate:this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate()})
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
         }
         else if (parseInt(this.state.date.getMonth()) < 10) {
-            this.setState({ startDate: this.state.date.getFullYear()  + "-0" + (this.state.date.getMonth() + 1) + "-" +  this.state.date.getDate()})
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
         else {
-            this.setState({ startDate: this.state.date.getFullYear()  + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate()})
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
-        
+
 
         this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
         if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() })
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
         }
         else if (parseInt(this.state.enddate.getDate()) < 10) {
-            this.setState({ endDate:this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate()})
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
         }
         else if (parseInt(this.state.enddate.getMonth()) < 10) {
-            this.setState({ endDate: this.state.enddate.getFullYear()  + "-0" + (this.state.enddate.getMonth() + 1) + "-" +  this.state.enddate.getDate()})
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
         else {
-            this.setState({ endDate: this.state.enddate.getFullYear()  + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate()})
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
@@ -145,34 +143,34 @@ export class ListOfBarcodes extends Component {
         if (this.state.toPrice === "") {
             this.state.toPrice = null;
         }
-       
+
         const obj = {
-            "fromDate":this.state.startDate,
-            "toDate":this.state.endDate,
+            "fromDate": this.state.startDate,
+            "toDate": this.state.endDate,
             barcodeTextileId: null,
             barcode: this.state.barCode,
-            storeId:this.state.storeId,
+            storeId: this.state.storeId,
             empId: this.state.empId,
-            itemMrpLessThan:this.state.fromPrice,
-            itemMrpGreaterThan:this.state.toPrice,
-          };
-              console.log('params are' + JSON.stringify(obj))
-              axios.post(ReportsService.getListOfBarcodes(), obj).then((res) => {
-                  console.log(res.data)
-                if (res.data && res.data["isSuccess"] === "true") {
-                    this.props.childParamlistBarcodes(res.data.result);
-                   
-                   
-                    this.props.modelCancelCallback();
-                }
-                else {
-                  alert(res.data.message);
-                }
-              }
-              ).catch(() => {
-                alert('No Results Found');
+            itemMrpLessThan: this.state.fromPrice,
+            itemMrpGreaterThan: this.state.toPrice,
+        };
+        console.log('params are' + JSON.stringify(obj));
+        axios.post(ReportsService.getListOfBarcodes(), obj).then((res) => {
+            console.log(res.data);
+            if (res.data && res.data["isSuccess"] === "true") {
+                this.props.childParamlistBarcodes(res.data.result);
+
+
                 this.props.modelCancelCallback();
-            }); 
+            }
+            else {
+                alert(res.data.message);
+            }
+        }
+        ).catch(() => {
+            alert('No Results Found');
+            this.props.modelCancelCallback();
+        });
     }
 
     modelCancel() {
@@ -183,11 +181,11 @@ export class ListOfBarcodes extends Component {
         this.setState({ modalVisible: false });
     }
 
-    handledeleteBarcode(){
-        this.setState({ flagdelete: true, modalVisible: true, flagViewDetail: false});
+    handledeleteBarcode() {
+        this.setState({ flagdelete: true, modalVisible: true, flagViewDetail: false });
     }
 
-    handleviewBarcode(item,index){
+    handleviewBarcode(item, index) {
         this.setState({ barcode: item.barcode, mrp: item.productTextile.itemMrp, qty: item.productTextile.qty });
         this.setState({ flagViewDetail: true, modalVisible: true, flagdelete: false });
     }
@@ -212,9 +210,10 @@ export class ListOfBarcodes extends Component {
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"\n"} {item.productTextile.qty}</Text>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE MRP: {"\n"} {item.productTextile.itemMrp}</Text>
                                     <View style={flats.buttons}>
-                                        
+
                                         <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteBarcode(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                                         </TouchableOpacity>
 
                                         <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewBarcode(item, index)}>
@@ -368,7 +367,7 @@ export class ListOfBarcodes extends Component {
                     </View>
                 )}
 
-{this.state.flagViewDetail && (
+                {this.state.flagViewDetail && (
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
 
@@ -384,20 +383,20 @@ export class ListOfBarcodes extends Component {
                                 <Text style={Device.isTablet ? styles.viewtext_tablet : styles.viewtext_mobile} >
                                     BARCODE:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext_tablet : styles.viewsubtext_mobile} >
-                                   {this.state.barcode} </Text>
+                                    {this.state.barcode} </Text>
                                 <Text style={Device.isTablet ? styles.viewtext1_tablet : styles.viewtext1_mobile} >
                                     MRP:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext1_tablet : styles.viewsubtext1_mobile} >
-                                ₹ {this.state.mrp} </Text>
-                                    <Text style={Device.isTablet ? styles.viewtext2_tablet : styles.viewtext2_mobile} >
+                                    ₹ {this.state.mrp} </Text>
+                                <Text style={Device.isTablet ? styles.viewtext2_tablet : styles.viewtext2_mobile} >
                                     STORE:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext2_tablet : styles.viewsubtext2_mobile} >
-                                {this.state.storeName} </Text>
+                                    {this.state.storeName} </Text>
                                 <Text style={Device.isTablet ? styles.viewtext3_tablet : styles.viewtext3_mobile} >
                                     QTY:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext3_tablet : styles.viewsubtext3_mobile} >
-                                 {this.state.qty} </Text>
-                                
+                                    {this.state.qty} </Text>
+
 
 
                                 <TouchableOpacity
@@ -511,11 +510,11 @@ const pickerSelectStyles_tablet = StyleSheet.create({
 const styles = StyleSheet.create({
 
     imagealign: {
-        marginTop: 16,
-        marginRight: 20,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
-       //////////////
-       filterCancel_mobile: {
+    //////////////
+    filterCancel_mobile: {
         width: deviceWidth - 40,
         marginLeft: 20,
         marginRight: 20,
@@ -608,7 +607,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         position: 'absolute', top: 90,
     },
-   
+
     viewsubtext1_mobile: {
         color: "#353C40",
         fontFamily: "bold",
@@ -657,7 +656,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         position: 'absolute', top: 120,
     },
-   
+
     viewsubtext2_mobile: {
         color: "#353C40",
         fontFamily: "bold",
@@ -706,7 +705,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         position: 'absolute', top: 150,
     },
-   
+
     viewsubtext3_mobile: {
         color: "#353C40",
         fontFamily: "bold",
@@ -755,7 +754,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         position: 'absolute', top: 180,
     },
-   
+
     viewsubtext4_mobile: {
         color: "#353C40",
         fontFamily: "bold",
@@ -804,7 +803,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         position: 'absolute', top: 210,
     },
-   
+
     viewsubtext5_mobile: {
         color: "#353C40",
         fontFamily: "bold",
@@ -1252,8 +1251,8 @@ const flats = StyleSheet.create({
         color: '#808080'
     },
     editButton_tablet: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: 1,
@@ -1261,8 +1260,8 @@ const flats = StyleSheet.create({
         // borderRadius:5,
     },
     deleteButton_tablet: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: 1,

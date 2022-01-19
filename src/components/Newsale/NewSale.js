@@ -2073,7 +2073,8 @@ class NewSale extends Component {
                         borderWidth: 1,
                         borderColor: "lightgray",
                       }} onPress={() => this.handlenewsaledeleteaction(item, index)}>
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                        <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                       </TouchableOpacity>
                     </View>
 
@@ -2636,7 +2637,7 @@ class NewSale extends Component {
                       borderColor: "lightgray",
                       // borderRadius:5,
                     }} onPress={() => this.handleeditaction(item, index)}>
-                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/edit.png')} />
+                      <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={{
@@ -2650,7 +2651,8 @@ class NewSale extends Component {
                       borderWidth: 1,
                       borderColor: "lightgray",
                     }} onPress={() => this.handledeleteaction(item, index)}>
-                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/delete.png')} />
+                      <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
                     </TouchableOpacity>
                     <View style={{
                       backgroundColor: 'grey',
@@ -3187,16 +3189,16 @@ const styles = StyleSheet.create({
     width: deviceWidth,
     textAlign: 'center',
     fontSize: 24,
-    height:Device.isAndroid ? 70 : 84,
-},
-menuButton_mobile: {
+    height: Device.isAndroid ? 70 : 84,
+  },
+  menuButton_mobile: {
     position: 'absolute',
     left: 10,
     bottom: 0,
     width: 40,
     height: 40,
-},
-headerTitle_mobile: {
+  },
+  headerTitle_mobile: {
     position: 'absolute',
     left: 70,
     bottom: 10,
@@ -3205,7 +3207,7 @@ headerTitle_mobile: {
     fontFamily: 'bold',
     fontSize: 18,
     color: '#353C40'
-},
+  },
   input_mobile: {
     justifyContent: 'center',
     marginLeft: 20,
