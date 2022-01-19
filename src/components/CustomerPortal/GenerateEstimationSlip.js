@@ -10,6 +10,9 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
 var deviceWidth = Dimensions.get('window').width;
+import RNBeep from 'react-native-a-beep';
+import axios from 'axios';
+import CustomerService from '../services/CustomerService';
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
@@ -62,20 +65,40 @@ class GenerateEstimationSlip extends Component {
             customerAddress: '',
             customerGSTNumber: '',
             domainId: 1,
-            storeId: 1,
             tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
-            tableData: [1, 2],
+            // tableData: [],
             privilages: [{ bool: true, name: "Check Promo Discount" }, { bool: false, name: "Clear Promotion" }],
             inventoryDelete: false,
             lineItemDelete: false,
-            uom: [],
+            uom: '',
             store: '',
+            storeId: 0,
+            itemsList: [],
+            barList: [],
+            mrpAmount: 0,
+            promoDisc: 0,
+            totalAmount: 0,
+            totalQuantity: 0,
+            lineItemsList: [],
+            smnumber: "",
             camera: {
                 type: RNCamera.Constants.Type.back,
                 flashMode: RNCamera.Constants.FlashMode.auto,
             }
         };
     }
+
+
+    componentDidMount() {
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) });
+            console.log(this.state.storeId);
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
+    }
+
 
     handleMenuButtonClick() {
         this.props.navigation.openDrawer();
@@ -114,37 +137,199 @@ class GenerateEstimationSlip extends Component {
     };
 
     generateEstimationSlip() {
-        alert('Estimation slip Generated successfully');
-        this.setState({ tableData: "" });
+        let lineItem = [];
+        this.state.barList.forEach((element, index) => {
+          const obj = {
+            "itemPrice": element.productTextile.itemMrp,
+            "quantity": parseInt(element.quantity),
+            "discount": element.productTextile.discount,
+            "netValue": element.totalMrp,
+            "barCode": element.barcode,
+            "domainId": 1,
+            "storeId": this.state.storeId,
+    
+          }
+          lineItem.push(obj);
+        });
+        axios.post(CustomerService.saveLineItems(), lineItem).then((res) => {
+          if (res) {
+            let lineItemsList = [];
+            let dataResult = JSON.parse(res.data.result);
+            dataResult.forEach(element => {
+              const obj = {
+                "lineItemId": element
+              }
+              lineItemsList.push(obj);
+            });
+            this.setState({ lineItemsList: lineItemsList });
+          }
+          const createObj = {
+            "salesMan": parseInt(this.state.smnumber),
+            "lineItems": this.state.lineItemsList,
+            "storeId": this.state.storeId,
+          }
+          axios.post(CustomerService.createDeliverySlip(), createObj).then((res) => {
+            if (res) {
+              alert(res.data.message);
+              this.setState({
+                barList: [],
+                itemsList: [],
+              });
+            }
+          });
+        }).catch(() => {
+            alert('Error to create Delivery slip');
+        });
     }
 
-    incrementForTable() {
+    endEditing() {
+        console.log("end edited");
+        if (this.state.uom === "") {
+            alert("Please select UOM");
+        }
+        else if(this.state.barcodeId === ""){
+            alert("Please select Barcode");  
+        }
+         if (this.state.smnumber === "") {
+            alert("Please select UOM");
+        }
+        else {
+            this.getLineItems()
+        }
+    }
+
+    getLineItems() {
+        const params = {
+            "barcode": this.state.barcodeId,
+            "storeId": this.state.storeId,
+        };
+        axios.get(CustomerService.getDeliverySlip(), { params }).then((res) => {
+            if (res.data) {
+                // res.data.result.salesMan = this.state.smNumber;
+                this.state.itemsList.push(res.data.result);
+                RNBeep.beep();
+                if (this.state.itemsList.length > 1) {
+                    for (let i = 0; i < this.state.itemsList.length - 1; i++) {
+                        if (
+                            this.state.itemsList[i].barcode ===
+                            this.state.itemsList[i + 1].barcode
+                        ) {
+                         
+                            this.state.itemsList.splice(i, 1);
+                            alert("Barcode already entered");
+                            break;
+                        }
+                    }
+                }
+                this.setState({ barList: this.state.itemsList }, () => {
+                    this.state.barList.forEach((element) => {
+                        if (element.quantity > 1) {
+                            console.log(element.quantity)
+                        } else {
+                            element.totalMrp = element.productTextile.itemMrp;
+                            element.quantity = parseInt("1");
+                        }
+
+                    });
+                    this.calculateTotal();
+                });
+                this.setState({ barcodeId: "",uom:"",smnumber:"" });
+            } else {
+                alert(res.data.body);
+            }
+        }).catch(() => {
+            alert('Please enter Barcode / SM number');
+        });
+    }
+
+    calculateTotal() {
+        let totalAmount = 0;
+        let totalqty = 0;
+        this.state.barList.forEach(barCode => {
+            totalAmount = totalAmount + barCode.totalMrp;
+            totalqty = totalqty + parseInt(barCode.quantity);
+        });
+
+        this.setState({ mrpAmount: totalAmount, totalQuantity: totalqty }
+        );
+
 
     }
 
-    updateQty() {
-
+    refresh() {
+        if (global.barcodeId === 'something') {
+            this.setState({ barcodeId: global.barcodeId });
+            this.getLineItems();
+        }
     }
 
-    decreamentForTable() {
 
+    handleUOM = (value) => {
+        // this.getAllSections()
+        this.setState({ uom: value })
     }
 
-    handleUOM() {
-
+    handleBarCode = (value) => {
+        this.setState({ barcodeId: value })
     }
 
-    handleBarCode() {
-
+    handleQty = (value) => {
+        this.setState({ saleQuantity: value })
     }
 
-    handleQty() {
+    updateQty = (text, index) => {
+        const qtyarr = [...this.state.itemsList];
+        qtyarr[index].quantity = text;
+        this.setState({ itemsList: qtyarr });
+    };
 
+    incrementForTable(item, index) {
+        const qtyarr = [...this.state.itemsList];
+        var additem = parseInt(qtyarr[index].quantity) + 1;
+        qtyarr[index].quantity = additem.toString();
+        let totalcostMrp = item.productTextile.itemMrp * parseInt(qtyarr[index].quantity);
+        item.totalMrp = totalcostMrp
+        this.setState({ itemsList: qtyarr });
+      
+        let grandTotal =0;
+    let totalqty = 0;
+    this.state.barList.forEach(bardata => {
+      grandTotal = grandTotal+ bardata.totalMrp;
+      totalqty = totalqty + parseInt(bardata.quantity)
+    });
+
+    this.setState({mrpAmount: grandTotal, totalQuantity: totalqty});
+
+        this.state.totalQuantity = (parseInt(this.state.totalQuantity) + 1)
     }
 
-    handleSmCode() {
+    decreamentForTable(item, index) {
+        const qtyarr = [...this.state.itemsList];
+        if(qtyarr[index].quantity > 1){
+        var additem = parseInt(qtyarr[index].quantity) - 1;
+        qtyarr[index].quantity = additem.toString();
+       
+        let totalcostMrp = item.productTextile.itemMrp * parseInt(qtyarr[index].quantity);
+        item.totalMrp = totalcostMrp
+        this.state.totalQuantity = (parseInt(this.state.totalQuantity) - 1)
+        let grandTotal =0;
+    let totalqty = 0;
+    this.state.barList.forEach(bardata => {
+      grandTotal = grandTotal+ bardata.totalMrp;
+      totalqty = totalqty + parseInt(bardata.quantity)
+    });
 
+    this.setState({mrpAmount: grandTotal, totalQuantity: totalqty});
+
+        this.setState({ itemsList: qtyarr });
+        }
     }
+
+
+    handleSmCode = (text) => {
+        this.setState({ smnumber: text });
+    };
+
 
     render() {
         console.log(global.barcodeId);
@@ -173,30 +358,31 @@ class GenerateEstimationSlip extends Component {
                                         style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : styles.rnSelectContainer_mobile_newsale}
                                         placeholder={{
                                             label: 'SELECT UOM',
-                                            value: " ",
+                                            value: "",
                                         }}
                                         Icon={() => {
                                             return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                         }}
-                                        items={this.state.uom}
+                                        items={[
+                                            { label: 'Pieces', value: 'Pieces' },
+                                            { label: 'Meters', value: 'Meters' },
+                                        ]}
                                         onValueChange={this.handleUOM}
                                         style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                                        value={this.state.store}
+                                        value={this.state.uom}
                                         useNativeAndroidPickerStyle={false}
 
                                     />
                                 </View>
 
-                                <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
                                     underlineColorAndroid="transparent"
                                     placeholder="ENTER BARCODE"
                                     placeholderTextColor="#6F6F6F60"
                                     textAlignVertical="center"
-                                    keyboardType={'default'}
                                     autoCapitalize="none"
-                                    onEndEditing
-                                    onChangeText={(text) => this.handleBarCode(text)}
-                                    onEndEditing={() => this.endEditing()}
+                                    value={this.state.barcodeId}
+                                    onChangeText={this.handleBarCode}
                                 />
 
                                 <TextInput style={Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start}
@@ -206,27 +392,41 @@ class GenerateEstimationSlip extends Component {
                                     textAlignVertical="center"
                                     keyboardType={'default'}
                                     autoCapitalize="none"
+                                    value={this.state.smnumber}
                                     onEndEditing
                                     onChangeText={(text) => this.handleSmCode(text)}
                                     onEndEditing={() => this.endEditing()}
                                 />
 
-                                <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
-                                    underlineColorAndroid="transparent"
-                                    placeholder="QTY"
-                                    placeholderTextColor="#6F6F6F60"
-                                    textAlignVertical="center"
-                                    keyboardType={'default'}
-                                    autoCapitalize="none"
-                                    onEndEditing
-                                    value={this.state.saleQuantity}
-                                    onChangeText={(text) => this.handleQty(text)}
-                                    onEndEditing={() => this.endEditing()}
-                                />
+                                {this.state.uom === "Pieces" && (
+                                    <TextInput style={Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="QTY"
+                                        placeholderTextColor="#6F6F6F60"
+                                        textAlignVertical="center"
+                                        keyboardType={'default'}
+                                        autoCapitalize="none"
+                                        editable={false} selectTextOnFocus={false}
+                                    />
+                                )}
+
+                                {this.state.uom === "Meters" && (
+                                    <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="QTY"
+                                        keyboardType={'default'}
+                                        placeholderTextColor="#6F6F6F60"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.saleQuantity}
+                                        onChangeText={this.handleQty}
+                                    />
+                                )}
+
 
 
                             </View>
-                            {this.state.tableData.length !== 0 && (
+                            {this.state.itemsList.length !== 0 && (
                                 <FlatList
                                     style={styles.flatList}
                                     horizontal
@@ -255,7 +455,7 @@ class GenerateEstimationSlip extends Component {
 
                             <FlatList style={{ marginTop: 20, marginBottom: 20 }}
                                 //  ListHeaderComponent={this.renderHeader}
-                                data={this.state.tableData}
+                                data={this.state.barList}
                                 keyExtractor={item => item.email}
                                 contentContainerStyle={{ paddingBottom: 200 }}
                                 onEndReached={this.onEndReached.bind(this)}
@@ -285,42 +485,42 @@ class GenerateEstimationSlip extends Component {
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: -20, fontFamily: 'regular', color: '#808080' }}>
                                                 BARCODE:
                                             </Text>
-                                            <Text style={{ fontSize: 12, marginLeft: Device.isTablet ? 245 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                                                {item.qty} {item.productuom}
+                                            <Text style={{ fontSize: 12, marginLeft: Device.isTablet ? 265 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+                                                {item.barcode}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                                 QUANTITY:
                                             </Text>
-                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 245 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                                                {item.qty} {item.productuom}
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 265 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+                                                {item.quantity}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                                 SM:
                                             </Text>
-                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 245 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                                                {item.qty} {item.productuom}
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 245 : 150, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+                                                {this.state.smnumber}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                                 DISCOUNT TYPE:
                                             </Text>
-                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 245 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                                                {item.qty} {item.productuom}
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 315 : 230, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+                                                -
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                                 MRP:
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 225 : 160, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'medium', color: '#ED1C24' }}>
                                                 {/* ₹ {(parseInt(item.netamount)).toString()} */}
-                                                Rs. 1000
+                                                ₹ {item.productTextile.itemMrp}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 310 : 220, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'regular', color: '#808080' }}>
-                                                DISCOUNT: Rs. 0
+                                                DISCOUNT: ₹ 0
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                                 TOTAL:
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 242 : 172, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'medium', color: '#ED1C24' }}>
-                                                ₹ {(parseInt(item.netamount) * item.qty).toString()}
+                                                ₹ {item.totalMrp}
                                             </Text>
                                         </View>
 
@@ -372,10 +572,9 @@ class GenerateEstimationSlip extends Component {
                                                     paddingLeft: Device.isTablet ? 15 : 9,
                                                 }}
                                                 underlineColorAndroid="transparent"
-                                                placeholder="0"
+                                                placeholder="1"
                                                 placeholderTextColor="#8F9EB7"
-
-                                                value={item.qty}
+                                                value={item.quantity}
                                                 onChangeText={(text) => this.updateQty(text, index)}
                                             />
                                             <TouchableOpacity style={{
@@ -463,7 +662,7 @@ class GenerateEstimationSlip extends Component {
                                 </View>
                             )}
 
-                            {this.state.tableData.length != 0 && (
+                            {this.state.itemsList.length != 0 && (
                                 <View style={{ width: deviceWidth, height: 220, position: 'absolute', bottom: 0, backgroundColor: '#FFFFFF' }}>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, justifyContent: 'center', textAlign: 'center', marginTop: 10,
@@ -474,7 +673,7 @@ class GenerateEstimationSlip extends Component {
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        {this.state.totalQty} </Text>
+                                        {this.state.totalQuantity} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -484,7 +683,7 @@ class GenerateEstimationSlip extends Component {
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        ₹ {this.state.totalAmount} </Text>
+                                        ₹ {this.state.promoDisc} </Text>
 
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
@@ -495,7 +694,7 @@ class GenerateEstimationSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        ₹ {(parseInt(this.state.totalAmount) - parseInt(this.state.totalDiscount)).toString()} </Text>
+                                        ₹ {(this.state.mrpAmount)} </Text>
 
                                     {/* <Text style={{
                     color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
@@ -1249,6 +1448,21 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
+    input_mobile_notedit: {
+        justifyContent: 'center',
+        marginLeft: deviceWidth / 2 + 30,
+        width: deviceWidth / 2 - 40,
+        height: 44,
+        marginTop: -55,
+        marginBottom: 10,
+        borderColor: '#DCE3F2',
+        borderRadius: 3,
+        backgroundColor: '#DCE3F2',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
     input_mobile_normal: {
         justifyContent: 'center',
         marginLeft: deviceWidth / 2 + 30,
@@ -1264,6 +1478,7 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
+
     input_mobile_normal_start: {
         justifyContent: 'center',
         marginLeft: 20,
@@ -1426,6 +1641,21 @@ const styles = StyleSheet.create({
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 22,
+    },
+    input_tablet_notedit: {
+        justifyContent: 'center',
+        marginLeft: deviceWidth / 2 + 30,
+        width: deviceWidth / 2 - 50,
+        height: 55,
+        marginTop: -65,
+        marginBottom: 10,
+        borderColor: '#DCE3F2',
+        borderRadius: 3,
+        backgroundColor: '#DCE3F2',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
     },
     input_tablet_normal: {
         justifyContent: 'center',

@@ -216,13 +216,13 @@ class NewSaleTextile extends Component {
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Billing Portal </Text>
                    
-                    {this.state.flagGenerateEstimationSlip && (
+                    {/* {this.state.flagGenerateEstimationSlip && (
           <TouchableOpacity
             style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
             onPress={() => this.navigateToScanCode()} >
             <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {('ITEM SCAN')} </Text>
           </TouchableOpacity>
-                    )}
+                    )} */}
                 </View>
 
                 <ScrollView>
