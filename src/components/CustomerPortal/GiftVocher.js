@@ -209,7 +209,7 @@ class GiftVocher extends Component {
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>FROM DATE: {"11/1/2022"}</Text>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>TO DATE: {"18/1/2022"}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>VALUE: {"1000"}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>VALUE: {"₹1000"}</Text>
                                 </View>
                             </View>
                         </View>

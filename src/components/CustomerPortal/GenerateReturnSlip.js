@@ -19,8 +19,10 @@ export default class GenerateReturnSlip extends Component {
             modelVisible: true,
             promotions: false,
             returnInvoice: [1, 2, 3],
+            returnedItems: [1],
             reasons: "",
             reasonDesc: "",
+            returnModel: false,
         };
     }
 
@@ -41,7 +43,10 @@ export default class GenerateReturnSlip extends Component {
     }
 
     searchInvoice = () => {
+    };
 
+    generateInvoice = () => {
+        this.setState({ returnModel: true, modelVisible: true });
     };
 
     handleCutomerTagging = () => {
@@ -83,17 +88,17 @@ export default class GenerateReturnSlip extends Component {
                     }}
                 >
                     <TouchableOpacity
-                        style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
+                        style={[Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile, { borderRadius: 5, height: 36, borderWidth: 1, borderColor: '#858585' }]}
                         onPress={this.searchInvoice}
                     >
                         <Text
-                            style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}
+                            style={[Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile]}
                         >
                             SEARCH
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
+                        style={[Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile, { borderRadius: 5, height: 36, borderWidth: 1, borderColor: '#858585' }]}
                         onPress={this.handleCutomerTagging}
                     >
                         <Text
@@ -173,7 +178,7 @@ export default class GenerateReturnSlip extends Component {
                                     <View style={flats.text}>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {"vcaca23445"}</Text>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"11"}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {"1000"}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {"₹1200"}</Text>
                                     </View>
                                 </View>
                             </View>;
@@ -192,7 +197,7 @@ export default class GenerateReturnSlip extends Component {
                                     <View style={flats.text}>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {"vcaca23445"}</Text>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"11"}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {"1200"}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {"₹1200"}</Text>
                                     </View>
                                 </View>
                             </View>;
@@ -207,7 +212,7 @@ export default class GenerateReturnSlip extends Component {
                                     </View>
                                     <View style={flats.text}>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>DISCOUNT: {"0"}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>VALUE: {"2400"}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>VALUE: {"₹2400"}</Text>
                                     </View>
                                 </View>
                             </View>;
@@ -215,8 +220,8 @@ export default class GenerateReturnSlip extends Component {
                     }}
                 />
                 <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return summary</Text>
-                <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>RETURN AMMOUNT: {"2400"}</Text>
-                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return For Reason *</Text>
+                <Text style={[Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile, { marginLeft: 20 }]}>RETURN AMOUNT: {"2400"}</Text>
+                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return For Reason <Text style={{ color: "#ed1c24" }}>*</Text></Text>
                 <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                     <RNPickerSelect
                         style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -237,8 +242,8 @@ export default class GenerateReturnSlip extends Component {
                     />
                 </View>
                 <TextInput
-                    style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { height: Device.isTablet ? 75 : 55 }]}
-                    placeholder='CUSTOMER NAME'
+                    style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { height: Device.isTablet ? 175 : 155, width: deviceWidth - 40 }]}
+                    placeholder='COMMENTS'
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -248,14 +253,70 @@ export default class GenerateReturnSlip extends Component {
                 />
                 <TouchableOpacity
                     style={[Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile, { width: deviceWidth - 40, height: Device.isTablet ? 60 : 50 }]}
-                    onPress={this.searchInvoice}
+                    onPress={this.generateInvoice}
                 >
                     <Text
                         style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}
                     >
-                        SEARCH
+                        GENERATE RETURN SLIP
                     </Text>
                 </TouchableOpacity>
+                {this.state.returnModel && (
+                    <View>
+                        <Modal isVisible={this.state.modelVisible}>
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 500 : 400, backgroundColor: '#00aa00' }]}>
+                                <Text style={[Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile, { color: '#ffffff' }]}> List of Return Items </Text>
+                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                </TouchableOpacity>
+                                <Text style={{ height: 2, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                </Text>
+                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 450 : 350 }}>
+                                    <View style={{ height: Device.isTablet ? 250 : 200 }}>
+                                        <FlatList
+                                            data={this.state.returnedItems}
+                                            scrollEnabled={true}
+                                            renderItem={({ item, index }) => (
+                                                <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
+                                                    <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
+                                                        <View style={flats.text}>
+                                                            <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>SLIP NO: { }</Text>
+                                                        </View>
+                                                        <View style={flats.text}>
+                                                            <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>ITEMS: { }</Text>
+                                                        </View>
+                                                        <View style={flats.text}>
+                                                            <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>RETURN SLIP VALUE: { }</Text>
+                                                        </View>
+                                                    </View>
+                                                </View>
+                                            )}
+                                        />
+                                    </View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10 }}>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>
+                                            BAR2912405772</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>₹2400</Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { backgroundColor: '#00aa00' }]}
+                                        onPress={() => this.generateNewSlip(item, index)}
+                                    >
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > GENERATE NEW </Text>
+
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#00aa00' }]} onPress={() => this.modelCancel()}
+                                    >
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00aa00' }]}  > BACK TO DASHBOARD </Text>
+
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </Modal>
+                    </View>
+                )}
             </View>
         );
     }
@@ -271,6 +332,7 @@ const flats = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
     },
+
 
 
     // flats for Mobile
@@ -511,8 +573,8 @@ const styles = StyleSheet.create({
         margin: 20
     },
     imagealign: {
-        marginTop: 40,
-        marginRight: 10,
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
     },
     container: {
         flex: 1,
@@ -804,6 +866,45 @@ const styles = StyleSheet.create({
         top: 10,
         right: 24,
     },
+    filterMainContainer_tablet: {
+        width: deviceWidth,
+        alignItems: 'center',
+        marginLeft: -40,
+        backgroundColor: "#ffffff",
+        height: 600,
+        position: 'absolute',
+        bottom: -40,
+    },
+    filterByTitle_tablet: {
+        position: 'absolute',
+        left: 20,
+        top: 15,
+        width: 300,
+        height: 30,
+        fontFamily: 'medium',
+        fontSize: 21,
+        color: '#353C40'
+    },
+    filterByTitleDecoration_tablet: {
+        height: 1,
+        width: deviceWidth,
+        backgroundColor: 'lightgray',
+        marginTop: 60,
+    },
+    filterCloseButton_tablet: {
+        position: 'absolute',
+        right: 24,
+        top: 10,
+        width: 60, height: 60,
+    },
+    filterCloseImage_tablet: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 17,
+        position: 'absolute',
+        top: 10,
+        right: 24,
+    },
     filterApplyButton_tablet: {
         width: deviceWidth - 40,
         marginLeft: 20,
@@ -866,7 +967,7 @@ const styles = StyleSheet.create({
     },
     input_tablet: {
         justifyContent: 'center',
-        marginLeft: 10,
+        marginLeft: 20,
         marginRight: 10,
         marginBottom: 20,
         marginTop: 10,
@@ -878,8 +979,8 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
-        fontFamily: 'regular',
         paddingLeft: 15,
+        fontFamily: 'regular',
         fontSize: 22,
     },
     signInButton_tablet: {

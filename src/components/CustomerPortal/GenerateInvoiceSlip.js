@@ -39,6 +39,8 @@ class GenerateInvoiceSlip extends Component {
             dob: "2021-06-21T18:30:00.000Z",
             address: "",
             modalVisible: true,
+            customerTagging: false,
+            billDiscount: false,
             flagone: true,
             flagqtyModelOpen: false,
             flagCustomerOpen: false,
@@ -59,6 +61,9 @@ class GenerateInvoiceSlip extends Component {
             customerGender: '',
             customerAddress: '',
             customerGSTNumber: '',
+            reasonDiscount: '',
+            discountAmount: '',
+            approvedBy: '',
             domainId: 1,
             storeId: 1,
             tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
@@ -120,6 +125,18 @@ class GenerateInvoiceSlip extends Component {
             this.state.privilages[index].bool = true;
         }
         for (let i = 0; i < this.state.privilages.length; i++) {
+            console.log(item);
+            if (item.name === "Tag Customer") {
+                this.setState({ customerTagging: true, modalVisible: true });
+            } else {
+                this.setState({ customerTagging: false, modalVisible: false });
+            }
+            if (item.name === "Bill Level Discount") {
+                // this.setState({ customerTagging: true, modalVisible: true });
+                this.setState({ billDiscount: true, modalVisible: true });
+            } else {
+                this.setState({ billDiscount: false, modalVisible: false });
+            }
             if (index != i) {
                 this.state.privilages[i].bool = false;
             }
@@ -139,9 +156,36 @@ class GenerateInvoiceSlip extends Component {
     }
 
     handleDsNumber() {
-        
+
     }
 
+    addCustomer() {
+
+    }
+
+    tagCustomer() {
+
+    }
+
+    handleMobileNumber(text) {
+        this.setState({ mobileNumber: text });
+    }
+
+    handleDiscountAmount(text) {
+        this.setState({ discountAmount: text });
+    }
+
+    handleApprovedBy(text) {
+        this.setState({ approvedBy: text });
+    }
+
+    handleDiscountReason = (value) => {
+        this.setState({ reasonDiscount: value });
+    };
+
+    billDiscount() {
+
+    }
 
     render() {
         console.log(global.barcodeId);
@@ -481,7 +525,128 @@ class GenerateInvoiceSlip extends Component {
 
 
                 )}
+                {this.state.customerTagging && (
+                    <View>
+                        <Modal isVisible={this.state.modalVisible}>
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 400 : 300 }]}>
 
+                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Tag Customer </Text>
+
+                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                </TouchableOpacity>
+
+                                <Text style={{ height: 2, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                </Text>
+                                <View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 40 : 20,
+                                        textAlign: 'center',
+                                        fontFamily: 'regular',
+                                        fontSize: Device.isTablet ? 23 : 18,
+                                        marginBottom: Device.isTablet ? 25 : 15,
+                                        color: '#353C40'
+                                    }}> Please provide customer phone number  </Text>
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="MOBILE NUMBER"
+                                        placeholderTextColor="#6F6F6F"
+                                        textAlignVertical="center"
+                                        keyboardType={'default'}
+                                        autoCapitalize="none"
+                                        onChangeText={(text) => this.handleMobileNumber(text)}
+                                    />
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile]}
+                                        onPress={() => this.tagCustomer(item, index)}
+                                    >
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CONFIRM </Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
+                                        onPress={() => this.modelCancel()}
+                                    >
+                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </Modal>
+                    </View>
+                )}
+                {this.state.billDiscount && (
+                    <View>
+                        <Modal isVisible={this.state.modalVisible}>
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 600 : 500 }]}>
+                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Bill Level Discount </Text>
+
+                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                </TouchableOpacity>
+
+                                <Text style={{ height: 2, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                </Text>
+                                <View>
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="AMOUNT"
+                                        placeholderTextColor="#6F6F6F"
+                                        textAlignVertical="center"
+                                        keyboardType={'default'}
+                                        autoCapitalize="none"
+                                        onChangeText={(text) => this.handleDiscountAmount(text)}
+                                    />
+                                    <TextInput
+                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="APPROVED BY"
+                                        placeholderTextColor="#6F6F6F"
+                                        textAlignVertical="center"
+                                        keyboardType={'default'}
+                                        autoCapitalize="none"
+                                        onChangeText={(text) => this.handleApprovedBy(text)}
+                                    />
+                                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                                        <RNPickerSelect
+                                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            placeholder={{ label: 'REASON', value: '' }}
+                                            Icon={() => {
+                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                            }}
+                                            items={[
+                                                { label: 'Promotion Not Applied', value: 'Promotion Not Applied' },
+                                                { label: 'RT Return Discount', value: 'RT Return Discount' },
+                                                { label: 'Mgnt. SPL Discount', value: 'Mgnt. SPL Discount' },
+                                                { label: 'Management Discount', value: 'Management Discount' },
+                                                { label: 'DMG Discount', value: 'DMG Discount' },
+                                                { label: 'Other', value: 'Other' },
+                                            ]}
+                                            onValueChange={this.handleDiscountReason}
+                                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                            value={this.state.reasonDiscount}
+                                            useNativeAndroidPickerStyle={false}
+                                        />
+                                    </View>
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile]}
+                                        onPress={() => this.billDiscount(item, index)}
+                                    >
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CONFIRM </Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
+                                        onPress={() => this.modelCancel()}
+                                    >
+                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </Modal>
+                    </View>
+                )}
                 {this.state.flagCustomerOpen && (
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
