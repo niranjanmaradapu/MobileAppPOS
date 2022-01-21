@@ -317,6 +317,7 @@ export default class AddUser extends Component {
 
     handleEmail = (value) => {
         this.setState({ email: value });
+
     };
 
     handleGender = (value) => {
@@ -350,15 +351,17 @@ export default class AddUser extends Component {
                 this.state.selectedStoresFinalArray.push({ name: this.state.selectedStoresArray[i].name, id: this.state.selectedStoresArray[i].id });
             }
         }
+        const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        const mobReg = /^[0-9\b]+$/;
         console.log(this.state.selectedStoresFinalArray);
         if (this.state.name === "") {
             alert("Please Enter Name");
         }
-        else if (this.state.mobile.length !== 10) {
+        else if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
             alert('You must enter a valid mobile number');
         }
-        else if (this.state.email === "") {
-            alert("Please Enter email");
+        else if (emailReg.test(this.state.email) === false) {
+            alert("Please Enter a valid email");
         }
         else {
             if (this.state.isEdit === false) {
@@ -475,7 +478,7 @@ export default class AddUser extends Component {
                     <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 7 }]}>
                         User Details
                     </Text>
-
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Name <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -486,6 +489,7 @@ export default class AddUser extends Component {
                         value={this.state.name}
                         onChangeText={this.handleName}
                     />
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Gender</Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -505,6 +509,7 @@ export default class AddUser extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>DOB</Text>
                     <TouchableOpacity
                         style={{
                             width: deviceWidth - 40,
@@ -525,27 +530,33 @@ export default class AddUser extends Component {
                         }}  > {this.state.dob === '' ? 'DoB' : this.state.dob} </Text>
                         <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                     </TouchableOpacity>
-
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Mobile <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Mobile"
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
+                        maxLength={10}
+                        keyboardType={'numeric'}
+                        textContentType='telephoneNumber'
                         autoCapitalize="none"
                         value={this.state.mobile}
                         onChangeText={this.handleMobile}
                     />
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Email <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Email"
                         placeholderTextColor="#6F6F6F"
+                        keyboardType='email-address'
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.email}
                         onChangeText={this.handleEmail}
                     />
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Address</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -578,21 +589,24 @@ export default class AddUser extends Component {
                     </TouchableOpacity>
 
                     {this.state.isSuperAdmin === false && (
-                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                            <RNPickerSelect
-                                style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                                placeholder={{
-                                    label: 'Domain'
-                                }}
-                                Icon={() => {
-                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                }}
-                                items={this.state.domains}
-                                onValueChange={this.handleDomain}
-                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                                value={this.state.domain}
-                                useNativeAndroidPickerStyle={false}
-                            />
+                        <View>
+                            <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Domain</Text>
+                            <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                                <RNPickerSelect
+                                    style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                    placeholder={{
+                                        label: 'Domain'
+                                    }}
+                                    Icon={() => {
+                                        return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                    }}
+                                    items={this.state.domains}
+                                    onValueChange={this.handleDomain}
+                                    style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                    value={this.state.domain}
+                                    useNativeAndroidPickerStyle={false}
+                                />
+                            </View>
                         </View>
                     )}
                     {this.state.isSuperAdmin === false && (
@@ -629,7 +643,6 @@ export default class AddUser extends Component {
                                             {item.name}
                                         </Text>
 
-
                                         {item.selectedindex === 1 && (
                                             <Image source={require('../assets/images/selected.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
                                         )}
@@ -637,7 +650,6 @@ export default class AddUser extends Component {
                                             <Image source={require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
                                         )}
                                     </View>
-
 
                                     {/* </View> */}
                                 </TouchableOpacity>
@@ -649,21 +661,24 @@ export default class AddUser extends Component {
 
                     )}
                     {this.state.isSuperAdmin === false && (
-                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                            <RNPickerSelect
-                                style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                                placeholder={{
-                                    label: 'Role'
-                                }}
-                                Icon={() => {
-                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                }}
-                                items={this.state.roles}
-                                onValueChange={this.handleRole}
-                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                                value={this.state.role}
-                                useNativeAndroidPickerStyle={false}
-                            />
+                        <View>
+                            <Text style={{ marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15, marginLeft: 20 }}>Role</Text>
+                            <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                                <RNPickerSelect
+                                    style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                    placeholder={{
+                                        label: 'Role'
+                                    }}
+                                    Icon={() => {
+                                        return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                    }}
+                                    items={this.state.roles}
+                                    onValueChange={this.handleRole}
+                                    style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                    value={this.state.role}
+                                    useNativeAndroidPickerStyle={false}
+                                />
+                            </View>
                         </View>
                     )}
 

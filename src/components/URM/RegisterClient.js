@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import axios from 'axios';
+import React, { Component } from 'react';
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Loader from '../../commonUtils/loader';
+import UrmService from '../services/UrmService';
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
-import Device from 'react-native-device-detection';
-import Loader from '../../commonUtils/loader';
-import axios from 'axios';
-import UrmService from '../services/UrmService';
 
 class RegisterClient extends Component {
     constructor(props) {
@@ -18,7 +18,7 @@ class RegisterClient extends Component {
             mobile: '',
             userEmail: "",
             address: "",
-        }
+        };
     }
 
     componentDidMount() {
@@ -30,52 +30,54 @@ class RegisterClient extends Component {
         return true;
     }
 
-    cancel(){
+    cancel() {
         this.props.navigation.goBack(null);
         return true;
     }
 
     handleName = (text) => {
-        this.setState({ userName: text })
-    }
+        this.setState({ userName: text });
+    };
 
     handleOrganization = (text) => {
-        this.setState({ organization: text })
-    }
+        this.setState({ organization: text });
+    };
 
     handleMobile = (text) => {
-        this.setState({ mobile: text })
-    }
+        this.setState({ mobile: text });
+    };
 
     handleEmail = (text) => {
-        this.setState({ userEmail: text })
-    }
+        this.setState({ userEmail: text });
+    };
     handleAddress = (text) => {
-        this.setState({ address: text })
-    }
+        this.setState({ address: text });
+    };
 
 
 
     create() {
+        const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        const mobReg = /^[0-9\b]+$/;
         if (this.state.userName.length === 0) {
             alert('You must enter a name');
-        } else if (this.state.mobile.length !== 10) {
+        } else if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
             alert('You must enter a valid mobile number');
         }
-        else if (this.state.userEmail.length === 0) {
-            alert('You must enter a email');
+        else if (emailReg.test(this.state.email) === false) {
+            alert('You must enter a valid email');
         }
         else {
-            this.setState({ loading: true })
+            this.setState({ loading: true });
             const obj = {
                 name: this.state.userName,
                 organizationName: this.state.organization,
                 address: this.state.address,
                 mobile: "+91".concat(this.state.mobile),
                 email: this.state.userEmail,
-            }
-            console.log('params are' + JSON.stringify(obj))
-            this.setState({ loading: true })
+            };
+            console.log('params are' + JSON.stringify(obj));
+            this.setState({ loading: true });
             axios.post(UrmService.registerUser(), obj).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
                     const clientId = res.data.result.split(":");
@@ -100,7 +102,7 @@ class RegisterClient extends Component {
                         clientDomain: [],
                         isSuperAdmin: "false",
                         createdBy: "NA",
-                    }
+                    };
 
                     axios.post(UrmService.saveUser(), clientObj).then((res) => {
                         console.log(res);
@@ -113,15 +115,15 @@ class RegisterClient extends Component {
                                 userEmail: "",
                                 address: "",
                             });
-                            this.setState({ loading: false })
+                            this.setState({ loading: false });
                             //  this.props.route.params.onGoBack();
                             this.props.navigation.goBack();
                         }
-                    })
+                    });
 
                 }
                 else {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     alert("duplicate record already exists");
                 }
             }
@@ -147,6 +149,7 @@ class RegisterClient extends Component {
                             Register New Client
                         </Text>
                     </View>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Name <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -157,26 +160,33 @@ class RegisterClient extends Component {
                         value={this.state.userName}
                         onChangeText={this.handleName}
                     />
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Mobile <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Mobile"
+                        maxLength={10}
+                        keyboardType={'numeric'}
+                        textContentType='telephoneNumber'
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.mobile}
                         onChangeText={this.handleMobile}
                     />
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Email <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Email"
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
+                        keyboardType='eamil-address'
                         autoCapitalize="none"
                         value={this.state.userEmail}
                         onChangeText={this.handleEmail}
                     />
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Organisation</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -187,6 +197,7 @@ class RegisterClient extends Component {
                         value={this.state.organization}
                         onChangeText={this.handleOrganization}
                     />
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Address</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -207,11 +218,11 @@ class RegisterClient extends Component {
                     </TouchableOpacity>
                 </SafeAreaView>
             </KeyboardAwareScrollView>
-        )
+        );
     }
 }
 
-export default RegisterClient
+export default RegisterClient;
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -326,4 +337,4 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
 
-})
+});

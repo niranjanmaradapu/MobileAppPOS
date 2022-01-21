@@ -9,6 +9,7 @@ import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 
+var deviceHeight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
 
 export default class AddStore extends Component {
@@ -38,36 +39,36 @@ export default class AddStore extends Component {
             domainId: 0,
             storeId: 0,
             navtext: '',
-            isEdit:false,
+            isEdit: false,
         };
     }
 
     async componentDidMount() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
         this.setState({ clientId: clientId });
-        this.setState({ isEdit: this.props.route.params.isEdit});
-      if(this.state.isEdit === true){
-        this.setState({
-            stateId: this.props.route.params.item.stateId,
-            statecode: this.props.route.params.item.stateCode,
-            dictrictId: this.props.route.params.item.districtId,
-            city: this.props.route.params.item.cityId,
-            area: this.props.route.params.item.area,
-            mobile: this.props.route.params.item.phoneNumber,
-            address: this.props.route.params.item.address,
-            domainId: this.props.route.params.item.clientDomianlId.clientDomainaId,
-            storeName: this.props.route.params.item.name,
-        });
-        this.setState({ navtext:'Edit Store' })
-    }
-    else{
-        this.setState({ navtext: 'Add Store' })
-    }
-      
+        this.setState({ isEdit: this.props.route.params.isEdit });
+        if (this.state.isEdit === true) {
+            this.setState({
+                stateId: this.props.route.params.item.stateId,
+                statecode: this.props.route.params.item.stateCode,
+                dictrictId: this.props.route.params.item.districtId,
+                city: this.props.route.params.item.cityId,
+                area: this.props.route.params.item.area,
+                mobile: this.props.route.params.item.phoneNumber,
+                address: this.props.route.params.item.address,
+                domainId: this.props.route.params.item.clientDomianlId.clientDomainaId,
+                storeName: this.props.route.params.item.name,
+            });
+            this.setState({ navtext: 'Edit Store' });
+        }
+        else {
+            this.setState({ navtext: 'Add Store' });
+        }
 
 
-        this.getDomainsList()
-        this.getMasterStatesList()
+
+        this.getDomainsList();
+        this.getMasterStatesList();
     }
 
     getDomainsList() {
@@ -78,24 +79,24 @@ export default class AddStore extends Component {
                 let len = res.data["result"].length;
                 if (len > 0) {
                     for (let i = 0; i < len; i++) {
-                        let number = res.data.result[i]
-                        this.state.domainsArray.push({ name: number.domaiName, id: number.clientDomainaId })
+                        let number = res.data.result[i];
+                        this.state.domainsArray.push({ name: number.domaiName, id: number.clientDomainaId });
                         domains.push({
                             value: this.state.domainsArray[i].name,
                             label: this.state.domainsArray[i].name
                         });
                         this.setState({
                             domains: domains,
-                        })
+                        });
 
-                        this.setState({ domainsArray: this.state.domainsArray })
+                        this.setState({ domainsArray: this.state.domainsArray });
                         if (this.state.domainsArray[i].id === this.state.domainId) {
-                            this.setState({ domain: this.state.domainsArray[i].name })
+                            this.setState({ domain: this.state.domainsArray[i].name });
 
                         }
 
                     }
-                    console.log(this.state.domains)
+                    console.log(this.state.domains);
                 }
             }
         }).catch(() => {
@@ -106,11 +107,11 @@ export default class AddStore extends Component {
     handleDomain = (value) => {
         for (let i = 0; i < this.state.domainsArray.length; i++) {
             if (this.state.domainsArray[i].name === value) {
-                this.setState({ domainId: this.state.domainsArray[i].id })
+                this.setState({ domainId: this.state.domainsArray[i].id });
             }
         }
-        this.setState({ domain: value })
-    }
+        this.setState({ domain: value });
+    };
 
 
 
@@ -124,19 +125,19 @@ export default class AddStore extends Component {
                 for (var i = 0; i < res.data["result"].length; i++) {
 
 
-                    this.state.statesArray.push({ name: res.data["result"][i].stateName, id: res.data["result"][i].stateId, code: res.data["result"][i].stateCode })
+                    this.state.statesArray.push({ name: res.data["result"][i].stateName, id: res.data["result"][i].stateId, code: res.data["result"][i].stateCode });
                     states.push({
                         value: this.state.statesArray[i].name,
                         label: this.state.statesArray[i].name
                     });
                     this.setState({
                         states: states,
-                    })
-                    this.setState({ statesArray: this.state.statesArray })
+                    });
+                    this.setState({ statesArray: this.state.statesArray });
                     if (this.state.statesArray[i].id === this.state.stateId) {
-                        console.log('stateId is' + this.state.statesArray[i].name)
-                        this.setState({ storeState: this.state.statesArray[i].name })
-                        this.getMasterDistrictsList()
+                        console.log('stateId is' + this.state.statesArray[i].name);
+                        this.setState({ storeState: this.state.statesArray[i].name });
+                        this.getMasterDistrictsList();
                     }
                 }
             }
@@ -147,14 +148,14 @@ export default class AddStore extends Component {
     handleStoreState = (value) => {
         for (let i = 0; i < this.state.statesArray.length; i++) {
             if (this.state.statesArray[i].name === value) {
-                this.setState({ stateId: this.state.statesArray[i].id })
-                this.setState({ statecode: this.state.statesArray[i].code })
+                this.setState({ stateId: this.state.statesArray[i].id });
+                this.setState({ statecode: this.state.statesArray[i].code });
 
             }
         }
-        this.getMasterDistrictsList()
-        this.setState({ storeState: value })
-    }
+        this.getMasterDistrictsList();
+        this.setState({ storeState: value });
+    };
 
 
     getMasterDistrictsList() {
@@ -169,18 +170,18 @@ export default class AddStore extends Component {
             if (res.data["result"]) {
                 // console.log(res.data)
                 for (var i = 0; i < res.data["result"].length; i++) {
-                    this.state.dictrictArray.push({ name: res.data["result"][i].districtName, id: res.data["result"][i].districtId })
+                    this.state.dictrictArray.push({ name: res.data["result"][i].districtName, id: res.data["result"][i].districtId });
                     dictricts.push({
                         value: this.state.dictrictArray[i].name,
                         label: this.state.dictrictArray[i].name
                     });
                     this.setState({
                         dictricts: dictricts,
-                    })
-                    this.setState({ dictrictArray: this.state.dictrictArray })
+                    });
+                    this.setState({ dictrictArray: this.state.dictrictArray });
                     if (this.state.dictrictArray[i].id === this.state.dictrictId) {
                         //  console.log('stateId is' + this.state.dictrictArray[i].name)
-                        this.setState({ storeDistrict: this.state.dictrictArray[i].name })
+                        this.setState({ storeDistrict: this.state.dictrictArray[i].name });
                     }
                 }
             }
@@ -191,11 +192,11 @@ export default class AddStore extends Component {
     handleDistrict = (value) => {
         for (let i = 0; i < this.state.dictrictArray.length; i++) {
             if (this.state.dictrictArray[i].name === value) {
-                this.setState({ districtId: this.state.dictrictArray[i].id })
+                this.setState({ districtId: this.state.dictrictArray[i].id });
             }
         }
-        this.setState({ storeDistrict: value })
-    }
+        this.setState({ storeDistrict: value });
+    };
 
 
     handleBackButtonClick() {
@@ -238,15 +239,15 @@ export default class AddStore extends Component {
 
     saveStore() {
         if (this.state.storeState === "") {
-            alert("Please Enter State");
+            alert("Please Enter All Mandatory Fields");
         } else if (this.state.storeDistrict === "") {
-            alert("Please Enter District");
+            alert("Please Enter All Mandatory Fields");
         } else if (this.state.domain === "") {
-            alert("Please Enter Domain");
+            alert("Please Enter All Mandatory Fields");
         } else if (this.state.storeName === "") {
-            alert("Please Enter Store Name");
+            alert("Please Enter All Mandatory Fields");
         } else {
-            if(this.state.isEdit === false){
+            if (this.state.isEdit === false) {
                 const saveObj = {
                     "name": this.state.storeName,
                     "stateId": this.state.stateId,
@@ -260,17 +261,17 @@ export default class AddStore extends Component {
                     "stateCode": this.state.statecode,
                     "gstNumber": this.state.gstNumber,
                     "clientId": this.state.clientId
-                }
-                console.log('params are' + JSON.stringify(saveObj))
-                this.setState({ loading: true })
+                };
+                console.log('params are' + JSON.stringify(saveObj));
+                this.setState({ loading: true });
                 axios.post(UrmService.saveStore(), saveObj).then((res) => {
-                    console.log(res.data)
+                    console.log(res.data);
                     if (res.data && res.data["isSuccess"] === "true") {
-                     //  this.props.route.params.onGoBack();
+                        //  this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
                     else {
-                        this.setState({ loading: false })
+                        this.setState({ loading: false });
                         alert(res.data.message);
                     }
                 }
@@ -293,17 +294,17 @@ export default class AddStore extends Component {
                     "stateCode": this.state.statecode,
                     "gstNumber": this.state.gstNumber,
                     "clientId": this.state.clientId
-                }
-                console.log(saveObj)
-                this.setState({ loading: true })
+                };
+                console.log(saveObj);
+                this.setState({ loading: true });
                 axios.put(UrmService.editStore(), saveObj).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
-                        this.setState({ loading: false })
-                       // this.props.route.params.onGoBack();
+                        this.setState({ loading: false });
+                        // this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
                     else {
-                        this.setState({ loading: false })
+                        this.setState({ loading: false });
                         alert("duplicate record already exists");
                     }
                 }
@@ -340,6 +341,7 @@ export default class AddStore extends Component {
                             margin: 15,
                         }}
                     >Store Details</Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>Store <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -356,6 +358,7 @@ export default class AddStore extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>District <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -372,6 +375,7 @@ export default class AddStore extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>City</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -382,6 +386,7 @@ export default class AddStore extends Component {
                         value={this.state.city}
                         onChangeText={this.handleCity}
                     />
+                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>Area</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -392,16 +397,21 @@ export default class AddStore extends Component {
                         value={this.state.area}
                         onChangeText={this.handleArea}
                     />
+                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>Stor Phone Number</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="MOBILE"
+                        maxLength={10}
+                        keyboardType={'numeric'}
+                        textContentType='telephoneNumber'
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.mobile}
                         onChangeText={this.handleMobile}
                     />
+                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>Address</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -420,6 +430,7 @@ export default class AddStore extends Component {
                             margin: 15,
                         }}
                     >Store Info</Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>Domain <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -436,6 +447,7 @@ export default class AddStore extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>Store Name <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -446,31 +458,36 @@ export default class AddStore extends Component {
                         value={this.state.storeName}
                         onChangeText={this.handleStoreName}
                     />
-                   {this.state.isEdit === true && (
-                    <TextInput
-                        style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
-                        underlineColorAndroid="transparent"
-                        placeholder="GST NUMBER"
-                        placeholderTextColor="#6F6F6F"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        value={this.state.gstNumber}
-                        editable={false} selectTextOnFocus={false}
-                        onChangeText={this.handleGstNumber}
-                    />
-                   )}
-                   {this.state.isEdit === false && (
-                    <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                        underlineColorAndroid="transparent"
-                        placeholder="GST NUMBER"
-                        placeholderTextColor="#6F6F6F"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        value={this.state.gstNumber}
-                        onChangeText={this.handleGstNumber}
-                    />
-                   )}
+                    {this.state.isEdit === true && (
+                        <TextInput
+                            style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
+                            underlineColorAndroid="transparent"
+                            placeholder="GST NUMBER"
+                            placeholderTextColor="#6F6F6F"
+                            textAlignVertical="center"
+                            autoCapitalize="none"
+                            value={this.state.gstNumber}
+                            editable={false} selectTextOnFocus={false}
+                            onChangeText={this.handleGstNumber}
+                        />
+                    )}
+                    {this.state.isEdit === false && (
+                        <View>
+                            <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>GST Number</Text>
+                            <TextInput
+                                style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                underlineColorAndroid="transparent"
+                                placeholder="GST NUMBER"
+                                placeholderTextColor="#6F6F6F"
+                                textAlignVertical="center"
+                                autoCapitalize="none"
+                                value={this.state.gstNumber}
+                                onChangeText={this.handleGstNumber}
+                            />
+                            <Text style={{ color: '#aa0000', fontSize: Device.isTablet ? 20 : 15, marginTop: 10, marginBottom: 20, marginLeft: 20 }}>Please Provide GST Number</Text>
+                        </View>
+                    )}
+
 
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.saveStore()}>
@@ -626,19 +643,19 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     input_mobile_edit: {
-    justifyContent: 'center',
-    marginLeft: 20,
-    marginRight: 20,
-    height: 44,
-    marginTop: 5,
-    marginBottom: 10,
-    borderColor: '#DCE3F2',
-    borderRadius: 3,
-    backgroundColor: '#DCE3F2',
-    borderWidth: 1,
-    fontFamily: 'regular',
-    paddingLeft: 15,
-    fontSize: 14,
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#DCE3F2',
+        borderRadius: 3,
+        backgroundColor: '#DCE3F2',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
     },
     saveButton_mobile: {
         margin: 8,
@@ -742,19 +759,19 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     input_tablet_edit: {
-    justifyContent: 'center',
-    marginLeft: 20,
-    marginRight: 20,
-    height: 54,
-    marginTop: 5,
-    marginBottom: 10,
-    borderColor: '#DCE3F2',
-    borderRadius: 3,
-    backgroundColor: '#DCE3F2',
-    borderWidth: 1,
-    fontFamily: 'regular',
-    paddingLeft: 15,
-    fontSize: 14,
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#DCE3F2',
+        borderRadius: 3,
+        backgroundColor: '#DCE3F2',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
     },
     saveButton_tablet: {
         margin: 8,
