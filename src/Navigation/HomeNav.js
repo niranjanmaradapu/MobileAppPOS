@@ -1,8 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack'
 import React, { Component } from 'react'
-import Home from '../components/Home/Home';
-import Statitics from '../components/Home/Statitics';
-
+import Home from '../components/tabbar/Home';
+import Statitics from '../components/tabbar/Statitics';
 
 const Stack = createStackNavigator();
 export default class HomeNav extends React.Component {
@@ -10,8 +9,9 @@ export default class HomeNav extends React.Component {
         return (
 
             <Stack.Navigator>
-                <Stack.Screen name="Home" options={{ headerShown: false }} component={Home} />
-                <Stack.Screen name="Statitics" options={{ headerShown: false }} component={Statitics} />
+                <Stack.Screen name="Home" options={{headerShown: false}} component={Home} />
+                <Stack.Screen name="Statitics" options={{headerShown: false}} component={Statitics} />
+               
             </Stack.Navigator>
 
         );

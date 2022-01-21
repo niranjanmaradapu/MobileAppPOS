@@ -1,18 +1,16 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { Component } from 'react'
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, Image, SafeAreaView, Switch } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+var deviceheight = Dimensions.get('window').height;
+import RNPickerSelect from 'react-native-picker-select';
+import { Chevron } from 'react-native-shapes';
+import LoginService from '../services/LoginService';
 import axios from 'axios';
 import jwt_decode from "jwt-decode";
-import React, { Component } from 'react';
-import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import Device from 'react-native-device-detection';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../loader';
+var deviceheight = Dimensions.get('window').height;
 import I18n from 'react-native-i18n';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import Loader from '../../commonUtils/loader';
-import LoginService from '../services/LoginService';
-var deviceheight = Dimensions.get('window').height;
-var deviceheight = Dimensions.get('window').height;
-var deviceWidth = Dimensions.get("window").width;
-import UrmService from '../services/UrmService';
-import ProfileService from '../services/ProfileService';
 
 
 const data = [
@@ -30,20 +28,6 @@ const data = [
     }
 ];
 
-global.previlage1 = '';
-global.previlage2 = '';
-global.previlage3 = '';
-global.previlage4 = '';
-global.previlage5 = '';
-global.previlage6 = '';
-global.previlage7 = '';
-global.previlage8 = '';
-global.username = ''
-global.userrole = ''
-global.domainName = ''
-global.userrole = ''
-
-
 
 export default class Login extends Component {
     constructor(props) {
@@ -52,361 +36,263 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
+<<<<<<< HEAD
             userName: 'applesuper1',
             password: 'Otsi@123',
+=======
+            userName: 'test001',
+            password: 'Otsi@1234',
+>>>>>>> parent of f20b00b (Merge pull request #41 from niranjanmaradapu/vinod20JanChanges)
             dropValue: '',
             store: 0,
             user: {
                 name: "prasannaaa"
             },
-            storeNames: [],
-            sessionData: '',
-            roleName: '',
+            storeNames: []
 
-
-        };
+        }
         console.log(process.env.REACT_APP_BASE_URL);
     }
 
     toggleRememberMe = value => {
-        this.setState({ rememberMe: value });
+        this.setState({ rememberMe: value })
         if (value === true) {
+            //user wants to be remembered.
             this.rememberUser();
         } else {
             this.forgetUser();
         }
-    };
+    }
 
+    // rememberUser = async () => {
+    //     try {
+    //         await AsyncStorage.setItem("username", this.state.userName);
+    //         await AsyncStorage.setItem("password", this.state.password);
+    //     } catch (error) {
+    //         // Error saving data
+    //     }
+    // };
+    // getRememberedUser = async () => {
+    //     try {
+    //         const username = await AsyncStorage.getItem("username");
+    //         const password = await AsyncStorage.getItem("password");
+    //         if (username !== null) {
+    //             // We have username!!
+    //             console.log(username)
+    //             this.state.userName = username
+    //             this.state.password = password
+    //             return username;
+    //         }
+    //     } catch (error) {
+    //         // Error retrieving data
+    //     }
+    // };
     forgetUser = async () => {
         try {
             await AsyncStorage.removeItem('Longtail-User');
         } catch (error) {
+            // Error removing
         }
     };
 
     handleEmail = (text) => {
-        this.setState({ userName: text });
-    };
+        this.setState({ userName: text })
+    }
     handlePassword = (text) => {
-        this.setState({ password: text });
-    };
+        this.setState({ password: text })
+    }
     handleStore = (value) => {
         this.setState({ store: value });
-    };
-
-    registerClient() {
-        console.log('adsadasdd')
-        this.props.navigation.navigate('RegisterClient');
     }
 
-     login() {
-        AsyncStorage.removeItem('tokenkey');
+   
+
+    login() {
+        //
+        //this.props.navigation.navigate('HomeNavigation')
+        //return
         if (this.state.userName.length === 0) {
             alert('You must enter a Usename');
         } else if (this.state.password.length === 0) {
             alert('You must enter a Password');
         }
+     
+        // else if (this.state.store.length === 1) {
+        //     alert('Please select one store');
+        // }
         else {
             const params = {
                 "email": this.state.userName, //"+919493926067",
                 "password": this.state.password, //"Mani@1123",
                 //"storeName": this.state.store,//"kphb",
-            };
+            }
             AsyncStorage.setItem("username", this.state.userName);
-            AsyncStorage.removeItem('tokenkey');
-            AsyncStorage.removeItem('custom:clientId1');
-            AsyncStorage.removeItem('phone_number');
-            AsyncStorage.removeItem('domainDataId');
-            AsyncStorage.removeItem('storeId');
-            AsyncStorage.removeItem('custom:isSuperAdmin');
-            AsyncStorage.removeItem('custom:isConfigUser');
-            AsyncStorage.removeItem('domainName');
-
-            console.log(LoginService.getAuth() + JSON.stringify(params));
-            this.setState({ loading: true });
+            console.log(LoginService.getAuth() + JSON.stringify(params))
+            this.setState({ loading: true })
             axios.post(LoginService.getAuth(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-
-                    if (res.data.result.authenticationResult) {
-                        const token = res.data.result.authenticationResult.idToken
-                        //==============================Token Key & phone number save ===================//
-                        AsyncStorage.setItem("tokenkey", JSON.stringify(token)).then(() => {
-                        }).catch(() => {
-                            console.log('there is error saving token')
-                        })
-
-                        AsyncStorage.getItem("tokenkey").then((value) => {
-                            var finalToken = value.replace('"', '');
-                            console.log(finalToken);
-                            axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken }
-                            //console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
-                        })
-
-                        AsyncStorage.setItem("phone_number", jwt_decode(token)["phone_number"]).then(() => {
-                            // console.log
-                        }).catch(() => {
-                            console.log('there is error saving domainDataId')
-                        })
-
-                        AsyncStorage.setItem("rolename", jwt_decode(token)["custom:roleName"]).then(() => {
-                             
-                            // console.log
-                        }).catch(() => {
-                            console.log('there is error saving domainDataId')
-                        })
-
-                        AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
-                            // console.log
-                        }).catch(() => {
-                            console.log('there is error saving domainDataId')
-                        })
-
-                        //==============================Navigation===================//
-                        if (jwt_decode(token)["custom:isSuperAdmin"] === "true") {
-                            AsyncStorage.setItem("custom:isSuperAdmin", "true").then(() => {
-                                // console.log
-                            }).catch(() => {
-
-                            })
-                            AsyncStorage.setItem("custom:isConfigUser", "false").then(() => {
-                                // console.log
-                            }).catch(() => {
-
-                            })
-
-                           
-                            this.getDomainsList()
-                        }
-                        else if (jwt_decode(token)["custom:isConfigUser"] === "true") {
-
-                            AsyncStorage.setItem("custom:isConfigUser", "true").then(() => {
-                                // console.log
-                            }).catch(() => {
-
-                            })
-                         
-                            axios.get(ProfileService.getUser() + this.state.userName).then((res) => {
-                                if (res.data && res.data["isSuccess"] === "true") {
-                                    global.username = res.data["result"].userName;
-                                    global.domainName = '';
-                                }
-                            }).catch(() => {
-                                this.setState({ loading: false });
-                                alert('No user details get');
-                            });
-
-                            global.previlage1 = '';
-                            global.previlage2 = '';
-                            global.previlage3 = '';
-                            global.previlage4 = '';
-                            global.previlage6 = '';
-                            global.previlage7 = 'URM Portal';
-                            global.previlage5 = 'Accounting Portal';
-                            AsyncStorage.getItem("rolename").then((value) => {
-                                global.userrole = value;
-                            }).catch(() => {
-                                console.log('there is error getting storeId')
-                            }) 
-                    
-
-
-                            this.props.navigation.navigate('HomeNavigation')
-                        }
-                        else {
-                            this.getDomainsForNormalUser()
-
-                           
-                            AsyncStorage.setItem("domainDataId", jwt_decode(token)["custom:domianId1"]).then(() => {
-                                this.getDomainsForNormalUser()
-                                // console.log
-                            }).catch(() => {
-                                console.log('there is error saving domainDataId')
-                            })
-
-                            this.getstoresForNormalUser()
-                        }
-
-                        // const clientDomainId = user["custom:clientDomians"].split(",")[0];
-                        // AsyncStorage.setItem("clientDomainId", JSON.stringify(clientDomainId)).then(() => {
-                        // }).catch(() => {
-                        //     console.log('there is error saving token')
-                        // })
-
-
-                        this.setState({ loading: false })
+                    //console.log(res.data)
+                    const token = res.data.result.authenticationResult.idToken
+                    AsyncStorage.setItem("user", JSON.stringify(jwt_decode(token))).then(() => {
+                        // console.log
+                    }).catch(() => {
+                        console.log('there is error saving token')
+                    })
+                    AsyncStorage.setItem("tokenkey", JSON.stringify(token)).then(() => {
+                    }).catch(() => {
+                        console.log('there is error saving token')
+                    })
+                    console.log("stores data----" + JSON.stringify(jwt_decode(token)["custom:domianId"]))
+                    if (jwt_decode(token)["custom:domianId"] === "1,2,3" || jwt_decode(token)["custom:domianId"] === "1,2") {
+                        // this.getModel();
+                        this.props.navigation.navigate('SelectDomain')
                     }
-                    else {
-                        if (res.data.result.challengeName === "NEW_PASSWORD_REQUIRED") {
-                            this.setState({ loading: false });
-                            const roleData = res.data.result
-                                ? JSON.parse(res.data.result.challengeParameters.userAttributes)
-                                : "";
-                            this.props.navigation.navigate('ManagePassword', {
-                                session: res.data.result.session,
-                                roleName: roleData["custom:roleName"],
-                                userName: this.state.userName,
-                                password: this.state.password,
-                            });
-                            console.log(this.state.sessionData)
-                            console.log(this.state.roleName);
-                        }
+                    else if (jwt_decode(token)["custom:domianId"] === "1") {
+                        // this.getModel();
+                        AsyncStorage.setItem("domainDataId","1").then(() => {
+                            // console.log
+                        }).catch(() => {
+                            console.log('there is error saving domainDataId')
+                        })
+                        this.getstores()
+                        //
                     }
-                  
-                }
+                     else {
+
+                    }
+                this.setState({ loading: false })
+
+                // }).catch(() => {
+                //     console.log('there is error getting token')
+                // })
+
+            }
                 else {
+                    this.setState({ loading: false })
                     alert('Invalid Credentials');
-                    this.emailValueInput.clear();
-                    this.passwordValueInput.clear();
-                    this.setState({ userName: '', password: '', selectedOption: null, loading: false });
+                    this.emailValueInput.clear()
+                    this.passwordValueInput.clear()
+                   // this.state.store = ""
+                    // this.state.store.clear()
+                    this.setState({ userName: '', password: '', selectedOption: null })
                 }
-
-
             }
-
-
             );
-        }
     }
+}
 
-
-    async getDomainsList() {
-        const clientId = await AsyncStorage.getItem("custom:clientId1");
-
-        axios.get(LoginService.getDomainsList() + clientId).then((res) => {
-            if (res.data["result"][0]) {
-                console.log('sdasdasdsadasdsasfsfssaf' + res.data["result"]);
-                if (res.data["result"].length > 1) {
-                    this.props.navigation.navigate('SelectDomain');
-                }
-                else {
-                    console.log('vinoddddgfgfgdgg');
-                    AsyncStorage.setItem("domainDataId", String(res.data.result[0].clientDomainaId)).then(() => {
-                        // console.log
-
-                    }).catch(() => {
-                        console.log('there is error saving token');
-                    });
-                    AsyncStorage.setItem("domainName", res.data.result[0].domaiName).then(() => {
-                        // console.log
-
-                    }).catch(() => {
-                        console.log('there is error saving token')
-                    })
-                    this.getstoresForSuperAdmin();
-                }
-            }
-        });
-    }
-
-    async getDomainsForNormalUser() {
-        AsyncStorage.getItem("domainDataId").then((value) => {
-            console.log('sdasfsafsafsfaasf' + value)
-            var domainNames = [];
-            axios.get(UrmService.getDomainName() + value).then((res) => {
-                if (res.data && res.data["isSuccess"] === "true") {
-                    console.log(res.data.result);
-                    AsyncStorage.setItem("domainName", res.data.result.domaiName).then(() => {
-                        // console.log
-
-                    }).catch(() => {
-                        console.log('there is error saving token')
-                    })
-                }
-
-            });
-
-        }).catch(() => {
-            console.log('there is error saving token')
-        })
-    }
-
-
-    async getstoresForSuperAdmin() {
-        const username = await AsyncStorage.getItem("domainDataId");
-        const params = {
-            "clientDomianId": username
-        };
-        console.log('sfsdfsdff' + params);
-        axios.get(LoginService.getUserStoresForSuperAdmin(), { params }).then((res) => {
-            let len = res.data["result"].length;
-            if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                    if (res.data["result"].length > 1) {
-
-                        this.props.navigation.navigate('SelectStore', { isFromDomain: false })
-
-                    }
-                    else {
-                        AsyncStorage.setItem("storeId", String(res.data.result[0].id)).then(() => {
-                        }).catch(() => {
-                            console.log('there is error saving storeName');
-                        });
-                        this.props.navigation.navigate('HomeNavigation');
-                    }
-                }
-            }
-        });
-    }
-
-
-    async getstoresForNormalUser() {
-        const username = await AsyncStorage.getItem("username");
-
+ async getstores(){
+    const username = await AsyncStorage.getItem("username");
+       // console.log(LoginService.getUserStores() + "/" + username)
+        var storeNames = [];
         axios.get(LoginService.getUserStores() + username).then((res) => {
             if (res.data["result"]) {
                 for (var i = 0; i < res.data["result"].length; i++) {
-                    let number = res.data.result[i];
-                    const myArray = [];
-                    myArray = number.split(":");
-                    this.state.storeNames.push({ name: myArray[0], id: myArray[1] });
-                }
-                this.setState({ storeNames: this.state.storeNames });
-                AsyncStorage.setItem("storeId", (this.state.storeNames[0].id).toString()).then(() => {
-                }).catch(() => {
-                    console.log('there is error saving token');
-                });
-
-
-                if (this.state.storeNames.length === 1) {
-                    this.props.navigation.navigate('HomeNavigation');
-                }
-                else {
-                    this.props.navigation.navigate('SelectStore', { isFromDomain: false })
+                    storeNames.push(
+                        res.data["result"][i]//id
+                       // label: res.data["result"][i]['storeName']
+                    );
+    
                 }
             }
+            this.setState({
+                storeNames: storeNames,
+            })
+            if(this.state.storeNames.length === 1){
+                this.props.navigation.navigate('HomeNavigation')
+            }
+            else{
+                this.props.navigation.navigate('SelectStore')
+            }
         });
+}
+
+
+forgotPassword() {
+    const params = {
+        "username": this.state.userName, //"+919493926067",
+        //"storeName": this.state.store,//"kphb",
     }
-
-
-
-    forgotPassword() {
-
-        this.props.navigation.navigate('ForgotPassword', { username: this.state.userName });
-
+    AsyncStorage.setItem("username", this.state.userName);
+    console.log(LoginService.forgotPasswordCodeSent() + JSON.stringify(params))
+   // this.setState({ loading: true })
+    axios.post(LoginService.forgotPasswordCodeSent(), null, { params: {
+        "username": this.state.userName
+       }}).then((res) => {
+        if (res.data && res.data["isSuccess"] === "true") {
+      //  this.setState({ loading: false })
+        this.props.navigation.navigate('ForgotPassword',{ username: this.state.userName});
     }
+        else {
+            this.setState({ loading: false })
+            alert('Invalid Credentials');
+           // this.props.navigation.goBack(null);
+           // this.state.store = ""
+            // this.state.store.clear()
+        }
+    }
+    );
+    //this.props.navigation.push('LoginAndSignUp', { screen: 'SignUp' });
+   
+}
 
     async componentDidMount() {
-    }
+    // //this.rememberUser();
+    // console.log(LoginService.getStores())
+    // var storeNames = [];
+    // axios.get(LoginService.getStores()).then((res) => {
+    //     if (res.data["result"]) {
+    //         for (var i = 0; i < res.data["result"].length; i++) {
+    //             storeNames.push({
+    //                 value: res.data["result"][i]['storeName'],//id
+    //                 label: res.data["result"][i]['storeName']
+    //             });
+
+    //         }
+    //     }
+    //     this.setState({
+    //         storeNames: storeNames,
+    //     })
+    //     console.log("stores data----" + JSON.stringify(res.data["result"]))
+    //     console.log('store Name' + JSON.stringify(storeNames))
+    // });
+    // console.log('dsgsdgsdg' + username)
+    // // const username = await this.getRememberedUser();
+    // // this.setState({
+    // //     username: username || "",
+    // //     rememberMe: username ? true : false
+    // // });
+}
 
 
-    render() {
-        return (
-            <KeyboardAwareScrollView KeyboardAwareScrollView
-                enableOnAndroid={true}>
-                <View style={styles.container}>
-                    {this.state.loading &&
-                        <Loader
-                            loading={this.state.loading} />
-                    }
-                    <SafeAreaView style={{ flex: 1 }}>
-                        <View style={styles.container}>
-                            <Image source={require('../assets/images/Subtraction.png')} style={Device.isTablet ? styles.bottomImage_tablet : styles.bottomImage_mobile} />
-                            <View style={{ flex: 1, marginTop: '5%', backgroundColor: '#FFFFFF' }}>
-                                {/* <Image source={require('../assets/images/logo.png')} style={styles.logoImage} /> */}
-                                {/* <Text></Text> */}
-                                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}> {I18n.t('Hey')} </Text>
-                                <Text style={Device.isTablet ? styles.headerText2_tablet : styles.headerText2_mobile}> {I18n.t('Login Now')} </Text>
-                                {/* <View style={{ marginTop: 15, marginLeft: 18, flexDirection: 'row' }}>
+render() {
+    return (
+        <KeyboardAwareScrollView KeyboardAwareScrollView
+            enableOnAndroid={true}>
+            <View style={styles.container}>
+                {this.state.loading &&
+                    <Loader
+                        loading={this.state.loading} />
+                }
+                <SafeAreaView style={{ flex: 1 }}>
+                    <View style={styles.container}>
+                        <Image source={require('../assets/images/Subtraction.png')} style={{ position: 'absolute', right: 0, bottom: 40, width: 162, height: 170 }} />
+                        <View style={{ flex: 1, marginTop: '5%', backgroundColor: '#FFFFFF' }}>
+                            {/* <Image source={require('../assets/images/logo.png')} style={styles.logoImage} /> */}
+                            {/* <Text></Text> */}
+                            <Text style={{
+                                color: "#353C40", fontSize: 20, fontFamily: "bold", marginLeft: 10, marginTop: 100,
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                fontSize: 28,
+                            }}> {I18n.t('Hey')} </Text>
+                            <Text style={{
+                                color: "#353C40", fontSize: 20, fontFamily: "bold", marginLeft: 10, marginTop: 0,
+                                flexDirection: 'column',
+                                justifyContent: 'center', height: 45,
+                                fontSize: 28,
+                            }}> {I18n.t('Login Now')} </Text>
+                            {/* <View style={{ marginTop: 15, marginLeft: 18, flexDirection: 'row' }}>
 
                                     <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}>If you are new / </Text>
                                     <TouchableOpacity
@@ -416,80 +302,152 @@ export default class Login extends Component {
                                 </View> */}
 
 
-                            </View>
-
-
-
-                            <View style={{ flex: 2 }}>
-                                <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                    underlineColorAndroid="transparent"
-                                    placeholder={I18n.t('Username')}
-                                    placeholderTextColor="#6F6F6F"
-                                    // textAlignVertical="center"
-                                    autoCapitalize="none"
-                                    onChangeText={this.handleEmail}
-                                    value={this.state.userName}
-                                    ref={inputemail => { this.emailValueInput = inputemail; }} />
-
-
-                                <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                    underlineColorAndroid="transparent"
-                                    placeholder={I18n.t('Password')}
-                                    secureTextEntry={true}
-                                    placeholderTextColor="#6F6F6F"
-                                    autoCapitalize="none"
-                                    onChangeText={this.handlePassword}
-                                    value={this.state.password}
-                                    ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
-
-                                <View>
-                                    <View style={{ flexDirection: "column" }}>
-
-                                        <View style={{
-                                            position: 'absolute',
-                                            right: 20,
-                                            top: 35, alignItems: 'center', flexDirection: 'row'
-                                        }}>
-
-
-
-
-                                            <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Forgot password')} </Text>
-                                            <TouchableOpacity
-                                                onPress={() => this.forgotPassword()} >
-                                                <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {I18n.t('Reset')} </Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        <View style={{
-                                            position: 'absolute',
-                                            left: 20,
-                                            top: 35, alignItems: 'center', flexDirection: 'row'
-                                        }}>
-                                            <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {'Register?'} </Text>
-                                            <TouchableOpacity
-                                                onPress={() => this.registerClient()} >
-                                                <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {'Register'} </Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-                                    </View>
-                                </View>
-                                <TouchableOpacity
-                                    style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
-                                    onPress={() => this.login()} >
-                                    <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}> {I18n.t('SIGN IN')} </Text>
-                                </TouchableOpacity>
-                            </View>
                         </View>
 
-                    </SafeAreaView>
 
-                </View>
 
-            </KeyboardAwareScrollView>
-        );
-    }
+                        <View style={{ flex: 2 }}>
+                            {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
+                            <TextInput style={styles.input}
+                                underlineColorAndroid="transparent"
+                                placeholder={I18n.t('Username')}
+                                placeholderTextColor="#6F6F6F"
+                                // textAlignVertical="center"
+                                autoCapitalize="none"
+                                onChangeText={this.handleEmail}
+                                value={this.state.userName}
+                                ref={inputemail => { this.emailValueInput = inputemail }} />
+
+
+                            {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
+                            <TextInput style={styles.passwordInput}
+                                underlineColorAndroid="transparent"
+                                placeholder={I18n.t('Password')}
+                                secureTextEntry={true}
+                                placeholderTextColor="#6F6F6F"
+                                autoCapitalize="none"
+                                onChangeText={this.handlePassword}
+                                value={this.state.password}
+                                ref={inputpassword => { this.passwordValueInput = inputpassword }} />
+
+                            {/* <Text style={styles.signInFieldStyle}> Store </Text> */}
+                            {/* <View style={{
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                    height: 50,
+                                    marginBottom: 5,
+                                    borderBottomWidth: 1,
+                                    borderBottomColor: '#0196FD',
+                                    color: '#6F6F6F',
+                                    fontWeight: 'regular',
+                                    fontSize: 14,
+                                }} >
+                                    <RNPickerSelect style={{
+                                        color: '#6F6F6F',
+                                        fontWeight: 'regular',
+                                        fontSize: 14
+                                    }}
+                                        placeholder={{
+                                            label: I18n.t('Select Store'),
+                                            value: " ",
+                                        }}
+                                        Icon={() => {
+                                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                        }}
+                                        items={this.state.storeNames}
+                                        onValueChange={this.handleStore}
+                                        style={pickerSelectStyles}
+                                        value={this.state.store}
+                                        useNativeAndroidPickerStyle={false}
+
+                                    />
+                                </View> */}
+
+                            <View>
+                                <View style={{ flexDirection: "column" }}>
+                                    {/* <Switch trackColor={{ true: '#8BB0EF', false: 'grey' }} style={{
+                                            position: 'absolute',
+                                            left: 30,
+                                            top: 25,
+                                            width: 30,
+                                            height: 30, color: '#8BB0EF',
+                                        }}
+                                            value={this.state.rememberMe}
+                                            onValueChange={(value) => this.toggleRememberMe(value)}
+                                        /><Text style={{
+                                            position: 'absolute',
+                                            left: 80,
+                                            top: 30,
+                                            width: 100,
+                                            height: 20, fontSize: 13, color: '#8BB0EF', fontFamily: "bold",
+                                        }}>Remember Me</Text> */}
+
+                                    {/* <View style={{
+                                            position: 'absolute',
+                                            left: 20,
+                                            top: 30, alignItems: 'center', flexDirection: 'row'
+                                        }}>
+                                            <Switch trackColor={{ true: '#8BB0EF', false: 'grey' }} style={{
+                                                color: '#8BB0EF'
+                                            }}
+                                                value={this.state.rememberMe}
+                                                onValueChange={(value) => this.toggleRememberMe(value)} />
+
+                                           
+                                            <TouchableOpacity
+                                                onPress={() => this.signUpButtonClicked()} >
+                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> {I18n.t('Remember Me')} </Text>
+                                            </TouchableOpacity>
+                                        </View> */}
+
+                                    <View style={{
+                                        position: 'absolute',
+                                        right: 20,
+                                        top: 35, alignItems: 'center', flexDirection: 'row'
+                                    }}>
+
+                                        <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> {I18n.t('Forgot password')} </Text>
+                                        <TouchableOpacity
+                                            onPress={() => this.forgotPassword()} >
+                                            <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> {I18n.t('Reset')} </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    {/* <Text style={{
+                                            color: '#0196FD', fontSize: 13, fontFamily: "bold", position: 'absolute',
+                                            right: 20,
+                                            top: 10,
+                                            width: 130,
+                                        }}> Forgot Password? </Text> */}
+                                </View>
+                            </View>
+
+                            {/* <View style={{ flex: 0.2, marginTop: 120 }}> */}
+                            {/* <View style={{ marginTop: 10, flexDirection: 'row', }}> */}
+                            {/* <Text style={{ fontSize: 13, color: '#8BB0EF',fontFamily: "bold", }}> Don't remember the Password? </Text> */}
+
+
+                            {/* </View> */}
+                            <TouchableOpacity
+                                style={styles.signInButton}
+                                onPress={() => this.login()} >
+                                <Text style={styles.signInButtonText}> {I18n.t('SIGN IN')} </Text>
+                            </TouchableOpacity>
+
+                            {/* <TouchableOpacity
+                                    style={styles.signInButton}
+                                    onPress={() => this.login()} >
+                                    <Text style={styles.signInButtonText}> SIGN IN </Text>
+                                </TouchableOpacity> */}
+                        </View>
+                    </View>
+
+                </SafeAreaView>
+
+            </View>
+
+        </KeyboardAwareScrollView>
+    )
+}
 }
 
 
@@ -523,7 +481,7 @@ const pickerSelectStyles = StyleSheet.create({
         borderWidth: 5,
         fontSize: 14,
     },
-});
+})
 
 const styles = StyleSheet.create({
     logoImage: {
@@ -561,189 +519,81 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
         // alignItems: 'center',
     },
-
-    // Mobile Styles
-    hederText_mobile: {
-        color: "#353C40",
-        fontSize: 20,
-        fontFamily: "bold",
-        marginLeft: 10,
-        marginTop: 100,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        fontSize: 28,
-    },
-    headerText2_mobile: {
-        color: "#353C40",
-        fontSize: 20,
-        fontFamily: "bold",
-        marginLeft: 10,
-        marginTop: 0,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        height: 45,
-        fontSize: 28,
-    },
-    bottomImage_mobile: {
-        position: 'absolute',
-        right: 0,
-        bottom: 40,
-        width: 162,
-        height: 170
-    },
-    input_mobile: {
-        justifyContent: 'center',
+    input: {
         marginLeft: 20,
         marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
+        height: 50,
+        backgroundColor: '#F6F6F6',
+        borderColor: '#F6F6F6',
+        color: '#6F6F6F',
+        fontFamily: "regular",
+        borderWidth: 5,
         fontSize: 14,
     },
-    signInButton_mobile: {
-        backgroundColor: '#ED1C24',
-        justifyContent: 'center',
+    passwordInput: {
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 100,
-        width: deviceWidth - 40,
         height: 50,
-        borderRadius: 10,
-        fontWeight: 'bold',
-        // marginBottom:100,
-    },
-    signInButtonText_mobile: {
-        color: 'white',
-        alignSelf: 'center',
-        fontSize: 15,
+        marginBottom: 5,
+        marginTop: 20,
+        backgroundColor: '#F6F6F6',
+        borderColor: '#F6F6F6',
+        color: '#6F6F6F',
         fontFamily: "regular",
+        borderWidth: 5,
+        fontSize: 14,
     },
-    navigationText_mobile: {
-        fontSize: 16,
-        color: '#858585',
-        fontFamily: "regular",
-    },
-    navigationButtonText_mobile: {
-        color: '#353C40',
-        fontSize: 16,
-        fontFamily: "bold",
-        textDecorationLine: 'underline'
-    },
-
-    // Tablet Styles
-    headerText_tablet: {
-        color: "#353C40",
-        fontSize: 40,
-        fontFamily: "bold",
-        marginLeft: 10,
-        marginTop: 100,
-        flexDirection: 'column',
-        justifyContent: 'center',
-    },
-    headerText2_tablet: {
-        color: "#353C40",
-        fontSize: 40,
-        fontFamily: "bold",
-        marginLeft: 10,
-        marginTop: 0,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        height: 55,
-    },
-    bottomImage_tablet: {
-        position: 'absolute',
-        right: 0,
-        bottom: 40,
-        width: 202,
-        height: 230
-    },
-    input_tablet: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 60,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 22,
-    },
-    signInButton_tablet: {
+    signInButton: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
         marginTop: 100,
-        width: deviceWidth - 40,
-        height: 60,
+        height: 44,
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
     },
-    signInButtonText_tablet: {
+    signInText: {
+        color: '#002C46',
+        alignSelf: 'center',
+        fontSize: 28,
+        fontFamily: "bold",
+        marginTop: 25,
+    },
+
+    signInFieldStyle: {
+        color: '#456CAF55',
+        marginLeft: 30,
+        marginTop: 15,
+        fontSize: 12,
+        fontFamily: "regular",
+    },
+    signinContinueText: {
+        color: '#456CAF55',
+        alignSelf: 'center',
+        fontSize: 13,
+        marginTop: 5,
+        fontFamily: "regular",
+    },
+    getStartedText: {
+        color: 'black',
+        alignSelf: 'center',
+        fontStyle: 'normal',
+        fontWeight: 'bold',
+        fontSize: 14
+    },
+    signInButtonText: {
         color: 'white',
         alignSelf: 'center',
-        fontSize: 20,
+        fontSize: 14,
         fontFamily: "regular",
     },
-    navigationText_tablet: {
-        fontSize: 22,
-        color: '#858585',
-        fontFamily: "regular",
+    spinnerTextalign: {
+        flex: 9.4,
+        color: '#A2A2A2',
+        justifyContent: 'center',
+        textAlign: "center",
+        color: 'black',
     },
-    navigationButtonText_tablet: {
-        color: '#353C40',
-        fontSize: 22,
-        fontFamily: "bold",
-        textDecorationLine: 'underline'
-    },
-});;
-
-// Unused Styles
-// {
-//     signInFieldStyle: {
-//         color: '#456CAF55',
-//         marginLeft: 30,
-//         marginTop: 15,
-//         fontSize: 12,
-//         fontFamily: "regular",
-//     },
-//     signinContinueText: {
-//         color: '#456CAF55',
-//         alignSelf: 'center',
-//         fontSize: 13,
-//         marginTop: 5,
-//         fontFamily: "regular",
-//     },
-// getStartedText: {
-//     color: 'black',
-//     alignSelf: 'center',
-//     fontStyle: 'normal',
-//     fontWeight: 'bold',
-//     fontSize: 14
-// },
-// signInText: {
-//     color: '#002C46',
-//     alignSelf: 'center',
-//     fontSize: 28,
-//     fontFamily: "bold",
-//     marginTop: 25,
-// },
-// spinnerTextalign: {
-//     flex: 9.4,
-//     color: '#A2A2A2',
-//     justifyContent: 'center',
-//     textAlign: "center",
-//     color: 'black',
-// },
-// }
+})

@@ -18,5 +18,11 @@
     "android",
     "web"
   ],
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "splash": {
+    "image": "./assets/splash.png",
+    "resizeMode": "contain",
+    "backgroundColor": "#ffffff"
+  },
+  "name": "EasyRetail"
 }
