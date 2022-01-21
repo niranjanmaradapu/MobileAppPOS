@@ -288,6 +288,9 @@ export class FilterCreditNotes extends Component {
                                 style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder="MOBILE"
+                                maxLength={10}
+                                keyboardType={'numeric'}
+                                textContentType='telephoneNumber'
                                 placeholderTextColor="#6F6F6F"
                                 textAlignVertical="center"
                                 autoCapitalize="none"

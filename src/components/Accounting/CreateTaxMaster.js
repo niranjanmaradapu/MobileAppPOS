@@ -3,6 +3,7 @@ import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View }
 import Device from 'react-native-device-detection';
 import Modal from 'react-native-modal';
 
+var deviceHeight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
 
 export default class CreateTaxMaster extends Component {
@@ -71,23 +72,23 @@ export default class CreateTaxMaster extends Component {
                 {this.state.taxMasterDelete && (
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
-                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
+                            <View style={[styles.deleteMainContainer]}>
 
                                 <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Tax </Text>
 
                                 <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                    <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: Device.isTablet ? 15 : 30, }} source={require('../assets/images/modelcancel.png')} />
                                 </TouchableOpacity>
                                 <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
                                 </Text>
                                 <Text style={{
-                                    position: 'absolute',
-                                    top: 70,
+                                    // position: 'absolute',
+                                    // top: 70,
                                     height: Device.isTablet ? 40 : 20,
                                     textAlign: 'center',
                                     fontFamily: 'regular',
                                     fontSize: Device.isTablet ? 23 : 18,
-                                    marginBottom: Device.isTablet ? 25 : 0,
+                                    // marginBottom: Device.isTablet ? 25 : 0,
                                     color: '#353C40'
                                 }}> Are you sure want to delete Tax?  </Text>
                                 <TouchableOpacity
@@ -113,16 +114,25 @@ export default class CreateTaxMaster extends Component {
 }
 
 const styles = StyleSheet.create({
+
+    deleteMainContainer: {
+        marginLeft: -40,
+        marginRight: -40,
+        backgroundColor: '#ffffff',
+        paddingLeft: Device.isTablet ? 0 : 20,
+        marginTop: Device.isTablet ? deviceHeight - 350 : deviceHeight - 240,
+        height: Device.isTablet ? 350 : 240,
+    },
+
     // Styles For Mobile
 
     filterMainContainer_mobile: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -20,
-        backgroundColor: "#ffffff",
-        height: 400,
-        position: 'absolute',
-        bottom: -20,
+        marginLeft: -40,
+        paddingLeft: 20,
+        marginRight: -40,
+        backgroundColor: '#ffffff',
+        marginTop: deviceHeight - 240,
+        height: 240,
     },
     filterByTitle_mobile: {
         position: 'absolute',
@@ -191,13 +201,12 @@ const styles = StyleSheet.create({
 
     // Styles For Tablet
     filterMainContainer_tablet: {
-        width: deviceWidth,
         alignItems: 'center',
         marginLeft: -40,
+        marginRight: -40,
+        marginTop: deviceHeight - 350,
         backgroundColor: "#ffffff",
-        height: 500,
-        position: 'absolute',
-        bottom: -40,
+        height: 350,
     },
     filterByTitle_tablet: {
         position: 'absolute',

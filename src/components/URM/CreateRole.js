@@ -227,6 +227,7 @@ export default class CreateRole extends Component {
                     </Text>
                 </View>
                 <ScrollView>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Role <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Role"
@@ -236,6 +237,7 @@ export default class CreateRole extends Component {
                         value={this.state.role}
                         onChangeText={this.handleRole}
                     />
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Description <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Description"
@@ -245,6 +247,7 @@ export default class CreateRole extends Component {
                         value={this.state.description}
                         onChangeText={this.handleDescription}
                     />
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Domain <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
