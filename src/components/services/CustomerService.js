@@ -14,6 +14,42 @@ getDeliverySlip(){
     return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/getBarcodeTextile";
 } 
 
+getHsnDetails(){
+    return REACT_NATIVE_APP_BASE_URL + "/hsn-details/hsnDetails/getHsnDetails";
+} 
+
+saveSale(){
+    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/sale";
+} 
+
+getDsSlip(){
+    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getdeliveryslip";
+} 
+
+getMobileData(){
+    return REACT_NATIVE_APP_BASE_URL + "/user-management/user/customer/mobileNo";
+} 
+
+getDiscountReasons(){
+    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/discTypes";
+} 
+
+saveSale(){
+    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/sale";
+} 
+
+getLineItems(){
+    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/savelineitems";
+} 
+
+getCustomerMobile(){
+    return REACT_NATIVE_APP_BASE_URL + "/user-management/user/customer/mobileNo";
+} 
+
+getCoupons(){
+    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getGv";
+} 
+
 
 }
 export default new CustomerService()

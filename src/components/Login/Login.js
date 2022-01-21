@@ -52,8 +52,8 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'wrognuser1',
-            password: 'Otsi@123',
+            userName: 'applesuper1',
+            password: 'Otsi@1234',
             dropValue: '',
             store: 0,
             user: {

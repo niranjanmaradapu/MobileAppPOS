@@ -11,6 +11,7 @@ import InventoryService from '../services/InventoryService';
 import UrmService from '../services/UrmService';
 
 var deviceWidth = Dimensions.get("window").width;
+var deviceheight = Dimensions.get("window").height;
 
 export default class Inventory extends Component {
 
@@ -501,8 +502,7 @@ export default class Inventory extends Component {
 
 
 
-                    </View>
-                </ScrollView >
+                  
 
                 {this.state.flagone && (
                     <FlatList
@@ -523,16 +523,16 @@ export default class Inventory extends Component {
 
                                     {this.state.inventoryDelete && (
                                         <View>
-                                            <Modal isVisible={this.state.modalVisible}>
+
+                                            <Modal  isVisible={this.state.modalVisible}>
 
                                                 <View style={{
-                                                    width: deviceWidth,
                                                     alignItems: 'center',
-                                                    marginLeft: -20,
-                                                    backgroundColor: "#ffffff",
-                                                    height: 260,
-                                                    position: 'absolute',
-                                                    bottom: -20,
+                                                    marginLeft: -40,
+                                                    marginRight: -40,
+                                                    marginTop:deviceheight-260,
+                                                     backgroundColor: "#ffffff",
+                                                     height: 260,
                                                 }}>
 
                                                     <Text style={{
@@ -552,7 +552,7 @@ export default class Inventory extends Component {
                                                         top: 7,
                                                         width: 50, height: 50,
                                                     }} onPress={() => this.modelCancel()}>
-                                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
+                                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: Device.isTablet ? -5 : 5, }} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
 
                                                     <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
@@ -679,6 +679,8 @@ export default class Inventory extends Component {
                         )}
                     />
                 )}
+                  </View>
+                </ScrollView >
                 {this.state.flagFilterBarcodeOpen && (
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
