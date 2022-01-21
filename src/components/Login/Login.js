@@ -36,13 +36,8 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-<<<<<<< HEAD
-            userName: 'applesuper1',
-            password: 'Otsi@123',
-=======
             userName: 'test001',
             password: 'Otsi@1234',
->>>>>>> parent of f20b00b (Merge pull request #41 from niranjanmaradapu/vinod20JanChanges)
             dropValue: '',
             store: 0,
             user: {
