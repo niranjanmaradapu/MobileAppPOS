@@ -109,15 +109,8 @@ class GenerateEstimationSlip extends Component {
         return true;
     }
 
-
-    handlenewsaledeleteaction=  (item, index) => {
+    handlenewsaledeleteaction() {
         this.setState({ modalVisible: true, lineItemDelete: true });
-    }
-
-    deleteLineItem= (item, index) => {
-        this.state.itemsList.splice(index, 1);
-        this.setState({ barList: this.state.itemsList });
-        this.calculateTotal();
     }
 
     modelCancel() {
@@ -618,7 +611,16 @@ class GenerateEstimationSlip extends Component {
                                             </TouchableOpacity>
                                         </View>
 
-     {this.state.lineItemDelete && (
+
+
+                                    </View>
+
+
+
+                                )}
+                            />
+
+                            {this.state.lineItemDelete && (
                                 <View>
                                     <Modal isVisible={this.state.modalVisible}>
 
@@ -659,15 +661,6 @@ class GenerateEstimationSlip extends Component {
                                     </Modal>
                                 </View>
                             )}
-
-                                    </View>
-
-
-
-                                )}
-                            />
-
-                       
 
                             {this.state.itemsList.length != 0 && (
                                 <View style={{ width: deviceWidth, height: 220, position: 'absolute', bottom: 0, backgroundColor: '#FFFFFF' }}>
