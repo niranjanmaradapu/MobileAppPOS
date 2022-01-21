@@ -13,6 +13,8 @@ var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
+import axios from 'axios';
+import CustomerService from '../services/CustomerService';
 
 class GenerateInvoiceSlip extends Component {
     constructor(props) {
@@ -56,7 +58,6 @@ class GenerateInvoiceSlip extends Component {
             inventoryDiscount: '',
             inventoryNetAmount: '',
             customerPhoneNumber: '',
-            customerName: '',
             customerEmail: '',
             customerGender: '',
             customerAddress: '',
@@ -67,7 +68,7 @@ class GenerateInvoiceSlip extends Component {
             domainId: 1,
             storeId: 1,
             tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
-            tableData: [1, 2],
+            tableData: [],
             privilages: [{ bool: true, name: "Tag Customer" }, { bool: false, name: "Bill Level Discount" }],
             inventoryDelete: false,
             lineItemDelete: false,
@@ -76,8 +77,117 @@ class GenerateInvoiceSlip extends Component {
             camera: {
                 type: RNCamera.Constants.Type.back,
                 flashMode: RNCamera.Constants.FlashMode.auto,
-            }
+            },
+            openn: false,
+      isSubOpen: false,
+      dsNumber: "",
+      manualDisc: 0,
+      isCash: false,
+      isCard: false,
+      btnDisabled: true,
+      isCardSelected: false,
+      isCashSelected: false,
+      isCalculator: false,
+      isPayment: true,
+      cashAmount: 0.0,
+      taxAmount: 0,
+      cardAmount: 0.0,
+      cardDigits: "",
+      rBarCodeList: [],
+      discReasons: [],
+      selectedDisc: {},
+      userId: "NA",
+      deliverySlipData: {
+        barcode: [],
+        mrp: "",
+        netAmount: 0.0,
+        promoDisc: "",
+        taxAmount: null,
+      },
+      dlslips: [],
+      finalList: [],
+      barCodeList: [],
+      mobilenumber: "",
+      customerName: "",
+      gender: "",
+      customerEmail: "",
+      couponCode: "",
+      ccCollectedCash:"",
+      dob: "",
+      customerGST: "",
+      address: "",
+      dropValue: "",
+      grandNetAmount: 0.0,
+      grandReceivedAmount: 0.0,
+      grandBalance: 0,
+      returnCash: 0,
+      input: {},
+      isBillingDetails: false,
+      errors: {},
+      isBillingDisc: false,
+      showDiscReason: false,
+      discApprovedBy: "",
+      showTable: false,
+      dsNumberList: [],
+      // customerDetails: {
+      //     mobilenumber: '',
+      //     customerName: '',
+      //     gender: '',
+      //     customerEmail: '',
+      //     dob: '',
+      //     customerGST: '',
+      //     address: ''
+      // },
+      // isOpen: false,
+      mobileData: {
+        address: "",
+        altMobileNo: "",
+        dob: "",
+        gender: "",
+        gstNumber: "",
+        mobileNumber: "",
+        name: "",
+        email: "",
+        newSaleId: "",
+      },
+      grossAmount: 0,
+      totalPromoDisc: 0,
+      totalManualDisc: 0,
+      netPayableAmount: 0,
+      netCardPayment: 0,
+      promoDiscount: 0,
+      retailBarCodeList: [],
+      barCodeRetailList: [],
+      genderList: [
+        {
+          value: "female",
+          label: "Female",
+        },
+        {
+          value: "male",
+          label: "Male",
+        },
+      ],
+      customerFullName: "-",
+      customerMobilenumber: "-",
+      isTextile: false,
+      isRetail: false,
+      lineItemsList: [],
+      paymentOrderId: "",
+      idClient: "",
+      stateGST: 0,
+      centralGST: 0,
+      isCouponApplied: true,
+      enablePayment: false,
+      isCCModel: false,
+      isCCPay: false
+      
         };
+    }
+
+    componentDidMount() {
+        this.getDiscountReasons()
+        this.getHsnDetails()
     }
 
     handleMenuButtonClick() {
@@ -117,6 +227,29 @@ class GenerateInvoiceSlip extends Component {
 
     }
 
+   
+
+    getDiscountReasons() {
+     axios.get(CustomerService.getDiscountReasons()).then((res) => {
+          if (res.status === 200) {
+            //this.setState({discReasons: res.data});
+            const discount = res.data.result;
+            console.log('reason ia' + res.data.result)
+            discount.forEach((dis, index) => {
+              const obj = {
+                value: dis,
+                label: dis,
+              };
+              this.state.discReasons.push(obj);
+            });
+          } else {
+            alert(res.data);
+          }
+        }).catch(() => {
+            alert('Error with getting discount reasons');
+        });
+      }
+
     topbarAction1 = (item, index) => {
         if (this.state.privilages[index].bool === true) {
             this.state.privilages[index].bool = false;
@@ -125,9 +258,10 @@ class GenerateInvoiceSlip extends Component {
             this.state.privilages[index].bool = true;
         }
         for (let i = 0; i < this.state.privilages.length; i++) {
-            console.log(item);
+          
             if (item.name === "Tag Customer") {
-                this.setState({ customerTagging: true, modalVisible: true });
+                this.setState({ customerTagging: true, modalVisible: true,handleBillDiscount: false });
+                return
             } else {
                 this.setState({ customerTagging: false, modalVisible: false });
             }
@@ -144,6 +278,175 @@ class GenerateInvoiceSlip extends Component {
         }
     };
 
+
+    getDeliverySlipDetails() {
+        let costPrice = 0;
+        let discount = 0;
+        let total = 0;
+        this.state.barCodeList = [];
+        this.state.finalList = [];
+        this.state.rBarCodeList = [];
+        
+        const params = {
+            "dsNumber":"DS/202213/-829393125",//this.state.dsNumber,
+        };
+           this.state.dsNumberList.push(params);
+      
+        axios.get(CustomerService.getDsSlip(), { params }).then((res) => {
+            if (res.data) {
+                console.log(res.data)
+                this.state.dlslips.push(res.data.result);
+                if (this.state.dlslips.length > 1) {
+                    const barList = this.state.dlslips.filter(
+                        (test, index, array) =>
+                            index ===
+                            array.findIndex((findTest) => findTest.dsNumber === test.dsNumber)
+                    );
+
+                    if (barList.length > 1) {
+                        let lineStorage = [];
+                        barList.forEach((element, index) => {
+                            let lineItems = element.lineItems;
+                            lineStorage = [...lineStorage, ...lineItems];
+                        });
+
+                        this.setState({ barCodeList: lineStorage });
+
+                    } else {
+                        this.setState({ barCodeList: barList[0].lineItems });
+                    }
+
+                } else {
+                    this.setState({ barCodeList: this.state.dlslips[0].lineItems });
+                }
+
+                this.state.barCodeList.forEach((barCode, index) => {
+                    costPrice = costPrice + barCode.itemPrice;
+                    discount = discount + barCode.discount;
+                    total = total + barCode.netValue;
+                });
+
+                discount = discount + this.state.discountAmount;
+
+                this.setState({
+                    netPayableAmount: total,
+                    totalPromoDisc: discount,
+                    grossAmount: costPrice,
+                });
+
+                if (this.state.barCodeList.length > 0) {
+                    this.setState({ enablePayment: true });
+                }
+
+                 this.getTaxAmount();
+            }
+            else {
+                alert(res.data.body);
+            }
+        }).catch(() => {
+            alert('Getting issue with the estimation slip lineitems');
+        });
+
+
+    }
+
+    getHsnDetails() {
+        axios.get(CustomerService.getHsnDetails()).then((response) => {
+            if (response) {
+                const details = response.data.result;
+                let slabVos = [];
+                details.forEach(detail => {
+                    if (detail.slabVos)
+                        slabVos.push(detail.slabVos);
+                });
+                AsyncStorage.setItem("HsnDetails", JSON.stringify(slabVos)).then(() => {
+                    console.log('data saved');
+        
+                }).catch(() => {
+                    console.log('there is error saving token');
+                });
+
+              
+            }
+        });
+    }
+
+    getReturnAmount = () => {
+        console.log(this.state.grandNetAmount);
+        if (this.state.barCodeList.length > 0 || this.state.barCodeRetailList.length > 0) {
+          this.setState({ isPayment: false });
+        }
+        // this.state.grandNetAmount =
+        //   this.state.netPayableAmount + this.state.taxAmount;
+        this.state.grandReceivedAmount =
+          this.state.netPayableAmount + this.state.taxAmount;
+        const collectedCash = parseInt(this.state.cashAmount);
+    
+        if (collectedCash > this.state.grandNetAmount) {
+          this.state.returnCash = collectedCash - this.state.grandNetAmount;
+          this.state.returnCash = Math.round(this.state.returnCash);
+        //  this.hideCashModal();
+        } else if (collectedCash == Math.round(this.state.grandNetAmount)) {
+         // this.state.grandNetAmount = 0;
+          this.setState({ isPayment: false });
+        
+        } else if (collectedCash < this.state.grandNetAmount) {
+         // this.state.grandNetAmount = this.state.grandNetAmount - collectedCash;
+       //   toast.info("Please enter sufficient amount");
+        } else {
+          this.state.cashAmount = 0;
+          this.state.returnCash = 0;
+          this.state.grandNetAmount = 0;
+          this.state.grandReceivedAmount = 0;
+          this.setState({ isPayment: true });
+         // toast.info("Please enter sufficient amount");
+        }
+    
+        if(this.state.returnCash >= 1) {
+          this.hideCashModal();
+        } else {
+          toast.error("Please collect suffient amount");
+        }
+    
+        
+      //  this.hideCashModal();
+      };
+    
+
+    getTaxAmount() {
+        let slabCheck = false;
+       // const taxDetails = 
+          axios.get(CustomerService.getHsnDetails()).then((response) => {
+            if (response) {
+                const details = response.data.result;
+                let slabVos = [];
+                details.forEach(detail => {
+                    if (detail.slabVos)
+                        slabVos.push(detail.slabVos);
+                });
+               
+                slabVos.forEach(taxData => {
+                    console.log(taxData);
+                    if (this.state.netPayableAmount >= taxData[0].priceFrom && this.state.netPayableAmount <= taxData[0].priceTo) {
+                      slabCheck = true;
+                      this.setState({ stateGST: taxData[0].taxVo.cgst, centralGST: taxData[0].taxVo.cgst });
+                    }
+              
+                  });
+
+                  if (!slabCheck) {
+                    this.setState({ stateGST: 70, centralGST: 70 });
+                    console.log("Checking the slab")
+                  }
+                  const grandTotal = this.state.netPayableAmount + this.state.centralGST + this.state.centralGST;
+                  this.setState({ grandNetAmount: grandTotal });
+            }
+        });
+       
+       
+    }
+
+
     pay() {
         this.props.navigation.navigate('Payment', {
             totalAmount: this.state.totalAmount, totalDiscount: this.state.totalDiscount,
@@ -155,8 +458,17 @@ class GenerateInvoiceSlip extends Component {
         });
     }
 
-    handleDsNumber() {
+    endEditing() {
+        if (this.state.dsNumber === "") {
+            alert("Please enter DS Number");
+        }
+        else {
+            this.getDeliverySlipDetails()
+        }
+    }
 
+    handleDsNumber = (text) => {
+        this.setState({ dsNumber: text });
     }
 
     addCustomer() {
@@ -164,12 +476,76 @@ class GenerateInvoiceSlip extends Component {
     }
 
     tagCustomer() {
-
+        this.tagCustomer()
     }
 
     handleMobileNumber(text) {
         this.setState({ mobileNumber: text });
     }
+
+    getMobileDetails() {
+        axios.get(CustomerService.getMobileData() + "/" + "+918466043606").then((res) => {
+          if (res.data.result) {
+            this.state.mobileData = res.data.result;
+            console.log(this.state.mobileData)
+            this.setState({
+              customerName: res.data.result.name,
+              gender: res.data.result.gender,
+              dob: res.data.result.dob,
+              customerEmail: res.data.result.email,
+              customerGST: res.data.result.gstNumber,
+              address: res.data.result.address,
+            });
+          } else {
+            toast.error("No Data Found");
+          }
+        }).catch(() => {
+            alert('Unable to get customer details');
+        });
+    }
+
+    tagCustomer() {
+    const obj = {
+        "id": "",
+        "phoneNo": "+91" + this.state.mobileNumber,
+        "name": "",
+        "active": false,
+        "inActive": false,
+        "roleId": "",
+        "storeId": ""
+      }
+      axios.get(CustomerService.getCustomerMobile() + "/" + "8466043606").then((res) => {
+        console.log(res);
+        if (res) {
+            console.log(res.data)
+          const mobileData = res.data.result;
+          this.setState({
+            userId: res.data.result.userId, customerFullName: res.data.result.userName
+          });
+          this.setState({ modalVisible: false });
+          this.state.mobileData = {
+            address: this.state.address,
+            altMobileNo: "",
+            dob: this.state.dob,
+            gender: mobileData.gender,
+            gstNumber: this.state.gstNumber,
+            mobileNumber: mobileData.phoneNumber,
+            name: mobileData.userName,
+            email: this.state.customerEmail,
+          };
+  
+          this.setState({
+            isBillingDetails: true,
+            customerMobilenumber: mobileData.phoneNumber,
+          });
+  
+        }
+      }).catch(() => {
+        alert('Unable to get customer details');
+    });
+    }
+
+    
 
     handleDiscountAmount(text) {
         this.setState({ discountAmount: text });
@@ -184,6 +560,25 @@ class GenerateInvoiceSlip extends Component {
     };
 
     billDiscount() {
+        if (Object.keys(parseInt(this.state.discountAmount).length !== 0 && this.state.approvedBy !== "" && this.state.reasonDiscount !== '')) {
+            this.state.netPayableAmount = 0;
+            const totalDisc =
+            parseInt(this.state.totalPromoDisc) + parseInt(this.state.discountAmount);
+            if (totalDisc < this.state.grandNetAmount) {
+              const netPayableAmount = this.state.grandNetAmount - totalDisc;
+              this.state.netPayableAmount = netPayableAmount;
+              //  this.setState({netPayableAmount: netPayableAmount});
+              this.getTaxAmount();
+            }
+            const promDisc = parseInt(this.state.discountAmount) + parseInt(this.state.totalPromoDisc);
+            console.log('vinodfdsfdsffs' + promDisc)
+            this.setState({ showDiscReason: true, promoDiscount: promDisc });
+      
+            this.setState({ modalVisible: false });
+          } else {
+            alert("Please Enter all fields")
+          }
+      
 
     }
 
@@ -228,7 +623,7 @@ class GenerateInvoiceSlip extends Component {
 
 
                             </View>
-                            {this.state.tableData.length !== 0 && (
+                            {this.state.barCodeList.length !== 0 && (
                                 <FlatList
                                     style={styles.flatList}
                                     horizontal
@@ -257,9 +652,9 @@ class GenerateInvoiceSlip extends Component {
 
                             <FlatList style={{ marginTop: 20, marginBottom: 20 }}
                                 //  ListHeaderComponent={this.renderHeader}
-                                data={this.state.tableData}
+                                data={this.state.barCodeList}
                                 keyExtractor={item => item.email}
-                                contentContainerStyle={{ paddingBottom: 200 }}
+                                contentContainerStyle={{ paddingBottom: 230 }}
                                 onEndReached={this.onEndReached.bind(this)}
                                 scrollEnabled={
                                     false
@@ -267,7 +662,7 @@ class GenerateInvoiceSlip extends Component {
                                 ref={(ref) => { this.listRef = ref; }}
                                 renderItem={({ item, index }) => (
                                     <View style={{
-                                        height: Device.isTablet ? 240 : 140,
+                                        height: Device.isTablet ? 230 : 180,
                                         backgroundColor: '#FFFFFF',
                                         borderBottomWidth: 5,
                                         borderBottomColor: '#FBFBFB',
@@ -275,7 +670,7 @@ class GenerateInvoiceSlip extends Component {
 
                                     }}>
 
-                                        <View style={{ flexDirection: 'column', height: Device.isTablet ? 220 : 120, }}>
+                                        <View style={{ flexDirection: 'column', height: Device.isTablet ? 180 : 180, }}>
                                             <Image source={require('../assets/images/default.jpeg')}
                                                 //source={{ uri: item.image }}
                                                 style={{
@@ -287,14 +682,14 @@ class GenerateInvoiceSlip extends Component {
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 0, fontFamily: 'regular', color: '#808080' }}>
                                                 ITEM:
                                             </Text>
-                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 245 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                                                {item.qty} {item.productuom}
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 225 : 165, marginTop:Device.isTablet ?  -22 :  -16, fontFamily: 'medium', color: '#353C40' }}>
+                                              #{item.barCode}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
                                                 QUANTITY:
                                             </Text>
-                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 245 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                                                {item.qty} {item.productuom}
+                                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 270 : 195, marginTop: Device.isTablet ?  -22 : -16, fontFamily: 'medium', color: '#353C40' }}>
+                                             {item.quantity}
                                             </Text>
 
                                             {/* <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
@@ -305,18 +700,18 @@ class GenerateInvoiceSlip extends Component {
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 230 : 160, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'medium', color: '#ED1C24' }}>
                                                 {/* ₹ {(parseInt(item.netamount)).toString()} */}
-                                                Rs. 1000
+                                                ₹ {item.itemPrice}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 310 : 220, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'regular', color: '#808080' }}>
-                                                DISCOUNT: Rs. 0
+                                                DISCOUNT: ₹ 0
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                GROSS AMOUNT:
+                                                GROSS AMOUNT: ₹ {item.netValue}
                                             </Text>
 
                                         </View>
 
-                                        <View style={{
+                                        {/* <View style={{
                                             flexDirection: 'row',
                                             justifyContent: 'space-around',
                                             alignItems: 'center',
@@ -349,7 +744,7 @@ class GenerateInvoiceSlip extends Component {
                                                     onPress={() => this.decreamentForTable(item, index)}>-</Text>
                                             </TouchableOpacity>
                                             {/* <Text> {item.qty}</Text> */}
-                                            <TextInput
+                                            {/* <TextInput
                                                 style={{
                                                     justifyContent: 'center',
                                                     margin: 20,
@@ -403,54 +798,14 @@ class GenerateInvoiceSlip extends Component {
                                                 borderColor: "lightgray",
                                             }} onPress={() => this.handlenewsaledeleteaction(item, index)}>
                                                 <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
-                                            </TouchableOpacity>
-                                        </View>
+                                            </TouchableOpacity> */}
+                                        {/* </View>  */}
                                     </View>
                                 )}
                             />
-                            {this.state.lineItemDelete && (
-                                <View>
-                                    <Modal isVisible={this.state.modalVisible}>
-
-                                        <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
-
-                                            <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Item </Text>
-
-                                            <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
-                                            </TouchableOpacity>
-
-                                            <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                            </Text>
-                                            <Text style={{
-                                                position: 'absolute',
-                                                top: 70,
-                                                height: Device.isTablet ? 40 : 20,
-                                                textAlign: 'center',
-                                                fontFamily: 'regular',
-                                                fontSize: Device.isTablet ? 23 : 18,
-                                                marginBottom: Device.isTablet ? 25 : 0,
-                                                color: '#353C40'
-                                            }}> Are you sure want to delete NewSale Item? </Text>
-                                            <TouchableOpacity
-                                                style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]}
-                                                onPress={() => this.deleteLineItem(item, index)}
-                                            >
-                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
-
-                                            </TouchableOpacity>
-
-                                            <TouchableOpacity
-                                                style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
-                                            >
-                                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
-
-                                            </TouchableOpacity>
-                                        </View>
-                                    </Modal>
-                                </View>)}
-                            {this.state.tableData.length != 0 && (
-                                <View style={{ width: deviceWidth, height: 220, position: 'absolute', bottom: 0, backgroundColor: '#FFFFFF' }}>
+                            
+                            {this.state.barCodeList.length != 0 && (
+                                <View style={{ width: deviceWidth, height: 320, position: 'absolute', bottom: 0, backgroundColor: '#FFFFFF' }}>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -460,7 +815,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        {this.state.totalQty} </Text>
+                                        {this.state.barCodeList.length} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -470,7 +825,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        ₹ {this.state.totalAmount} </Text>
+                                       ₹ {this.state.promoDiscount} </Text>
 
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
@@ -481,7 +836,48 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        ₹ {(parseInt(this.state.totalAmount) - parseInt(this.state.totalDiscount)).toString()} </Text>
+                                        ₹ {this.state.netPayableAmount} </Text>
+
+                                        <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        Customer Name </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                         {this.state.customerFullName} </Text>
+                                        <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        Customer Mobile Number </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        {this.state.customerMobilenumber} </Text>
+                                        <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        Loyalty Points </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                       - </Text>
+                                        <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 210, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        Expiry Date </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 210, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        - </Text>
 
                                     {/* <Text style={{
                     color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
@@ -559,7 +955,7 @@ class GenerateInvoiceSlip extends Component {
                                     />
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile]}
-                                        onPress={() => this.tagCustomer(item, index)}
+                                        onPress={() => this.tagCustomer()}
                                     >
                                         <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CONFIRM </Text>
                                     </TouchableOpacity>
@@ -615,14 +1011,9 @@ class GenerateInvoiceSlip extends Component {
                                             Icon={() => {
                                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                             }}
-                                            items={[
-                                                { label: 'Promotion Not Applied', value: 'Promotion Not Applied' },
-                                                { label: 'RT Return Discount', value: 'RT Return Discount' },
-                                                { label: 'Mgnt. SPL Discount', value: 'Mgnt. SPL Discount' },
-                                                { label: 'Management Discount', value: 'Management Discount' },
-                                                { label: 'DMG Discount', value: 'DMG Discount' },
-                                                { label: 'Other', value: 'Other' },
-                                            ]}
+                                            items={
+                                                this.state.discReasons
+                                            }
                                             onValueChange={this.handleDiscountReason}
                                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                             value={this.state.reasonDiscount}
@@ -631,7 +1022,7 @@ class GenerateInvoiceSlip extends Component {
                                     </View>
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile]}
-                                        onPress={() => this.billDiscount(item, index)}
+                                        onPress={() => this.billDiscount()}
                                     >
                                         <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CONFIRM </Text>
                                     </TouchableOpacity>

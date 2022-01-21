@@ -53,7 +53,7 @@ export default class Login extends Component {
             redirect: false,
             isAuth: false,
             userName: 'applesuper1',
-            password: 'Otsi@123',
+            password: 'Otsi@1234',
             dropValue: '',
             store: 0,
             user: {
