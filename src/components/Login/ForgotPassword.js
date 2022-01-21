@@ -3,6 +3,10 @@ import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions,
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
+import Device from 'react-native-device-detection';
+import LoginService from '../services/LoginService';
+import axios from 'axios';
+import Loader from '../../commonUtils/loader';
 
 class ForgotPassword extends Component {
     constructor(props) {
@@ -17,11 +21,11 @@ class ForgotPassword extends Component {
     }
 
     componentDidMount() {
-        this.setState({
-            userName: this.props.route.params.username,
-        });
-        
-      }
+        // this.setState({
+        //     userName: this.props.route.params.username,
+        // });
+
+    }
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
@@ -42,53 +46,21 @@ class ForgotPassword extends Component {
         this.setState({ confirmPassword: text })
     }
 
-    create(){
-         //
-        //this.props.navigation.navigate('HomeNavigation')
-        //return
+    async create() {
         if (this.state.userName.length === 0) {
             alert('You must enter a Usename');
-        } else if (this.state.code.length === 0) {
-            alert('You must enter a code recieved in mail');
-        }
-        else if (this.state.newPassword.length === 0) {
-            alert('You must enter a new password');
-        }
-        else if (this.state.confirmPassword.length === 0) {
-            alert('You must enter a confirm password');
-        }
-        else if (this.state.confirmPassword === this.state.confirmPassword) {
-            alert('new and confirm passwords are not matched');
-        }
+        } 
         else {
-            const params = {
-                "username": this.state.userName, //"+919493926067",
-                "confirmarionCode": this.state.code, //"Mani@1123",
-                "newPassword": this.state.newPassword,
-                //"storeName": this.state.store,//"kphb",
-            }
-            AsyncStorage.setItem("username", this.state.userName);
-            console.log(LoginService.getAuth() + JSON.stringify(params))
-            this.setState({ loading: true })
-            axios.post(LoginService.forgotPassword(),null, { params: {
-                "username": this.state.userName, //"+919493926067",
-                "confirmarionCode": this.state.code, //"Mani@1123",
-                "newPassword": this.state.newPassword,
-               }}).then((res) => {
-                if (res.data && res.data["isSuccess"] === "true") {
-                this.setState({ loading: false })
-                this.props.navigation.goBack(null);
-            }
-                else {
-                    this.setState({ loading: false })
-                    alert('Invalid Credentials');
-                   // this.props.navigation.goBack(null);
-                   // this.state.store = ""
-                    // this.state.store.clear()
+            this.setState({ loading: true });
+            axios.get(LoginService.sendVerificationCode() + this.state.userName).then((res) => {
+                if (res) {
+                    this.setState({ loading: false });
+                    alert("Confirmation Code Sent to mail");
+                    this.props.navigation.navigate('UpdateNewpassword', { userName: this.state.userName });  
                 }
-            }
-            );
-    }
+            });
+           
+        }
     }
 
 
@@ -96,60 +68,44 @@ class ForgotPassword extends Component {
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
-                {/* <View style={styles.container}>
+              
                     {this.state.loading &&
                     <Loader
                     loading={this.state.loading} />
-                }  */}
+                }  
                 <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
-                    <View style={styles.viewswidth}>
-                        <TouchableOpacity style={{
-                            position: 'absolute',
-                            left: 10,
-                            top: 20,
-                            width: 20,
-                            height: 20,
-                        }} onPress={() => this.handleBackButtonClick()}>
-                            <Image source={require('../assets/images/backButton.png')} />
-                        </TouchableOpacity>
-
-                        {/* <Text style={styles.signUptext}> Sign Up </Text>
-                        <Icons name={'arrow-back'} size={30} color='#ffffff' onPress={this.handleBackButtonClick} style={{
-                            position: 'absolute',
-                            left: 5,
-                            top: 35
-                        }} /> */}
-                    </View>
 
                     <View style={styles.container}>
                         <View style={{ flex: 1, marginTop: '0%', backgroundColor: '#FFFFFF' }}>
                             {/* <Image source={require('../assets/images/logo.png')} style={styles.logoImage} /> */}
                             {/* <Text></Text> */}
-                            <Text style={{
-                                color: "#353C40", fontSize: 20, fontFamily: "bold", marginLeft: 10, marginTop: 20,
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                fontSize: 28,
-                            }}> Forgot Password </Text>
+                            <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
+                        <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
+                            <Image source={require('../assets/images/backButton.png')} />
+                        </TouchableOpacity>
+                        <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                          Verification Code
+                        </Text>
+                    </View>
                         </View>
 
 
 
                         <View style={{ flex: 6 }}>
                             {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
-                            <TextInput style={styles.input}
+                            <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder="User Name"
                                 placeholderTextColor="#6F6F6F"
                                 // textAlignVertical="center"
                                 autoCapitalize="none"
                                 onChangeText={this.handleEmail}
-                                 value={this.state.userName}
+                                value={this.state.userName}
                                 ref={inputemail => { this.emailValueInput = inputemail }} />
 
 
                             {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
-                            <TextInput style={styles.passwordInput}
+                            {/* <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder="Confirmation Code"
                                 secureTextEntry={true}
@@ -159,7 +115,7 @@ class ForgotPassword extends Component {
                                 //value={this.state.password}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
 
-                            <TextInput style={styles.passwordInput}
+                            <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder="New Password"
                                 secureTextEntry={true}
@@ -169,7 +125,7 @@ class ForgotPassword extends Component {
                                 //value={this.state.password}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
 
-                            <TextInput style={styles.passwordInput}
+                            <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder="Confirm Password"
                                 secureTextEntry={true}
@@ -177,16 +133,16 @@ class ForgotPassword extends Component {
                                 autoCapitalize="none"
                                 onChangeText={this.handleConfirmPassword}
                                 //value={this.state.password}
-                                ref={inputpassword => { this.passwordValueInput = inputpassword }} />
+                                ref={inputpassword => { this.passwordValueInput = inputpassword }} /> */}
 
-                           
+
                             <TouchableOpacity
-                                style={styles.signInButton}
+                                style={Device.isTablet ? styles.createButton_tablet : styles.createButton_mobile}
                                 onPress={() => this.create()} >
-                                <Text style={styles.signInButtonText}> CREATE  </Text>
+                                <Text style={Device.isTablet ? styles.createButtonText_tablet : styles.createButtonText_mobile}> SEND  </Text>
                             </TouchableOpacity>
 
-                       
+
                         </View>
                     </View>
                 </SafeAreaView>
@@ -277,80 +233,129 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
         // alignItems: 'center',
     },
-    input: {
+    // Styles For Mobile
+    viewsWidth_mobile: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 24,
+        height: 84,
+    },
+    backButton_mobile: {
+        position: 'absolute',
+        left: 10,
+        top: 30,
+        width: 40,
+        height: 40,
+    },
+    headerTitle_mobile: {
+        position: 'absolute',
+        left: 70,
+        top: 47,
+        width: 300,
+        height: 25,
+        fontFamily: 'bold',
+        fontSize: 18,
+        color: '#353C40'
+    },
+    input_mobile: {
+        justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
-        height: 50,
-        backgroundColor: '#F6F6F6',
-        borderColor: '#F6F6F6',
-        color: '#6F6F6F',
-        fontFamily: "regular",
-        borderWidth: 5,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
         fontSize: 14,
     },
-    passwordInput: {
-        marginLeft: 20,
-        marginRight: 20,
-        height: 50,
-        marginBottom: 5,
-        marginTop: 20,
-        backgroundColor: '#F6F6F6',
-        borderColor: '#F6F6F6',
-        color: '#6F6F6F',
-        fontFamily: "regular",
-        borderWidth: 5,
-        fontSize: 14,
-    },
-    signInButton: {
+
+    createButton_mobile: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 30,
-        height: 44,
+        marginTop: 20,
+        width: deviceWidth - 40,
+        height: 50,
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
     },
-    signInText: {
-        color: '#002C46',
-        alignSelf: 'center',
-        fontSize: 20,
-        fontFamily: "bold",
-    },
-
-    signInFieldStyle: {
-        color: '#456CAF55',
-        marginLeft: 30,
-        marginTop: 15,
-        fontSize: 12,
-        fontFamily: "regular",
-    },
-    signinContinueText: {
-        color: '#456CAF55',
-        alignSelf: 'center',
-        marginTop: 5,
-        fontSize: 13,
-        fontFamily: "regular",
-    },
-    getStartedText: {
-        color: 'black',
-        alignSelf: 'center',
-        fontStyle: 'normal',
-        fontWeight: 'bold',
-        fontSize: 14
-    },
-    signInButtonText: {
+    createButtonText_mobile: {
         color: 'white',
         alignSelf: 'center',
+        fontSize: 15,
         fontFamily: "regular",
-        fontSize: 14,
     },
-    spinnerTextalign: {
-        flex: 9.4,
-        color: '#A2A2A2',
+    // signInFieldStyle: {
+    //     color: '#456CAF55',
+    //     marginLeft: 30,
+    //     marginTop: 15,
+    //     fontSize: 12,
+    //     fontFamily: "regular",
+    // },
+
+     // Styles For Tablet
+     viewsWidth_tablet: {
+        backgroundColor: '#ffffff',
+        width: deviceWidth,
+        textAlign: 'center',
+        fontSize: 28,
+        height: 90,
+    },
+    backButton_tablet: {
+        position: 'absolute',
+        left: 10,
+        top: 25,
+        width: 90,
+        height: 90,
+    },
+    headerTitle_tablet: {
+        position: 'absolute',
+        left: 70,
+        top: 40,
+        width: 300,
+        height: 40,
+        fontFamily: 'bold',
+        fontSize: 24,
+        color: '#353C40'
+    },
+    input_tablet: {
         justifyContent: 'center',
-        textAlign: "center",
-        color: 'black',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    createButton_tablet: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        marginTop: 20,
+        width: deviceWidth - 40,
+        height: 60,
+        borderRadius: 10,
+        fontWeight: 'bold',
+        // marginBottom:100,
+    },
+    createButtonText_tablet: {
+        color: 'white',
+        alignSelf: 'center',
+        fontSize: 20,
+        fontFamily: "regular",
     },
 })

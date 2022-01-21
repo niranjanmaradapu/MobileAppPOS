@@ -9,8 +9,16 @@ class NewSaleService {
         return REACT_NATIVE_APP_BASE_URL + '/new-sale/newsale/getAllBarcodes'
     }
 
-    getImageScanning(){
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/imageScanning'  
+    saveLineItems() {
+        return REACT_NATIVE_APP_BASE_URL + '/new-sale/newsale/savelineitems/2'
+    }
+
+    createOrder() {
+        return REACT_NATIVE_APP_BASE_URL + '/new-sale/newsale/sale'
+    }
+
+    getImageScanning() {
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/imageScanning'
     }
 }
 export default new NewSaleService()

@@ -19,11 +19,6 @@ class SignUp extends Component {
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
-                {/* <View style={styles.container}>
-                    {this.state.loading &&
-                    <Loader
-                    loading={this.state.loading} />
-                }  */}
                 <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
                     <View style={styles.viewswidth}>
                         <TouchableOpacity style={{
@@ -35,19 +30,10 @@ class SignUp extends Component {
                         }} onPress={() => this.handleBackButtonClick()}>
                             <Image source={require('../assets/images/backButton.png')} />
                         </TouchableOpacity>
-
-                        {/* <Text style={styles.signUptext}> Sign Up </Text>
-                        <Icons name={'arrow-back'} size={30} color='#ffffff' onPress={this.handleBackButtonClick} style={{
-                            position: 'absolute',
-                            left: 5,
-                            top: 35
-                        }} /> */}
                     </View>
 
                     <View style={styles.container}>
                         <View style={{ flex: 1, marginTop: '0%', backgroundColor: '#FFFFFF' }}>
-                            {/* <Image source={require('../assets/images/logo.png')} style={styles.logoImage} /> */}
-                            {/* <Text></Text> */}
                             <Text style={{
                                 color: "#353C40", fontSize: 20, fontFamily: "bold", marginLeft: 10, marginTop: 20,
                                 flexDirection: 'column',
@@ -63,14 +49,8 @@ class SignUp extends Component {
                                     <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> Sign In </Text>
                                 </TouchableOpacity>
                             </View>
-
-
                         </View>
-
-
-
                         <View style={{ flex: 6 }}>
-                            {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
                             <TextInput style={styles.input}
                                 underlineColorAndroid="transparent"
                                 placeholder="NAME"
@@ -134,81 +114,11 @@ class SignUp extends Component {
                                 //value={this.state.password}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword }} />
 
-                            {/* <Text style={styles.signInFieldStyle}> Store </Text> */}
-                            {/* <View style={{
-                                    marginLeft: 20,
-                                    marginRight: 20,
-                                    height: 50,
-                                    marginBottom: 5,
-                                    borderBottomWidth: 1,
-                                    borderBottomColor: '#0196FD',
-                                    color: '#6F6F6F',
-                                    fontWeight: 'regular',
-                                    fontSize: 14,
-                                }} > */}
-                            {/* <RNPickerSelect style={{
-                                        color: '#6F6F6F',
-                                        fontWeight: 'regular',
-                                        fontSize: 14
-                                    }}
-                                        placeholder={{
-                                            label: 'Select Store',
-                                            value: " ",
-                                        }}
-                                        Icon={() => {
-                                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                                        }}
-                                        //items={this.state.storeNames}
-                                        onValueChange={this.handleStore}
-                                        style={pickerSelectStyles}
-                                       // value={this.state.store}
-                                        useNativeAndroidPickerStyle={false}
-
-                                    /> */}
-                            {/* </View> */}
-
-                            {/* <View>
-                                    <View style={{ flexDirection: "column" }}>
-                                       
-
-                                        <View style={{
-                                            position: 'absolute',
-                                            right: 20,
-                                            top: 30, flexDirection: 'row'
-                                        }}>
-
-                                            <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}> Forgot password? </Text>
-                                            <TouchableOpacity
-                                                onPress={() => this.signUpButtonClicked()} >
-                                                <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> Reset </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                        {/* <Text style={{
-                                            color: '#0196FD', fontSize: 13, fontFamily: "bold", position: 'absolute',
-                                            right: 20,
-                                            top: 10,
-                                            width: 130,
-                                        }}> Forgot Password? </Text> */}
-                            {/* </View>
-                                </View>  */}
-
-                            {/* <View style={{ flex: 0.2, marginTop: 120 }}> */}
-                            {/* <View style={{ marginTop: 10, flexDirection: 'row', }}> */}
-                            {/* <Text style={{ fontSize: 13, color: '#8BB0EF',fontFamily: "bold", }}> Don't remember the Password? </Text> */}
-
-
-                            {/* </View> */}
                             <TouchableOpacity
                                 style={styles.signInButton}
                                 onPress={() => this.login()} >
                                 <Text style={styles.signInButtonText}> CREATE ACCOUNT </Text>
                             </TouchableOpacity>
-
-                            {/* <TouchableOpacity
-                                    style={styles.signInButton}
-                                    onPress={() => this.login()} >
-                                    <Text style={styles.signInButtonText}> SIGN IN </Text>
-                                </TouchableOpacity> */}
                         </View>
                     </View>
                 </SafeAreaView>
