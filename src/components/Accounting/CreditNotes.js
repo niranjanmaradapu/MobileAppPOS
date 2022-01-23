@@ -430,7 +430,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_mobile: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 50,
@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_tablet: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 60,

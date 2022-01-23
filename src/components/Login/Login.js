@@ -8,11 +8,11 @@ import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
+import ProfileService from '../services/ProfileService';
+import UrmService from '../services/UrmService';
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
-import UrmService from '../services/UrmService';
-import ProfileService from '../services/ProfileService';
 
 
 const data = [
@@ -38,10 +38,10 @@ global.previlage5 = '';
 global.previlage6 = '';
 global.previlage7 = '';
 global.previlage8 = '';
-global.username = ''
-global.userrole = ''
-global.domainName = ''
-global.userrole = ''
+global.username = '';
+global.userrole = '';
+global.domainName = '';
+global.userrole = '';
 
 
 
@@ -52,8 +52,8 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'applesuper1',
-            password: 'Otsi@1234',
+            userName: 'appletextileuser1',
+            password: 'Otsi@123',
             dropValue: '',
             store: 0,
             user: {
@@ -95,11 +95,11 @@ export default class Login extends Component {
     };
 
     registerClient() {
-        console.log('adsadasdd')
+        console.log('adsadasdd');
         this.props.navigation.navigate('RegisterClient');
     }
 
-     login() {
+    login() {
         AsyncStorage.removeItem('tokenkey');
         if (this.state.userName.length === 0) {
             alert('You must enter a Usename');
@@ -128,38 +128,38 @@ export default class Login extends Component {
                 if (res.data && res.data["isSuccess"] === "true") {
 
                     if (res.data.result.authenticationResult) {
-                        const token = res.data.result.authenticationResult.idToken
+                        const token = res.data.result.authenticationResult.idToken;
                         //==============================Token Key & phone number save ===================//
                         AsyncStorage.setItem("tokenkey", JSON.stringify(token)).then(() => {
                         }).catch(() => {
-                            console.log('there is error saving token')
-                        })
+                            console.log('there is error saving token');
+                        });
 
                         AsyncStorage.getItem("tokenkey").then((value) => {
                             var finalToken = value.replace('"', '');
                             console.log(finalToken);
-                            axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken }
+                            axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken };
                             //console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
-                        })
+                        });
 
                         AsyncStorage.setItem("phone_number", jwt_decode(token)["phone_number"]).then(() => {
                             // console.log
                         }).catch(() => {
-                            console.log('there is error saving domainDataId')
-                        })
+                            console.log('there is error saving domainDataId');
+                        });
 
                         AsyncStorage.setItem("rolename", jwt_decode(token)["custom:roleName"]).then(() => {
-                             
+
                             // console.log
                         }).catch(() => {
-                            console.log('there is error saving domainDataId')
-                        })
+                            console.log('there is error saving domainDataId');
+                        });
 
                         AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
                             // console.log
                         }).catch(() => {
-                            console.log('there is error saving domainDataId')
-                        })
+                            console.log('there is error saving domainDataId');
+                        });
 
                         //==============================Navigation===================//
                         if (jwt_decode(token)["custom:isSuperAdmin"] === "true") {
@@ -167,15 +167,15 @@ export default class Login extends Component {
                                 // console.log
                             }).catch(() => {
 
-                            })
+                            });
                             AsyncStorage.setItem("custom:isConfigUser", "false").then(() => {
                                 // console.log
                             }).catch(() => {
 
-                            })
+                            });
 
-                           
-                            this.getDomainsList()
+
+                            this.getDomainsList();
                         }
                         else if (jwt_decode(token)["custom:isConfigUser"] === "true") {
 
@@ -183,8 +183,8 @@ export default class Login extends Component {
                                 // console.log
                             }).catch(() => {
 
-                            })
-                         
+                            });
+
                             axios.get(ProfileService.getUser() + this.state.userName).then((res) => {
                                 if (res.data && res.data["isSuccess"] === "true") {
                                     global.username = res.data["result"].userName;
@@ -205,25 +205,25 @@ export default class Login extends Component {
                             AsyncStorage.getItem("rolename").then((value) => {
                                 global.userrole = value;
                             }).catch(() => {
-                                console.log('there is error getting storeId')
-                            }) 
-                    
+                                console.log('there is error getting storeId');
+                            });
 
 
-                            this.props.navigation.navigate('HomeNavigation')
+
+                            this.props.navigation.navigate('HomeNavigation');
                         }
                         else {
-                            this.getDomainsForNormalUser()
+                            this.getDomainsForNormalUser();
 
-                           
+
                             AsyncStorage.setItem("domainDataId", jwt_decode(token)["custom:domianId1"]).then(() => {
-                                this.getDomainsForNormalUser()
+                                this.getDomainsForNormalUser();
                                 // console.log
                             }).catch(() => {
-                                console.log('there is error saving domainDataId')
-                            })
+                                console.log('there is error saving domainDataId');
+                            });
 
-                            this.getstoresForNormalUser()
+                            this.getstoresForNormalUser();
                         }
 
                         // const clientDomainId = user["custom:clientDomians"].split(",")[0];
@@ -233,7 +233,7 @@ export default class Login extends Component {
                         // })
 
 
-                        this.setState({ loading: false })
+                        this.setState({ loading: false });
                     }
                     else {
                         if (res.data.result.challengeName === "NEW_PASSWORD_REQUIRED") {
@@ -247,11 +247,11 @@ export default class Login extends Component {
                                 userName: this.state.userName,
                                 password: this.state.password,
                             });
-                            console.log(this.state.sessionData)
+                            console.log(this.state.sessionData);
                             console.log(this.state.roleName);
                         }
                     }
-                  
+
                 }
                 else {
                     alert('Invalid Credentials');
@@ -290,8 +290,8 @@ export default class Login extends Component {
                         // console.log
 
                     }).catch(() => {
-                        console.log('there is error saving token')
-                    })
+                        console.log('there is error saving token');
+                    });
                     this.getstoresForSuperAdmin();
                 }
             }
@@ -300,7 +300,7 @@ export default class Login extends Component {
 
     async getDomainsForNormalUser() {
         AsyncStorage.getItem("domainDataId").then((value) => {
-            console.log('sdasfsafsafsfaasf' + value)
+            console.log('sdasfsafsafsfaasf' + value);
             var domainNames = [];
             axios.get(UrmService.getDomainName() + value).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
@@ -309,15 +309,15 @@ export default class Login extends Component {
                         // console.log
 
                     }).catch(() => {
-                        console.log('there is error saving token')
-                    })
+                        console.log('there is error saving token');
+                    });
                 }
 
             });
 
         }).catch(() => {
-            console.log('there is error saving token')
-        })
+            console.log('there is error saving token');
+        });
     }
 
 
@@ -333,7 +333,7 @@ export default class Login extends Component {
                 for (let i = 0; i < len; i++) {
                     if (res.data["result"].length > 1) {
 
-                        this.props.navigation.navigate('SelectStore', { isFromDomain: false })
+                        this.props.navigation.navigate('SelectStore', { isFromDomain: false });
 
                     }
                     else {
@@ -371,7 +371,7 @@ export default class Login extends Component {
                     this.props.navigation.navigate('HomeNavigation');
                 }
                 else {
-                    this.props.navigation.navigate('SelectStore', { isFromDomain: false })
+                    this.props.navigation.navigate('SelectStore', { isFromDomain: false });
                 }
             }
         });

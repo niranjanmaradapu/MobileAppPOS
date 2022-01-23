@@ -518,7 +518,7 @@ class EditPool extends Component {
                                                     <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
                                                 </TouchableOpacity>
 
-                                                <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                                <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
                                                 </Text>
                                                 <View style={{ marginTop: 10, width: deviceWidth, }}>
                                                     <View style={{

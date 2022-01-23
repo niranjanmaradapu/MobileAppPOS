@@ -502,193 +502,157 @@ export default class Inventory extends Component {
 
 
 
-                  
 
-                {this.state.flagone && (
-                    <FlatList
-                        data={this.state.barcodesData}
-                        style={{ marginTop: 20 }}
-                        scrollEnabled={true}
-                        renderItem={({ item, index }) => (
-                            <View
-                                style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
-                            >
-                                <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
-                                    <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
-                                    <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>BARCODE: {"\n"}{item.barcode}</Text>
-                                    <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>LIST PRICE:  {"\n"} ₹{item.productTextile.itemMrp} </Text>
-                                    <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>STORE: {this.state.storeName}</Text>
-                                    <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.productTextile.qty}</Text>
-                                    <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>VALUE: ₹{item.productTextile.value}</Text>
 
-                                    {this.state.inventoryDelete && (
-                                        <View>
+                        {this.state.flagone && (
+                            <FlatList
+                                data={this.state.barcodesData}
+                                style={{ marginTop: 20 }}
+                                scrollEnabled={true}
+                                renderItem={({ item, index }) => (
+                                    <View
+                                        style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
+                                    >
+                                        <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
+                                            <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>BARCODE: {"\n"}{item.barcode}</Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>LIST PRICE:  {"\n"} ₹{item.productTextile.itemMrp} </Text>
+                                            <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>STORE: {this.state.storeName}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.productTextile.qty}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>VALUE: ₹{item.productTextile.value}</Text>
 
-                                            <Modal  isVisible={this.state.modalVisible}>
+                                            {this.state.inventoryDelete && (
+                                                <View>
 
-                                                <View style={{
-                                                    alignItems: 'center',
-                                                    marginLeft: -40,
-                                                    marginRight: -40,
-                                                    marginTop:deviceheight-260,
-                                                     backgroundColor: "#ffffff",
-                                                     height: 260,
-                                                }}>
+                                                    <Modal isVisible={this.state.modalVisible}>
 
-                                                    <Text style={{
-                                                        position: 'absolute',
-                                                        left: 20,
-                                                        top: 15,
-                                                        width: 300,
-                                                        height: 20,
-                                                        fontFamily: 'medium',
-                                                        fontSize: 16,
-                                                        color: '#353C40'
-                                                    }}> Delete Inventory </Text>
+                                                        <View style={styles.deleteMainContainer}>
 
-                                                    <TouchableOpacity style={{
-                                                        position: 'absolute',
-                                                        right: 20,
-                                                        top: 7,
-                                                        width: 50, height: 50,
-                                                    }} onPress={() => this.modelCancel()}>
-                                                        <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: Device.isTablet ? -5 : 5, }} source={require('../assets/images/modelcancel.png')} />
-                                                    </TouchableOpacity>
+                                                            <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Inventory </Text>
 
-                                                    <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                                    </Text>
-                                                    <Text style={{
-                                                        position: 'absolute',
-                                                        top: 70,
-                                                        height: 20,
-                                                        textAlign: 'center',
-                                                        fontFamily: 'regular',
-                                                        fontSize: 18,
-                                                        color: '#353C40'
-                                                    }}> Are you sure want to delete Barcode?  </Text>
-                                                    <TouchableOpacity
-                                                        style={{
-                                                            width: deviceWidth - 40,
-                                                            marginLeft: 20,
-                                                            marginRight: 20,
-                                                            marginTop: 60,
-                                                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                        }} onPress={() => this.deleteInventory(item, index)}
-                                                    >
-                                                        <Text style={{
-                                                            textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                                            fontFamily: "regular"
-                                                        }}  > DELETE </Text>
+                                                            <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                                                <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
+                                                            </TouchableOpacity>
 
-                                                    </TouchableOpacity>
+                                                            <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                                            </Text>
+                                                            <Text style={{
+                                                                // position: 'absolute',
+                                                                // top: 70,
+                                                                height: Device.isTablet ? 40 : 20,
+                                                                textAlign: 'center',
+                                                                fontFamily: 'regular',
+                                                                fontSize: Device.isTablet ? 23 : 18,
+                                                                // marginBottom: Device.isTablet ? 25 : 0,
+                                                                color: '#353C40'
+                                                            }}> Are you sure want to delete Barcode?  </Text>
 
-                                                    <TouchableOpacity
-                                                        style={{
-                                                            width: deviceWidth - 40,
-                                                            marginLeft: 20,
-                                                            marginRight: 20,
-                                                            marginTop: 20,
-                                                            height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                                        }} onPress={() => this.modelCancel()}
-                                                    >
-                                                        <Text style={{
-                                                            textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                                            fontFamily: "regular"
-                                                        }}  > CANCEL </Text>
+                                                            <TouchableOpacity
+                                                                style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 65 : 40 }]}
+                                                                onPress={() => this.deleteInventory(item, index)}
+                                                            >
+                                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
 
-                                                    </TouchableOpacity>
+                                                            </TouchableOpacity>
+
+                                                            <TouchableOpacity
+                                                                style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
+                                                            >
+                                                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                    </Modal>
+                                                </View>)}
+                                            <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
+                                                <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
+                                            </TouchableOpacity>
+
+                                            <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handlebarcodedeleteaction(item, index)}>
+                                                <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
+                                            </TouchableOpacity>
+
+                                            {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{ }</Text> */}
+
+
+
+                                            {this.state.barcodeDelete && (
+                                                <View>
+                                                    <Modal isVisible={this.state.modalVisible}>
+
+                                                        <View style={styles.deleteMainContainer}>
+
+                                                            <Text style={Device.isTablet ? flats.deleteBarcodeHeading_tablet : flats.deleteBarcodeHeading_mobile}> Delete Barcode Id </Text>
+                                                            <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                                                <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
+                                                            </TouchableOpacity>
+
+                                                            <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                                            </Text>
+                                                            <Text style={Device.isTablet ? flats.deleteSubHeading_tablet : flats.deleteSubHeading_mobile}> Are you sure want to delete Barcode?  </Text>
+                                                            <TouchableOpacity
+                                                                style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile} onPress={() => this.deleteBarcodeId(item, index)}
+                                                            >
+                                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+
+                                                            </TouchableOpacity>
+
+                                                            <TouchableOpacity
+                                                                style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
+                                                            >
+                                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CANCEL </Text>
+
+                                                            </TouchableOpacity>
+                                                        </View>
+                                                    </Modal>
                                                 </View>
-                                            </Modal>
-                                        </View>)}
-                                    <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
-                                        <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handlebarcodedeleteaction(item, index)}>
-                                        <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
-
-                                    </TouchableOpacity>
-
-                                    {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{ }</Text> */}
+                                            )}
 
 
-
-                                    {this.state.barcodeDelete && (
-                                        <View>
-                                            <Modal isVisible={this.state.modalVisible}>
-
-                                                <View style={Device.isTablet ? flats.deleteBarcodeContainer_tablet : flats.deleteBarcodeContainer_mobile}>
-
-                                                    <Text style={Device.isTablet ? flats.deleteBarcodeHeading_tablet : flats.deleteBarcodeHeading_mobile}> Delete Barcode Id </Text>
-                                                    <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
-                                                    </TouchableOpacity>
-
-                                                    <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                                    </Text>
-                                                    <Text style={Device.isTablet ? flats.deleteSubHeading_tablet : flats.deleteSubHeading_mobile}> Are you sure want to delete Barcode?  </Text>
-                                                    <TouchableOpacity
-                                                        style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile} onPress={() => this.deleteBarcodeId(item, index)}
-                                                    >
-                                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
-
-                                                    </TouchableOpacity>
-
-                                                    <TouchableOpacity
-                                                        style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
-                                                    >
-                                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CANCEL </Text>
-
-                                                    </TouchableOpacity>
-                                                </View>
-                                            </Modal>
                                         </View>
-                                    )}
-
-
-                                </View>
-                            </View>
+                                    </View>
+                                )}
+                            />
                         )}
-                    />
-                )}
-                {this.state.flagtwo && (
-                    <FlatList
-                        data={this.state.reBarcodesData}
-                        style={{ marginTop: 20 }}
-                        scrollEnabled={true}
-                        keyExtractor={item => item}
-                        renderItem={({ item, index }) => (
-                            <View
-                                style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
-                            >
-                                <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
-                                    <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >PARENT BARCODE: {"\n"}{item.toBeBarcodeId}</Text>
-                                    <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>CHILD BARCODE: {"\n"}{item.currentBarcodeId}</Text>
-                                    {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonTextsubrebar_mobile}>{ }</Text> */}
-                                    <Text style={Device.isTablet ? flats.commonTextRebar_tablet : flats.commonTextRebar_mobile}>EMPLOYEE ID: {"\n"}{item.createdBy}</Text>
-                                    <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>DATE: {"\n"}{item.fromDate}</Text>
-                                </View>
-                                <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.print(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/print.png')} />
-                                </TouchableOpacity>
+                        {this.state.flagtwo && (
+                            <FlatList
+                                data={this.state.reBarcodesData}
+                                style={{ marginTop: 20 }}
+                                scrollEnabled={true}
+                                keyExtractor={item => item}
+                                renderItem={({ item, index }) => (
+                                    <View
+                                        style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
+                                    >
+                                        <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
+                                            <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >PARENT BARCODE: {"\n"}{item.toBeBarcodeId}</Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>CHILD BARCODE: {"\n"}{item.currentBarcodeId}</Text>
+                                            {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonTextsubrebar_mobile}>{ }</Text> */}
+                                            <Text style={Device.isTablet ? flats.commonTextRebar_tablet : flats.commonTextRebar_mobile}>EMPLOYEE ID: {"\n"}{item.createdBy}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>DATE: {"\n"}{item.fromDate}</Text>
+                                        </View>
+                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.print(item, index)}>
+                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/print.png')} />
+                                        </TouchableOpacity>
 
-                                <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.seeDetails(item, index)}>
-                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/eye.png')} />
-                                </TouchableOpacity>
-                            </View>
+                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.seeDetails(item, index)}>
+                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/eye.png')} />
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
+                            />
                         )}
-                    />
-                )}
-                  </View>
+                    </View>
                 </ScrollView >
                 {this.state.flagFilterBarcodeOpen && (
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
-                            <View style={Device.isTablet ? styles.filterBarcodeContainer_tablet : styles.filterBarcodeContainer_mobile} >
+                            <View style={styles.filterMainContainer} >
                                 <KeyboardAwareScrollView enableOnAndroid={true} >
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                        <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
                                     <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
                                     </Text>
@@ -779,11 +743,11 @@ export default class Inventory extends Component {
                 {this.state.flagFilterReBarcodeOpen && (
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
-                            <View style={Device.isTablet ? styles.filterBarcodeContainer_tablet : styles.filterBarcodeContainer_mobile} >
+                            <View style={styles.filterMainContainer} >
                                 <KeyboardAwareScrollView enableOnAndroid={true} >
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modalCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                        <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
                                     <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
                                     </Text>
@@ -902,6 +866,29 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
     },
+    deleteMainContainer: {
+        marginLeft: -40,
+        marginRight: -40,
+        backgroundColor: '#ffffff',
+        paddingLeft: Device.isTablet ? 0 : 20,
+        marginTop: Device.isTablet ? deviceheight - 350 : deviceheight - 240,
+        height: Device.isTablet ? 350 : 240,
+    },
+    modelCloseImage: {
+        fontFamily: 'regular',
+        fontSize: 12,
+        position: 'absolute',
+        top: 10,
+        right: Device.isTablet ? 15 : 30,
+    },
+    filterMainContainer: {
+        marginLeft: -40,
+        marginRight: -40,
+        backgroundColor: '#ffffff',
+        paddingLeft: Device.isTablet ? 0 : 20,
+        marginTop: Device.isTablet ? deviceheight - 500 : deviceheight - 400,
+        height: Device.isTablet ? 500 : 400,
+    },
 
     // Styles For Mobile
     viewsWidth_mobile: {
@@ -1013,19 +1000,19 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_mobile: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 50,
     },
     filterCloseButton_mobile: {
         position: 'absolute',
-        right: -20,
+        right: 8,
         top: 15,
-        width: 50, height: 50,
+        width: 50,
+        height: 50,
     },
     filterCloseImage_mobile: {
-        color: '#ED1C24',
         fontFamily: 'regular',
         fontSize: 12,
         position: 'absolute',
@@ -1223,6 +1210,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         alignSelf: 'center'
     },
+
     filterBarcodeContainer_tablet: {
         width: deviceWidth,
         alignItems: 'center',
@@ -1243,7 +1231,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_tablet: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 60,

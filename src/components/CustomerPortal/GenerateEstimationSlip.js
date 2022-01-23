@@ -1,7 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import Constants from 'expo-constants';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import RNBeep from 'react-native-a-beep';
 import { RNCamera } from 'react-native-camera';
 import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -9,10 +11,8 @@ import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
-var deviceWidth = Dimensions.get('window').width;
-import RNBeep from 'react-native-a-beep';
-import axios from 'axios';
 import CustomerService from '../services/CustomerService';
+var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
@@ -110,15 +110,15 @@ class GenerateEstimationSlip extends Component {
     }
 
 
-    handlenewsaledeleteaction=  (item, index) => {
+    handlenewsaledeleteaction = (item, index) => {
         this.setState({ modalVisible: true, lineItemDelete: true });
-    }
+    };
 
-    deleteLineItem= (item, index) => {
+    deleteLineItem = (item, index) => {
         this.state.itemsList.splice(index, 1);
         this.setState({ barList: this.state.itemsList });
         this.calculateTotal();
-    }
+    };
 
     modelCancel() {
         this.setState({ modalVisible: false });
@@ -146,44 +146,44 @@ class GenerateEstimationSlip extends Component {
     generateEstimationSlip() {
         let lineItem = [];
         this.state.barList.forEach((element, index) => {
-          const obj = {
-            "itemPrice": element.productTextile.itemMrp,
-            "quantity": parseInt(element.quantity),
-            "discount": element.productTextile.discount,
-            "netValue": element.totalMrp,
-            "barCode": element.barcode,
-            "domainId": 1,
-            "storeId": this.state.storeId,
-    
-          }
-          lineItem.push(obj);
+            const obj = {
+                "itemPrice": element.productTextile.itemMrp,
+                "quantity": parseInt(element.quantity),
+                "discount": element.productTextile.discount,
+                "netValue": element.totalMrp,
+                "barCode": element.barcode,
+                "domainId": 1,
+                "storeId": this.state.storeId,
+
+            };
+            lineItem.push(obj);
         });
         axios.post(CustomerService.saveLineItems(), lineItem).then((res) => {
-          if (res) {
-            let lineItemsList = [];
-            let dataResult = JSON.parse(res.data.result);
-            dataResult.forEach(element => {
-              const obj = {
-                "lineItemId": element
-              }
-              lineItemsList.push(obj);
-            });
-            this.setState({ lineItemsList: lineItemsList });
-          }
-          const createObj = {
-            "salesMan": parseInt(this.state.smnumber),
-            "lineItems": this.state.lineItemsList,
-            "storeId": this.state.storeId,
-          }
-          axios.post(CustomerService.createDeliverySlip(), createObj).then((res) => {
             if (res) {
-              alert(res.data.message);
-              this.setState({
-                barList: [],
-                itemsList: [],
-              });
+                let lineItemsList = [];
+                let dataResult = JSON.parse(res.data.result);
+                dataResult.forEach(element => {
+                    const obj = {
+                        "lineItemId": element
+                    };
+                    lineItemsList.push(obj);
+                });
+                this.setState({ lineItemsList: lineItemsList });
             }
-          });
+            const createObj = {
+                "salesMan": parseInt(this.state.smnumber),
+                "lineItems": this.state.lineItemsList,
+                "storeId": this.state.storeId,
+            };
+            axios.post(CustomerService.createDeliverySlip(), createObj).then((res) => {
+                if (res) {
+                    alert(res.data.message);
+                    this.setState({
+                        barList: [],
+                        itemsList: [],
+                    });
+                }
+            });
         }).catch(() => {
             alert('Error to create Delivery slip');
         });
@@ -194,14 +194,14 @@ class GenerateEstimationSlip extends Component {
         if (this.state.uom === "") {
             alert("Please select UOM");
         }
-        else if(this.state.barcodeId === ""){
-            alert("Please select Barcode");  
+        else if (this.state.barcodeId === "") {
+            alert("Please select Barcode");
         }
-         if (this.state.smnumber === "") {
+        if (this.state.smnumber === "") {
             alert("Please select UOM");
         }
         else {
-            this.getLineItems()
+            this.getLineItems();
         }
     }
 
@@ -221,7 +221,7 @@ class GenerateEstimationSlip extends Component {
                             this.state.itemsList[i].barcode ===
                             this.state.itemsList[i + 1].barcode
                         ) {
-                         
+
                             this.state.itemsList.splice(i, 1);
                             alert("Barcode already entered");
                             break;
@@ -231,7 +231,7 @@ class GenerateEstimationSlip extends Component {
                 this.setState({ barList: this.state.itemsList }, () => {
                     this.state.barList.forEach((element) => {
                         if (element.quantity > 1) {
-                            console.log(element.quantity)
+                            console.log(element.quantity);
                         } else {
                             element.totalMrp = element.productTextile.itemMrp;
                             element.quantity = parseInt("1");
@@ -240,7 +240,7 @@ class GenerateEstimationSlip extends Component {
                     });
                     this.calculateTotal();
                 });
-                this.setState({ barcodeId: "",uom:"",smnumber:"" });
+                this.setState({ barcodeId: "", uom: "", smnumber: "" });
             } else {
                 alert(res.data.body);
             }
@@ -273,16 +273,16 @@ class GenerateEstimationSlip extends Component {
 
     handleUOM = (value) => {
         // this.getAllSections()
-        this.setState({ uom: value })
-    }
+        this.setState({ uom: value });
+    };
 
     handleBarCode = (value) => {
-        this.setState({ barcodeId: value })
-    }
+        this.setState({ barcodeId: value });
+    };
 
     handleQty = (value) => {
-        this.setState({ saleQuantity: value })
-    }
+        this.setState({ saleQuantity: value });
+    };
 
     updateQty = (text, index) => {
         const qtyarr = [...this.state.itemsList];
@@ -295,40 +295,40 @@ class GenerateEstimationSlip extends Component {
         var additem = parseInt(qtyarr[index].quantity) + 1;
         qtyarr[index].quantity = additem.toString();
         let totalcostMrp = item.productTextile.itemMrp * parseInt(qtyarr[index].quantity);
-        item.totalMrp = totalcostMrp
+        item.totalMrp = totalcostMrp;
         this.setState({ itemsList: qtyarr });
-      
-        let grandTotal =0;
-    let totalqty = 0;
-    this.state.barList.forEach(bardata => {
-      grandTotal = grandTotal+ bardata.totalMrp;
-      totalqty = totalqty + parseInt(bardata.quantity)
-    });
 
-    this.setState({mrpAmount: grandTotal, totalQuantity: totalqty});
+        let grandTotal = 0;
+        let totalqty = 0;
+        this.state.barList.forEach(bardata => {
+            grandTotal = grandTotal + bardata.totalMrp;
+            totalqty = totalqty + parseInt(bardata.quantity);
+        });
 
-        this.state.totalQuantity = (parseInt(this.state.totalQuantity) + 1)
+        this.setState({ mrpAmount: grandTotal, totalQuantity: totalqty });
+
+        this.state.totalQuantity = (parseInt(this.state.totalQuantity) + 1);
     }
 
     decreamentForTable(item, index) {
         const qtyarr = [...this.state.itemsList];
-        if(qtyarr[index].quantity > 1){
-        var additem = parseInt(qtyarr[index].quantity) - 1;
-        qtyarr[index].quantity = additem.toString();
-       
-        let totalcostMrp = item.productTextile.itemMrp * parseInt(qtyarr[index].quantity);
-        item.totalMrp = totalcostMrp
-        this.state.totalQuantity = (parseInt(this.state.totalQuantity) - 1)
-        let grandTotal =0;
-    let totalqty = 0;
-    this.state.barList.forEach(bardata => {
-      grandTotal = grandTotal+ bardata.totalMrp;
-      totalqty = totalqty + parseInt(bardata.quantity)
-    });
+        if (qtyarr[index].quantity > 1) {
+            var additem = parseInt(qtyarr[index].quantity) - 1;
+            qtyarr[index].quantity = additem.toString();
 
-    this.setState({mrpAmount: grandTotal, totalQuantity: totalqty});
+            let totalcostMrp = item.productTextile.itemMrp * parseInt(qtyarr[index].quantity);
+            item.totalMrp = totalcostMrp;
+            this.state.totalQuantity = (parseInt(this.state.totalQuantity) - 1);
+            let grandTotal = 0;
+            let totalqty = 0;
+            this.state.barList.forEach(bardata => {
+                grandTotal = grandTotal + bardata.totalMrp;
+                totalqty = totalqty + parseInt(bardata.quantity);
+            });
 
-        this.setState({ itemsList: qtyarr });
+            this.setState({ mrpAmount: grandTotal, totalQuantity: totalqty });
+
+            this.setState({ itemsList: qtyarr });
         }
     }
 
@@ -618,47 +618,47 @@ class GenerateEstimationSlip extends Component {
                                             </TouchableOpacity>
                                         </View>
 
-     {this.state.lineItemDelete && (
-                                <View>
-                                    <Modal isVisible={this.state.modalVisible}>
+                                        {this.state.lineItemDelete && (
+                                            <View>
+                                                <Modal isVisible={this.state.modalVisible}>
 
-                                        <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
+                                                    <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
 
-                                            <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Item </Text>
+                                                        <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Item </Text>
 
-                                            <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
-                                            </TouchableOpacity>
+                                                        <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
+                                                            <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                                        </TouchableOpacity>
 
-                                            <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                            </Text>
-                                            <Text style={{
-                                                position: 'absolute',
-                                                top: 70,
-                                                height: Device.isTablet ? 40 : 20,
-                                                textAlign: 'center',
-                                                fontFamily: 'regular',
-                                                fontSize: Device.isTablet ? 23 : 18,
-                                                marginBottom: Device.isTablet ? 25 : 0,
-                                                color: '#353C40'
-                                            }}> Are you sure want to delete NewSale Item?  </Text>
-                                            <TouchableOpacity
-                                                style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]}
-                                                onPress={() => this.deleteLineItem(item, index)}
-                                            >
-                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
-                                            </TouchableOpacity>
+                                                        <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                                        </Text>
+                                                        <Text style={{
+                                                            position: 'absolute',
+                                                            top: 70,
+                                                            height: Device.isTablet ? 40 : 20,
+                                                            textAlign: 'center',
+                                                            fontFamily: 'regular',
+                                                            fontSize: Device.isTablet ? 23 : 18,
+                                                            marginBottom: Device.isTablet ? 25 : 0,
+                                                            color: '#353C40'
+                                                        }}> Are you sure want to delete NewSale Item?  </Text>
+                                                        <TouchableOpacity
+                                                            style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]}
+                                                            onPress={() => this.deleteLineItem(item, index)}
+                                                        >
+                                                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                                        </TouchableOpacity>
 
-                                            <TouchableOpacity
-                                                style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
-                                                onPress={() => this.modelCancel()}
-                                            >
-                                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
-                                            </TouchableOpacity>
-                                        </View>
-                                    </Modal>
-                                </View>
-                            )}
+                                                        <TouchableOpacity
+                                                            style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
+                                                            onPress={() => this.modelCancel()}
+                                                        >
+                                                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                </Modal>
+                                            </View>
+                                        )}
 
                                     </View>
 
@@ -667,7 +667,7 @@ class GenerateEstimationSlip extends Component {
                                 )}
                             />
 
-                       
+
 
                             {this.state.itemsList.length != 0 && (
                                 <View style={{ width: deviceWidth, height: 220, position: 'absolute', bottom: 0, backgroundColor: '#FFFFFF' }}>
@@ -2164,7 +2164,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_mobile: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 50,
@@ -2240,7 +2240,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_tablet: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 60,

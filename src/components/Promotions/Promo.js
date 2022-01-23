@@ -1029,7 +1029,7 @@ class Promo extends Component {
                                                     <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                                 </TouchableOpacity>
 
-                                                <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                                <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
                                                 </Text>
                                                 <Text style={{
                                                     position: 'absolute',
@@ -1257,7 +1257,7 @@ class Promo extends Component {
                                                     <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
                                                 </TouchableOpacity>
 
-                                                <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                                <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
                                                 </Text>
                                                 <Text style={{
                                                     position: 'absolute',
@@ -1830,7 +1830,7 @@ class Promo extends Component {
                                         <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
 
-                                    <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                    <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
                                     </Text>
                                     <Text style={{
                                         position: 'absolute',
@@ -2841,7 +2841,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_mobile: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 50,
@@ -3102,7 +3102,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_tablet: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 60,

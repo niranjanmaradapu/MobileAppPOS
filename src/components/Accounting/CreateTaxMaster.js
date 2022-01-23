@@ -77,7 +77,7 @@ export default class CreateTaxMaster extends Component {
                                 <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Tax </Text>
 
                                 <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                    <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: Device.isTablet ? 15 : 30, }} source={require('../assets/images/modelcancel.png')} />
+                                    <Image style={styles.deleteCloseImage} source={require('../assets/images/modelcancel.png')} />
                                 </TouchableOpacity>
                                 <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
                                 </Text>
@@ -123,6 +123,13 @@ const styles = StyleSheet.create({
         marginTop: Device.isTablet ? deviceHeight - 350 : deviceHeight - 240,
         height: Device.isTablet ? 350 : 240,
     },
+    deleteCloseImage: {
+        fontFamily: 'regular',
+        fontSize: 12,
+        position: 'absolute',
+        top: 10,
+        right: Device.isTablet ? 15 : 30,
+    },
 
     // Styles For Mobile
 
@@ -145,7 +152,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_mobile: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 50,
@@ -155,14 +162,6 @@ const styles = StyleSheet.create({
         right: 8,
         top: 15,
         width: 50, height: 50,
-    },
-    filterCloseImage_mobile: {
-        color: '#ED1C24',
-        fontFamily: 'regular',
-        fontSize: 12,
-        position: 'absolute',
-        top: 10,
-        right: 0,
     },
     filterApplyButton_mobile: {
         width: deviceWidth - 40,
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_tablet: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 60,
@@ -228,15 +227,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 24,
         top: 10,
-        width: 60, height: 60,
-    },
-    filterCloseImage_tablet: {
-        color: '#ED1C24',
-        fontFamily: 'regular',
-        fontSize: 17,
-        position: 'absolute',
-        top: 10,
-        right: 24,
+        width: 60,
+        height: 60,
     },
     filterApplyButton_tablet: {
         width: deviceWidth - 40,
