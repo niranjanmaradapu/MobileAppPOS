@@ -10,6 +10,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import ReportsService from '../services/ReportsService';
 var deviceWidth = Dimensions.get("window").width;
+var deviceheight = Dimensions.get("window").height;
 
 export class ListOfPromotions extends Component {
 
@@ -176,11 +177,11 @@ export class ListOfPromotions extends Component {
                 {this.props.flagFilterListPromotions && (
                     <View>
                         <Modal isVisible={this.props.modalVisible}>
-                            <View style={Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile} >
+                            <View style={styles.filterMainContainer} >
                                 <KeyboardAwareScrollView enableOnAndroid={true} >
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                        <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
                                     <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
                                     </Text>
@@ -307,6 +308,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
+
     inputAndroid: {
         justifyContent: 'center',
         height: 42,
@@ -381,7 +383,21 @@ const styles = StyleSheet.create({
         marginTop: Device.isTablet ? 25 : 20,
         marginRight: Device.isTablet ? 30 : 20,
     },
-
+    modelCloseImage: {
+        fontFamily: 'regular',
+        fontSize: 12,
+        position: 'absolute',
+        top: 10,
+        right: Device.isTablet ? 15 : 30,
+    },
+    filterMainContainer: {
+        marginLeft: -40,
+        marginRight: -40,
+        backgroundColor: '#ffffff',
+        paddingLeft: Device.isTablet ? 0 : 20,
+        marginTop: Device.isTablet ? deviceheight - 550 : deviceheight - 450,
+        height: Device.isTablet ? 550 : 450,
+    },
     // Styles For Mobile
 
     filterMainContainer_mobile: {
@@ -404,7 +420,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_mobile: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 50,
@@ -560,7 +576,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_tablet: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 60,

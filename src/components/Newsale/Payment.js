@@ -4,13 +4,13 @@ import axios from 'axios';
 import Constants from 'expo-constants';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import RazorpayCheckout from 'react-native-razorpay';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
-import Device from 'react-native-device-detection';
 import LoginService from '../services/LoginService';
 import NewSaleService from '../services/NewSaleService';
 import PromotionsService from '../services/PromotionsService';
@@ -764,7 +764,7 @@ class Payment extends Component {
                         )}
                         {this.state.notfound === "not found" && this.state.loyaltyPoints == "" && (
                             <View style={{ height: 50, backgroundColor: "#ffffff", }}>
-                                <View style={{ height: 1, backgroundColor: "" }}>
+                                <View style={{ height: Device.isTablet ? 2 : 1, backgroundColor: "" }}>
                                 </View>
                                 <TouchableOpacity
                                     style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 150, height: 32, alignSelf: 'center', marginTop: 5 }}
@@ -833,7 +833,7 @@ class Payment extends Component {
 
                         {this.state.loyaltyPoints !== "" && this.state.redeemedPints === "0" && (
                             <View style={{ height: 0, backgroundColor: "#ffffff", }}>
-                                {/* <View style={{ height: 1, backgroundColor: "#22222240",marginTop:-20, }}> */}
+                                {/* <View style={{ height: Device.isTablet ? 2 : 1, backgroundColor: "#22222240",marginTop:-20, }}> */}
 
                                 <TouchableOpacity
                                     style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 150, height: 32, alignSelf: 'flex-end', marginTop: -45, right: 10 }}
@@ -1046,7 +1046,7 @@ class Payment extends Component {
                                             <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
                                         </TouchableOpacity>
 
-                                        <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                        <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
                                         </Text>
                                         <Text style={{
                                             position: 'absolute',

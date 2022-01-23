@@ -23,8 +23,8 @@ class RegisterClient extends Component {
 
     componentDidMount() {
 
-
     }
+
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
@@ -50,6 +50,7 @@ class RegisterClient extends Component {
     handleEmail = (text) => {
         this.setState({ userEmail: text });
     };
+    
     handleAddress = (text) => {
         this.setState({ address: text });
     };
@@ -64,7 +65,7 @@ class RegisterClient extends Component {
         } else if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
             alert('You must enter a valid mobile number');
         }
-        else if (emailReg.test(this.state.email) === false) {
+        else if (emailReg.test(this.state.userEmail) === false) {
             alert('You must enter a valid email');
         }
         else {

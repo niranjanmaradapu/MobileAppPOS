@@ -8,6 +8,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Modal from 'react-native-modal';
 import ReportsService from '../services/ReportsService';
 var deviceWidth = Dimensions.get("window").width;
+var deviceheight = Dimensions.get("window").height;
 
 export class GoodsReturn extends Component {
 
@@ -206,11 +207,11 @@ export class GoodsReturn extends Component {
                 {this.props.flagFilterGoodsReturn && (
                     <View>
                         <Modal isVisible={this.props.modalVisible}>
-                            <View style={Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile} >
+                            <View style={styles.filterMainContainer} >
                                 <KeyboardAwareScrollView enableOnAndroid={true} >
                                     <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
+                                        <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
                                     </TouchableOpacity>
                                     <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
                                     </Text>
@@ -414,6 +415,21 @@ const styles = StyleSheet.create({
         marginTop: Device.isTablet ? 25 : 20,
         marginRight: Device.isTablet ? 30 : 20,
     },
+    modelCloseImage: {
+        fontFamily: 'regular',
+        fontSize: 12,
+        position: 'absolute',
+        top: 10,
+        right: Device.isTablet ? 15 : 30,
+    },
+    filterMainContainer: {
+        marginLeft: -40,
+        marginRight: -40,
+        backgroundColor: '#ffffff',
+        paddingLeft: Device.isTablet ? 0 : 20,
+        marginTop: Device.isTablet ? deviceheight - 600 : deviceheight - 500,
+        height: Device.isTablet ? 600 : 500,
+    },
 
     // Styles For Mobile
 
@@ -437,7 +453,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_mobile: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 50,
@@ -446,7 +462,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 8,
         top: 15,
-        width: 50, height: 50,
+        width: 50,
+        height: 50,
     },
     filterDateButton_mobile: {
         width: deviceWidth - 40,
@@ -593,7 +610,7 @@ const styles = StyleSheet.create({
         color: '#353C40'
     },
     filterByTitleDecoration_tablet: {
-        height: 1,
+        height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
         marginTop: 60,
@@ -617,7 +634,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 24,
         top: 10,
-        width: 60, height: 60,
+        width: 60,
+        height: 60,
     },
     filterCloseImage_tablet: {
         color: '#ED1C24',

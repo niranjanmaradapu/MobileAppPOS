@@ -140,91 +140,91 @@ class NewSaleRetail extends Component {
     });
     this.barcodeDBStore();
     this.getItems();
-   
+
     AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
-        if (value === "true") {
-            var domainId = "1";
-            if (global.domainName === "Textile") {
-                domainId = "1";
-            }
-            else if (global.domainName === "Retail") {
-                domainId = "2";
-            }
-            else if (global.domainName === "Electrical & Electronics") {
-                domainId = "3";
-            }
+      if (value === "true") {
+        var domainId = "1";
+        if (global.domainName === "Textile") {
+          domainId = "1";
+        }
+        else if (global.domainName === "Retail") {
+          domainId = "2";
+        }
+        else if (global.domainName === "Electrical & Electronics") {
+          domainId = "3";
+        }
 
-        
-            axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
-              
-                if (res.data && res.data["isSuccess"] === "true") {
-                    let len = res.data["result"].length;
-                    if (len > 0) {
-                        if (len > 0) {
-                            for (let i = 0; i < len; i++) {
-                                let previlage = res.data["result"][i];
-                                if (previlage.name === "Billing Portal") {
-                                    for (let i = 0; i < previlage.subPrivillages.length; i++) {
-                                        console.log(previlage.subPrivillages[i].parentPrivillageId);
-                                        if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
-                                            let subprivilage = previlage.subPrivillages[i];
-                                            if (subprivilage.name === "Dashboard") {
-                                                this.setState({ flagOne: false, flagTwo: false });
-                                            }
-                                            if (i === 0) {
-                                                this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                            }
-                                            else {
-                                                this.state.privilages.push({ bool: false, name: subprivilage.name });
-                                            }
-                                        }
-                                    }
-                                }
-                                this.setState({ privilages: this.state.privilages });
-                            }
+
+        axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
+
+          if (res.data && res.data["isSuccess"] === "true") {
+            let len = res.data["result"].length;
+            if (len > 0) {
+              if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                  let previlage = res.data["result"][i];
+                  if (previlage.name === "Billing Portal") {
+                    for (let i = 0; i < previlage.subPrivillages.length; i++) {
+                      console.log(previlage.subPrivillages[i].parentPrivillageId);
+                      if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
+                        let subprivilage = previlage.subPrivillages[i];
+                        if (subprivilage.name === "Dashboard") {
+                          this.setState({ flagOne: false, flagTwo: false });
                         }
+                        if (i === 0) {
+                          this.state.privilages.push({ bool: true, name: subprivilage.name });
+                        }
+                        else {
+                          this.state.privilages.push({ bool: false, name: subprivilage.name });
+                        }
+                      }
                     }
+                  }
+                  this.setState({ privilages: this.state.privilages });
                 }
-            });
-        }
-        else {
-            AsyncStorage.getItem("rolename").then((value) => {
-                axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
-                    if (res.data && res.data["isSuccess"] === "true") {
-                        let len = res.data["result"].parentPrivilages.length;
-                        let length = res.data["result"].subPrivilages.length;
-                        // console.log(.name)
-                        if (len > 0) {
-                            for (let i = 0; i < len; i++) {
-                                let previlage = res.data["result"].parentPrivilages[i];
-                                if (previlage.name === "Billing Portal") {
+              }
+            }
+          }
+        });
+      }
+      else {
+        AsyncStorage.getItem("rolename").then((value) => {
+          axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
+            if (res.data && res.data["isSuccess"] === "true") {
+              let len = res.data["result"].parentPrivilages.length;
+              let length = res.data["result"].subPrivilages.length;
+              // console.log(.name)
+              if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                  let previlage = res.data["result"].parentPrivilages[i];
+                  if (previlage.name === "Billing Portal") {
 
-                                    if (length > 0) {
-                                        for (let i = 0; i < length; i++) {
-                                            if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
-                                                let subprivilage = res.data["result"].subPrivilages[i];
-                                                if (i === 0) {
-                                                    this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                }
-                                                else {
-                                                    this.state.privilages.push({ bool: false, name: subprivilage.name });
-                                                }
-                                            }
-                                            this.setState({ privilages: this.state.privilages });
-                                        }
-                                    }
-                                }
-                            }
+                    if (length > 0) {
+                      for (let i = 0; i < length; i++) {
+                        if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
+                          let subprivilage = res.data["result"].subPrivilages[i];
+                          if (i === 0) {
+                            this.state.privilages.push({ bool: true, name: subprivilage.name });
+                          }
+                          else {
+                            this.state.privilages.push({ bool: false, name: subprivilage.name });
+                          }
                         }
+                        this.setState({ privilages: this.state.privilages });
+                      }
                     }
-                });
-            }).catch(() => {
-                console.log('there is error saving domainDataId');
-            });
+                  }
+                }
+              }
+            }
+          });
+        }).catch(() => {
+          console.log('there is error saving domainDataId');
+        });
 
-        }
+      }
     }).catch(() => {
-        console.log('there is error getting sadasdsd');
+      console.log('there is error getting sadasdsd');
     });
 
 
@@ -233,25 +233,25 @@ class NewSaleRetail extends Component {
 
   topbarAction1 = (item, index) => {
     if (item.name === "Generate Invoice") {
-      console.log('geneare invocie safasfsf')
-        this.setState({ inventoryDelete: false, modalVisible: false, flagone: true, flagtwo: false, flagthree: false, flagfour: false });
+      console.log('geneare invocie safasfsf');
+      this.setState({ inventoryDelete: false, modalVisible: false, flagone: true, flagtwo: false, flagthree: false, flagfour: false });
     }
 
     if (this.state.privilages[index].bool === true) {
-        this.state.privilages[index].bool = false;
+      this.state.privilages[index].bool = false;
     }
     else {
-        this.state.privilages[index].bool = true;
+      this.state.privilages[index].bool = true;
     }
     for (let i = 0; i < this.state.privilages.length; i++) {
-        if (index != i) {
-            this.state.privilages[i].bool = false;
-        }
-        this.setState({ privilages: this.state.privilages });
+      if (index != i) {
+        this.state.privilages[i].bool = false;
+      }
+      this.setState({ privilages: this.state.privilages });
     }
-}
+  };
 
- 
+
 
   invoiceUpdate() {
     this.setState({ tableData: [] });
@@ -1023,7 +1023,7 @@ class NewSaleRetail extends Component {
     this.props.navigation.dispatch(DrawerActions.openDrawer());
   }
 
- 
+
 
 
   topbarAction2() {
@@ -1060,7 +1060,7 @@ class NewSaleRetail extends Component {
       flagthree: true,
       flagfour: false
     });
-   // this.synccreateInventoryOfflineToOnline();
+    // this.synccreateInventoryOfflineToOnline();
     this.getItems();
   }
 
@@ -1765,322 +1765,322 @@ class NewSaleRetail extends Component {
           </TouchableOpacity>
         </View> */}
 
-<ScrollView>
-                    <View style={styles.previlagecontainer}>
+        <ScrollView>
+          <View style={styles.previlagecontainer}>
 
-                        <FlatList
-                            style={styles.flatList}
-                            horizontal
-                            data={this.state.privilages}
-                            showsVerticalScrollIndicator={false}
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item, index }) => (
-                                <TouchableOpacity style={{
-                                    height: 36,
-                                    width: 200,
-                                    borderWidth: 1,
-                                    backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
-                                    borderColor: item.bool ? '#ED1C24' : '#858585',
-                                    borderRadius: 5,
-                                    marginLeft: 10,
-                                }} onPress={() => this.topbarAction1(item, index)} >
+            <FlatList
+              style={styles.flatList}
+              horizontal
+              data={this.state.privilages}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item, index }) => (
+                <TouchableOpacity style={{
+                  height: 36,
+                  width: 200,
+                  borderWidth: 1,
+                  backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
+                  borderColor: item.bool ? '#ED1C24' : '#858585',
+                  borderRadius: 5,
+                  marginLeft: 10,
+                }} onPress={() => this.topbarAction1(item, index)} >
 
-                                    <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
-                                        {item.name}
-                                    </Text>
-                                </TouchableOpacity>
-                            )}
-                            ListFooterComponent={<View style={{ width: 15 }}></View>}
-                        />
-
-                      
-        {this.state.flagone && (
-          <ScrollView>
-            < View
-              style={{
-                flex: 1,
-                paddingHorizontal: 0,
-                paddingVertical: 0,
-                marginTop: 10,
-              }}>
-              <View>
-                <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                  underlineColorAndroid="transparent"
-                  placeholder="Enter Barcode"
-                  placeholderTextColor="#6F6F6F60"
-                  textAlignVertical="center"
-                  keyboardType={'default'}
-                  autoCapitalize="none"
-                  onEndEditing
-                  onChangeText={(text) => this.handleBarCode(text)}
-                  onEndEditing={() => this.endEditing()}
-                />
-
-                <TouchableOpacity
-                  style={Device.isTablet ? styles.tagCustomerButton_tablet : styles.tagCustomerButton_mobile}
-                  onPress={() => this.tagCustomer()} >
-                  <Text style={Device.isTablet ? styles.tagCustomerButtonText_tablet : styles.tagCustomerButtonText_mobile}> {('Tag Customer')} </Text>
+                  <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
+                    {item.name}
+                  </Text>
                 </TouchableOpacity>
-              </View>
-              <FlatList
-                //  ListHeaderComponent={this.renderHeader}
-                data={this.state.tableData}
-                keyExtractor={item => item.email}
-                contentContainerStyle={{ paddingBottom: 200 }}
-                onEndReached={this.onEndReached.bind(this)}
-                scrollEnabled={
-                  false
-                }
-                ref={(ref) => { this.listRef = ref; }}
-                renderItem={({ item, index }) => (
-                  <View style={{
-                    height: 120,
-                    backgroundColor: '#FFFFFF',
-                    borderBottomWidth: 5,
-                    borderBottomColor: '#FBFBFB',
-                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+              )}
+              ListFooterComponent={<View style={{ width: 15 }}></View>}
+            />
 
+
+            {this.state.flagone && (
+              <ScrollView>
+                < View
+                  style={{
+                    flex: 1,
+                    paddingHorizontal: 0,
+                    paddingVertical: 0,
+                    marginTop: 10,
                   }}>
+                  <View>
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                      underlineColorAndroid="transparent"
+                      placeholder="Enter Barcode"
+                      placeholderTextColor="#6F6F6F60"
+                      textAlignVertical="center"
+                      keyboardType={'default'}
+                      autoCapitalize="none"
+                      onEndEditing
+                      onChangeText={(text) => this.handleBarCode(text)}
+                      onEndEditing={() => this.endEditing()}
+                    />
 
-                    <View style={{ flexDirection: 'column', height: 120, }}>
-                      <Image source={require('../assets/images/default.jpeg')}
-                        //source={{ uri: item.image }}
-                        style={{
-                          position: 'absolute', left: 20, top: 15, width: 90, height: 90,
-                        }} />
-                      <Text style={{ fontSize: 16, marginTop: 10, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>
-                        {item.itemdesc}
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                        QUANTITY:
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                        {item.qty} {item.productuom}
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                        PRICE/EACH:
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 205, marginTop: -15, fontFamily: 'medium', color: '#ED1C24' }}>
-                        ₹ {(parseInt(item.netamount)).toString()}
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 245, marginTop: -15, fontFamily: 'regular', color: '#808080', textDecorationLine: 'line-through' }}>
-                        Rs. 100
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                        TOTAL:
-                      </Text>
-                      <Text style={{ fontSize: 12, marginLeft: 172, marginTop: -15, fontFamily: 'medium', color: '#ED1C24' }}>
-                        ₹ {(parseInt(item.netamount) * item.qty).toString()}
-                      </Text>
-                    </View>
-
-                    <View style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-around',
-                      alignItems: 'center',
-                      height: 30,
-                      marginRight: 20,
-                      width: 90,
-                      //borderWidth:1,
-                      //borderColor:'#ED1C24',
-                      // borderRadius:3,
-                    }}>
-                      <TouchableOpacity style={{
-                        borderColor: '#ED1C24',
-                        height: 28,
-                        width: 30, borderBottomLeftRadius: 3,
-                        borderTopLeftRadius: 3,
-                        borderBottomWidth: 1,
-                        borderTopWidth: 1,
-                        borderLeftWidth: 1, paddingLeft: 10, marginLeft: 20,
-                      }}>
-                        <Text style={{ alignSelf: 'center', marginTop: 2, marginLeft: -10, color: '#ED1C24' }}
-                          onPress={() => this.decreamentForTable(item, index)}>-</Text>
-                      </TouchableOpacity>
-                      {/* <Text> {item.qty}</Text> */}
-                      <TextInput
-                        style={{
-                          justifyContent: 'center',
-                          margin: 20,
-                          height: 28,
-                          width: 30,
-                          marginTop: 10,
-                          marginBottom: 10,
-                          borderColor: '#ED1C24',
-                          backgroundColor: 'white',
-                          color: '#353C40',
-                          borderWidth: 1,
-                          fontFamily: 'regular',
-                          fontSize: 12,
-                          paddingLeft: 9,
-                        }}
-                        underlineColorAndroid="transparent"
-                        placeholder="0"
-                        placeholderTextColor="#8F9EB7"
-
-                        value={item.qty}
-                        onChangeText={(text) => this.updateQty(text, index)}
-                      />
-                      <TouchableOpacity style={{
-                        borderColor: '#ED1C24',
-                        height: 28,
-                        width: 30, borderBottomRightRadius: 3,
-                        borderTopRightRadius: 3,
-                        borderBottomWidth: 1,
-                        borderTopWidth: 1,
-                        borderRightWidth: 1
-                      }}>
-                        <Text style={{ alignSelf: 'center', marginTop: 2, color: '#ED1C24' }}
-                          onPress={() => this.incrementForTable(item, index)}>+</Text>
-
-                      </TouchableOpacity>
-
-                      <TouchableOpacity style={{
-                        position: 'absolute',
-                        right: 20,
-                        top: -35,
-                        width: 30,
-                        height: 30,
-                        borderRadius: 5,
-                        // borderTopRightRadius: 5,
-                        borderWidth: 1,
-                        borderColor: "lightgray",
-                      }} onPress={() => this.handlenewsaledeleteaction(item, index)}>
-                        <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
-
-                      </TouchableOpacity>
-                    </View>
-
-                    {this.state.lineItemDelete && (
-                      <View>
-                        <Modal isVisible={this.state.modalVisible}>
-
-                          <View style={{
-                            width: deviceWidth,
-                            alignItems: 'center',
-                            marginLeft: -20,
-                            backgroundColor: "#ffffff",
-                            height: 260,
-                            position: 'absolute',
-                            bottom: -20,
-                          }}>
-
-                            <Text style={{
-                              position: 'absolute',
-                              left: 20,
-                              top: 15,
-                              width: 300,
-                              height: 20,
-                              fontFamily: 'medium',
-                              fontSize: 16,
-                              color: '#353C40'
-                            }}> Delete Item </Text>
-
-                            <TouchableOpacity style={{
-                              position: 'absolute',
-                              right: 20,
-                              top: 7,
-                              width: 50, height: 50,
-                            }} onPress={() => this.modelCancel()}>
-                              <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
-                            </TouchableOpacity>
-
-                            <Text style={{ height: 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                            </Text>
-                            <Text style={{
-                              position: 'absolute',
-                              top: 70,
-                              height: 20,
-                              textAlign: 'center',
-                              fontFamily: 'regular',
-                              fontSize: 18,
-                              color: '#353C40'
-                            }}> Are you sure want to delete NewSale Item?  </Text>
-                            <TouchableOpacity
-                              style={{
-                                width: deviceWidth - 40,
-                                marginLeft: 20,
-                                marginRight: 20,
-                                marginTop: 60,
-                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                              }} onPress={() => this.deleteLineItem(item, index)}
-                            >
-                              <Text style={{
-                                textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                fontFamily: "regular"
-                              }}  > DELETE </Text>
-
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                              style={{
-                                width: deviceWidth - 40,
-                                marginLeft: 20,
-                                marginRight: 20,
-                                marginTop: 20,
-                                height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                              }} onPress={() => this.modelCancel()}
-                            >
-                              <Text style={{
-                                textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                fontFamily: "regular"
-                              }}  > CANCEL </Text>
-
-                            </TouchableOpacity>
-                          </View>
-                        </Modal>
-                      </View>)}
-
+                    <TouchableOpacity
+                      style={Device.isTablet ? styles.tagCustomerButton_tablet : styles.tagCustomerButton_mobile}
+                      onPress={() => this.tagCustomer()} >
+                      <Text style={Device.isTablet ? styles.tagCustomerButtonText_tablet : styles.tagCustomerButtonText_mobile}> {('Tag Customer')} </Text>
+                    </TouchableOpacity>
                   </View>
+                  <FlatList
+                    //  ListHeaderComponent={this.renderHeader}
+                    data={this.state.tableData}
+                    keyExtractor={item => item.email}
+                    contentContainerStyle={{ paddingBottom: 200 }}
+                    onEndReached={this.onEndReached.bind(this)}
+                    scrollEnabled={
+                      false
+                    }
+                    ref={(ref) => { this.listRef = ref; }}
+                    renderItem={({ item, index }) => (
+                      <View style={{
+                        height: 120,
+                        backgroundColor: '#FFFFFF',
+                        borderBottomWidth: 5,
+                        borderBottomColor: '#FBFBFB',
+                        flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
+
+                      }}>
+
+                        <View style={{ flexDirection: 'column', height: 120, }}>
+                          <Image source={require('../assets/images/default.jpeg')}
+                            //source={{ uri: item.image }}
+                            style={{
+                              position: 'absolute', left: 20, top: 15, width: 90, height: 90,
+                            }} />
+                          <Text style={{ fontSize: 16, marginTop: 10, marginLeft: 130, fontFamily: 'medium', color: '#353C40' }}>
+                            {item.itemdesc}
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                            QUANTITY:
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+                            {item.qty} {item.productuom}
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                            PRICE/EACH:
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 205, marginTop: -15, fontFamily: 'medium', color: '#ED1C24' }}>
+                            ₹ {(parseInt(item.netamount)).toString()}
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 245, marginTop: -15, fontFamily: 'regular', color: '#808080', textDecorationLine: 'line-through' }}>
+                            Rs. 100
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
+                            TOTAL:
+                          </Text>
+                          <Text style={{ fontSize: 12, marginLeft: 172, marginTop: -15, fontFamily: 'medium', color: '#ED1C24' }}>
+                            ₹ {(parseInt(item.netamount) * item.qty).toString()}
+                          </Text>
+                        </View>
+
+                        <View style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-around',
+                          alignItems: 'center',
+                          height: 30,
+                          marginRight: 20,
+                          width: 90,
+                          //borderWidth:1,
+                          //borderColor:'#ED1C24',
+                          // borderRadius:3,
+                        }}>
+                          <TouchableOpacity style={{
+                            borderColor: '#ED1C24',
+                            height: 28,
+                            width: 30, borderBottomLeftRadius: 3,
+                            borderTopLeftRadius: 3,
+                            borderBottomWidth: 1,
+                            borderTopWidth: 1,
+                            borderLeftWidth: 1, paddingLeft: 10, marginLeft: 20,
+                          }}>
+                            <Text style={{ alignSelf: 'center', marginTop: 2, marginLeft: -10, color: '#ED1C24' }}
+                              onPress={() => this.decreamentForTable(item, index)}>-</Text>
+                          </TouchableOpacity>
+                          {/* <Text> {item.qty}</Text> */}
+                          <TextInput
+                            style={{
+                              justifyContent: 'center',
+                              margin: 20,
+                              height: 28,
+                              width: 30,
+                              marginTop: 10,
+                              marginBottom: 10,
+                              borderColor: '#ED1C24',
+                              backgroundColor: 'white',
+                              color: '#353C40',
+                              borderWidth: 1,
+                              fontFamily: 'regular',
+                              fontSize: 12,
+                              paddingLeft: 9,
+                            }}
+                            underlineColorAndroid="transparent"
+                            placeholder="0"
+                            placeholderTextColor="#8F9EB7"
+
+                            value={item.qty}
+                            onChangeText={(text) => this.updateQty(text, index)}
+                          />
+                          <TouchableOpacity style={{
+                            borderColor: '#ED1C24',
+                            height: 28,
+                            width: 30, borderBottomRightRadius: 3,
+                            borderTopRightRadius: 3,
+                            borderBottomWidth: 1,
+                            borderTopWidth: 1,
+                            borderRightWidth: 1
+                          }}>
+                            <Text style={{ alignSelf: 'center', marginTop: 2, color: '#ED1C24' }}
+                              onPress={() => this.incrementForTable(item, index)}>+</Text>
+
+                          </TouchableOpacity>
+
+                          <TouchableOpacity style={{
+                            position: 'absolute',
+                            right: 20,
+                            top: -35,
+                            width: 30,
+                            height: 30,
+                            borderRadius: 5,
+                            // borderTopRightRadius: 5,
+                            borderWidth: 1,
+                            borderColor: "lightgray",
+                          }} onPress={() => this.handlenewsaledeleteaction(item, index)}>
+                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+
+                          </TouchableOpacity>
+                        </View>
+
+                        {this.state.lineItemDelete && (
+                          <View>
+                            <Modal isVisible={this.state.modalVisible}>
+
+                              <View style={{
+                                width: deviceWidth,
+                                alignItems: 'center',
+                                marginLeft: -20,
+                                backgroundColor: "#ffffff",
+                                height: 260,
+                                position: 'absolute',
+                                bottom: -20,
+                              }}>
+
+                                <Text style={{
+                                  position: 'absolute',
+                                  left: 20,
+                                  top: 15,
+                                  width: 300,
+                                  height: 20,
+                                  fontFamily: 'medium',
+                                  fontSize: 16,
+                                  color: '#353C40'
+                                }}> Delete Item </Text>
+
+                                <TouchableOpacity style={{
+                                  position: 'absolute',
+                                  right: 20,
+                                  top: 7,
+                                  width: 50, height: 50,
+                                }} onPress={() => this.modelCancel()}>
+                                  <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
+                                </TouchableOpacity>
+
+                                <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
+                                </Text>
+                                <Text style={{
+                                  position: 'absolute',
+                                  top: 70,
+                                  height: 20,
+                                  textAlign: 'center',
+                                  fontFamily: 'regular',
+                                  fontSize: 18,
+                                  color: '#353C40'
+                                }}> Are you sure want to delete NewSale Item?  </Text>
+                                <TouchableOpacity
+                                  style={{
+                                    width: deviceWidth - 40,
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                    marginTop: 60,
+                                    height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                  }} onPress={() => this.deleteLineItem(item, index)}
+                                >
+                                  <Text style={{
+                                    textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                    fontFamily: "regular"
+                                  }}  > DELETE </Text>
+
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                  style={{
+                                    width: deviceWidth - 40,
+                                    marginLeft: 20,
+                                    marginRight: 20,
+                                    marginTop: 20,
+                                    height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
+                                  }} onPress={() => this.modelCancel()}
+                                >
+                                  <Text style={{
+                                    textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
+                                    fontFamily: "regular"
+                                  }}  > CANCEL </Text>
+
+                                </TouchableOpacity>
+                              </View>
+                            </Modal>
+                          </View>)}
+
+                      </View>
 
 
 
-                )}
-              />
-              {this.state.tableData.length != 0 && (
-                <View style={{ width: deviceWidth, height: 220, position: 'absolute', bottom: 0, backgroundColor: '#FFFFFF' }}>
-                  <Text style={{
-                    color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                    fontSize: 14, position: 'absolute',
-                  }}>
-                    Total Qty </Text>
-                  <Text style={{
-                    color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                    fontSize: 14, position: 'absolute',
-                  }}>
-                    {this.state.totalQty} </Text>
-                  <Text style={{
-                    color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                    fontSize: 14, position: 'absolute',
-                  }}>
-                    Total MRP </Text>
-                  <Text style={{
-                    color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                    fontSize: 14, position: 'absolute',
-                  }}>
-                    ₹ {this.state.totalAmount} </Text>
-                  <Text style={{
-                    color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 90, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                    fontSize: 14, position: 'absolute',
-                  }}>
-                    Promo Discount </Text>
-                  <Text style={{
-                    color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 90, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                    fontSize: 14, position: 'absolute',
-                  }}>
-                    ₹  {this.state.totalDiscount} </Text>
-                  <Text style={{
-                    color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                    fontSize: 14, position: 'absolute',
-                  }}>
-                    Payable Amount </Text>
-                  <Text style={{
-                    color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
-                    fontSize: 14, position: 'absolute',
-                  }}>
-                    ₹ {(parseInt(this.state.totalAmount) - parseInt(this.state.totalDiscount)).toString()} </Text>
+                    )}
+                  />
+                  {this.state.tableData.length != 0 && (
+                    <View style={{ width: deviceWidth, height: 220, position: 'absolute', bottom: 0, backgroundColor: '#FFFFFF' }}>
+                      <Text style={{
+                        color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 14, position: 'absolute',
+                      }}>
+                        Total Qty </Text>
+                      <Text style={{
+                        color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 14, position: 'absolute',
+                      }}>
+                        {this.state.totalQty} </Text>
+                      <Text style={{
+                        color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 14, position: 'absolute',
+                      }}>
+                        Total MRP </Text>
+                      <Text style={{
+                        color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 14, position: 'absolute',
+                      }}>
+                        ₹ {this.state.totalAmount} </Text>
+                      <Text style={{
+                        color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 90, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 14, position: 'absolute',
+                      }}>
+                        Promo Discount </Text>
+                      <Text style={{
+                        color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 90, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 14, position: 'absolute',
+                      }}>
+                        ₹  {this.state.totalDiscount} </Text>
+                      <Text style={{
+                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 14, position: 'absolute',
+                      }}>
+                        Payable Amount </Text>
+                      <Text style={{
+                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                        fontSize: 14, position: 'absolute',
+                      }}>
+                        ₹ {(parseInt(this.state.totalAmount) - parseInt(this.state.totalDiscount)).toString()} </Text>
 
-                  {/* <Text style={{
+                      {/* <Text style={{
                     color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                     fontSize: 14, position: 'absolute',
                   }}>
@@ -2103,187 +2103,187 @@ class NewSaleRetail extends Component {
 
 
 
-                  <View style={styles.TopcontainerforPay}>
+                      <View style={styles.TopcontainerforPay}>
 
-                    <TouchableOpacity
-                      style={styles.signInButton}
-                      onPress={() => this.pay()} >
+                        <TouchableOpacity
+                          style={styles.signInButton}
+                          onPress={() => this.pay()} >
 
-                      <Text style={styles.signInButtonText}> Check out </Text>
-                    </TouchableOpacity>
+                          <Text style={styles.signInButtonText}> Check out </Text>
+                        </TouchableOpacity>
 
 
-                  </View>
+                      </View>
 
+                    </View>
+                  )}
                 </View>
-              )}
-            </View>
-          </ScrollView>
+              </ScrollView>
 
 
-        )}
+            )}
 
-        {this.state.flagCustomerOpen && (
-          <View>
-            <Modal isVisible={this.state.modalVisible}>
-              <KeyboardAwareScrollView KeyboardAwareScrollView
-                enableOnAndroid={true}>
+            {this.state.flagCustomerOpen && (
+              <View>
+                <Modal isVisible={this.state.modalVisible}>
+                  <KeyboardAwareScrollView KeyboardAwareScrollView
+                    enableOnAndroid={true}>
 
-
-                <View style={{
-                  flex: 1, justifyContent: 'center', //Centered horizontally
-                  alignItems: 'center', color: '#ffffff',
-                  borderRadius: 20, borderwidth: 10
-                }}>
-                  <View style={{ flex: 1, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", marginTop: deviceWidth / 2 - 80 }}>
-                    <Text style={{
-                      color: "#353C40", fontSize: 18, fontFamily: "semibold", marginLeft: 20, marginTop: 20, height: 20,
-                      justifyContent: 'center',
-                    }}> {'Personal Information'} </Text>
-
-                    <View style={{ marginTop: 0, width: deviceWidth }}>
-                      <TextInput style={styles.createUserinput}
-                        underlineColorAndroid="transparent"
-                        placeholder="MOBILE NUMBER *"
-                        placeholderTextColor="#353C4050"
-                        keyboardType="name-phone-pad"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        value={this.state.customerPhoneNumber}
-                        onChangeText={(text) => this.handleCustomerPhoneNumber(text)}
-                        onEndEditing={() => this.endEditing()}
-                      />
-                    </View>
-
-
-                    <TextInput style={styles.createUserinput}
-                      underlineColorAndroid="transparent"
-                      placeholder="CUSTOMER NAME *"
-                      placeholderTextColor="#353C4050"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      value={this.state.customerName}
-                      onChangeText={this.handleCustomerName}
-                    />
-
-                    <View>
-                      <TextInput style={styles.createUserinput}
-                        underlineColorAndroid="transparent"
-                        placeholder="EMAIL"
-                        placeholderTextColor="#353C4050"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        value={this.state.customerEmail}
-                        onChangeText={this.handleCustomerEmail}
-                      />
-                    </View>
 
                     <View style={{
-                      justifyContent: 'center',
-                      margin: 40,
-                      height: 44,
-                      marginTop: 5,
-                      marginBottom: 10,
-                      borderColor: '#8F9EB717',
-                      borderRadius: 3,
-                      backgroundColor: '#FBFBFB',
-                      borderWidth: 1,
-                      fontFamily: 'regular',
-                      paddingLeft: 15,
-                      fontSize: 14,
-                    }} >
-                      <RNPickerSelect style={{
-                        color: '#8F9EB717',
-                        fontWeight: 'regular',
-                        fontSize: 15
-                      }}
-                        placeholder={{
-                          label: 'GENDER',
-                          value: '',
-                        }}
-                        Icon={() => {
-                          return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                        }}
-                        items={[
-                          { label: 'Male', value: 'male' },
-                          { label: 'Female', value: 'female' },
-                        ]}
-                        onValueChange={this.handlecustomerGender}
-                        style={pickerSelectStyles_mobile}
-                        value={this.state.customerGender}
-                        useNativeAndroidPickerStyle={false}
+                      flex: 1, justifyContent: 'center', //Centered horizontally
+                      alignItems: 'center', color: '#ffffff',
+                      borderRadius: 20, borderwidth: 10
+                    }}>
+                      <View style={{ flex: 1, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", marginTop: deviceWidth / 2 - 80 }}>
+                        <Text style={{
+                          color: "#353C40", fontSize: 18, fontFamily: "semibold", marginLeft: 20, marginTop: 20, height: 20,
+                          justifyContent: 'center',
+                        }}> {'Personal Information'} </Text>
 
-                      />
+                        <View style={{ marginTop: 0, width: deviceWidth }}>
+                          <TextInput style={styles.createUserinput}
+                            underlineColorAndroid="transparent"
+                            placeholder="MOBILE NUMBER *"
+                            placeholderTextColor="#353C4050"
+                            keyboardType="name-phone-pad"
+                            textAlignVertical="center"
+                            autoCapitalize="none"
+                            value={this.state.customerPhoneNumber}
+                            onChangeText={(text) => this.handleCustomerPhoneNumber(text)}
+                            onEndEditing={() => this.endEditing()}
+                          />
+                        </View>
+
+
+                        <TextInput style={styles.createUserinput}
+                          underlineColorAndroid="transparent"
+                          placeholder="CUSTOMER NAME *"
+                          placeholderTextColor="#353C4050"
+                          textAlignVertical="center"
+                          autoCapitalize="none"
+                          value={this.state.customerName}
+                          onChangeText={this.handleCustomerName}
+                        />
+
+                        <View>
+                          <TextInput style={styles.createUserinput}
+                            underlineColorAndroid="transparent"
+                            placeholder="EMAIL"
+                            placeholderTextColor="#353C4050"
+                            textAlignVertical="center"
+                            autoCapitalize="none"
+                            value={this.state.customerEmail}
+                            onChangeText={this.handleCustomerEmail}
+                          />
+                        </View>
+
+                        <View style={{
+                          justifyContent: 'center',
+                          margin: 40,
+                          height: 44,
+                          marginTop: 5,
+                          marginBottom: 10,
+                          borderColor: '#8F9EB717',
+                          borderRadius: 3,
+                          backgroundColor: '#FBFBFB',
+                          borderWidth: 1,
+                          fontFamily: 'regular',
+                          paddingLeft: 15,
+                          fontSize: 14,
+                        }} >
+                          <RNPickerSelect style={{
+                            color: '#8F9EB717',
+                            fontWeight: 'regular',
+                            fontSize: 15
+                          }}
+                            placeholder={{
+                              label: 'GENDER',
+                              value: '',
+                            }}
+                            Icon={() => {
+                              return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                            }}
+                            items={[
+                              { label: 'Male', value: 'male' },
+                              { label: 'Female', value: 'female' },
+                            ]}
+                            onValueChange={this.handlecustomerGender}
+                            style={pickerSelectStyles_mobile}
+                            value={this.state.customerGender}
+                            useNativeAndroidPickerStyle={false}
+
+                          />
+                        </View>
+
+
+                        <TextInput style={styles.createUserinput}
+                          underlineColorAndroid="transparent"
+                          placeholder="ADDRESS"
+                          placeholderTextColor="#353C4050"
+                          textAlignVertical="center"
+                          autoCapitalize="none"
+                          value={this.state.customerAddress}
+                          onChangeText={this.handleCustomerAddress}
+                        />
+
+                        <Text style={{
+                          color: "#353C40", fontSize: 18, fontFamily: "semibold", marginLeft: 20, marginTop: 20, height: 20,
+                          justifyContent: 'center',
+                        }}> {'Business Information(optional)'} </Text>
+
+                        <View>
+                          <TextInput style={styles.createUserinput}
+                            underlineColorAndroid="transparent"
+                            placeholder="GST NUMBER"
+                            placeholderTextColor="#353C4050"
+                            textAlignVertical="center"
+                            autoCapitalize="none"
+                            value={this.state.customerGSTNumber}
+                            onChangeText={this.handleCustomerGSTNumber}
+                          />
+                        </View>
+
+
+
+                        <TouchableOpacity
+                          style={{
+                            margin: 20,
+                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5, marginLeft: 40, marginRight: 40,
+                          }} onPress={() => this.addCustomer()}
+                        >
+                          <Text style={{
+                            textAlign: 'center', margin: 20, color: "#ffffff", fontSize: 15,
+                            fontFamily: "regular", height: 50,
+                          }}  > TAG/ADD CUSTOMER </Text>
+
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={{
+                            margin: 20,
+                            height: 50, backgroundColor: "#ED1C24", borderRadius: 5, marginLeft: 40, marginRight: 40,
+                          }}
+                          onPress={() => this.cancel()} >
+                          <Text style={{
+                            textAlign: 'center', margin: 20, color: "#ffffff", fontSize: 15,
+                            fontFamily: "regular", height: 50,
+                          }}> {('Cancel')} </Text>
+                        </TouchableOpacity>
+
+                      </View>
+
                     </View>
 
-
-                    <TextInput style={styles.createUserinput}
-                      underlineColorAndroid="transparent"
-                      placeholder="ADDRESS"
-                      placeholderTextColor="#353C4050"
-                      textAlignVertical="center"
-                      autoCapitalize="none"
-                      value={this.state.customerAddress}
-                      onChangeText={this.handleCustomerAddress}
-                    />
-
-                    <Text style={{
-                      color: "#353C40", fontSize: 18, fontFamily: "semibold", marginLeft: 20, marginTop: 20, height: 20,
-                      justifyContent: 'center',
-                    }}> {'Business Information(optional)'} </Text>
-
-                    <View>
-                      <TextInput style={styles.createUserinput}
-                        underlineColorAndroid="transparent"
-                        placeholder="GST NUMBER"
-                        placeholderTextColor="#353C4050"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        value={this.state.customerGSTNumber}
-                        onChangeText={this.handleCustomerGSTNumber}
-                      />
-                    </View>
+                  </KeyboardAwareScrollView>
+                </Modal>
+              </View>)}
 
 
 
-                    <TouchableOpacity
-                      style={{
-                        margin: 20,
-                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5, marginLeft: 40, marginRight: 40,
-                      }} onPress={() => this.addCustomer()}
-                    >
-                      <Text style={{
-                        textAlign: 'center', margin: 20, color: "#ffffff", fontSize: 15,
-                        fontFamily: "regular", height: 50,
-                      }}  > TAG/ADD CUSTOMER </Text>
 
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={{
-                        margin: 20,
-                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5, marginLeft: 40, marginRight: 40,
-                      }}
-                      onPress={() => this.cancel()} >
-                      <Text style={{
-                        textAlign: 'center', margin: 20, color: "#ffffff", fontSize: 15,
-                        fontFamily: "regular", height: 50,
-                      }}> {('Cancel')} </Text>
-                    </TouchableOpacity>
-
-                  </View>
-
-                </View>
-
-              </KeyboardAwareScrollView>
-            </Modal>
-          </View>)}
-
-
-      
-
-</View>
-                </ScrollView >
+          </View>
+        </ScrollView >
 
 
       </View>
@@ -2570,10 +2570,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     // backgroundColor: '#FAFAFF'
-},
-flatList: {
+  },
+  flatList: {
     marginTop: 20
-},
+  },
   head: {
     height: 45,
     borderColor: '#FAFAFF',
@@ -2809,16 +2809,16 @@ flatList: {
     width: deviceWidth,
     textAlign: 'center',
     fontSize: 24,
-    height:Device.isAndroid ? 70 : 84,
-},
-menuButton_mobile: {
+    height: Device.isAndroid ? 70 : 84,
+  },
+  menuButton_mobile: {
     position: 'absolute',
     left: 10,
     bottom: 0,
     width: 40,
     height: 40,
-},
-headerTitle_mobile: {
+  },
+  headerTitle_mobile: {
     position: 'absolute',
     left: 70,
     bottom: 10,
@@ -2827,7 +2827,7 @@ headerTitle_mobile: {
     fontFamily: 'bold',
     fontSize: 18,
     color: '#353C40'
-},
+  },
   input_mobile: {
     justifyContent: 'center',
     marginLeft: 20,
