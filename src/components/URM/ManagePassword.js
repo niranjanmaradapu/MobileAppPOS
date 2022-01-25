@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import axios from 'axios';
+import React, { Component } from 'react';
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Loader from '../../commonUtils/loader';
+import UrmService from '../services/UrmService';
 
 var deviceWidth = Dimensions.get('window').width;
-import Device from 'react-native-device-detection';
-import Loader from '../../commonUtils/loader';
-import axios from 'axios';
-import UrmService from '../services/UrmService';
 
 export default class ManagePassword extends Component {
 
@@ -19,31 +19,35 @@ export default class ManagePassword extends Component {
             session: "",
             roleName: "",
             userName: "",
-
-        }
+            confirmPassword: "",
+        };
     }
 
     async componentDidMount() {
-      //  this.setState({ loading: false })
-        this.setState({ userName: this.props.route.params.userName })
-        this.setState({ roleName: this.props.route.params.roleName })
-        this.setState({ session: this.props.route.params.session })
-        this.setState({ password: this.props.route.params.password })
+        //  this.setState({ loading: false })
+        this.setState({ userName: this.props.route.params.userName });
+        this.setState({ roleName: this.props.route.params.roleName });
+        this.setState({ session: this.props.route.params.session });
+        this.setState({ password: this.props.route.params.password });
     }
 
 
     handlePassword = (value) => {
-        this.setState({ password: value })
-    }
+        this.setState({ password: value });
+    };
 
     handleNewPassword = (value) => {
-        this.setState({ newPassword: value })
-    }
+        this.setState({ newPassword: value });
+    };
 
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
     }
+
+    handleConfirmPassword = (text) => {
+        this.setState({ confirmPassword: text });
+    };
 
     cancel() {
         this.props.navigation.goBack(null);
@@ -51,12 +55,18 @@ export default class ManagePassword extends Component {
     }
 
     changePassword() {
-        if (this.state.password.length === 0) {
-            alert("Current Password Cannot be Empty")
-        } else if (this.state.newPassword.length === 0) {
-            alert("Current Password Cannot be Empty")
-        } else {
-            this.setState({ loading: true })
+        // if (this.state.password.length === 0) {
+        //     alert("Current Password Cannot be Empty")
+        // } else 
+        if (this.state.newPassword.length === 0) {
+            alert("New Password Cannot be Empty");
+        } else if (this.state.confirmPassword.length === 0) {
+            alert('you must enter confirm password');
+        } else if (this.state.confirmPassword !== this.state.newPassword) {
+            alert('new password and confirm password should be same');
+        }
+        else {
+            this.setState({ loading: true });
             const obj = {
                 userName: this.state.userName,
                 password: this.state.password,
@@ -64,17 +74,17 @@ export default class ManagePassword extends Component {
                 session: this.state.session,
                 roleName: this.state.roleName,
             };
-            console.log('params are' + JSON.stringify(obj))
-            this.setState({ loading: true })
+            console.log('params are' + JSON.stringify(obj));
+            this.setState({ loading: true });
             axios.post(UrmService.changePassword(), obj).then((res) => {
                 if (res) {
                     alert("Password Changed Successfully");
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     this.props.navigation.goBack();
                     //    window.location.reload();
                 }
                 else {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                 }
             });
         }
@@ -97,7 +107,7 @@ export default class ManagePassword extends Component {
                             Update New Password
                         </Text>
                     </View>
-                    <TextInput
+                    {/* <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Current Password"
@@ -106,7 +116,7 @@ export default class ManagePassword extends Component {
                         autoCapitalize="none"
                         value={this.state.password}
                         onChangeText={this.handlePassword}
-                    />
+                    /> */}
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -117,6 +127,16 @@ export default class ManagePassword extends Component {
                         value={this.state.newPassword}
                         onChangeText={this.handleNewPassword}
                     />
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        underlineColorAndroid="transparent"
+                        placeholder="Confirm Password"
+                        secureTextEntry={true}
+                        placeholderTextColor="#6F6F6F"
+                        autoCapitalize="none"
+                        onChangeText={this.handleConfirmPassword}
+                        value={this.state.confirmPassword}
+                        ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
+
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.changePassword()}>
                         <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
@@ -127,7 +147,7 @@ export default class ManagePassword extends Component {
                     </TouchableOpacity>
                 </SafeAreaView>
             </KeyboardAwareScrollView>
-        )
+        );
     }
 }
 
@@ -244,4 +264,4 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
 
-})
+});

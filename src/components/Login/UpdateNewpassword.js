@@ -1,13 +1,12 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import axios from 'axios';
+import React, { Component } from 'react';
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Loader from '../../commonUtils/loader';
+import LoginService from '../services/LoginService';
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
-import Device from 'react-native-device-detection';
-import LoginService from '../services/LoginService';
-import axios from 'axios';
-import Loader from '../../commonUtils/loader';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class UpdateNewpassword extends Component {
     constructor(props) {
@@ -18,7 +17,7 @@ class UpdateNewpassword extends Component {
             code: '',
             newPassword: '',
             confirmPassword: '',
-        }
+        };
     }
 
     componentDidMount() {
@@ -33,48 +32,50 @@ class UpdateNewpassword extends Component {
     }
 
     handleEmail = (text) => {
-        this.setState({ code: text })
-    }
-   
-    handleNewPassword = (text) => {
-        this.setState({ newPassword: text })
-    }
+        this.setState({ code: text });
+    };
 
-  
-     create() {
+    handleNewPassword = (text) => {
+        this.setState({ newPassword: text });
+    };
+
+
+    create() {
         if (this.state.code.length === 0) {
-            alert('You must enter a Usename');
-        } 
+            alert('You must enter a Code');
+        }
         if (this.state.newPassword.length === 0) {
             alert('You must enter New Password');
-        } 
+        }
         else {
-                    const params = {
-                        "username": this.state.userName, //"+919493926067",
-                        "confirmarionCode": this.state.code, //"Mani@1123",
-                        "newPassword": this.state.newPassword,
-                        //"storeName": this.state.store,//"kphb",
-                    }
-                    console.log(params)
-                    this.setState({ loading: true })
-                    axios.post(LoginService.forgotPassword(),null, { params: {
-                        "username": this.state.userName, //"+919493926067",
-                        "confirmarionCode": this.state.code, //"Mani@1123",
-                        "newPassword": this.state.newPassword,
-                       }}).then((res) => {
-                        if (res) {
-                         alert("Password Changed Successfully");
-                            // window.location.reload();
-                        this.setState({ loading: false })
-                        this.props.navigation.navigate('Login');
-                    }
-                        else {
-                            this.setState({ loading: false })
-                            alert('Invalid Credentials');
-                        }
-                    }
-                    );
-           
+            const params = {
+                "username": this.state.userName, //"+919493926067",
+                "confirmarionCode": this.state.code, //"Mani@1123",
+                "newPassword": this.state.newPassword,
+                //"storeName": this.state.store,//"kphb",
+            };
+            console.log(params);
+            this.setState({ loading: true });
+            axios.post(LoginService.forgotPassword(), null, {
+                params: {
+                    "username": this.state.userName, //"+919493926067",
+                    "confirmarionCode": this.state.code, //"Mani@1123",
+                    "newPassword": this.state.newPassword,
+                }
+            }).then((res) => {
+                if (res) {
+                    alert("Password Changed Successfully");
+                    // window.location.reload();
+                    this.setState({ loading: false });
+                    this.props.navigation.navigate('Login');
+                }
+                else {
+                    this.setState({ loading: false });
+                    alert('Invalid Credentials');
+                }
+            }
+            );
+
         }
     }
 
@@ -83,11 +84,11 @@ class UpdateNewpassword extends Component {
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
-               
-                    {this.state.loading &&
+
+                {this.state.loading &&
                     <Loader
-                    loading={this.state.loading} />
-                } 
+                        loading={this.state.loading} />
+                }
                 <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
 
                     <View style={styles.container}>
@@ -95,13 +96,13 @@ class UpdateNewpassword extends Component {
                             {/* <Image source={require('../assets/images/logo.png')} style={styles.logoImage} /> */}
                             {/* <Text></Text> */}
                             <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                        <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                            <Image source={require('../assets/images/backButton.png')} />
-                        </TouchableOpacity>
-                        <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                          Update New Password
-                        </Text>
-                    </View>
+                                <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
+                                    <Image source={require('../assets/images/backButton.png')} />
+                                </TouchableOpacity>
+                                <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                                    Update New Password
+                                </Text>
+                            </View>
                         </View>
 
 
@@ -116,13 +117,13 @@ class UpdateNewpassword extends Component {
                                 autoCapitalize="none"
                                 onChangeText={this.handleEmail}
                                 value={this.state.code}
-                                ref={inputemail => { this.emailValueInput = inputemail }} />
+                                ref={inputemail => { this.emailValueInput = inputemail; }} />
 
-                                
+
 
 
                             {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
-                         <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                            <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder="New Password"
                                 secureTextEntry={true}
@@ -130,7 +131,7 @@ class UpdateNewpassword extends Component {
                                 autoCapitalize="none"
                                 onChangeText={this.handleNewPassword}
                                 value={this.state.newPassword}
-                                ref={inputpassword => { this.passwordValueInput = inputpassword }} />
+                                ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
 
                             {/* <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
@@ -150,7 +151,7 @@ class UpdateNewpassword extends Component {
                                 autoCapitalize="none"
                                 onChangeText={this.handleConfirmPassword}
                                 //value={this.state.password}
-                                ref={inputpassword => { this.passwordValueInput = inputpassword }} /> */} 
+                                ref={inputpassword => { this.passwordValueInput = inputpassword }} /> */}
 
 
                             <TouchableOpacity
@@ -165,11 +166,11 @@ class UpdateNewpassword extends Component {
                 </SafeAreaView>
 
             </KeyboardAwareScrollView>
-        )
+        );
     }
 }
 
-export default UpdateNewpassword
+export default UpdateNewpassword;
 
 
 const pickerSelectStyles = StyleSheet.create({
@@ -198,7 +199,7 @@ const pickerSelectStyles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 16,
     },
-})
+});
 
 const styles = StyleSheet.create({
     logoImage: {
@@ -317,8 +318,8 @@ const styles = StyleSheet.create({
     //     fontFamily: "regular",
     // },
 
-     // Styles For Tablet
-     viewsWidth_tablet: {
+    // Styles For Tablet
+    viewsWidth_tablet: {
         backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',
@@ -375,4 +376,4 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: "regular",
     },
-})
+});
