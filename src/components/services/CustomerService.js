@@ -1,58 +1,65 @@
-const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097'
+const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097';
 
 
 class CustomerService {
-createDeliverySlip(){
-    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/createdeliveryslip";
-} 
+    createDeliverySlip() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/createdeliveryslip";
+    }
 
-saveLineItems(){
-    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/savelineitems/1";
-} 
+    saveLineItems() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/savelineitems/1";
+    }
 
-getDeliverySlip(){
-    return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/getBarcodeTextile";
-} 
+    getDeliverySlip() {
+        return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/getBarcodeTextile";
+    }
 
-getHsnDetails(){
-    return REACT_NATIVE_APP_BASE_URL + "/hsn-details/hsnDetails/getHsnDetails";
-} 
+    getHsnDetails() {
+        return REACT_NATIVE_APP_BASE_URL + "/hsn-details/hsnDetails/getHsnDetails";
+    }
 
-saveSale(){
-    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/sale";
-} 
+    saveSale() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/sale";
+    }
 
-getDsSlip(){
-    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getdeliveryslip";
-} 
+    getDsSlip() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getdeliveryslip";
+    }
 
-getMobileData(){
-    return REACT_NATIVE_APP_BASE_URL + "/user-management/user/customer/mobileNo";
-} 
+    getMobileData() {
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/user/customer/mobileNo";
+    }
 
-getDiscountReasons(){
-    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/discTypes";
-} 
+    getDiscountReasons() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/discTypes";
+    }
 
-saveSale(){
-    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/sale";
-} 
+    saveSale() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/sale";
+    }
 
-getLineItems(){
-    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/savelineitems";
-} 
+    getLineItems() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/savelineitems";
+    }
 
-getCustomerMobile(){
-    return REACT_NATIVE_APP_BASE_URL + "/user-management/user/customer/mobileNo";
-} 
+    getCustomerMobile() {
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/user/customer/mobileNo";
+    }
 
-getCoupons(){
-    return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getGv";
-} 
+    getCoupons() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getGv";
+    }
 
+    getGiftVocher() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getlistofgv";
+    }
+
+    saveGiftVocher() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/saveGv";
+    }
 
 }
-export default new CustomerService()
+export default new CustomerService();
 
 
 

@@ -1,7 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
+import CustomerService from '../services/CustomerService';
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
@@ -22,8 +25,23 @@ class GiftVocher extends Component {
             startDate: "",
             endDate: "",
             toDate: "",
-            vochers: [1, 2],
+            giftVochersList: [],
         };
+    }
+
+    async componentDidMount() {
+        this.getGiftVocherList();
+    }
+
+    getGiftVocherList() {
+        axios.get(CustomerService.getGiftVocher()).then(res => {
+            if (res) {
+                // console.log(res.data);
+                if (res.data.result != "Record not found") {
+                    this.setState({ giftVochersList: res.data.result, isGiftVocher: true });
+                }
+            }
+        });
     }
 
     datepickerClicked() {
@@ -84,9 +102,40 @@ class GiftVocher extends Component {
         this.setState({ giftValue: text });
     }
 
-    handleGiftVocher() {
-
+    addGiftVocher() {
+        const user = AsyncStorage.getItem("username");
+        const obj = {
+            "gvNumber": this.state.gvNumber,
+            "description": this.state.description,
+            "fromDate": this.state.date,
+            "todate": this.state.enddate,
+            "clientId": user["custom:clientId1"],
+            "value": this.state.giftValue
+        };
+        axios.post(CustomerService.saveGiftVocher(), obj).then(res => {
+            if (res && res.data.isSuccess === "true") {
+                this.setState({
+                    gvNumber: '',
+                    description: '',
+                    giftValue: '',
+                    datepickerOpen: false,
+                    datepickerendOpen: false,
+                    date: new Date(),
+                    enddate: new Date(),
+                    fromDate: "",
+                    startDate: "",
+                    endDate: "",
+                    toDate: "",
+                    giftVochersList: [],
+                });
+                this.getGiftVocherList();
+                console.log(res.data);
+            }
+            alert(res.data.message);
+        });
     }
+
+
 
     render() {
         return (
@@ -189,7 +238,7 @@ class GiftVocher extends Component {
                     />
                     <TouchableOpacity
                         style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
-                        onPress={() => this.handleGiftVocher()}
+                        onPress={() => this.addGiftVocher()}
                     >
                         <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}>Add Gift Vocher</Text>
                     </TouchableOpacity>
@@ -197,19 +246,19 @@ class GiftVocher extends Component {
                 <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>List of Gift Vochers</Text>
                 <FlatList
                     style={{ marginTop: 20, marginBottom: 20 }}
-                    data={this.state.vochers}
+                    data={this.state.giftVochersList}
                     scrollEnabled={true}
-                    renderItem={({ irem, index }) => (
+                    renderItem={({ item, index }) => (
                         <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>S.NO: {index + 1}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>GV NUMBER: {"hyd12345"}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>GV NUMBER: {item.gvNumber}</Text>
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>FROM DATE: {"11/1/2022"}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>TO DATE: {"18/1/2022"}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>VALUE: {"₹1000"}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>FROM DATE: {item.fromDate}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>TO DATE: {item.toDate}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>VALUE: {item.value}</Text>
                                 </View>
                             </View>
                         </View>

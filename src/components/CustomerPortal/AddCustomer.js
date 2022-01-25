@@ -1,8 +1,10 @@
+import axios from 'axios';
 import React, { Component } from 'react';
-import { Alert, Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import CreateCustomerService from '../services/CreateCustomerService';
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
@@ -13,33 +15,98 @@ export default class AddCustomer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            customerName: "",
-            mobileNumber: "",
+            username: "",
+            name: "",
+            phoneNumber: "",
+            birthDate: "",
             email: "",
-            customerGender: "",
+            gender: "",
+            tempPassword: "Otsi@123",
+            parentId: "1",
+            domianId: "802",
             address: "",
+            role: {
+                roleName: ""
+            },
+            stores: [],
+            clientId: "",
+            isConfigUser: "",
+            clientDomain: [],
             gstNumber: "",
             companyName: "",
-            businessEmail: "",
-            businessPNo: "",
-            businessAddress: "",
+            gstemail: "",
+            gstmobile: "",
+            gstaddress: "",
+            isCustomer: "true",
+            isConfigUser: "false"
         };
     }
 
+    async componentDidMount() {
+
+        this.addCustomer = this.addCustomer.bind(this);
+    }
+
+    addCustomer() {
+        if (this.state.name === "") {
+            alert("Customer Name cannot be empty");
+        } else if (this.state.phoneNumber === "") {
+            alert("Mobile Number cannot be empty");
+        } else {
+            this.state.phoneNumber = "+91" + this.state.phoneNumber;
+            axios.post(CreateCustomerService.addCustomer(), this.state).then(res => {
+                if (res) {
+                    console.log(res.data);
+                    if (res.data.status === 400) {
+                        alert(res.data.message);
+                    } else {
+                        alert("Customer Added Successfully");
+                    }
+                    this.setState({
+                        username: "",
+                        name: "",
+                        phoneNumber: "",
+                        birthDate: "",
+                        email: "",
+                        gender: "",
+                        tempPassword: "Otsi@123",
+                        parentId: "1",
+                        domianId: "802",
+                        address: "",
+                        role: {
+                            roleName: ""
+                        },
+                        stores: [],
+                        clientId: "",
+                        isConfigUser: "",
+                        clientDomain: [],
+                        gstNumber: "",
+                        companyName: "",
+                        gstemail: "",
+                        gstmobile: "",
+                        gstaddress: "",
+                        isCustomer: "true",
+                        isConfigUser: "false"
+                    });
+                }
+            });
+        }
+    }
+
     handleCustomerName(text) {
-        this.setState({ customerName: text });
+        this.setState({ username: text, name: text });
     }
 
     handleMobileNumber(text) {
-        this.setState({ mobileNumber: text });
+        this.setState({ phoneNumber: text });
     }
 
     handleEmail(text) {
         this.setState({ email: text });
     }
 
-    handlecustomerGender = (value) => {
-        this.setState({ customerGender: value });
+    handlegender = (value) => {
+        this.setState({ gender: value });
     };
 
     handleAddress(text) {
@@ -55,25 +122,24 @@ export default class AddCustomer extends Component {
     }
 
     handleBusinessAddress(text) {
-        this.setState({ businessAddress: text });
+        this.setState({ gstaddress: text });
     }
 
     handleBusinessEmail(text) {
-        this.setState({ businessEmail: text });
+        this.setState({ gstemail: text });
     }
 
     handleBusinessPhone(text) {
-        this.setState({ businessPNo: text });
+        this.setState({ gstmobile: text });
     }
 
-    handleAddCustomer() {
 
-    }
 
     render() {
         return (
             <View>
                 <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Personal Information</Text>
+                <Text style={styles.headings}>Customer Name <Text style={{ color: 'red' }}>*</Text></Text>
                 <TextInput
                     style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder='CUSTOMER NAME'
@@ -81,18 +147,23 @@ export default class AddCustomer extends Component {
                     textAlignVertical="center"
                     keyboardType={'default'}
                     autoCapitalize='none'
-                    value={this.state.customerName}
+                    value={this.state.name}
                     onChangeText={(text) => this.handleCustomerName(text)}
                 />
+                <Text style={styles.headings}>Mobile Number <Text style={{ color: 'red' }}>*</Text></Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder='MOBILE NUMBER'
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
                     autoCapitalize='none'
-                    value={this.state.mobileNumber}
+                    maxLength={10}
+                    keyboardType={'number-pad'}
+                    textContentType='telephoneNumber'
+                    value={this.state.phoneNumber}
                     onChangeText={(text) => this.handleMobileNumber(text)}
                 />
+                <Text style={styles.headings}>Email</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder='Email'
                     placeholderTextColor="#6f6f6f60"
@@ -102,6 +173,7 @@ export default class AddCustomer extends Component {
                     value={this.state.email}
                     onChangeText={(text) => this.handleEmail(text)}
                 />
+                <Text style={styles.headings}>Address</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder='ADDRESS'
                     placeholderTextColor="#6f6f6f60"
@@ -111,6 +183,7 @@ export default class AddCustomer extends Component {
                     value={this.state.address}
                     onChangeText={(text) => this.handleAddress(text)}
                 />
+                <Text style={styles.headings}>Gender</Text>
                 <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                     <RNPickerSelect
                         style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -122,13 +195,14 @@ export default class AddCustomer extends Component {
                             { label: 'Male', value: 'male' },
                             { label: 'Female', value: 'female' },
                         ]}
-                        onValueChange={this.handlecustomerGender}
+                        onValueChange={this.handlegender}
                         style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                        value={this.state.customerGender}
+                        value={this.state.gender}
                         useNativeAndroidPickerStyle={false}
                     />
                 </View>
                 <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Business Information</Text>
+                <Text style={styles.headings}>GST Number</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder='GST NUMBER'
                     placeholderTextColor="#6f6f6f60"
@@ -138,6 +212,7 @@ export default class AddCustomer extends Component {
                     value={this.state.gstNumber}
                     onChangeText={(text) => this.handleGstNumber(text)}
                 />
+                <Text style={styles.headings}>Company Name</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder='COMPANY NAME'
                     placeholderTextColor="#6f6f6f60"
@@ -147,37 +222,40 @@ export default class AddCustomer extends Component {
                     value={this.state.companyName}
                     onChangeText={(text) => this.handleCompanyName(text)}
                 />
+                <Text style={styles.headings}>Email</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder='EMAIL'
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
                     autoCapitalize='none'
-                    value={this.state.businessEmail}
+                    value={this.state.gstemail}
                     onChangeText={(text) => this.handleBusinessEmail(text)}
                 />
+                <Text style={styles.headings}>Phone Number</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder='PHONE NUMBER'
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
                     autoCapitalize='none'
-                    value={this.state.businessPNo}
+                    value={this.state.gstmobile}
                     onChangeText={(text) => this.handleBusinessPhone(text)}
                 />
+                <Text style={styles.headings}>Address</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder='ADDRESS'
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
                     autoCapitalize='none'
-                    value={this.state.businessAddress}
+                    value={this.state.gstaddress}
                     onChangeText={(text) => this.handleBusinessAddress(text)}
                 />
 
                 <TouchableOpacity
                     style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
-                    onPress={() => this.handleAddCustomer()}
+                    onPress={() => this.addCustomer()}
                 >
                     <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}>Add Customer</Text>
                 </TouchableOpacity>
@@ -277,6 +355,13 @@ const styles = StyleSheet.create({
         width: 300,
         height: 230,
 
+    },
+    headings: {
+        fontSize: Device.isTablet ? 20 : 15,
+        marginLeft: 20,
+        color: '#000000',
+        marginTop: Device.isTablet ? 10 : 5,
+        marginBottom: Device.isTablet ? 10 : 5,
     },
     containerForActivity: {
         flex: 1,
@@ -450,6 +535,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
         marginTop: 50,
+        marginBottom: 20,
         width: deviceWidth - 40,
         height: 60,
         borderRadius: 10,
