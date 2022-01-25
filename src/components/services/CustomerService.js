@@ -50,6 +50,10 @@ getCoupons(){
     return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getGv";
 } 
 
+addCustomer(){
+    return REACT_NATIVE_APP_BASE_URL +  "/user-management/auth/createUser";
+}
+
 
 }
 export default new CustomerService()
