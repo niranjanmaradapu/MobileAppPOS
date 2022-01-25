@@ -49,11 +49,11 @@ export default class AddDomain extends Component {
                     value: this.state.domainsArray[i].name,
                     label: this.state.domainsArray[i].name
                 });
-                this.setState({
-                    domains: domains,
-                })
-                this.setState({ domainsArray: this.state.domainsArray })
             }
+            this.setState({
+                domains: domains,
+            })
+            this.setState({ domainsArray: this.state.domainsArray })
         }
         
     });

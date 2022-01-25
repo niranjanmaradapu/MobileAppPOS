@@ -386,6 +386,7 @@ export default class Login extends Component {
     }
 
     async componentDidMount() {
+        AsyncStorage.removeItem('phone_number');
     }
 
 

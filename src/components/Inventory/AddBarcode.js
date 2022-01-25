@@ -74,6 +74,10 @@ class AddBarcode extends Component {
         this.getAllstores();
     }
 
+    componentWillUnmount() {
+
+    }
+
     getAllDivisions() {
         var divisions = [];
         axios.get(InventoryService.getAllDivisions(),).then((res) => {
@@ -87,12 +91,13 @@ class AddBarcode extends Component {
                         label: this.state.divisionArray[i].name
                     });
                     console.log(this.state.divisionArray);
-                    this.setState({
+                   
+                }
+                 this.setState({
                         divisions: divisions,
                     });
 
-                    this.setState({ divisionArray: this.state.divisionArray });
-                }
+                   this.setState({ divisionArray: this.state.divisionArray });
             }
 
         });
@@ -114,13 +119,12 @@ class AddBarcode extends Component {
                         value: this.state.secionArray[i].name,
                         label: this.state.secionArray[i].name
                     });
-
-                    this.setState({
+                }
+                this.setState({
                         secions: secions,
                     });
 
                     this.setState({ secionArray: this.state.secionArray });
-                }
             }
 
         });
@@ -142,12 +146,13 @@ class AddBarcode extends Component {
                         label: this.state.subsecionArray[i].name
                     });
                     console.log(this.state.subsecionArray);
-                    this.setState({
+                   
+                }
+                 this.setState({
                         subsecions: subsecions,
                     });
 
                     this.setState({ subsecionArray: this.state.subsecionArray });
-                }
             }
 
         });
@@ -166,12 +171,13 @@ class AddBarcode extends Component {
                         label: this.state.catogiriesArray[i].name
                     });
 
-                    this.setState({
+                   
+                }
+                 this.setState({
                         catogiries: catogiries,
                     });
 
                     this.setState({ catogiriesArray: this.state.catogiriesArray });
-                }
             }
 
         });
@@ -189,13 +195,12 @@ class AddBarcode extends Component {
                         value: this.state.uomArray[i].name,
                         label: this.state.uomArray[i].name
                     });
-
-                    this.setState({
+                }
+                  this.setState({
                         uom: uom,
                     });
 
                     this.setState({ uomArray: this.state.uomArray });
-                }
             }
 
         });
@@ -212,13 +217,12 @@ class AddBarcode extends Component {
                         value: this.state.hsncodesArray[i].name,
                         label: this.state.hsncodesArray[i].name
                     });
-
-                    this.setState({
+                }
+                this.setState({
                         hsncodes: hsncodes,
                     });
 
                     this.setState({ hsncodesArray: this.state.hsncodesArray });
-                }
             }
 
         });
@@ -239,13 +243,12 @@ class AddBarcode extends Component {
                         value: this.state.storeNamesArray[i].name,
                         label: this.state.storeNamesArray[i].name
                     });
-                    this.setState({
+                }
+                 this.setState({
                         storeNames: storeNames,
                     });
 
                     this.setState({ storeNamesArray: this.state.storeNamesArray });
-
-                }
 
             }
         });

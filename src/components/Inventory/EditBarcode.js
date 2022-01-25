@@ -129,12 +129,12 @@ var deviceWidth = Dimensions.get('window').width;
                         label: this.state.divisionArray[i].name
                     });
                    // console.log(this.state.divisionArray)
-                    this.setState({
-                        divisions: divisions,
-                    })
-                  
-                    this.setState({ divisionArray: this.state.divisionArray })
                 }
+                this.setState({
+                    divisions: divisions,
+                })
+              
+                this.setState({ divisionArray: this.state.divisionArray })
             }
             
         });
@@ -161,13 +161,12 @@ var deviceWidth = Dimensions.get('window').width;
                         value: this.state.secionArray[i].name,
                         label: this.state.secionArray[i].name
                     });
-                 
-                    this.setState({
-                        secions: secions,
-                    })
-                  
-                    this.setState({ secionArray: this.state.secionArray })
                 }
+                this.setState({
+                    secions: secions,
+                })
+              
+                this.setState({ secionArray: this.state.secionArray })
             }
             
         });
@@ -193,12 +192,12 @@ var deviceWidth = Dimensions.get('window').width;
                         label: this.state.subsecionArray[i].name
                     });
                   //  console.log(this.state.subsecionArray)
-                    this.setState({
-                        subsecions: subsecions,
-                    })
-                  
-                    this.setState({ subsecionArray: this.state.subsecionArray })
                 }
+                this.setState({
+                    subsecions: subsecions,
+                })
+              
+                this.setState({ subsecionArray: this.state.subsecionArray })
             }
             
         });
@@ -220,12 +219,12 @@ var deviceWidth = Dimensions.get('window').width;
                         label: this.state.catogiriesArray[i].name
                     });
                  
-                    this.setState({
-                        catogiries: catogiries,
-                    })
-                  
-                    this.setState({ catogiriesArray: this.state.catogiriesArray })
                 }
+                this.setState({
+                    catogiries: catogiries,
+                })
+              
+                this.setState({ catogiriesArray: this.state.catogiriesArray })
             }
             
         });
@@ -247,13 +246,12 @@ var deviceWidth = Dimensions.get('window').width;
                         value: this.state.uomArray[i].name,
                         label: this.state.uomArray[i].name
                     });
-                 
-                    this.setState({
-                        uom: uom,
-                    })
-                  
-                    this.setState({ uomArray: this.state.uomArray })
                 }
+                this.setState({
+                    uom: uom,
+                })
+              
+                this.setState({ uomArray: this.state.uomArray })
             }
             
         });  
@@ -275,12 +273,12 @@ var deviceWidth = Dimensions.get('window').width;
                         label: this.state.hsncodesArray[i].name
                     });
                  
-                    this.setState({
-                        hsncodes: hsncodes,
-                    })
-                  
-                    this.setState({ hsncodesArray: this.state.hsncodesArray })
                 }
+                this.setState({
+                    hsncodes: hsncodes,
+                })
+              
+                this.setState({ hsncodesArray: this.state.hsncodesArray })
             }
             
         });  
@@ -305,13 +303,10 @@ var deviceWidth = Dimensions.get('window').width;
                     this.setState({
                         storeNames: storeNames,
                     })
-
                     this.setState({ storeNamesArray: this.state.storeNamesArray })
                     if (this.state.storeNamesArray[i].id === this.state.storeId) {
                         this.setState({ store: this.state.storeNamesArray[i].name })
                       }   
-                      
-
                 }
 
             }

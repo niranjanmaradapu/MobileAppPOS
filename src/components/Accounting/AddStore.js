@@ -85,17 +85,18 @@ export default class AddStore extends Component {
                             value: this.state.domainsArray[i].name,
                             label: this.state.domainsArray[i].name
                         });
-                        this.setState({
-                            domains: domains,
-                        });
-
-                        this.setState({ domainsArray: this.state.domainsArray });
-                        if (this.state.domainsArray[i].id === this.state.domainId) {
+                       
+                        if (number.clientDomainaId === this.state.domainId) {
                             this.setState({ domain: this.state.domainsArray[i].name });
 
                         }
 
                     }
+                    this.setState({
+                        domains: domains,
+                    });
+
+                    this.setState({ domainsArray: this.state.domainsArray });
                     console.log(this.state.domains);
                 }
             }
@@ -130,16 +131,17 @@ export default class AddStore extends Component {
                         value: this.state.statesArray[i].name,
                         label: this.state.statesArray[i].name
                     });
-                    this.setState({
-                        states: states,
-                    });
-                    this.setState({ statesArray: this.state.statesArray });
-                    if (this.state.statesArray[i].id === this.state.stateId) {
+                  
+                    if (res.data["result"][i].stateId === this.state.stateId) {
                         console.log('stateId is' + this.state.statesArray[i].name);
                         this.setState({ storeState: this.state.statesArray[i].name });
                         this.getMasterDistrictsList();
                     }
                 }
+                  this.setState({
+                        states: states,
+                    });
+                    this.setState({ statesArray: this.state.statesArray });
             }
 
         });

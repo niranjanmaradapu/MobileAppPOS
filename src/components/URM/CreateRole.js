@@ -37,7 +37,6 @@ export default class CreateRole extends Component {
     async componentDidMount() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
         this.setState({ isEdit: this.props.route.params.isEdit });
-        console.log(this.props.route.params.item);
         if (this.state.isEdit === true) {
             this.setState({
                 description: this.props.route.params.item.discription,
@@ -252,7 +251,8 @@ export default class CreateRole extends Component {
                         <RNPickerSelect
                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
-                                label: 'Domain'
+                                label: 'Domain',
+                                // value:this.state.domain,
                             }}
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;

@@ -45,11 +45,13 @@ export default class Privilages extends Component {
             domainId = "3";
         }
         global.privilages = [];
+        this.setState({ loading: true });
         axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 let len = res.data["result"].length;
                 if (len > 0) {
                     if (len > 0) {
+                        this.setState({ loading: false });
                         for (let i = 0; i < len; i++) {
                             let previlage = res.data["result"][i];
                             console.log(previlage);

@@ -104,13 +104,14 @@ class Promo extends Component {
                         value: this.state.storeNamesArray[i].name,
                         label: this.state.storeNamesArray[i].name
                     });
-                    this.setState({
-                        storeNames: storeNames,
-                    });
-
-                    this.setState({ storeNamesArray: this.state.storeNamesArray });
-
+                    
                 }
+                this.setState({
+                    storeNames: storeNames,
+                });
+
+                this.setState({ storeNamesArray: this.state.storeNamesArray });
+
 
             }
         });
@@ -266,8 +267,6 @@ class Promo extends Component {
                                 this.state.createdByTempArray.push({ label: number.createdBy, value: number.createdBy });
                             }
 
-                            this.setState({ createdByTempArray: this.state.createdByTempArray });
-
                             if (this.state.poolsactiveStatus === false) {
                                 if (number.isActive == false) {
                                     this.state.poolsData.push(number);
@@ -281,9 +280,9 @@ class Promo extends Component {
                                 }
 
                             }
-                            this.setState({ poolsData: this.state.poolsData });
-
                         }
+                        this.setState({ createdByTempArray: this.state.createdByTempArray });
+                        this.setState({ poolsData: this.state.poolsData });
                     }
                     this.state.createdByTempArray.forEach(obj => {
                         if (!this.state.createdByArray.some(o => o.value === obj.value)) {
