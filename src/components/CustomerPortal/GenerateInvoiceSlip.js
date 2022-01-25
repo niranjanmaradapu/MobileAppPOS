@@ -514,7 +514,7 @@ class GenerateInvoiceSlip extends Component {
             "roleId": "",
             "storeId": ""
         };
-        axios.get(CustomerService.getCustomerMobile() + "/" + "8466043606").then((res) => {
+        axios.get(CustomerService.getCustomerMobile() + "/" + obj.phoneNo).then((res) => {
             console.log(res);
             if (res) {
                 console.log(res.data);
