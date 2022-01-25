@@ -107,7 +107,7 @@ class RegisterClient extends Component {
 
                     axios.post(UrmService.saveUser(), clientObj).then((res) => {
                         console.log(res);
-                        if (res) {
+                        if (res.data.isSuccess === "true") {
                             alert("Username and Password are sent to  respective mailId");
                             this.setState({
                                 userName: '',
@@ -117,8 +117,11 @@ class RegisterClient extends Component {
                                 address: "",
                             });
                             this.setState({ loading: false });
-                            //  this.props.route.params.onGoBack();
                             this.props.navigation.goBack();
+                        }
+                        else{
+                            this.setState({ loading: false });
+                            alert(res.data.message);
                         }
                     });
 
@@ -182,7 +185,7 @@ class RegisterClient extends Component {
                         placeholder="Email"
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
-                        keyboardType='eamil-address'
+                        keyboardType={'email-address'}
                         autoCapitalize="none"
                         value={this.state.userEmail}
                         onChangeText={this.handleEmail}
