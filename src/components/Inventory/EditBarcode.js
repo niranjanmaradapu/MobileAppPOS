@@ -109,7 +109,7 @@ var deviceWidth = Dimensions.get('window').width;
         this.getAllDivisions()
         this.getAllCatogiries()
         this.getAllHSNCodes()
-        this.getAllstores()
+       // this.getAllstores()
     }
     
     getAllDivisions() {

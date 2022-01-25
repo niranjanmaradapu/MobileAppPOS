@@ -52,8 +52,8 @@ export default class Login extends Component {
             rememberMe: false,
             redirect: false,
             isAuth: false,
-            userName: 'ajio_config_user',
-            password: 'Otsi#123',
+            userName: 'mangosuper2',
+            password: 'Otsi@123',
             dropValue: '',
             store: 0,
             user: {

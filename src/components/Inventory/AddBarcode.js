@@ -229,29 +229,62 @@ class AddBarcode extends Component {
     }
 
     async getAllstores() {
-        const username = await AsyncStorage.getItem("username");
-        var storeNames = [];
-        axios.get(LoginService.getUserStores() + username).then((res) => {
-            if (res.data["result"]) {
-                for (var i = 0; i < res.data["result"].length; i++) {
-                    let number = res.data.result[i];
-                    const myArray = [];
-                    myArray = number.split(":");
-                    this.state.storeNamesArray.push({ name: myArray[0], id: myArray[1] });
-                    console.log(this.state.storeNamesArray);
-                    storeNames.push({
-                        value: this.state.storeNamesArray[i].name,
-                        label: this.state.storeNamesArray[i].name
-                    });
+        AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
+          
+            if (value === "true") {
+                const params = {
+                    "clientDomianId": this.state.domainId
                 }
-                 this.setState({
-                        storeNames: storeNames,
-                    });
-
-                    this.setState({ storeNamesArray: this.state.storeNamesArray });
+                var storeNames = [];
+                axios.get(LoginService.getUserStoresForSuperAdmin(), { params }).then((res) => {
+                    let len = res.data["result"].length;
+                    if (len > 0) {
+                        for (let i = 0; i < len; i++) {
+                            let number = res.data.result[i]
+                           // this.state.storeData.push(number)
+                            console.log(this.state.storeData)
+                            storeNames.push({
+                                value: number.name,
+                                label: number.name
+                            });
+                        }
+                        this.setState({
+                            storeNames: storeNames,
+                        });
+    
+                        this.setState({ storeNamesArray: this.state.storeNamesArray });
+                        
+                        this.setState({ storeData: this.state.storeData })
+                    }
+                });
 
             }
-        });
+            else{
+                const username =  AsyncStorage.getItem("username");
+                var storeNames = [];
+                axios.get(LoginService.getUserStores() + username).then((res) => {
+                    if (res.data["result"]) {
+                        for (var i = 0; i < res.data["result"].length; i++) {
+                            let number = res.data.result[i];
+                            const myArray = [];
+                            myArray = number.split(":");
+                            this.state.storeNamesArray.push({ name: myArray[0], id: myArray[1] });
+                            console.log(this.state.storeNamesArray);
+                            storeNames.push({
+                                value: this.state.storeNamesArray[i].name,
+                                label: this.state.storeNamesArray[i].name
+                            });
+                        }
+                         this.setState({
+                                storeNames: storeNames,
+                            });
+        
+                            this.setState({ storeNamesArray: this.state.storeNamesArray });
+        
+                    }
+                });
+            }
+        }) 
     }
 
     handleBackButtonClick() {
