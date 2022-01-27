@@ -460,8 +460,8 @@ class Home extends Component {
                 });
         }
 
+        
     }
-
     getTodaySale() {
         const params = {
             "storeId": this.state.storeId,
@@ -488,7 +488,7 @@ class Home extends Component {
                             indexValue.push(data.damount);
                         });
 
-                        console.log(indexName);
+                        console.log(indexValue);
 
                         // colors.map(data => {
                         //     indexColor.push(data.normalColorCode);
@@ -676,6 +676,7 @@ class Home extends Component {
                             <BarChart
                                 style={{ margin: 5 }}
                                 data={debitNotesBar}
+                                // data={this.state.debitNotesByStoreChart}
                                 width={deviceWidth - 80}
                                 height={Device.isTablet ? 380 : 550}
                                 yLabelsOffset={30}
