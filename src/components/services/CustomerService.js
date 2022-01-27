@@ -34,9 +34,6 @@ class CustomerService {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/discTypes";
     }
 
-    saveSale() {
-        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/sale";
-    }
 
     getLineItems() {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/savelineitems";
@@ -62,6 +59,12 @@ class CustomerService {
     getReturnSlip() {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getInvoiceDetails";
     }
+
+
+    getRetailBarcode() {
+        return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryRetail/getBarcodeId";
+    }
+
 
     addCustomer() {
         return REACT_NATIVE_APP_BASE_URL + "/user-management/auth/createUser";

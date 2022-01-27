@@ -37,7 +37,6 @@ class NewSaleTextile extends Component {
             selectedcolor: '',
             subPrivilages: "",
             barcodes: [1, 2],
-
         };
     }
 
@@ -45,17 +44,21 @@ class NewSaleTextile extends Component {
     async componentDidMount() {
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
             if (value === "true") {
-                var domainId = "1";
+                 var domainId = "0";
                 if (global.domainName === "Textile") {
                     domainId = "1";
+                    this.setState({flagGenerateEstimationSlip:true})
+                    this.setState({flagGenerateInvoice:false})
                 }
                 else if (global.domainName === "Retail") {
                     domainId = "2";
+                    this.setState({flagGenerateEstimationSlip:false})
+                    this.setState({flagGenerateInvoice:false})
                 }
                 else if (global.domainName === "Electrical & Electronics") {
                     domainId = "3";
                 }
-
+                console.log('dfsdfdsf' + domainId)
                 axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
                         let len = res.data["result"].length;
@@ -258,7 +261,7 @@ class NewSaleTextile extends Component {
                         )}
 
                         {this.state.flagGenerateInvoice && (
-                            <GenerateInvoiceSlip />
+                            <GenerateInvoiceSlip  navigation={this.props.navigation}/>
                         )}
 
                         {this.state.flagGenerateReturnSlip && (
