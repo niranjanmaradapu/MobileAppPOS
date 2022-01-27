@@ -85,7 +85,7 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="Billing Portal"
-                                onPress={() => { props.navigation.navigate('CustomerRetailNavigation') }}
+                                onPress={() => { props.navigation.navigate('CustomerNavigation') }}
                             />
                         )}
                         {global.previlage2 === "Billing Portal" && global.domainName == "Textile" && (

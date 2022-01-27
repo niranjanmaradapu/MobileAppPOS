@@ -43,7 +43,6 @@ export default class AddCustomer extends Component {
     }
 
     async componentDidMount() {
-
         this.addCustomer = this.addCustomer.bind(this);
     }
 
