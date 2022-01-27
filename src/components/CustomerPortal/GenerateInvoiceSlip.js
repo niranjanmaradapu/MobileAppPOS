@@ -460,7 +460,7 @@ class GenerateInvoiceSlip extends Component {
                 approvedBy: this.state.approvedBy,
                 reasonDiscount: this.state.reasonDiscount,
                 userId: this.state.userId,
-                retailBarCodeList:this.state.retailBarCodeList,
+                retailBarCodeList: this.state.retailBarCodeList,
                 dsNumberList: this.state.dsNumberList,
                 customerName: this.state.customerName, customerPhoneNumber: this.state.customerPhoneNumber,
                 customerGSTNumber: this.state.customerGSTNumber, customerAddress: this.state.customerAddress,
@@ -503,7 +503,7 @@ class GenerateInvoiceSlip extends Component {
         let total = 0;
         const params = {
             "storeId": this.state.storeId,
-            "barcodeId":this.state.barcodeId,
+            "barcodeId": this.state.barcodeId,
         };
         console.log(params)
         axios.get(CustomerService.getRetailBarcode(), { params }).then((res) => {
@@ -717,9 +717,9 @@ class GenerateInvoiceSlip extends Component {
                                     />)}
 
                             </View>
-                           
 
-                            {this.state.barCodeList.length !== 0 || this.state.retailBarCodeList.length !== 0 && (
+
+                            {this.state.retailBarCodeList.length !== 0 && (
                                 <FlatList
                                     style={styles.flatList}
                                     horizontal
@@ -746,8 +746,36 @@ class GenerateInvoiceSlip extends Component {
                                 />
                             )}
 
-{this.state.retailBarCodeList.length !== 0 && global.domainName === "Retail" && (
-                                 <FlatList style={{ marginTop: 20, marginBottom: 20 }}
+
+                            {this.state.barCodeList.length !== 0 && (
+                                <FlatList
+                                    style={styles.flatList}
+                                    horizontal
+                                    data={this.state.privilages}
+                                    showsVerticalScrollIndicator={false}
+                                    showsHorizontalScrollIndicator={false}
+                                    renderItem={({ item, index }) => (
+                                        <TouchableOpacity style={{
+                                            height: 36,
+                                            width: 200,
+                                            borderWidth: 1,
+                                            backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
+                                            borderColor: item.bool ? '#ED1C24' : '#858585',
+                                            borderRadius: 5,
+                                            marginLeft: 10,
+                                        }} onPress={() => this.topbarAction1(item, index)} >
+
+                                            <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
+                                                {item.name}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    )}
+                                    ListFooterComponent={<View style={{ width: 15 }}></View>}
+                                />
+                            )}
+
+                            {this.state.retailBarCodeList.length !== 0 && global.domainName === "Retail" && (
+                                <FlatList style={{ marginTop: 20, marginBottom: 20 }}
                                     //  ListHeaderComponent={this.renderHeader}
                                     data={this.state.retailBarCodeList}
                                     keyExtractor={item => item.email}
@@ -963,7 +991,7 @@ class GenerateInvoiceSlip extends Component {
                                     )}
                                 />)}
 
-                            {(this.state.barCodeList.length !== 0 || global.domainName === "Textile" &&
+                            {(this.state.barCodeList.length !== 0 && global.domainName === "Textile" &&
                                 <FlatList style={{ marginTop: 20, marginBottom: 20 }}
                                     //  ListHeaderComponent={this.renderHeader}
                                     data={this.state.barCodeList}
@@ -1120,7 +1148,97 @@ class GenerateInvoiceSlip extends Component {
                             )}
 
 
-                            {this.state.barCodeList.length != 0 || this.state.retailBarCodeList.length != 0 && (
+                            {this.state.barCodeList.length != 0 && (
+                                <View style={{ width: deviceWidth, height: 320, position: 'absolute', bottom: 0, backgroundColor: '#FFFFFF' }}>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        Items </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        {this.state.barCodeList.length} </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        Discount </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        ₹ {this.state.promoDiscount} </Text>
+
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        Total </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        ₹ {this.state.netPayableAmount} </Text>
+
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        Customer Name </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        {this.state.customerFullName} </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        Customer Mobile Number </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        {this.state.customerMobilenumber} </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        Loyalty Points </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        - </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 210, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        Expiry Date </Text>
+                                    <Text style={{
+                                        color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 210, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
+                                        fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
+                                    }}>
+                                        - </Text>
+                                    <View style={styles.TopcontainerforPay}>
+
+                                        <TouchableOpacity
+                                            style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
+                                            onPress={() => this.pay()} >
+
+                                            <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}> Checkout </Text>
+                                        </TouchableOpacity>
+
+
+                                    </View>
+
+                                </View>
+                            )}
+
+
+                            {this.state.retailBarCodeList.length != 0 && (
                                 <View style={{ width: deviceWidth, height: 320, position: 'absolute', bottom: 0, backgroundColor: '#FFFFFF' }}>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, justifyContent: 'center', textAlign: 'center', marginTop: 10,
@@ -1237,6 +1355,8 @@ class GenerateInvoiceSlip extends Component {
 
 
                 )}
+
+
                 {this.state.customerTagging && (
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
