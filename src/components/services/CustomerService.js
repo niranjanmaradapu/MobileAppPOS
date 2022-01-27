@@ -59,13 +59,13 @@ class CustomerService {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/saveGv";
     }
 
-    returnSlip() {
+    getReturnSlip() {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getInvoiceDetails";
     }
 
-addCustomer(){
-    return REACT_NATIVE_APP_BASE_URL +  "/user-management/auth/createUser";
-}
+    addCustomer() {
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/auth/createUser";
+    }
 
 
 }

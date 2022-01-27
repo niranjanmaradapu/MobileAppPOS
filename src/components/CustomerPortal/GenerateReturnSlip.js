@@ -15,16 +15,20 @@ export default class GenerateReturnSlip extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            invoiceNumber: "KLM/202212/586734156",
+            invoiceNumber: "KLM/202227/1983752684",
             mobileNumber: "",
             customerTagging: false,
             modelVisible: true,
             promotions: false,
-            returnInvoice: [1, 2, 3],
-            returnedItems: [1],
+            returnInvoice: [],
+            returnedItems: [0],
             reasons: "",
             reasonDesc: "",
             returnModel: false,
+            netValue: 0,
+            quantity: 0,
+            isChecked: false,
+            itemClicked: false,
         };
     }
 
@@ -48,12 +52,37 @@ export default class GenerateReturnSlip extends Component {
         const obj = {
             invoiceNo: this.state.invoiceNumber,
             mobileNo: this.state.mobileNumber,
-            domainId: 1
+            domianId: 1
         };
-        axios.post(CustomerService.returnSlip(), obj).then(res => {
-            console.log(res.data);
+        console.log(this.state.invoiceNumber);
+        axios.post(CustomerService.getReturnSlip(), obj).then(res => {
+            console.log(res.data.result);
+            this.setState({ returnInvoice: res.data.result }, () => {
+                let costprice = 0;
+                let quantity = 0;
+                this.state.returnInvoice.forEach(element => {
+                    costprice = costprice + element.netValue;
+                    quantity = quantity + element.quantity;
+                    element.isChecked = false;
+                });
+
+                this.setState({ netValue: costprice, quantity: quantity, isChecked: false });
+            });
+        }).catch(err => {
+            console.log(err);
         });
     };
+
+    itemSelected() {
+        if (this.state.itemClicked === true) {
+            this.setState({ itemClicked: false });
+        }
+        else {
+            this.setState({ itemClicked: true });
+        }
+    }
+
+
 
     generateInvoice = () => {
         this.setState({ returnModel: true, modelVisible: true });
@@ -173,61 +202,48 @@ export default class GenerateReturnSlip extends Component {
                     style={{ marginTop: 20, marginBottom: 20 }}
                     data={this.state.returnInvoice}
                     scrollEnabled={true}
-                    renderItem={({ item, index }) => {
-                        if (index === 0) {
-                            return <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
+                    renderItem={({ item, index }) => (
+                        <View>
+                            <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                                 <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
+                                    <View>
+                                        <TouchableOpacity onPress={() => this.itemSelected(item, index, section)} style={{ position: 'absolute', top: 10, left: 10, }}>
+                                            <Image style={{ position: 'absolute', top: 0, left: 0, }} source={
+                                                //require('../assets/images/chargeunselect.png')}
+                                                this.state.itemClicked ? require('../assets/images/selected.png') : require('../assets/images/langunselect.png')} />
+                                        </TouchableOpacity>
+                                    </View>
                                     <View style={flats.text}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>S.NO:</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>S.NO: {index + 1}</Text>
                                         <Image source={require('../assets/images/default.jpeg')}
                                             //source={{ uri: item.image }}
                                             style={{
                                                 width: Device.isTablet ? 140 : 90, height: Device.isTablet ? 140 : 90,
                                             }} />
+
                                     </View>
                                     <View style={flats.text}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {"vcaca23445"}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"11"}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {"₹1200"}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {item.barcode}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {item.quantity}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {item.netValue}</Text>
                                     </View>
                                 </View>
-                            </View>;
-                        }
-                        if (index === 1) {
-                            return <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
-                                <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
-                                    <View style={flats.text}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>S.NO:</Text>
-                                        <Image source={require('../assets/images/default.jpeg')}
-                                            //source={{ uri: item.image }}
-                                            style={{
-                                                width: Device.isTablet ? 140 : 90, height: Device.isTablet ? 140 : 90,
-                                            }} />
-                                    </View>
-                                    <View style={flats.text}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {"vcaca23445"}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"11"}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {"₹1200"}</Text>
-                                    </View>
-                                </View>
-                            </View>;
-                        }
-                        if (index === 2) {
-                            return <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile} >
+                            </View>
+                            <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile} >
                                 <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile}>
                                     <View style={flats.text}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>ITEMS: {"02"}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"02"}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>N/RATE: {"2400"}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>ITEMS: {this.state.returnInvoice.length}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {this.state.quantity}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>N/RATE: {this.state.netValue}</Text>
                                     </View>
                                     <View style={flats.text}>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>DISCOUNT: {"0"}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>VALUE: {"₹2400"}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>VALUE: {this.state.netValue}</Text>
                                     </View>
                                 </View>
-                            </View>;
-                        }
-                    }}
+                            </View>
+                        </View>
+                    )}
                 />
                 <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return summary</Text>
                 <Text style={[Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile, { marginLeft: 20 }]}>RETURN AMOUNT: {"2400"}</Text>
@@ -565,6 +581,15 @@ const pickerSelectStyles_tablet = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
+    item: {
+        padding: 15,
+        fontSize: 18,
+        height: 44,
+        backgroundColor: '#ffffff',
+        fontSize: 18,
+        fontFamily: 'medium',
+        color: '#353C40',
+    },
     logoImage: {
         alignSelf: 'center',
         width: 300,
