@@ -50,6 +50,7 @@ class CustomerService {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getGv";
     }
 
+
     getGiftVocher() {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getlistofgv";
     }
@@ -61,6 +62,11 @@ class CustomerService {
     returnSlip() {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getInvoiceDetails";
     }
+
+addCustomer(){
+    return REACT_NATIVE_APP_BASE_URL +  "/user-management/auth/createUser";
+}
+
 
 }
 export default new CustomerService();

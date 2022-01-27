@@ -212,7 +212,7 @@ export default class Inventory extends Component {
             "currentBarcodeId": this.state.barCodeId,
             "storeId": this.state.storeId
         };
-        console.log("cssafsfssdsfdsfsdsadasd" + this.state.storeId);
+        console.log(params);
         this.setState({ loading: true });
         axios.post(InventoryService.getbarcodeTexttileAdjustments(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
@@ -313,25 +313,41 @@ export default class Inventory extends Component {
     }
 
     datepickerDoneClicked() {
-        if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
+        if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
+        }
+        else if (parseInt(this.state.date.getDate()) < 10) {
+            this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
+        }
+        else if (parseInt(this.state.date.getMonth()) < 10) {
+            this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
         else {
             this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
         }
 
+
         this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
 
     datepickerendDoneClicked() {
-        if (parseInt(this.state.enddate.getDate()) < 10) {
-            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-0" + this.state.enddate.getDate() });
+        if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
+        }
+        else if (parseInt(this.state.enddate.getDate()) < 10) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
+        }
+        else if (parseInt(this.state.enddate.getMonth()) < 10) {
+            this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
         else {
             this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
         }
         this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
     }
+
+
+   
 
 
     datepickerCancelClicked() {

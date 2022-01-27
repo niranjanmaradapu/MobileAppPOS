@@ -167,11 +167,11 @@ export class FilterStores extends Component {
                         value: this.state.statesArray[i].name,
                         label: this.state.statesArray[i].name
                     });
-                    this.setState({
-                        states: states,
-                    });
-                    this.setState({ statesArray: this.state.statesArray });
                 }
+                this.setState({
+                    states: states,
+                });
+                this.setState({ statesArray: this.state.statesArray });
             }
 
         });
@@ -207,11 +207,11 @@ export class FilterStores extends Component {
                         value: this.state.dictrictArray[i].name,
                         label: this.state.dictrictArray[i].name
                     });
-                    this.setState({
-                        dictricts: dictricts,
-                    });
-                    this.setState({ dictrictArray: this.state.dictrictArray });
                 }
+                this.setState({
+                    dictricts: dictricts,
+                });
+                this.setState({ dictrictArray: this.state.dictrictArray });
             }
 
         });

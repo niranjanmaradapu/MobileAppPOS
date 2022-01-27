@@ -33,7 +33,7 @@ export default class AddStore extends Component {
             statecode: '',
             dictrictArray: [],
             dictricts: [],
-            dictrictId: 0,
+            districtId: 0,
             domainsArray: [],
             domains: [],
             domainId: 0,
@@ -51,7 +51,7 @@ export default class AddStore extends Component {
             this.setState({
                 stateId: this.props.route.params.item.stateId,
                 statecode: this.props.route.params.item.stateCode,
-                dictrictId: this.props.route.params.item.districtId,
+                districtId: this.props.route.params.item.districtId,
                 city: this.props.route.params.item.cityId,
                 area: this.props.route.params.item.area,
                 mobile: this.props.route.params.item.phoneNumber,
@@ -59,6 +59,7 @@ export default class AddStore extends Component {
                 domainId: this.props.route.params.item.clientDomianlId.clientDomainaId,
                 storeName: this.props.route.params.item.name,
             });
+            console.log(this.props.route.params.item)
             this.setState({ navtext: 'Edit Store' });
         }
         else {
@@ -85,17 +86,18 @@ export default class AddStore extends Component {
                             value: this.state.domainsArray[i].name,
                             label: this.state.domainsArray[i].name
                         });
-                        this.setState({
-                            domains: domains,
-                        });
-
-                        this.setState({ domainsArray: this.state.domainsArray });
-                        if (this.state.domainsArray[i].id === this.state.domainId) {
+                       
+                        if (number.clientDomainaId === this.state.domainId) {
                             this.setState({ domain: this.state.domainsArray[i].name });
 
                         }
 
                     }
+                    this.setState({
+                        domains: domains,
+                    });
+
+                    this.setState({ domainsArray: this.state.domainsArray });
                     console.log(this.state.domains);
                 }
             }
@@ -130,16 +132,17 @@ export default class AddStore extends Component {
                         value: this.state.statesArray[i].name,
                         label: this.state.statesArray[i].name
                     });
-                    this.setState({
-                        states: states,
-                    });
-                    this.setState({ statesArray: this.state.statesArray });
-                    if (this.state.statesArray[i].id === this.state.stateId) {
+                  
+                    if (res.data["result"][i].stateId === this.state.stateId) {
                         console.log('stateId is' + this.state.statesArray[i].name);
                         this.setState({ storeState: this.state.statesArray[i].name });
                         this.getMasterDistrictsList();
                     }
                 }
+                  this.setState({
+                        states: states,
+                    });
+                    this.setState({ statesArray: this.state.statesArray });
             }
 
         });
@@ -179,8 +182,8 @@ export default class AddStore extends Component {
                         dictricts: dictricts,
                     });
                     this.setState({ dictrictArray: this.state.dictrictArray });
-                    if (this.state.dictrictArray[i].id === this.state.dictrictId) {
-                        //  console.log('stateId is' + this.state.dictrictArray[i].name)
+                    if (this.state.dictrictArray[i].id === this.state.districtId) {
+                          console.log('district name vinod is' + this.state.dictrictArray[i].name)
                         this.setState({ storeDistrict: this.state.dictrictArray[i].name });
                     }
                 }
@@ -192,6 +195,7 @@ export default class AddStore extends Component {
     handleDistrict = (value) => {
         for (let i = 0; i < this.state.dictrictArray.length; i++) {
             if (this.state.dictrictArray[i].name === value) {
+                console.log('district name vinod is' + this.state.dictrictArray[i].id)
                 this.setState({ districtId: this.state.dictrictArray[i].id });
             }
         }
@@ -251,7 +255,7 @@ export default class AddStore extends Component {
                 const saveObj = {
                     "name": this.state.storeName,
                     "stateId": this.state.stateId,
-                    "districtId": this.state.dictrictId,
+                    "districtId": this.state.districtId,
                     "cityId": this.state.city,
                     "area": this.state.area,
                     "address": this.state.address,
@@ -267,7 +271,7 @@ export default class AddStore extends Component {
                 axios.post(UrmService.saveStore(), saveObj).then((res) => {
                     console.log(res.data);
                     if (res.data && res.data["isSuccess"] === "true") {
-                        //  this.props.route.params.onGoBack();
+                         this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
                     else {
@@ -284,7 +288,7 @@ export default class AddStore extends Component {
                     "id": this.state.storeId,
                     "name": this.state.storeName,
                     "stateId": this.state.stateId,
-                    "districtId": this.state.dictrictId,
+                    "districtId": this.state.districtId,
                     "cityId": this.state.city,
                     "area": this.state.area,
                     "address": this.state.address,
@@ -300,7 +304,7 @@ export default class AddStore extends Component {
                 axios.put(UrmService.editStore(), saveObj).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
                         this.setState({ loading: false });
-                        // this.props.route.params.onGoBack();
+                         this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
                     else {
@@ -397,7 +401,7 @@ export default class AddStore extends Component {
                         value={this.state.area}
                         onChangeText={this.handleArea}
                     />
-                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>Stor Phone Number</Text>
+                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>Store Phone Number</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"

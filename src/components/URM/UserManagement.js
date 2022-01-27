@@ -166,9 +166,8 @@ export default class UserManagement extends Component {
                     console.log(number);
                     this.setState({ loading: false });
                     this.state.rolesData.push(number);
-
-                    this.setState({ rolesData: this.state.rolesData });
                 }
+                this.setState({ rolesData: this.state.rolesData });
             }
         }).catch(() => {
             this.setState({ loading: false });
@@ -204,8 +203,9 @@ export default class UserManagement extends Component {
                     this.state.usersData.push(number);
 
 
-                    this.setState({ usersData: this.state.usersData });
+                   
                 }
+                this.setState({ usersData: this.state.usersData });
             }
         }).catch(() => {
             this.setState({ loading: false });

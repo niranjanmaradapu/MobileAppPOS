@@ -37,7 +37,6 @@ export default class CreateRole extends Component {
     async componentDidMount() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
         this.setState({ isEdit: this.props.route.params.isEdit });
-        console.log(this.props.route.params.item);
         if (this.state.isEdit === true) {
             this.setState({
                 description: this.props.route.params.item.discription,
@@ -47,6 +46,7 @@ export default class CreateRole extends Component {
                 parentlist: this.props.route.params.item.parentPrivilageVo,
                 roleId: this.props.route.params.item.roleId
             });
+            console.log("sadadsdsad" + this.props.route.params.item.clientDomainVo.domaiName)
             this.setState({ navtext: 'Edit Role' });
         }
         else {
@@ -80,6 +80,13 @@ export default class CreateRole extends Component {
                             this.setState({ domain: this.state.domainsArray[0].name });
                             this.setState({ domainId: this.state.domainsArray[0].id });
                         }
+                        else{
+                            if (number.domaiName === this.props.route.params.item.clientDomainVo.domaiName) {
+                                this.setState({ domain: this.state.domainsArray[i].name });
+                                this.setState({ domainId: this.state.domainsArray[i].id });
+                            }
+                        }
+                       
                     }
                     console.log(this.state.domains);
                 }
@@ -191,6 +198,7 @@ export default class CreateRole extends Component {
         this.setState({ childlist: [] });
         this.state.roles = [];
         for (let i = 0; i < global.privilages.length; i++) {
+            console.log('vinod data' + global.privilages[i].subPrivillages.name)
             this.state.parentlist.push({ name: global.privilages[i].parent, id: global.privilages[i].id });
             this.state.childlist.push(global.privilages[i].subPrivillages);
             this.state.roles.push(global.privilages[i].subPrivillages);
@@ -252,7 +260,8 @@ export default class CreateRole extends Component {
                         <RNPickerSelect
                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
-                                label: 'Domain'
+                                label: 'Domain',
+                                // value:this.state.domain,
                             }}
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
