@@ -1,9 +1,11 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import CustomerService from '../services/CustomerService';
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
@@ -13,7 +15,7 @@ export default class GenerateReturnSlip extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            invoiceNumber: "",
+            invoiceNumber: "KLM/202212/586734156",
             mobileNumber: "",
             customerTagging: false,
             modelVisible: true,
@@ -43,6 +45,14 @@ export default class GenerateReturnSlip extends Component {
     }
 
     searchInvoice = () => {
+        const obj = {
+            invoiceNo: this.state.invoiceNumber,
+            mobileNo: this.state.mobileNumber,
+            domainId: 1
+        };
+        axios.post(CustomerService.returnSlip(), obj).then(res => {
+            console.log(res.data);
+        });
     };
 
     generateInvoice = () => {

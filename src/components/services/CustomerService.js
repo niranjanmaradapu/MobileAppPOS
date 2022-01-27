@@ -58,6 +58,10 @@ class CustomerService {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/saveGv";
     }
 
+    returnSlip() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getInvoiceDetails";
+    }
+
 }
 export default new CustomerService();
 
