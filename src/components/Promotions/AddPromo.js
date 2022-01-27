@@ -93,9 +93,10 @@ class AddPromo extends Component {
                                 this.state.createdByArray.push({ poolName: number.poolName, poolId: number.poolId });
                             }
 
-                            this.setState({ createdByArray: this.state.createdByArray });
+                          
                             console.log('pool names' + number.poolName);
                         }
+                        this.setState({ createdByArray: this.state.createdByArray });
                     }
                     // this.state.createdByTempArray.forEach(obj => {
                     //     if (!this.state.createdByArray.some(o => o.poolName === obj.poolName)) {

@@ -173,10 +173,9 @@ export default class AccountManagement extends Component {
                     console.log('sfsdfdfsdfdsfsfsdfs' + number);
                     console.log(number);
                     this.setState({ loading: false });
-                    this.state.domains.push(number);
-
-                    this.setState({ domains: this.state.domains });
+                    this.state.domains.push(number);   
                 }
+                this.setState({ domains: this.state.domains });
             }
         }).catch(() => {
             this.setState({ loading: false });
@@ -200,9 +199,8 @@ export default class AccountManagement extends Component {
                     console.log(number);
                     this.setState({ loading: false });
                     this.state.stores.push(number);
-
-                    this.setState({ stores: this.state.stores });
                 }
+                this.setState({ stores: this.state.stores });
             }
         }).catch(() => {
             this.setState({ loading: false });

@@ -97,12 +97,13 @@ export default class AddUser extends Component {
                             value: this.state.domainsArray[i].name,
                             label: this.state.domainsArray[i].name
                         });
-                        this.setState({
-                            domains: domains,
-                        });
-                        this.setState({ domainsArray: this.state.domainsArray });
                         this.getRoles();
                     }
+                    this.setState({
+                        domains: domains,
+                    });
+                    this.setState({ domainsArray: this.state.domainsArray });
+
                     if (this.state.isEdit === true) {
                         for (let i = 0; i < this.state.domainsArray.length; i++) {
                             if (this.state.domainsArray[i].id === this.state.domainId) {

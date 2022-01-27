@@ -59,6 +59,12 @@ export default class SelectStore extends React.Component {
                     }).catch(() => {
                       
                     })
+
+                    AsyncStorage.setItem("storeName", (res.data.result[0].name)).then(() => {
+                       
+                    }).catch(() => {
+                        console.log('there is error saving token')
+                    })
                     // 
                 }
                 this.setState({ storeData: this.state.storeData })
