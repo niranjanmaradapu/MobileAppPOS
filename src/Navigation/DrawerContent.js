@@ -44,7 +44,7 @@ export function DrawerContent(props) {
                                 <Caption style={styles.caption}>{global.userrole}</Caption>
                                 <Caption style={styles.middelcaption}>{global.domainName}</Caption>
                             
-                            </View>
+                            </View>           
                         </View>
 
                         {/* <View style={styles.row}>
@@ -193,6 +193,20 @@ export function DrawerContent(props) {
 
                 </View>
             </DrawerContentScrollView>
+            <Drawer.Section style={styles.bottomDrawerSection}>
+                <DrawerItem
+                    icon={({ color, size }) => (
+                        <Icon
+                            name="exit-to-app"
+                            color={color}
+                            size={size}
+                        />
+                    )}
+                    label="Domain Switch"
+                    onPress={() => { props.navigation.navigate('SelectDomain') }}
+                />
+            </Drawer.Section>
+
             <Drawer.Section style={styles.bottomDrawerSection}>
                 <DrawerItem
                     icon={({ color, size }) => (

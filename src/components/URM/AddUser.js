@@ -295,8 +295,13 @@ export default class AddUser extends Component {
             this.setState({ selectedStoresArray: this.state.selectedStoresArray });
         }
 
-
-        this.setState({ storesArray: this.state.storesArray });
+        const newArrayList = [];
+        this.state.storesArray.forEach(obj => {
+          if (!newArrayList.some(o => o.name === obj.name)) {
+            newArrayList.push({...obj});
+          }
+        });
+        this.setState({ storesArray: newArrayList });
     };
 
     cancel() {

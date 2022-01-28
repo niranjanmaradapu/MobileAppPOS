@@ -112,6 +112,8 @@ export default class CreateRole extends Component {
     }
 
     saveRole() {
+        console.log(this.state.parentlist)
+        console.log(this.state.childlist)
         if (this.state.role === "") {
             alert("Please Enter Role");
         } else if (this.state.description === "") {
@@ -198,13 +200,19 @@ export default class CreateRole extends Component {
         this.setState({ childlist: [] });
         this.state.roles = [];
         for (let i = 0; i < global.privilages.length; i++) {
-            console.log('vinod data' + global.privilages[i].subPrivillages.name)
-            this.state.parentlist.push({ name: global.privilages[i].parent, id: global.privilages[i].id });
-            this.state.childlist.push(global.privilages[i].subPrivillages);
+                this.state.parentlist.push({ name: global.privilages[i].parent, id: global.privilages[i].id });
+                this.state.childlist.push(global.privilages[i].subPrivillages);
             this.state.roles.push(global.privilages[i].subPrivillages);
-            this.setState({ parentlist: this.state.parentlist, childlist: this.state.childlist, roles: this.state.roles });
         }
+        const newArrayList = [];
+    this.state.parentlist.forEach(obj => {
+      if (!newArrayList.some(o => o.name === obj.name)) {
+        newArrayList.push({...obj});
+      }
+    });
+        this.setState({ parentlist: newArrayList, childlist: this.state.childlist, roles: this.state.roles });
     }
+    
 
     handleDomain = (value) => {
         this.setState({ domain: value });
