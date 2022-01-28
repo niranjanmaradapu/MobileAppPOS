@@ -1564,7 +1564,7 @@ class TextilePayment extends Component {
                                 }}>
                                     ₹  {(parseInt(this.state.redeemedPints) / 10).toString()} </Text>
                             </View>
-
+                            <View></View>
                             <View style={styles.TopcontainerforPay}>
                                 <TouchableOpacity
                                     style={styles.signInButton}
