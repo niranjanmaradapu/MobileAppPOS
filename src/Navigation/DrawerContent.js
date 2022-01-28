@@ -202,7 +202,7 @@ export function DrawerContent(props) {
                             size={size}
                         />
                     )}
-                    label="Domain Change"
+                    label="Domain Switch"
                     onPress={() => { props.navigation.navigate('SelectDomain') }}
                 />
             </Drawer.Section>
