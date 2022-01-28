@@ -53,7 +53,7 @@ class NewSaleTextile extends Component {
                 else if (global.domainName === "Retail") {
                     domainId = "2";
                     this.setState({flagGenerateEstimationSlip:false})
-                    this.setState({flagGenerateInvoice:false})
+                    this.setState({flagGenerateInvoice:true})
                 }
                 else if (global.domainName === "Electrical & Electronics") {
                     domainId = "3";

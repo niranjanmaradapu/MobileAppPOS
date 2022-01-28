@@ -390,8 +390,7 @@ class Settings extends Component {
 
     handleMenuButtonClick() {
         this.props.navigation.openDrawer();
-        // this.props.navigation.navigate('Home')
-    }
+        }
 
 
     render() {
@@ -577,7 +576,7 @@ class Settings extends Component {
                                     </View>
                                 </View>
 
-                                <View>
+                                {/* <View>
                                     <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> DOMAIN: </Text>
                                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
                                         <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -595,7 +594,7 @@ class Settings extends Component {
                                             useNativeAndroidPickerStyle={false}
                                         />
                                     </View>
-                                </View>
+                                </View> */}
 
 
                                 <View>
