@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -15,21 +16,38 @@ export default class GenerateReturnSlip extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            invoiceNumber: "KLM/202227/1983752684",
+            invoiceNumber: "",
             mobileNumber: "",
             customerTagging: false,
             modelVisible: true,
             promotions: false,
             returnInvoice: [],
             returnedItems: [0],
-            reasons: "",
+            reason: "",
+            invoiceNo: "",
             reasonDesc: "",
             returnModel: false,
             netValue: 0,
             quantity: 0,
             isChecked: false,
             itemClicked: false,
+            qty: 0,
+            values: 0,
+            netValueList: [],
+            returnSlipTotal: 0,
+            storeId: 0,
+            userId: "NA",
         };
+    }
+
+    componentDidMount() {
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) });
+            console.log("Store Id", this.state.storeId);
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
     }
 
     handleReasonDesc(text) {
@@ -73,19 +91,100 @@ export default class GenerateReturnSlip extends Component {
         });
     };
 
-    itemSelected() {
+    itemSelected(e, index, item) {
         if (this.state.itemClicked === true) {
-            this.setState({ itemClicked: false });
+            this.setState({ itemClicked: false }, () => {
+                if (this.state.itemClicked === false) {
+                    let index = this.state.netValueList.findIndex(ele => ele.barcode === item.barcode);
+                    this.state.netValueList.splice(index, 1);
+                }
+            });
         }
         else {
-            this.setState({ itemClicked: true });
+            this.setState({ itemClicked: true }, () => {
+                if (this.state.itemClicked === true) {
+                    const obj = {
+                        netValue: item.netValue,
+                        barcode: item.barcode,
+                        quantity: item.quantity
+                    };
+                    this.state.netValueList.push(obj);
+                }
+
+            });
+
         }
+
+        const netValueList = this.removeDuplicates(this.state.netValueList, "barcode");
+        this.setState({ netValueList: netValueList }, () => {
+            let returnSlipTotal = 0;
+            this.state.netValueList.forEach(ele => {
+                returnSlipTotal = returnSlipTotal + ele.netValue;
+            });
+            this.setState({ returnSlipTotal: returnSlipTotal });
+        });
+
+        // alert(this.state.returnSlipTotal);
+
+    }
+
+    removeDuplicates(array, key) {
+        const lookup = new Set();
+        return array.filter(obj => !lookup.has(obj[key]) && lookup.add(obj[key]));
+    }
+
+    generateNewSlip() {
+        console.log(this.state.netValueList);
+        let barList = [];
+        this.state.netValueList.forEach(ele => {
+            const obj = {
+                barCode: ele.barcode
+            };
+            barList.push(obj);
+        });
+        console.warn(barList);
+        console.log(this.state.storeId);
+        const saveObj = {
+            "barcodes": barList,
+            "mobileNumber": this.state.mobileNumber,
+            "invoiceNo": this.state.invoiceNumber,
+            "reason": this.state.reason,
+            "userId": this.state.userId,
+            "storeId": this.state.storeId,
+            "iSReviewed": false,
+            "customerName": "",
+            "totalAmount": this.state.returnSlipTotal,
+            "createdBy": "",
+            "domianId": 1
+        };
+        axios.post(CustomerService.saveRetunSlip(), saveObj).then(res => {
+            if (res) {
+                alert(res.data.result);
+                this.setState({
+                    modelVisible: false,
+                    netValueList: [],
+                    returnSlipTotal: 0,
+                    returnInvoice: [],
+                    mobileNumber: '',
+                    invoiceNumber: "",
+                    netValue: 0,
+                    quantity: 0,
+                    reason: "",
+
+                });
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+
     }
 
 
 
     generateInvoice = () => {
         this.setState({ returnModel: true, modelVisible: true });
+        console.log("hello");
+        console.log(this.state.netValueList);
     };
 
     handleCutomerTagging = () => {
@@ -107,6 +206,7 @@ export default class GenerateReturnSlip extends Component {
                     textAlignVertical="center"
                     keyboardType={'default'}
                     autoCapitalize="none"
+                    value={this.state.invoiceNumber}
                     onChangeText={(text) => this.handleInvoiceNumber(text)}
                 // onEndEditing={() => this.endEditing()}
                 />
@@ -118,6 +218,7 @@ export default class GenerateReturnSlip extends Component {
                     textAlignVertical="center"
                     keyboardType={'default'}
                     autoCapitalize="none"
+                    value={this.state.mobileNumber}
                     onChangeText={(text) => this.handleMobileNumber(text)}
                 // onEndEditing={() => this.endEditing()}
                 />
@@ -206,23 +307,22 @@ export default class GenerateReturnSlip extends Component {
                         <View>
                             <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                                 <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
-                                    <View>
-                                        <TouchableOpacity onPress={() => this.itemSelected(item, index, section)} style={{ position: 'absolute', top: 10, left: 10, }}>
+                                    <View style={flats.text}>
+                                        <TouchableOpacity onPress={(e) => this.itemSelected(e, index, item)} style={{ position: 'relative', top: 60, left: 10, width: 20, height: 20 }}>
                                             <Image style={{ position: 'absolute', top: 0, left: 0, }} source={
                                                 //require('../assets/images/chargeunselect.png')}
                                                 this.state.itemClicked ? require('../assets/images/selected.png') : require('../assets/images/langunselect.png')} />
                                         </TouchableOpacity>
+                                        <View style={{ marginLeft: 60 }}>
+                                            <Image source={require('../assets/images/default.jpeg')}
+                                                //source={{ uri: item.image }}
+                                                style={{
+                                                    width: Device.isTablet ? 140 : 90, height: Device.isTablet ? 140 : 90,
+                                                }} />
+                                            <Text style={[Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile, { marginLeft: 30, marginTop: 10 }]}>S.NO: {index + 1}</Text>
+                                        </View>
                                     </View>
-                                    <View style={flats.text}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>S.NO: {index + 1}</Text>
-                                        <Image source={require('../assets/images/default.jpeg')}
-                                            //source={{ uri: item.image }}
-                                            style={{
-                                                width: Device.isTablet ? 140 : 90, height: Device.isTablet ? 140 : 90,
-                                            }} />
-
-                                    </View>
-                                    <View style={flats.text}>
+                                    <View style={[flats.text, { marginRight: Device.isTablet ? 20 : 0 }]}>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {item.barcode}</Text>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {item.quantity}</Text>
                                         <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {item.netValue}</Text>
@@ -246,7 +346,7 @@ export default class GenerateReturnSlip extends Component {
                     )}
                 />
                 <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return summary</Text>
-                <Text style={[Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile, { marginLeft: 20 }]}>RETURN AMOUNT: {"2400"}</Text>
+                <Text style={[Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile, { marginLeft: 20 }]}>RETURN AMOUNT: {this.state.returnSlipTotal}</Text>
                 <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return For Reason <Text style={{ color: "#ed1c24" }}>*</Text></Text>
                 <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                     <RNPickerSelect
@@ -263,7 +363,7 @@ export default class GenerateReturnSlip extends Component {
                         ]}
                         onValueChange={this.handleReason}
                         style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                        value={this.state.reasons}
+                        value={this.state.reason}
                         useNativeAndroidPickerStyle={false}
                     />
                 </View>
@@ -300,33 +400,29 @@ export default class GenerateReturnSlip extends Component {
                                 <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 450 : 350 }}>
                                     <View style={{ height: Device.isTablet ? 250 : 200 }}>
                                         <FlatList
-                                            data={this.state.returnedItems}
+                                            data={this.state.netValueList}
                                             scrollEnabled={true}
                                             renderItem={({ item, index }) => (
                                                 <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                                                     <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                                         <View style={flats.text}>
-                                                            <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>SLIP NO: { }</Text>
+                                                            <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>SLIP NO: {item.barcode}</Text>
                                                         </View>
                                                         <View style={flats.text}>
-                                                            <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>ITEMS: { }</Text>
+                                                            <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>ITEMS: {item.quantity}</Text>
                                                         </View>
                                                         <View style={flats.text}>
-                                                            <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>RETURN SLIP VALUE: { }</Text>
+                                                            <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>RETURN SLIP VALUE: {this.state.returnSlipTotal}</Text>
                                                         </View>
                                                     </View>
                                                 </View>
                                             )}
                                         />
                                     </View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: 10 }}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>
-                                            BAR2912405772</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>₹2400</Text>
-                                    </View>
+
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { backgroundColor: '#00aa00' }]}
-                                        onPress={() => this.generateNewSlip(item, index)}
+                                        onPress={() => this.generateNewSlip()}
                                     >
                                         <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > GENERATE NEW </Text>
 

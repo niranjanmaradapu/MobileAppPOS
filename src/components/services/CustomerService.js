@@ -60,6 +60,10 @@ class CustomerService {
         return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getInvoiceDetails";
     }
 
+    saveRetunSlip() {
+        return REACT_NATIVE_APP_BASE_URL + "/customer/customer/createReturnSlip";
+    }
+
 
     getRetailBarcode() {
         return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryRetail/getBarcodeId";
