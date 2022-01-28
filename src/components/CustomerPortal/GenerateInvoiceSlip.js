@@ -80,7 +80,7 @@ class GenerateInvoiceSlip extends Component {
             },
             openn: false,
             isSubOpen: false,
-            dsNumber: "",
+            dsNumber: "DS/202228/1920408661",
             manualDisc: 0,
             isCash: false,
             isCard: false,
@@ -426,7 +426,7 @@ class GenerateInvoiceSlip extends Component {
                         const taxPer = taxData[0].taxVo.taxLabel.split(' ')[1].split('%')[0];
                         const tax = parseInt(taxPer) / 100;
 
-                        const totalTax = this.state.netPayableAmount * tax
+                        const totalTax = this.state.netPayableAmount * tax;
 
                         const central = totalTax / 2;
                         this.setState({ centralGST: Math.floor(central) });
@@ -505,7 +505,7 @@ class GenerateInvoiceSlip extends Component {
             "storeId": this.state.storeId,
             "barcodeId": this.state.barcodeId,
         };
-        console.log(params)
+        console.log(params);
         axios.get(CustomerService.getRetailBarcode(), { params }).then((res) => {
             if (res) {
                 this.state.retailBarCodeList.push(res.data.result);
