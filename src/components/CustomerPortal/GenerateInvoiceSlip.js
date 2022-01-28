@@ -80,7 +80,7 @@ class GenerateInvoiceSlip extends Component {
             },
             openn: false,
             isSubOpen: false,
-            dsNumber: "DS/202228/1920408661",
+            dsNumber: "",
             manualDisc: 0,
             isCash: false,
             isCard: false,
