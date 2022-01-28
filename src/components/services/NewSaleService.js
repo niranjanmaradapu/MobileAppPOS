@@ -20,5 +20,13 @@ class NewSaleService {
     getImageScanning() {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/imageScanning'
     }
+
+    getCoupons() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getGv"
+    }
+
+    saveCoupons() {
+        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/changeflaggv";
+    }
 }
 export default new NewSaleService()
