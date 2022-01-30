@@ -9,7 +9,8 @@ import {
     PieChart
 } from "react-native-chart-kit";
 import Device from 'react-native-device-detection';
-import HomeGraphs from '../services/HomeGraphs';
+import HomeGraphsService from '../services/Graphs/HomeGraphsService';
+import AccountingPortalGraphsService from '../services/Graphs/AccountingPortalGraphsService';
 import ProfileService from '../services/ProfileService';
 import UrmService from '../services/UrmService';
 var deviceWidth = Dimensions.get('window').width;
@@ -285,6 +286,9 @@ class Home extends Component {
             domainId: 1,
             debitNotesByStore: [],
             debitNotesByStoreChart: {},
+            toadysSale: 0,
+            monthlySale: 0,
+            thisVsLastMonthSale: 0,
         };
     }
 
@@ -453,27 +457,41 @@ class Home extends Component {
             alert('No user details get');
         });
         if (username) {
-            this.setState({ domainId: 1 },
-                () => {
-                    this.getTodaySale();
-                    this.getDebitNotesByStores();
-                });
+            this.setState({ domainId: 1 });
         }
 
-        
+        this.getTodaySale();
+        this.getMonthlySale();
+        this.getLastVsThisMonthSale();
+        // this.getDebitNotesByStores();
     }
+
     getTodaySale() {
-        const params = {
-            "storeId": this.state.storeId,
-            "domainId": this.state.domainId,
-        };
-        axios.get(HomeGraphs.getTodaySale(), params).then((res) => {
-            console.log("todays sale", res.data.result);
+        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
+        axios.get(HomeGraphsService.getTodaySale() + params).then((res) => {
+            console.warn("todays sale", res.data.result);
+            this.setState({ toadysSale: res.data.result.amount });
         }).catch(error => console.log(error));
     }
 
+    getMonthlySale() {
+        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
+        axios.get(HomeGraphsService.getMonthlySale() + params).then(res => {
+            console.log("monthly sale", res.data.result);
+            this.setState({ monthlySale: res.data.result.amount });
+        });
+    }
+
+    getLastVsThisMonthSale() {
+        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
+        axios.get(HomeGraphsService.getLastVsThisMonthSale() + params).then(res => {
+            console.log("Last vs This Month Sale", res.data.result);
+            this.setState({ thisVsLastMonthSale: res.data.result.amount });
+        });
+    }
+
     getDebitNotesByStores() {
-        axios.get(HomeGraphs.getDebitnNotesByStores()).then((res) => {
+        axios.get(AccountingPortalGraphsService.getDebitnNotesByStores()).then((res) => {
             console.log('Debit Notes By Store', res.data.result);
             if (res) {
                 this.setState({ debitNotesByStore: res.data.result },
@@ -570,7 +588,7 @@ class Home extends Component {
                                             Today's Sales
                                         </Text>
                                         <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                            ₹ 14,221.50
+                                            ₹ {this.state.toadysSale}
                                         </Text>
                                     </View>;
                                 }
@@ -591,7 +609,7 @@ class Home extends Component {
                                             Monthly's Sales
                                         </Text>
                                         <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                            ₹ 14,221.50
+                                            ₹ {this.state.monthlySale}
                                         </Text>
                                     </View>;
                                 }
@@ -612,7 +630,7 @@ class Home extends Component {
                                             This month sales v/s Last month
                                         </Text>
                                         <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 60, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                            + 18.75%
+                                            + {this.state.thisVsLastMonthSale}
                                         </Text>
                                     </View>;
 

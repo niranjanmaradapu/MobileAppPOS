@@ -10,6 +10,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from "../../commonUtils/loader";
 import UrmService from '../services/UrmService';
+import UrmDashboard from './UrmDashboard';
 var deviceheight = Dimensions.get("window").height;
 var deviceWidth = Dimensions.get("window").width;
 
@@ -19,7 +20,7 @@ export default class UserManagement extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            flagOne: true,
+            flagOne: false,
             flagTwo: false,
             flagFilterRoles: false,
             flagFilterUsers: false,
@@ -36,7 +37,8 @@ export default class UserManagement extends Component {
             privilages: [],
             clientId: 0,
             doneButtonClicked: false,
-            navtext: ''
+            navtext: '',
+            flagDashboard: true,
         };
     }
 
@@ -84,7 +86,7 @@ export default class UserManagement extends Component {
                                                     if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                                         let subprivilage = previlage.subPrivillages[i];
                                                         if (subprivilage.name === "Dashboard") {
-                                                            this.setState({ flagOne: false, flagTwo: false });
+                                                            this.setState({ flagOne: false, flagTwo: false, flagDashboard: true });
                                                         }
                                                         if (i === 0) {
                                                             this.state.privilages.push({ bool: true, name: subprivilage.name });
@@ -119,7 +121,7 @@ export default class UserManagement extends Component {
                                                         if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
                                                             let subprivilage = res.data["result"].subPrivilages[i];
                                                             if (subprivilage.name === "Dashboard") {
-                                                                this.setState({ flagOne: false, flagTwo: false });
+                                                                this.setState({ flagOne: false, flagTwo: false, flagDashboard: true });
                                                             }
                                                             if (i === 0) {
                                                                 this.state.privilages.push({ bool: true, name: subprivilage.name });
@@ -203,7 +205,7 @@ export default class UserManagement extends Component {
                     this.state.usersData.push(number);
 
 
-                   
+
                 }
                 this.setState({ usersData: this.state.usersData });
             }
@@ -214,14 +216,14 @@ export default class UserManagement extends Component {
 
     topbarAction = (item, index) => {
         if (item.name === "Users") {
-            this.setState({ flagOne: true, flagTwo: false });
+            this.setState({ flagOne: true, flagTwo: false, flagDashboard: false });
 
         }
         else if (item.name === "Roles") {
-            this.setState({ flagTwo: true, flagOne: false });
+            this.setState({ flagTwo: true, flagOne: false, flagDashboard: false });
         }
         else if (item.name === "Dashboard") {
-            this.setState({ flagTwo: false, flagOne: false });
+            this.setState({ flagTwo: false, flagOne: false, flagDashboard: true });
         }
 
         if (this.state.privilages[index].bool === true) {
@@ -505,6 +507,10 @@ export default class UserManagement extends Component {
                             </View>
                         </TouchableOpacity>
                     </View> */}
+
+                        {this.state.flagDashboard && (
+                            <UrmDashboard />
+                        )}
                         {this.state.flagTwo && (
                             <FlatList
                                 data={this.state.rolesData}
