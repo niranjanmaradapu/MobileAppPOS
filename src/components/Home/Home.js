@@ -14,7 +14,6 @@ import AccountingPortalGraphsService from '../services/Graphs/AccountingPortalGr
 import ProfileService from '../services/ProfileService';
 import UrmService from '../services/UrmService';
 var deviceWidth = Dimensions.get('window').width;
-var deviceWidth = Dimensions.get('window').width;
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
 
 var deviceWidth = Dimensions.get('window').width;

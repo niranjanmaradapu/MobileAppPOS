@@ -1,10 +1,12 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import colors from '../../colors.json';
 import URMGraphsService from '../services/Graphs/URMGraphsService';
+import { PieChart, BarChart } from 'react-native-chart-kit';
+var deviceWidth = Dimensions.get('window').width;
 
 const chartConfigMobile = {
     backgroundGradientFrom: "#fff",
@@ -30,6 +32,25 @@ const chartConfigMobile = {
         fontFamily: "regular",
     },
 };
+
+const salesByCategoryPie = [
+
+    {
+        name: "SHIRTS",
+        population: 19.5,
+        color: "rgba(131, 167, 234, 1)",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15
+
+    },
+    {
+        name: "SAREES",
+        population: 17.1,
+        color: "#F00",
+        legendFontColor: "#7F7F7F",
+        legendFontSize: 15
+    },
+];
 
 const chartConfigTablet = {
     backgroundGradientFrom: "#fff",
@@ -65,7 +86,7 @@ export default class UrmDashboard extends Component {
             activeUsersData: [],
             storesData: [],
             usersByRoleChart: {},
-            activeInactiveUsersChart: {},
+            activeInactiveUsersChart: [],
             storesVsEmployeesChart: {},
         };
     }
@@ -88,25 +109,23 @@ export default class UrmDashboard extends Component {
                         let indexColor = [];
                         let indexHoverColor = [];
 
-                        this.state.activeUsersData.forEach(data => {
-                            indexName.push(data.name);
-                            indexCount.push(data.count);
-
+                        this.state.activeUsersData.forEach(datas => {
+                            indexName.push(datas.name);
+                            indexCount.push(datas.count);
+                            colors.forEach(data => {
+                                indexColor.push(data.normalColorCode);
+                                if (datas.name !== null) {
+                                    console.log('sadsdsd')
+                                }
+                            });
                         });
-
-                        colors.forEach(data => {
-                            indexColor.push(data.normalColorCode);
-                            // indexHoverColor.push(data.hoverColorCode);
-                        });
-
-                        this.setState({
-                            activeInactiveUsersChart: {
-                                labels: indexName,
-                                promos: indexCount,
-                                color: indexColor,
+                        for (let i = 0; i <this.state.activeUsersData.length; i++) {
+                            this.state.activeInactiveUsersChart.push({
+                                name:indexName[i], population: indexCount[i], color: indexColor[i], legendFontColor: "#7F7F7F",
                                 legendFontSize: 15
-                            }
-                        });
+                            })
+                        }
+                        this.setState({ activeInactiveUsersChart: this.state.activeInactiveUsersChart })
                     }
                 );
             }
@@ -116,14 +135,22 @@ export default class UrmDashboard extends Component {
 
 
     render() {
+        //  this.getActiveUsers()
         return (
             <View>
-                <Text>Dashboard</Text>
+                {/* <Text>Dashboard</Text> */}
                 {console.log(this.state.activeInactiveUsersChart)}
-                {/* <PieChart
+                <PieChart
                     data={this.state.activeInactiveUsersChart}
+                    width={deviceWidth - 60}
+                    height={Device.isTablet ? 300 : 220}
                     chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
-                /> */}
+                    accessor="population"
+                    backgroundColor={"transparent"}
+                    paddingLeft={"15"}
+                    center={[0, 0]}
+                    absolute
+                />
                 {/* <BarChart
                     chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
                 /> */}
