@@ -17,40 +17,16 @@ var deviceWidth = Dimensions.get('window').width;
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
 
 var deviceWidth = Dimensions.get('window').width;
-const chartConfigMobile = {
+
+const chartConfig = {
     backgroundGradientFrom: "#fff",
     backgroundGradientTo: "#fff",
-    barPercentage: 0.5,
+    barPercentage: Device.isTablet ? 1 : 0.5,
     height: 5000,
-    fillShadowGradient: `rgba(1, 122, 205, 1)`,
+    fillShadowGradient: `#25f1d5`,
     fillShadowGradientOpacity: 1,
     decimalPlaces: 0, // optional, defaults to 2dp
-    color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
-    labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
-
-    style: {
-        borderRadius: 16,
-        fontFamily: "regular",
-    },
-    propsForBackgroundLines: {
-        strokeWidth: 1,
-        stroke: "#e3e3e3",
-        // strokeDasharray: "0",
-    },
-    propsForLabels: {
-        fontFamily: "regular",
-    },
-};
-
-const chartConfigTablet = {
-    backgroundGradientFrom: "#fff",
-    backgroundGradientTo: "#fff",
-    barPercentage: 1,
-    height: 5000,
-    fillShadowGradient: `rgba(1, 122, 205, 1)`,
-    fillShadowGradientOpacity: 1,
-    decimalPlaces: 0, // optional, defaults to 2dp
-    color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
+    color: (opacity = 1) => `#25f1d5`,
     labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
 
     style: {
@@ -533,7 +509,7 @@ class Home extends Component {
                                 data={salesByCategoryPie}
                                 width={deviceWidth - 60}
                                 height={Device.isTablet ? 300 : 220}
-                                chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
+                                chartConfig={chartConfig}
                                 accessor="population"
                                 backgroundColor={"transparent"}
                                 paddingLeft={"15"}
@@ -546,12 +522,12 @@ class Home extends Component {
                             <BarChart
                                 style={Device.isTablet ? styles.topSalesManChart_tablet : styles.topSalesManChart_mobile}
                                 data={topSalesManBar}
-                                width={deviceWidth - 70}
+                                width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
                                 height={Device.isTablet ? 400 : 350}
-                                yLabelsOffset={30}
+                                yLabelsOffset={20}
                                 yAxisLabel="₹"
                                 yAxisSuffix="k"
-                                chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
+                                chartConfig={chartConfig}
                                 verticalLabelRotation={Device.isTablet ? 0 : 90}
                             />
                         </View>

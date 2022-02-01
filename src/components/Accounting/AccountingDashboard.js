@@ -1,12 +1,309 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { BarChart } from 'react-native-chart-kit';
+import Device from 'react-native-device-detection';
+import AccountingPortalGraphsService from '../services/Graphs/AccountingPortalGraphsService';
+
+var deviceWidth = Dimensions.get('window').width;
+
+const chartConfig = {
+    backgroundGradientFrom: "#fff",
+    backgroundGradientTo: "#fff",
+    barPercentage: Device.isTablet ? 1 : 0.5,
+    height: 5000,
+    fillShadowGradient: `#25f1d5`,
+    fillShadowGradientOpacity: 1,
+    decimalPlaces: 0, // optional, defaults to 2dp
+    color: (opacity = 1) => `#25f1d5`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
+
+    style: {
+        borderRadius: 16,
+        fontFamily: "regular",
+    },
+    propsForBackgroundLines: {
+        strokeWidth: 1,
+        stroke: "#e3e3e3",
+        // strokeDasharray: "0",
+    },
+    propsForLabels: {
+        fontFamily: "regular",
+    },
+};
+
+const balancedChartConfig = {
+    backgroundGradientFrom: "#fff",
+    backgroundGradientTo: "#fff",
+    barPercentage: Device.isTablet ? 1 : 0.5,
+    height: 5000,
+    fillShadowGradient: `#ffb93f`,
+    fillShadowGradientOpacity: 1,
+    decimalPlaces: 0, // optional, defaults to 2dp
+    color: (opacity = 1) => `#ffb93f`,
+    labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
+
+    style: {
+        borderRadius: 16,
+        fontFamily: "regular",
+    },
+    propsForBackgroundLines: {
+        strokeWidth: 1,
+        stroke: "#e3e3e3",
+        // strokeDasharray: "0",
+    },
+    propsForLabels: {
+        fontFamily: "regular",
+    },
+};
+
+
 
 export default class AccountingDashboard extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            debitNotesByStoreData: [],
+            usedAmountByStoreData: [],
+            usedBalancedAmountData: [],
+            balncedAmountByStoreData: [],
+            usedBalancedAmountChart: {
+                labels: [],
+                datasets: [
+                    {
+                        data: []
+                    }
+                ]
+            },
+            debitNotesByStoreGraph: {
+                labels: [],
+                datasets: [
+                    {
+                        data: []
+                    }
+                ]
+            },
+            usedAmountByStoreGraph: {
+                labels: [],
+                datasets: [
+                    {
+                        data: []
+                    }
+                ]
+            },
+            balncedAmountByStoreGraph: {
+                labels: [],
+                datasets: [
+                    {
+                        data: []
+                    }
+                ]
+            },
+            storeId: "",
+            debitNotesByStoreValues: [],
+        };
+
+    }
+
+    componentDidMount() {
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) },
+                () => {
+                });
+            console.log(this.state.storeId);
+        }).catch(() => {
+            console.log('there is error getting storeId');
+        });
+        this.usedBalanced();
+        this.debitNotesByStore();
+    }
+
+    debitNotesByStore() {
+        axios.get(AccountingPortalGraphsService.getDebitnNotesByStores()).then(res => {
+            if (res) {
+                console.log(res.data);
+                this.setState({ debitNotesByStoreData: res.data.result },
+                    () => {
+                        let indexName = [];
+                        let indexCount = [];
+                        let indexColor = [];
+                        let indexHoverColor = [];
+
+                        this.state.debitNotesByStoreData.forEach(data => {
+                            indexName.push(data.storeId);
+                            indexCount.push(data.damount);
+                        });
+
+                        // colors.forEach(data => {
+                        //     indexColor.push(data.normalColorCode);
+                        //     indexHoverColor.push(data.hoverColorCode);
+                        // });
+                        this.state.debitNotesByStoreValues.push({
+                            name: indexName,
+                            value: indexCount,
+                            color: '#25f1d5',
+                        });
+                        this.setState({
+                            debitNotesByStoreGraph: {
+                                labels: indexName,
+                                datasets: [
+                                    {
+                                        data: indexCount,
+                                    }
+                                ]
+                            },
+                            debitNotesByStoreValues: this.state.debitNotesByStoreValues
+                        });
+
+                    });
+            }
+            console.log("Debit Notes By Store", this.state.debitNotesByStoreGraph);
+        });
+    }
+
+    usedBalanced() {
+        axios.get(AccountingPortalGraphsService.getUsedBalancedAmmounts()).then(res => {
+            console.log("Used Balanced", res.data.result);
+            if (res) {
+                this.setState({ usedBalancedAmountData: res.data.result },
+                    () => {
+                        let indexName = [];
+                        let indexCount = [];
+                        let indexCount2 = [];
+
+                        this.state.usedBalancedAmountData.forEach(data => {
+                            indexName.push(data.storeId);
+                            indexCount.push(data.actualAmount);
+                            indexCount2.push(data.transactionAmount);
+                        });
+
+                        this.setState({
+                            usedAmountByStoreGraph: {
+                                labels: indexName,
+                                datasets: [
+                                    {
+                                        data: indexCount,
+                                    }
+                                ]
+                            },
+                            balncedAmountByStoreGraph: {
+                                labels: indexName,
+                                datasets: [
+                                    {
+                                        data: indexCount2,
+                                    }
+                                ]
+                            }
+                        });
+
+                    });
+            }
+        });
+    }
+
     render() {
         return (
             <View>
-                <Text style={{ marginTop: 100 }}> Dashboard </Text>
+                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 400 }]}>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Debit Notes By Store</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
+                        <BarChart
+                            style={{ paddingTop: 20 }}
+                            data={this.state.debitNotesByStoreGraph}
+                            width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
+                            yLabelsOffset={20}
+                            height={300}
+                            yAxisLabel="₹"
+                            fromZero
+                            chartConfig={chartConfig}
+                            verticalLabelRotation={Device.isTablet ? 0 : 90}
+                        // paddingLeft={"15"}
+                        // yAxisSuffix="L"
+                        // center={[0, 0]}
+                        // absolute
+                        />
+                    </View>
+                </View>
+
+                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 400 }]}>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Used Amount By Store</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
+                        <BarChart
+                            style={{ paddingTop: 20 }}
+                            data={this.state.usedAmountByStoreGraph}
+                            width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
+                            height={300}
+                            yLabelsOffset={20}
+                            yAxisLabel="₹"
+                            fromZero
+                            chartConfig={chartConfig}
+                            verticalLabelRotation={Device.isTablet ? 0 : 90}
+                        // paddingLeft={"15"}
+                        // yAxisSuffix="L"
+                        // center={[0, 0]}
+                        // absolute
+                        />
+                    </View>
+                </View>
+
+                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 400 }]}>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Balanced Amount By Store</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
+                        <BarChart
+                            style={{ paddingTop: 20 }}
+                            data={this.state.balncedAmountByStoreGraph}
+                            width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
+                            height={300}
+                            yLabelsOffset={20}
+                            yAxisLabel="₹"
+                            fromZero
+                            chartConfig={balancedChartConfig}
+                            verticalLabelRotation={Device.isTablet ? 0 : 90}
+                        // paddingLeft={"15"}
+                        // yAxisSuffix="L"
+                        // center={[0, 0]}
+                        // absolute
+                        />
+                    </View>
+                </View>
+
             </View>
+
         );
     }
 }
+
+
+const styles = StyleSheet.create({
+    chartMaincontainer: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        height: Device.isTablet ? 350 : 300,
+        width: deviceWidth - 40,
+        margin: 20,
+        borderRadius: 20,
+    },
+    chartTitle_tablet: {
+        fontSize: 25,
+        fontFamily: 'bold',
+        marginTop: 20,
+        marginLeft: 20,
+        position: 'absolute',
+        top: 0,
+        left: 20
+    },
+    chartTitle_mobile: {
+        fontSize: 20,
+        fontFamily: 'bold',
+        marginTop: 20,
+        marginLeft: 20,
+        position: 'absolute',
+        top: 0,
+        left: 20
+    },
+});

@@ -237,13 +237,13 @@ export default class UrmDashboard extends Component {
                             style={{ paddingTop: 20, paddingLeft: 20 }}
                             width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20}
                             height={Device.isTablet ? 300 : 220}
-                            chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
+                            chartConfig={chartConfig}
                             accessor="count"
                             backgroundColor={"transparent"}
                             hasLegend={false}
-                            // paddingLeft={"15"}
-                            // center={[0, 0]}
-                            // absolute
+                        // paddingLeft={"15"}
+                        // center={[0, 0]}
+                        // absolute
                         />
 
                         <View style={{ marginTop: Device.isTablet ? 40 : 20 }}>
@@ -272,13 +272,13 @@ export default class UrmDashboard extends Component {
                             style={{ paddingTop: 20, paddingLeft: 20 }}
                             width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20}
                             height={Device.isTablet ? 300 : 220}
-                            chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
+                            chartConfig={chartConfig}
                             accessor="count"
                             backgroundColor={"transparent"}
                             hasLegend={false}
-                            // paddingLeft={"15"}
-                            // center={[0, 0]}
-                            // absolute
+                        // paddingLeft={"15"}
+                        // center={[0, 0]}
+                        // absolute
                         />
                         <View style={{ marginTop: Device.isTablet ? 40 : 20 }}>
                             <FlatList
@@ -305,13 +305,13 @@ export default class UrmDashboard extends Component {
                             style={{ paddingTop: 20, paddingLeft: 20 }}
                             width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20}
                             height={Device.isTablet ? 300 : 220}
-                            chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
+                            chartConfig={chartConfig}
                             accessor="count"
                             backgroundColor={"transparent"}
                             hasLegend={false}
-                            // paddingLeft={"15"}
-                            // center={[0, 0]}
-                            // absolute
+                        // paddingLeft={"15"}
+                        // center={[0, 0]}
+                        // absolute
                         />
 
                         <View style={{ marginTop: Device.isTablet ? 40 : 20 }}>
