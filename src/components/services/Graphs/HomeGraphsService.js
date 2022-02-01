@@ -13,6 +13,10 @@ class HomeGraphsService {
         return REACT_NATIVE_APP_BASE_URL + '/new-sale/reports/getMonthlySale';
     }
 
+    getTopFiveSales() {
+        return REACT_NATIVE_APP_BASE_URL + '/new-sale/reports/getTopFiveSalesByRepresentative'
+    }
+
 }
 
 export default new HomeGraphsService();

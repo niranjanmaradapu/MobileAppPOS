@@ -22,7 +22,7 @@ class GenerateEstimationSlip extends Component {
         super(props);
         this.camera = null;
         this.barcodeCodes = [];
-        this.state = { 
+        this.state = {
             barcodeId: "",
             mobileNumber: "",
             altMobileNo: "",
@@ -197,7 +197,7 @@ class GenerateEstimationSlip extends Component {
         else if (this.state.barcodeId === "") {
             alert("Please select Barcode");
         }
-       else if (this.state.smnumber === "") {
+        else if (this.state.smnumber === "") {
             alert("Please enter SM Number");
         }
         else {
@@ -241,7 +241,7 @@ class GenerateEstimationSlip extends Component {
                     this.calculateTotal();
                 });
                 this.setState({ barcodeId: "", uom: "", smnumber: "" });
-                this.state.barcodeId = ""
+                this.state.barcodeId = "";
             } else {
                 alert(res.data.body);
             }
@@ -341,19 +341,19 @@ class GenerateEstimationSlip extends Component {
     navigateToScanCode() {
         global.barcodeId = 'something';
         this.props.navigation.navigate('ScanBarCode', {
-          isFromNewSale: false, isFromAddProduct: true,
-          onGoBack: () => this.refresh(),
+            isFromNewSale: false, isFromAddProduct: true,
+            onGoBack: () => this.refresh(),
         });
-      }
+    }
 
-      refresh() {
+    refresh() {
         if (global.barcodeId != 'something') {
-          this.setState({ barcodeId: global.barcodeId });
-          this.setState({ dsNumber: ""});
-          global.barcodeId = 'something';
+            this.setState({ barcodeId: global.barcodeId });
+            this.setState({ dsNumber: "" });
+            global.barcodeId = 'something';
         }
-        console.log('bar code is sadsadsdsadsds' + this.state.barcodeId)
-      }
+        console.log('bar code is sadsadsdsadsds' + this.state.barcodeId);
+    }
 
     render() {
         console.log(global.barcodeId);
@@ -365,8 +365,6 @@ class GenerateEstimationSlip extends Component {
 
         return (
             <View style={{ flex: 1 }}>
-
-
                 {this.state.flagone && (
                     <ScrollView>
                         < View
@@ -450,12 +448,19 @@ class GenerateEstimationSlip extends Component {
                                 )}
 
 
-          <TouchableOpacity
-            style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
-            onPress={() => this.navigateToScanCode()} >
-            <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {('BARCODE SCAN')} </Text>
-          </TouchableOpacity>
-                  
+                                <TouchableOpacity
+                                    style={{
+                                        backgroundColor: '#ED1C24',
+                                        width: Device.isTablet ? 200 : 150,
+                                        height: Device.isTablet ? 55 : 45,
+                                        borderRadius: 10,
+                                        // marginLeft: Device.isTablet ? 50 : 30,
+                                        margin: Device.isTablet ? 20 : 10,
+                                    }}
+                                    onPress={() => this.navigateToScanCode()} >
+                                    <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 10 : 5 }]}> {('BARCODE SCAN')} </Text>
+                                </TouchableOpacity>
+
 
 
 

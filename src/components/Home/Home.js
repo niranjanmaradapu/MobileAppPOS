@@ -9,7 +9,6 @@ import {
     PieChart
 } from "react-native-chart-kit";
 import Device from 'react-native-device-detection';
-import AccountingPortalGraphsService from '../services/Graphs/AccountingPortalGraphsService';
 import HomeGraphsService from '../services/Graphs/HomeGraphsService';
 import ProfileService from '../services/ProfileService';
 import UrmService from '../services/UrmService';
@@ -132,6 +131,15 @@ class Home extends Component {
             toadysSale: 0,
             monthlySale: 0,
             thisVsLastMonthSale: 0,
+            topSales: [],
+            topSalesChart: {
+                labels: [],
+                datasets: [
+                    {
+                        data: []
+                    }
+                ]
+            }
         };
     }
 
@@ -306,6 +314,7 @@ class Home extends Component {
         this.getTodaySale();
         this.getMonthlySale();
         this.getLastVsThisMonthSale();
+        this.getTopSales();
         // this.getDebitNotesByStores();
     }
 
@@ -333,45 +342,37 @@ class Home extends Component {
         });
     }
 
-    getDebitNotesByStores() {
-        axios.get(AccountingPortalGraphsService.getDebitnNotesByStores()).then((res) => {
-            console.log('Debit Notes By Store', res.data.result);
-            if (res) {
-                this.setState({ debitNotesByStore: res.data.result },
 
+    getTopSales() {
+        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
+        axios.get(HomeGraphsService.getTopFiveSales() + params).then(response => {
+            if (response) {
+                console.log("Top 5 Sales Representative", response.data.result);
+                this.setState({ topSales: response.data.result },
                     () => {
                         let indexName = [];
-                        let indexValue = [];
-                        let indexColor = [];
+                        let indexCount = [];
 
-                        this.state.debitNotesByStore.forEach((data) => {
-                            indexName.push(data.storeId);
-                            indexValue.push(data.damount);
+                        this.state.topSales.forEach(data => {
+                            indexName.push(data.userId);
+                            indexCount.push(data.amount);
                         });
 
-                        console.log(indexValue);
-
-                        // colors.map(data => {
-                        //     indexColor.push(data.normalColorCode);
-                        // });
-
                         this.setState({
-                            debitNotesByStoreChart: {
+                            topSalesChart: {
                                 labels: indexName,
                                 datasets: [
                                     {
-                                        data: indexValue,
+                                        data: indexCount,
                                     }
                                 ]
                             }
                         });
-                    }
-                );
-                console.log(this.state.debitNotesByStoreChart);
+                    });
+                console.log("Top Sales", this.state.topSalesChart);
             }
-        }).catch(error => console.log(error));
+        });
     }
-
 
     statatics() {
         this.props.navigation.navigate('Statitics');
@@ -521,18 +522,18 @@ class Home extends Component {
                             <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales by representative</Text>
                             <BarChart
                                 style={Device.isTablet ? styles.topSalesManChart_tablet : styles.topSalesManChart_mobile}
-                                data={topSalesManBar}
+                                data={this.state.topSalesChart}
                                 width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
                                 height={Device.isTablet ? 400 : 350}
                                 yLabelsOffset={20}
                                 yAxisLabel="₹"
-                                yAxisSuffix="k"
+                                fromZero
                                 chartConfig={chartConfig}
                                 verticalLabelRotation={Device.isTablet ? 0 : 90}
                             />
                         </View>
                     </View>
-                </ScrollView >
+                </ScrollView>
             </View>
 
         );

@@ -277,7 +277,7 @@ class GenerateInvoiceSlip extends Component {
 
 
     getDeliverySlipDetails() {
-        this.setState({  barCodeList: [], finalList: [], rBarCodeList: [], dlslips: [] });
+        this.setState({ barCodeList: [], finalList: [], rBarCodeList: [], dlslips: [] });
         let costPrice = 0;
         let discount = 0;
         let total = 0;
@@ -679,13 +679,13 @@ class GenerateInvoiceSlip extends Component {
     refreshTextile() {
         if (global.barcodeId != 'something') {
             this.setState({ dsNumber: global.barcodeId },
-                ()=>{
-                    this.getDeliverySlipDetails()
+                () => {
+                    this.getDeliverySlipDetails();
                 });
             this.setState({ barcodeId: '' });
             global.barcodeId = 'something';
         }
-        console.log('murali barcode', this.state.dsNumber)
+        console.log('murali barcode', this.state.dsNumber);
     }
 
     navigateToScanCode() {
@@ -699,13 +699,13 @@ class GenerateInvoiceSlip extends Component {
     refresh() {
         if (global.barcodeId != 'something') {
             this.setState({ barcodeId: global.barcodeId },
-                ()=>{
-                    this.getRetailBarcodeList()
+                () => {
+                    this.getRetailBarcodeList();
                 });
             this.setState({ dsNumber: "" });
             global.barcodeId = 'something';
         }
-        console.log('bar code is sadsadsdsadsds' + this.state.barcodeId)
+        console.log('bar code is sadsadsdsadsds' + this.state.barcodeId);
     }
 
 
@@ -733,21 +733,29 @@ class GenerateInvoiceSlip extends Component {
                             <View>
 
                                 {(global.domainName === "Textile" &&
-                                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                        underlineColorAndroid="transparent"
-                                        placeholder="Enter DsNumber"
-                                        placeholderTextColor="#6F6F6F60"
-                                        textAlignVertical="center"
-                                        keyboardType={'default'}
-                                        autoCapitalize="none"
-                                        value={this.state.dsNumber}
-                                        onEndEditing
-                                        onChangeText={(text) => this.handleDsNumber(text)}
-                                        onEndEditing={() => this.endEditing()}
-                                    />)}
+                                    <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between' }}>
+                                        <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.3 : deviceWidth / 1.6 }]}
+                                            underlineColorAndroid="transparent"
+                                            placeholder="Enter DsNumber"
+                                            placeholderTextColor="#6F6F6F60"
+                                            textAlignVertical="center"
+                                            keyboardType={'default'}
+                                            autoCapitalize="none"
+                                            value={this.state.dsNumber}
+                                            onEndEditing
+                                            onChangeText={(text) => this.handleDsNumber(text)}
+                                            onEndEditing={() => this.endEditing()}
+                                        />
+                                        <TouchableOpacity
+                                            style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 160 : 110, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: 10 }}
+                                            onPress={() => this.navigateToScan()} >
+                                            <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 10 : 5 }]}> {('DS SCAN')} </Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                )}
 
                                 {(global.domainName === "Retail" &&
-                                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                    <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, {}]}
                                         underlineColorAndroid="transparent"
                                         placeholder="Enter Barcode"
                                         placeholderTextColor="#6F6F6F60"
@@ -762,13 +770,9 @@ class GenerateInvoiceSlip extends Component {
 
                             </View>
 
-                            {(global.domainName === "Textile" &&
-                                <TouchableOpacity
-                                    style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
-                                    onPress={() => this.navigateToScan()} >
-                                    <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {('DS SCAN')} </Text>
-                                </TouchableOpacity>
-                            )}
+                            {/* {(global.domainName === "Textile" &&
+                                
+                            )} */}
 
                             {(global.domainName === "Retail" &&
                                 <TouchableOpacity
