@@ -8,15 +8,15 @@ import colors from '../../colors.json';
 import ReportsGraphsService from '../services/Graphs/ReportsGraphsService';
 var deviceWidth = Dimensions.get('window').width;
 
-const chartConfigMobile = {
+const chartConfig = {
     backgroundGradientFrom: "#fff",
     backgroundGradientTo: "#fff",
-    barPercentage: 0.5,
+    barPercentage: Device.isTablet ? 1 : 0.5,
     height: 5000,
-    fillShadowGradient: `rgba(1, 122, 205, 1)`,
+    fillShadowGradient: `#25f1d5`,
     fillShadowGradientOpacity: 1,
     decimalPlaces: 0, // optional, defaults to 2dp
-    color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
+    color: (opacity = 1) => `#25f1d5`,
     labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
 
     style: {
@@ -32,32 +32,6 @@ const chartConfigMobile = {
         fontFamily: "regular",
     },
 };
-
-const chartConfigTablet = {
-    backgroundGradientFrom: "#fff",
-    backgroundGradientTo: "#fff",
-    barPercentage: 1,
-    height: 5000,
-    fillShadowGradient: `rgba(1, 122, 205, 1)`,
-    fillShadowGradientOpacity: 1,
-    decimalPlaces: 0, // optional, defaults to 2dp
-    color: (opacity = 1) => `rgba(1, 122, 205, 1)`,
-    labelColor: (opacity = 1) => `rgba(0, 0, 0, 1)`,
-
-    style: {
-        borderRadius: 16,
-        fontFamily: "regular",
-    },
-    propsForBackgroundLines: {
-        strokeWidth: 1,
-        stroke: "#e3e3e3",
-        // strokeDasharray: "0",
-    },
-    propsForLabels: {
-        fontFamily: "regular",
-    },
-};
-
 
 export default class ReportsDashboard extends Component {
 
@@ -89,15 +63,15 @@ export default class ReportsDashboard extends Component {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) },
                 () => {
-                    this.getInvoicesGenerated();
-                    this.getActiveVsInactivePromos();
-                    this.getSalesSummary();
-                    this.getTopFiveSales();
                 });
             console.log(this.state.storeId);
         }).catch(() => {
             console.log('there is error getting storeId');
         });
+        this.getInvoicesGenerated();
+        this.getActiveVsInactivePromos();
+        this.getSalesSummary();
+        this.getTopFiveSales();
 
         AsyncStorage.getItem("storeName").then((value) => {
 
@@ -265,12 +239,12 @@ export default class ReportsDashboard extends Component {
                         <BarChart
                             style={{ paddingTop: 20 }}
                             data={this.state.topSalesChart}
-                            width={deviceWidth - 60}
+                            width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
                             height={300}
-                            yLabelsOffset={30}
+                            yLabelsOffset={20}
                             yAxisLabel="₹"
                             fromZero
-                            chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
+                            chartConfig={chartConfig}
                             verticalLabelRotation={Device.isTablet ? 0 : 90}
                         // paddingLeft={"15"}
                         // yAxisSuffix="L"
@@ -288,7 +262,7 @@ export default class ReportsDashboard extends Component {
                             style={{ paddingTop: 20, paddingLeft: 20 }}
                             width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20}
                             height={Device.isTablet ? 300 : 220}
-                            chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
+                            chartConfig={chartConfig}
                             accessor="count"
                             backgroundColor={"transparent"}
                             hasLegend={false}
@@ -320,7 +294,7 @@ export default class ReportsDashboard extends Component {
                             data={this.state.salesSummaryChart}
                             style={{ paddingTop: 20, paddingLeft: 20 }}
                             width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20} height={Device.isTablet ? 300 : 220}
-                            chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
+                            chartConfig={chartConfig}
                             accessor="count"
                             backgroundColor={"transparent"}
                             hasLegend={false}
@@ -352,7 +326,7 @@ export default class ReportsDashboard extends Component {
                             data={this.state.activeVsInactiveChart}
                             style={{ paddingTop: 20, paddingLeft: 20 }}
                             width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20} height={Device.isTablet ? 300 : 220}
-                            chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
+                            chartConfig={chartConfig}
                             accessor="count"
                             backgroundColor={"transparent"}
                             hasLegend={false}

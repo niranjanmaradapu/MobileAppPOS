@@ -329,7 +329,7 @@ export default class GenerateReturnSlip extends Component {
                                     </View>
                                 </View>
                             </View>
-                            <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile} >
+                            {/* <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile} >
                                 <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile}>
                                     <View style={flats.text}>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>ITEMS: {this.state.returnInvoice.length}</Text>
@@ -341,7 +341,7 @@ export default class GenerateReturnSlip extends Component {
                                         <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>VALUE: {this.state.netValue}</Text>
                                     </View>
                                 </View>
-                            </View>
+                            </View> */}
                         </View>
                     )}
                 />
