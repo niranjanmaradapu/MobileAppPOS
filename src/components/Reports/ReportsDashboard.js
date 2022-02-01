@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
-import { PieChart } from 'react-native-chart-kit';
+import { PieChart, BarChart } from 'react-native-chart-kit';
 import Device from 'react-native-device-detection';
 import colors from '../../colors.json';
 import ReportsGraphsService from '../services/Graphs/ReportsGraphsService';
@@ -183,6 +183,7 @@ export default class ReportsDashboard extends Component {
                                 color: indexColor[i]
                             });
                         }
+                        this.setState({ activeVsInactiveChart: this.state.activeVsInactiveChart });
                     });
             }
         });
@@ -192,39 +193,49 @@ export default class ReportsDashboard extends Component {
         axios.get(ReportsGraphsService.getTopFiveSales()).then(response => {
             console.log('Top Five Sales', response.data);
             if (response) {
-                this.setState({ topSales: response.data.result },
+                this.setState({ topSalesData: response.data.result },
                     () => {
                         let indexName = [];
                         let indexCount = [];
                         let indexColor = [];
 
-                        if (this.state.topSalesData && this.state.topSales.length > 0) {
-                            this.state.topSales.forEach(data => {
-                                indexName.push(data.storeId);
-                                indexCount.push(data.amount);
-                                colors.forEach(data => {
-                                    indexColor.push(data.normalColorCode);
-                                });
-                            });
+                        // this.state.topSalesData.forEach(datas => {
+                        //     indexName.push(datas.storeId);
+                        //     indexCount.push(datas.amount);
+                        // });
+                        // colors.forEach(data => {
+                        //     indexColor.push(data.normalColorCode);
+                        // });
 
-                            for (var i = 0; i < this.state.topSalesData.length; i++) {
-                                this.state.topSalesChart.push({
-                                    labels: indexName,
-                                    datasets: [
-                                        {
-                                            data: indexCount
-                                        }
-                                    ]
-                                });
+                        console.log("index", indexName, indexCount);
+
+                        // console.warn(this.state.topSalesData);
+                        // // for (var i = 0; i < this.state.topSalesData.length; i++) {
+                        //     this.state.topSalesChart.push({
+                        //         labels: indexName[i],
+                        //         datasets: [
+                        //             {
+                        //                 data: indexCount[i]
+                        //             }
+                        //         ]
+                        //     });
+                        // // }
+                        // this.setState({ topSalesChart: this.state.topSalesChart });
+
+                        this.setState({
+                            topSalesChart: {
+                                labels: indexName,
+                                datasets: [
+                                    {
+                                        datas: indexCount
+                                    }
+                                ]
                             }
-
-                            this.setState({ topSalesChart: this.state.topSalesChart });
-                        }
-
-                        console.log(this.state.topSalesChart);
+                        });
                     });
+
             }
-            console.log(this.state.topSalesChart);
+            console.log("top sales Chart", this.state.topSalesChart);
         });
     }
 
@@ -232,17 +243,20 @@ export default class ReportsDashboard extends Component {
         return (
             <View>
                 <View>
-                    {/* <BarChart
+                    <BarChart
+                        style={{ margin: 5 }}
                         data={this.state.topSalesChart}
-                        width={deviceWidth - 60}
-                        height={Device.isTablet ? 300 : 220}
+                        width={deviceWidth - 70}
+                        height={Device.isTablet ? 380 : 490}
+                        yLabelsOffset={20}
+                        yAxisLabel="₹"
+                        yAxisSuffix="L"
                         chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
-                        accessor="population"
-                        backgroundColor={"transparent"}
+                        verticalLabelRotation={Device.isTablet ? 0 : 90}
                     // paddingLeft={"15"}
                     // center={[0, 0]}
                     // absolute
-                    /> */}
+                    />
                 </View>
 
                 <View style={styles.chartMaincontainer}>

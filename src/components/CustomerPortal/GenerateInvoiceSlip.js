@@ -176,6 +176,7 @@ class GenerateInvoiceSlip extends Component {
     }
 
     componentDidMount() {
+        this.setState({ dsNumber: "", barCodeList: [] });
         AsyncStorage.getItem("storeId").then((value) => {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) });
@@ -277,6 +278,7 @@ class GenerateInvoiceSlip extends Component {
 
 
     getDeliverySlipDetails() {
+        this.setState({  barCodeList: [], finalList: [], rBarCodeList: [], dlslips: [] });
         let costPrice = 0;
         let discount = 0;
         let total = 0;
