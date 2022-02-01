@@ -40,7 +40,7 @@ class NewSaleTextile extends Component {
         };
     }
 
-
+ 
     async componentDidMount() {
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
             if (value === "true") {
@@ -186,7 +186,6 @@ class NewSaleTextile extends Component {
     }
 
 
-
     statatics() {
         this.props.navigation.navigate('Statitics');
     }
@@ -201,13 +200,6 @@ class NewSaleTextile extends Component {
         // this.props.navigation.navigate('Home')
     }
 
-    navigateToScanCode() {
-        global.barcodeId = 'something';
-        //this.setState({ barcodeId: global.barcodeId })
-        this.props.navigation.navigate('ScanBarCode', {
-          onGoBack: () => this.refresh(),
-        });
-      }
 
 
     render() {
@@ -218,14 +210,6 @@ class NewSaleTextile extends Component {
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Billing Portal </Text>
-                   
-                    {/* {this.state.flagGenerateEstimationSlip && (
-          <TouchableOpacity
-            style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
-            onPress={() => this.navigateToScanCode()} >
-            <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {('ITEM SCAN')} </Text>
-          </TouchableOpacity>
-                    )} */}
                 </View>
 
                 <ScrollView>
@@ -257,11 +241,15 @@ class NewSaleTextile extends Component {
                         />
 
                         {this.state.flagGenerateEstimationSlip && (
-                            <GenerateEstimationSlip />
+                            <GenerateEstimationSlip 
+                            navigation={this.props.navigation}
+                            />
                         )}
 
                         {this.state.flagGenerateInvoice && (
-                            <GenerateInvoiceSlip  navigation={this.props.navigation}/>
+                            <GenerateInvoiceSlip  
+                            navigation={this.props.navigation}
+                          />
                         )}
 
                         {this.state.flagGenerateReturnSlip && (

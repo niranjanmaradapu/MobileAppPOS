@@ -22,7 +22,7 @@ class GenerateEstimationSlip extends Component {
         super(props);
         this.camera = null;
         this.barcodeCodes = [];
-        this.state = {
+        this.state = { 
             barcodeId: "",
             mobileNumber: "",
             altMobileNo: "",
@@ -197,8 +197,8 @@ class GenerateEstimationSlip extends Component {
         else if (this.state.barcodeId === "") {
             alert("Please select Barcode");
         }
-        if (this.state.smnumber === "") {
-            alert("Please select UOM");
+       else if (this.state.smnumber === "") {
+            alert("Please enter SM Number");
         }
         else {
             this.getLineItems();
@@ -241,6 +241,7 @@ class GenerateEstimationSlip extends Component {
                     this.calculateTotal();
                 });
                 this.setState({ barcodeId: "", uom: "", smnumber: "" });
+                this.state.barcodeId = ""
             } else {
                 alert(res.data.body);
             }
@@ -337,6 +338,22 @@ class GenerateEstimationSlip extends Component {
         this.setState({ smnumber: text });
     };
 
+    navigateToScanCode() {
+        global.barcodeId = 'something';
+        this.props.navigation.navigate('ScanBarCode', {
+          isFromNewSale: false, isFromAddProduct: true,
+          onGoBack: () => this.refresh(),
+        });
+      }
+
+      refresh() {
+        if (global.barcodeId != 'something') {
+          this.setState({ barcodeId: global.barcodeId });
+          this.setState({ dsNumber: ""});
+          global.barcodeId = 'something';
+        }
+        console.log('bar code is sadsadsdsadsds' + this.state.barcodeId)
+      }
 
     render() {
         console.log(global.barcodeId);
@@ -389,7 +406,9 @@ class GenerateEstimationSlip extends Component {
                                     textAlignVertical="center"
                                     autoCapitalize="none"
                                     value={this.state.barcodeId}
+                                    onEndEditing
                                     onChangeText={this.handleBarCode}
+                                    onEndEditing={() => this.endEditing()}
                                 />
 
                                 <TextInput style={Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start}
@@ -429,6 +448,15 @@ class GenerateEstimationSlip extends Component {
                                         onChangeText={this.handleQty}
                                     />
                                 )}
+
+
+          <TouchableOpacity
+            style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
+            onPress={() => this.navigateToScanCode()} >
+            <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {('BARCODE SCAN')} </Text>
+          </TouchableOpacity>
+                  
+
 
 
 
@@ -1052,6 +1080,14 @@ const styles = StyleSheet.create({
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 14,
+    },
+    navButton_mobile: {
+        position: 'absolute',
+        right: 20, top: 37,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 105,
+        height: 32,
     },
     signInButton: {
         backgroundColor: '#ED1C24',
