@@ -13,10 +13,10 @@ class ScanBarCode extends Component {
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.camera = null;
     this.barcodeCodes = [];
-
     this.state = {
       isFromNewSale: false,
       isFromAddProduct: false,
+      isscanned:0,
       torchon: RNCamera.Constants.FlashMode.off,
       camera: {
         type: RNCamera.Constants.Type.back,
@@ -50,10 +50,16 @@ class ScanBarCode extends Component {
 
   onBarCodeRead(e) {
     if (global.barcodeId == "something") {
-      // { RNBeep.beep() }
-      global.barcodeId = e.data
-      this.props.route.params.onGoBack();
-      this.props.navigation.goBack();
+      if(this.state.isscanned === 0){
+        this.setState({ isscanned: 1 })
+      }
+      if(this.state.isscanned === 1){
+        this.setState({ isscanned: 2 })
+        { RNBeep.beep() }
+        global.barcodeId = e.data
+        this.props.route.params.onGoBack();
+        this.props.navigation.goBack();
+      }
     }
   }
 
@@ -102,7 +108,7 @@ class ScanBarCode extends Component {
             fontFamily: 'bold',
             fontSize: 18,
             color: '#353C40'
-          }}> {this.state.isFromNewSale === true ? 'New Sale' : 'Scan & Add Product'} </Text>
+          }}> {this.state.isFromNewSale === true ? 'Delivery slip scan' : 'Barcode scan'} </Text>
           {/* <Text style={styles.signUptext}> Sign Up </Text> */}
 
         </View>

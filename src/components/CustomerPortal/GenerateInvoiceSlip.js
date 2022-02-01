@@ -176,7 +176,6 @@ class GenerateInvoiceSlip extends Component {
     }
 
     componentDidMount() {
-        this.setState({ dsNumber: "", barCodeList: [] });
         AsyncStorage.getItem("storeId").then((value) => {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) });
@@ -669,6 +668,47 @@ class GenerateInvoiceSlip extends Component {
 
     }
 
+    navigateToScan() {
+        global.barcodeId = 'something';
+        this.props.navigation.navigate('ScanBarCode', {
+            isFromNewSale: true, isFromAddProduct: false,
+            onGoBack: () => this.refreshTextile(),
+        });
+    }
+
+    refreshTextile() {
+        if (global.barcodeId != 'something') {
+            this.setState({ dsNumber: global.barcodeId },
+                ()=>{
+                    this.getDeliverySlipDetails()
+                });
+            this.setState({ barcodeId: '' });
+            global.barcodeId = 'something';
+        }
+        console.log('murali barcode', this.state.dsNumber)
+    }
+
+    navigateToScanCode() {
+        global.barcodeId = 'something';
+        this.props.navigation.navigate('ScanBarCode', {
+            isFromNewSale: false, isFromAddProduct: true,
+            onGoBack: () => this.refresh(),
+        });
+    }
+
+    refresh() {
+        if (global.barcodeId != 'something') {
+            this.setState({ barcodeId: global.barcodeId },
+                ()=>{
+                    this.getRetailBarcodeList()
+                });
+            this.setState({ dsNumber: "" });
+            global.barcodeId = 'something';
+        }
+        console.log('bar code is sadsadsdsadsds' + this.state.barcodeId)
+    }
+
+
     render() {
         console.log(global.barcodeId);
         AsyncStorage.getItem("tokenkey").then((value) => {
@@ -700,6 +740,7 @@ class GenerateInvoiceSlip extends Component {
                                         textAlignVertical="center"
                                         keyboardType={'default'}
                                         autoCapitalize="none"
+                                        value={this.state.dsNumber}
                                         onEndEditing
                                         onChangeText={(text) => this.handleDsNumber(text)}
                                         onEndEditing={() => this.endEditing()}
@@ -712,6 +753,7 @@ class GenerateInvoiceSlip extends Component {
                                         placeholderTextColor="#6F6F6F60"
                                         textAlignVertical="center"
                                         keyboardType={'default'}
+                                        value={this.state.barcodeId}
                                         autoCapitalize="none"
                                         onEndEditing
                                         onChangeText={(text) => this.handleBarcode(text)}
@@ -719,6 +761,22 @@ class GenerateInvoiceSlip extends Component {
                                     />)}
 
                             </View>
+
+                            {(global.domainName === "Textile" &&
+                                <TouchableOpacity
+                                    style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
+                                    onPress={() => this.navigateToScan()} >
+                                    <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {('DS SCAN')} </Text>
+                                </TouchableOpacity>
+                            )}
+
+                            {(global.domainName === "Retail" &&
+                                <TouchableOpacity
+                                    style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
+                                    onPress={() => this.navigateToScanCode()} >
+                                    <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {('BARCODE SCAN')} </Text>
+                                </TouchableOpacity>
+                            )}
 
 
                             {this.state.retailBarCodeList.length !== 0 && (
@@ -1771,6 +1829,14 @@ const styles = StyleSheet.create({
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 14,
+    },
+    navButton_mobile: {
+        position: 'absolute',
+        right: 20, top: 37,
+        backgroundColor: '#ED1C24',
+        borderRadius: 5,
+        width: 105,
+        height: 32,
     },
     createUserinput: {
         justifyContent: 'center',
