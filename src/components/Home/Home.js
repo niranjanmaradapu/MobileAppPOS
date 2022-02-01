@@ -9,8 +9,8 @@ import {
     PieChart
 } from "react-native-chart-kit";
 import Device from 'react-native-device-detection';
-import HomeGraphsService from '../services/Graphs/HomeGraphsService';
 import AccountingPortalGraphsService from '../services/Graphs/AccountingPortalGraphsService';
+import HomeGraphsService from '../services/Graphs/HomeGraphsService';
 import ProfileService from '../services/ProfileService';
 import UrmService from '../services/UrmService';
 var deviceWidth = Dimensions.get('window').width;
@@ -121,144 +121,12 @@ const salesByCategoryPie = [
     }
 ];
 
-const invoicesPie = [
-    {
-        name: "jan",
-        sales: 10,
-        color: "#f00",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "feb",
-        sales: 10,
-        color: "#0f0",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "mar",
-        sales: 10,
-        color: "#00f",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "apr",
-        sales: 10,
-        color: "#f0f",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "may",
-        sales: 10,
-        color: "#ff0",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "jun",
-        sales: 10,
-        color: "#070795",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "jul",
-        sales: 10,
-        color: "#00ffff",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "aug",
-        sales: 10,
-        color: "#9ffff0",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "sep",
-        sales: 10,
-        color: "#086",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "nov",
-        sales: 10,
-        color: "#289",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "dec",
-        sales: 10,
-        color: "#2f4",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    }
-];
-
-const salesSummaryPie = [
-    {
-        name: "Sales",
-        sales: 8000,
-        color: "#ff0",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "Returns",
-        sales: 2000,
-        color: "#00f",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    }
-];
-
-const activeInactivePie = [
-    {
-        name: "Active",
-        promo: 57,
-        color: "#0f0",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    },
-    {
-        name: "InActive",
-        promo: 17,
-        color: "#7f7f7f",
-        legendFontColor: "#7f7f7f",
-        legendFontSize: 15
-    }
-];
 
 const topSalesManBar = {
     labels: ["John", "Raju", "Gayathri", "Vignesh", "Ramya"],
     datasets: [
         {
             data: [45, 35, 28, 18.5, 12]
-        }
-    ]
-};
-
-
-const debitNotesBar = {
-    labels: ["Panjagutta-Hyd", "Patney-Hyd", "Chandanagar-Hyd", "Ecil-Hyd", "Vijayawada", "Vizag", "Waranal"],
-    datasets: [
-        {
-            data: [3.0, 1.8, 3.8, 5, 4.0, 2.3, 3.9]
-        }
-    ]
-};
-
-const topSalesByStoresBar = {
-    labels: ["Kukatpally-Hyd", "Patny-Hyd", "Vijaywada", "Panjagutta-Hyd", "Warangal"],
-    datasets: [
-        {
-            data: [45, 38.25, 35, 29.5, 20.55]
         }
     ]
 };
@@ -634,27 +502,27 @@ class Home extends Component {
                                     </View>;
 
                                 }
-                                if (item.key === 4) {
-                                    return <View style={{
-                                        height: 120,
-                                        width: 250,
-                                        borderWidth: 1,
-                                        backgroundColor: "#00C656",
-                                        borderColor: '#ffffff',
-                                        borderRadius: 10,
-                                        marginLeft: 10,
-                                    }}>
-                                        <Image source={require('../assets/images/monthlysales.png')} style={{
-                                            marginLeft: 20, marginTop: 40,
-                                        }} />
-                                        <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, marginLeft: 20, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
-                                            Today total Orders
-                                        </Text>
-                                        <Text style={{ fontSize: 15, marginTop: 0, alignItems: 'center', alignSelf: 'center', fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                            55
-                                        </Text>
-                                    </View>;
-                                }
+                                // if (item.key === 4) {
+                                //     return <View style={{
+                                //         height: 120,
+                                //         width: 250,
+                                //         borderWidth: 1,
+                                //         backgroundColor: "#00C656",
+                                //         borderColor: '#ffffff',
+                                //         borderRadius: 10,
+                                //         marginLeft: 10,
+                                //     }}>
+                                //         <Image source={require('../assets/images/monthlysales.png')} style={{
+                                //             marginLeft: 20, marginTop: 40,
+                                //         }} />
+                                //         <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, marginLeft: 20, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
+                                //             Today total Orders
+                                //         </Text>
+                                //         <Text style={{ fontSize: 15, marginTop: 0, alignItems: 'center', alignSelf: 'center', fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
+                                //             55
+                                //         </Text>
+                                //     </View>;
+                                // }
                             }}
                             ListFooterComponent={<View style={{ width: 15 }}></View>}
                         />
@@ -674,7 +542,7 @@ class Home extends Component {
                             />
                         </View>
                         <View style={Device.isTablet ? styles.topSalesManChartContainer_tablet : styles.topSalesManChartContainer_mobile}>
-                            <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 sales by category</Text>
+                            <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales by representative</Text>
                             <BarChart
                                 style={Device.isTablet ? styles.topSalesManChart_tablet : styles.topSalesManChart_mobile}
                                 data={topSalesManBar}
@@ -687,120 +555,7 @@ class Home extends Component {
                                 verticalLabelRotation={Device.isTablet ? 0 : 90}
                             />
                         </View>
-                        <View style={Device.isTablet ? styles.debitNotesChartContainer_tablet : styles.debitNotesChartContainer_mobile}>
-                            <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Debit Notes by stores</Text>
-
-                            <BarChart
-                                style={{ margin: 5 }}
-                                data={debitNotesBar}
-                                // data={this.state.debitNotesByStoreChart}
-                                width={deviceWidth - 80}
-                                height={Device.isTablet ? 380 : 550}
-                                yLabelsOffset={30}
-                                yAxisLabel="₹"
-                                yAxisSuffix="L"
-                                chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
-                                verticalLabelRotation={Device.isTablet ? 0 : 90}
-                            />
-
-                        </View>
-                        <View style={Device.isTablet ? styles.topSalesByStoresChartContainer_tablet : styles.topSalesByStoresChartContainer_mobile}>
-                            <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales By Store</Text>
-                            <BarChart
-                                style={{ margin: 5 }}
-                                data={topSalesByStoresBar}
-                                width={deviceWidth - 70}
-                                height={Device.isTablet ? 380 : 490}
-                                yLabelsOffset={20}
-                                yAxisLabel="₹"
-                                yAxisSuffix="L"
-                                chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
-                                verticalLabelRotation={Device.isTablet ? 0 : 90}
-                            />
-                        </View>
-                        <View style={Device.isTablet ? styles.invoicesGeneratedChartContainer_tablet : styles.invoicesGeneratedChartContainer_mobile}>
-                            <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Invoices generated</Text>
-                            <PieChart
-                                data={invoicesPie}
-                                width={deviceWidth - 30}
-                                height={Device.isTablet ? 330 : 280}
-                                chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
-                                accessor="sales"
-                                backgroundColor={"transparent"}
-                                paddingLeft={"35"}
-                                center={[0, 0]}
-                                hasLegend="true"
-                                absolute
-                            />
-                        </View>
-                        <View style={Device.isTablet ? styles.salesSummaryChartContainer_tablet : styles.salesSummaryChartContainer_mobile}>
-                            <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Sales summary</Text>
-                            <PieChart
-                                data={salesSummaryPie}
-                                width={deviceWidth - 60}
-                                height={Device.isTablet ? 230 : 180}
-                                chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
-                                accessor="sales"
-                                backgroundColor={"transparent"}
-                                paddingLeft={"15"}
-                                center={[0, 0]}
-                                absolute
-                            />
-                        </View>
-                        <View style={Device.isTablet ? styles.activeInactiveChartContainer_tablet : styles.activeInactiveChartContainer_mobile}>
-                            <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Active & InActive Promos</Text>
-                            <PieChart
-                                data={activeInactivePie}
-                                width={deviceWidth - 60}
-                                height={Device.isTablet ? 230 : 180}
-                                chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
-                                accessor="promo"
-                                backgroundColor={"transparent"}
-                                paddingLeft={"15"}
-                                center={[0, 0]}
-                                absolute
-                            />
-                        </View>
                     </View>
-                    {/* <View style={{ height: 40, backgroundColor: '#ffffff', width: deviceWidth, marginTop: 0, }}>
-
-                            <Text onPress={() => this.statatics()} style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', position: 'absolute', right: 20, top: 20, }}> {('STATISTICS >')} </Text>
-
-                        </View> */}
-
-                    {/* <View style={{ height: 50, backgroundColor: '#e6e6e6', width: deviceWidth, marginTop: 0, }}>
-                            <Text style={{ fontSize: 14, fontFamily: 'bold', color: '#353C40', marginLeft: 10, marginTop: 20 }}> {('Recent orders')} </Text>
-                            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ED1C24', position: 'absolute', right: 20, top: 20, }}> {('SEE ALL >')} </Text>
-                        </View> */}
-                    {/* <FlatList
-                            ListHeaderComponent={this.renderHeader}
-                            data={dummmydata}
-                            keyExtractor={item => item.email}
-                            renderItem={({ item, index }) => (
-                                <View style={{
-                                    height: 60,
-                                    backgroundColor: 'white',
-                                    borderBottomWidth: 5,
-                                    borderBottomColor: '#e6e6e6',
-                                    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
-                                }}>
-                                    <View style={{ flexDirection: 'column', width: '100%', height: 60, }}>
-                                        <Image source={require('../assets/images/iconmonstr-credit-card-thin.png')} style={{
-                                            position: 'absolute', left: 20, top: 25,
-                                        }} />
-                                        <Text style={{ fontSize: 12, marginTop: 16, marginLeft: 60, fontFamily: 'medium', color: "#222222" }}>
-                                            Order Id #6123{item.itemdesc}
-                                        </Text>
-                                        <Text style={{ fontSize: 10, marginLeft: 60, fontFamily: 'regular', color: '#828282', }}>
-                                            Today, 10:45AM
-                                        </Text>
-                                        <Text style={{ fontSize: 16, fontFamily: 'medium', color: '#FE7C19', position: 'absolute', right: 20, top: 20, }}> {('₹ 14,221.50')} </Text>
-                                    </View>
-                                </View>
-                            )}
-                        /> */}
-
-
                 </ScrollView >
             </View>
 

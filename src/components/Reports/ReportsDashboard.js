@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
-import { PieChart, BarChart } from 'react-native-chart-kit';
+import { BarChart, PieChart } from 'react-native-chart-kit';
 import Device from 'react-native-device-detection';
 import colors from '../../colors.json';
 import ReportsGraphsService from '../services/Graphs/ReportsGraphsService';
@@ -71,8 +71,16 @@ export default class ReportsDashboard extends Component {
             activeVsInactiveData: [],
             activeVsInactiveChart: [],
             topSalesData: [],
-            topSalesChart: {},
+            topSalesChart: {
+                labels: [],
+                datasets: [
+                    {
+                        data: []
+                    }
+                ]
+            },
             storeId: '',
+            storeName: "",
         };
     }
 
@@ -91,6 +99,15 @@ export default class ReportsDashboard extends Component {
             console.log('there is error getting storeId');
         });
 
+        AsyncStorage.getItem("storeName").then((value) => {
+
+            this.setState({ storeName: value });
+
+        }).catch(() => {
+
+            console.log('there is error getting storeId');
+
+        });
     }
 
     getInvoicesGenerated() {
@@ -199,10 +216,10 @@ export default class ReportsDashboard extends Component {
                         let indexCount = [];
                         let indexColor = [];
 
-                        // this.state.topSalesData.forEach(datas => {
-                        //     indexName.push(datas.storeId);
-                        //     indexCount.push(datas.amount);
-                        // });
+                        this.state.topSalesData.forEach(datas => {
+                            indexName.push(datas.storeId);
+                            indexCount.push(datas.amount);
+                        });
                         // colors.forEach(data => {
                         //     indexColor.push(data.normalColorCode);
                         // });
@@ -227,7 +244,7 @@ export default class ReportsDashboard extends Component {
                                 labels: indexName,
                                 datasets: [
                                     {
-                                        datas: indexCount
+                                        data: indexCount
                                     }
                                 ]
                             }
@@ -242,30 +259,34 @@ export default class ReportsDashboard extends Component {
     render() {
         return (
             <View>
-                <View>
-                    <BarChart
-                        style={{ margin: 5 }}
-                        data={this.state.topSalesChart}
-                        width={deviceWidth - 70}
-                        height={Device.isTablet ? 380 : 490}
-                        yLabelsOffset={20}
-                        yAxisLabel="₹"
-                        yAxisSuffix="L"
-                        chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
-                        verticalLabelRotation={Device.isTablet ? 0 : 90}
-                    // paddingLeft={"15"}
-                    // center={[0, 0]}
-                    // absolute
-                    />
+                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 400 }]}>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales</Text>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
+                        <BarChart
+                            style={{ paddingTop: 20 }}
+                            data={this.state.topSalesChart}
+                            width={deviceWidth - 60}
+                            height={300}
+                            yLabelsOffset={30}
+                            yAxisLabel="₹"
+                            fromZero
+                            chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
+                            verticalLabelRotation={Device.isTablet ? 0 : 90}
+                        // paddingLeft={"15"}
+                        // yAxisSuffix="L"
+                        // center={[0, 0]}
+                        // absolute
+                        />
+                    </View>
                 </View>
 
                 <View style={styles.chartMaincontainer}>
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Invoices Generated</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <PieChart
-                            style={{ paddingTop: 20, }}
                             data={this.state.invoicesChart}
-                            width={deviceWidth - 60}
+                            style={{ paddingTop: 20, paddingLeft: 20 }}
+                            width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20}
                             height={Device.isTablet ? 300 : 220}
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
                             accessor="count"
@@ -277,6 +298,7 @@ export default class ReportsDashboard extends Component {
                         />
                         <View style={{ marginTop: Device.isTablet ? 40 : 20 }}>
                             <FlatList
+                                style={{ paddingRight: 20 }}
                                 data={this.state.invoicesChart}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
@@ -295,10 +317,9 @@ export default class ReportsDashboard extends Component {
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Sales Summary</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <PieChart
-                            style={{ paddingTop: 20, }}
                             data={this.state.salesSummaryChart}
-                            width={deviceWidth - 60}
-                            height={Device.isTablet ? 300 : 220}
+                            style={{ paddingTop: 20, paddingLeft: 20 }}
+                            width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20} height={Device.isTablet ? 300 : 220}
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
                             accessor="count"
                             backgroundColor={"transparent"}
@@ -309,6 +330,7 @@ export default class ReportsDashboard extends Component {
                         />
                         <View style={{ marginTop: Device.isTablet ? 40 : 20 }}>
                             <FlatList
+                                style={{ paddingRight: 20 }}
                                 data={this.state.salesSummaryChart}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
@@ -327,10 +349,9 @@ export default class ReportsDashboard extends Component {
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Active vs Inactive Promos</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <PieChart
-                            style={{ paddingTop: 20, }}
                             data={this.state.activeVsInactiveChart}
-                            width={deviceWidth - 60}
-                            height={Device.isTablet ? 300 : 220}
+                            style={{ paddingTop: 20, paddingLeft: 20 }}
+                            width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20} height={Device.isTablet ? 300 : 220}
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
                             accessor="count"
                             backgroundColor={"transparent"}
@@ -341,6 +362,7 @@ export default class ReportsDashboard extends Component {
                         />
                         <View style={{ marginTop: Device.isTablet ? 40 : 20 }}>
                             <FlatList
+                                style={{ paddingRight: 20 }}
                                 data={this.state.activeVsInactiveChart}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}

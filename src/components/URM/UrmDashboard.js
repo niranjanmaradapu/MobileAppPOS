@@ -233,9 +233,9 @@ export default class UrmDashboard extends Component {
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Active vs InActive Users</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 180 }}>
                         <PieChart
-                            style={{ paddingTop: 20, }}
                             data={this.state.activeInactiveUsersChart}
-                            width={deviceWidth - 60}
+                            style={{ paddingTop: 20, paddingLeft: 20 }}
+                            width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20}
                             height={Device.isTablet ? 300 : 220}
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
                             accessor="count"
@@ -248,6 +248,7 @@ export default class UrmDashboard extends Component {
 
                         <View style={{ marginTop: Device.isTablet ? 40 : 20 }}>
                             <FlatList
+                                style={{ paddingRight: 20 }}
                                 data={this.state.activeInactiveUsersChart}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
@@ -267,9 +268,9 @@ export default class UrmDashboard extends Component {
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Stores vs POS Employees</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <PieChart
-                            style={{ paddingTop: 20, }}
                             data={this.state.storesVsEmployeesChart}
-                            width={deviceWidth - 60}
+                            style={{ paddingTop: 20, paddingLeft: 20 }}
+                            width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20}
                             height={Device.isTablet ? 300 : 220}
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
                             accessor="count"
@@ -281,6 +282,7 @@ export default class UrmDashboard extends Component {
                         />
                         <View style={{ marginTop: Device.isTablet ? 40 : 20 }}>
                             <FlatList
+                                style={{ paddingRight: 20 }}
                                 data={this.state.storesVsEmployeesChart}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
@@ -299,9 +301,9 @@ export default class UrmDashboard extends Component {
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Users By Roles</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <PieChart
-                            style={{ paddingTop: 20, }}
                             data={this.state.usersByRoleChart}
-                            width={deviceWidth - 60}
+                            style={{ paddingTop: 20, paddingLeft: 20 }}
+                            width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20}
                             height={Device.isTablet ? 300 : 220}
                             chartConfig={Device.isTablet ? chartConfigTablet : chartConfigMobile}
                             accessor="count"
@@ -314,6 +316,7 @@ export default class UrmDashboard extends Component {
 
                         <View style={{ marginTop: Device.isTablet ? 40 : 20 }}>
                             <FlatList
+                                style={{ paddingRight: 20 }}
                                 data={this.state.usersByRolesValues}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
