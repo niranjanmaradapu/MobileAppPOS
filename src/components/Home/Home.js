@@ -581,13 +581,14 @@ class Home extends Component {
                                 </View>
                             </View>
                         </View>
-                        <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 450 }]}>
+                        <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 500 : 450 }]}>
                             <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales by representative</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                                 <BarChart
+                                    style={{ paddingTop: 20 }}
                                     data={this.state.topSalesChart}
                                     width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
-                                    height={Device.isTablet ? 400 : 400}
+                                    height={380}
                                     yLabelsOffset={20}
                                     yAxisLabel="₹"
                                     fromZero
@@ -620,8 +621,7 @@ const styles = StyleSheet.create({
     chartTitle_tablet: {
         fontSize: 25,
         fontFamily: 'bold',
-        marginTop: 20,
-        marginLeft: 20,
+        margin: 20,
         position: 'absolute',
         top: 0,
         left: 20
@@ -965,12 +965,6 @@ const styles = StyleSheet.create({
         height: 280,
         borderRadius: 10
     },
-    chartTitle_mobile: {
-        fontSize: 20,
-        fontFamily: 'bold',
-        marginTop: 20,
-        marginLeft: 20
-    },
     topSalesManChart_mobile: {
         margin: 5,
     },
@@ -1042,12 +1036,7 @@ const styles = StyleSheet.create({
         height: 340,
         borderRadius: 10
     },
-    chartTitle_tablet: {
-        fontSize: 25,
-        fontFamily: 'bold',
-        marginTop: 20,
-        marginLeft: 20
-    },
+
     topSalesManChart_tablet: {
         margin: 10,
     },

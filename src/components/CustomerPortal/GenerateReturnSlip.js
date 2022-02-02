@@ -8,7 +8,6 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import CustomerService from '../services/CustomerService';
 var deviceheight = Dimensions.get('window').height;
-var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
 
 export default class GenerateReturnSlip extends Component {
@@ -54,9 +53,9 @@ export default class GenerateReturnSlip extends Component {
         this.setState({ reasonDesc: text });
     }
 
-    handleReason() {
-
-    }
+    handleReason = (value) => {
+        this.setState({ reason: value });
+    };
 
     handleInvoiceNumber(text) {
         this.setState({ invoiceNumber: text });
