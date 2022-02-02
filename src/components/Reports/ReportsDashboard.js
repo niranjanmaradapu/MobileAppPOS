@@ -6,6 +6,7 @@ import { BarChart, PieChart } from 'react-native-chart-kit';
 import Device from 'react-native-device-detection';
 import colors from '../../colors.json';
 import ReportsGraphsService from '../services/Graphs/ReportsGraphsService';
+import InventoryService from '../services/InventoryService';
 var deviceWidth = Dimensions.get('window').width;
 
 const chartConfig = {
@@ -54,7 +55,7 @@ export default class ReportsDashboard extends Component {
                 ]
             },
             storeId: '',
-            storeName: "",
+            storeNames: [],
         };
     }
 
@@ -63,15 +64,16 @@ export default class ReportsDashboard extends Component {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) },
                 () => {
+                    this.getInvoicesGenerated();
+                    this.getActiveVsInactivePromos();
+                    this.getSalesSummary();
+                    this.getTopFiveSales();
                 });
             console.log(this.state.storeId);
         }).catch(() => {
             console.log('there is error getting storeId');
         });
-        this.getInvoicesGenerated();
-        this.getActiveVsInactivePromos();
-        this.getSalesSummary();
-        this.getTopFiveSales();
+        
 
         AsyncStorage.getItem("storeName").then((value) => {
 
@@ -189,6 +191,7 @@ export default class ReportsDashboard extends Component {
                         let indexName = [];
                         let indexCount = [];
                         let indexColor = [];
+                        let indexLabels = [];
 
                         this.state.topSalesData.forEach(datas => {
                             indexName.push(datas.storeId);
@@ -200,29 +203,33 @@ export default class ReportsDashboard extends Component {
 
                         console.log("index", indexName, indexCount);
 
-                        // console.warn(this.state.topSalesData);
-                        // // for (var i = 0; i < this.state.topSalesData.length; i++) {
-                        //     this.state.topSalesChart.push({
-                        //         labels: indexName[i],
-                        //         datasets: [
-                        //             {
-                        //                 data: indexCount[i]
-                        //             }
-                        //         ]
-                        //     });
-                        // // }
-                        // this.setState({ topSalesChart: this.state.topSalesChart });
-
-                        this.setState({
-                            topSalesChart: {
-                                labels: indexName,
-                                datasets: [
-                                    {
-                                        data: indexCount
-                                    }
-                                ]
+                        axios.post(InventoryService.getStoreNameById(), indexName).then(res => {
+                            let storeName = res.data.result;
+                            console.log("store Names response", res.data.result);
+                            if (res) {
+                                storeName.forEach((ele, index) => {
+                                    indexLabels.push(ele.name);
+                                });
                             }
+                            this.setState({ storeNames: indexLabels }, 
+                                () => {
+                                    this.setState({
+                                        topSalesChart: {
+                                            labels: this.state.storeNames,
+                                            datasets: [
+                                                {
+                                                    data: indexCount
+                                                }
+                                            ]
+                                        }
+                                    });
+                                });
                         });
+                        
+                        console.log("store Name", indexLabels);
+                        console.log("store Id", indexName);
+
+                        
                     });
 
             }
@@ -233,19 +240,19 @@ export default class ReportsDashboard extends Component {
     render() {
         return (
             <View>
-                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 400 }]}>
+                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 450 }]}>
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <BarChart
                             style={{ paddingTop: 20 }}
                             data={this.state.topSalesChart}
                             width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
-                            height={300}
+                            height={380}
                             yLabelsOffset={20}
                             yAxisLabel="₹"
                             fromZero
                             chartConfig={chartConfig}
-                            verticalLabelRotation={Device.isTablet ? 0 : 90}
+                            verticalLabelRotation={Device.isTablet ? 0 : 45}
                         // paddingLeft={"15"}
                         // yAxisSuffix="L"
                         // center={[0, 0]}

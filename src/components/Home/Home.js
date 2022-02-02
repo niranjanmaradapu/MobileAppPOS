@@ -9,9 +9,11 @@ import {
     PieChart
 } from "react-native-chart-kit";
 import Device from 'react-native-device-detection';
+import colors from '../../colors.json';
 import HomeGraphsService from '../services/Graphs/HomeGraphsService';
 import ProfileService from '../services/ProfileService';
 import UrmService from '../services/UrmService';
+
 var deviceWidth = Dimensions.get('window').width;
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
 
@@ -126,8 +128,6 @@ class Home extends Component {
         this.state = {
             privilages: [],
             domainId: 1,
-            debitNotesByStore: [],
-            debitNotesByStoreChart: {},
             toadysSale: 0,
             monthlySale: 0,
             thisVsLastMonthSale: 0,
@@ -139,7 +139,9 @@ class Home extends Component {
                         data: []
                     }
                 ]
-            }
+            },
+            salesCategory: [],
+            salesCategoryChart: [],
         };
     }
 
@@ -315,6 +317,7 @@ class Home extends Component {
         this.getMonthlySale();
         this.getLastVsThisMonthSale();
         this.getTopSales();
+        this.getSalesByCategory();
         // this.getDebitNotesByStores();
     }
 
@@ -370,6 +373,45 @@ class Home extends Component {
                         });
                     });
                 console.log("Top Sales", this.state.topSalesChart);
+            }
+        });
+    }
+
+
+    getSalesByCategory() {
+        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
+        axios.get(HomeGraphsService.getSalesByCategory() + params).then(response => {
+            if (response) {
+                console.log("Sales By Category", response.data.result);
+                this.setState({ salesCategory: response.data.result },
+                    () => {
+                        let indexName = [];
+                        let indexCount = [];
+                        let indexColor = [];
+
+                        this.state.salesCategory.forEach(data => {
+                            indexName.push(data.categeoryType);
+                            indexCount.push(data.amount);
+                            colors.forEach(data => {
+                                indexColor.push(data.normalColorCode);
+                            });
+                        });
+
+                        for (var i = 0; i < this.state.salesCategory.length; i++) {
+                            this.state.salesCategoryChart.push({
+                                name: indexName[i],
+                                count: indexCount[i],
+                                color: indexColor[i]
+                            });
+                        }
+
+
+
+                        this.setState({ salesCategoryChart: this.state.salesCategoryChart },
+                            () => {
+                                console.log(this.state.salesCategoryChart);
+                            });
+                    });
             }
         });
     }
@@ -503,34 +545,56 @@ class Home extends Component {
                             }}
                             ListFooterComponent={<View style={{ width: 15 }}></View>}
                         />
+                        <View>
+                            <View style={styles.chartMaincontainer}>
+                                <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Sales % by category</Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
 
-                        <View style={Device.isTablet ? styles.salesByCategoryChart_tablet : styles.salesByCategoryChart_mobile}>
-                            <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Sales % by category</Text>
-                            <PieChart
-                                data={salesByCategoryPie}
-                                width={deviceWidth - 60}
-                                height={Device.isTablet ? 300 : 220}
-                                chartConfig={chartConfig}
-                                accessor="population"
-                                backgroundColor={"transparent"}
-                                paddingLeft={"15"}
-                                center={[0, 0]}
-                                absolute
-                            />
+                                    <PieChart
+                                        data={this.state.salesCategoryChart}
+                                        style={{ paddingTop: 20, paddingLeft: 20 }}
+                                        width={Device.isTablet ? deviceWidth - 60 : deviceWidth - 20}
+                                        height={Device.isTablet ? 300 : 220}
+                                        chartConfig={chartConfig}
+                                        accessor="count"
+                                        hasLegend={false}
+                                        backgroundColor={"transparent"}
+                                        paddingLeft={"15"}
+                                        center={[0, 0]}
+                                        absolute
+                                    />
+                                    <View style={{ marginTop: Device.isTablet ? 40 : 20 }}>
+                                        <FlatList
+                                            style={{ paddingRight: 20 }}
+                                            data={this.state.salesCategoryChart}
+                                            showsVerticalScrollIndicator={false}
+                                            showsHorizontalScrollIndicator={false}
+                                            renderItem={({ item, index }) => (
+                                                <View style={{ flexDirection: 'column' }}>
+                                                    <View style={{ flexDirection: 'column' }}>
+                                                        <Text style={{ fontSize: Device.isTablet ? 20 : 15, fontFamily: 'medium', marginRight: 10, color: item.color }}>{item.name} : {item.count}</Text>
+                                                    </View>
+                                                </View>
+                                            )}
+                                        />
+                                    </View>
+                                </View>
+                            </View>
                         </View>
-                        <View style={Device.isTablet ? styles.topSalesManChartContainer_tablet : styles.topSalesManChartContainer_mobile}>
+                        <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 450 }]}>
                             <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales by representative</Text>
-                            <BarChart
-                                style={Device.isTablet ? styles.topSalesManChart_tablet : styles.topSalesManChart_mobile}
-                                data={this.state.topSalesChart}
-                                width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
-                                height={Device.isTablet ? 400 : 350}
-                                yLabelsOffset={20}
-                                yAxisLabel="₹"
-                                fromZero
-                                chartConfig={chartConfig}
-                                verticalLabelRotation={Device.isTablet ? 0 : 90}
-                            />
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
+                                <BarChart
+                                    data={this.state.topSalesChart}
+                                    width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
+                                    height={Device.isTablet ? 400 : 400}
+                                    yLabelsOffset={20}
+                                    yAxisLabel="₹"
+                                    fromZero
+                                    chartConfig={chartConfig}
+                                    verticalLabelRotation={Device.isTablet ? 0 : 45}
+                                />
+                            </View>
                         </View>
                     </View>
                 </ScrollView>
@@ -543,6 +607,34 @@ export default Home;
 
 
 const styles = StyleSheet.create({
+    chartMaincontainer: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#FFFFFF',
+        height: Device.isTablet ? 350 : 300,
+        width: deviceWidth - 40,
+        margin: 20,
+        borderRadius: 20,
+    },
+    chartTitle_tablet: {
+        fontSize: 25,
+        fontFamily: 'bold',
+        marginTop: 20,
+        marginLeft: 20,
+        position: 'absolute',
+        top: 0,
+        left: 20
+    },
+    chartTitle_mobile: {
+        fontSize: 20,
+        fontFamily: 'bold',
+        marginTop: 20,
+        marginLeft: 20,
+        position: 'absolute',
+        top: 0,
+        left: 20
+    },
     safeArea: {
         flex: 1,
         justifyContent: 'center',

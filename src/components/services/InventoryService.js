@@ -1,5 +1,5 @@
 // import base from './Base';
-const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097'
+const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097';
 
 
 class InventoryService {
@@ -35,38 +35,40 @@ class InventoryService {
         return REACT_NATIVE_APP_BASE_URL + '/catalog-categories/catalog/getcategoriesByid';
     }
 
-    getAllSubSections(){
+    getAllSubSections() {
         return REACT_NATIVE_APP_BASE_URL + '/catalog-categories/catalog/getcategoriesByid';
     }
-    getAllCategories(){
+    getAllCategories() {
         return REACT_NATIVE_APP_BASE_URL + '/catalog-categories/catalog/ListOfAllCategories';
     }
 
-    getAllHsnList(){
-        return REACT_NATIVE_APP_BASE_URL +   '/hsn-details/hsnDetails/getHsnDetails';
+    getAllHsnList() {
+        return REACT_NATIVE_APP_BASE_URL + '/hsn-details/hsnDetails/getHsnDetails';
     }
 
-    addTextileBarcodes(){
-        return REACT_NATIVE_APP_BASE_URL +  "/inventory/inventoryTextile/addBarcode_Textile";
+    addTextileBarcodes() {
+        return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/addBarcode_Textile";
     }
 
-    updatTextileBarcodes(){
-        return REACT_NATIVE_APP_BASE_URL +  "/inventory/inventoryTextile/updateBarcode_Textile"; 
+    updatTextileBarcodes() {
+        return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/updateBarcode_Textile";
     }
 
-    getTextileBarcodes(){
+    getTextileBarcodes() {
         return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/getAllBarcodeTextiles";
     }
 
-    deleteTextileBarcode(){
+    deleteTextileBarcode() {
         return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/deleteBarcode_Textile";
-    } 
+    }
 
-    getbarcodeTexttileAdjustments(){
+    getbarcodeTexttileAdjustments() {
         return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/getAllAdjustments";
     }
 
-   
-  
+    getStoreNameById() {
+        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/storeList";
+    }
+
 }
-export default new InventoryService()
+export default new InventoryService();
