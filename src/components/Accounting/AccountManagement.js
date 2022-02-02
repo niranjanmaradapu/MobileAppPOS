@@ -96,6 +96,18 @@ export default class AccountManagement extends Component {
                                                         if (i === 0) {
                                                             this.state.privilages.push({ bool: true, name: subprivilage.name });
                                                         }
+                                                        else if (subprivilage.name === "Credit Notes"){
+
+                                                        }
+                                                        else if (subprivilage.name === "Debit Notes"){
+
+                                                        }
+                                                        else if (subprivilage.name === "Create Tax Master"){
+
+                                                        }
+                                                        else if (subprivilage.name === "Create HSN Code"){
+
+                                                        }
                                                         else {
                                                             this.state.privilages.push({ bool: false, name: subprivilage.name });
                                                         }
