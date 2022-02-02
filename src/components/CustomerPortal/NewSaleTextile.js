@@ -253,7 +253,8 @@ class NewSaleTextile extends Component {
                         )}
 
                         {this.state.flagGenerateReturnSlip && (
-                            <GenerateReturnSlip />
+                            <GenerateReturnSlip
+                            navigation={this.props.navigation} />
                         )}
 
                         {this.state.falgAddCustomer && (

@@ -449,16 +449,11 @@ class GenerateEstimationSlip extends Component {
 
 
                                 <TouchableOpacity
-                                    style={{
-                                        backgroundColor: '#ED1C24',
-                                        width: Device.isTablet ? 200 : 150,
-                                        height: Device.isTablet ? 55 : 45,
-                                        borderRadius: 10,
-                                        // marginLeft: Device.isTablet ? 50 : 30,
-                                        margin: Device.isTablet ? 20 : 10,
-                                    }}
+                                    style={
+                                        Device.isTablet ? styles.input_tabletbutton_normal : styles.input_mobilebutton_normal
+                                    }
                                     onPress={() => this.navigateToScanCode()} >
-                                    <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 10 : 5 }]}> {('BARCODE SCAN')} </Text>
+                                    <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 0 : 0,marginLeft: Device.isTablet ? -20 : -10 }]}> {('BARCODE SCAN')} </Text>
                                 </TouchableOpacity>
 
 
@@ -1498,8 +1493,8 @@ const styles = StyleSheet.create({
     },
     input_mobile_notedit: {
         justifyContent: 'center',
-        marginLeft: deviceWidth / 2 + 30,
-        width: deviceWidth / 2 - 40,
+        marginLeft: deviceWidth / 3 + 30,
+        width: deviceWidth / 3 - 40,
         height: 44,
         marginTop: -55,
         marginBottom: 10,
@@ -1526,11 +1521,26 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
+    input_mobilebutton_normal: {
+        justifyContent: 'center',
+        marginLeft: deviceWidth - 130,
+        width: deviceWidth / 3 - 10,
+        height: 44,
+        marginTop: -55,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 10,
+        backgroundColor: '#ED1C24',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
 
     input_mobile_normal_start: {
         justifyContent: 'center',
         marginLeft: 20,
-        width: deviceWidth / 2,
+        width: deviceWidth / 3,
         height: 44,
         marginTop: 0,
         marginBottom: 10,
@@ -1692,8 +1702,8 @@ const styles = StyleSheet.create({
     },
     input_tablet_notedit: {
         justifyContent: 'center',
-        marginLeft: deviceWidth / 2 + 30,
-        width: deviceWidth / 2 - 50,
+        marginLeft: deviceWidth / 3 + 30,
+        width: deviceWidth / 3 - 50,
         height: 55,
         marginTop: -65,
         marginBottom: 10,
@@ -1720,6 +1730,21 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 22,
     },
+    input_tabletbutton_normal: {
+        justifyContent: 'center',
+        marginLeft: deviceWidth  - 230,
+        width: deviceWidth / 3 - 50,
+        height: 55,
+        borderRadius: 10,
+        marginTop: -65,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        backgroundColor: '#ED1C24',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 22,
+    },
     navButton_tablet: {
         position: 'absolute',
         right: 20, top: 27,
@@ -1731,7 +1756,7 @@ const styles = StyleSheet.create({
     input_tablet_normal_start: {
         justifyContent: 'center',
         marginLeft: 20,
-        width: deviceWidth / 2,
+        width: deviceWidth / 3,
         height: 55,
         marginTop: 0,
         marginBottom: 10,
@@ -1900,21 +1925,21 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
-    input_mobile_normal_start: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        width: deviceWidth / 2,
-        height: 44,
-        marginTop: 0,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
+    // input_mobile_normal_start: {
+    //     justifyContent: 'center',
+    //     marginLeft: 20,
+    //     width: deviceWidth / 2,
+    //     height: 44,
+    //     marginTop: 0,
+    //     marginBottom: 10,
+    //     borderColor: '#8F9EB717',
+    //     borderRadius: 3,
+    //     backgroundColor: '#FBFBFB',
+    //     borderWidth: 1,
+    //     fontFamily: 'regular',
+    //     paddingLeft: 15,
+    //     fontSize: 14,
+    // },
     rnSelect_mobile: {
         color: '#8F9EB7',
         fontSize: 15
@@ -2069,21 +2094,21 @@ const styles = StyleSheet.create({
         width: 155,
         height: 42,
     },
-    input_tablet_normal_start: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        width: deviceWidth / 2,
-        height: 55,
-        marginTop: 0,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 22,
-    },
+    // input_tablet_normal_start: {
+    //     justifyContent: 'center',
+    //     marginLeft: 20,
+    //     width: deviceWidth / 2,
+    //     height: 55,
+    //     marginTop: 0,
+    //     marginBottom: 10,
+    //     borderColor: '#8F9EB717',
+    //     borderRadius: 3,
+    //     backgroundColor: '#FBFBFB',
+    //     borderWidth: 1,
+    //     fontFamily: 'regular',
+    //     paddingLeft: 15,
+    //     fontSize: 22,
+    // },
     rnSelect_tablet: {
         color: '#8F9EB7',
         fontSize: 20

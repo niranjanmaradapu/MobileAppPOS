@@ -691,7 +691,7 @@ class GenerateInvoiceSlip extends Component {
     navigateToScanCode() {
         global.barcodeId = 'something';
         this.props.navigation.navigate('ScanBarCode', {
-            isFromNewSale: false, isFromAddProduct: true,
+            isFromNewSale: false, isFromAddProduct: false,invoiceScan:true,
             onGoBack: () => this.refresh(),
         });
     }
@@ -734,7 +734,7 @@ class GenerateInvoiceSlip extends Component {
 
                                 {(global.domainName === "Textile" &&
                                     <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between' }}>
-                                        <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.3 : deviceWidth / 1.6 }]}
+                                        <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.35 : deviceWidth / 1.6 }]}
                                             underlineColorAndroid="transparent"
                                             placeholder="Enter DsNumber"
                                             placeholderTextColor="#6F6F6F60"
@@ -749,7 +749,7 @@ class GenerateInvoiceSlip extends Component {
                                         <TouchableOpacity
                                             style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 160 : 110, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: 10 }}
                                             onPress={() => this.navigateToScan()} >
-                                            <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 10 : 5 }]}> {('DS SCAN')} </Text>
+                                            <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 10 : 10 }]}> {('DS SCAN')} </Text>
                                         </TouchableOpacity>
                                     </View>
                                 )}

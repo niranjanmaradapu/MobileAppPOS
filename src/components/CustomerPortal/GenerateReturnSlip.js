@@ -194,21 +194,47 @@ export default class GenerateReturnSlip extends Component {
         this.setState({ modelVisible: false });
     }
 
+    navigateToScanCode() {
+        global.barcodeId = 'something';
+        this.props.navigation.navigate('ScanBarCode', {
+            isFromNewSale: false, isFromAddProduct: true,
+            onGoBack: () => this.refresh(),
+        });
+    }
+
+    refresh() {
+        if (global.barcodeId != 'something') {
+            this.setState({ invoiceNumber: global.barcodeId },
+                () => {
+                    this.searchInvoice();
+                });
+            global.barcodeId = 'something';
+        }
+        console.log('bar code is sadsadsdsadsds' + this.state.invoiceNumber);
+    }
+
+
     render() {
         return (
             <View>
-                <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    underlineColorAndroid="transparent"
-                    placeholder="INVOICE NUMBER"
-                    placeholderTextColor="#6F6F6F"
-                    textAlignVertical="center"
-                    keyboardType={'default'}
-                    autoCapitalize="none"
-                    value={this.state.invoiceNumber}
-                    onChangeText={(text) => this.handleInvoiceNumber(text)}
-                // onEndEditing={() => this.endEditing()}
-                />
+                <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between' }}>
+                    <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.35 : deviceWidth / 1.6 }]}
+                        underlineColorAndroid="transparent"
+                        placeholder="INVOICE NUMBER"
+                        placeholderTextColor="#6F6F6F"
+                        textAlignVertical="center"
+                        keyboardType={'default'}
+                        autoCapitalize="none"
+                        value={this.state.invoiceNumber}
+                        onChangeText={(text) => this.handleInvoiceNumber(text)}
+                    />
+                    <TouchableOpacity
+                        style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 160 : 100, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: 10 }}
+                        onPress={() => this.navigateToScanCode()} >
+                        <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 10 : 10 }]}> {('INVOICE SCAN')} </Text>
+                    </TouchableOpacity>
+                </View>
+
                 <TextInput
                     style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     underlineColorAndroid="transparent"
@@ -543,6 +569,7 @@ const flats = StyleSheet.create({
         fontSize: 21,
         color: '#ED1C24'
     },
+
     flatlistText_tablet: {
         fontFamily: 'regular',
         fontSize: 21,
@@ -702,6 +729,22 @@ const styles = StyleSheet.create({
         fontSize: 20,
         margin: 20
     },
+    navButtonText_tablet: {
+        fontSize: 17,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginLeft: 10,
+        marginTop: 8,
+        alignSelf: 'center'
+    },
+    navButtonText_mobile: {
+        fontSize: 12,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginLeft: 10,
+        marginTop: 8,
+        alignSelf: 'center'
+    },
     imagealign: {
         marginTop: Device.isTablet ? 25 : 20,
         marginRight: Device.isTablet ? 30 : 20,
@@ -830,7 +873,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         height: 44,
         marginTop: 10,
-        width: deviceWidth - 20,
+        width: deviceWidth - 40,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
@@ -1102,7 +1145,7 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         marginTop: 10,
         height: 60,
-        width: deviceWidth - 20,
+        width: deviceWidth - 40,
         marginTop: 5,
         marginBottom: 10,
         borderColor: '#8F9EB717',
