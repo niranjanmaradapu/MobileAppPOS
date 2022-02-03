@@ -198,12 +198,12 @@ const styles = StyleSheet.create({
         height: 90,
         borderRadius: 45,
         marginLeft: 30,
-        marginTop: 20,
+        marginTop: 5,
     },
     text_tablet: {
         fontSize: 30,
         fontFamily: 'medium',
-        marginTop: -80,
+        marginTop: -65,
         alignSelf: 'center',
     },
     continueButton_tablet: {

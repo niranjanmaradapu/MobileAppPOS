@@ -341,7 +341,7 @@ class Home extends Component {
         const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
         axios.get(HomeGraphsService.getLastVsThisMonthSale() + params).then(res => {
             console.log("Last vs This Month Sale", res.data.result);
-            this.setState({ thisVsLastMonthSale: res.data.result.amount });
+            this.setState({ thisVsLastMonthSale: res.data.result.percentValue });
         });
     }
 

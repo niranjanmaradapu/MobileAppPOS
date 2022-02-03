@@ -194,7 +194,7 @@ export default class ReportsDashboard extends Component {
                         let indexLabels = [];
 
                         this.state.topSalesData.forEach(datas => {
-                            indexName.push(datas.storeId);
+                            indexName.push(datas.name);
                             indexCount.push(datas.amount);
                         });
                         // colors.forEach(data => {
@@ -203,27 +203,29 @@ export default class ReportsDashboard extends Component {
 
                         console.log("index", indexName, indexCount);
 
-                        axios.post(InventoryService.getStoreNameById(), indexName).then(res => {
-                            let storeName = res.data.result;
-                            console.log("store Names response", res.data.result);
-                            if (res) {
-                                storeName.forEach((ele, index) => {
-                                    indexLabels.push(ele.name);
-                                });
+                        // axios.post(InventoryService.getStoreNameById(), indexName).then(res => {
+                        //     let storeName = res.data.result;
+                        //     console.log("store Names response", res.data.result);
+                        //     if (res) {
+                        //         storeName.forEach((ele, index) => {
+                        //             indexLabels.push(ele.name);
+                        //         });
+                        //     }
+                        //     this.setState({ storeNames: indexLabels }, 
+                        //         () => {
+                                    
+                        //         });
+                        // });
+
+                        this.setState({
+                            topSalesChart: {
+                                labels: indexName,
+                                datasets: [
+                                    {
+                                        data: indexCount
+                                    }
+                                ]
                             }
-                            this.setState({ storeNames: indexLabels }, 
-                                () => {
-                                    this.setState({
-                                        topSalesChart: {
-                                            labels: this.state.storeNames,
-                                            datasets: [
-                                                {
-                                                    data: indexCount
-                                                }
-                                            ]
-                                        }
-                                    });
-                                });
                         });
                         
                         console.log("store Name", indexLabels);
