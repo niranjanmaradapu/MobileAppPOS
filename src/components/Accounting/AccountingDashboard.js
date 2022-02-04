@@ -69,14 +69,6 @@ export default class AccountingDashboard extends Component {
             usedAmountByStoreData: [],
             usedBalancedAmountData: [],
             balncedAmountByStoreData: [],
-            usedBalancedAmountChart: {
-                labels: [],
-                datasets: [
-                    {
-                        data: []
-                    }
-                ]
-            },
             debitNotesByStoreGraph: {
                 labels: [],
                 datasets: [
@@ -124,41 +116,43 @@ export default class AccountingDashboard extends Component {
     debitNotesByStore() {
         axios.get(AccountingPortalGraphsService.getDebitnNotesByStores()).then(res => {
             if (res) {
-                console.log(res.data);
-                this.setState({ debitNotesByStoreData: res.data.result },
-                    () => {
-                        let indexName = [];
-                        let indexCount = [];
-                        let indexColor = [];
-                        let indexHoverColor = [];
+                console.log("debit notes by store", res.data);
+                if (res.data.result !== "null" && res.data.result.length > 0) {
+                    this.setState({ debitNotesByStoreData: res.data.result },
+                        () => {
+                            let indexName = [];
+                            let indexCount = [];
+                            let indexColor = [];
+                            let indexHoverColor = [];
 
-                        this.state.debitNotesByStoreData.forEach(data => {
-                            indexName.push(data.storeId);
-                            indexCount.push(data.damount);
-                        });
+                            this.state.debitNotesByStoreData.forEach(data => {
+                                indexName.push(data.storeId);
+                                indexCount.push(data.damount);
+                            });
 
-                        // colors.forEach(data => {
-                        //     indexColor.push(data.normalColorCode);
-                        //     indexHoverColor.push(data.hoverColorCode);
-                        // });
-                        this.state.debitNotesByStoreValues.push({
-                            name: indexName,
-                            value: indexCount,
-                            color: '#25f1d5',
-                        });
-                        this.setState({
-                            debitNotesByStoreGraph: {
-                                labels: indexName,
-                                datasets: [
-                                    {
-                                        data: indexCount,
-                                    }
-                                ]
-                            },
-                            debitNotesByStoreValues: this.state.debitNotesByStoreValues
-                        });
+                            // colors.forEach(data => {
+                            //     indexColor.push(data.normalColorCode);
+                            //     indexHoverColor.push(data.hoverColorCode);
+                            // });
+                            this.state.debitNotesByStoreValues.push({
+                                name: indexName,
+                                value: indexCount,
+                                color: '#25f1d5',
+                            });
+                            this.setState({
+                                debitNotesByStoreGraph: {
+                                    labels: indexName,
+                                    datasets: [
+                                        {
+                                            data: indexCount,
+                                        }
+                                    ]
+                                },
+                                debitNotesByStoreValues: this.state.debitNotesByStoreValues
+                            });
 
-                    });
+                        });
+                }
             }
             console.log("Debit Notes By Store", this.state.debitNotesByStoreGraph);
         });
@@ -168,38 +162,39 @@ export default class AccountingDashboard extends Component {
         axios.get(AccountingPortalGraphsService.getUsedBalancedAmmounts()).then(res => {
             console.log("Used Balanced", res.data.result);
             if (res) {
-                this.setState({ usedBalancedAmountData: res.data.result },
-                    () => {
-                        let indexName = [];
-                        let indexCount = [];
-                        let indexCount2 = [];
+                if (res.data.result !== "null" && res.data.result.length > 0) {
+                    this.setState({ usedBalancedAmountData: res.data.result },
+                        () => {
+                            let indexName = [];
+                            let indexCount = [];
+                            let indexCount2 = [];
 
-                        this.state.usedBalancedAmountData.forEach(data => {
-                            indexName.push(data.storeId);
-                            indexCount.push(data.actualAmount);
-                            indexCount2.push(data.transactionAmount);
+                            this.state.usedBalancedAmountData.forEach(data => {
+                                indexName.push(data.storeId);
+                                indexCount.push(data.actualAmount);
+                                indexCount2.push(data.transactionAmount);
+                            });
+
+                            this.setState({
+                                usedAmountByStoreGraph: {
+                                    labels: indexName,
+                                    datasets: [
+                                        {
+                                            data: indexCount,
+                                        }
+                                    ]
+                                },
+                                balncedAmountByStoreGraph: {
+                                    labels: indexName,
+                                    datasets: [
+                                        {
+                                            data: indexCount2,
+                                        }
+                                    ]
+                                }
+                            });
                         });
-
-                        this.setState({
-                            usedAmountByStoreGraph: {
-                                labels: indexName,
-                                datasets: [
-                                    {
-                                        data: indexCount,
-                                    }
-                                ]
-                            },
-                            balncedAmountByStoreGraph: {
-                                labels: indexName,
-                                datasets: [
-                                    {
-                                        data: indexCount2,
-                                    }
-                                ]
-                            }
-                        });
-
-                    });
+                }
             }
         });
     }

@@ -257,14 +257,25 @@ export default class NewSaleReport extends Component {
                         <Modal isVisible={this.state.modalVisible}>
 
                             <View style={styles.deleteMainContainer}>
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                        <View>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > New Sale Report </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 2 : 1,
+                                        width: deviceWidth,
+                                        backgroundColor: 'lightgray',
+                                    }}></Text>
+                                </View>
 
-                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete New Sale Report </Text>
 
-                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.estimationModelCancel()}>
-                                    <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
-                                </TouchableOpacity>
-                                <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                                </Text>
                                 <Text style={{
                                     position: 'absolute',
                                     top: 70,
@@ -296,13 +307,24 @@ export default class NewSaleReport extends Component {
                     <View>
                         <Modal isVisible={this.props.modalVisible}>
                             <View style={styles.filterMainContainer} >
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                        <View>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 2 : 1,
+                                        width: deviceWidth,
+                                        backgroundColor: 'lightgray',
+                                    }}></Text>
+                                </View>
                                 <KeyboardAwareScrollView enableOnAndroid={true} >
-                                    <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
-                                    <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
-                                    </TouchableOpacity>
-                                    <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                                    </Text>
                                     <TouchableOpacity
                                         style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
                                         testID="openModal"
@@ -364,7 +386,7 @@ export default class NewSaleReport extends Component {
                                             />
                                         </View>
                                     )}
-                                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                                    <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile , {width: deviceWidth -40}]}>
                                         <RNPickerSelect
                                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                             placeholder={{
@@ -386,7 +408,7 @@ export default class NewSaleReport extends Component {
                                         />
                                     </View>
                                     <TextInput
-                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="INVOICE NUMBER"
                                         placeholderTextColor="#6F6F6F"
@@ -396,7 +418,7 @@ export default class NewSaleReport extends Component {
                                         onChangeText={this.handleInvoiceNumber}
                                     />
                                     <TextInput
-                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="MOBILE NUMBER"
                                         placeholderTextColor="#6F6F6F"
@@ -406,7 +428,7 @@ export default class NewSaleReport extends Component {
                                         onChangeText={this.handleMobile}
                                     />
                                     <TextInput
-                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="EMP ID"
                                         placeholderTextColor="#6F6F6F"
@@ -435,14 +457,24 @@ export default class NewSaleReport extends Component {
                         <Modal isVisible={this.state.modalVisible}>
 
                             <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 670 : 640 }]}>
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                        <View>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Sale bill Details </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 2 : 1,
+                                        width: deviceWidth,
+                                        backgroundColor: 'lightgray',
+                                    }}></Text>
+                                </View>
 
-                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Sale bill Details </Text>
-
-                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.estimationModelCancel()}>
-                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
-                                </TouchableOpacity>
-                                <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                                </Text>
                                 <Text style={Device.isTablet ? styles.viewtext_tablet : styles.viewtext_mobile} >
                                     Memo No:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext_tablet : styles.viewsubtext_mobile} >

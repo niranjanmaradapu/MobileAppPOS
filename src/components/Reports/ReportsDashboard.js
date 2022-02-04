@@ -6,7 +6,6 @@ import { BarChart, PieChart } from 'react-native-chart-kit';
 import Device from 'react-native-device-detection';
 import colors from '../../colors.json';
 import ReportsGraphsService from '../services/Graphs/ReportsGraphsService';
-import InventoryService from '../services/InventoryService';
 var deviceWidth = Dimensions.get('window').width;
 
 const chartConfig = {
@@ -73,6 +72,7 @@ export default class ReportsDashboard extends Component {
         }).catch(() => {
             console.log('there is error getting storeId');
         });
+
         
 
         AsyncStorage.getItem("storeName").then((value) => {
@@ -90,30 +90,31 @@ export default class ReportsDashboard extends Component {
         const param = '?storeId=' + this.state.storeId;
         axios.get(ReportsGraphsService.getInvocesGenerated() + param).then(res => {
             if (res) {
-                this.setState({ invoicesGenerted: res.data.result },
-                    () => {
-                        let indexName = [];
-                        let indexCount = [];
-                        let indexColor = [];
+                if (res.data.result !== "null" && res.data.result.length > 0) {
+                    this.setState({ invoicesGenerted: res.data.result },
+                        () => {
+                            let indexName = [];
+                            let indexCount = [];
+                            let indexColor = [];
 
-                        this.state.invoicesGenerted.forEach(data => {
-                            indexName.push(data.month);
-                            indexCount.push(data.amount);
-                            colors.forEach(data => {
-                                indexColor.push(data.normalColorCode);
+                            this.state.invoicesGenerted.forEach(data => {
+                                indexName.push(data.month);
+                                indexCount.push(data.amount);
+                                colors.forEach(data => {
+                                    indexColor.push(data.normalColorCode);
+                                });
                             });
+
+                            for (var i = 0; i < this.state.invoicesGenerted.length; i++) {
+                                this.state.invoicesChart.push({
+                                    name: indexName[i],
+                                    count: indexCount[i],
+                                    color: indexColor[i]
+                                });
+                            }
+                            this.setState({ invoicesChart: this.state.invoicesChart });
                         });
-
-                        for (var i = 0; i < this.state.invoicesGenerted.length; i++) {
-                            this.state.invoicesChart.push({
-                                name: indexName[i],
-                                count: indexCount[i],
-                                color: indexColor[i]
-                            });
-                        }
-                        this.setState({ invoicesChart: this.state.invoicesChart });
-                    });
-
+                }
             }
         }).catch(error => console.log(error));
     }
@@ -122,30 +123,32 @@ export default class ReportsDashboard extends Component {
         axios.get(ReportsGraphsService.getSaleSummary()).then(response => {
             console.warn("hello");
             if (response) {
-                this.setState({ salesSummaryData: response.data.result },
-                    () => {
-                        let indexName = [];
-                        let indexCount = [];
-                        let indexColor = [];
+                if (response.data.result !== "null" && response.data.result.length > 0) {
+                    this.setState({ salesSummaryData: response.data.result },
+                        () => {
+                            let indexName = [];
+                            let indexCount = [];
+                            let indexColor = [];
 
-                        this.state.salesSummaryData.forEach(data => {
-                            indexName.push(data.name);
-                            indexCount.push(data.amount);
-                            colors.forEach(data => {
-                                indexColor.push(data.normalColorCode);
+                            this.state.salesSummaryData.forEach(data => {
+                                indexName.push(data.name);
+                                indexCount.push(data.amount);
+                                colors.forEach(data => {
+                                    indexColor.push(data.normalColorCode);
+                                });
                             });
+
+                            for (var i = 0; i < this.state.salesSummaryData.length; i++) {
+                                this.state.salesSummaryChart.push({
+                                    name: indexName[i],
+                                    count: indexCount[i],
+                                    color: indexColor[i]
+                                });
+                            }
+
+                            this.setState({ salesSummaryChart: this.state.salesSummaryChart });
                         });
-
-                        for (var i = 0; i < this.state.salesSummaryData.length; i++) {
-                            this.state.salesSummaryChart.push({
-                                name: indexName[i],
-                                count: indexCount[i],
-                                color: indexColor[i]
-                            });
-                        }
-
-                        this.setState({ salesSummaryChart: this.state.salesSummaryChart });
-                    });
+                }
             }
             console.log("sales Summary" + this.state.salesSummaryChart);
         });
@@ -154,86 +157,69 @@ export default class ReportsDashboard extends Component {
     getActiveVsInactivePromos() {
         axios.get(ReportsGraphsService.getActiveInactivePromos()).then(response => {
             if (response) {
-                console.log('Active Inactive Promos', response.data.result);
-                this.setState({ activeVsInactiveData: response.data.result },
-                    () => {
-                        let indexName = [];
-                        let indexCount = [];
-                        let indexColor = [];
+                if (response.data.result !== "null" && response.data.result.length > 0) {
+                    console.log('Active Inactive Promos', response.data.result);
+                    this.setState({ activeVsInactiveData: response.data.result },
+                        () => {
+                            let indexName = [];
+                            let indexCount = [];
+                            let indexColor = [];
 
-                        this.state.activeVsInactiveData.forEach(data => {
-                            indexName.push(data.name);
-                            indexCount.push(data.count);
-                            colors.forEach(data => {
-                                indexColor.push(data.normalColorCode);
+                            this.state.activeVsInactiveData.forEach(data => {
+                                indexName.push(data.name);
+                                indexCount.push(data.count);
+                                colors.forEach(data => {
+                                    indexColor.push(data.normalColorCode);
+                                });
                             });
+
+                            for (var i = 0; i < this.state.activeVsInactiveData.length; i++) {
+                                this.state.activeVsInactiveChart.push({
+                                    name: indexName[i],
+                                    count: indexCount[i],
+                                    color: indexColor[i]
+                                });
+                            }
+                            this.setState({ activeVsInactiveChart: this.state.activeVsInactiveChart });
                         });
-
-                        for (var i = 0; i < this.state.activeVsInactiveData.length; i++) {
-                            this.state.activeVsInactiveChart.push({
-                                name: indexName[i],
-                                count: indexCount[i],
-                                color: indexColor[i]
-                            });
-                        }
-                        this.setState({ activeVsInactiveChart: this.state.activeVsInactiveChart });
-                    });
+                }
             }
         });
-
     }
+
     getTopFiveSales() {
         axios.get(ReportsGraphsService.getTopFiveSales()).then(response => {
             console.log('Top Five Sales', response.data);
             if (response) {
-                this.setState({ topSalesData: response.data.result },
-                    () => {
-                        let indexName = [];
-                        let indexCount = [];
-                        let indexColor = [];
-                        let indexLabels = [];
+                if (response.data.result !== "null" && response.data.result.length > 0) {
+                    this.setState({ topSalesData: response.data.result },
+                        () => {
+                            let indexName = [];
+                            let indexCount = [];
+                            let indexColor = [];
+                            let indexLabels = [];
 
-                        this.state.topSalesData.forEach(datas => {
-                            indexName.push(datas.name);
-                            indexCount.push(datas.amount);
+                            this.state.topSalesData.forEach(datas => {
+                                indexName.push(datas.name);
+                                indexCount.push(datas.amount);
+                            });
+
+                            console.log("index", indexName, indexCount);
+                            this.setState({
+                                topSalesChart: {
+                                    labels: indexName,
+                                    datasets: [
+                                        {
+                                            data: indexCount
+                                        }
+                                    ]
+                                }
+                            });
+
+                            console.log("store Name", indexLabels);
+                            console.log("store Id", indexName);
                         });
-                        // colors.forEach(data => {
-                        //     indexColor.push(data.normalColorCode);
-                        // });
-
-                        console.log("index", indexName, indexCount);
-
-                        // axios.post(InventoryService.getStoreNameById(), indexName).then(res => {
-                        //     let storeName = res.data.result;
-                        //     console.log("store Names response", res.data.result);
-                        //     if (res) {
-                        //         storeName.forEach((ele, index) => {
-                        //             indexLabels.push(ele.name);
-                        //         });
-                        //     }
-                        //     this.setState({ storeNames: indexLabels }, 
-                        //         () => {
-                                    
-                        //         });
-                        // });
-
-                        this.setState({
-                            topSalesChart: {
-                                labels: indexName,
-                                datasets: [
-                                    {
-                                        data: indexCount
-                                    }
-                                ]
-                            }
-                        });
-                        
-                        console.log("store Name", indexLabels);
-                        console.log("store Id", indexName);
-
-                        
-                    });
-
+                }
             }
             console.log("top sales Chart", this.state.topSalesChart);
         });

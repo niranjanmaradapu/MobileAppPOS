@@ -178,13 +178,24 @@ export class ListOfPromotions extends Component {
                     <View>
                         <Modal isVisible={this.props.modalVisible}>
                             <View style={styles.filterMainContainer} >
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                        <View>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter by </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 2 : 1,
+                                        width: deviceWidth,
+                                        backgroundColor: 'lightgray',
+                                    }}></Text>
+                                </View>
                                 <KeyboardAwareScrollView enableOnAndroid={true} >
-                                    <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
-                                    <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
-                                    </TouchableOpacity>
-                                    <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                                    </Text>
                                     <TouchableOpacity
                                         style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
                                         testID="openModal"
@@ -247,7 +258,7 @@ export class ListOfPromotions extends Component {
                                         </View>
                                     )}
                                     <TextInput
-                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="PROMO ID"
                                         placeholderTextColor="#6F6F6F"
@@ -256,7 +267,7 @@ export class ListOfPromotions extends Component {
                                         value={this.state.promoId}
                                         onChangeText={this.handlePromoId}
                                     />
-                                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                                    <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 40 }]}>
                                         <RNPickerSelect
                                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                             placeholder={{
@@ -579,7 +590,7 @@ const styles = StyleSheet.create({
         height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
-        marginTop: 60,
+
     },
     input_tablet: {
         justifyContent: 'center',

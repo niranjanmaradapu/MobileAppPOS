@@ -217,8 +217,8 @@ export default class GenerateReturnSlip extends Component {
     render() {
         return (
             <View>
-                <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between' }}>
-                    <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.35 : deviceWidth / 1.6 }]}
+                <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between', marginTop: 20 }}>
+                    <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.25 : deviceWidth / 1.5 }]}
                         underlineColorAndroid="transparent"
                         placeholder="INVOICE NUMBER"
                         placeholderTextColor="#6F6F6F"
@@ -229,9 +229,9 @@ export default class GenerateReturnSlip extends Component {
                         onChangeText={(text) => this.handleInvoiceNumber(text)}
                     />
                     <TouchableOpacity
-                        style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 160 : 100, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: 10 }}
+                        style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 120 : 80, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: 10 }}
                         onPress={() => this.navigateToScanCode()} >
-                        <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 10 : 10 }]}> {('INVOICE SCAN')} </Text>
+                        <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 5 : 5 }]}> {('SCAN')} </Text>
                     </TouchableOpacity>
                 </View>
 
@@ -730,7 +730,7 @@ const styles = StyleSheet.create({
         margin: 20
     },
     navButtonText_tablet: {
-        fontSize: 17,
+        fontSize: 22,
         fontFamily: 'regular',
         color: '#ffffff',
         marginLeft: 10,
@@ -738,7 +738,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     navButtonText_mobile: {
-        fontSize: 12,
+        fontSize: 17,
         fontFamily: 'regular',
         color: '#ffffff',
         marginLeft: 10,
@@ -1037,7 +1037,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         position: 'absolute',
         top: 10,
-        right: 24,
+        right: 14,
     },
     filterMainContainer_tablet: {
         width: deviceWidth,
@@ -1076,7 +1076,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         position: 'absolute',
         top: 10,
-        right: 24,
+        right: 14,
     },
     filterApplyButton_tablet: {
         width: deviceWidth - 40,

@@ -409,7 +409,7 @@ class GenerateEstimationSlip extends Component {
                                     onEndEditing={() => this.endEditing()}
                                 />
 
-                                <TextInput style={Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start}
+                                <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, {width: Device.isTablet ? 450 : 150}]}
                                     underlineColorAndroid="transparent"
                                     placeholder="SM Number"
                                     placeholderTextColor="#6F6F6F60"
@@ -423,7 +423,7 @@ class GenerateEstimationSlip extends Component {
                                 />
 
                                 {this.state.uom === "Pieces" && (
-                                    <TextInput style={Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit}
+                                <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 230 : 100 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         placeholderTextColor="#6F6F6F60"
@@ -432,10 +432,10 @@ class GenerateEstimationSlip extends Component {
                                         autoCapitalize="none"
                                         editable={false} selectTextOnFocus={false}
                                     />
-                                )}
+                                )} 
 
                                 {this.state.uom === "Meters" && (
-                                    <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
+                                    <TextInput style={[Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 230 : 100 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         keyboardType={'default'}
@@ -453,7 +453,7 @@ class GenerateEstimationSlip extends Component {
                                         Device.isTablet ? styles.input_tabletbutton_normal : styles.input_mobilebutton_normal
                                     }
                                     onPress={() => this.navigateToScanCode()} >
-                                    <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 0 : 0,marginLeft: Device.isTablet ? -20 : -10 }]}> {('BARCODE SCAN')} </Text>
+                                    <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { marginTop: Device.isTablet ? 0 : 0, marginLeft: Device.isTablet ? -20 : -10 }]}> {('SCAN')} </Text>
                                 </TouchableOpacity>
 
 
@@ -1523,8 +1523,8 @@ const styles = StyleSheet.create({
     },
     input_mobilebutton_normal: {
         justifyContent: 'center',
-        marginLeft: deviceWidth - 130,
-        width: deviceWidth / 3 - 10,
+        marginLeft: deviceWidth - 100,
+        width: deviceWidth / 4 - 10,
         height: 44,
         marginTop: -55,
         marginBottom: 10,
@@ -1634,14 +1634,6 @@ const styles = StyleSheet.create({
         marginTop: 8,
         alignSelf: 'center'
     },
-    navButtonText_mobile: {
-        fontSize: 12,
-        fontFamily: 'regular',
-        color: '#ffffff',
-        marginLeft: 10,
-        marginTop: 8,
-        alignSelf: 'center'
-    },
     signInButton_mobile: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
@@ -1713,7 +1705,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 14,
+        fontSize: 22,
     },
     input_tablet_normal: {
         justifyContent: 'center',
@@ -1728,12 +1720,13 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
+        
         fontSize: 22,
     },
     input_tabletbutton_normal: {
         justifyContent: 'center',
-        marginLeft: deviceWidth  - 230,
-        width: deviceWidth / 3 - 50,
+        marginLeft: deviceWidth - 145,
+        width: deviceWidth / 4 - 100,
         height: 55,
         borderRadius: 10,
         marginTop: -65,
@@ -1861,7 +1854,7 @@ const styles = StyleSheet.create({
         height: 42,
     },
     navButtonText_tablet: {
-        fontSize: 17,
+        fontSize: 22,
         fontFamily: 'regular',
         color: '#ffffff',
         marginLeft: 10,
@@ -2023,11 +2016,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center'
     },
     navButtonText_mobile: {
-        fontSize: 12,
+        fontSize: 17,
         fontFamily: 'regular',
         color: '#ffffff',
         marginLeft: 10,
-        marginTop: 8,
+        marginTop: 0,
         alignSelf: 'center'
     },
 
@@ -2201,14 +2194,7 @@ const styles = StyleSheet.create({
         width: 155,
         height: 42,
     },
-    navButtonText_tablet: {
-        fontSize: 17,
-        fontFamily: 'regular',
-        color: '#ffffff',
-        marginLeft: 10,
-        marginTop: 8,
-        alignSelf: 'center'
-    },
+
 
     // Styles for mobile
     filterMainContainer_mobile: {

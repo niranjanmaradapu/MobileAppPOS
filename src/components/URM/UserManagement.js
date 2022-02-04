@@ -528,43 +528,30 @@ export default class UserManagement extends Component {
                                             {this.state.roleDelete && (
                                                 <View>
                                                     <Modal isVisible={this.state.modalVisible}>
-                                                        <View style={{
-                                                            width: deviceWidth,
-                                                            alignItems: 'center',
-                                                            marginLeft: -20,
-                                                            backgroundColor: "#ffffff",
-                                                            height: 260,
-                                                            position: 'absolute',
-                                                            bottom: -20,
-                                                        }}>
-                                                            <Text style={{
-                                                                position: 'absolute',
-                                                                left: 20,
-                                                                top: 15,
-                                                                width: 300,
-                                                                height: 20,
-                                                                fontFamily: 'medium',
-                                                                fontSize: 16,
-                                                                color: '#353C40'
-                                                            }}> Delete Role </Text>
-                                                            <TouchableOpacity style={{
-                                                                position: 'absolute',
-                                                                right: 20,
-                                                                top: 7,
-                                                                width: 50, height: 50,
-                                                            }} onPress={() => this.modelCancel()}>
-                                                                <Image style={{ color: '#ED1C24', fontFamily: 'regular', fontSize: 12, position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/modelcancel.png')} />
-                                                            </TouchableOpacity>
+                                                        <View style={[styles.filterMainContainer, { height: Device.isTablet ? 300 : 250, marginTop: Device.isTablet ? deviceheight - 300 : deviceheight - 250 }]}>
+                                                            <View>
+                                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                                                    <View>
+                                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Role </Text>
+                                                                    </View>
+                                                                    <View>
+                                                                        <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                                            <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                                        </TouchableOpacity>
+                                                                    </View>
+                                                                </View>
+                                                                <Text style={{
+                                                                    height: Device.isTablet ? 2 : 1,
+                                                                    width: deviceWidth,
+                                                                    backgroundColor: 'lightgray',
+                                                                }}></Text>
+                                                            </View>
 
-                                                            <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                                            </Text>
                                                             <Text style={{
-                                                                position: 'absolute',
-                                                                top: 70,
-                                                                height: 20,
+                                                                marginLeft: 20,
                                                                 textAlign: 'center',
                                                                 fontFamily: 'regular',
-                                                                fontSize: 18,
+                                                                fontSize: Device.isTablet ? 22 : 17,
                                                                 color: '#353C40'
                                                             }}> Are you sure want to delete Role?  </Text>
                                                             <TouchableOpacity
@@ -633,17 +620,26 @@ export default class UserManagement extends Component {
                                                 <View>
                                                     <Modal isVisible={this.state.modalVisible}>
                                                         <View style={styles.deleteMainContainer}>
-                                                            <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete User </Text>
-                                                            <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                                <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
-                                                            </TouchableOpacity>
-
-                                                            <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                                            </Text>
+                                                            <View>
+                                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                                                    <View>
+                                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete User </Text>
+                                                                    </View>
+                                                                    <View>
+                                                                        <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                                            <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                                        </TouchableOpacity>
+                                                                    </View>
+                                                                </View>
+                                                                <Text style={{
+                                                                    height: Device.isTablet ? 2 : 1,
+                                                                    width: deviceWidth,
+                                                                    backgroundColor: 'lightgray',
+                                                                }}></Text>
+                                                            </View>
                                                             <Text style={{
                                                                 // position: 'absolute',
                                                                 // top: 70,
-                                                                height: Device.isTablet ? 40 : 20,
                                                                 textAlign: 'center',
                                                                 fontFamily: 'regular',
                                                                 fontSize: Device.isTablet ? 23 : 18,
@@ -651,7 +647,7 @@ export default class UserManagement extends Component {
                                                                 color: '#353C40'
                                                             }}> Are you sure want to delete User?  </Text>
                                                             <TouchableOpacity
-                                                                style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 65 : 40 }]}
+                                                                style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 45 : 30 }]}
                                                                 onPress={() => this.deleteUser(item, index)}
                                                             >
                                                                 <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
@@ -685,16 +681,28 @@ export default class UserManagement extends Component {
                             <View>
                                 <Modal isVisible={this.state.modalVisible}>
                                     <View style={styles.filterMainContainer} >
+                                        <View>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                                <View>
+                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                                                </View>
+                                                <View>
+                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                        <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </View>
+                                            <Text style={{
+                                                height: Device.isTablet ? 2 : 1,
+                                                width: deviceWidth,
+                                                backgroundColor: 'lightgray',
+                                            }}></Text>
+                                        </View>
                                         <KeyboardAwareScrollView enableOnAndroid={true} >
-                                            <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
-                                            <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
-                                            </TouchableOpacity>
-                                            <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                                            </Text>
+
 
                                             <TextInput
-                                                style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                                style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                                 underlineColorAndroid="transparent"
                                                 placeholder="ROLE"
                                                 placeholderTextColor="#6F6F6F"
@@ -704,7 +712,7 @@ export default class UserManagement extends Component {
                                                 onChangeText={this.handleRole}
                                             />
                                             <TextInput
-                                                style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                                style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                                 underlineColorAndroid="transparent"
                                                 placeholder="CREATED BY"
                                                 placeholderTextColor="#6F6F6F"
@@ -788,14 +796,26 @@ export default class UserManagement extends Component {
                             <View>
                                 <Modal isVisible={this.state.modalVisible}>
                                     <View style={styles.filterMainContainer} >
+                                        <View>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                                <View>
+                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                                                </View>
+                                                <View>
+                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                        <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </View>
+                                            <Text style={{
+                                                height: Device.isTablet ? 2 : 1,
+                                                width: deviceWidth,
+                                                backgroundColor: 'lightgray',
+                                            }}></Text>
+                                        </View>
                                         <KeyboardAwareScrollView enableOnAndroid={true} >
-                                            <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
-                                            <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
-                                            </TouchableOpacity>
-                                            <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                                            </Text>
-                                            <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+
+                                            <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, {width: deviceWidth - 40}]}>
                                                 <RNPickerSelect
                                                     style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                                     placeholder={{
@@ -815,7 +835,7 @@ export default class UserManagement extends Component {
                                                 />
                                             </View>
                                             <TextInput
-                                                style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                                style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                                 underlineColorAndroid="transparent"
                                                 placeholder="ROLE"
                                                 placeholderTextColor="#6F6F6F"
@@ -825,7 +845,7 @@ export default class UserManagement extends Component {
                                                 onChangeText={this.handleRole}
                                             />
                                             <TextInput
-                                                style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                                style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                                 underlineColorAndroid="transparent"
                                                 placeholder="STORE/BRANCH"
                                                 placeholderTextColor="#6F6F6F"
@@ -979,8 +999,8 @@ const styles = StyleSheet.create({
         marginRight: -40,
         backgroundColor: '#ffffff',
         paddingLeft: Device.isTablet ? 0 : 20,
-        marginTop: Device.isTablet ? deviceheight - 350 : deviceheight - 240,
-        height: Device.isTablet ? 350 : 240,
+        marginTop: Device.isTablet ? deviceheight - 300 : deviceheight - 250,
+        height: Device.isTablet ? 300 : 250,
     },
     modelCloseImage: {
         fontFamily: 'regular',

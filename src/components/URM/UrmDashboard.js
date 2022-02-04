@@ -67,41 +67,43 @@ export default class UrmDashboard extends Component {
         const param = '?clientId=' + clientId;
         axios.get(URMGraphsService.getActiveUsers() + param).then(response => {
             if (response) {
-                this.setState({ activeUsersData: response.data.result },
-                    () => {
-                        console.log("ActiveUsersVSInactiveUser", this.state.activeUsersData);
-                        let indexName = [];
-                        let indexCount = [];
-                        let indexColor = [];
-                        let indexHoverColor = [];
+                if (response.data.result !== "null" && response.data.result.length > 0) {
+                    this.setState({ activeUsersData: response.data.result },
+                        () => {
+                            console.log("ActiveUsersVSInactiveUser", this.state.activeUsersData);
+                            let indexName = [];
+                            let indexCount = [];
+                            let indexColor = [];
+                            let indexHoverColor = [];
 
-                        this.state.activeUsersData.forEach(datas => {
-                            indexName.push(datas.name);
-                            indexCount.push(datas.count);
-                            colors.forEach(data => {
-                                indexColor.push(data.normalColorCode);
-                                // if (datas.name !== null) {
-                                //     console.log('data is null');
-                                // }
+                            this.state.activeUsersData.forEach(datas => {
+                                indexName.push(datas.name);
+                                indexCount.push(datas.count);
+                                colors.forEach(data => {
+                                    indexColor.push(data.normalColorCode);
+                                    // if (datas.name !== null) {
+                                    //     console.log('data is null');
+                                    // }
+                                });
                             });
-                        });
-                        for (let i = 0; i < this.state.activeUsersData.length; i++) {
-                            if (indexName[i] === 'ActiveUsers') {
-                                this.setState({ activeCount: indexCount[i] });
-                            } else if (indexName[i] === 'inactiveUsers') {
-                                this.setState({ inactiveCount: indexCount[i] });
+                            for (let i = 0; i < this.state.activeUsersData.length; i++) {
+                                if (indexName[i] === 'ActiveUsers') {
+                                    this.setState({ activeCount: indexCount[i] });
+                                } else if (indexName[i] === 'inactiveUsers') {
+                                    this.setState({ inactiveCount: indexCount[i] });
+                                }
+                                this.state.activeInactiveUsersChart.push({
+                                    name: indexName[i],
+                                    count: indexCount[i],
+                                    color: indexColor[i],
+                                    legendFontColor: "#7F7F7F",
+                                    legendFontSize: 0
+                                });
                             }
-                            this.state.activeInactiveUsersChart.push({
-                                name: indexName[i],
-                                count: indexCount[i],
-                                color: indexColor[i],
-                                legendFontColor: "#7F7F7F",
-                                legendFontSize: 0
-                            });
+                            this.setState({ activeInactiveUsersChart: this.state.activeInactiveUsersChart });
                         }
-                        this.setState({ activeInactiveUsersChart: this.state.activeInactiveUsersChart });
-                    }
-                );
+                    );
+                }
             }
         });
     }
@@ -111,39 +113,41 @@ export default class UrmDashboard extends Component {
         const param = '?clientId=' + clientId;
         axios.get(URMGraphsService.getStoresVsEmployees() + param).then(response => {
             if (response) {
-                this.setState({ storesData: response.data.result },
-                    () => {
-                        console.log("StoresVsEmployees", this.state.storesData);
-                        let indexName = [];
-                        let indexCount = [];
-                        let indexColor = [];
-                        let indexHoverColor = [];
+                if (response.data.result !== "null" && response.data.result.length > 0) {
+                    this.setState({ storesData: response.data.result },
+                        () => {
+                            console.log("StoresVsEmployees", this.state.storesData);
+                            let indexName = [];
+                            let indexCount = [];
+                            let indexColor = [];
+                            let indexHoverColor = [];
 
-                        this.state.storesData.forEach(datas => {
-                            indexName.push(datas.name);
-                            indexCount.push(datas.count);
-                            colors.forEach(datas => {
-                                indexColor.push(datas.normalColorCode);
+                            this.state.storesData.forEach(datas => {
+                                indexName.push(datas.name);
+                                indexCount.push(datas.count);
+                                colors.forEach(datas => {
+                                    indexColor.push(datas.normalColorCode);
+                                });
                             });
-                        });
-                        for (let i = 0; i < this.state.storesData.length; i++) {
-                            if (indexName[i] === 'stores') {
-                                this.setState({ storesCount: indexCount[i] });
-                            } else if (indexName[i] === "users") {
-                                this.setState({ employeesCount: indexCount[i] });
+                            for (let i = 0; i < this.state.storesData.length; i++) {
+                                if (indexName[i] === 'stores') {
+                                    this.setState({ storesCount: indexCount[i] });
+                                } else if (indexName[i] === "users") {
+                                    this.setState({ employeesCount: indexCount[i] });
+                                }
+                                this.state.storesVsEmployeesChart.push({
+                                    name: indexName[i],
+                                    count: indexCount[i],
+                                    color: indexColor[i],
+                                    legendFontColor: "#7F7F7F",
+                                    legendFontSize: Device.isTablet ? 20 : 15
+                                });
                             }
-                            this.state.storesVsEmployeesChart.push({
-                                name: indexName[i],
-                                count: indexCount[i],
-                                color: indexColor[i],
-                                legendFontColor: "#7F7F7F",
-                                legendFontSize: Device.isTablet ? 20 : 15
-                            });
-                        }
-                        this.setState({ storesVsEmployeesChart: this.state.storesVsEmployeesChart });
+                            this.setState({ storesVsEmployeesChart: this.state.storesVsEmployeesChart });
 
-                    }
-                );
+                        }
+                    );
+                }
             }
         });
     }
@@ -154,46 +158,48 @@ export default class UrmDashboard extends Component {
         const param = '?clientId=' + clientId;
         axios.get(URMGraphsService.getUsersByRole() + param).then(res => {
             if (res) {
-                this.setState({ usersData: res.data.result },
-                    () => {
-                        console.log("usersByRole", this.state.usersData);
-                        let indexName = [];
-                        let indexCount = [];
-                        let indexColor = [];
-                        let indexHoverColor = [];
+                if (res.data.result !== "null" && res.data.result.length > 0) {
+                    this.setState({ usersData: res.data.result },
+                        () => {
+                            console.log("usersByRole", this.state.usersData);
+                            let indexName = [];
+                            let indexCount = [];
+                            let indexColor = [];
+                            let indexHoverColor = [];
 
-                        this.state.usersData.forEach(data => {
-                            indexName.push(data.name);
-                            indexCount.push(data.count);
-                            colors.forEach(data => {
-                                indexColor.push(data.normalColorCode);
+                            this.state.usersData.forEach(data => {
+                                indexName.push(data.name);
+                                indexCount.push(data.count);
+                                colors.forEach(data => {
+                                    indexColor.push(data.normalColorCode);
+                                });
                             });
-                        });
 
-                        for (var i = 0; i < this.state.usersData.length; i++) {
-                            if (indexCount[i] > 0) {
-                                this.state.usersByRolesValues.push({
+                            for (var i = 0; i < this.state.usersData.length; i++) {
+                                if (indexCount[i] > 0) {
+                                    this.state.usersByRolesValues.push({
+                                        name: indexName[i],
+                                        count: indexCount[i],
+                                        color: indexColor[i],
+                                    });
+                                    this.setState({ usersByRolesValues: this.state.usersByRolesValues });
+                                }
+                                this.state.usersByRoleChart.push({
                                     name: indexName[i],
                                     count: indexCount[i],
                                     color: indexColor[i],
+                                    legendFontColor: "#7F7F7F",
+                                    legendFontSize: Device.isTablet ? 20 : 15
                                 });
-                                this.setState({ usersByRolesValues: this.state.usersByRolesValues });
                             }
-                            this.state.usersByRoleChart.push({
-                                name: indexName[i],
-                                count: indexCount[i],
-                                color: indexColor[i],
-                                legendFontColor: "#7F7F7F",
-                                legendFontSize: Device.isTablet ? 20 : 15
-                            });
+
+                            this.setState({ usersByRoleChart: this.state.usersByRoleChart });
                         }
+                    );
+                    console.log(this.state.activeInactiveUsersChart);
+                    console.log(this.state.usersByRolesValues);
 
-                        this.setState({ usersByRoleChart: this.state.usersByRoleChart });
-                    }
-                );
-                console.log(this.state.activeInactiveUsersChart);
-                console.log(this.state.usersByRolesValues);
-
+                }
             }
         });
     }

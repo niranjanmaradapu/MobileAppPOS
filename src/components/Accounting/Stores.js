@@ -87,14 +87,24 @@ export class Stores extends Component {
                         <Modal isVisible={this.state.modalVisible}>
 
                             <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
-
-                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Store </Text>
-
-                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.storeModelCancel()}>
-                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
-                                </TouchableOpacity>
-                                <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                                </Text>
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                        <View>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Store </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 0 }} onPress={() => this.storeModelCancel()}>
+                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 2 : 1,
+                                        width: deviceWidth,
+                                        backgroundColor: 'lightgray',
+                                    }}></Text>
+                                </View>
+                                
                                 <Text style={{
                                     position: 'absolute',
                                     top: 70,
@@ -270,13 +280,25 @@ export class FilterStores extends Component {
 
             <Modal isVisible={this.props.modalVisible}>
                 <View style={Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile} >
+                    <View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                            <View>
+                                <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                            </View>
+                            <View>
+                                <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 0 }} onPress={() => this.modelCancel()}>
+                                    <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                        <Text style={{
+                            height: Device.isTablet ? 2 : 1,
+                            width: deviceWidth,
+                            backgroundColor: 'lightgray',
+                        }}></Text>
+                    </View>
                     <KeyboardAwareScrollView enableOnAndroid={true} >
-                        <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
-                        <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                            <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.modelCancelImage_mobile} source={require('../assets/images/modelcancel.png')} />
-                        </TouchableOpacity>
-                        <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                        </Text>
+                        
 
                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                             <RNPickerSelect
@@ -547,6 +569,14 @@ const styles = StyleSheet.create({
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 14,
+    },
+    modelCancelImage_mobile: {
+        color: '#ED1C24',
+        fontFamily: 'regular',
+        fontSize: 12,
+        position: 'absolute',
+        top: 8,
+        right: 5,
     },
 
     // Styles For Tablet

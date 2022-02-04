@@ -230,13 +230,24 @@ export class ListOfBarcodes extends Component {
                     <View>
                         <Modal isVisible={this.props.modalVisible}>
                             <View style={styles.filterMainContainer} >
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                        <View>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 2 : 1,
+                                        width: deviceWidth,
+                                        backgroundColor: 'lightgray',
+                                    }}></Text>
+                                </View>
                                 <KeyboardAwareScrollView enableOnAndroid={true} >
-                                    <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile} > Filter by </Text>
-                                    <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                        <Image style={styles.modelCloseImage} source={require('../assets/images/modelcancel.png')} />
-                                    </TouchableOpacity>
-                                    <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                                    </Text>
                                     <TouchableOpacity
                                         style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
                                         testID="openModal"
@@ -299,7 +310,7 @@ export class ListOfBarcodes extends Component {
                                         </View>
                                     )}
                                     <TextInput
-                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="BARCODE"
                                         placeholderTextColor="#6F6F6F"
@@ -325,7 +336,7 @@ export class ListOfBarcodes extends Component {
                                         />
                                     </View> */}
                                     <TextInput
-                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="EMP ID"
                                         placeholderTextColor="#6F6F6F"
@@ -335,7 +346,7 @@ export class ListOfBarcodes extends Component {
                                         onChangeText={this.handleEmpId}
                                     />
                                     <TextInput
-                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="PRICE <"
                                         placeholderTextColor="#6F6F6F"
@@ -345,7 +356,7 @@ export class ListOfBarcodes extends Component {
                                         onChangeText={this.handleFromPrice}
                                     />
                                     <TextInput
-                                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="PRICE >"
                                         placeholderTextColor="#6F6F6F"
@@ -373,14 +384,24 @@ export class ListOfBarcodes extends Component {
                         <Modal isVisible={this.state.modalVisible}>
 
                             <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 300 }]}>
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                        <View>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Barcode Details </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -6 }} onPress={() => this.estimationModelCancel()}>
+                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 2 : 1,
+                                        width: deviceWidth,
+                                        backgroundColor: 'lightgray',
+                                    }}></Text>
+                                </View>
 
-                                <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Barcode Details </Text>
-
-                                <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.estimationModelCancel()}>
-                                    <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
-                                </TouchableOpacity>
-                                <Text style={Device.isTablet ? styles.filterByTitleDecoration_tablet : styles.filterByTitleDecoration_mobile}>
-                                </Text>
                                 <Text style={Device.isTablet ? styles.viewtext_tablet : styles.viewtext_mobile} >
                                     BARCODE:  </Text>
                                 <Text style={Device.isTablet ? styles.viewsubtext_tablet : styles.viewsubtext_mobile} >
@@ -398,16 +419,12 @@ export class ListOfBarcodes extends Component {
                                 <Text style={Device.isTablet ? styles.viewsubtext3_tablet : styles.viewsubtext3_mobile} >
                                     {this.state.qty} </Text>
 
-
-
                                 <TouchableOpacity
                                     style={Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile} onPress={() => this.estimationModelCancel()}
                                 >
                                     <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
 
                                 </TouchableOpacity>
-
-
 
                             </View>
 
@@ -514,12 +531,19 @@ const styles = StyleSheet.create({
         marginTop: Device.isTablet ? 25 : 20,
         marginRight: Device.isTablet ? 30 : 20,
     },
+    filterByClsoeButton: {
+        position: 'absolute',
+        top: 10,
+        right: Device.isTablet ? 24 : 14,
+        width: Device.isTablet ? 60 : 50,
+        height: Device.isTablet ? 60 : 50,
+    },
     modelCloseImage: {
         fontFamily: 'regular',
         fontSize: 12,
         position: 'absolute',
         top: 10,
-        right: Device.isTablet ? 15 : 30,
+        right: Device.isTablet ? 15 : 10,
     },
     deleteMainContainer: {
         marginLeft: -40,

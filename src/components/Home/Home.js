@@ -318,14 +318,15 @@ class Home extends Component {
         this.getLastVsThisMonthSale();
         this.getTopSales();
         this.getSalesByCategory();
-        // this.getDebitNotesByStores();
     }
 
     getTodaySale() {
         const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
         axios.get(HomeGraphsService.getTodaySale() + params).then((res) => {
             console.warn("todays sale", res.data.result);
-            this.setState({ toadysSale: res.data.result.amount });
+            if (res.data.result !== "null") {
+                this.setState({ toadysSale: res.data.result.amount });
+            }
         }).catch(error => console.log(error));
     }
 
@@ -333,7 +334,9 @@ class Home extends Component {
         const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
         axios.get(HomeGraphsService.getMonthlySale() + params).then(res => {
             console.log("monthly sale", res.data.result);
-            this.setState({ monthlySale: res.data.result.amount });
+            if (res.data.result !== "null") {
+                this.setState({ monthlySale: res.data.result.amount });
+            }
         });
     }
 
@@ -341,7 +344,9 @@ class Home extends Component {
         const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
         axios.get(HomeGraphsService.getLastVsThisMonthSale() + params).then(res => {
             console.log("Last vs This Month Sale", res.data.result);
-            this.setState({ thisVsLastMonthSale: res.data.result.percentValue });
+            if (res.data.result !== "null") {
+                this.setState({ thisVsLastMonthSale: res.data.result.percentValue });
+            }
         });
     }
 
@@ -350,29 +355,31 @@ class Home extends Component {
         const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
         axios.get(HomeGraphsService.getTopFiveSales() + params).then(response => {
             if (response) {
-                console.log("Top 5 Sales Representative", response.data.result);
-                this.setState({ topSales: response.data.result },
-                    () => {
-                        let indexName = [];
-                        let indexCount = [];
+                if (response.data.result !== "null" && response.data.result.length > 0) {
+                    console.log("Top 5 Sales Representative", response.data.result);
+                    this.setState({ topSales: response.data.result },
+                        () => {
+                            let indexName = [];
+                            let indexCount = [];
 
-                        this.state.topSales.forEach(data => {
-                            indexName.push(data.userId);
-                            indexCount.push(data.amount);
-                        });
+                            this.state.topSales.forEach(data => {
+                                indexName.push(data.userId);
+                                indexCount.push(data.amount);
+                            });
 
-                        this.setState({
-                            topSalesChart: {
-                                labels: indexName,
-                                datasets: [
-                                    {
-                                        data: indexCount,
-                                    }
-                                ]
-                            }
+                            this.setState({
+                                topSalesChart: {
+                                    labels: indexName,
+                                    datasets: [
+                                        {
+                                            data: indexCount,
+                                        }
+                                    ]
+                                }
+                            });
                         });
-                    });
-                console.log("Top Sales", this.state.topSalesChart);
+                    console.log("Top Sales", this.state.topSalesChart);
+                }
             }
         });
     }
@@ -382,36 +389,38 @@ class Home extends Component {
         const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
         axios.get(HomeGraphsService.getSalesByCategory() + params).then(response => {
             if (response) {
-                console.log("Sales By Category", response.data.result);
-                this.setState({ salesCategory: response.data.result },
-                    () => {
-                        let indexName = [];
-                        let indexCount = [];
-                        let indexColor = [];
+                if (response.data.result !== "null" && response.data.result.length > 0) {
+                    console.log("Sales By Category", response.data.result);
+                    this.setState({ salesCategory: response.data.result },
+                        () => {
+                            let indexName = [];
+                            let indexCount = [];
+                            let indexColor = [];
 
-                        this.state.salesCategory.forEach(data => {
-                            indexName.push(data.categeoryType);
-                            indexCount.push(data.amount);
-                            colors.forEach(data => {
-                                indexColor.push(data.normalColorCode);
+                            this.state.salesCategory.forEach(data => {
+                                indexName.push(data.categeoryType);
+                                indexCount.push(data.amount);
+                                colors.forEach(data => {
+                                    indexColor.push(data.normalColorCode);
+                                });
                             });
+
+                            for (var i = 0; i < this.state.salesCategory.length; i++) {
+                                this.state.salesCategoryChart.push({
+                                    name: indexName[i],
+                                    count: indexCount[i],
+                                    color: indexColor[i]
+                                });
+                            }
+
+
+
+                            this.setState({ salesCategoryChart: this.state.salesCategoryChart },
+                                () => {
+                                    console.log(this.state.salesCategoryChart);
+                                });
                         });
-
-                        for (var i = 0; i < this.state.salesCategory.length; i++) {
-                            this.state.salesCategoryChart.push({
-                                name: indexName[i],
-                                count: indexCount[i],
-                                color: indexColor[i]
-                            });
-                        }
-
-
-
-                        this.setState({ salesCategoryChart: this.state.salesCategoryChart },
-                            () => {
-                                console.log(this.state.salesCategoryChart);
-                            });
-                    });
+                }
             }
         });
     }
@@ -516,7 +525,7 @@ class Home extends Component {
                                             This month sales v/s Last month
                                         </Text>
                                         <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 60, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                            + {this.state.thisVsLastMonthSale}
+                                            {this.state.thisVsLastMonthSale} %
                                         </Text>
                                     </View>;
 
