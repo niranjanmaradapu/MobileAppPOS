@@ -246,7 +246,7 @@ class GenerateEstimationSlip extends Component {
                 alert(res.data.body);
             }
         }).catch(() => {
-            alert('Please enter Barcode / SM number');
+            alert('Please enter a valid Barcode / SM number');
         });
     }
 
@@ -409,7 +409,7 @@ class GenerateEstimationSlip extends Component {
                                     onEndEditing={() => this.endEditing()}
                                 />
 
-                                <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, {width: Device.isTablet ? 450 : 150}]}
+                                <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 450 : 150 }]}
                                     underlineColorAndroid="transparent"
                                     placeholder="SM Number"
                                     placeholderTextColor="#6F6F6F60"
@@ -423,7 +423,7 @@ class GenerateEstimationSlip extends Component {
                                 />
 
                                 {this.state.uom === "Pieces" && (
-                                <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 230 : 100 }]}
+                                    <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 230 : 100 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         placeholderTextColor="#6F6F6F60"
@@ -432,7 +432,7 @@ class GenerateEstimationSlip extends Component {
                                         autoCapitalize="none"
                                         editable={false} selectTextOnFocus={false}
                                     />
-                                )} 
+                                )}
 
                                 {this.state.uom === "Meters" && (
                                     <TextInput style={[Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 230 : 100 }]}
@@ -651,18 +651,26 @@ class GenerateEstimationSlip extends Component {
                                                 <Modal isVisible={this.state.modalVisible}>
 
                                                     <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
+                                                        <View>
+                                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                                                <View>
+                                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Item </Text>
+                                                                </View>
+                                                                <View>
+                                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                                        <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                                    </TouchableOpacity>
+                                                                </View>
+                                                            </View>
+                                                            <Text style={{
+                                                                height: Device.isTablet ? 2 : 1,
+                                                                width: deviceWidth,
+                                                                backgroundColor: 'lightgray',
+                                                            }}></Text>
+                                                        </View>
 
-                                                        <Text style={Device.isTablet ? styles.filterByTitle_tablet : styles.filterByTitle_mobile}> Delete Item </Text>
-
-                                                        <TouchableOpacity style={Device.isTablet ? styles.filterCloseButton_tablet : styles.filterCloseButton_mobile} onPress={() => this.modelCancel()}>
-                                                            <Image style={Device.isTablet ? styles.filterCloseImage_tablet : styles.filterCloseImage_mobile} source={require('../assets/images/modelcancel.png')} />
-                                                        </TouchableOpacity>
-
-                                                        <Text style={{ height: Device.isTablet ? 2 : 1, width: deviceWidth, backgroundColor: 'lightgray', marginTop: 50, }}>
-                                                        </Text>
                                                         <Text style={{
-                                                            position: 'absolute',
-                                                            top: 70,
+
                                                             height: Device.isTablet ? 40 : 20,
                                                             textAlign: 'center',
                                                             fontFamily: 'regular',
@@ -1720,7 +1728,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
-        
+
         fontSize: 22,
     },
     input_tabletbutton_normal: {

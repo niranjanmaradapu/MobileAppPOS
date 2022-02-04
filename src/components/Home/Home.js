@@ -363,7 +363,7 @@ class Home extends Component {
                             let indexCount = [];
 
                             this.state.topSales.forEach(data => {
-                                indexName.push(data.userId);
+                                indexName.push(data.name);
                                 indexCount.push(data.amount);
                             });
 
