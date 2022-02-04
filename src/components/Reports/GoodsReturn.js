@@ -181,11 +181,20 @@ export class GoodsReturn extends Component {
                     renderItem={({ item, index }) => (
                         <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
+                            {(item.barcodes.length !== 0 && 
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S NO: {index + 1} </Text>
                                     <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>RTS NUMBER: {"\n"}{item.rtNumber}</Text>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {"\n"}{item.barcodes[0].barCode} </Text>
                                 </View>
+                            )}
+                                 {(item.barcodes.length === 0 &&
+                                <View style={flats.text}>
+                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S NO: {index + 1} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>RTS NUMBER: {"\n"}{item.rtNumber}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {"\n"}{'-'} </Text>
+                                </View>
+                                 )}
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >EMP ID: { } </Text>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>RTS DATE: {"\n"} {item.createdInfo}</Text>
