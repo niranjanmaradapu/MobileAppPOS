@@ -651,56 +651,7 @@ class GenerateEstimationSlip extends Component {
 
 
 
-                                        {this.state.lineItemDelete && (
-                                            <View>
-                                                <Modal isVisible={this.state.modalVisible}>
-
-                                                    <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
-                                                        <View>
-                                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
-                                                                <View>
-                                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Item </Text>
-                                                                </View>
-                                                                <View>
-                                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
-                                                                        <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
-                                                                    </TouchableOpacity>
-                                                                </View>
-                                                            </View>
-                                                            <Text style={{
-                                                                height: Device.isTablet ? 2 : 1,
-                                                                width: deviceWidth,
-                                                                backgroundColor: 'lightgray',
-                                                            }}></Text>
-                                                        </View>
-
-                                                        <Text style={{
-
-                                                            height: Device.isTablet ? 40 : 20,
-                                                            textAlign: 'center',
-                                                            fontFamily: 'regular',
-                                                            fontSize: Device.isTablet ? 23 : 18,
-                                                            marginBottom: Device.isTablet ? 25 : 0,
-                                                            color: '#353C40'
-                                                        }}> Are you sure want to delete NewSale Item?  </Text>
-                                                        <TouchableOpacity
-                                                            style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]}
-                                                            onPress={() => this.deleteLineItem(item, index)}
-                                                        >
-                                                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
-                                                        </TouchableOpacity>
-
-                                                        <TouchableOpacity
-                                                            style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
-                                                            onPress={() => this.modelCancel()}
-                                                        >
-                                                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                </Modal>
-                                            </View>
-                                        )}
-
+                                        
                                     </View>
 
 
@@ -708,6 +659,55 @@ class GenerateEstimationSlip extends Component {
                                 )}
                             />
 
+                            {this.state.lineItemDelete && (
+                                <View>
+                                    <Modal isVisible={this.state.modalVisible}>
+
+                                        <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
+                                            <View>
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                                    <View>
+                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Item </Text>
+                                                    </View>
+                                                    <View>
+                                                        <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                            <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                </View>
+                                                <Text style={{
+                                                    height: Device.isTablet ? 2 : 1,
+                                                    width: deviceWidth,
+                                                    backgroundColor: 'lightgray',
+                                                }}></Text>
+                                            </View>
+
+                                            <Text style={{
+
+                                                height: Device.isTablet ? 40 : 20,
+                                                textAlign: 'center',
+                                                fontFamily: 'regular',
+                                                fontSize: Device.isTablet ? 23 : 18,
+                                                marginBottom: Device.isTablet ? 25 : 0,
+                                                color: '#353C40'
+                                            }}> Are you sure want to delete NewSale Item?  </Text>
+                                            <TouchableOpacity
+                                                style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]}
+                                                onPress={() => this.deleteLineItem(item, index)}
+                                            >
+                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                            </TouchableOpacity>
+
+                                            <TouchableOpacity
+                                                style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
+                                                onPress={() => this.modelCancel()}
+                                            >
+                                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </Modal>
+                                </View>
+                            )}
 
 
                             {this.state.itemsList.length != 0 && (
