@@ -13,6 +13,7 @@ import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
 import CustomerService from '../services/CustomerService';
 var deviceWidth = Dimensions.get('window').width;
+var deviceHeight = Dimensions.get('window').height;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
@@ -46,6 +47,8 @@ class GenerateEstimationSlip extends Component {
             flagone: true,
             flagqtyModelOpen: false,
             flagCustomerOpen: false,
+            alertPopup: true,
+            alertVisible: true,
             flagtwo: false,
             productItemId: 0,
             productuom: "",
@@ -573,7 +576,7 @@ class GenerateEstimationSlip extends Component {
                                         }}>
                                             <TouchableOpacity style={{
                                                 borderColor: '#ED1C24',
-                                                height: Device.isTablet ? 48 : 28,
+                                                height: Device.isTablet ? 50 : 30,
                                                 width: Device.isTablet ? 50 : 30, borderBottomLeftRadius: 3,
                                                 borderTopLeftRadius: 3,
                                                 borderBottomWidth: 1,
@@ -594,7 +597,7 @@ class GenerateEstimationSlip extends Component {
                                                 style={{
                                                     justifyContent: 'center',
                                                     margin: 20,
-                                                    height: Device.isTablet ? 48 : 28,
+                                                    height: Device.isTablet ? 50 : 30,
                                                     width: Device.isTablet ? 50 : 30,
                                                     marginTop: 10,
                                                     marginBottom: 10,
@@ -614,7 +617,7 @@ class GenerateEstimationSlip extends Component {
                                             />
                                             <TouchableOpacity style={{
                                                 borderColor: '#ED1C24',
-                                                height: Device.isTablet ? 48 : 28,
+                                                height: Device.isTablet ? 50 : 30,
                                                 width: Device.isTablet ? 50 : 30, borderBottomRightRadius: 3,
                                                 borderTopRightRadius: 3,
                                                 borderBottomWidth: 1,
@@ -645,6 +648,8 @@ class GenerateEstimationSlip extends Component {
                                                 <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
                                             </TouchableOpacity>
                                         </View>
+
+
 
                                         {this.state.lineItemDelete && (
                                             <View>
@@ -936,7 +941,15 @@ class GenerateEstimationSlip extends Component {
                     </View>)}
 
 
+                {/* {this.state.alertPopup && (
+                    <View>
+                        <Modal isVisible={this.state.alertVisible}>
+                            <View style={{ marginTop: deviceHeight / 5, marginLeft: deviceWidth / 3.3, backgroundColor: '#00aa00', height: 150, width: 250 }}>
 
+                            </View>
+                        </Modal>
+                    </View>
+                )} */}
 
 
 

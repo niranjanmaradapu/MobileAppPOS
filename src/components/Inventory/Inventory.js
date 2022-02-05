@@ -537,56 +537,7 @@ export default class Inventory extends Component {
                                             <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.productTextile.qty}</Text>
                                             <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>VALUE: ₹{item.productTextile.value}</Text>
 
-                                            {this.state.inventoryDelete && (
-                                                <View>
-                                                    <Modal isVisible={this.state.modalVisible}>
-                                                        <View style={styles.deleteMainContainer}>
-                                                            <View>
-                                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
-                                                                    <View>
-                                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Barcode </Text>
-                                                                    </View>
-                                                                    <View>
-                                                                        <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
-                                                                            <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
-                                                                        </TouchableOpacity>
-                                                                    </View>
-                                                                </View>
-                                                                <Text style={{
-                                                                    height: Device.isTablet ? 2 : 1,
-                                                                    width: deviceWidth,
-                                                                    backgroundColor: 'lightgray',
-                                                                }}></Text>
-                                                            </View>
 
-                                                            <Text style={{
-                                                                // position: 'absolute',
-                                                                // top: 70,
-                                                                height: Device.isTablet ? 40 : 20,
-                                                                textAlign: 'center',
-                                                                fontFamily: 'regular',
-                                                                fontSize: Device.isTablet ? 23 : 18,
-                                                                // marginBottom: Device.isTablet ? 25 : 0,
-                                                                color: '#353C40'
-                                                            }}> Are you sure want to delete Barcode?  </Text>
-
-                                                            <TouchableOpacity
-                                                                style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 65 : 40 }]}
-                                                                onPress={() => this.deleteInventory(item, index)}
-                                                            >
-                                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
-
-                                                            </TouchableOpacity>
-
-                                                            <TouchableOpacity
-                                                                style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
-                                                            >
-                                                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
-
-                                                            </TouchableOpacity>
-                                                        </View>
-                                                    </Modal>
-                                                </View>)}
                                             <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
                                                 <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                             </TouchableOpacity>
@@ -598,55 +549,65 @@ export default class Inventory extends Component {
 
                                             {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{ }</Text> */}
 
+                                            
 
 
-                                            {this.state.barcodeDelete && (
-                                                <View>
-                                                    <Modal isVisible={this.state.modalVisible}>
-
-                                                        <View style={styles.deleteMainContainer}>
-                                                            <View>
-                                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
-                                                                    <View>
-                                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Barcode Id </Text>
-                                                                    </View>
-                                                                    <View>
-                                                                        <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
-                                                                            <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
-                                                                        </TouchableOpacity>
-                                                                    </View>
-                                                                </View>
-                                                                <Text style={{
-                                                                    height: Device.isTablet ? 2 : 1,
-                                                                    width: deviceWidth,
-                                                                    backgroundColor: 'lightgray',
-                                                                }}></Text>
-                                                            </View>
-
-                                                            <Text style={Device.isTablet ? flats.deleteSubHeading_tablet : flats.deleteSubHeading_mobile}> Are you sure want to delete Barcode?  </Text>
-                                                            <TouchableOpacity
-                                                                style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile} onPress={() => this.deleteBarcodeId(item, index)}
-                                                            >
-                                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
-
-                                                            </TouchableOpacity>
-
-                                                            <TouchableOpacity
-                                                                style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
-                                                            >
-                                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CANCEL </Text>
-
-                                                            </TouchableOpacity>
-                                                        </View>
-                                                    </Modal>
-                                                </View>
-                                            )}
-
-
+                                            
                                         </View>
                                     </View>
                                 )}
                             />
+                        )}
+                        {this.state.inventoryDelete && (
+                            <View>
+                                <Modal isVisible={this.state.modalVisible}>
+                                    <View style={styles.deleteMainContainer}>
+                                        <View>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                                <View>
+                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Barcode </Text>
+                                                </View>
+                                                <View>
+                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                        <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </View>
+                                            <Text style={{
+                                                height: Device.isTablet ? 2 : 1,
+                                                width: deviceWidth,
+                                                backgroundColor: 'lightgray',
+                                            }}></Text>
+                                        </View>
+
+                                        <Text style={{
+                                            // position: 'absolute',
+                                            // top: 70,
+                                            height: Device.isTablet ? 40 : 20,
+                                            textAlign: 'center',
+                                            fontFamily: 'regular',
+                                            fontSize: Device.isTablet ? 23 : 18,
+                                            // marginBottom: Device.isTablet ? 25 : 0,
+                                            color: '#353C40'
+                                        }}> Are you sure want to delete Barcode?  </Text>
+
+                                        <TouchableOpacity
+                                            style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 65 : 40 }]}
+                                            onPress={() => this.deleteInventory(item, index)}
+                                        >
+                                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity
+                                            style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
+                                        >
+                                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+
+                                        </TouchableOpacity>
+                                    </View>
+                                </Modal>
+                            </View>
                         )}
                         {this.state.flagtwo && (
                             <FlatList
@@ -889,6 +850,47 @@ export default class Inventory extends Component {
                                         </TouchableOpacity>
                                     </View>
                                 </KeyboardAwareScrollView>
+                            </View>
+                        </Modal>
+                    </View>
+                )}
+                {this.state.barcodeDelete && (
+                    <View>
+                        <Modal isVisible={this.state.modalVisible}>
+
+                            <View style={styles.deleteMainContainer}>
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                        <View>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Barcode Id </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 2 : 1,
+                                        width: deviceWidth,
+                                        backgroundColor: 'lightgray',
+                                    }}></Text>
+                                </View>
+
+                                <Text style={Device.isTablet ? flats.deleteSubHeading_tablet : flats.deleteSubHeading_mobile}> Are you sure want to delete Barcode?  </Text>
+                                <TouchableOpacity
+                                    style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile} onPress={() => this.deleteBarcodeId(item, index)}
+                                >
+                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
+                                >
+                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CANCEL </Text>
+
+                                </TouchableOpacity>
                             </View>
                         </Modal>
                     </View>

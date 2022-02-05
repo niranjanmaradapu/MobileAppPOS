@@ -44,6 +44,7 @@ class Reports extends Component {
             flagFilterNewSale: false,
             flagFilterSalesSumary: false,
             modalVisible: true,
+            filterButton: false,
 
             // Component Arrays
             estimationSlip: [],
@@ -148,9 +149,9 @@ class Reports extends Component {
 
     topbarAction1 = (item, index) => {
         if (item.name === "Dashboard") {
-            this.setState({ flagDashboard: true });
+            this.setState({ filterButton: false, flagDashboard: true });
         } else {
-            this.setState({ flagDashboard: false });
+            this.setState({ filterButton: true, flagDashboard: false });
         }
         if (item.name === "List Of Estimation Slip") {
             this.setState({ estimationSlip: [] });
@@ -318,11 +319,13 @@ class Reports extends Component {
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Reports </Text>
-                    <TouchableOpacity
-                        style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
-                        onPress={() => this.filterAction()} >
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
-                    </TouchableOpacity>
+                    {this.state.filterButton &&
+                        <TouchableOpacity
+                            style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                            onPress={() => this.filterAction()} >
+                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                        </TouchableOpacity>
+                    }
                 </View>
                 <ScrollView>
                     <View style={styles.container}>

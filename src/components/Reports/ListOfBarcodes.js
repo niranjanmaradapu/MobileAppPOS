@@ -30,7 +30,7 @@ export class ListOfBarcodes extends Component {
             toPrice: "",
             storeId: 0,
             storeName: "",
-            flagViewDetail: false,
+            flagViewDetail: true,
             flagdelete: false,
             barcode: "",
             mrp: "",
@@ -382,15 +382,14 @@ export class ListOfBarcodes extends Component {
                 {this.state.flagViewDetail && (
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
-
-                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 300 }]}>
+                            <View style={[styles.filterMainContainer, { height: Device.isTablet ? 400 : 300, marginTop: Device.isTablet ? deviceheight - 400 : deviceheight - 350, backgroundColor: '#00a9a9' }]}>
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Barcode Details </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > Estimation Slip Details </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -6 }} onPress={() => this.estimationModelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 10 }} onPress={() => this.estimationModelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -401,34 +400,42 @@ export class ListOfBarcodes extends Component {
                                         backgroundColor: 'lightgray',
                                     }}></Text>
                                 </View>
-
-                                <Text style={Device.isTablet ? styles.viewtext_tablet : styles.viewtext_mobile} >
-                                    BARCODE:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext_tablet : styles.viewsubtext_mobile} >
-                                    {this.state.barcode} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext1_tablet : styles.viewtext1_mobile} >
-                                    MRP:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext1_tablet : styles.viewsubtext1_mobile} >
-                                    ₹ {this.state.mrp} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext2_tablet : styles.viewtext2_mobile} >
-                                    STORE:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext2_tablet : styles.viewsubtext2_mobile} >
-                                    {this.state.storeName} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext3_tablet : styles.viewtext3_mobile} >
-                                    QTY:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext3_tablet : styles.viewsubtext3_mobile} >
-                                    {this.state.qty} </Text>
-
-                                <TouchableOpacity
-                                    style={Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile} onPress={() => this.estimationModelCancel()}
-                                >
-                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
-
-                                </TouchableOpacity>
-
+                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 350 : 300 }}>
+                                    <View style={{ flexDirection: 'column', justifyContent: 'space-around', paddingRight: Device.isTablet ? 20 : 20, paddingLeft: Device.isTablet ? 20 : 0, height: Device.isTablet ? 310 : 250 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                BARCODE:  </Text>
+                                            <Text style={[styles.viewSubText, { color: '#00a9a9', fontFamily: 'medium' }]} selectable={true}>
+                                                {this.state.barcode} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                MRP:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                {this.state.mrp} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                STORE:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                {this.state.storeName} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                QTY:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                ₹ {this.state.qty} </Text>
+                                        </View>
+                                        <View style={{ paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <TouchableOpacity
+                                                style={[Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile, { borderColor: '#00a9a9' }]} onPress={() => this.estimationModelCancel()}
+                                            >
+                                                <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00a9a9' }]}  > CANCEL </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>
                             </View>
-
-
                         </Modal>
                     </View>
                 )}
@@ -561,13 +568,21 @@ const styles = StyleSheet.create({
         marginTop: Device.isTablet ? deviceheight - 670 : deviceheight - 570,
         height: Device.isTablet ? 670 : 570,
     },
+    viewText: {
+        fontSize: Device.isTablet ? 22 : 17,
+        fontFamily: 'bold',
+        color: "#353C40"
+    },
+    viewSubText: {
+        fontSize: Device.isTablet ? 22 : 17,
+        fontFamily: 'regular',
+        color: "#353C40"
+    },
 
     //////////////
     filterCancel_mobile: {
         width: deviceWidth - 40,
         marginLeft: 20,
-        marginRight: 20,
-        marginTop: 150,
         height: 50,
         backgroundColor: "#ffffff",
         borderRadius: 5,
@@ -868,13 +883,10 @@ const styles = StyleSheet.create({
     },
     filterCancel_tablet: {
         width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 150,
         height: 60,
         backgroundColor: "#ffffff",
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: "#353C4050",
     },
     ////////

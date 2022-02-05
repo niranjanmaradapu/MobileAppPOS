@@ -235,7 +235,7 @@ export default class NewSaleReport extends Component {
                                 </View> */}
 
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >NET AMMOUNT:{"\n"} ₹ {item.totalNetAmount} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >NET AMOUNT:{"\n"} ₹ {item.totalNetAmount} </Text>
                                     <View style={flats.buttons}>
 
                                         <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteNewSale(item, index)}>
@@ -386,7 +386,7 @@ export default class NewSaleReport extends Component {
                                             />
                                         </View>
                                     )}
-                                    <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile , {width: deviceWidth -40}]}>
+                                    <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 40 }]}>
                                         <RNPickerSelect
                                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                             placeholder={{
@@ -456,111 +456,139 @@ export default class NewSaleReport extends Component {
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
 
-                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 670 : 640 }]}>
+                            <View style={[styles.filterMainContainer, { height: Device.isTablet ? 740 : 620, marginTop: Device.isTablet ? deviceheight - 740 : deviceheight - 620, backgroundColor: '#00a9a9' }]}>
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Sale bill Details </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > Estimation Slip Details </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 10 }} onPress={() => this.estimationModelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
                                     <Text style={{
                                         height: Device.isTablet ? 2 : 1,
-                                        width: deviceWidth,
+                                        width: deviceWidth - 10,
                                         backgroundColor: 'lightgray',
                                     }}></Text>
                                 </View>
+                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 670 : 570 }}>
+                                    <View style={{ flexDirection: 'column', justifyContent: 'space-around', paddingRight: Device.isTablet ? 20 : 20, paddingLeft: Device.isTablet ? 20 : 0, height: Device.isTablet ? 650 : 550 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                Memo No:  </Text>
+                                            <Text style={[styles.viewSubText, { color: '#00a9a9', fontFamily: 'medium' }]} selectable={true}>
+                                                {this.state.memono} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                BARCODE:  </Text>
+                                            <Text style={styles.viewSubText} selectable={true}>
+                                                {this.state.barocde} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                SECTION:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                - </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                EMP ID:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                {this.state.empId} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                HSN CODE:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                {'HSN12345'} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                QTY:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                {this.state.qty} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                MRP:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                ₹ {this.state.mrp} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                DISC:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                - </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                TAXABLE AMOUNT:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                ₹ {this.state.taxableaount} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                CGST:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                ₹ {this.state.cgst} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                SGST:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                ₹ {this.state.sgst} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                IGST:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                ₹ {this.state.igst} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                NET AMOUNT:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                ₹ {this.state.mrp} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                GST%:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                {'gst10%'} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                CUSTOMER:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                {this.state.customername} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                MOBILE:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                {this.state.mobile} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                DATE:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                {this.state.createdate} </Text>
+                                        </View>
+                                        <View style={{}}>
+                                            <TouchableOpacity
+                                                style={[Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile, { marginTop: Device.isTablet ? 20 : 10, borderColor: '#00a9a9' }]} onPress={() => this.estimationModelCancel()}
+                                            >
+                                                <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00a9a9' }]}  > CANCEL </Text>
+                                            </TouchableOpacity>
+                                        </View>
 
-                                <Text style={Device.isTablet ? styles.viewtext_tablet : styles.viewtext_mobile} >
-                                    Memo No:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext_tablet : styles.viewsubtext_mobile} >
-                                    {this.state.memono} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext1_tablet : styles.viewtext1_mobile} >
-                                    BARCODE:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext1_tablet : styles.viewsubtext1_mobile} >
-                                    {this.state.barocde} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext2_tablet : styles.viewtext2_mobile} >
-                                    SECTION:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext2_tablet : styles.viewsubtext2_mobile} >
-                                    - </Text>
-                                <Text style={Device.isTablet ? styles.viewtext3_tablet : styles.viewtext3_mobile} >
-                                    EMP ID:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext3_tablet : styles.viewsubtext3_mobile} >
-                                    {this.state.empId} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext4_tablet : styles.viewtext4_mobile} >
-                                    HSN CODE:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext4_tablet : styles.viewsubtext4_mobile} >
-                                    {'HSN1234'} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext5_tablet : styles.viewtext5_mobile} >
-                                    QTY:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext5_tablet : styles.viewsubtext5_mobile} >
-                                    {this.state.qty} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext6_tablet : styles.viewtext6_mobile} >
-                                    MRP:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext6_tablet : styles.viewsubtext6_mobile} >
-                                    ₹ {this.state.mrp} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext7_tablet : styles.viewtext7_mobile} >
-                                    DISC:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext7_tablet : styles.viewsubtext7_mobile} >
-                                    - </Text>
-
-                                <Text style={Device.isTablet ? styles.viewtext9_tablet : styles.viewtext9_mobile} >
-                                    TAXABLE AMOUNT:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext9_tablet : styles.viewsubtext9_mobile} >
-                                    ₹ {this.state.taxableaount} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext10_tablet : styles.viewtext10_mobile} >
-                                    CGST:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext10_tablet : styles.viewsubtext10_mobile} >
-                                    ₹ {this.state.cgst} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext11_tablet : styles.viewtext11_mobile} >
-                                    SGST:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext11_tablet : styles.viewsubtext11_mobile} >
-                                    ₹ {this.state.sgst} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext12_tablet : styles.viewtext12_mobile} >
-                                    IGST:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext12_tablet : styles.viewsubtext12_mobile} >
-                                    ₹ {this.state.igst} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext13_tablet : styles.viewtext13_mobile} >
-                                    NET AMOUNT:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext13_tablet : styles.viewsubtext13_mobile} >
-                                    ₹ {this.state.mrp} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext8_tablet : styles.viewtext8_mobile} >
-                                    GST%:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext8_tablet : styles.viewsubtext8_mobile} >
-                                    {'gst10%'} </Text>
-
-                                <Text style={Device.isTablet ? styles.viewtext14_tablet : styles.viewtext14_mobile} >
-                                    CUSTOMER:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext14_tablet : styles.viewsubtext14_mobile} >
-                                    {this.state.customername} </Text>
-
-                                <Text style={Device.isTablet ? styles.viewtext15_tablet : styles.viewtext15_mobile} >
-                                    Mobile:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext15_tablet : styles.viewsubtext15_mobile} >
-                                    {this.state.mobile} </Text>
-
-                                <Text style={Device.isTablet ? styles.viewtext16_tablet : styles.viewtext16_mobile} >
-                                    Date:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext16_tablet : styles.viewsubtext16_mobile} >
-                                    {this.state.createdate} </Text>
-
-
-                                <TouchableOpacity
-                                    style={Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile} onPress={() => this.estimationModelCancel()}
-                                >
-                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
-
-                                </TouchableOpacity>
-
-
-
+                                    </View>
+                                </View>
                             </View>
-
-
                         </Modal>
                     </View>
                 )}
@@ -684,12 +712,20 @@ const styles = StyleSheet.create({
         marginTop: Device.isTablet ? deviceheight - 350 : deviceheight - 240,
         height: Device.isTablet ? 350 : 240,
     },
+    viewText: {
+        fontSize: Device.isTablet ? 22 : 17,
+        fontFamily: 'bold',
+        color: "#353C40"
+    },
+    viewSubText: {
+        fontSize: Device.isTablet ? 22 : 17,
+        fontFamily: 'regular',
+        color: "#353C40"
+    },
     //////////////
     filterCancel_mobile: {
         width: deviceWidth - 40,
         marginLeft: 20,
-        marginRight: 20,
-        marginTop: 520,
         height: 50,
         backgroundColor: "#ffffff",
         borderRadius: 5,
@@ -1537,13 +1573,10 @@ const styles = StyleSheet.create({
 
     filterCancel_tablet: {
         width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 530,
         height: 60,
         backgroundColor: "#ffffff",
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: "#353C4050",
     },
     ////////

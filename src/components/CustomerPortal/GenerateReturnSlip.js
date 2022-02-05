@@ -229,7 +229,7 @@ export default class GenerateReturnSlip extends Component {
                         onChangeText={(text) => this.handleInvoiceNumber(text)}
                     />
                     <TouchableOpacity
-                        style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 120 : 80, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: 10 }}
+                        style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 120 : 80, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: Device.isTablet ? 10 : 5 }}
                         onPress={() => this.navigateToScanCode()} >
                         <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 5 : 5 }]}> {('SCAN')} </Text>
                     </TouchableOpacity>
@@ -892,9 +892,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
-        marginBottom: 20,
+        marginBottom: 5,
         height: 44,
-        marginTop: 10,
+        marginTop: 5,
         width: deviceWidth - 40,
         borderColor: '#8F9EB717',
         borderRadius: 3,

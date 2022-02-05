@@ -247,7 +247,7 @@ export class ListOfEstimationSlip extends Component {
                                     }}></Text>
                                 </View>
                                 <Text style={{
-                                    
+
                                     height: Device.isTablet ? 40 : 20,
                                     textAlign: 'center',
                                     fontFamily: 'regular',
@@ -356,7 +356,7 @@ export class ListOfEstimationSlip extends Component {
                                             />
                                         </View>
                                     )}
-                                    <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, {width: deviceWidth - 40}]}>
+                                    <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 40 }]}>
                                         <RNPickerSelect
                                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                             placeholder={{
@@ -417,71 +417,75 @@ export class ListOfEstimationSlip extends Component {
                     <View>
                         <Modal isVisible={this.state.modalVisible}>
 
-                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 300 }]}>
+                            <View style={[styles.filterMainContainer, { height: Device.isTablet ? 400 : 300, marginTop: Device.isTablet ? deviceheight - 400 : deviceheight - 350, backgroundColor: '#00a9a9' }]}>
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Estimation Slip Details </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > Estimation Slip Details </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -6 }} onPress={() => this.estimationModelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 10 }} onPress={() => this.estimationModelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
                                     <Text style={{
                                         height: Device.isTablet ? 2 : 1,
-                                        width: deviceWidth,
+                                        width: deviceWidth - 10,
                                         backgroundColor: 'lightgray',
                                     }}></Text>
                                 </View>
-                                <Text style={Device.isTablet ? styles.viewtext_tablet : styles.viewtext_mobile} >
-                                    Delivery Slip:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext_tablet : styles.viewsubtext_mobile} >
-                                    {this.state.dsnumber} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext1_tablet : styles.viewtext1_mobile} >
-                                    SM:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext1_tablet : styles.viewsubtext1_mobile} >
-                                    - </Text>
-                                <Text style={Device.isTablet ? styles.viewtext2_tablet : styles.viewtext2_mobile} >
-                                    QTY:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext2_tablet : styles.viewsubtext2_mobile} >
-                                    {this.state.qty} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext3_tablet : styles.viewtext3_mobile} >
-                                    GROSS AMOUNT:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext3_tablet : styles.viewsubtext3_mobile} >
-                                    ₹ {this.state.mrp} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext4_tablet : styles.viewtext4_mobile} >
-                                    PROMO DISCOUNT:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext4_tablet : styles.viewsubtext4_mobile} >
-                                    {this.state.promodisc} </Text>
-                                <Text style={Device.isTablet ? styles.viewtext5_tablet : styles.viewtext5_mobile} >
-                                    NET AMOUNT:  </Text>
-                                <Text style={Device.isTablet ? styles.viewsubtext5_tablet : styles.viewsubtext5_mobile} >
-                                    ₹ {this.state.mrp} </Text>
-
-
-                                <TouchableOpacity
-                                    style={Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile} onPress={() => this.estimationModelCancel()}
-                                >
-                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
-
-                                </TouchableOpacity>
-
-
-
+                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 350 : 300 }}>
+                                    <View style={{ flexDirection: 'column', justifyContent: 'space-around', paddingRight: Device.isTablet ? 20 : 20, paddingLeft: Device.isTablet ? 20 : 0, height: Device.isTablet ? 310 : 250 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                Delivery Slip:  </Text>
+                                            <Text style={[styles.viewSubText, { color: '#00a9a9', fontFamily: 'medium' }]} selectable={true}>
+                                                {this.state.dsnumber} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                SM:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                - </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                QTY:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                {this.state.qty} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                GROSS AMOUNT:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                ₹ {this.state.mrp} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                PROMO DISCOUNT:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                {this.state.promodisc} </Text>
+                                        </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <Text style={styles.viewText} >
+                                                NET AMOUNT:  </Text>
+                                            <Text style={styles.viewSubText} >
+                                                ₹ {this.state.mrp} </Text>
+                                        </View>
+                                        <View style={{ paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                            <TouchableOpacity
+                                                style={[Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile, { borderColor: '#00a9a9' }]} onPress={() => this.estimationModelCancel()}
+                                            >
+                                                <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00a9a9' }]}  > CANCEL </Text>
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>
                             </View>
-
-
                         </Modal>
                     </View>
                 )}
-
-
-
-
-
-
             </View>
         );
     }
@@ -596,10 +600,20 @@ const styles = StyleSheet.create({
     filterMainContainer: {
         marginLeft: -40,
         marginRight: -40,
-        backgroundColor: '#ffffff',
         paddingLeft: Device.isTablet ? 0 : 20,
+        backgroundColor: '#ffffff',
         marginTop: Device.isTablet ? deviceheight - 630 : deviceheight - 530,
         height: Device.isTablet ? 630 : 530,
+    },
+    viewText: {
+        fontSize: Device.isTablet ? 22 : 17,
+        fontFamily: 'bold',
+        color: "#353C40"
+    },
+    viewSubText: {
+        fontSize: Device.isTablet ? 22 : 17,
+        fontFamily: 'regular',
+        color: "#353C40"
     },
 
     // Styles For Mobile
@@ -788,10 +802,7 @@ const styles = StyleSheet.create({
     },
     //////////////
     filterCancel_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 190,
+        width: deviceWidth - 20,
         height: 50,
         backgroundColor: "#ffffff",
         borderRadius: 5,
@@ -801,22 +812,13 @@ const styles = StyleSheet.create({
     viewtext_tablet: {
         color: "#353C40",
         fontFamily: "regular",
-        alignItems: 'center',
-        left: 10,
         fontSize: 22,
         justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute', top: 80,
     },
     viewtext_mobile: {
         color: "#353C40",
         fontFamily: "regular",
-        alignItems: 'center',
-        left: 10,
         fontSize: 14,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute', top: 60,
     },
     viewsubtext_tablet: {
         color: "#353C40",
@@ -824,12 +826,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: 16,
         fontSize: 22,
-        position: 'absolute',
-        right: 10,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute',
-        top: 80,
     },
     viewsubtext_mobile: {
         color: "#353C40",
@@ -837,122 +833,56 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: 16,
         fontSize: 14,
-        position: 'absolute',
-        right: 10,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute',
-        top: 60,
     },
 
     viewtext1_tablet: {
         color: "#353C40",
         fontFamily: "regular",
-        alignItems: 'center',
-        left: 10,
         fontSize: 22,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute', top: 110,
 
     },
     viewsubtext1_tablet: {
         color: "#353C40",
         fontFamily: "bold",
-        alignItems: 'center',
-        marginLeft: 16,
         fontSize: 22,
-        position: 'absolute',
-        right: 10,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute',
-        top: 110,
     },
 
     viewtext1_mobile: {
         color: "#353C40",
-        fontFamily: "regular",
-        alignItems: 'center',
-        left: 10,
         fontSize: 14,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute', top: 90,
     },
 
     viewsubtext1_mobile: {
         color: "#353C40",
         fontFamily: "bold",
-        alignItems: 'center',
-        marginLeft: 16,
         fontSize: 14,
-        position: 'absolute',
-        right: 10,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute',
-        top: 90,
     },
     viewtext2_tablet: {
         color: "#353C40",
         fontFamily: "regular",
-        alignItems: 'center',
-        left: 10,
         fontSize: 22,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute', top: 140,
-
     },
     viewsubtext2_tablet: {
         color: "#353C40",
         fontFamily: "bold",
-        alignItems: 'center',
-        marginLeft: 16,
         fontSize: 22,
-        position: 'absolute',
-        right: 10,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute',
-        top: 140,
     },
 
     viewtext2_mobile: {
         color: "#353C40",
         fontFamily: "regular",
-        alignItems: 'center',
-        left: 10,
         fontSize: 14,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute', top: 120,
     },
 
     viewsubtext2_mobile: {
         color: "#353C40",
         fontFamily: "bold",
-        alignItems: 'center',
-        marginLeft: 16,
         fontSize: 14,
-        position: 'absolute',
-        right: 10,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute',
-        top: 120,
     },
     viewtext3_tablet: {
         color: "#353C40",
         fontFamily: "regular",
-        alignItems: 'center',
-        left: 10,
         fontSize: 22,
-        justifyContent: 'center',
-        textAlign: 'center',
-        position: 'absolute', top: 170,
-
     },
     viewsubtext3_tablet: {
         color: "#353C40",
@@ -1092,13 +1022,10 @@ const styles = StyleSheet.create({
     },
     filterCancel_tablet: {
         width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 210,
         height: 60,
         backgroundColor: "#ffffff",
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: "#353C4050",
     },
     ////////

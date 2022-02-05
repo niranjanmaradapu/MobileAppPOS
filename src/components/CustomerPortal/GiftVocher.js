@@ -161,7 +161,7 @@ class GiftVocher extends Component {
                     value={this.state.description}
                     onChangeText={(text) => this.handleDescription(text)}
                 />
-                <View style={{ flexDirection: 'row', alignContent: 'space-between' }}>
+                <View style={{ flexDirection: Device.isTablet ? 'row' : 'column', alignContent: 'space-between' }}>
                     <TouchableOpacity
                         style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
                         testID="openModal"
@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
         marginRight: 20,
         height: 44,
         marginTop: 5,
-        marginBottom: 10,
+        marginBottom: 5,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
@@ -618,7 +618,8 @@ const styles = StyleSheet.create({
         width: deviceWidth - 40,
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 10,
+        marginTop: 5,
+        marginBottom: 5,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         height: 50,
@@ -757,6 +758,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
         marginTop: 10,
+        marginBottom: 10,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         height: 60,
