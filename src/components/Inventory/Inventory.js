@@ -44,6 +44,7 @@ export default class Inventory extends Component {
             storeName: "",
             privilages: [],
             subPrivilages: "",
+            barcodeTextileId:"",
         };
     }
 
@@ -113,9 +114,9 @@ export default class Inventory extends Component {
                                             console.log(previlage.subPrivillages[i].parentPrivillageId);
                                             if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                                 let subprivilage = previlage.subPrivillages[i];
-                                                if (subprivilage.name === "Dashboard") {
-                                                    this.setState({ flagOne: false, flagTwo: false });
-                                                }
+                                                // if (subprivilage.name === "Dashboard") {
+                                                //     this.setState({ flagOne: false, flagTwo: false });
+                                                // }
                                                 if (i === 0) {
                                                     this.state.privilages.push({ bool: true, name: subprivilage.name });
                                                 }
@@ -200,6 +201,9 @@ export default class Inventory extends Component {
                 this.setState({ barcodesData: this.state.barcodesData });
 
             }
+        }).catch(() => {
+            alert('No Results Found');
+            this.setState({ loading: false });
         });
     }
 
@@ -229,6 +233,9 @@ export default class Inventory extends Component {
                 this.setState({ reBarcodesData: this.state.reBarcodesData });
 
             }
+        }).catch(() => {
+            alert('No Results Found');
+            this.setState({ loading: false });
         });
 
     }
@@ -368,8 +375,8 @@ export default class Inventory extends Component {
     }
 
     handlebarcodedeleteaction(item, index) {
-        this.setState({ inventoryDelete: true, modalVisible: true });
-
+        this.setState({ inventoryDelete: true, modalVisible: true,barcodeTextileId:item.barcodeTextileId });
+        
         // axios.delete(InventoryService.deleteTextileBarcode(), {
         //     params: {
         //         "barcodeId": item.barcodeTextileId,
@@ -426,21 +433,22 @@ export default class Inventory extends Component {
 
     };
 
-    deleteInventory = (item, index) => {
+    deleteInventory() {
         axios.delete(InventoryService.deleteTextileBarcode(), {
             params: {
                 //barcodeId=1811759398
-                "barcodeTextileId": item.barcodeTextileId,
+                "barcodeTextileId": this.state.barcodeTextileId,
             }
         }).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                const list = this.state.barcodesData;
-                list.splice(index, 1);
-                this.setState({ barcodesData: list, inventoryDelete: false, modalVisible: false });
-            }
-            else {
-                alert('Issue in delete barcode and having' + res.data["error"]);
-            }
+            if (res.data && res.data.isSuccess === "true") {
+                alert(res.data.result);
+                this.setState({ inventoryDelete: false, modalVisible: false,barcodeTextileId:'' });
+                this.setState({ isAddBarcode: false });
+                this.getAllBarcodes();
+              } else {
+                this.setState({ inventoryDelete: false, modalVisible: false,barcodeTextileId:'' });
+               alert(res.data.message);
+              }
         }
         );
     };
@@ -549,16 +557,41 @@ export default class Inventory extends Component {
 
                                             {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{ }</Text> */}
 
-                                            
-
-
-                                            
                                         </View>
+                                    </View>
+                                )}  
+                            />
+                        )}
+                        
+                        {this.state.flagtwo && (
+                            <FlatList
+                                data={this.state.reBarcodesData}
+                                style={{ marginTop: 20 }}
+                                scrollEnabled={true}
+                                keyExtractor={item => item}
+                                renderItem={({ item, index }) => (
+                                    <View
+                                        style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
+                                    >
+                                        <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
+                                            <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >PARENT BARCODE: {"\n"}{item.toBeBarcodeId}</Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>CHILD BARCODE: {"\n"}{item.currentBarcodeId}</Text>
+                                            {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonTextsubrebar_mobile}>{ }</Text> */}
+                                            <Text style={Device.isTablet ? flats.commonTextRebar_tablet : flats.commonTextRebar_mobile}>EMPLOYEE ID: {"\n"}{item.createdBy}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>DATE: {"\n"}{item.fromDate}</Text>
+                                        </View>
+                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.print(item, index)}>
+                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/print.png')} />
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.seeDetails(item, index)}>
+                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/eye.png')} />
+                                        </TouchableOpacity>
                                     </View>
                                 )}
                             />
                         )}
-                        {this.state.inventoryDelete && (
+                         {this.state.inventoryDelete && (
                             <View>
                                 <Modal isVisible={this.state.modalVisible}>
                                     <View style={styles.deleteMainContainer}>
@@ -593,7 +626,7 @@ export default class Inventory extends Component {
 
                                         <TouchableOpacity
                                             style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 65 : 40 }]}
-                                            onPress={() => this.deleteInventory(item, index)}
+                                            onPress={() => this.deleteInventory()}
                                         >
                                             <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
 
@@ -609,34 +642,7 @@ export default class Inventory extends Component {
                                 </Modal>
                             </View>
                         )}
-                        {this.state.flagtwo && (
-                            <FlatList
-                                data={this.state.reBarcodesData}
-                                style={{ marginTop: 20 }}
-                                scrollEnabled={true}
-                                keyExtractor={item => item}
-                                renderItem={({ item, index }) => (
-                                    <View
-                                        style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
-                                    >
-                                        <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
-                                            <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >PARENT BARCODE: {"\n"}{item.toBeBarcodeId}</Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>CHILD BARCODE: {"\n"}{item.currentBarcodeId}</Text>
-                                            {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonTextsubrebar_mobile}>{ }</Text> */}
-                                            <Text style={Device.isTablet ? flats.commonTextRebar_tablet : flats.commonTextRebar_mobile}>EMPLOYEE ID: {"\n"}{item.createdBy}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>DATE: {"\n"}{item.fromDate}</Text>
-                                        </View>
-                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.print(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/print.png')} />
-                                        </TouchableOpacity>
 
-                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.seeDetails(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/eye.png')} />
-                                        </TouchableOpacity>
-                                    </View>
-                                )}
-                            />
-                        )}
                     </View>
                 </ScrollView >
                 {this.state.flagFilterBarcodeOpen && (

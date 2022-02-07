@@ -193,7 +193,6 @@ class GenerateEstimationSlip extends Component {
     }
 
     endEditing() {
-        console.log("end edited");
         if (this.state.uom === "") {
             alert("Please select UOM");
         }
@@ -407,12 +406,12 @@ class GenerateEstimationSlip extends Component {
                                     textAlignVertical="center"
                                     autoCapitalize="none"
                                     value={this.state.barcodeId}
-                                    onEndEditing
+                                   // onEndEditing
                                     onChangeText={this.handleBarCode}
-                                    onEndEditing={() => this.endEditing()}
+                                    // onEndEditing={() => this.endEditing()}
                                 />
 
-                                <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 450 : 150 }]}
+                                <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 350 : 150 }]}
                                     underlineColorAndroid="transparent"
                                     placeholder="SM Number"
                                     placeholderTextColor="#6F6F6F60"
@@ -426,7 +425,7 @@ class GenerateEstimationSlip extends Component {
                                 />
 
                                 {this.state.uom === "Pieces" && (
-                                    <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 230 : 100 }]}
+                                    <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 100 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         placeholderTextColor="#6F6F6F60"
@@ -438,7 +437,7 @@ class GenerateEstimationSlip extends Component {
                                 )}
 
                                 {this.state.uom === "Meters" && (
-                                    <TextInput style={[Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 230 : 100 }]}
+                                    <TextInput style={[Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 100 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         keyboardType={'default'}
