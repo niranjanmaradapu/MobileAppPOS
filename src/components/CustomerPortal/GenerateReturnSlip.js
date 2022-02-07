@@ -36,6 +36,7 @@ export default class GenerateReturnSlip extends Component {
             returnSlipTotal: 0,
             storeId: 0,
             userId: "NA",
+            customerNumber: "",
         };
     }
 
@@ -169,7 +170,7 @@ export default class GenerateReturnSlip extends Component {
                     netValue: 0,
                     quantity: 0,
                     reason: "",
-
+                    customerNumber: "",
                 });
             }
         }).catch(err => {
@@ -191,7 +192,7 @@ export default class GenerateReturnSlip extends Component {
     };
 
     modelCancel() {
-        this.setState({ modelVisible: false });
+        this.setState({ modelVisible: false, returnModel: false, customerTagging: false });
     }
 
     navigateToScanCode() {
@@ -200,6 +201,19 @@ export default class GenerateReturnSlip extends Component {
             isFromNewSale: false, isFromAddProduct: true,
             onGoBack: () => this.refresh(),
         });
+    }
+
+    customerTag() {
+        if (this.state.customerNumber.length === 0 || this.state.customerNumber.length < 10) {
+            alert("please enter a valid 10 digit mobile number");
+        } else {
+            alert("tagged successfully");
+            this.modelCancel();
+        }
+    }
+
+    handleCustomerNumber(text) {
+        this.setState({ customerNumber: text });
     }
 
     refresh() {
@@ -243,6 +257,8 @@ export default class GenerateReturnSlip extends Component {
                     textAlignVertical="center"
                     keyboardType={'default'}
                     autoCapitalize="none"
+                    maxLength={10}
+                    keyboardType={'numeric'}
                     value={this.state.mobileNumber}
                     onChangeText={(text) => this.handleMobileNumber(text)}
                 // onEndEditing={() => this.endEditing()}
@@ -253,7 +269,7 @@ export default class GenerateReturnSlip extends Component {
                     }}
                 >
                     <TouchableOpacity
-                        style={[Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile, { borderRadius: 5, height: 36, borderWidth: 1, borderColor: '#858585' }]}
+                        style={[Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile, { borderRadius: 5, height: 36, borderWidth: Device.isTablet ? 2 : 1, borderColor: '#858585' }]}
                         onPress={this.searchInvoice}
                     >
                         <Text
@@ -263,7 +279,7 @@ export default class GenerateReturnSlip extends Component {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={[Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile, { borderRadius: 5, height: 36, borderWidth: 1, borderColor: '#858585' }]}
+                        style={[Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile, { borderRadius: 5, height: 36, borderWidth: Device.isTablet ? 2 : 1, borderColor: '#858585' }]}
                         onPress={this.handleCutomerTagging}
                     >
                         <Text
@@ -276,14 +292,14 @@ export default class GenerateReturnSlip extends Component {
                 {this.state.customerTagging && (
                     <View>
                         <Modal isVisible={this.state.modelVisible}>
-                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 400 : 300 }]}>
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 400 : 320, marginTop: Device.isTablet ? deviceheight - 400 : deviceheight - 320, paddingBottom: Device.isTablet ? 0 : 20 }]}>
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Tag Customer </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -5 }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -295,7 +311,7 @@ export default class GenerateReturnSlip extends Component {
                                     }}></Text>
                                 </View>
 
-                                
+
                                 <View>
                                     <Text style={{
                                         height: Device.isTablet ? 40 : 20,
@@ -312,12 +328,15 @@ export default class GenerateReturnSlip extends Component {
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         keyboardType={'default'}
+                                        maxLength={10}
+                                        keyboardType={'numeric'}
                                         autoCapitalize="none"
-                                        onChangeText={(text) => this.handleMobileNumber(text)}
+                                        value={this.state.customerNumber}
+                                        onChangeText={(text) => this.handleCustomerNumber(text)}
                                     />
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile]}
-                                        onPress={() => this.deleteLineItem(item, index)}
+                                        onPress={() => this.customerTag()}
                                     >
                                         <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CONFIRM </Text>
                                     </TouchableOpacity>
@@ -429,10 +448,10 @@ export default class GenerateReturnSlip extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > List of Return Items </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > List of Return Items </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -5 }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -502,8 +521,6 @@ const flats = StyleSheet.create({
         justifyContent: 'space-around',
     },
 
-
-
     // flats for Mobile
     flatlistContainer_mobile: {
         height: 150,
@@ -543,7 +560,7 @@ const flats = StyleSheet.create({
         height: 30,
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         borderColor: "lightgray",
         // borderRadius:5,
     },
@@ -552,7 +569,7 @@ const flats = StyleSheet.create({
         height: 30,
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         borderColor: "lightgray",
     },
     flatlistSubContainerTotal_mobile: {
@@ -612,7 +629,7 @@ const flats = StyleSheet.create({
         height: 50,
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         borderColor: "lightgray",
         // borderRadius:5,
     },
@@ -621,7 +638,7 @@ const flats = StyleSheet.create({
         height: 50,
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         borderColor: "lightgray",
     },
     flatlistSubContainerTotal_tablet: {
@@ -650,7 +667,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         justifyContent: 'center',
         height: 42,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
         fontSize: 15,
@@ -661,7 +678,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         justifyContent: 'center',
         height: 42,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
         fontSize: 15,
@@ -692,7 +709,7 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         justifyContent: 'center',
         height: 52,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
         fontSize: 20,
@@ -703,7 +720,7 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         justifyContent: 'center',
         height: 52,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
         fontSize: 20,
@@ -790,12 +807,12 @@ const styles = StyleSheet.create({
     filterMainContainer_mobile: {
         width: deviceWidth,
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         marginLeft: -20,
+        marginRight: -20,
         backgroundColor: "#ffffff",
-        position: 'absolute',
-        bottom: -20,
+        height: 400,
+        marginTop: deviceheight - 400,
     },
     filterByTitle_mobile: {
         position: 'absolute',
@@ -850,7 +867,7 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: "#ffffff",
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         borderColor: "#353C4050",
     },
     filterButtonCancelText_mobile: {
@@ -899,7 +916,7 @@ const styles = StyleSheet.create({
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 14,
@@ -926,7 +943,7 @@ const styles = StyleSheet.create({
     cancelButton_mobile: {
         backgroundColor: '#FFFFFF',
         borderColor: '#8F9EB717',
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
@@ -970,7 +987,7 @@ const styles = StyleSheet.create({
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         fontSize: 14,
     },
@@ -1026,10 +1043,10 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         alignItems: 'center',
         marginLeft: -40,
+        marginRight: -40,
         backgroundColor: "#ffffff",
         height: 600,
-        position: 'absolute',
-        bottom: -40,
+        marginTop: deviceheight - 500,
     },
     filterByTitle_tablet: {
         position: 'absolute',
@@ -1060,15 +1077,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 10,
         right: 14,
-    },
-    filterMainContainer_tablet: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -40,
-        backgroundColor: "#ffffff",
-        height: 600,
-        position: 'absolute',
-        bottom: -40,
     },
     filterByTitle_tablet: {
         position: 'absolute',
@@ -1124,7 +1132,7 @@ const styles = StyleSheet.create({
         height: 60,
         backgroundColor: "#ffffff",
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         borderColor: "#353C4050",
     },
     filterButtonCancelText_tablet: {
@@ -1173,7 +1181,7 @@ const styles = StyleSheet.create({
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         paddingLeft: 15,
         fontFamily: 'regular',
         fontSize: 22,
@@ -1242,7 +1250,7 @@ const styles = StyleSheet.create({
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         fontSize: 20,
     },
