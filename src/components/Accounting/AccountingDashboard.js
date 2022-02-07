@@ -126,7 +126,7 @@ export default class AccountingDashboard extends Component {
                             let indexHoverColor = [];
 
                             this.state.debitNotesByStoreData.forEach(data => {
-                                indexName.push(data.storeId);
+                                indexName.push(data.name);
                                 indexCount.push(data.damount);
                             });
 
@@ -170,7 +170,7 @@ export default class AccountingDashboard extends Component {
                             let indexCount2 = [];
 
                             this.state.usedBalancedAmountData.forEach(data => {
-                                indexName.push(data.storeId);
+                                indexName.push(data.name);
                                 indexCount.push(data.actualAmount);
                                 indexCount2.push(data.transactionAmount);
                             });

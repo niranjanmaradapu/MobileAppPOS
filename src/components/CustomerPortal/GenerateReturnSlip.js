@@ -37,6 +37,8 @@ export default class GenerateReturnSlip extends Component {
             storeId: 0,
             userId: "NA",
             customerNumber: "",
+            resultModel: false,
+            resultData: "",
         };
     }
 
@@ -159,7 +161,10 @@ export default class GenerateReturnSlip extends Component {
         };
         axios.post(CustomerService.saveRetunSlip(), saveObj).then(res => {
             if (res) {
-                alert(res.data.result);
+                // alert(res.data.result);
+                this.setState({ resultData: res.data.result }, () => {
+                    this.setState({ resultModel: true, modelVisible: true });
+                });
                 this.setState({
                     modelVisible: false,
                     netValueList: [],
@@ -188,11 +193,12 @@ export default class GenerateReturnSlip extends Component {
     };
 
     handleCutomerTagging = () => {
+        // alert("some data");
         this.setState({ customerTagging: true, modelVisible: true });
     };
 
     modelCancel() {
-        this.setState({ modelVisible: false, returnModel: false, customerTagging: false });
+        this.setState({ modelVisible: false, returnModel: false, customerTagging: false, resultModel: false });
     }
 
     navigateToScanCode() {
@@ -499,6 +505,41 @@ export default class GenerateReturnSlip extends Component {
                                     >
                                         <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00aa00' }]}  > BACK TO DASHBOARD </Text>
 
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </Modal>
+                    </View>
+                )}
+                {this.state.resultModel && (
+                    <View>
+                        <Modal isVisible={this.state.modelVisible}>
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 300 : 250, backgroundColor: '#00aa00', marginTop: Device.isTablet ? deviceheight - 300 : deviceheight - 250 }]}>
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                        <View>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > RT Number </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -5 }} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 2 : 1,
+                                        width: deviceWidth,
+                                        backgroundColor: 'lightgray',
+                                    }}></Text>
+                                </View>
+                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 250 : 200, }}>
+                                    <View style={{ height: Device.isTablet ? 70 : 60, alignItems: 'center', marginTop: 20 }}>
+                                        <Text style={{ fontSize: Device.isTablet ? 24 : 19, fontFamily: 'medium', }} selectable={true}>{this.state.resultData}</Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#00aa00', }]} onPress={() => this.modelCancel()}
+                                    >
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00aa00' }]}  > BACK TO DASHBOARD </Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
