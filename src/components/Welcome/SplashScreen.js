@@ -21,12 +21,12 @@ export default class SplashScreen extends React.Component {
         })
         console.log('phone number is' + phonenumber)
         setTimeout(() => {
-            if (phonenumber === null) {
+            // if (phonenumber === null) {
                 this.props.navigation.navigate('AuthNavigation')
-            }
-            else {
-                this.props.navigation.navigate('HomeNavigation')
-            }
+            // }
+            // else {
+            //     this.props.navigation.navigate('HomeNavigation')
+            // }
         }, 2500);
     }
 

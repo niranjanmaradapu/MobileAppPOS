@@ -29,7 +29,7 @@ axios.interceptors.response.use((response) => response, (error) => {
    // whatever you want to do with the error
    console.log(error.response.status)
    if (error.response.status === 404) {
-    alert('The requested resource does not exist or has been deleted')
+   // alert('The requested resource does not exist or has been deleted')
   }
 
   if (error.response.status === 401) {
