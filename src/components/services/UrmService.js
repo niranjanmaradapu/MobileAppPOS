@@ -101,6 +101,10 @@ class UrmService {
     editUser(){
         return REACT_NATIVE_APP_BASE_URL +  "/user-management/user/updateUser"
     } 
+
+    getGSTNumber(){
+        return REACT_NATIVE_APP_BASE_URL +  "/user-management/store/getgstDetails"
+    } 
 }
 export default new UrmService()
 

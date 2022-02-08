@@ -20,7 +20,7 @@ export default class AddStore extends Component {
             storeState: "",
             storeDistrict: "",
             storeName: "",
-            gstNumber: "123",
+            gstNumber: "",
             mobile: "",
             city: "",
             area: "",
@@ -58,6 +58,7 @@ export default class AddStore extends Component {
                 address: this.props.route.params.item.address,
                 domainId: this.props.route.params.item.clientDomianlId.clientDomainaId,
                 storeName: this.props.route.params.item.name,
+                storeId: this.props.route.params.item.id,
             });
             console.log(this.props.route.params.item);
             this.setState({ navtext: 'Edit Store' });
@@ -137,6 +138,7 @@ export default class AddStore extends Component {
                         console.log('stateId is' + this.state.statesArray[i].name);
                         this.setState({ storeState: this.state.statesArray[i].name });
                         this.getMasterDistrictsList();
+                        this.getGSTNumber()
                     }
                 }
                 this.setState({
@@ -151,12 +153,11 @@ export default class AddStore extends Component {
     handleStoreState = (value) => {
         for (let i = 0; i < this.state.statesArray.length; i++) {
             if (this.state.statesArray[i].name === value) {
-                this.setState({ stateId: this.state.statesArray[i].id });
-                this.setState({ statecode: this.state.statesArray[i].code });
-
+                this.setState({ stateId: this.state.statesArray[i].id,statecode: this.state.statesArray[i].code });
             }
         }
-        this.getMasterDistrictsList();
+       this.getGSTNumber()
+       this.getMasterDistrictsList();
         this.setState({ storeState: value });
     };
 
@@ -240,6 +241,19 @@ export default class AddStore extends Component {
     handleStoreName = (value) => {
         this.setState({ storeName: value });
     };
+
+     getGSTNumber(){
+        const params = {
+            "clientId": this.state.clientId,
+            "stateCode":this.state.statecode,
+        }
+        axios.get(UrmService.getGSTNumber(), { params }).then((res) => {
+            console.log(res)
+            if (res) {
+                this.setState({gstNumber: res.data.result.gstNumber})
+            }
+        });
+    } 
 
     saveStore() {
         if (this.state.storeState === "") {
