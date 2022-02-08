@@ -618,7 +618,7 @@ export default class UserManagement extends Component {
                                                     <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Role </Text>
                                                 </View>
                                                 <View>
-                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15,  }} onPress={() => this.modelCancel()}>
+                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                         <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
                                                 </View>
@@ -722,7 +722,7 @@ export default class UserManagement extends Component {
                         )}
                         {this.state.flagFilterRoles && (
                             <View>
-                                <Modal isVisible={this.state.modalVisible} style={{margin: 0}}>
+                                <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
                                     <View style={styles.filterMainContainer} >
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -730,7 +730,7 @@ export default class UserManagement extends Component {
                                                     <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
                                                 </View>
                                                 <View>
-                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15,  }} onPress={() => this.modelCancel()}>
+                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                         <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
                                                 </View>
@@ -843,7 +843,7 @@ export default class UserManagement extends Component {
                                                     <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
                                                 </View>
                                                 <View>
-                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15,  }} onPress={() => this.modelCancel()}>
+                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                         <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
                                                 </View>
@@ -1087,7 +1087,7 @@ const styles = StyleSheet.create({
     filterButton_mobile: {
         position: 'absolute',
         right: 20,
-        bottom: 5,
+        top: 30,
         backgroundColor: '#ffffff',
         borderRadius: 5,
         width: 30,
