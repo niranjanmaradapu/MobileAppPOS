@@ -20,7 +20,7 @@ export default class AddStore extends Component {
             storeState: "",
             storeDistrict: "",
             storeName: "",
-            gstNumber: "",
+            gstNumber: "123",
             mobile: "",
             city: "",
             area: "",
@@ -59,7 +59,7 @@ export default class AddStore extends Component {
                 domainId: this.props.route.params.item.clientDomianlId.clientDomainaId,
                 storeName: this.props.route.params.item.name,
             });
-            console.log(this.props.route.params.item)
+            console.log(this.props.route.params.item);
             this.setState({ navtext: 'Edit Store' });
         }
         else {
@@ -86,7 +86,7 @@ export default class AddStore extends Component {
                             value: this.state.domainsArray[i].name,
                             label: this.state.domainsArray[i].name
                         });
-                       
+
                         if (number.clientDomainaId === this.state.domainId) {
                             this.setState({ domain: this.state.domainsArray[i].name });
 
@@ -132,17 +132,17 @@ export default class AddStore extends Component {
                         value: this.state.statesArray[i].name,
                         label: this.state.statesArray[i].name
                     });
-                  
+
                     if (res.data["result"][i].stateId === this.state.stateId) {
                         console.log('stateId is' + this.state.statesArray[i].name);
                         this.setState({ storeState: this.state.statesArray[i].name });
                         this.getMasterDistrictsList();
                     }
                 }
-                  this.setState({
-                        states: states,
-                    });
-                    this.setState({ statesArray: this.state.statesArray });
+                this.setState({
+                    states: states,
+                });
+                this.setState({ statesArray: this.state.statesArray });
             }
 
         });
@@ -183,7 +183,7 @@ export default class AddStore extends Component {
                     });
                     this.setState({ dictrictArray: this.state.dictrictArray });
                     if (this.state.dictrictArray[i].id === this.state.districtId) {
-                          console.log('district name vinod is' + this.state.dictrictArray[i].name)
+                        console.log('district name vinod is' + this.state.dictrictArray[i].name);
                         this.setState({ storeDistrict: this.state.dictrictArray[i].name });
                     }
                 }
@@ -195,7 +195,7 @@ export default class AddStore extends Component {
     handleDistrict = (value) => {
         for (let i = 0; i < this.state.dictrictArray.length; i++) {
             if (this.state.dictrictArray[i].name === value) {
-                console.log('district name vinod is' + this.state.dictrictArray[i].id)
+                console.log('district name vinod is' + this.state.dictrictArray[i].id);
                 this.setState({ districtId: this.state.dictrictArray[i].id });
             }
         }
@@ -250,7 +250,12 @@ export default class AddStore extends Component {
             alert("Please Enter All Mandatory Fields");
         } else if (this.state.storeName === "") {
             alert("Please Enter All Mandatory Fields");
-        } else {
+        } else if (this.state.mobile.length === 0 || this.state.mobile.length < 10) {
+            alert("Please Enter a valid 10 digit mobile number");
+        } else if (this.state.gstNumber.length === 0) {
+            alert("Please Enter GST Number");
+        }
+        else {
             if (this.state.isEdit === false) {
                 const saveObj = {
                     "name": this.state.storeName,
@@ -271,7 +276,7 @@ export default class AddStore extends Component {
                 axios.post(UrmService.saveStore(), saveObj).then((res) => {
                     console.log(res.data);
                     if (res.data && res.data["isSuccess"] === "true") {
-                         this.props.route.params.onGoBack();
+                        this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
                     else {
@@ -299,12 +304,12 @@ export default class AddStore extends Component {
                     "gstNumber": this.state.gstNumber,
                     "clientId": this.state.clientId
                 };
-                console.log(saveObj);
+                console.log("save", saveObj);
                 this.setState({ loading: true });
                 axios.put(UrmService.editStore(), saveObj).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
                         this.setState({ loading: false });
-                         this.props.route.params.onGoBack();
+                        this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
                     else {

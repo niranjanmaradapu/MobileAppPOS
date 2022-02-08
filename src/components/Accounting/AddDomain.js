@@ -14,12 +14,12 @@ export default class AddDomain extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            domain: "",
-            clientId:0,
+            domainName: "",
+            clientId: 0,
             description: "",
-            domainsArray:[],
-            domains:[],
-            domainId:0,
+            domainsArray: [],
+            domains: [],
+            domainId: 0,
         };
     }
 
@@ -32,41 +32,41 @@ export default class AddDomain extends Component {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
         this.setState({ clientId: clientId });
 
-        this.getMasterDomainsList()
+        this.getMasterDomainsList();
     }
 
-    
 
-   getMasterDomainsList(){
+
+    getMasterDomainsList() {
         this.setState({ domains: [] });
         this.setState({ loading: false });
         var domains = [];
         axios.get(UrmService.getMasterDomains()).then((res) => {
-        if (res.data["result"]) {
-            for (var i = 0; i < res.data["result"].length; i++) {
-                this.state.domainsArray.push({ name: res.data["result"][i].channelName, id:  res.data["result"][i].id })
-                domains.push({
-                    value: this.state.domainsArray[i].name,
-                    label: this.state.domainsArray[i].name
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    this.state.domainsArray.push({ name: res.data["result"][i].channelName, id: res.data["result"][i].id });
+                    domains.push({
+                        value: this.state.domainsArray[i].name,
+                        label: this.state.domainsArray[i].name
+                    });
+                }
+                this.setState({
+                    domains: domains,
                 });
+                this.setState({ domainsArray: this.state.domainsArray });
             }
-            this.setState({
-                domains: domains,
-            })
-            this.setState({ domainsArray: this.state.domainsArray })
-        }
-        
-    });
-}
 
-handleDomain = (value) => {
-    for (let i = 0; i < this.state.domainsArray.length; i++) {
-        if (this.state.domainsArray[i].name === value) {
-          this.setState({ domainId: this.state.domainsArray[i].id })
-        }   
+        });
     }
-    this.setState({ domain: value })
-}
+
+    handleDomain = (value) => {
+        for (let i = 0; i < this.state.domainsArray.length; i++) {
+            if (this.state.domainsArray[i].name === value) {
+                this.setState({ domainId: this.state.domainsArray[i].id, domainName: value });
+                // this.setState({  });
+            }
+        }
+    };
 
 
     cancel() {
@@ -74,44 +74,45 @@ handleDomain = (value) => {
         return true;
     }
 
-   
+
 
     handleDescription = (value) => {
         this.setState({ description: value });
     };
 
     saveDomain() {
-        if (this.state.domain.length === 0) {
-            alert("please select the domain");
+        if (this.state.domainName === "") {
+            alert("please select the domainName");
         }
-        else if(this.state.description.length === 0) {
-            alert("please enter description");
-        }
+        // else if (this.state.description.length === 0) {
+        //     alert("please enter description");
+
+        // }
         else {
             const obj = {
-                "name": this.state.domain,
+                "name": this.state.domainName,
                 "discription": this.state.description,
                 "masterDomianId": this.state.domainId,
                 "clientId": this.state.clientId,
                 "createdBy": global.username
-            }
-              console.log('params are' + JSON.stringify(obj))
-              this.setState({ loading: true })
-              axios.post(UrmService.saveDomain(), obj).then((res) => {
-                  console.log(res.data)
+            };
+            console.log('params are' + JSON.stringify(obj));
+            this.setState({ loading: true });
+            axios.post(UrmService.saveDomain(), obj).then((res) => {
+                console.log(res.data);
                 if (res.data && res.data["isSuccess"] === "true") {
                     this.props.route.params.onGoBack();
                     this.props.navigation.goBack();
                 }
                 else {
-                  this.setState({ loading: false })
-                  alert(res.data.message);
+                    this.setState({ loading: false });
+                    alert(res.data.message);
                 }
-              }
-              ).catch(() => {
+            }
+            ).catch(() => {
                 this.setState({ loading: false });
             });
-           
+
         }
     }
 
@@ -132,6 +133,7 @@ handleDomain = (value) => {
                     </Text>
                 </View>
                 <ScrollView>
+                    <Text style={{ fontSize: Device.isTablet ? 22 : 17, fontFamily: 'medium', marginLeft: 20, marginBottom: 20 }}>Doamin <Text style={{ color: 'red', fontFamily: 'bold' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -144,13 +146,10 @@ handleDomain = (value) => {
                             items={this.state.domains}
                             onValueChange={this.handleDomain}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                            value={this.state.domain}
+                            value={this.state.domainName}
                             useNativeAndroidPickerStyle={false}
                         />
 
-
-                       
-                          
                     </View>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}

@@ -120,19 +120,21 @@ export default class Privilages extends Component {
 
     saveRole() {
         global.privilages = [];
-        this.state.childlist =  []
-       // console.log('vinod' + this.state.childlist);
+        this.state.childlist = [];
+        // console.log('vinod' + this.state.childlist);
         for (let i = 0; i < this.state.previlages.length; i++) {
-            let len =  this.state.previlages[i].data.length
-          //  var index = 0
+            let len = this.state.previlages[i].data.length;
+            //  var index = 0
             for (let j = 0; j < len; j++) {
-                if(this.state.previlages[i].data[j].selectedindex === 1){
-                    this.state.childlist.push({ title: this.state.previlages[i].data[j].name, 
+                if (this.state.previlages[i].data[j].selectedindex === 1) {
+                    this.state.childlist.push({
+                        title: this.state.previlages[i].data[j].name,
                         description: this.state.previlages[i].data[j].description,
-                         parent: this.state.previlages[i].title, 
-                         id: this.state.previlages[i].id, 
-                         subPrivillages: this.state.previlages[i].data[j].subPrivillage });
-                         console.log('vinod' +  this.state.previlages[i].data[j].name)
+                        parent: this.state.previlages[i].title,
+                        id: this.state.previlages[i].id,
+                        subPrivillages: this.state.previlages[i].data[j].subPrivillage
+                    });
+                    console.log('vinod' + this.state.previlages[i].data[j].name);
                 }
                 // if(this.state.previlages[i].data[j].selectedindex === 0){
                 //  
@@ -141,12 +143,12 @@ export default class Privilages extends Component {
                 //     // this.setState({ childlist: list });
                 // }
             }
-           
+
         }
-      //  console.log('vinod' + this.state.childlist);
+        //  console.log('vinod' + this.state.childlist);
         this.setState({ childlist: this.state.childlist });
         global.privilages = this.state.childlist;
-        console.log( global.privilages.length);
+        console.log(global.privilages.length);
         this.props.route.params.onGoBack();
         this.props.navigation.goBack();
     }
@@ -154,7 +156,7 @@ export default class Privilages extends Component {
     selectedPrivilage = (item, index, section) => {
         if (item.selectedindex === 0) {
             item.selectedindex = 1;
-           // this.state.childlist.push({ title: item.name, description: item.description, parent: section.title, id: section.id, subPrivillages: item.subPrivillage });
+            // this.state.childlist.push({ title: item.name, description: item.description, parent: section.title, id: section.id, subPrivillages: item.subPrivillage });
         }
         else {
             item.selectedindex = 0;
@@ -164,7 +166,7 @@ export default class Privilages extends Component {
         }
 
         this.setState({ previlages: this.state.previlages });
-       
+
     };
 
 
@@ -181,7 +183,7 @@ export default class Privilages extends Component {
                         <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                        Privilages
+                        Privileges
                     </Text>
                 </View>
 

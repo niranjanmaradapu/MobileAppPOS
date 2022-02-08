@@ -96,16 +96,16 @@ export default class AccountManagement extends Component {
                                                         if (i === 0) {
                                                             this.state.privilages.push({ bool: true, name: subprivilage.name });
                                                         }
-                                                        else if (subprivilage.name === "Credit Notes"){
+                                                        else if (subprivilage.name === "Credit Notes") {
 
                                                         }
-                                                        else if (subprivilage.name === "Debit Notes"){
+                                                        else if (subprivilage.name === "Debit Notes") {
 
                                                         }
-                                                        else if (subprivilage.name === "Create Tax Master"){
+                                                        else if (subprivilage.name === "Create Tax Master") {
 
                                                         }
-                                                        else if (subprivilage.name === "Create HSN Code"){
+                                                        else if (subprivilage.name === "Create HSN Code") {
 
                                                         }
                                                         else {
@@ -185,7 +185,7 @@ export default class AccountManagement extends Component {
                     console.log('sfsdfdfsdfdsfsfsdfs' + number);
                     console.log(number);
                     this.setState({ loading: false });
-                    this.state.domains.push(number);   
+                    this.state.domains.push(number);
                 }
                 this.setState({ domains: this.state.domains });
             }

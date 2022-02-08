@@ -123,6 +123,7 @@ export default class ManagePassword extends Component {
                         placeholder="New Password"
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
+                        secureTextEntry={true}
                         autoCapitalize="none"
                         value={this.state.newPassword}
                         onChangeText={this.handleNewPassword}

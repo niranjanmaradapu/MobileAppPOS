@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import axios from 'axios';
+import React, { Component } from 'react';
+import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Loader from '../../commonUtils/loader';
+import LoginService from '../services/LoginService';
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
-import Device from 'react-native-device-detection';
-import LoginService from '../services/LoginService';
-import axios from 'axios';
-import Loader from '../../commonUtils/loader';
 
 class ForgotPassword extends Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class ForgotPassword extends Component {
             code: '',
             newPassword: '',
             confirmPassword: '',
-        }
+        };
     }
 
     componentDidMount() {
@@ -32,34 +32,34 @@ class ForgotPassword extends Component {
     }
 
     handleEmail = (text) => {
-        this.setState({ userName: text })
-    }
+        this.setState({ userName: text });
+    };
     handleCode = (text) => {
-        this.setState({ code: text })
-    }
+        this.setState({ code: text });
+    };
 
     handleNewPassword = (text) => {
-        this.setState({ newPassword: text })
-    }
+        this.setState({ newPassword: text });
+    };
 
     handleConfirmPassword = (text) => {
-        this.setState({ confirmPassword: text })
-    }
+        this.setState({ confirmPassword: text });
+    };
 
     async create() {
         if (this.state.userName.length === 0) {
             alert('You must enter a Usename');
-        } 
+        }
         else {
             this.setState({ loading: true });
             axios.get(LoginService.sendVerificationCode() + this.state.userName).then((res) => {
                 if (res) {
                     this.setState({ loading: false });
                     alert("Confirmation Code Sent to mail");
-                    this.props.navigation.navigate('UpdateNewpassword', { userName: this.state.userName });  
+                    this.props.navigation.navigate('UpdateNewpassword', { userName: this.state.userName });
                 }
             });
-           
+
         }
     }
 
@@ -68,11 +68,11 @@ class ForgotPassword extends Component {
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
-              
-                    {this.state.loading &&
+
+                {this.state.loading &&
                     <Loader
-                    loading={this.state.loading} />
-                }  
+                        loading={this.state.loading} />
+                }
                 <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
 
                     <View style={styles.container}>
@@ -80,13 +80,13 @@ class ForgotPassword extends Component {
                             {/* <Image source={require('../assets/images/logo.png')} style={styles.logoImage} /> */}
                             {/* <Text></Text> */}
                             <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                        <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                            <Image source={require('../assets/images/backButton.png')} />
-                        </TouchableOpacity>
-                        <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                          Verification Code
-                        </Text>
-                    </View>
+                                <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
+                                    <Image source={require('../assets/images/backButton.png')} />
+                                </TouchableOpacity>
+                                <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                                    Verification Code
+                                </Text>
+                            </View>
                         </View>
 
 
@@ -101,7 +101,7 @@ class ForgotPassword extends Component {
                                 autoCapitalize="none"
                                 onChangeText={this.handleEmail}
                                 value={this.state.userName}
-                                ref={inputemail => { this.emailValueInput = inputemail }} />
+                                ref={inputemail => { this.emailValueInput = inputemail; }} />
 
 
                             {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
@@ -148,11 +148,11 @@ class ForgotPassword extends Component {
                 </SafeAreaView>
 
             </KeyboardAwareScrollView>
-        )
+        );
     }
 }
 
-export default ForgotPassword
+export default ForgotPassword;
 
 
 const pickerSelectStyles = StyleSheet.create({
@@ -181,7 +181,7 @@ const pickerSelectStyles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 16,
     },
-})
+});
 
 const styles = StyleSheet.create({
     logoImage: {
@@ -300,8 +300,8 @@ const styles = StyleSheet.create({
     //     fontFamily: "regular",
     // },
 
-     // Styles For Tablet
-     viewsWidth_tablet: {
+    // Styles For Tablet
+    viewsWidth_tablet: {
         backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',
@@ -358,4 +358,4 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: "regular",
     },
-})
+});
