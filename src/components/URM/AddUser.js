@@ -297,9 +297,9 @@ export default class AddUser extends Component {
 
         const newArrayList = [];
         this.state.storesArray.forEach(obj => {
-          if (!newArrayList.some(o => o.name === obj.name)) {
-            newArrayList.push({...obj});
-          }
+            if (!newArrayList.some(o => o.name === obj.name)) {
+                newArrayList.push({ ...obj });
+            }
         });
         this.setState({ storesArray: newArrayList });
     };
@@ -636,35 +636,36 @@ export default class AddUser extends Component {
                         // sections={this.state.previlages}
                         // renderSectionHeader={({ section }) => <Text style={Device.isTablet ? styles.sectionHeaderTablet : styles.sectionHeaderMobile}>{section.title}</Text>}
                         // renderItem={({ item, index, section }) => (
+                        <View>
+                            <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Stores</Text>
+                            <FlatList
+                                data={this.state.storesArray}
+                                style={{ marginTop: 10, }}
+                                scrollEnabled={true}
+                                renderItem={({ item, index }) => (
+                                    <TouchableOpacity onPress={() => this.selectedPrivilage(item, index)}>
 
-                        <FlatList
-                            data={this.state.storesArray}
-                            style={{ marginTop: 10, }}
-                            scrollEnabled={true}
-                            renderItem={({ item, index }) => (
-                                <TouchableOpacity onPress={() => this.selectedPrivilage(item, index)}>
+                                        <View style={Device.isTablet ? styles.item : styles.item}>
+                                            <Text>
+                                                {item.name}
+                                            </Text>
 
-                                    <View style={Device.isTablet ? styles.item : styles.item}>
-                                        <Text>
-                                            {item.name}
-                                        </Text>
+                                            {item.selectedindex === 1 && (
+                                                <Image source={require('../assets/images/selected.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
+                                            )}
+                                            {item.selectedindex === 0 && (
+                                                <Image source={require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
+                                            )}
+                                        </View>
 
-                                        {item.selectedindex === 1 && (
-                                            <Image source={require('../assets/images/selected.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
-                                        )}
-                                        {item.selectedindex === 0 && (
-                                            <Image source={require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
-                                        )}
-                                    </View>
-
-                                    {/* </View> */}
-                                </TouchableOpacity>
+                                        {/* </View> */}
+                                    </TouchableOpacity>
 
 
 
-                            )}
-                        />
-
+                                )}
+                            />
+                        </View>
                     )}
                     {this.state.isSuperAdmin === false && (
                         <View>
