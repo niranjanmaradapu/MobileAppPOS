@@ -40,6 +40,7 @@ export default class UserManagement extends Component {
             doneButtonClicked: false,
             navtext: '',
             flagDashboard: true,
+            filterActive: false,
         };
     }
 
@@ -217,11 +218,15 @@ export default class UserManagement extends Component {
 
     topbarAction = (item, index) => {
         if (item.name === "Users") {
-            this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true });
+            this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false }, () => {
+                this.getAllUsers();
+            });
 
         }
         else if (item.name === "Roles") {
-            this.setState({ flagTwo: true, flagOne: false, flagDashboard: false, filterButton: true });
+            this.setState({ flagTwo: true, flagOne: false, flagDashboard: false, filterButton: true, filterActive: false }, () => {
+                this.getRolesList();
+            });
         }
         else if (item.name === "Dashboard") {
             this.setState({ flagTwo: false, flagOne: false, flagDashboard: true, filterButton: false });
@@ -244,7 +249,7 @@ export default class UserManagement extends Component {
 
     filterAction() {
         if (this.state.flagTwo === true) {
-            this.setState({ flagFilterRoles: true });
+            this.setState({ flagFilterRoles: true, filterActive: false });
         } else {
             this.setState({ flagFilterRoles: false });
         }
@@ -254,6 +259,19 @@ export default class UserManagement extends Component {
             this.setState({ flagFilterUsers: false });
         }
         this.setState({ modalVisible: true });
+    }
+
+    clearFilterAction() {
+        if (this.state.flagOne === true) {
+            this.setState({ filterActive: false }, () => {
+                this.getAllUsers();
+            });
+        }
+        else if (this.state.flagTwo === true) {
+            this.setState({ filterActive: false }, () => {
+                this.getRolesList();
+            });
+        }
     }
 
     modelCancel() {
@@ -344,10 +362,14 @@ export default class UserManagement extends Component {
         console.log(searchRole);
         axios.post(UrmService.getRolesBySearch(), searchRole).then((res) => {
             if (res) {
-                this.setState({ rolesData: res.data.result, modalVisible: false, createdDate: "", role: "", createdBy: "" });
+                this.setState({ rolesData: res.data.result, modalVisible: false, createdDate: "", role: "", createdBy: "" }, () => {
+                    this.setState({ filterActive: true });
+                });
 
             } else {
-                this.setState({ rolesData: res.data.result, modalVisible: false, createdDate: "", role: "", createdBy: "" });
+                this.setState({ rolesData: res.data.result, modalVisible: false, createdDate: "", role: "", createdBy: "" }, () => {
+                    this.setState({ filterActive: false });
+                });
             }
 
         });
@@ -367,10 +389,15 @@ export default class UserManagement extends Component {
         console.log(obj);
         axios.post(UrmService.getUserBySearch(), obj).then((res) => {
             if (res) {
-                this.setState({ usersData: res.data.result, modalVisible: false, userType: "", role: "", createdBy: "" });
+                this.setState({ usersData: res.data.result, modalVisible: false, userType: "", role: "", createdBy: "" },
+                    () => {
+                        this.setState({ filterActive: true });
+                    });
 
             } else {
-                this.setState({ usersData: res.data.result, modalVisible: false, userType: "", role: "", createdBy: "" });
+                this.setState({ usersData: res.data.result, modalVisible: false, userType: "", role: "", createdBy: "" }, () => {
+                    this.setState({ filterActive: false });
+                });
             }
 
         });
@@ -453,11 +480,22 @@ export default class UserManagement extends Component {
                             </TouchableOpacity>
                         )}
                         {this.state.filterButton &&
-                            <TouchableOpacity
-                                style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
-                                onPress={() => this.filterAction()} >
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
-                            </TouchableOpacity>
+                            <View>
+                                {!this.state.filterActive &&
+                                    <TouchableOpacity
+                                        style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                        onPress={() => this.filterAction()} >
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                                    </TouchableOpacity>
+                                }
+                                {this.state.filterActive &&
+                                    <TouchableOpacity
+                                        style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                        onPress={() => this.clearFilterAction()} >
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+                                    </TouchableOpacity>
+                                }
+                            </View>
                         }
                     </View>
 
@@ -528,7 +566,7 @@ export default class UserManagement extends Component {
                                             <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>CREATED BY: {"\n"}{item.createdBy}</Text>
                                             <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>USER COUNT:  {item.usersCount}</Text>
                                             <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>DESCRIPTION: {"\n"}{item.discription}</Text>
-                                            
+
                                             <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditRole(item, index)}>
                                                 <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                             </TouchableOpacity>
@@ -580,7 +618,7 @@ export default class UserManagement extends Component {
                                                     <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Role </Text>
                                                 </View>
                                                 <View>
-                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15,  }} onPress={() => this.modelCancel()}>
                                                         <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
                                                 </View>
@@ -636,7 +674,7 @@ export default class UserManagement extends Component {
                         )}
                         {this.state.userDelete && (
                             <View>
-                                <Modal isVisible={this.state.modalVisible}>
+                                <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
                                     <View style={styles.deleteMainContainer}>
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -644,7 +682,7 @@ export default class UserManagement extends Component {
                                                     <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete User </Text>
                                                 </View>
                                                 <View>
-                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                         <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
                                                 </View>
@@ -684,7 +722,7 @@ export default class UserManagement extends Component {
                         )}
                         {this.state.flagFilterRoles && (
                             <View>
-                                <Modal isVisible={this.state.modalVisible}>
+                                <Modal isVisible={this.state.modalVisible} style={{margin: 0}}>
                                     <View style={styles.filterMainContainer} >
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -692,7 +730,7 @@ export default class UserManagement extends Component {
                                                     <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
                                                 </View>
                                                 <View>
-                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15,  }} onPress={() => this.modelCancel()}>
                                                         <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
                                                 </View>
@@ -797,7 +835,7 @@ export default class UserManagement extends Component {
 
                         {this.state.flagFilterUsers && (
                             <View>
-                                <Modal isVisible={this.state.modalVisible}>
+                                <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
                                     <View style={styles.filterMainContainer} >
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -805,7 +843,7 @@ export default class UserManagement extends Component {
                                                     <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
                                                 </View>
                                                 <View>
-                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15,  }} onPress={() => this.modelCancel()}>
                                                         <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
                                                 </View>
@@ -998,10 +1036,10 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 5,
     },
     deleteMainContainer: {
-        marginLeft: -40,
-        marginRight: -40,
+        // marginLeft: -40,
+        // marginRight: -40,
+        // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
-        paddingLeft: Device.isTablet ? 0 : 20,
         marginTop: Device.isTablet ? deviceheight - 300 : deviceheight - 250,
         height: Device.isTablet ? 300 : 250,
     },
@@ -1013,10 +1051,10 @@ const styles = StyleSheet.create({
         right: Device.isTablet ? 15 : 30,
     },
     filterMainContainer: {
-        marginLeft: -40,
-        marginRight: -40,
+        // marginLeft: -40,
+        // marginRight: -40,
+        // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
-        paddingLeft: Device.isTablet ? 0 : 20,
         marginTop: Device.isTablet ? deviceheight - 500 : deviceheight - 400,
         height: Device.isTablet ? 500 : 400,
     },

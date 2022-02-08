@@ -54,6 +54,7 @@ export default class ReportsDashboard extends Component {
                 ]
             },
             storeId: '',
+            domainId: 1,
             storeNames: [],
         };
     }
@@ -73,7 +74,7 @@ export default class ReportsDashboard extends Component {
             console.log('there is error getting storeId');
         });
 
-        
+
 
         AsyncStorage.getItem("storeName").then((value) => {
 
@@ -87,8 +88,8 @@ export default class ReportsDashboard extends Component {
     }
 
     getInvoicesGenerated() {
-        const param = '?storeId=' + this.state.storeId;
-        axios.get(ReportsGraphsService.getInvocesGenerated() + param).then(res => {
+        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
+        axios.get(ReportsGraphsService.getInvocesGenerated() + params).then(res => {
             if (res) {
                 if (res.data.result !== "null" && res.data.result.length > 0) {
                     this.setState({ invoicesGenerted: res.data.result },
@@ -120,7 +121,8 @@ export default class ReportsDashboard extends Component {
     }
 
     getSalesSummary() {
-        axios.get(ReportsGraphsService.getSaleSummary()).then(response => {
+        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
+        axios.get(ReportsGraphsService.getSaleSummary() + params).then(response => {
             console.warn("hello");
             if (response) {
                 if (response.data.result !== "null" && response.data.result.length > 0) {
@@ -155,7 +157,8 @@ export default class ReportsDashboard extends Component {
     }
 
     getActiveVsInactivePromos() {
-        axios.get(ReportsGraphsService.getActiveInactivePromos()).then(response => {
+        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
+        axios.get(ReportsGraphsService.getActiveInactivePromos() + params).then(response => {
             if (response) {
                 if (response.data.result !== "null" && response.data.result.length > 0) {
                     console.log('Active Inactive Promos', response.data.result);
@@ -188,7 +191,8 @@ export default class ReportsDashboard extends Component {
     }
 
     getTopFiveSales() {
-        axios.get(ReportsGraphsService.getTopFiveSales()).then(response => {
+        const param = '?domainId=' + this.state.domainId;
+        axios.get(ReportsGraphsService.getTopFiveSales() + param).then(response => {
             console.log('Top Five Sales', response.data);
             if (response) {
                 if (response.data.result !== "null" && response.data.result.length > 0) {
