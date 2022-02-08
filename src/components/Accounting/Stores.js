@@ -41,7 +41,7 @@ export class Stores extends Component {
     }
 
     updateStore() {
-        // this.props.getStoresList()
+         // this.props.getStoresList()
     }
 
     modelCancel() {
@@ -154,7 +154,7 @@ export class FilterStores extends Component {
             statecode: '',
             dictrictArray: [],
             dictricts: [],
-            dictrictId: 0,
+            districtId: 0,
             filterStores: [],
         };
     }
@@ -170,7 +170,6 @@ export class FilterStores extends Component {
         var states = [];
         axios.get(UrmService.getStates()).then((res) => {
             if (res.data["result"]) {
-
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.statesArray.push({ name: res.data["result"][i].stateName, id: res.data["result"][i].stateId, code: res.data["result"][i].stateCode });
                     states.push({
@@ -221,7 +220,7 @@ export class FilterStores extends Component {
                 this.setState({
                     dictricts: dictricts,
                 });
-                this.setState({ dictrictArray: this.state.dictrictArray });
+                this.setState({ dictrictArray: this.state.dictrictArray }); 
             }
 
         });
@@ -245,18 +244,20 @@ export class FilterStores extends Component {
         this.setState({ storeState: value });
     };
 
-    handleDistrict = (value) => {
-        this.setState({ storeDistrict: value });
-    };
 
     applyStoreFilter() {
-        //  alert("Applied");
+        if (this.state.city === "") {
+            this.state.city = null;
+        }
+        
         const searchStore = {
-            "stateId": this.state.storeState,
-            "cityId": this.state.city,
-            "districtId": this.state.storeDistrict,
-            "storeName": null
+            "stateId": this.state.statecode,
+            // "cityId": this.state.city,
+            "districtId": this.state.districtId,
+            "storeName": this.state.city,
         };
+
+        console.log('store search',searchStore)
 
         axios.post(UrmService.getStoresBySearch(), searchStore).then((res) => {
             if (res) {
@@ -335,7 +336,7 @@ export class FilterStores extends Component {
                         <TextInput
                             style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                             underlineColorAndroid="transparent"
-                            placeholder="CITY"
+                            placeholder="STORE NAME"
                             placeholderTextColor="#6F6F6F"
                             textAlignVertical="center"
                             autoCapitalize="none"
