@@ -44,7 +44,7 @@ export default class Inventory extends Component {
             storeName: "",
             privilages: [],
             subPrivilages: "",
-            barcodeTextileId:"",
+            barcodeTextileId: "",
         };
     }
 
@@ -375,8 +375,8 @@ export default class Inventory extends Component {
     }
 
     handlebarcodedeleteaction(item, index) {
-        this.setState({ inventoryDelete: true, modalVisible: true,barcodeTextileId:item.barcodeTextileId });
-        
+        this.setState({ inventoryDelete: true, modalVisible: true, barcodeTextileId: item.barcodeTextileId });
+
         // axios.delete(InventoryService.deleteTextileBarcode(), {
         //     params: {
         //         "barcodeId": item.barcodeTextileId,
@@ -442,13 +442,13 @@ export default class Inventory extends Component {
         }).then((res) => {
             if (res.data && res.data.isSuccess === "true") {
                 alert(res.data.result);
-                this.setState({ inventoryDelete: false, modalVisible: false,barcodeTextileId:'' });
+                this.setState({ inventoryDelete: false, modalVisible: false, barcodeTextileId: '' });
                 this.setState({ isAddBarcode: false });
                 this.getAllBarcodes();
-              } else {
-                this.setState({ inventoryDelete: false, modalVisible: false,barcodeTextileId:'' });
-               alert(res.data.message);
-              }
+            } else {
+                this.setState({ inventoryDelete: false, modalVisible: false, barcodeTextileId: '' });
+                alert(res.data.message);
+            }
         }
         );
     };
@@ -533,13 +533,14 @@ export default class Inventory extends Component {
                                 data={this.state.barcodesData}
                                 style={{ marginTop: 20 }}
                                 scrollEnabled={true}
+                                removeClippedSubviews={false}
                                 renderItem={({ item, index }) => (
                                     <View
                                         style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
                                     >
                                         <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
                                             <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>BARCODE: {"\n"}{item.barcode}</Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>BARCODE: {"\n"}{item.barcode}</Text>
                                             <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>LIST PRICE:  {"\n"} ₹{item.productTextile.itemMrp} </Text>
                                             <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>STORE: {this.state.storeName}</Text>
                                             <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.productTextile.qty}</Text>
@@ -559,10 +560,10 @@ export default class Inventory extends Component {
 
                                         </View>
                                     </View>
-                                )}  
+                                )}
                             />
                         )}
-                        
+
                         {this.state.flagtwo && (
                             <FlatList
                                 data={this.state.reBarcodesData}
@@ -591,7 +592,7 @@ export default class Inventory extends Component {
                                 )}
                             />
                         )}
-                         {this.state.inventoryDelete && (
+                        {this.state.inventoryDelete && (
                             <View>
                                 <Modal isVisible={this.state.modalVisible}>
                                     <View style={styles.deleteMainContainer}>

@@ -227,15 +227,15 @@ export class ListOfEstimationSlip extends Component {
                 />
                 {this.state.deleteEstimationSlip && (
                     <View>
-                        <Modal isVisible={this.state.modalVisible}>
-                            <View style={styles.deleteMainContainer}>
+                        <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
+                            <View style={[styles.deleteMainContainer, { backgroundColor: "#ED1C24" }]}>
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Estimation Slip </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > Delete Estimation Slip </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.estimationModelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -246,27 +246,30 @@ export class ListOfEstimationSlip extends Component {
                                         backgroundColor: 'lightgray',
                                     }}></Text>
                                 </View>
-                                <Text style={{
+                                <View style={{ backgroundColor: "#ffffff", height: Device.isTablet ? 300 : 250 }}>
+                                    <Text style={{
+                                        // height: Device.isTablet ? 40 : 20,
+                                        textAlign: 'center',
+                                        fontFamily: 'regular',
+                                        marginTop: 15,
+                                        fontSize: Device.isTablet ? 23 : 18,
+                                        color: '#353C40'
+                                    }}> Are you sure want to delete Estimation Slip ?  </Text>
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 40 : 30 }]} onPress={() => this.deleteEstimationSlip(item, index)}
+                                    >
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
 
-                                    height: Device.isTablet ? 40 : 20,
-                                    textAlign: 'center',
-                                    fontFamily: 'regular',
-                                    fontSize: Device.isTablet ? 23 : 18,
-                                    color: '#353C40'
-                                }}> Are you sure want to delete Estimation Slip ?  </Text>
-                                <TouchableOpacity
-                                    style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 55 : 45 }]} onPress={() => this.deleteEstimationSlip(item, index)}
-                                >
-                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                    </TouchableOpacity>
 
-                                </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#ED1C24', }]} onPress={() => this.estimationModelCancel()}
+                                    >
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#ED1C24' }]}  > CANCEL </Text>
 
-                                <TouchableOpacity
-                                    style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.estimationModelCancel()}
-                                >
-                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+                                    </TouchableOpacity>
+                                </View>
 
-                                </TouchableOpacity>
                             </View>
                         </Modal>
                     </View>
@@ -274,7 +277,7 @@ export class ListOfEstimationSlip extends Component {
 
                 {this.props.flagFilterEstimationSlip && (
                     <View>
-                        <Modal isVisible={this.props.modalVisible}>
+                        <Modal isVisible={this.props.modalVisible} style={{ margin: 0 }}>
                             <View style={styles.filterMainContainer} >
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -282,7 +285,7 @@ export class ListOfEstimationSlip extends Component {
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -415,65 +418,65 @@ export class ListOfEstimationSlip extends Component {
 
                 {this.state.flagViewDetail && (
                     <View>
-                        <Modal isVisible={this.state.modalVisible}>
+                        <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
 
-                            <View style={[styles.filterMainContainer, { height: Device.isTablet ? 400 : 300, marginTop: Device.isTablet ? deviceheight - 400 : deviceheight - 350, backgroundColor: '#00a9a9' }]}>
+                            <View style={[styles.filterMainContainer, { height: Device.isTablet ? 400 : 350, marginTop: Device.isTablet ? deviceheight - 400 : deviceheight - 350, backgroundColor: '#00a9a9' }]}>
                                 <View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50, }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > Estimation Slip Details </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff', }} > Estimation Slip Details </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 10 }} onPress={() => this.estimationModelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
                                     <Text style={{
                                         height: Device.isTablet ? 2 : 1,
-                                        width: deviceWidth - 10,
+                                        width: deviceWidth,
                                         backgroundColor: 'lightgray',
                                     }}></Text>
                                 </View>
-                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 350 : 300 }}>
-                                    <View style={{ flexDirection: 'column', justifyContent: 'space-around', paddingRight: Device.isTablet ? 20 : 20, paddingLeft: Device.isTablet ? 20 : 0, height: Device.isTablet ? 310 : 250 }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 350 : 300, width: deviceWidth, margin: 0 }}>
+                                    <View style={{ flexDirection: 'column', justifyContent: 'space-around', height: Device.isTablet ? 300 : 250 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
                                             <Text style={styles.viewText} >
                                                 Delivery Slip:  </Text>
                                             <Text style={[styles.viewSubText, { color: '#00a9a9', fontFamily: 'medium' }]} selectable={true}>
                                                 {this.state.dsnumber} </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
                                             <Text style={styles.viewText} >
                                                 SM:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 - </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
                                             <Text style={styles.viewText} >
                                                 QTY:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.qty} </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
                                             <Text style={styles.viewText} >
                                                 GROSS AMOUNT:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 ₹ {this.state.mrp} </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
                                             <Text style={styles.viewText} >
                                                 PROMO DISCOUNT:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.promodisc} </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
                                             <Text style={styles.viewText} >
                                                 NET AMOUNT:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 ₹ {this.state.mrp} </Text>
                                         </View>
-                                        <View style={{ paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                        <View style={{ paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
                                             <TouchableOpacity
                                                 style={[Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile, { borderColor: '#00a9a9' }]} onPress={() => this.estimationModelCancel()}
                                             >
@@ -590,17 +593,17 @@ const styles = StyleSheet.create({
         right: Device.isTablet ? 20 : 30,
     },
     deleteMainContainer: {
-        marginLeft: -40,
-        marginRight: -40,
+        // marginLeft: -40,
+        // marginRight: -40,
+        // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
-        paddingLeft: Device.isTablet ? 0 : 20,
         marginTop: Device.isTablet ? deviceheight - 350 : deviceheight - 240,
-        height: Device.isTablet ? 350 : 240,
+        height: Device.isTablet ? 350 : 300,
     },
     filterMainContainer: {
-        marginLeft: -40,
-        marginRight: -40,
-        paddingLeft: Device.isTablet ? 0 : 20,
+        // marginLeft: -40,
+        // marginRight: -40,
+        // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
         marginTop: Device.isTablet ? deviceheight - 630 : deviceheight - 530,
         height: Device.isTablet ? 630 : 530,
