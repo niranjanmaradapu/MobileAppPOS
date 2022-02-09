@@ -113,6 +113,7 @@ export default class NewSaleReport extends Component {
             console.log(res.data);
             if (res.data && res.data["isSuccess"] === "true") {
                 this.props.childParamNewsales(res.data.result.newSaleVo);
+                this.props.filterActiveCallback();
                 this.props.modelCancelCallback();
             }
             else {
@@ -256,14 +257,14 @@ export default class NewSaleReport extends Component {
                     <View>
                         <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
 
-                            <View style={styles.deleteMainContainer}>
+                            <View style={[styles.deleteMainContainer, { backgroundColor: '#ED1C24' }]}>
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > New Sale Report </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > Delete New Sale </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -275,30 +276,28 @@ export default class NewSaleReport extends Component {
                                     }}></Text>
                                 </View>
 
+                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 300 : 250, }}>
+                                    <Text style={{
+                                        textAlign: 'center',
+                                        fontFamily: 'regular',
+                                        fontSize: Device.isTablet ? 23 : 18,
+                                        color: '#353C40',
+                                        marginTop: 10
+                                    }}> Are you sure want to delete New Sale Report ?  </Text>
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 55 : 25 }]} onPress={() => this.deleteEstimationSlip(item, index)}
+                                    >
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
 
-                                <Text style={{
-                                    position: 'absolute',
-                                    top: 70,
-                                    height: Device.isTablet ? 40 : 20,
-                                    textAlign: 'center',
-                                    fontFamily: 'regular',
-                                    fontSize: Device.isTablet ? 23 : 18,
-                                    marginBottom: Device.isTablet ? 25 : 0,
-                                    color: '#353C40'
-                                }}> Are you sure want to delete New Sale Report ?  </Text>
-                                <TouchableOpacity
-                                    style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]} onPress={() => this.deleteEstimationSlip(item, index)}
-                                >
-                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                    </TouchableOpacity>
 
-                                </TouchableOpacity>
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#ED1C24' }]} onPress={() => this.estimationModelCancel()}
+                                    >
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#ED1C24' }]}  > CANCEL </Text>
 
-                                <TouchableOpacity
-                                    style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.estimationModelCancel()}
-                                >
-                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
-
-                                </TouchableOpacity>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </Modal>
                     </View>
@@ -310,10 +309,10 @@ export default class NewSaleReport extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17,  }} > Filter By </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 15 }} > Filter By </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -463,14 +462,14 @@ export default class NewSaleReport extends Component {
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > Estimation Slip Details </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 10 }} onPress={() => this.estimationModelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
                                     <Text style={{
                                         height: Device.isTablet ? 2 : 1,
-                                        width: deviceWidth - 10,
+                                        width: deviceWidth,
                                         backgroundColor: 'lightgray',
                                     }}></Text>
                                 </View>
@@ -710,7 +709,7 @@ const styles = StyleSheet.create({
         // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
         marginTop: Device.isTablet ? deviceheight - 350 : deviceheight - 240,
-        height: Device.isTablet ? 350 : 240,
+        height: Device.isTablet ? 350 : 300,
     },
     viewText: {
         fontSize: Device.isTablet ? 22 : 17,

@@ -30,8 +30,9 @@ export class ListOfBarcodes extends Component {
             toPrice: "",
             storeId: 0,
             storeName: "",
-            flagViewDetail: true,
+            flagViewDetail: false,
             flagdelete: false,
+            modalVisible: true,
             barcode: "",
             mrp: "",
             qty: "",
@@ -160,8 +161,7 @@ export class ListOfBarcodes extends Component {
             console.log(res.data);
             if (res.data && res.data["isSuccess"] === "true") {
                 this.props.childParamlistBarcodes(res.data.result);
-
-
+                this.props.filterActiveCallback();
                 this.props.modelCancelCallback();
             }
             else {
@@ -228,7 +228,7 @@ export class ListOfBarcodes extends Component {
                 />
                 {this.props.flagFilterListBarcodes && (
                     <View>
-                        <Modal isVisible={this.props.modalVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.props.modalVisible}>
                             <View style={styles.filterMainContainer} >
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -236,7 +236,7 @@ export class ListOfBarcodes extends Component {
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -381,7 +381,7 @@ export class ListOfBarcodes extends Component {
 
                 {this.state.flagViewDetail && (
                     <View>
-                        <Modal isVisible={this.state.modalVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
                             <View style={[styles.filterMainContainer, { height: Device.isTablet ? 400 : 300, marginTop: Device.isTablet ? deviceheight - 400 : deviceheight - 350, backgroundColor: '#00a9a9' }]}>
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -389,7 +389,7 @@ export class ListOfBarcodes extends Component {
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > Estimation Slip Details </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 10 }} onPress={() => this.estimationModelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -426,7 +426,7 @@ export class ListOfBarcodes extends Component {
                                             <Text style={styles.viewSubText} >
                                                 ₹ {this.state.qty} </Text>
                                         </View>
-                                        <View style={{ paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                        <View>
                                             <TouchableOpacity
                                                 style={[Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile, { borderColor: '#00a9a9' }]} onPress={() => this.estimationModelCancel()}
                                             >
@@ -561,10 +561,10 @@ const styles = StyleSheet.create({
         height: Device.isTablet ? 350 : 240,
     },
     filterMainContainer: {
-        marginLeft: -40,
-        marginRight: -40,
+        // marginLeft: -40,
+        // marginRight: -40,
+        // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
-        paddingLeft: Device.isTablet ? 0 : 20,
         marginTop: Device.isTablet ? deviceheight - 670 : deviceheight - 570,
         height: Device.isTablet ? 670 : 570,
     },

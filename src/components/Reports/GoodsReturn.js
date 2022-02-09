@@ -129,6 +129,7 @@ export class GoodsReturn extends Component {
             console.log(res.data);
             if (res.data && res.data["isSuccess"] === "true") {
                 this.props.childParamgoodsReturn(res.data.result);
+                this.props.filterActiveCallback();
                 this.props.modelCancelCallback();
             }
             else {
@@ -215,7 +216,7 @@ export class GoodsReturn extends Component {
                 />
                 {this.props.flagFilterGoodsReturn && (
                     <View>
-                        <Modal isVisible={this.props.modalVisible}>
+                        <Modal style={{margin: 0}}isVisible={this.props.modalVisible}>
                             <View style={styles.filterMainContainer} >
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -223,7 +224,7 @@ export class GoodsReturn extends Component {
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -443,10 +444,10 @@ const styles = StyleSheet.create({
         right: Device.isTablet ? 15 : 30,
     },
     filterMainContainer: {
-        marginLeft: -40,
-        marginRight: -40,
+        // marginLeft: -40,
+        // marginRight: -40,
+        // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
-        paddingLeft: Device.isTablet ? 0 : 20,
         marginTop: Device.isTablet ? deviceheight - 600 : deviceheight - 500,
         height: Device.isTablet ? 600 : 500,
     },
