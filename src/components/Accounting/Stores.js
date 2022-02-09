@@ -8,7 +8,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import UrmService from '../services/UrmService';
 var deviceWidth = Dimensions.get("window").width;
-
+var deviceHeight = Dimensions.get("window").height;
 export class Stores extends Component {
 
     constructor(props) {
@@ -41,7 +41,8 @@ export class Stores extends Component {
     }
 
     updateStore() {
-         // this.props.getStoresList()
+        // alert("done");
+        this.props.getStoresList();
     }
 
     modelCancel() {
@@ -84,13 +85,13 @@ export class Stores extends Component {
                 />
                 {this.state.storesDelete && (
                     <View>
-                        <Modal isVisible={this.state.modalVisible}>
+                        <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
 
-                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250, marginTop: Device.isTablet ? deviceHeight - 350 : deviceHeight - 250, backgroundColor: "#ED1C24" }]}>
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Store </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > Delete Store </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 0 }} onPress={() => this.storeModelCancel()}>
@@ -104,30 +105,31 @@ export class Stores extends Component {
                                         backgroundColor: 'lightgray',
                                     }}></Text>
                                 </View>
-                                
-                                <Text style={{
-                                    position: 'absolute',
-                                    top: 70,
-                                    height: Device.isTablet ? 40 : 20,
-                                    textAlign: 'center',
-                                    fontFamily: 'regular',
-                                    fontSize: Device.isTablet ? 23 : 18,
-                                    marginBottom: Device.isTablet ? 25 : 0,
-                                    color: '#353C40'
-                                }}> Are you sure want to delete Store?  </Text>
-                                <TouchableOpacity
-                                    style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]} onPress={() => this.deleteStore(item, index)}
-                                >
-                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 300 : 200, }}>
+                                    <Text style={{
+                                        // position: 'absolute',
+                                        // top: 70,
+                                        height: Device.isTablet ? 40 : 20,
+                                        textAlign: 'center',
+                                        fontFamily: 'regular',
+                                        fontSize: Device.isTablet ? 23 : 18,
+                                        color: '#353C40',
+                                        marginTop: 15,
+                                    }}> Are you sure want to delete Store?  </Text>
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 35 : 25 }]} onPress={() => this.deleteStore(item, index)}
+                                    >
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
 
-                                </TouchableOpacity>
+                                    </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.storeModelCancel()}
-                                >
-                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: "#ED1C24", }]} onPress={() => this.storeModelCancel()}
+                                    >
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: "#ED1C24" }]}  > CANCEL </Text>
 
-                                </TouchableOpacity>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </Modal>
                     </View>
@@ -220,7 +222,7 @@ export class FilterStores extends Component {
                 this.setState({
                     dictricts: dictricts,
                 });
-                this.setState({ dictrictArray: this.state.dictrictArray }); 
+                this.setState({ dictrictArray: this.state.dictrictArray });
             }
 
         });
@@ -249,7 +251,7 @@ export class FilterStores extends Component {
         if (this.state.city === "") {
             this.state.city = null;
         }
-        
+
         const searchStore = {
             "stateId": this.state.statecode,
             // "cityId": this.state.city,
@@ -257,7 +259,7 @@ export class FilterStores extends Component {
             "storeName": this.state.city,
         };
 
-        console.log('store search',searchStore)
+        console.log('store search', searchStore);
 
         axios.post(UrmService.getStoresBySearch(), searchStore).then((res) => {
             if (res) {
@@ -279,7 +281,7 @@ export class FilterStores extends Component {
     render() {
         return (
 
-            <Modal isVisible={this.props.modalVisible}>
+            <Modal isVisible={this.props.modalVisible} style={{ margin: 0 }}>
                 <View style={Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile} >
                     <View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -299,7 +301,7 @@ export class FilterStores extends Component {
                         }}></Text>
                     </View>
                     <KeyboardAwareScrollView enableOnAndroid={true} >
-                        
+
 
                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                             <RNPickerSelect
@@ -454,11 +456,12 @@ const styles = StyleSheet.create({
     filterMainContainer_mobile: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -20,
         backgroundColor: "#ffffff",
         height: 400,
-        position: 'absolute',
-        bottom: -20,
+        marginTop: deviceHeight - 400,
+        // marginLeft: -20,
+        // position: 'absolute',
+        // bottom: -20,
     },
     filterByTitle_mobile: {
         position: 'absolute',
@@ -584,11 +587,9 @@ const styles = StyleSheet.create({
     filterMainContainer_tablet: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -40,
         backgroundColor: "#ffffff",
         height: 500,
-        position: 'absolute',
-        bottom: -40,
+        marginTop: deviceHeight - 500,
     },
     filterByTitle_tablet: {
         position: 'absolute',
@@ -659,7 +660,7 @@ const styles = StyleSheet.create({
         height: 60,
         backgroundColor: "#ffffff",
         borderRadius: 5,
-        borderWidth: 1,
+        borderWidth: 2,
         borderColor: "#353C4050",
     },
     filterButtonCancelText_tablet: {

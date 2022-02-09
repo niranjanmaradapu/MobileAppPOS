@@ -46,7 +46,7 @@ export default class CreateRole extends Component {
                 parentlist: this.props.route.params.item.parentPrivilageVo,
                 roleId: this.props.route.params.item.roleId
             });
-            console.log("sadadsdsad" + this.props.route.params.item.clientDomainVo.domaiName)
+            console.log("sadadsdsad" + this.props.route.params.item.clientDomainVo.domaiName);
             this.setState({ navtext: 'Edit Role' });
         }
         else {
@@ -80,13 +80,13 @@ export default class CreateRole extends Component {
                             this.setState({ domain: this.state.domainsArray[0].name });
                             this.setState({ domainId: this.state.domainsArray[0].id });
                         }
-                        else{
+                        else {
                             if (number.domaiName === this.props.route.params.item.clientDomainVo.domaiName) {
                                 this.setState({ domain: this.state.domainsArray[i].name });
                                 this.setState({ domainId: this.state.domainsArray[i].id });
                             }
                         }
-                       
+
                     }
                     console.log(this.state.domains);
                 }
@@ -112,8 +112,8 @@ export default class CreateRole extends Component {
     }
 
     saveRole() {
-        console.log(this.state.parentlist)
-        console.log(this.state.childlist)
+        console.log(this.state.parentlist);
+        console.log(this.state.childlist);
         if (this.state.role === "") {
             alert("Please Enter Role");
         } else if (this.state.description === "") {
@@ -157,7 +157,7 @@ export default class CreateRole extends Component {
                     "clientDomianId": this.state.domainId,
                     "createdBy": global.username,
                     "parentPrivilages": this.state.parentlist,
-                    "subPrivillages": this.state.childlist,
+                    "subPrivillages": this.state.roles,
                     "roleId": this.state.roleId,
                 };
 
@@ -200,19 +200,19 @@ export default class CreateRole extends Component {
         this.setState({ childlist: [] });
         this.state.roles = [];
         for (let i = 0; i < global.privilages.length; i++) {
-                this.state.parentlist.push({ name: global.privilages[i].parent, id: global.privilages[i].id });
-                this.state.childlist.push(global.privilages[i].subPrivillages);
+            this.state.parentlist.push({ name: global.privilages[i].parent, id: global.privilages[i].id });
+            this.state.childlist.push(global.privilages[i].subPrivillages);
             this.state.roles.push(global.privilages[i].subPrivillages);
         }
         const newArrayList = [];
-    this.state.parentlist.forEach(obj => {
-      if (!newArrayList.some(o => o.name === obj.name)) {
-        newArrayList.push({...obj});
-      }
-    });
+        this.state.parentlist.forEach(obj => {
+            if (!newArrayList.some(o => o.name === obj.name)) {
+                newArrayList.push({ ...obj });
+            }
+        });
         this.setState({ parentlist: newArrayList, childlist: this.state.childlist, roles: this.state.roles });
     }
-    
+
 
     handleDomain = (value) => {
         this.setState({ domain: value });

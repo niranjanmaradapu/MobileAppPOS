@@ -254,7 +254,7 @@ export default class NewSaleReport extends Component {
                 />
                 {this.state.flagDeleteNewSale && (
                     <View>
-                        <Modal isVisible={this.state.modalVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
 
                             <View style={styles.deleteMainContainer}>
                                 <View>
@@ -305,12 +305,12 @@ export default class NewSaleReport extends Component {
                 )}
                 {this.props.flagFilterNewSale && (
                     <View>
-                        <Modal isVisible={this.props.modalVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.props.modalVisible}>
                             <View style={styles.filterMainContainer} >
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17,  }} > Filter By </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
@@ -454,7 +454,7 @@ export default class NewSaleReport extends Component {
 
                 {this.state.flagViewDetail && (
                     <View>
-                        <Modal isVisible={this.state.modalVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
 
                             <View style={[styles.filterMainContainer, { height: Device.isTablet ? 740 : 620, marginTop: Device.isTablet ? deviceheight - 740 : deviceheight - 620, backgroundColor: '#00a9a9' }]}>
                                 <View>
@@ -697,18 +697,18 @@ const styles = StyleSheet.create({
         right: Device.isTablet ? 15 : 30,
     },
     filterMainContainer: {
-        marginLeft: -40,
-        marginRight: -40,
+        // marginLeft: -40,
+        // marginRight: -40,
+        // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
-        paddingLeft: Device.isTablet ? 0 : 20,
         marginTop: Device.isTablet ? deviceheight - 680 : deviceheight - 580,
         height: Device.isTablet ? 680 : 580,
     },
     deleteMainContainer: {
-        marginLeft: -40,
-        marginRight: -40,
+        // marginLeft: -40,
+        // marginRight: -40,
+        // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
-        paddingLeft: Device.isTablet ? 0 : 20,
         marginTop: Device.isTablet ? deviceheight - 350 : deviceheight - 240,
         height: Device.isTablet ? 350 : 240,
     },

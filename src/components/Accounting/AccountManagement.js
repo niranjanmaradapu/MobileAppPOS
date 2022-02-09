@@ -369,7 +369,9 @@ export default class AccountManagement extends Component {
         this.setState({ stores: data });
     };
 
-
+    handelGetStore = () => {
+        this.getStoresList();
+    };
 
 
 
@@ -513,6 +515,7 @@ export default class AccountManagement extends Component {
                             {this.state.flagStore && (
                                 <Stores
                                     stores={this.state.stores}
+                                    getStoresList={this.handelGetStore}
                                     navigation={this.props.navigation}
                                 />
                             )}

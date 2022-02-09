@@ -16,11 +16,15 @@ export default class Domain extends Component {
                     renderItem={({ item, index }) => (
                         <View style={Device.isTablet ? styles.flatlistContainer_tablet : styles.flatlistContainer_mobile}>
                             <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
-                                <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S NO: {index + 1} </Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', }}>
+                                    <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S NO: {index + 1} </Text>
+                                </View>
                                 <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>DOMAIN: {"\n"} {item.domaiName}</Text>
                                 <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>CREATED BY:   {"\n"} {item.createdBy}</Text>
+                            </View>
+                            <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
                                 <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>CREATED DATE: {"\n"} {item.createdDate}  </Text>
-                                <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>DESCRIPTION: {"\n"}      {item.discription}  </Text>
+                                <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>DESCRIPTION: {"\n"}{item.discription}  </Text>
                             </View>
                         </View>
                     )}
@@ -133,12 +137,13 @@ const styles = StyleSheet.create({
         borderBottomWidth: 5,
         borderBottomColor: '#FFFFFF',
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
+        justifyContent: 'space-around',
+        // alignItems: 'center'
     },
     flatlistSubContainer_mobile: {
         flexDirection: 'column',
-        width: '100%',
+        justifyContent: 'space-around',
+        // width: '100%',
         height: 140,
     },
     rnSelect_mobile: {
@@ -255,13 +260,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 5,
         borderBottomColor: '#FFFFFF',
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
+        justifyContent: 'space-around',
+        // alignItems: 'center'
+        // width: deviceWidth,
     },
     flatlistSubContainer_tablet: {
         flexDirection: 'column',
-        width: '100%',
+        justifyContent: 'space-around',
         height: 160,
+        // width: deviceWidth / 2,
     },
     rnSelect_tablet: {
         color: '#8F9EB7',
@@ -289,161 +296,78 @@ const styles = StyleSheet.create({
 const flats = StyleSheet.create({
     mainText_mobile: {
         fontSize: 16,
-        marginLeft: 50,
-        marginTop: 10,
-        marginBottom: 10,
+        // marginLeft: 50,
+        // marginTop: 10,
+        // marginBottom: 10,
         fontFamily: 'medium',
         color: '#ED1C24',
     },
     subText_mobile: {
         fontSize: 12,
-        marginLeft: 50,
-        marginTop: 10,
-        marginBottom: 10,
+        // marginLeft: 50,
+        // marginTop: 10,
+        // marginBottom: 10,
         fontFamily: 'medium',
         color: '#353C40'
     },
     commonText_mobile: {
         fontSize: 12,
-        marginBottom: 10,
-        marginLeft: 50,
-        marginTop: -100,
-        alignSelf: 'center',
-        textAlign: 'center',
+        // marginBottom: 10,
+        // marginLeft: 50,
+        // marginTop: -100,
+        // alignSelf: 'center',
+        // textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
     },
     commonTextsub_mobile: {
         fontSize: 12,
-        marginLeft: 50,
-        marginBottom: 10,
-        marginTop: 5,
-        alignSelf: 'center',
-        textAlign: 'center',
+        // marginLeft: 50,
+        // marginBottom: 10,
+        // marginTop: 5,
+        // alignSelf: 'center',
+        // textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
-    },
-    editButton_mobile: {
-        position: 'absolute',
-        right: 50,
-        top: 90,
-        width: 30,
-        height: 30,
-        borderBottomLeftRadius: 5,
-        borderTopLeftRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-        // borderRadius:5,
-    },
-    deleteButton_mobile: {
-        position: 'absolute',
-        right: 20,
-        top: 90,
-        width: 30,
-        height: 30,
-        borderBottomRightRadius: 5,
-        borderTopRightRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-    },
-    deleteBarcodeContainer_mobile: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -20,
-        backgroundColor: "#ffffff",
-        height: 260,
-        position: 'absolute',
-        bottom: -20,
-    },
-    deleteBarcodeHeading_mobile: {
-        position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 20,
-        fontFamily: 'medium',
-        fontSize: 16,
-        color: '#353C40'
     },
 
     // Tablet styles
 
     mainText_tablet: {
         fontSize: 21,
-        marginLeft: 100,
-        marginTop: 10,
-        marginBottom: 10,
+        // marginLeft: 100,
+        // marginTop: 10,
+        // marginBottom: 10,
         fontFamily: 'medium',
         color: '#ED1C24',
     },
     subText_tablet: {
         fontSize: 17,
-        marginLeft: 100,
-        marginTop: 10,
-        marginBottom: 10,
+        // marginLeft: 100,
+        // marginTop: 10,
+        // marginBottom: 10,
         fontFamily: 'medium',
         color: '#353C40'
     },
     commonText_tablet: {
         fontSize: 17,
-        marginBottom: 10,
-        marginLeft: 100,
-        marginTop: -120,
-        alignSelf: 'center',
-        textAlign: 'center',
+        // marginBottom: 10,
+        // marginLeft: 100,
+        // marginTop: -120,
+        // alignSelf: 'center',
+        // textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
     },
     commonTextsub_tablet: {
         fontSize: 17,
-        marginBottom: 10,
-        marginLeft: 100,
-        marginTop: 10,
-        alignSelf: 'center',
-        textAlign: 'center',
+        // marginBottom: 10,
+        // marginLeft: 100,
+        // marginTop: 10,
+        // alignSelf: 'center',
+        // textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
     },
-    editButton_tablet: {
-        position: 'absolute',
-        right: 50,
-        top: 90,
-        width: 30,
-        height: 40,
-        borderBottomLeftRadius: 5,
-        borderTopLeftRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-        // borderRadius:5,
-    },
-    deleteButton_tablet: {
-        position: 'absolute',
-        right: 20,
-        top: 90,
-        width: 30,
-        height: 40,
-        borderBottomRightRadius: 5,
-        borderTopRightRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-    },
-    deleteBarcodeContainer_tablet: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -20,
-        backgroundColor: "#ffffff",
-        height: 280,
-        position: 'absolute',
-        bottom: -20,
-    },
-    deleteBarcodeHeading_tablet: {
-        position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 30,
-        fontFamily: 'medium',
-        fontSize: 21,
-        color: '#353C40'
-    },
+
 });
