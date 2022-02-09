@@ -151,28 +151,27 @@ export default class AddStore extends Component {
     }
 
     handleStoreState = (value) => {
+        this.state.dictricts = []
         for (let i = 0; i < this.state.statesArray.length; i++) {
             if (this.state.statesArray[i].name === value) {
                 this.setState({ stateId: this.state.statesArray[i].id,statecode: this.state.statesArray[i].code });
             }
         }
-       this.getGSTNumber()
-       this.getMasterDistrictsList();
+        this.getGSTNumber()
+        this.getMasterDistrictsList();
         this.setState({ storeState: value });
     };
-
-
+    
     getMasterDistrictsList() {
-        this.setState({ dictricts: [] });
-        this.setState({ dictrictArray: [] });
         this.setState({ loading: false });
-        var dictricts = [];
         const params = {
             "stateCode": this.state.statecode
         };
         axios.get(UrmService.getDistricts(), { params }).then((res) => {
             if (res.data["result"]) {
-                // console.log(res.data)
+                var dictricts = [];
+                this.setState({ dictricts: [] });
+                this.setState({ dictrictArray: [] });
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.dictrictArray.push({ name: res.data["result"][i].districtName, id: res.data["result"][i].districtId });
                     dictricts.push({

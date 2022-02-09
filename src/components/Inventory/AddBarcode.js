@@ -229,6 +229,7 @@ class AddBarcode extends Component {
     }
 
     async getAllstores() {
+        const username =  await AsyncStorage.getItem("username");
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
           
             if (value === "true") {
@@ -260,13 +261,12 @@ class AddBarcode extends Component {
 
             }
             else{
-                const username =  AsyncStorage.getItem("username");
                 var storeNames = [];
                 axios.get(LoginService.getUserStores() + username).then((res) => {
                     if (res.data["result"]) {
                         for (var i = 0; i < res.data["result"].length; i++) {
-                            let number = res.data.result[i];
-                            const myArray = [];
+                            let number = res.data.result[i]
+                            const myArray = []
                             myArray = number.split(":");
                             this.state.storeNamesArray.push({ name: myArray[0], id: myArray[1] });
                             console.log(this.state.storeNamesArray);

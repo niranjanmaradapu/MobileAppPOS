@@ -366,6 +366,12 @@ export default class Login extends Component {
                     console.log('there is error saving token');
                 });
 
+                AsyncStorage.setItem("storeName", (this.state.storeNames[0].name)).then(() => {
+                       
+                }).catch(() => {
+                    console.log('there is error saving token')
+                })
+
 
                 if (this.state.storeNames.length === 1) {
                     this.props.navigation.navigate('HomeNavigation');
