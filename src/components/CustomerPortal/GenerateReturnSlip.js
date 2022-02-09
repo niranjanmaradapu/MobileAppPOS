@@ -297,7 +297,7 @@ export default class GenerateReturnSlip extends Component {
                 </View>
                 {this.state.customerTagging && (
                     <View>
-                        <Modal isVisible={this.state.modelVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modelVisible}>
                             <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 400 : 320, marginTop: Device.isTablet ? deviceheight - 400 : deviceheight - 320, paddingBottom: Device.isTablet ? 0 : 20 }]}>
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -305,7 +305,7 @@ export default class GenerateReturnSlip extends Component {
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Tag Customer </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -5 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -449,7 +449,7 @@ export default class GenerateReturnSlip extends Component {
                 </TouchableOpacity>
                 {this.state.returnModel && (
                     <View>
-                        <Modal isVisible={this.state.modelVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modelVisible}>
                             <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 500 : 400, backgroundColor: '#00aa00' }]}>
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -513,7 +513,7 @@ export default class GenerateReturnSlip extends Component {
                 )}
                 {this.state.resultModel && (
                     <View>
-                        <Modal isVisible={this.state.modelVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modelVisible}>
                             <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 300 : 250, backgroundColor: '#00aa00', marginTop: Device.isTablet ? deviceheight - 300 : deviceheight - 250 }]}>
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -849,8 +849,6 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         flexDirection: 'column',
         justifyContent: 'space-between',
-        marginLeft: -20,
-        marginRight: -20,
         backgroundColor: "#ffffff",
         height: 400,
         marginTop: deviceheight - 400,
@@ -1083,8 +1081,6 @@ const styles = StyleSheet.create({
     filterMainContainer_tablet: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -40,
-        marginRight: -40,
         backgroundColor: "#ffffff",
         height: 600,
         marginTop: deviceheight - 500,

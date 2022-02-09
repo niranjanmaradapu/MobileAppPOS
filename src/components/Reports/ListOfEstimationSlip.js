@@ -38,6 +38,7 @@ export class ListOfEstimationSlip extends Component {
             barcode: "",
             flagViewDetail: false,
             storeId: 0,
+            filterActive: false,
         };
     }
 
@@ -46,11 +47,10 @@ export class ListOfEstimationSlip extends Component {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
-
-
         }).catch(() => {
             console.log('there is error getting storeId');
         });
+
     }
 
 
@@ -166,8 +166,10 @@ export class ListOfEstimationSlip extends Component {
         axios.post(ReportsService.estimationSlips(), obj).then((res) => {
             console.log(res.data);
             if (res.data && res.data["isSuccess"] === "true") {
+                this.setState({ filterActive: true });
                 this.props.childParams(res.data.result.deliverySlipVo);
                 this.props.modelCancelCallback();
+                this.props.filterActiveCallback();
                 console.log(this.props.estimationSlip);
             }
             else {
@@ -184,6 +186,7 @@ export class ListOfEstimationSlip extends Component {
     modelCancel() {
         this.props.modelCancelCallback();
     }
+
 
 
 

@@ -392,7 +392,7 @@ class GenerateEstimationSlip extends Component {
                                             { label: 'Meters', value: 'Meters' },
                                         ]}
                                         onValueChange={this.handleUOM}
-                                        style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                        style={pickerSelectStyles}
                                         value={this.state.uom}
                                         useNativeAndroidPickerStyle={false}
 
@@ -406,9 +406,9 @@ class GenerateEstimationSlip extends Component {
                                     textAlignVertical="center"
                                     autoCapitalize="none"
                                     value={this.state.barcodeId}
-                                   // onEndEditing
+                                    // onEndEditing
                                     onChangeText={this.handleBarCode}
-                                    // onEndEditing={() => this.endEditing()}
+                                // onEndEditing={() => this.endEditing()}
                                 />
 
                                 <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 350 : 150 }]}
@@ -650,7 +650,7 @@ class GenerateEstimationSlip extends Component {
 
 
 
-                                        
+
                                     </View>
 
 
@@ -660,16 +660,16 @@ class GenerateEstimationSlip extends Component {
 
                             {this.state.lineItemDelete && (
                                 <View>
-                                    <Modal isVisible={this.state.modalVisible}>
+                                    <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
 
-                                        <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 250 }]}>
+                                        <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 300, backgroundColor: '#ED1C24' }]}>
                                             <View>
                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                                     <View>
-                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Item </Text>
+                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > Delete Item </Text>
                                                     </View>
                                                     <View>
-                                                        <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                        <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                             <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                                         </TouchableOpacity>
                                                     </View>
@@ -680,29 +680,28 @@ class GenerateEstimationSlip extends Component {
                                                     backgroundColor: 'lightgray',
                                                 }}></Text>
                                             </View>
+                                            <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 300 : 250 }}>
+                                                <Text style={{
+                                                    textAlign: 'center',
+                                                    fontFamily: 'regular',
+                                                    fontSize: Device.isTablet ? 23 : 18,
+                                                    color: '#353C40',
+                                                    marginTop: 15,
+                                                }}> Are you sure want to delete NewSale Item?  </Text>
+                                                <TouchableOpacity
+                                                    style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]}
+                                                    onPress={() => this.deleteLineItem(item, index)}
+                                                >
+                                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                                </TouchableOpacity>
 
-                                            <Text style={{
-
-                                                height: Device.isTablet ? 40 : 20,
-                                                textAlign: 'center',
-                                                fontFamily: 'regular',
-                                                fontSize: Device.isTablet ? 23 : 18,
-                                                marginBottom: Device.isTablet ? 25 : 0,
-                                                color: '#353C40'
-                                            }}> Are you sure want to delete NewSale Item?  </Text>
-                                            <TouchableOpacity
-                                                style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]}
-                                                onPress={() => this.deleteLineItem(item, index)}
-                                            >
-                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
-                                            </TouchableOpacity>
-
-                                            <TouchableOpacity
-                                                style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
-                                                onPress={() => this.modelCancel()}
-                                            >
-                                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
-                                            </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#ED1C24' }]}
+                                                    onPress={() => this.modelCancel()}
+                                                >
+                                                    <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#ED1C24' }]}  > CANCEL </Text>
+                                                </TouchableOpacity>
+                                            </View>
                                         </View>
                                     </Modal>
                                 </View>
@@ -785,15 +784,14 @@ class GenerateEstimationSlip extends Component {
 
                 {this.state.flagCustomerOpen && (
                     <View>
-                        <Modal isVisible={this.state.modalVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
                             <KeyboardAwareScrollView KeyboardAwareScrollView
                                 enableOnAndroid={true}>
-
-
                                 <View style={{
                                     flex: 1, justifyContent: 'center', //Centered horizontally
                                     alignItems: 'center', color: '#ffffff',
-                                    borderRadius: 20, borderwidth: 10
+                                    borderRadius: 20, borderwidth: 10,
+                                    marginTop: Device.isTablet ? deviceHeight - 1000 : deviceHeight - 700,
                                 }}>
                                     <View style={{ flex: 1, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", marginTop: deviceWidth / 2 - 80 }}>
                                         <Text style={{
@@ -942,7 +940,7 @@ class GenerateEstimationSlip extends Component {
 
                 {/* {this.state.alertPopup && (
                     <View>
-                        <Modal isVisible={this.state.alertVisible}>
+                        <Modal style={{margin: 0}}isVisible={this.state.alertVisible}>
                             <View style={{ marginTop: deviceHeight / 5, marginLeft: deviceWidth / 3.3, backgroundColor: '#00aa00', height: 150, width: 250 }}>
 
                             </View>
@@ -961,73 +959,31 @@ class GenerateEstimationSlip extends Component {
 export default GenerateEstimationSlip;
 
 
-const pickerSelectStyles_mobile = StyleSheet.create({
+const pickerSelectStyles = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 52 : 42,
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 52 : 42,
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
-    },
-});
-
-const pickerSelectStyles_tablet = StyleSheet.create({
-    placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: 20,
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: 52,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: 52,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
@@ -2220,10 +2176,8 @@ const styles = StyleSheet.create({
     filterMainContainer_mobile: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -20,
         backgroundColor: "#ffffff",
-        position: 'absolute',
-        bottom: -20,
+        marginTop: deviceHeight - 300,
     },
     filterByTitle_mobile: {
         position: 'absolute',
@@ -2295,11 +2249,9 @@ const styles = StyleSheet.create({
     filterMainContainer_tablet: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -40,
         backgroundColor: "#ffffff",
-        height: 600,
-        position: 'absolute',
-        bottom: -40,
+        height: 400,
+        marginTop: deviceHeight - 400,
     },
     filterByTitle_tablet: {
         position: 'absolute',

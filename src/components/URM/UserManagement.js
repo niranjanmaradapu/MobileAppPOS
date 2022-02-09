@@ -610,7 +610,7 @@ export default class UserManagement extends Component {
                         )}
                         {this.state.roleDelete && (
                             <View>
-                                <Modal isVisible={this.state.modalVisible}>
+                                <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
                                     <View style={[styles.filterMainContainer, { height: Device.isTablet ? 300 : 250, marginTop: Device.isTablet ? deviceheight - 300 : deviceheight - 250 }]}>
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -631,18 +631,18 @@ export default class UserManagement extends Component {
                                         </View>
 
                                         <Text style={{
-                                            marginLeft: 20,
                                             textAlign: 'center',
                                             fontFamily: 'regular',
                                             fontSize: Device.isTablet ? 22 : 17,
-                                            color: '#353C40'
+                                            color: '#353C40',
+                                            marginTop: 15,
                                         }}> Are you sure want to delete Role?  </Text>
                                         <TouchableOpacity
                                             style={{
                                                 width: deviceWidth - 40,
                                                 marginLeft: 20,
                                                 marginRight: 20,
-                                                marginTop: 60,
+                                                marginTop: Device.isTablet ? 45 : 30,
                                                 height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
                                             }} onPress={() => this.deleteRole(item, index)}
                                         >
@@ -650,7 +650,6 @@ export default class UserManagement extends Component {
                                                 textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
                                                 fontFamily: "regular"
                                             }}  > DELETE </Text>
-
                                         </TouchableOpacity>
 
                                         <TouchableOpacity

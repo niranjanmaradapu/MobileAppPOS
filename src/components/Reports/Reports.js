@@ -56,6 +56,8 @@ class Reports extends Component {
             listPromotions: [],
             sbList: [],
             storeId: 0,
+            filterActive: false,
+            refreshPage: false,
         };
     }
 
@@ -154,38 +156,32 @@ class Reports extends Component {
             this.setState({ filterButton: true, flagDashboard: false });
         }
         if (item.name === "List Of Estimation Slip") {
-            this.setState({ estimationSlip: [] });
-            this.setState({ flagEstimationSlip: true });
+            this.setState({ estimationSlip: [], flagEstimationSlip: true, filterActive: false });
         } else {
             this.setState({ flagEstimationSlip: false });
         }
         if (item.name === "New Sale Report") {
-            this.setState({ newSale: [] });
-            this.setState({ flagNewSale: true });
+            this.setState({ newSale: [], flagNewSale: true, filterActive: false });
         } else {
             this.setState({ flagNewSale: false });
         }
         if (item.name === "Goods Return") {
-            this.setState({ goodsReturn: [] });
-            this.setState({ flagGoodsReturn: true });
+            this.setState({ goodsReturn: [], flagGoodsReturn: true, filterActive: false });
         } else {
             this.setState({ flagGoodsReturn: false });
         }
         if (item.name === "Sales Summary") {
-            this.setState({ salesSumaryObject: [] });
-            this.setState({ flagSalesSummary: true });
+            this.setState({ salesSumaryObject: [], flagSalesSummary: true, filterActive: false });
         } else {
             this.setState({ flagSalesSummary: false });
         }
         if (item.name === "List of Barcodes") {
-            this.setState({ listBarcodes: [] });
-            this.setState({ flagListBarcodes: true });
+            this.setState({ listBarcodes: [], flagListBarcodes: true, filterActive: false });
         } else {
             this.setState({ flagListBarcodes: false });
         }
         if (item.name === "List of promotions") {
-            this.setState({ listPromotions: [] });
-            this.setState({ flagListPromotions: true });
+            this.setState({ listPromotions: [], flagListPromotions: true, filterActive: false });
         } else {
             this.setState({ flagListPromotions: false });
         }
@@ -305,10 +301,46 @@ class Reports extends Component {
         console.log(this.state.listPromotions);
     };
 
+    filterCahngeAction() {
+        // alert("hey");
+        this.setState({ filterActive: true });
+    }
 
+    filterChange = () => {
+        this.filterCahngeAction();
+    };
 
+    clearFilter() {
+        alert('cleared Functions');
+    }
 
-
+    clearFilterAction() {
+        if (this.state.flagEstimationSlip === true) {
+            this.setState({ filterActive: false }, () => {
+                this.setState({ flagEstimationSlip: true, estimationSlip: [] });
+            });
+        } else if (this.state.flagNewSale === true) {
+            this.setState({ filterActive: false }, () => {
+                this.setState({ flagNewSale: true, newSale: [] });
+            });
+        } else if (this.state.flagGoodsReturn === true) {
+            this.setState({ filterActive: false }, () => {
+                this.setState({ flagGoodsReturn: true, goodsReturn: [] });
+            });
+        } else if (this.state.flagSalesSummary === true) {
+            this.setState({ filterActive: false }, () => {
+                this.setState({ flagSalesSummary: true, salesSumary: [] });
+            });
+        } else if (this.state.flagListBarcodes === true) {
+            this.setState({ filterActive: false }, () => {
+                this.setState({ flagListBarcodes: true, listBarcodes: [] });
+            });
+        } else if (this.state.flagListPromotions === true) {
+            this.setState({ filterActive: false }, () => {
+                this.setState({ flagListPromotions: true, listPromotions: [] });
+            });
+        }
+    }
 
 
     render() {
@@ -320,11 +352,22 @@ class Reports extends Component {
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Reports </Text>
                     {this.state.filterButton &&
-                        <TouchableOpacity
-                            style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
-                            onPress={() => this.filterAction()} >
-                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
-                        </TouchableOpacity>
+                        <View>
+                            {!this.state.filterActive &&
+                                <TouchableOpacity
+                                    style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                    onPress={() => this.filterAction()} >
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                                </TouchableOpacity>
+                            }
+                            {this.state.filterActive &&
+                                <TouchableOpacity
+                                    style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                    onPress={() => this.clearFilterAction()} >
+                                    <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+                                </TouchableOpacity>
+                            }
+                        </View>
                     }
                 </View>
                 <ScrollView>
@@ -362,7 +405,9 @@ class Reports extends Component {
                         {this.state.flagEstimationSlip && (
                             <ListOfEstimationSlip
                                 estimationSlip={this.state.estimationSlip}
+                                filterActiveCallback={this.filterChange}
                                 childParams={this.getDetails}
+                                clearFilter={this.state.refreshPage}
                                 modalVisible={this.state.modalVisible}
                                 flagFilterEstimationSlip={this.state.flagFilterEstimationSlip}
                                 modelCancelCallback={this.modelCancel}
@@ -371,6 +416,7 @@ class Reports extends Component {
 
                         {this.state.flagNewSale && (
                             <NewSaleReport
+                                filterActiveCallback={this.filterChange}
                                 newSale={this.state.newSale}
                                 childParamNewsales={this.getNewsaleDetails}
                                 modalVisible={this.state.modalVisible}
@@ -381,6 +427,7 @@ class Reports extends Component {
 
                         {this.state.flagGoodsReturn && (
                             <GoodsReturn
+                                filterActiveCallback={this.filterChange}
                                 goodsReturn={this.state.goodsReturn}
                                 childParamgoodsReturn={this.getgoodsReturn}
                                 modalVisible={this.state.modalVisible}
@@ -392,6 +439,7 @@ class Reports extends Component {
 
                         {this.state.flagSalesSummary && (
                             <SalesSumary
+                                filterActiveCallback={this.filterChange}
                                 salesSumary={this.state.salesSumary}
                                 salesSumaryObject={this.state.salesSumaryObject}
                                 childParamSalesSummaryObject={this.getsalesSumaryObject}
@@ -405,6 +453,7 @@ class Reports extends Component {
 
                         {this.state.flagListBarcodes && (
                             <ListOfBarcodes
+                                filterActiveCallback={this.filterChange}
                                 listBarcodes={this.state.listBarcodes}
                                 childParamlistBarcodes={this.getlistBarcodes}
                                 modalVisible={this.state.modalVisible}
@@ -415,6 +464,7 @@ class Reports extends Component {
 
                         {this.state.flagListPromotions && (
                             <ListOfPromotions
+                                filterActiveCallback={this.filterChange}
                                 listPromotions={this.state.listPromotions}
                                 childParamlistofPromotions={this.getlistofPromotions}
                                 flagFilterListPromotions={this.state.flagFilterListPromotions}
@@ -580,7 +630,7 @@ const styles = StyleSheet.create({
     filterButton_mobile: {
         position: 'absolute',
         right: 20,
-        bottom: 5,
+        top: 25,
         backgroundColor: '#ffffff',
         borderRadius: 5,
         width: 30,

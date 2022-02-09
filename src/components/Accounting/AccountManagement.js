@@ -44,7 +44,7 @@ export default class AccountManagement extends Component {
             stores: [],
             domains: [],
             storesDelete: false,
-
+            filterActive: false,
         };
     }
 
@@ -366,8 +366,15 @@ export default class AccountManagement extends Component {
 
     filterStores = (data) => {
         this.setState({ stores: [] });
-        this.setState({ stores: data });
+        this.setState({ stores: data }, () => {
+            this.setState({ filterActive: true });
+        });
     };
+
+    clearFilterAction() {
+        this.getStoresList();
+        this.setState({ filterActive: false });
+    }
 
     handelGetStore = () => {
         this.getStoresList();
@@ -438,11 +445,22 @@ export default class AccountManagement extends Component {
                         )}
 
                         {this.state.flagStore && (
-                            <TouchableOpacity
-                                style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
-                                onPress={() => this.filterAction()} >
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
-                            </TouchableOpacity>
+                            <View>
+                                {!this.state.filterActive &&
+                                    <TouchableOpacity
+                                        style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                        onPress={() => this.filterAction()} >
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                                    </TouchableOpacity>
+                                }
+                                {this.state.filterActive &&
+                                    <TouchableOpacity
+                                        style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                        onPress={() => this.clearFilterAction()} >
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+                                    </TouchableOpacity>
+                                }
+                            </View>
                         )}
 
                         {this.state.flagDomain && (
@@ -711,7 +729,7 @@ const styles = StyleSheet.create({
     filterButton_mobile: {
         position: 'absolute',
         right: 20,
-        bottom: 5,
+        top: 25,
         backgroundColor: '#ffffff',
         borderRadius: 5,
         width: 30,

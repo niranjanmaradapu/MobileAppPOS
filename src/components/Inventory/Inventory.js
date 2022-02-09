@@ -45,16 +45,13 @@ export default class Inventory extends Component {
             privilages: [],
             subPrivilages: "",
             barcodeTextileId: "",
+            filterActive: false,
         };
     }
 
     handleBackButtonClick() {
         this.props.navigation.openDrawer();
         // this.props.navigation.navigate('Home')
-    }
-
-    filterAction() {
-
     }
 
 
@@ -489,11 +486,22 @@ export default class Inventory extends Component {
             onPress={() => this.navigateToScanCode()} >
             <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('NEW SALE SCAN')} </Text>
           </TouchableOpacity> */}
-                    <TouchableOpacity
-                        style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
-                        onPress={() => this.filterAction()} >
-                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
-                    </TouchableOpacity>
+                    <View>
+                        {!this.state.filterActive &&
+                            <TouchableOpacity
+                                style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                onPress={() => this.filterAction()} >
+                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                            </TouchableOpacity>
+                        }
+                        {this.state.filterActive &&
+                            <TouchableOpacity
+                                style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                onPress={() => this.clearFilterAction()} >
+                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+                            </TouchableOpacity>
+                        }
+                    </View>
                 </View>
 
                 <ScrollView>
@@ -594,7 +602,7 @@ export default class Inventory extends Component {
                         )}
                         {this.state.inventoryDelete && (
                             <View>
-                                <Modal isVisible={this.state.modalVisible}>
+                                <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
                                     <View style={styles.deleteMainContainer}>
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -602,7 +610,7 @@ export default class Inventory extends Component {
                                                     <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Barcode </Text>
                                                 </View>
                                                 <View>
-                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                         <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
                                                 </View>
@@ -648,7 +656,7 @@ export default class Inventory extends Component {
                 </ScrollView >
                 {this.state.flagFilterBarcodeOpen && (
                     <View>
-                        <Modal isVisible={this.state.modalVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
                             <View style={styles.filterMainContainer} >
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -656,7 +664,7 @@ export default class Inventory extends Component {
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -754,7 +762,7 @@ export default class Inventory extends Component {
                 )}
                 {this.state.flagFilterReBarcodeOpen && (
                     <View>
-                        <Modal isVisible={this.state.modalVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
                             <View style={styles.filterMainContainer} >
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
@@ -762,7 +770,7 @@ export default class Inventory extends Component {
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -863,7 +871,7 @@ export default class Inventory extends Component {
                 )}
                 {this.state.barcodeDelete && (
                     <View>
-                        <Modal isVisible={this.state.modalVisible}>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
 
                             <View style={styles.deleteMainContainer}>
                                 <View>
@@ -872,7 +880,7 @@ export default class Inventory extends Component {
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Barcode Id </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -932,10 +940,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 5,
     },
     deleteMainContainer: {
-        marginLeft: -40,
-        marginRight: -40,
         backgroundColor: '#ffffff',
-        paddingLeft: Device.isTablet ? 0 : 20,
         marginTop: Device.isTablet ? deviceheight - 350 : deviceheight - 240,
         height: Device.isTablet ? 350 : 240,
     },
@@ -947,10 +952,7 @@ const styles = StyleSheet.create({
         right: Device.isTablet ? 15 : 30,
     },
     filterMainContainer: {
-        marginLeft: -40,
-        marginRight: -40,
         backgroundColor: '#ffffff',
-        paddingLeft: Device.isTablet ? 0 : 20,
         marginTop: Device.isTablet ? deviceheight - 500 : deviceheight - 400,
         height: Device.isTablet ? 500 : 400,
     },

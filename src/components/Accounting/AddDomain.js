@@ -133,7 +133,7 @@ export default class AddDomain extends Component {
                     </Text>
                 </View>
                 <ScrollView>
-                    <Text style={{ fontSize: Device.isTablet ? 22 : 17, fontFamily: 'medium', marginLeft: 20, marginBottom: 20 }}>Doamin <Text style={{ color: 'red', fontFamily: 'bold' }}>*</Text></Text>
+                    <Text style={{ fontSize: Device.isTablet ? 22 : 17, fontFamily: 'medium', marginLeft: 20, marginBottom: 20 }}>Domain <Text style={{ color: 'red', fontFamily: 'bold' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
