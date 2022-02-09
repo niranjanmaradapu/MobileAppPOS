@@ -210,7 +210,20 @@ export default class CreateRole extends Component {
                 newArrayList.push({ ...obj });
             }
         });
-        this.setState({ parentlist: newArrayList, childlist: this.state.childlist, roles: this.state.roles });
+
+        const newArraychildList = [];
+        this.state.childlist.forEach(obj => {
+            if (!newArraychildList.some(o => o.name === obj.name)) {
+                newArraychildList.push({ ...obj });
+            }
+        });
+        const newArrayrolesList = [];
+        this.state.roles.forEach(obj => {
+            if (!newArrayrolesList.some(o => o.name === obj.name)) {
+                newArrayrolesList.push({ ...obj });
+            }
+        });
+        this.setState({ parentlist: newArrayList, childlist:newArraychildList , roles: newArrayrolesList });
     }
 
 
