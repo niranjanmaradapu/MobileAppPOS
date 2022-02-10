@@ -81,7 +81,8 @@ class AddPool extends Component {
             console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
-            console.log('there is error getting domainDataId');
+            console.log('There is error getting domainDataId');
+            alert('There is error getting domainDataId');
         });
     }
 
@@ -275,11 +276,7 @@ class AddPool extends Component {
                                 paddingLeft: 15,
                                 fontSize: 14,
                             }} >
-                                <RNPickerSelect style={{
-                                    color: '#8F9EB717',
-                                    fontWeight: 'regular',
-                                    fontSize: 15
-                                }}
+                                <RNPickerSelect
                                     placeholder={{
                                         label: 'POOL TYPE',
 
@@ -438,7 +435,7 @@ class AddPool extends Component {
                                             <View style={{ marginTop: 10, width: deviceWidth, }}>
                                                 <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
 
-                                                    <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                                    <RNPickerSelect
 
                                                         placeholder={{
                                                             label: 'SELECT COLUMN NAME',
@@ -462,7 +459,7 @@ class AddPool extends Component {
 
 
                                                 <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                                                    <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                                    <RNPickerSelect
                                                         placeholder={{
                                                             label: 'SELECT OPERATOR',
 

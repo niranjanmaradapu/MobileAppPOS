@@ -157,16 +157,19 @@ export default class AccountManagement extends Component {
 
                             });
                         }).catch(() => {
-                            console.log('there is error saving domainDataId');
+                            console.log('There is error saving domainDataId');
+                            alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
-                    console.log('there is error getting storeId');
+                    console.log('There is error getting storeId');
+                    alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
         this.getDomainsList();
     }
@@ -191,6 +194,7 @@ export default class AccountManagement extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            alert("There is an Error while getting Domains");
         });
     }
 
@@ -216,6 +220,7 @@ export default class AccountManagement extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            alert("There is an Error while Getting Stores");
         });
     }
 
@@ -729,7 +734,7 @@ const styles = StyleSheet.create({
     filterButton_mobile: {
         position: 'absolute',
         right: 20,
-        top: 25,
+        top: 30,
         backgroundColor: '#ffffff',
         borderRadius: 5,
         width: 30,

@@ -40,25 +40,25 @@ class NewSaleTextile extends Component {
         };
     }
 
- 
+
     async componentDidMount() {
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
             if (value === "true") {
-                 var domainId = "0";
+                var domainId = "0";
                 if (global.domainName === "Textile") {
                     domainId = "1";
-                    this.setState({flagGenerateEstimationSlip:true})
-                    this.setState({flagGenerateInvoice:false})
+                    this.setState({ flagGenerateEstimationSlip: true });
+                    this.setState({ flagGenerateInvoice: false });
                 }
                 else if (global.domainName === "Retail") {
                     domainId = "2";
-                    this.setState({flagGenerateEstimationSlip:false})
-                    this.setState({flagGenerateInvoice:true})
+                    this.setState({ flagGenerateEstimationSlip: false });
+                    this.setState({ flagGenerateInvoice: true });
                 }
                 else if (global.domainName === "Electrical & Electronics") {
                     domainId = "3";
                 }
-                console.log('dfsdfdsf' + domainId)
+                console.log('dfsdfdsf' + domainId);
                 axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
                     if (res.data && res.data["isSuccess"] === "true") {
                         let len = res.data["result"].length;
@@ -122,18 +122,20 @@ class NewSaleTextile extends Component {
                         }
                     });
                 }).catch(() => {
-                    console.log('there is error saving domainDataId');
+                    console.log('There is error saving domainDataId');
+                    alert('There is error saving domainDataId');
                 });
 
             }
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
 
     }
 
     topbarAction1 = (item, index) => {
-        
+
         if (item.name === " Generate Estimation Slip") {
             this.setState({ flagGenerateEstimationSlip: true });
         } else {
@@ -241,20 +243,20 @@ class NewSaleTextile extends Component {
                         />
 
                         {this.state.flagGenerateEstimationSlip && (
-                            <GenerateEstimationSlip 
-                            navigation={this.props.navigation}
+                            <GenerateEstimationSlip
+                                navigation={this.props.navigation}
                             />
                         )}
 
                         {this.state.flagGenerateInvoice && (
-                            <GenerateInvoiceSlip  
-                            navigation={this.props.navigation}
-                          />
+                            <GenerateInvoiceSlip
+                                navigation={this.props.navigation}
+                            />
                         )}
 
                         {this.state.flagGenerateReturnSlip && (
                             <GenerateReturnSlip
-                            navigation={this.props.navigation} />
+                                navigation={this.props.navigation} />
                         )}
 
                         {this.state.falgAddCustomer && (
@@ -623,7 +625,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         width: 155,
         height: 42,
-      },
+    },
     headerTitle_tablet: {
         position: 'absolute',
         left: 70,

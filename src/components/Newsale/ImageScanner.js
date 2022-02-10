@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, Dimensions, View } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
 import axios from 'axios';
-import NewSaleService from '../services/NewSaleService';
+import React, { Component } from 'react';
+import { Alert, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import RNBeep from 'react-native-a-beep';
+import ImagePicker from 'react-native-image-crop-picker';
+import NewSaleService from '../services/NewSaleService';
 var deviceWidth = Dimensions.get('window').width;
 
 
@@ -17,8 +17,8 @@ export default class ImageScanner extends Component {
         };
     }
     handleBackButtonClick() {
-        this.props.route.params.onGoBack()
-        this.props.navigation.goBack()
+        this.props.route.params.onGoBack();
+        this.props.navigation.goBack();
         return true;
     }
 
@@ -51,7 +51,7 @@ export default class ImageScanner extends Component {
                         },
                         images: null,
                     });
-                    this.getImageNameByScan()
+                    this.getImageNameByScan();
                 })
                 .catch((e) => {
                     console.log(e);
@@ -82,7 +82,7 @@ export default class ImageScanner extends Component {
                         },
                         images: null,
                     });
-                    this.getImageNameByScan()
+                    this.getImageNameByScan();
                 })
                 .catch((e) => alert(e));
         }
@@ -109,9 +109,9 @@ export default class ImageScanner extends Component {
                     console.log("response :", global.productname);
                     // this.setState({ inventoryProductName: response.data.result[0].name})
                     if (global.productname == "something") {
-                        { RNBeep.beep() }
-                        global.productname = response.data.result[0].name
-                        console.log(global.productname)
+                        { RNBeep.beep(); }
+                        global.productname = response.data.result[0].name;
+                        console.log(global.productname);
                         this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
@@ -120,8 +120,9 @@ export default class ImageScanner extends Component {
             })
             .catch(function (error) {
                 console.log(error);
+                alert(error);
 
-            })
+            });
     }
 
 

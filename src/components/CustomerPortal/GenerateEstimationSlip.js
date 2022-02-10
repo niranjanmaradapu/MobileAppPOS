@@ -101,7 +101,8 @@ class GenerateEstimationSlip extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
     }
 
@@ -371,7 +372,8 @@ class GenerateEstimationSlip extends Component {
         AsyncStorage.getItem("tokenkey").then((value) => {
             console.log(value);
         }).catch(() => {
-            console.log('there is error getting token');
+            console.log('There is error getting token');
+            alert('There is error getting token');
         });
 
         return (
@@ -660,7 +662,7 @@ class GenerateEstimationSlip extends Component {
                                 <View>
                                     <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
 
-                                        <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 300, backgroundColor: '#ED1C24' }]}>
+                                        <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 300, marginTop: Device.isTablet ? deviceHeight - 350 : deviceHeight - 300, backgroundColor: '#ED1C24' }]}>
                                             <View>
                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                                     <View>
@@ -668,7 +670,7 @@ class GenerateEstimationSlip extends Component {
                                                     </View>
                                                     <View>
                                                         <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
-                                                            <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                            <Image style={{ width: Device.isTablet ? 20 : 15, height: Device.isTablet ? 20 : 15, margin: 5 }} source={require('../assets/images/modalCloseWhite.png')} />
                                                         </TouchableOpacity>
                                                     </View>
                                                 </View>
@@ -950,7 +952,7 @@ class GenerateEstimationSlip extends Component {
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -5 }} onPress={() => this.modelCancel()}>
-                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                <Image style={{ width: Device.isTablet ? 20 : 15, height: Device.isTablet ? 20 : 15, margin: 5 }} source={require('../assets/images/modalCloseWhite.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>

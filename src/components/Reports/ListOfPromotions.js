@@ -40,14 +40,16 @@ export class ListOfPromotions extends Component {
 
 
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
             this.setState({ storeName: value });
             console.log(this.state.storeName);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
     }
 
@@ -270,7 +272,6 @@ export class ListOfPromotions extends Component {
                                     />
                                     <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 40 }]}>
                                         <RNPickerSelect
-                                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                             placeholder={{
                                                 label: 'SELECT STORE'
                                             }}

@@ -56,7 +56,8 @@ class AddPromo extends Component {
             this.getAllpools();
 
         }).catch(() => {
-            console.log('there is error getting domainDataId');
+            console.log('There is error getting domainDataId');
+            alert('There is error getting domainDataId');
         });
         this.setState({
             promotionName: this.props.route.params.item.promotionName,
@@ -93,7 +94,7 @@ class AddPromo extends Component {
                                 this.state.createdByArray.push({ poolName: number.poolName, poolId: number.poolId });
                             }
 
-                          
+
                             console.log('pool names' + number.poolName);
                         }
                         this.setState({ createdByArray: this.state.createdByArray });
@@ -109,7 +110,7 @@ class AddPromo extends Component {
                 }
             }).catch(() => {
                 this.setState({ loading: false });
-                // alert('No Records Found')
+                alert('No Records Found');
             });
 
     };
@@ -308,7 +309,7 @@ class AddPromo extends Component {
                         />
 
                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                            <RNPickerSelect
                                 placeholder={{
                                     label: 'PROMOTION APPLY TYPE',
 
@@ -356,7 +357,7 @@ class AddPromo extends Component {
 
 
                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                            <RNPickerSelect
                                 placeholder={{
                                     label: 'APPLICABILITY',
 
@@ -395,7 +396,7 @@ class AddPromo extends Component {
 
                         {this.state.chargeExtra && (
                             <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                                <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                <RNPickerSelect
                                     placeholder={{
                                         label: 'SELECT TAX %',
 

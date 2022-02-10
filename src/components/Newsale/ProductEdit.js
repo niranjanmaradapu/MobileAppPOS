@@ -5,6 +5,7 @@ import Constants from 'expo-constants';
 import React, { Component } from 'react';
 import { Alert, Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
+import Device from 'react-native-device-detection';
 import ImagePicker from 'react-native-image-crop-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from "react-native-modal";
@@ -12,7 +13,6 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
 import InventoryService from '../services/InventoryService';
-import Device from 'react-native-device-detection';
 import NewSaleService from '../services/NewSaleService';
 var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
@@ -73,28 +73,30 @@ class ProductEdit extends Component {
                 type: RNCamera.Constants.Type.back,
                 flashMode: RNCamera.Constants.FlashMode.auto,
             }
-        }
+        };
     }
 
     async componentDidMount() {
-        var domainStringId = ""
-        var storeStringId = ""
+        var domainStringId = "";
+        var storeStringId = "";
         AsyncStorage.getItem("domainDataId").then((value) => {
-            domainStringId = value
-            this.setState({ domainId: parseInt(domainStringId) })
-            console.log("domain data id" + this.state.domainId)
+            domainStringId = value;
+            this.setState({ domainId: parseInt(domainStringId) });
+            console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
-            console.log('there is error getting domainDataId')
-        })
+            console.log('There is error getting domainDataId');
+            alert('There is error getting domainDataId');
+        });
 
         AsyncStorage.getItem("storeId").then((value) => {
-            storeStringId = value
-            this.setState({ storeId: parseInt(storeStringId) })
-            console.log(this.state.storeId)
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) });
+            console.log(this.state.storeId);
         }).catch(() => {
-            console.log('there is error getting storeId')
-        })
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
+        });
 
         this.setState({
             productItemId: this.props.route.params.productItemId,
@@ -105,8 +107,8 @@ class ProductEdit extends Component {
             productmrp: this.props.route.params.productmrp,
             productofferprice: this.props.route.params.productofferprice,
         });
-        console.log('sadsadf' + this.state.productuom)
-        this.getUOM()
+        console.log('sadsadf' + this.state.productuom);
+        this.getUOM();
     }
 
 
@@ -132,10 +134,10 @@ class ProductEdit extends Component {
                     },
                     images: null,
                 });
-                this.getImageNameByScan()
+                this.getImageNameByScan();
             })
             .catch((e) => {
-                this.setState({ flagqtyModelOpen: false, modalVisible: false })
+                this.setState({ flagqtyModelOpen: false, modalVisible: false });
                 console.log(e);
                 Alert.alert(e.message ? e.message : e);
             });
@@ -161,7 +163,7 @@ class ProductEdit extends Component {
         })
             .then((image) => {
                 console.log('received image', image);
-                this.setState({ flagqtyModelOpen: false })
+                this.setState({ flagqtyModelOpen: false });
                 this.setState({ modalVisible: false });
                 this.setState({
                     image: {
@@ -172,10 +174,10 @@ class ProductEdit extends Component {
                     },
                     images: null,
                 });
-                this.getImageNameByScan()
+                this.getImageNameByScan();
             })
             .catch((e) => {
-                this.setState({ flagqtyModelOpen: false })
+                this.setState({ flagqtyModelOpen: false });
                 this.setState({ modalVisible: false });
                 console.log(e);
                 Alert.alert(e.message ? e.message : e);
@@ -185,9 +187,9 @@ class ProductEdit extends Component {
     }
 
     cancel() {
-        console.log('clicked')
+        console.log('clicked');
         //this.setState({ modalVisible: true });
-        this.setState({ flagqtyModelOpen: false, modalVisible: false })
+        this.setState({ flagqtyModelOpen: false, modalVisible: false });
     }
 
     async getImageNameByScan() {
@@ -208,13 +210,14 @@ class ProductEdit extends Component {
                 //const productname = response.data.result[0].name
                 if (response.data) {
                     console.log("response :", response.data.result[0].name);
-                    this.setState({ productname: response.data.result[0].name })
-                    this.forceUpdate()
+                    this.setState({ productname: response.data.result[0].name });
+                    this.forceUpdate();
                 }
             })
             .catch(function (error) {
                 console.log(error);
-            })
+                alert(error);
+            });
     }
 
     async getUOM() {
@@ -225,7 +228,7 @@ class ProductEdit extends Component {
                 axios.get(InventoryService.getUOM()).then((res) => {
                     if (res.data["result"]) {
                         for (var i = 0; i < res.data["result"].length; i++) {
-                            console.log('getuom' + res.data["result"][i].uomName)
+                            console.log('getuom' + res.data["result"][i].uomName);
                             uom.push({
                                 value: res.data["result"][i].uomName,//id
                                 label: res.data["result"][i].uomName,
@@ -235,13 +238,14 @@ class ProductEdit extends Component {
                     }
                     this.setState({
                         uom: uom,
-                    })
+                    });
                     AsyncStorage.setItem("uomData", JSON.stringify(uom)).then(() => {
-                        console.log('table data saved')
+                        console.log('table data saved');
                     }).catch(() => {
-                        console.log('there is error saving token')
-                    })
-                    console.log(this.state.uom)
+                        console.log('There is error saving token');
+                        alert('There is error saving token');
+                    });
+                    console.log(this.state.uom);
                     // if(this.state.uom.length === 1){
                     //     //this.props.navigation.navigate('HomeNavigation')
                     // }
@@ -252,12 +256,12 @@ class ProductEdit extends Component {
             }
             else {
                 const value = AsyncStorage.getItem("uomData");
-                console.log('value is---->' + JSON.stringify(value))
+                console.log('value is---->' + JSON.stringify(value));
                 this.setState({
                     uom: value,
-                })
+                });
             }
-        })
+        });
     }
 
 
@@ -269,32 +273,32 @@ class ProductEdit extends Component {
 
     handleUOM = (value) => {
         this.setState({ productuom: value });
-    }
+    };
 
 
 
     handleInventoryBarcode = (text) => {
-        this.setState({ barcodeId: text })
-    }
+        this.setState({ barcodeId: text });
+    };
     handleInventoryProductName = (text) => {
-        this.setState({ productname: text })
-    }
+        this.setState({ productname: text });
+    };
     handleInventoryQuantity = (value) => {
         this.setState({ produtctQty: value });
-    }
+    };
 
     handleInventoryMRP = (text) => {
-        this.setState({ productmrp: text })
-    }
+        this.setState({ productmrp: text });
+    };
     handleInventoryDiscount = (text) => {
-        this.setState({ productofferprice: text })
+        this.setState({ productofferprice: text });
         // console.log(this.state.inventoryMRP)
         // console.log(text)
         // this.setState({ inventoryNetAmount: (parseInt(this.state.inventoryMRP) - parseInt(text)).toString() })
-    }
+    };
     handleInventoryNetAmount = (text) => {
         this.setState({ inventoryNetAmount: text });
-    }
+    };
 
 
     async inventoryUpdate() {
@@ -313,7 +317,7 @@ class ProductEdit extends Component {
             alert('Please Enter Discount %');
         }
         else {
-            this.setState({ loading: true })
+            this.setState({ loading: true });
             const params = {
                 //required 
                 "productItemId": this.state.productItemId,
@@ -335,17 +339,17 @@ class ProductEdit extends Component {
                 "length": 35,
                 "productValidity": "",
                 "empId": 1
-            }
-            console.log('params are' + JSON.stringify(params))
-            this.setState({ loading: true })
+            };
+            console.log('params are' + JSON.stringify(params));
+            this.setState({ loading: true });
             axios.put(InventoryService.updateBarcode(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     this.props.route.params.onGoBack();
                     this.props.navigation.goBack();
                 }
                 else {
-                    this.setState({ loading: false })
+                    this.setState({ loading: false });
                     // this.setState({ loading: false })
                     alert("duplicate record already exists");
                 }
@@ -356,8 +360,8 @@ class ProductEdit extends Component {
 
 
     refresh() {
-        this.setState({ productname: global.productname })
-        console.log('search' + this.state.productname)
+        this.setState({ productname: global.productname });
+        console.log('search' + this.state.productname);
     }
 
     // refreshGetBarCode() {
@@ -368,8 +372,8 @@ class ProductEdit extends Component {
 
 
     navigateToGetBarCode() {
-        console.log('tapped')
-        global.barcodeId = 'something'
+        console.log('tapped');
+        global.barcodeId = 'something';
         this.props.navigation.navigate('ScanBarCode', {
             isFromNewSale: false, isFromAddProduct: true,
             onGoBack: () => this.refreshGetBarCode(),
@@ -377,7 +381,7 @@ class ProductEdit extends Component {
     }
 
     navigateToImageScanner() {
-        global.productname = 'something'
+        global.productname = 'something';
         this.props.navigation.navigate('ImageScanner', {
             onGoBack: () => this.refresh(),
         });
@@ -516,7 +520,7 @@ class ProductEdit extends Component {
                                         autoCapitalize="none"
                                         value={String(this.state.produtctQty)}
                                         onChangeText={this.handleInventoryQuantity}
-                                        ref={inputemail => { this.emailValueInput = inputemail }} />
+                                        ref={inputemail => { this.emailValueInput = inputemail; }} />
                                 </View>
 
                                 <View style={{
@@ -533,11 +537,7 @@ class ProductEdit extends Component {
                                     paddingLeft: 15,
                                     fontSize: 14,
                                 }} >
-                                    <RNPickerSelect style={{
-                                        color: '#8F9EB717',
-                                        fontWeight: 'regular',
-                                        fontSize: 15
-                                    }}
+                                    <RNPickerSelect
                                         placeholder={{
                                             label: 'SELECT UOM',
 
@@ -563,7 +563,7 @@ class ProductEdit extends Component {
                                     autoCapitalize="none"
                                     value={this.state.productmrp}
                                     onChangeText={this.handleInventoryMRP}
-                                    ref={inputemail => { this.emailValueInput = inputemail }} />
+                                    ref={inputemail => { this.emailValueInput = inputemail; }} />
 
                                 <View>
                                     <TextInput style={styles.input}
@@ -574,7 +574,7 @@ class ProductEdit extends Component {
                                         autoCapitalize="none"
                                         value={this.state.productofferprice}
                                         onChangeText={this.handleInventoryDiscount}
-                                        ref={inputemail => { this.emailValueInput = inputemail }} />
+                                        ref={inputemail => { this.emailValueInput = inputemail; }} />
 
                                 </View>
 
@@ -600,10 +600,10 @@ class ProductEdit extends Component {
                 </KeyboardAwareScrollView>
             </View>
 
-        )
+        );
     }
 }
-export default ProductEdit
+export default ProductEdit;
 
 
 const pickerSelectStyles = StyleSheet.create({
@@ -614,23 +614,24 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 52 : 42,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
+        color: '#001B4A',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 52 : 42,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
@@ -646,7 +647,7 @@ const pickerSelectStyles = StyleSheet.create({
         // fontSize: 16,
         // borderRadius: 3,
     },
-})
+});
 
 const styles = StyleSheet.create({
     safeArea: {

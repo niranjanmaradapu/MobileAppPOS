@@ -86,7 +86,8 @@ class Promo extends Component {
             this.getAllpools();
 
         }).catch(() => {
-            console.log('there is error getting domainDataId');
+            console.log('There is error getting domainDataId');
+            alert('There is error getting domainDataId');
         });
 
 
@@ -104,7 +105,7 @@ class Promo extends Component {
                         value: this.state.storeNamesArray[i].name,
                         label: this.state.storeNamesArray[i].name
                     });
-                    
+
                 }
                 this.setState({
                     storeNames: storeNames,
@@ -192,12 +193,15 @@ class Promo extends Component {
                         }
                     });
                 }).catch(() => {
-                    console.log('there is error saving domainDataId');
+                    console.log('There is error saving domainDataId');
+                    alert('There is error saving domainDataId');
+
                 });
 
             }
         }).catch(() => {
-            console.log('there is error getting sadasdsd');
+            console.log('There is error getting sadasdsd');
+            alert('There is error getting sadasdsd');
         });
 
     }
@@ -1463,7 +1467,7 @@ class Promo extends Component {
                                     </Text>
                                     <View style={{ marginTop: 10, width: deviceWidth, }}>
                                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            <RNPickerSelect
                                                 placeholder={{
                                                     label: 'SELECT CREATED BY',
 
@@ -1481,7 +1485,7 @@ class Promo extends Component {
                                         </View>
 
                                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            <RNPickerSelect
                                                 placeholder={{
                                                     label: 'SELECT POOL TYPE',
 
@@ -1503,7 +1507,7 @@ class Promo extends Component {
                                         </View>
 
                                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            <RNPickerSelect
                                                 placeholder={{
                                                     label: 'SELECT STATUS',
 
@@ -1559,7 +1563,7 @@ class Promo extends Component {
                                     </Text>
                                     <View style={{ marginTop: 10, width: deviceWidth, }}>
                                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            <RNPickerSelect
                                                 placeholder={{
                                                     label: 'SELECT STORE',
 
@@ -1698,7 +1702,7 @@ class Promo extends Component {
 
 
                                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            <RNPickerSelect
                                                 placeholder={{
                                                     label: 'SELECT STATUS',
 
@@ -1875,7 +1879,7 @@ class Promo extends Component {
 
 
                                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            <RNPickerSelect
                                                 placeholder={{
                                                     label: 'APPLICABILITY',
 
@@ -1911,7 +1915,7 @@ class Promo extends Component {
 
                                         {this.state.chargeExtra && (
                                             <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                                                <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                                <RNPickerSelect
                                                     placeholder={{
                                                         label: 'SELECT TAX %',
 
@@ -1981,7 +1985,7 @@ class Promo extends Component {
                                     <View style={{ marginTop: 30, width: deviceWidth, }}>
 
                                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            <RNPickerSelect
                                                 placeholder={{
                                                     label: 'PROMOTION TYPE',
 
@@ -2003,7 +2007,7 @@ class Promo extends Component {
                                         </View>
 
                                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            <RNPickerSelect
                                                 placeholder={{
                                                     label: 'PROMOTION NAME',
 
@@ -2022,7 +2026,7 @@ class Promo extends Component {
                                         </View>
 
                                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
-                                            <RNPickerSelect style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            <RNPickerSelect
                                                 placeholder={{
                                                     label: 'SELECT STORE',
 

@@ -48,14 +48,16 @@ export class ListOfBarcodes extends Component {
 
 
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
             this.setState({ storeName: value });
             console.log(this.state.storeName);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
     }
 
@@ -390,7 +392,7 @@ export class ListOfBarcodes extends Component {
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
-                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                <Image style={{ margin: 5, height: Device.isTablet ? 20 : 15, width: Device.isTablet ? 20 : 15, }} source={require('../assets/images/modalCloseWhite.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>

@@ -123,7 +123,8 @@ class InventoryRetail extends Component {
       console.log("domain data ids" + this.state.domainId);
 
     }).catch(() => {
-      console.log('there is error getting domainDataId');
+      console.log('There is error getting domainDataId');
+      alert('There is error getting domainDataId');
     });
 
     AsyncStorage.getItem("storeId").then((value) => {
@@ -132,7 +133,8 @@ class InventoryRetail extends Component {
       console.log(this.state.storeId);
       console.log("cssafsfs" + this.state.storeId);
     }).catch(() => {
-      console.log('there is error getting storeId');
+      console.log('There is error getting storeId');
+      alert('There is error getting storeId');
     });
     this.barcodeDBStore();
     this.getItems();
@@ -782,7 +784,7 @@ class InventoryRetail extends Component {
     }
     ).catch(() => {
       this.setState({ flagCustomerOpen: false, modalVisible: false });
-      // alert("create customer adding not successfully")
+      alert("There is An error in Getting Customer Details");
     });
   };
 
@@ -913,7 +915,8 @@ class InventoryRetail extends Component {
           AsyncStorage.setItem("uomData", JSON.stringify(uom)).then(() => {
             console.log('table data saved');
           }).catch(() => {
-            console.log('there is error saving token');
+            console.log('There is error saving token');
+            alert('There is error saving token');
           });
           console.log(this.state.uom);
         });
@@ -1435,6 +1438,7 @@ class InventoryRetail extends Component {
       })
       .catch(function (error) {
         console.log(error);
+        alert(error);
       });
   }
 
@@ -1467,6 +1471,7 @@ class InventoryRetail extends Component {
       })
       .catch(function (error) {
         console.log(error);
+        alert(error);
 
       });
 
@@ -1576,7 +1581,8 @@ class InventoryRetail extends Component {
     AsyncStorage.getItem("tokenkey").then((value) => {
       console.log(value);
     }).catch(() => {
-      console.log('there is error getting token');
+      console.log('There is error getting token');
+      alert('There is error getting token');
     });
     const state = this.state;
 
@@ -1767,7 +1773,6 @@ class InventoryRetail extends Component {
 
                       <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                          style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                           placeholder={{
                             label: 'SELECT UOM',
                             value: " ",

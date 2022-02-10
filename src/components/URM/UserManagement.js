@@ -142,16 +142,19 @@ export default class UserManagement extends Component {
 
                             });
                         }).catch(() => {
-                            console.log('there is error saving domainDataId');
+                            console.log('There is error saving domainDataId');
+                            alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
-                    console.log('there is error getting storeId');
+                    console.log('There is error getting storeId');
+                    alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
         this.getAllUsers();
         this.getRolesList();
@@ -175,6 +178,7 @@ export default class UserManagement extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            alert("There is an Error Getting Roles");
         });
     }
 
@@ -213,6 +217,7 @@ export default class UserManagement extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            alert("There is an Error Getting Users");
         });
     }
 
@@ -857,7 +862,7 @@ export default class UserManagement extends Component {
 
                                             <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 40 }]}>
                                                 <RNPickerSelect
-                                                    style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                                    // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                                     placeholder={{
                                                         label: 'USER TYPE'
                                                     }}

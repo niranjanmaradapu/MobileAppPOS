@@ -66,7 +66,8 @@ class Payment extends Component {
             console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
-            console.log('there is error getting domainDataId');
+            console.log('There is error getting domainDataId');
+            alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -74,7 +75,8 @@ class Payment extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
         console.log(this.props.route.params.totalAmount);
         this.setState({
@@ -208,7 +210,7 @@ class Payment extends Component {
         }
         ).catch(() => {
             this.setState({ flagCustomerOpen: false, modalVisible: false });
-            // alert("create customer adding not successfully")
+            alert("Unable to Get User Details");
         });
     };
 
@@ -543,7 +545,7 @@ class Payment extends Component {
                     }
                 }).catch(() => {
                     this.setState({ loading: false, notfound: "Not Found" });
-                    //  alert('No Records Found')
+                    alert('No Records Found');
                 });
         }
     }
@@ -1175,11 +1177,7 @@ class Payment extends Component {
                                                     paddingLeft: 15,
                                                     fontSize: 14,
                                                 }} >
-                                                    <RNPickerSelect style={{
-                                                        color: '#8F9EB717',
-                                                        fontWeight: 'regular',
-                                                        fontSize: 15
-                                                    }}
+                                                    <RNPickerSelect
                                                         placeholder={{
                                                             label: 'GENDER',
                                                             value: '',
@@ -1353,27 +1351,27 @@ const pickerSelectStyles = StyleSheet.create({
     placeholder: {
         color: "#353C4050",
         fontFamily: "regular",
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 52 : 42,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 52 : 42,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
 

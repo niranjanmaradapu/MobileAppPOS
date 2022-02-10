@@ -93,6 +93,7 @@ export default class CreateRole extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            alert("There is an Error Getting Domain Id");
         });
     }
 
@@ -148,6 +149,7 @@ export default class CreateRole extends Component {
                 }
                 ).catch(() => {
                     this.setState({ loading: false });
+                    alert("There is an Error Saving Role");
                 });
             }
             else {
@@ -177,6 +179,7 @@ export default class CreateRole extends Component {
                 }
                 ).catch(() => {
                     this.setState({ loading: false });
+                    alert("There is an Error SAving Role");
                 });
 
             }
@@ -223,7 +226,7 @@ export default class CreateRole extends Component {
                 newArrayrolesList.push({ ...obj });
             }
         });
-        this.setState({ parentlist: newArrayList, childlist:newArraychildList , roles: newArrayrolesList });
+        this.setState({ parentlist: newArrayList, childlist: newArraychildList, roles: newArrayrolesList });
     }
 
 
@@ -279,7 +282,6 @@ export default class CreateRole extends Component {
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Domain <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'Domain',
                                 // value:this.state.domain,

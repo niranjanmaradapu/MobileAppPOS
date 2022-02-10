@@ -111,6 +111,7 @@ export default class AddDomain extends Component {
             }
             ).catch(() => {
                 this.setState({ loading: false });
+                alert("There is an Error while saving Domain");
             });
 
         }
@@ -136,7 +137,7 @@ export default class AddDomain extends Component {
                     <Text style={{ fontSize: Device.isTablet ? 22 : 17, fontFamily: 'medium', marginLeft: 20, marginBottom: 20 }}>Domain <Text style={{ color: 'red', fontFamily: 'bold' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                            // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'DOMAIN'
                             }}

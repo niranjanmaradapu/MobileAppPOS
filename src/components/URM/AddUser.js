@@ -121,6 +121,7 @@ export default class AddUser extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            alert("There is an Error getting DomainId");
         });
     }
 
@@ -192,6 +193,7 @@ export default class AddUser extends Component {
 
         }).catch(() => {
             this.setState({ loading: false });
+            alert("There is an Error Getting Stores");
         });
     }
 
@@ -219,6 +221,7 @@ export default class AddUser extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            alert("There is an error Getting Roles");
         });
 
     }
@@ -410,6 +413,7 @@ export default class AddUser extends Component {
                 }
                 ).catch(() => {
                     this.setState({ loading: false });
+                    alert("There is an Error Saving User");
                 });
 
             }
@@ -454,6 +458,7 @@ export default class AddUser extends Component {
                 }
                 ).catch(() => {
                     this.setState({ loading: false });
+                    alert("There is an Error while Saving User");
                 });
 
             }
@@ -498,7 +503,6 @@ export default class AddUser extends Component {
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Gender</Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'Gender'
                             }}
@@ -599,7 +603,6 @@ export default class AddUser extends Component {
                             <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Domain</Text>
                             <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                                 <RNPickerSelect
-                                    style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                     placeholder={{
                                         label: 'Domain'
                                     }}
@@ -672,7 +675,6 @@ export default class AddUser extends Component {
                             <Text style={{ marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15, marginLeft: 20 }}>Role</Text>
                             <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                                 <RNPickerSelect
-                                    style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                     placeholder={{
                                         label: 'Role'
                                     }}

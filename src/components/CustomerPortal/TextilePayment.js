@@ -83,7 +83,8 @@ class TextilePayment extends Component {
             console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
-            console.log('there is error getting domainDataId');
+            console.log('There is error getting domainDataId');
+            alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -91,7 +92,8 @@ class TextilePayment extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
         console.log(this.props.route.params.totalAmount);
         this.setState({
@@ -235,7 +237,7 @@ class TextilePayment extends Component {
         }
         ).catch(() => {
             this.setState({ flagCustomerOpen: false, modalVisible: false });
-            // alert("create customer adding not successfully")
+            alert("There is an Error getting User Details");
         });
     };
 
@@ -693,7 +695,7 @@ class TextilePayment extends Component {
                     }
                 }).catch(() => {
                     this.setState({ loading: false, notfound: "Not Found" });
-                    //  alert('No Records Found')
+                    alert('No Records Found');
                 });
         }
     }
@@ -1335,11 +1337,7 @@ class TextilePayment extends Component {
                                                     paddingLeft: 15,
                                                     fontSize: Device.isTablet ? 19 : 14,
                                                 }} >
-                                                    <RNPickerSelect style={{
-                                                        color: '#8F9EB717',
-                                                        fontWeight: 'regular',
-                                                        fontSize: 15
-                                                    }}
+                                                    <RNPickerSelect
                                                         placeholder={{
                                                             label: 'GENDER',
                                                             value: '',
@@ -1352,7 +1350,11 @@ class TextilePayment extends Component {
                                                             { label: 'Female', value: 'female' },
                                                         ]}
                                                         onValueChange={this.handlecustomerGender}
-                                                        style={pickerSelectStyles}
+                                                        style={[pickerSelectStyles, {
+                                                            color: '#8F9EB717',
+                                                            fontWeight: 'regular',
+                                                            fontSize: Device.isTablet ? 20 : 15
+                                                        }]}
                                                         value={this.state.customerGender}
                                                         useNativeAndroidPickerStyle={false}
 

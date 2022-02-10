@@ -104,6 +104,7 @@ export default class AddStore extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            alert('There Is An Error Getting Domains List');
         });
     }
 
@@ -138,7 +139,7 @@ export default class AddStore extends Component {
                         console.log('stateId is' + this.state.statesArray[i].name);
                         this.setState({ storeState: this.state.statesArray[i].name });
                         this.getMasterDistrictsList();
-                        this.getGSTNumber()
+                        this.getGSTNumber();
                     }
                 }
                 this.setState({
@@ -151,17 +152,17 @@ export default class AddStore extends Component {
     }
 
     handleStoreState = (value) => {
-        this.state.dictricts = []
+        this.state.dictricts = [];
         for (let i = 0; i < this.state.statesArray.length; i++) {
             if (this.state.statesArray[i].name === value) {
-                this.setState({ stateId: this.state.statesArray[i].id,statecode: this.state.statesArray[i].code });
+                this.setState({ stateId: this.state.statesArray[i].id, statecode: this.state.statesArray[i].code });
             }
         }
-        this.getGSTNumber()
+        this.getGSTNumber();
         this.getMasterDistrictsList();
         this.setState({ storeState: value });
     };
-    
+
     getMasterDistrictsList() {
         this.setState({ loading: false });
         const params = {
@@ -241,18 +242,18 @@ export default class AddStore extends Component {
         this.setState({ storeName: value });
     };
 
-     getGSTNumber(){
+    getGSTNumber() {
         const params = {
             "clientId": this.state.clientId,
-            "stateCode":this.state.statecode,
-        }
+            "stateCode": this.state.statecode,
+        };
         axios.get(UrmService.getGSTNumber(), { params }).then((res) => {
-            console.log(res)
+            console.log(res);
             if (res) {
-                this.setState({gstNumber: res.data.result.gstNumber})
+                this.setState({ gstNumber: res.data.result.gstNumber });
             }
         });
-    } 
+    }
 
     saveStore() {
         if (this.state.storeState === "") {
@@ -299,6 +300,7 @@ export default class AddStore extends Component {
                 }
                 ).catch(() => {
                     this.setState({ loading: false });
+                    alert("There is an Error while Saving The Store");
                 });
             }
             else {
@@ -332,6 +334,7 @@ export default class AddStore extends Component {
                 }
                 ).catch(() => {
                     this.setState({ loading: false });
+                    alert("There is an Error while Saving the Store");
                 });
             }
         }
@@ -366,7 +369,7 @@ export default class AddStore extends Component {
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>Store <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                            // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'STATE'
                             }}
@@ -383,7 +386,7 @@ export default class AddStore extends Component {
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>District <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                            // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'DISTRICT'
                             }}
@@ -455,7 +458,7 @@ export default class AddStore extends Component {
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>Domain <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                            // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'DOMAIN'
                             }}

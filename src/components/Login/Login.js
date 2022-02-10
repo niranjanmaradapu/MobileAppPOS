@@ -132,7 +132,8 @@ export default class Login extends Component {
                         //==============================Token Key & phone number save ===================//
                         AsyncStorage.setItem("tokenkey", JSON.stringify(token)).then(() => {
                         }).catch(() => {
-                            console.log('there is error saving token');
+                            console.log('There is error saving token');
+                            alert('There is error saving token');
                         });
 
                         AsyncStorage.getItem("tokenkey").then((value) => {
@@ -145,33 +146,36 @@ export default class Login extends Component {
                         AsyncStorage.setItem("phone_number", jwt_decode(token)["phone_number"]).then(() => {
                             // console.log
                         }).catch(() => {
-                            console.log('there is error saving domainDataId');
+                            console.log('There is error saving domainDataId');
+                            alert('There is error saving domainDataId');
                         });
 
                         AsyncStorage.setItem("rolename", jwt_decode(token)["custom:roleName"]).then(() => {
 
                             // console.log
                         }).catch(() => {
-                            console.log('there is error saving domainDataId');
+                            console.log('There is error saving domainDataId');
+                            alert('There is error saving domainDataId');
                         });
 
                         AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
                             // console.log
                         }).catch(() => {
-                            console.log('there is error saving domainDataId');
+                            console.log('There is error saving domainDataId');
+                            alert('There is error saving domainDataId');
                         });
 
                         //==============================Navigation===================//
                         if (jwt_decode(token)["custom:isSuperAdmin"] === "true") {
                             AsyncStorage.setItem("custom:isSuperAdmin", "true").then(() => {
                                 // console.log
-                            }).catch(() => {
-
+                            }).catch((err) => {
+                                alert(err);
                             });
                             AsyncStorage.setItem("custom:isConfigUser", "false").then(() => {
                                 // console.log
-                            }).catch(() => {
-
+                            }).catch((err) => {
+                                alert(err);
                             });
 
 
@@ -181,8 +185,8 @@ export default class Login extends Component {
 
                             AsyncStorage.setItem("custom:isConfigUser", "true").then(() => {
                                 // console.log
-                            }).catch(() => {
-
+                            }).catch((err) => {
+                                alert(err);
                             });
 
                             axios.get(ProfileService.getUser() + this.state.userName).then((res) => {
@@ -205,7 +209,8 @@ export default class Login extends Component {
                             AsyncStorage.getItem("rolename").then((value) => {
                                 global.userrole = value;
                             }).catch(() => {
-                                console.log('there is error getting storeId');
+                                console.log('There is error getting storeId');
+                                alert('There is error getting storeId');
                             });
 
 
@@ -220,7 +225,8 @@ export default class Login extends Component {
                                 this.getDomainsForNormalUser();
                                 // console.log
                             }).catch(() => {
-                                console.log('there is error saving domainDataId');
+                                console.log('There is error saving domainDataId');
+                                alert('There is error saving domainDataId');
                             });
 
                             this.getstoresForNormalUser();
@@ -229,7 +235,7 @@ export default class Login extends Component {
                         // const clientDomainId = user["custom:clientDomians"].split(",")[0];
                         // AsyncStorage.setItem("clientDomainId", JSON.stringify(clientDomainId)).then(() => {
                         // }).catch(() => {
-                        //     console.log('there is error saving token')
+                        //     console.log('There is error saving token')
                         // })
 
 
@@ -284,13 +290,15 @@ export default class Login extends Component {
                         // console.log
 
                     }).catch(() => {
-                        console.log('there is error saving token');
+                        console.log('There is error saving token');
+                        alert('There is error saving token');
                     });
                     AsyncStorage.setItem("domainName", res.data.result[0].domaiName).then(() => {
                         // console.log
 
                     }).catch(() => {
-                        console.log('there is error saving token');
+                        console.log('There is error saving token');
+                        alert('There is error saving token');
                     });
                     this.getstoresForSuperAdmin();
                 }
@@ -309,14 +317,16 @@ export default class Login extends Component {
                         // console.log
 
                     }).catch(() => {
-                        console.log('there is error saving token');
+                        console.log('There is error saving token');
+                        alert('There is error saving token');
                     });
                 }
 
             });
 
         }).catch(() => {
-            console.log('there is error saving token');
+            console.log('There is error saving token');
+            alert('There is error saving token');
         });
     }
 
@@ -339,7 +349,8 @@ export default class Login extends Component {
                     else {
                         AsyncStorage.setItem("storeId", String(res.data.result[0].id)).then(() => {
                         }).catch(() => {
-                            console.log('there is error saving storeName');
+                            console.log('There is error saving storeName');
+                            alert('There is error saving storeName');
                         });
                         this.props.navigation.navigate('HomeNavigation');
                     }
@@ -363,14 +374,16 @@ export default class Login extends Component {
                 this.setState({ storeNames: this.state.storeNames });
                 AsyncStorage.setItem("storeId", (this.state.storeNames[0].id).toString()).then(() => {
                 }).catch(() => {
-                    console.log('there is error saving token');
+                    console.log('There is error saving token');
+                    alert('There is error saving token');
                 });
 
                 AsyncStorage.setItem("storeName", (this.state.storeNames[0].name)).then(() => {
-                       
+
                 }).catch(() => {
-                    console.log('there is error saving token')
-                })
+                    console.log('There is error saving token');
+                    alert('There is error saving token');
+                });
 
 
                 if (this.state.storeNames.length === 1) {

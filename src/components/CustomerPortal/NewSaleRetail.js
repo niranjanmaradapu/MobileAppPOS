@@ -127,16 +127,18 @@ class NewSaleRetail extends Component {
       console.log("domain data ids" + this.state.domainId);
 
     }).catch(() => {
-      console.log('there is error getting domainDataId');
+      console.log('There is error getting domainDataId');
+      alert('There is error getting domainDataId');
     });
 
     AsyncStorage.getItem("storeId").then((value) => {
       storeStringId = value;
       this.setState({ storeId: parseInt(storeStringId) });
       console.log(this.state.storeId);
-      console.log("cssafsfs" + this.state.storeId);
+      console.log("storeId" + this.state.storeId);
     }).catch(() => {
-      console.log('there is error getting storeId');
+      console.log('There is error getting storeId');
+      alert('There is error getting storeId');
     });
     this.barcodeDBStore();
     this.getItems();
@@ -219,12 +221,14 @@ class NewSaleRetail extends Component {
             }
           });
         }).catch(() => {
-          console.log('there is error saving domainDataId');
+          console.log('There is error saving domainDataId');
+          alert('There is error saving domainDataId');
         });
 
       }
     }).catch(() => {
-      console.log('there is error getting sadasdsd');
+      console.log('There is error getting role Name');
+      alert('There is error getting Role Name');
     });
 
 
@@ -233,7 +237,7 @@ class NewSaleRetail extends Component {
 
   topbarAction1 = (item, index) => {
     if (item.name === "Generate Invoice") {
-      console.log('geneare invocie safasfsf');
+      console.log('generate invocie');
       this.setState({ inventoryDelete: false, modalVisible: false, flagone: true, flagtwo: false, flagthree: false, flagfour: false });
     }
 
@@ -793,7 +797,7 @@ class NewSaleRetail extends Component {
     }
     ).catch(() => {
       this.setState({ loading: false, flagCustomerOpen: false, modalVisible: false });
-      alert("create customer adding not successfully");
+      alert("There is an Error in Creating Customer");
     });
   }
 
@@ -815,7 +819,7 @@ class NewSaleRetail extends Component {
     }
     ).catch(() => {
       this.setState({ flagCustomerOpen: false, modalVisible: false });
-      // alert("create customer adding not successfully")
+      alert("There is an Error in Getting Customer Details");
     });
   };
 
@@ -946,7 +950,8 @@ class NewSaleRetail extends Component {
           AsyncStorage.setItem("uomData", JSON.stringify(uom)).then(() => {
             console.log('table data saved');
           }).catch(() => {
-            console.log('there is error saving token');
+            console.log('There is error saving token');
+            alert('There is error saving token');
           });
           console.log(this.state.uom);
         });
@@ -1443,6 +1448,7 @@ class NewSaleRetail extends Component {
       })
       .catch(function (error) {
         console.log(error);
+        alert(error);
       });
   }
 
@@ -1475,7 +1481,7 @@ class NewSaleRetail extends Component {
       })
       .catch(function (error) {
         console.log(error);
-
+        alert(error);
       });
 
   }
@@ -1584,7 +1590,8 @@ class NewSaleRetail extends Component {
     AsyncStorage.getItem("tokenkey").then((value) => {
       console.log(value);
     }).catch(() => {
-      console.log('there is error getting token');
+      console.log('There is error getting token');
+      alert('There is error getting token');
     });
     const state = this.state;
 
@@ -1811,7 +1818,7 @@ class NewSaleRetail extends Component {
                       textAlignVertical="center"
                       keyboardType={'default'}
                       autoCapitalize="none"
-                      onEndEditing
+                      // onEndEditing
                       onChangeText={(text) => this.handleBarCode(text)}
                       onEndEditing={() => this.endEditing()}
                     />
@@ -1976,7 +1983,7 @@ class NewSaleRetail extends Component {
                                   }}></Text>
                                 </View>
 
-                                
+
                                 <Text style={{
                                   textAlign: 'center',
                                   fontFamily: 'regular',
@@ -2179,11 +2186,7 @@ class NewSaleRetail extends Component {
                           paddingLeft: 15,
                           fontSize: 14,
                         }} >
-                          <RNPickerSelect style={{
-                            color: '#8F9EB717',
-                            fontWeight: 'regular',
-                            fontSize: 15
-                          }}
+                          <RNPickerSelect
                             placeholder={{
                               label: 'GENDER',
                               value: '',
@@ -2196,7 +2199,7 @@ class NewSaleRetail extends Component {
                               { label: 'Female', value: 'female' },
                             ]}
                             onValueChange={this.handlecustomerGender}
-                            style={pickerSelectStyles_mobile}
+                            style={DEvice.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                             value={this.state.customerGender}
                             useNativeAndroidPickerStyle={false}
 

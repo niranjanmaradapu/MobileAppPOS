@@ -39,6 +39,7 @@ export default class GenerateReturnSlip extends Component {
             customerNumber: "",
             resultModel: false,
             resultData: "",
+            itemsReturn: false,
         };
     }
 
@@ -48,7 +49,8 @@ export default class GenerateReturnSlip extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log("Store Id", this.state.storeId);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
     }
 
@@ -86,10 +88,11 @@ export default class GenerateReturnSlip extends Component {
                     element.isChecked = false;
                 });
 
-                this.setState({ netValue: costprice, quantity: quantity, isChecked: false });
+                this.setState({ netValue: costprice, quantity: quantity, isChecked: false, itemsReturn: true });
             });
         }).catch(err => {
             console.log(err);
+            alert('Unable to get the Invoice Details');
         });
     };
 
@@ -180,6 +183,7 @@ export default class GenerateReturnSlip extends Component {
             }
         }).catch(err => {
             console.log(err);
+            alert("Unable to Save the Return Slip");
         });
 
     }
@@ -358,38 +362,40 @@ export default class GenerateReturnSlip extends Component {
                         </Modal>
                     </View>
                 )}
-                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>List Of Items For Return</Text>
-                <FlatList
-                    style={{ marginTop: 20, marginBottom: 20 }}
-                    data={this.state.returnInvoice}
-                    scrollEnabled={true}
-                    renderItem={({ item, index }) => (
-                        <View>
-                            <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
-                                <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
-                                    <View style={flats.text}>
-                                        <TouchableOpacity onPress={(e) => this.itemSelected(e, index, item)} style={{ position: 'relative', top: 60, left: 10, width: 20, height: 20 }}>
-                                            <Image style={{ position: 'absolute', top: 0, left: 0, }} source={
-                                                //require('../assets/images/chargeunselect.png')}
-                                                this.state.itemClicked ? require('../assets/images/selected.png') : require('../assets/images/langunselect.png')} />
-                                        </TouchableOpacity>
-                                        <View style={{ marginLeft: 60 }}>
-                                            <Image source={require('../assets/images/default.jpeg')}
-                                                //source={{ uri: item.image }}
-                                                style={{
-                                                    width: Device.isTablet ? 140 : 90, height: Device.isTablet ? 140 : 90,
-                                                }} />
-                                            <Text style={[Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile, { marginLeft: 30, marginTop: 10 }]}>S.NO: {index + 1}</Text>
+                {this.state.itemsReturn && (
+                    <View>
+                        <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>List Of Items For Return</Text>
+                        <FlatList
+                            style={{ marginTop: 20, marginBottom: 20 }}
+                            data={this.state.returnInvoice}
+                            scrollEnabled={true}
+                            renderItem={({ item, index }) => (
+                                <View>
+                                    <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
+                                        <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
+                                            <View style={flats.text}>
+                                                <TouchableOpacity onPress={(e) => this.itemSelected(e, index, item)} style={{ position: 'relative', top: 60, left: 10, width: 20, height: 20 }}>
+                                                    <Image style={{ position: 'absolute', top: 0, left: 0, }} source={
+                                                        //require('../assets/images/chargeunselect.png')}
+                                                        this.state.itemClicked ? require('../assets/images/selected.png') : require('../assets/images/langunselect.png')} />
+                                                </TouchableOpacity>
+                                                <View style={{ marginLeft: 60 }}>
+                                                    <Image source={require('../assets/images/default.jpeg')}
+                                                        //source={{ uri: item.image }}
+                                                        style={{
+                                                            width: Device.isTablet ? 140 : 90, height: Device.isTablet ? 140 : 90,
+                                                        }} />
+                                                    <Text style={[Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile, { marginLeft: 30, marginTop: 10 }]}>S.NO: {index + 1}</Text>
+                                                </View>
+                                            </View>
+                                            <View style={[flats.text, { marginRight: Device.isTablet ? 20 : 0 }]}>
+                                                <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {item.barcode}</Text>
+                                                <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {item.quantity}</Text>
+                                                <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {item.netValue}</Text>
+                                            </View>
                                         </View>
                                     </View>
-                                    <View style={[flats.text, { marginRight: Device.isTablet ? 20 : 0 }]}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {item.barcode}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {item.quantity}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {item.netValue}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                            {/* <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile} >
+                                    {/* <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile} >
                                 <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile}>
                                     <View style={flats.text}>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>ITEMS: {this.state.returnInvoice.length}</Text>
@@ -402,51 +408,54 @@ export default class GenerateReturnSlip extends Component {
                                     </View>
                                 </View>
                             </View> */}
+                                </View>
+                            )}
+                        />
+                        <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return summary</Text>
+                        <Text style={[Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile, { marginLeft: 20 }]}>RETURN AMOUNT: {this.state.returnSlipTotal}</Text>
+                        <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return For Reason <Text style={{ color: "#ed1c24" }}>*</Text></Text>
+                        <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                            <RNPickerSelect
+                                // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                placeholder={{ label: 'REASON', value: '' }}
+                                Icon={() => {
+                                    return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                }}
+                                items={[
+                                    { label: 'Not Fitting', value: 'Not Fitting' },
+                                    { label: 'Damaged Piece', value: 'Damaged Piece' },
+                                    { label: 'Quality is Not Good', value: 'Quality is Not Good' },
+                                    { label: 'Others', value: 'Others' },
+                                ]}
+                                onValueChange={this.handleReason}
+                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                value={this.state.reason}
+                                useNativeAndroidPickerStyle={false}
+                            />
                         </View>
-                    )}
-                />
-                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return summary</Text>
-                <Text style={[Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile, { marginLeft: 20 }]}>RETURN AMOUNT: {this.state.returnSlipTotal}</Text>
-                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return For Reason <Text style={{ color: "#ed1c24" }}>*</Text></Text>
-                <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                    <RNPickerSelect
-                        // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                        placeholder={{ label: 'REASON', value: '' }}
-                        Icon={() => {
-                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                        }}
-                        items={[
-                            { label: 'Not Fitting', value: 'Not Fitting' },
-                            { label: 'Damaged Piece', value: 'Damaged Piece' },
-                            { label: 'Quality is Not Good', value: 'Quality is Not Good' },
-                            { label: 'Others', value: 'Others' },
-                        ]}
-                        onValueChange={this.handleReason}
-                        style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                        value={this.state.reason}
-                        useNativeAndroidPickerStyle={false}
-                    />
-                </View>
-                <TextInput
-                    style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { height: Device.isTablet ? 175 : 155, width: deviceWidth - 40 }]}
-                    placeholder='COMMENTS'
-                    placeholderTextColor="#6f6f6f60"
-                    textAlignVertical="center"
-                    keyboardType={'default'}
-                    autoCapitalize='none'
-                    value={this.state.reasonDesc}
-                    onChangeText={(text) => this.handleReasonDesc(text)}
-                />
-                <TouchableOpacity
-                    style={[Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile, { width: deviceWidth - 40, height: Device.isTablet ? 60 : 50 }]}
-                    onPress={this.generateInvoice}
-                >
-                    <Text
-                        style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}
-                    >
-                        GENERATE RETURN SLIP
-                    </Text>
-                </TouchableOpacity>
+                        <TextInput
+                            style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { height: Device.isTablet ? 175 : 155, width: deviceWidth - 40 }]}
+                            placeholder='COMMENTS'
+                            placeholderTextColor="#6f6f6f60"
+                            textAlignVertical="center"
+                            keyboardType={'default'}
+                            autoCapitalize='none'
+                            value={this.state.reasonDesc}
+                            onChangeText={(text) => this.handleReasonDesc(text)}
+                        />
+                        <TouchableOpacity
+                            style={[Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile, { width: deviceWidth - 40, height: Device.isTablet ? 60 : 50 }]}
+                            onPress={this.generateInvoice}
+                        >
+                            <Text
+                                style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}
+                            >
+                                GENERATE RETURN SLIP
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+
                 {this.state.returnModel && (
                     <View>
                         <Modal style={{ margin: 0 }} isVisible={this.state.modelVisible}>
@@ -458,7 +467,7 @@ export default class GenerateReturnSlip extends Component {
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -5 }} onPress={() => this.modelCancel()}>
-                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                <Image style={{ width: Device.isTablet ? 20 : 15, height: Device.isTablet ? 20 : 15, margin: 5 }} source={require('../assets/images/modalCloseWhite.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
@@ -522,7 +531,7 @@ export default class GenerateReturnSlip extends Component {
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -5 }} onPress={() => this.modelCancel()}>
-                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                <Image style={{ width: Device.isTablet ? 20 : 15, height: Device.isTablet ? 20 : 15, margin: 5 }} source={require('../assets/images/modalCloseWhite.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>

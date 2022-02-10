@@ -71,7 +71,8 @@ export default class ReportsDashboard extends Component {
                 });
             console.log(this.state.storeId);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
 
 
@@ -82,7 +83,9 @@ export default class ReportsDashboard extends Component {
 
         }).catch(() => {
 
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
+
 
         });
     }
@@ -117,7 +120,7 @@ export default class ReportsDashboard extends Component {
                         });
                 }
             }
-        }).catch(error => console.log(error));
+        }).catch(error => console.log(error), alert(error));
     }
 
     getSalesSummary() {
@@ -232,23 +235,20 @@ export default class ReportsDashboard extends Component {
     render() {
         return (
             <View>
-                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 450 }]}>
+                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 550 }]}>
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <BarChart
                             style={{ paddingTop: 20 }}
                             data={this.state.topSalesChart}
                             width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
-                            height={380}
+                            height={Device.isTablet ? 300 : 450}
                             yLabelsOffset={20}
+                            xLabelsOffset={Device.isTablet ? 0 : -20}
                             yAxisLabel="₹"
                             fromZero
                             chartConfig={chartConfig}
-                            verticalLabelRotation={Device.isTablet ? 0 : 45}
-                        // paddingLeft={"15"}
-                        // yAxisSuffix="L"
-                        // center={[0, 0]}
-                        // absolute
+                            verticalLabelRotation={Device.isTablet ? 0 : 90}
                         />
                     </View>
                 </View>

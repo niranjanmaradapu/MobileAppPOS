@@ -12,6 +12,7 @@ import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
 import CustomerService from '../services/CustomerService';
 var deviceWidth = Dimensions.get('window').width;
+var deviceHeight = Dimensions.get('window').height;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
@@ -183,7 +184,8 @@ class GenerateInvoiceSlip extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
         this.getDiscountReasons();
         this.getHsnDetails();
@@ -361,7 +363,8 @@ class GenerateInvoiceSlip extends Component {
                     console.log('data saved');
 
                 }).catch(() => {
-                    console.log('there is error saving token');
+                    console.log('There is error saving token');
+                    alert('There is error saving token');
                 });
 
 
@@ -437,7 +440,6 @@ class GenerateInvoiceSlip extends Component {
                         slabCheck = true;
                         // this.setState({ stateGST: taxData[0].taxVo.cgst, centralGST: taxData[0].taxVo.cgst });
                     }
-
                 });
 
                 if (!slabCheck) {
@@ -716,7 +718,7 @@ class GenerateInvoiceSlip extends Component {
         AsyncStorage.getItem("tokenkey").then((value) => {
             console.log(value);
         }).catch(() => {
-            console.log('there is error getting token');
+            console.log('There is error getting token');
         });
 
         return (
@@ -970,71 +972,7 @@ class GenerateInvoiceSlip extends Component {
                           </TouchableOpacity>
                                             </View>  */}
 
-                                            {this.state.lineItemDelete && (
-                                                <View>
-                                                    <Modal isVisible={this.state.modalVisible}>
 
-                                                        <View style={[styles.filterMainContainer, { height: Device.isTablet ? 300 : 250, marginTop: Device.isTablet ? deviceheight - 300 : deviceheight - 250 }]}>
-
-                                                            <View>
-                                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
-                                                                    <View>
-                                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Item </Text>
-                                                                    </View>
-                                                                    <View>
-                                                                        <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
-                                                                            <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
-                                                                        </TouchableOpacity>
-                                                                    </View>
-                                                                </View>
-                                                                <Text style={{
-                                                                    height: Device.isTablet ? 2 : 1,
-                                                                    width: deviceWidth,
-                                                                    backgroundColor: 'lightgray',
-                                                                }}></Text>
-                                                            </View>
-
-
-                                                            <Text style={{
-                                                                textAlign: 'center',
-                                                                fontFamily: 'regular',
-                                                                fontSize: Device.isTablet ? 17 : 22,
-                                                                color: '#353C40'
-                                                            }}> Are you sure want to delete NewSale Item?  </Text>
-                                                            <TouchableOpacity
-                                                                style={{
-                                                                    width: deviceWidth - 40,
-                                                                    marginLeft: 20,
-                                                                    marginRight: 20,
-                                                                    marginTop: 60,
-                                                                    height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
-                                                                }} onPress={() => this.deleteLineItem(item, index)}
-                                                            >
-                                                                <Text style={{
-                                                                    textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
-                                                                    fontFamily: "regular"
-                                                                }}  > DELETE </Text>
-
-                                                            </TouchableOpacity>
-
-                                                            <TouchableOpacity
-                                                                style={{
-                                                                    width: deviceWidth - 40,
-                                                                    marginLeft: 20,
-                                                                    marginRight: 20,
-                                                                    marginTop: 20,
-                                                                    height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#353C4050",
-                                                                }} onPress={() => this.modelCancel()}
-                                                            >
-                                                                <Text style={{
-                                                                    textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
-                                                                    fontFamily: "regular"
-                                                                }}  > CANCEL </Text>
-
-                                                            </TouchableOpacity>
-                                                        </View>
-                                                    </Modal>
-                                                </View>)}
 
                                         </View>
 
@@ -1042,6 +980,75 @@ class GenerateInvoiceSlip extends Component {
 
                                     )}
                                 />)}
+
+                            {this.state.lineItemDelete && (
+                                <View>
+                                    <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
+
+                                        <View style={[styles.filterMainContainer, { height: Device.isTablet ? 350 : 300, marginTop: Device.isTablet ? deviceHeight - 350 : deviceHeight - 300, backgroundColor: '#ED1C24' }]}>
+
+                                            <View>
+                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                                    <View>
+                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > Delete Item </Text>
+                                                    </View>
+                                                    <View>
+                                                        <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
+                                                            <Image style={{ width: Device.isTablet ? 20 : 15, height: Device.isTablet ? 20 : 15, margin: 5 }} source={require('../assets/images/modalCloseWhite.png')} />
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                </View>
+                                                <Text style={{
+                                                    height: Device.isTablet ? 2 : 1,
+                                                    width: deviceWidth,
+                                                    backgroundColor: 'lightgray',
+                                                }}></Text>
+                                            </View>
+
+                                            <View style={{ backgroundColor: '#ffffff' }}>
+                                                <Text style={{
+                                                    textAlign: 'center',
+                                                    fontFamily: 'regular',
+                                                    fontSize: Device.isTablet ? 17 : 22,
+                                                    marginTop: 15,
+                                                    color: '#353C40'
+                                                }}> Are you sure want to delete NewSale Item?  </Text>
+                                                <TouchableOpacity
+                                                    style={{
+                                                        width: deviceWidth - 40,
+                                                        marginLeft: 20,
+                                                        marginRight: 20,
+                                                        marginTop: 60,
+                                                        height: 50, backgroundColor: "#ED1C24", borderRadius: 5,
+                                                    }} onPress={() => this.deleteLineItem(item, index)}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > DELETE </Text>
+
+                                                </TouchableOpacity>
+
+                                                <TouchableOpacity
+                                                    style={{
+                                                        width: deviceWidth - 40,
+                                                        marginLeft: 20,
+                                                        marginRight: 20,
+                                                        marginTop: 20,
+                                                        height: 50, backgroundColor: "#ffffff", borderRadius: 5, borderWidth: 1, borderColor: "#ED1C24",
+                                                    }} onPress={() => this.modelCancel()}
+                                                >
+                                                    <Text style={{
+                                                        textAlign: 'center', marginTop: 20, color: "#ED1c24", fontSize: 15,
+                                                        fontFamily: "regular"
+                                                    }}  > CANCEL </Text>
+
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    </Modal>
+                                </View>
+                            )}
 
                             {(this.state.barCodeList.length !== 0 && global.domainName === "Textile" &&
                                 <FlatList style={{ marginTop: 20, marginBottom: 20 }}
@@ -1420,7 +1427,7 @@ class GenerateInvoiceSlip extends Component {
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Tag Customer </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -1480,7 +1487,7 @@ class GenerateInvoiceSlip extends Component {
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Bill level Discount </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 15 }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -1697,14 +1704,8 @@ class GenerateInvoiceSlip extends Component {
 
                             </KeyboardAwareScrollView>
                         </Modal>
-                    </View>)}
-
-
-
-
-
-
-
+                    </View>
+                )}
 
             </View>
         );

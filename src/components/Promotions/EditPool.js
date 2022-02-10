@@ -92,7 +92,8 @@ class EditPool extends Component {
             console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
-            console.log('there is error getting domainDataId');
+            console.log('There is error getting domainDataId');
+            alert('There is error getting domainDataId');
         });
     }
 
@@ -305,14 +306,9 @@ class EditPool extends Component {
                                 paddingLeft: 15,
                                 fontSize: 14,
                             }} >
-                                <RNPickerSelect style={{
-                                    color: '#8F9EB717',
-                                    fontWeight: 'regular',
-                                    fontSize: 15
-                                }}
+                                <RNPickerSelect
                                     placeholder={{
                                         label: 'POOL TYPE',
-
                                     }}
                                     Icon={() => {
                                         return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
@@ -535,11 +531,7 @@ class EditPool extends Component {
                                                         paddingLeft: 15,
                                                         fontSize: 14,
                                                     }} >
-                                                        <RNPickerSelect style={{
-                                                            color: '#8F9EB717',
-                                                            fontWeight: 'regular',
-                                                            fontSize: 15
-                                                        }}
+                                                        <RNPickerSelect
                                                             placeholder={{
                                                                 label: 'SELECT COLUMN NAME',
 
@@ -575,11 +567,7 @@ class EditPool extends Component {
                                                         paddingLeft: 15,
                                                         fontSize: 14,
                                                     }} >
-                                                        <RNPickerSelect style={{
-                                                            color: '#8F9EB717',
-                                                            fontWeight: 'regular',
-                                                            fontSize: 15
-                                                        }}
+                                                        <RNPickerSelect
                                                             placeholder={{
                                                                 label: 'SELECT OPERATOR',
 
@@ -690,23 +678,24 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 52 : 42,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
+        color: '#001B4A',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 52 : 42,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',

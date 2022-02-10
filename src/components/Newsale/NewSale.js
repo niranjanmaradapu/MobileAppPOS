@@ -125,7 +125,8 @@ class NewSale extends Component {
       console.log("domain data ids" + this.state.domainId);
 
     }).catch(() => {
-      console.log('there is error getting domainDataId');
+      console.log('There is error getting domainDataId');
+      alert('There is error getting domainDataId');
     });
 
     AsyncStorage.getItem("storeId").then((value) => {
@@ -134,7 +135,8 @@ class NewSale extends Component {
       console.log(this.state.storeId);
       console.log("cssafsfs" + this.state.storeId);
     }).catch(() => {
-      console.log('there is error getting storeId');
+      console.log('There is error getting storeId');
+      alert('There is error getting storeId');
     });
     this.barcodeDBStore();
     this.getItems();
@@ -782,7 +784,7 @@ class NewSale extends Component {
     }
     ).catch(() => {
       this.setState({ flagCustomerOpen: false, modalVisible: false });
-      // alert("create customer adding not successfully")
+      alert("Unable to Get User Details");
     });
   };
 
@@ -913,7 +915,8 @@ class NewSale extends Component {
           AsyncStorage.setItem("uomData", JSON.stringify(uom)).then(() => {
             console.log('table data saved');
           }).catch(() => {
-            console.log('there is error saving token');
+            console.log('There is error saving token');
+            alert('There is error saving token');
           });
           console.log(this.state.uom);
         });
@@ -1413,6 +1416,7 @@ class NewSale extends Component {
       })
       .catch(function (error) {
         console.log(error);
+        alert(error);
       });
   }
 
@@ -1445,7 +1449,7 @@ class NewSale extends Component {
       })
       .catch(function (error) {
         console.log(error);
-
+        alert(error);
       });
 
   }
@@ -1554,7 +1558,8 @@ class NewSale extends Component {
     AsyncStorage.getItem("tokenkey").then((value) => {
       console.log(value);
     }).catch(() => {
-      console.log('there is error getting token');
+      console.log('There is error getting token');
+      alert('There is error getting token');
     });
     const state = this.state;
 
@@ -1853,7 +1858,6 @@ class NewSale extends Component {
 
                   <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                     <RNPickerSelect
-                      style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                       placeholder={{
                         label: 'SELECT UOM',
                         value: " ",
@@ -1938,7 +1942,6 @@ class NewSale extends Component {
                   textAlignVertical="center"
                   keyboardType={'default'}
                   autoCapitalize="none"
-                  onEndEditing
                   onChangeText={(text) => this.handleBarCode(text)}
                   onEndEditing={() => this.endEditing()}
                 />
@@ -2319,11 +2322,7 @@ class NewSale extends Component {
                       paddingLeft: 15,
                       fontSize: 14,
                     }} >
-                      <RNPickerSelect style={{
-                        color: '#8F9EB717',
-                        fontWeight: 'regular',
-                        fontSize: 15
-                      }}
+                      <RNPickerSelect
                         placeholder={{
                           label: 'GENDER',
                           value: '',
@@ -2336,7 +2335,7 @@ class NewSale extends Component {
                           { label: 'Female', value: 'female' },
                         ]}
                         onValueChange={this.handlecustomerGender}
-                        style={pickerSelectStyles}
+                        style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                         value={this.state.customerGender}
                         useNativeAndroidPickerStyle={false}
 

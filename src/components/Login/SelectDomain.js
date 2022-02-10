@@ -38,13 +38,15 @@ export default class SelectDomain extends React.Component {
                         // console.log
 
                     }).catch(() => {
-                        console.log('there is error saving token');
+                        console.log('There is error saving token');
+                        alert('There is error saving token');
                     });
                     AsyncStorage.setItem("domainName", res.data.result[0].domaiName).then(() => {
                         // console.log
 
                     }).catch(() => {
-                        console.log('there is error saving token');
+                        console.log('There is error saving token');
+                        alert('There is error saving token');
                     });
                 }
                 this.setState({ domainData: this.state.domainData });
@@ -66,13 +68,14 @@ export default class SelectDomain extends React.Component {
             // console.log
 
         }).catch(() => {
-            console.log('there is error saving token');
+            console.log('There is error saving token');
+            alert('There is error saving token');
         });
         AsyncStorage.setItem("domainName", item.domaiName).then(() => {
             // console.log
 
         }).catch(() => {
-            console.log('there is error saving token');
+            alert('There is error saving token');
         });
     };
 
@@ -121,7 +124,7 @@ export default class SelectDomain extends React.Component {
                 <TouchableOpacity
                     style={Device.isTablet ? styles.continueButton_tablet : styles.continueButton_mobiile}
                     onPress={() => this.letsGoButtonAction()} >
-                     <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {('CONTINUE')} </Text>
+                    <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {('CONTINUE')} </Text>
                 </TouchableOpacity>
             </View>
 

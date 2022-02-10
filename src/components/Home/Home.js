@@ -157,7 +157,8 @@ class Home extends Component {
 
 
         }).catch(() => {
-            console.log('there is error getting domainDataId');
+            console.log('There is error getting domainDataId');
+            alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -166,19 +167,22 @@ class Home extends Component {
             console.log(this.state.storeId);
             console.log("cssafsfs " + this.state.storeId);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("domainName").then((value) => {
             global.domainName = value;
         }).catch(() => {
-            console.log('there is error getting domainName');
+            console.log('There is error getting domainName');
+            alert('There is error getting domainName');
         });
 
         AsyncStorage.getItem("rolename").then((value) => {
             global.userrole = value;
         }).catch(() => {
-            console.log('there is error getting userrole');
+            console.log('There is error getting userrole');
+            alert('There is error getting userrole');
         });
 
         global.previlage1 = '';
@@ -286,16 +290,19 @@ class Home extends Component {
                                 }
                             });
                         }).catch(() => {
-                            console.log('there is error saving domainDataId');
+                            console.log('There is error saving domainDataId');
+                            alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
-                    console.log('there is error getting storeId');
+                    console.log('There is error getting storeId');
+                    alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
 
 
@@ -327,7 +334,7 @@ class Home extends Component {
             if (res.data.result !== "null") {
                 this.setState({ toadysSale: res.data.result.amount });
             }
-        }).catch(error => console.log(error));
+        }).catch(error => { console.log(error), alert(error); });
     }
 
     getMonthlySale() {

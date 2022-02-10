@@ -46,14 +46,16 @@ export class SalesSumary extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
             this.setState({ storeName: value });
             console.log(this.state.storeName);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
     }
 

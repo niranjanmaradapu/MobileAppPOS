@@ -32,7 +32,8 @@ class AddLoyalty extends Component {
             console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
-            console.log('there is error getting domainDataId');
+            console.log('There is error getting domainDataId');
+            alert('There is error getting domainDataId');
         });
     }
 
@@ -144,7 +145,6 @@ class AddLoyalty extends Component {
                         autoCapitalize="none"
                         value={this.state.invoiceNumber}
                         onChangeText={this.handleInvoiceNumber}
-                        onEndEditing
                         onEndEditing={() => this.endEditing()}
                     />
 

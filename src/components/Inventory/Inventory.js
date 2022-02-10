@@ -66,7 +66,8 @@ export default class Inventory extends Component {
 
 
         }).catch(() => {
-            console.log('there is error getting domainDataId');
+            console.log('There is error getting domainDataId');
+            alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -76,14 +77,16 @@ export default class Inventory extends Component {
             this.getAllBarcodes();
 
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
             storeName = value;
             this.setState({ storeName: storeName });
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
@@ -162,12 +165,14 @@ export default class Inventory extends Component {
                         }
                     });
                 }).catch(() => {
-                    console.log('there is error saving domainDataId');
+                    console.log('There is error saving domainDataId');
+                    alert('There is error saving domainDataId');
                 });
 
             }
         }).catch(() => {
-            console.log('there is error getting sadasdsd');
+            console.log('There is error getting sadasdsd');
+            alert('There is error getting details');
         });
 
 
@@ -222,11 +227,8 @@ export default class Inventory extends Component {
                     this.setState({ loading: false });
                     for (var i = 0; i < res.data["result"].length; i++) {
                         this.state.reBarcodesData.push(res.data["result"][i]);
-
-
                     }
                 }
-
                 this.setState({ reBarcodesData: this.state.reBarcodesData });
 
             }
@@ -994,7 +996,7 @@ const styles = StyleSheet.create({
     filterButton_mobile: {
         position: 'absolute',
         right: 20,
-        bottom: 5,
+        top: 30,
         backgroundColor: '#ffffff',
         borderRadius: 5,
         width: 30,

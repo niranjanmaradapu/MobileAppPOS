@@ -65,7 +65,8 @@ class AddBarcode extends Component {
             this.getAllpools();
 
         }).catch(() => {
-            console.log('there is error getting domainDataId');
+            console.log('There is error getting domainDataId');
+            alert('There is error getting domainDataId');
         });
         this.getAllDivisions();
         this.getAllCatogiries();
@@ -91,13 +92,13 @@ class AddBarcode extends Component {
                         label: this.state.divisionArray[i].name
                     });
                     console.log(this.state.divisionArray);
-                   
-                }
-                 this.setState({
-                        divisions: divisions,
-                    });
 
-                   this.setState({ divisionArray: this.state.divisionArray });
+                }
+                this.setState({
+                    divisions: divisions,
+                });
+
+                this.setState({ divisionArray: this.state.divisionArray });
             }
 
         });
@@ -121,10 +122,10 @@ class AddBarcode extends Component {
                     });
                 }
                 this.setState({
-                        secions: secions,
-                    });
+                    secions: secions,
+                });
 
-                    this.setState({ secionArray: this.state.secionArray });
+                this.setState({ secionArray: this.state.secionArray });
             }
 
         });
@@ -146,13 +147,13 @@ class AddBarcode extends Component {
                         label: this.state.subsecionArray[i].name
                     });
                     console.log(this.state.subsecionArray);
-                   
-                }
-                 this.setState({
-                        subsecions: subsecions,
-                    });
 
-                    this.setState({ subsecionArray: this.state.subsecionArray });
+                }
+                this.setState({
+                    subsecions: subsecions,
+                });
+
+                this.setState({ subsecionArray: this.state.subsecionArray });
             }
 
         });
@@ -171,13 +172,13 @@ class AddBarcode extends Component {
                         label: this.state.catogiriesArray[i].name
                     });
 
-                   
-                }
-                 this.setState({
-                        catogiries: catogiries,
-                    });
 
-                    this.setState({ catogiriesArray: this.state.catogiriesArray });
+                }
+                this.setState({
+                    catogiries: catogiries,
+                });
+
+                this.setState({ catogiriesArray: this.state.catogiriesArray });
             }
 
         });
@@ -196,11 +197,11 @@ class AddBarcode extends Component {
                         label: this.state.uomArray[i].name
                     });
                 }
-                  this.setState({
-                        uom: uom,
-                    });
+                this.setState({
+                    uom: uom,
+                });
 
-                    this.setState({ uomArray: this.state.uomArray });
+                this.setState({ uomArray: this.state.uomArray });
             }
 
         });
@@ -219,31 +220,31 @@ class AddBarcode extends Component {
                     });
                 }
                 this.setState({
-                        hsncodes: hsncodes,
-                    });
+                    hsncodes: hsncodes,
+                });
 
-                    this.setState({ hsncodesArray: this.state.hsncodesArray });
+                this.setState({ hsncodesArray: this.state.hsncodesArray });
             }
 
         });
     }
 
     async getAllstores() {
-        const username =  await AsyncStorage.getItem("username");
+        const username = await AsyncStorage.getItem("username");
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
-          
+
             if (value === "true") {
                 const params = {
                     "clientDomianId": this.state.domainId
-                }
+                };
                 var storeNames = [];
                 axios.get(LoginService.getUserStoresForSuperAdmin(), { params }).then((res) => {
                     let len = res.data["result"].length;
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            let number = res.data.result[i]
-                           // this.state.storeData.push(number)
-                            console.log(this.state.storeData)
+                            let number = res.data.result[i];
+                            // this.state.storeData.push(number)
+                            console.log(this.state.storeData);
                             storeNames.push({
                                 value: number.name,
                                 label: number.name
@@ -252,21 +253,21 @@ class AddBarcode extends Component {
                         this.setState({
                             storeNames: storeNames,
                         });
-    
+
                         this.setState({ storeNamesArray: this.state.storeNamesArray });
-                        
-                        this.setState({ storeData: this.state.storeData })
+
+                        this.setState({ storeData: this.state.storeData });
                     }
                 });
 
             }
-            else{
+            else {
                 var storeNames = [];
                 axios.get(LoginService.getUserStores() + username).then((res) => {
                     if (res.data["result"]) {
                         for (var i = 0; i < res.data["result"].length; i++) {
-                            let number = res.data.result[i]
-                            const myArray = []
+                            let number = res.data.result[i];
+                            const myArray = [];
                             myArray = number.split(":");
                             this.state.storeNamesArray.push({ name: myArray[0], id: myArray[1] });
                             console.log(this.state.storeNamesArray);
@@ -275,16 +276,16 @@ class AddBarcode extends Component {
                                 label: this.state.storeNamesArray[i].name
                             });
                         }
-                         this.setState({
-                                storeNames: storeNames,
-                            });
-        
-                            this.setState({ storeNamesArray: this.state.storeNamesArray });
-        
+                        this.setState({
+                            storeNames: storeNames,
+                        });
+
+                        this.setState({ storeNamesArray: this.state.storeNamesArray });
+
                     }
                 });
             }
-        }) 
+        });
     }
 
     handleBackButtonClick() {
@@ -384,6 +385,7 @@ class AddBarcode extends Component {
     };
 
     saveBarcode() {
+        console.log(this.state.store);
         if (this.state.divisionId === null) {
             alert("please select the Division");
         }
@@ -417,36 +419,36 @@ class AddBarcode extends Component {
         else if (String(this.state.empId).length === 0) {
             alert("please enter the Emp ID");
         }
-        else if (String(this.state.store).length === 0) {
+        else if (this.state.store === undefined) {
             alert("please select the Store");
         }
-        else if (String(this.state.quantity) === 0) {
+        else if (String(this.state.quantity).length === 0) {
             alert("please enter the Qty");
         }
         else {
             const params = {
-                "division": this.state.divisionId,
-                "section": this.state.sectionId,
-                "subSection": this.state.subsectionId,
-                "category": this.state.catogirieId,
+                "division": parseInt(this.state.divisionId),
+                "section": parseInt(this.state.sectionId),
+                "subSection": parseInt(this.state.subsectionId),
+                "category": parseInt(this.state.catogirieId),
                 "batchNo": this.state.batchNo,
                 "colour": this.state.colour,
                 "productTextile": {
-                    "costPrice": this.state.costPrice,
-                    "empId": this.state.empId,
-                    "hsnMasterId": this.state.hsnId,
-                    "itemMrp": this.state.listPrice,
                     "qty": this.state.quantity,
+                    "costPrice": this.state.costPrice,
+                    "itemMrp": this.state.listPrice,
                     "storeId": this.state.storeId,
+                    "empId": this.state.empId,
                     "uom": this.state.uomName,
+                    "hsnMasterId": parseInt(this.state.hsnId),
                 }
             };
-            console.log('params are' + JSON.stringify(params));
             this.setState({ loading: true });
+            console.log('params are' + JSON.stringify(params));
             axios.post(InventoryService.addTextileBarcodes(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    console.log(`inventory added successfully`);
                     // this.props.route.params.onGoBack();
+                    console.log("Adding Barcode", res.data);
                     this.props.navigation.goBack();
                 }
                 else {
@@ -455,7 +457,6 @@ class AddBarcode extends Component {
                 }
             }
             );
-            alert("success");
         }
     }
 
@@ -481,7 +482,6 @@ class AddBarcode extends Component {
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Division <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'Division'
                             }}
@@ -498,7 +498,6 @@ class AddBarcode extends Component {
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Section <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'Section'
                             }}
@@ -515,7 +514,6 @@ class AddBarcode extends Component {
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Sub Section <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'Sub Section'
                             }}
@@ -532,7 +530,6 @@ class AddBarcode extends Component {
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Category <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'Category'
                             }}
@@ -593,7 +590,6 @@ class AddBarcode extends Component {
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>UOM <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'UOM'
                             }}
@@ -610,7 +606,6 @@ class AddBarcode extends Component {
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>HSN Code <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'HSN Code'
                             }}
@@ -637,7 +632,6 @@ class AddBarcode extends Component {
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Store <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
-                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'Store'
                             }}

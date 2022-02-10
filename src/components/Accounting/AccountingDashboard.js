@@ -107,7 +107,8 @@ export default class AccountingDashboard extends Component {
                 });
             console.log(this.state.storeId);
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
         this.usedBalanced();
         this.debitNotesByStore();
@@ -202,65 +203,53 @@ export default class AccountingDashboard extends Component {
     render() {
         return (
             <View>
-                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 400 }]}>
+                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 550 }]}>
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Debit Notes By Store</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <BarChart
                             style={{ paddingTop: 20 }}
                             data={this.state.debitNotesByStoreGraph}
                             width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
-                            yLabelsOffset={20}
-                            height={300}
+                            yLabelsOffset={20} xLabelsOffset={Device.isTablet ? 0 : -20}
+                            height={Device.isTablet ? 300 : 450}
                             yAxisLabel="₹"
                             fromZero
                             chartConfig={chartConfig}
                             verticalLabelRotation={Device.isTablet ? 0 : 90}
-                        // paddingLeft={"15"}
-                        // yAxisSuffix="L"
-                        // center={[0, 0]}
-                        // absolute
                         />
                     </View>
                 </View>
 
-                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 400 }]}>
+                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 550 }]}>
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Used Amount By Store</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <BarChart
                             style={{ paddingTop: 20 }}
                             data={this.state.usedAmountByStoreGraph}
                             width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
-                            height={300}
-                            yLabelsOffset={20}
+                            height={Device.isTablet ? 300 : 450}
+                            yLabelsOffset={20} xLabelsOffset={Device.isTablet ? 0 : -20}
                             yAxisLabel="₹"
                             fromZero
                             chartConfig={chartConfig}
                             verticalLabelRotation={Device.isTablet ? 0 : 90}
-                        // paddingLeft={"15"}
-                        // yAxisSuffix="L"
-                        // center={[0, 0]}
-                        // absolute
                         />
                     </View>
                 </View>
 
-                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 400 }]}>
+                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 550 }]}>
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Balanced Amount By Store</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <BarChart
                             style={{ paddingTop: 20 }}
                             data={this.state.balncedAmountByStoreGraph}
                             width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
-                            height={300}
-                            yLabelsOffset={20}
+                            height={Device.isTablet ? 300 : 450}
+                            yLabelsOffset={20} xLabelsOffset={Device.isTablet ? 0 : -20}
                             yAxisLabel="₹"
                             fromZero
                             chartConfig={balancedChartConfig}
                             verticalLabelRotation={Device.isTablet ? 0 : 90}
-                        // paddingLeft={"15"}
-                        // yAxisSuffix="L"
-                        // center={[0, 0]}
-                        // absolute
                         />
                     </View>
                 </View>

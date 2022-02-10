@@ -1,21 +1,22 @@
-import 'react-native-gesture-handler';
-import { AppRegistry, LogBox } from 'react-native';
-import App from './src/components/App';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-LogBox.ignoreAllLogs(true)
+import axios from 'axios';
+import { AppRegistry, LogBox } from 'react-native';
+import 'react-native-gesture-handler';
+import App from './src/components/App';
+LogBox.ignoreAllLogs(true);
 
 // // For requests
 axios.interceptors.request.use(
    (req) => {
       AsyncStorage.getItem("tokenkey").then((value) => {
          var finalToken = value.replace('"', '');
-        // console.log(finalToken);
-         axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken }
+         // console.log(finalToken);
+         axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken };
          //console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
       }).catch(() => {
-         console.log('there is error getting token')
-      })
+         alert('There is error getting token');
+         console.log('There is error getting token');
+      });
       return req;
    },
    (err) => {
@@ -25,18 +26,18 @@ axios.interceptors.request.use(
 
 //For response
 axios.interceptors.response.use((response) => response, (error) => {
-  // if(error.)
+   // if(error.)
    // whatever you want to do with the error
-   console.log(error.response.status)
+   console.log(error.response.status);
    if (error.response.status === 404) {
-   // alert('The requested resource does not exist or has been deleted')
-  }
+      // alert('The requested resource does not exist or has been deleted')
+   }
 
-  if (error.response.status === 401) {
-  
-   alert('Please login to access this resource')
-  }
-  
-  
- });
+   if (error.response.status === 401) {
+
+      alert('Please login to access this resource');
+   }
+
+
+});
 AppRegistry.registerComponent('main', () => App);

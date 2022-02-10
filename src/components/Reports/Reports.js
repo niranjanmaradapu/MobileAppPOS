@@ -139,12 +139,14 @@ class Reports extends Component {
                         }
                     });
                 }).catch(() => {
-                    console.log('there is error saving domainDataId');
+                    console.log('There is error saving domainDataId');
+                    alert('There is error saving domainDataId');
                 });
 
             }
         }).catch(() => {
-            console.log('there is error getting storeId');
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
         });
 
     }
