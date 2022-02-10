@@ -261,7 +261,7 @@ export default class GenerateReturnSlip extends Component {
                     placeholder="MOBILE NUMBER"
                     placeholderTextColor="#6F6F6F"
                     textAlignVertical="center"
-                    keyboardType={'default'}
+                    // keyboardType={'default'}
                     autoCapitalize="none"
                     maxLength={10}
                     keyboardType={'numeric'}
@@ -333,7 +333,7 @@ export default class GenerateReturnSlip extends Component {
                                         placeholder="MOBILE NUMBER"
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
-                                        keyboardType={'default'}
+                                        // keyboardType={'default'}
                                         maxLength={10}
                                         keyboardType={'numeric'}
                                         autoCapitalize="none"
@@ -410,7 +410,7 @@ export default class GenerateReturnSlip extends Component {
                 <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return For Reason <Text style={{ color: "#ed1c24" }}>*</Text></Text>
                 <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                     <RNPickerSelect
-                        style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                        // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                         placeholder={{ label: 'REASON', value: '' }}
                         Icon={() => {
                             return <Chevron style={styles.imagealign} size={1.5} color="gray" />;

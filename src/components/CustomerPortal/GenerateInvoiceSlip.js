@@ -172,6 +172,8 @@ class GenerateInvoiceSlip extends Component {
             isCCModel: false,
             isCCPay: false,
             storeId: 0,
+            returnModel: false,
+            returnData: "",
         };
     }
 
@@ -742,7 +744,7 @@ class GenerateInvoiceSlip extends Component {
                                             keyboardType={'default'}
                                             autoCapitalize="none"
                                             value={this.state.dsNumber}
-                                            onEndEditing
+                                            // onEndEditing
                                             onChangeText={(text) => this.handleDsNumber(text)}
                                             onEndEditing={() => this.endEditing()}
                                         />
@@ -763,7 +765,7 @@ class GenerateInvoiceSlip extends Component {
                                         keyboardType={'default'}
                                         value={this.state.barcodeId}
                                         autoCapitalize="none"
-                                        onEndEditing
+                                        // onEndEditing
                                         onChangeText={(text) => this.handleBarcode(text)}
                                         onEndEditing={() => this.endEditing()}
                                     />)}
@@ -1513,7 +1515,7 @@ class GenerateInvoiceSlip extends Component {
                                     />
                                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                                         <RNPickerSelect
-                                            style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                                            // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                             placeholder={{ label: 'REASON', value: '' }}
                                             Icon={() => {
                                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
@@ -1614,11 +1616,7 @@ class GenerateInvoiceSlip extends Component {
                                             paddingLeft: 15,
                                             fontSize: 14,
                                         }} >
-                                            <RNPickerSelect style={{
-                                                color: '#8F9EB717',
-                                                fontWeight: 'regular',
-                                                fontSize: 15
-                                            }}
+                                            <RNPickerSelect
                                                 placeholder={{
                                                     label: 'GENDER',
                                                     value: '',
@@ -1631,7 +1629,7 @@ class GenerateInvoiceSlip extends Component {
                                                     { label: 'Female', value: 'female' },
                                                 ]}
                                                 onValueChange={this.handlecustomerGender}
-                                                style={pickerSelectStyles}
+                                                style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
                                                 value={this.state.customerGender}
                                                 useNativeAndroidPickerStyle={false}
 

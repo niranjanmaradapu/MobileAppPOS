@@ -14,6 +14,7 @@ import { openDatabase } from 'react-native-sqlite-storage';
 import CustomerService from '../services/CustomerService';
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
+var deviceheight = Dimensions.get('window').height;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
@@ -87,7 +88,9 @@ class GenerateEstimationSlip extends Component {
             camera: {
                 type: RNCamera.Constants.Type.back,
                 flashMode: RNCamera.Constants.FlashMode.auto,
-            }
+            },
+            resultModel: false,
+            resultData: "",
         };
     }
 
@@ -180,14 +183,20 @@ class GenerateEstimationSlip extends Component {
             };
             axios.post(CustomerService.createDeliverySlip(), createObj).then((res) => {
                 if (res) {
-                    alert(res.data.message);
+                    this.setState({ resultModel: true, resultData: res.data.message, modalVisible: true });
+                    // alert(res.data.message);
                     this.setState({
                         barList: [],
                         itemsList: [],
+                        barCode: "",
+                        smnumber: "",
                     });
+                } else {
+                    this.setState({ resultModel: false, modalVisible: false });
                 }
             });
         }).catch(() => {
+            this.setState({ resultModel: false, modalVisible: false });
             alert('Error to create Delivery slip');
         });
     }
@@ -379,7 +388,7 @@ class GenerateEstimationSlip extends Component {
                             <View>
                                 <View style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : styles.rnSelectContainer_mobile_newsale}>
                                     <RNPickerSelect
-                                        style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : styles.rnSelectContainer_mobile_newsale}
+                                        // style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : styles.rnSelectContainer_mobile_newsale}
                                         placeholder={{
                                             label: 'SELECT UOM',
                                             value: "",
@@ -419,7 +428,7 @@ class GenerateEstimationSlip extends Component {
                                     keyboardType={'default'}
                                     autoCapitalize="none"
                                     value={this.state.smnumber}
-                                    onEndEditing
+                                    // onEndEditing
                                     onChangeText={(text) => this.handleSmCode(text)}
                                     onEndEditing={() => this.endEditing()}
                                 />
@@ -457,10 +466,6 @@ class GenerateEstimationSlip extends Component {
                                     onPress={() => this.navigateToScanCode()} >
                                     <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { marginTop: Device.isTablet ? 0 : 0, marginLeft: Device.isTablet ? -20 : -10 }]}> {('SCAN')} </Text>
                                 </TouchableOpacity>
-
-
-
-
 
                             </View>
                             {this.state.itemsList.length !== 0 && (
@@ -647,14 +652,7 @@ class GenerateEstimationSlip extends Component {
                                                 <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
                                             </TouchableOpacity>
                                         </View>
-
-
-
-
                                     </View>
-
-
-
                                 )}
                             />
 
@@ -791,12 +789,11 @@ class GenerateEstimationSlip extends Component {
                                     flex: 1, justifyContent: 'center', //Centered horizontally
                                     alignItems: 'center', color: '#ffffff',
                                     borderRadius: 20, borderwidth: 10,
-                                    marginTop: Device.isTablet ? deviceHeight - 1000 : deviceHeight - 700,
+                                    marginTop: Device.isTablet ? deviceHeight - 1080 : deviceHeight - 660,
                                 }}>
-                                    <View style={{ flex: 1, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", marginTop: deviceWidth / 2 - 80 }}>
+                                    <View style={{ flex: 1, marginLeft: 20, marginRight: 20, backgroundColor: "#ffffff", marginTop: deviceWidth / 2 - 80, paddingBottom: 20 }}>
                                         <Text style={{
-                                            color: "#353C40", fontSize: 18, fontFamily: "semibold", marginLeft: 20, marginTop: 20, height: 20,
-                                            justifyContent: 'center',
+                                            color: "#353C40", fontSize: Device.isTablet ? 20 : 15, fontFamily: "semibold", marginLeft: 20, marginTop: 20, marginBottom: 10,
                                         }}> {'Personal Information'} </Text>
 
                                         <View style={{ marginTop: 0, width: deviceWidth }}>
@@ -850,11 +847,7 @@ class GenerateEstimationSlip extends Component {
                                             paddingLeft: 15,
                                             fontSize: 14,
                                         }} >
-                                            <RNPickerSelect style={{
-                                                color: '#8F9EB717',
-                                                fontWeight: 'regular',
-                                                fontSize: 15
-                                            }}
+                                            <RNPickerSelect
                                                 placeholder={{
                                                     label: 'GENDER',
                                                     value: '',
@@ -867,7 +860,7 @@ class GenerateEstimationSlip extends Component {
                                                     { label: 'Female', value: 'female' },
                                                 ]}
                                                 onValueChange={this.handlecustomerGender}
-                                                style={pickerSelectStyles}
+                                                style={[pickerSelectStyles, { marginTop: Device.isTablet ? 10 : 5, marginBottom: Device.isTablet ? 10 : 5 }]}
                                                 value={this.state.customerGender}
                                                 useNativeAndroidPickerStyle={false}
 
@@ -886,7 +879,7 @@ class GenerateEstimationSlip extends Component {
                                         />
 
                                         <Text style={{
-                                            color: "#353C40", fontSize: 18, fontFamily: "semibold", marginLeft: 20, marginTop: 20, height: 20,
+                                            color: "#353C40", fontSize: Device.isTablet ? 20 : 15, fontFamily: "semibold", marginLeft: 20, marginTop: Device.isTablet ? 20 : 10, marginBottom: 10,
                                             justifyContent: 'center',
                                         }}> {'Business Information(optional)'} </Text>
 
@@ -906,12 +899,12 @@ class GenerateEstimationSlip extends Component {
 
                                         <TouchableOpacity
                                             style={{
-                                                margin: 20,
+                                                margin: Device.isTablet ? 10 : 5,
                                                 height: 50, backgroundColor: "#ED1C24", borderRadius: 5, marginLeft: 40, marginRight: 40,
                                             }} onPress={() => this.addCustomer()}
                                         >
                                             <Text style={{
-                                                textAlign: 'center', margin: 20, color: "#ffffff", fontSize: 15,
+                                                textAlign: 'center', margin: 15, color: "#ffffff", fontSize: Device.isTablet ? 20 : 15,
                                                 fontFamily: "regular", height: 50,
                                             }}  > TAG/ADD CUSTOMER </Text>
 
@@ -919,20 +912,18 @@ class GenerateEstimationSlip extends Component {
 
                                         <TouchableOpacity
                                             style={{
-                                                margin: 20,
-                                                height: 50, backgroundColor: "#ED1C24", borderRadius: 5, marginLeft: 40, marginRight: 40,
+                                                margin: Device.isTablet ? 10 : 5,
+                                                height: 50, borderColor: "#ED1C24", backgroundColor: '#ffffff', borderRadius: 5, marginLeft: 40, marginRight: 40, borderWidth: Device.isTablet ? 2 : 1,
                                             }}
                                             onPress={() => this.cancel()} >
                                             <Text style={{
-                                                textAlign: 'center', margin: 20, color: "#ffffff", fontSize: 15,
+                                                textAlign: 'center', margin: 15, color: "#ED1C24", fontSize: Device.isTablet ? 20 : 15,
                                                 fontFamily: "regular", height: 50,
                                             }}> {('Cancel')} </Text>
                                         </TouchableOpacity>
 
                                     </View>
-
                                 </View>
-
                             </KeyboardAwareScrollView>
                         </Modal>
                     </View>)}
@@ -948,7 +939,41 @@ class GenerateEstimationSlip extends Component {
                     </View>
                 )} */}
 
-
+                {this.state.resultModel && (
+                    <View>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
+                            <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 300 : 250, backgroundColor: '#00aa00', marginTop: Device.isTablet ? deviceheight - 300 : deviceheight - 250 }]}>
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                        <View>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > DS Number </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -5 }} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 2 : 1,
+                                        width: deviceWidth,
+                                        backgroundColor: 'lightgray',
+                                    }}></Text>
+                                </View>
+                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 250 : 200, }}>
+                                    <View style={{ height: Device.isTablet ? 70 : 60, alignItems: 'center', marginTop: 20 }}>
+                                        <Text style={{ fontSize: Device.isTablet ? 24 : 19, fontFamily: 'medium', }} selectable={true}>{this.state.resultData}</Text>
+                                    </View>
+                                    <TouchableOpacity
+                                        style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#00aa00', }]} onPress={() => this.modelCancel()}
+                                    >
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00aa00' }]}  > BACK TO DASHBOARD </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </Modal>
+                    </View>
+                )}
 
 
 
@@ -1045,17 +1070,17 @@ const styles = StyleSheet.create({
     },
     createUserinput: {
         justifyContent: 'center',
-        margin: 40,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
+        margin: Device.isTablet ? 40 : 20,
+        height: Device.isTablet ? 54 : 44,
+        marginTop: Device.isTablet ? 10 : 5,
+        marginBottom: Device.isTablet ? 10 : 5,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 14,
+        fontSize: Device.isTablet ? 20 : 14,
     },
     navButton_mobile: {
         position: 'absolute',
