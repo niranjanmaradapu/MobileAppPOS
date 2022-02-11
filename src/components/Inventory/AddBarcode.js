@@ -50,14 +50,16 @@ class AddBarcode extends Component {
             hsnId: null,
             storeNamesArray: [],
             storeNames: [],
-            storeId: 1,
+            storeId: "",
             domainId: 1,
+            isEdit: false,
         };
     }
 
     componentDidMount() {
         var domainStringId = "";
         var storeStringId = "";
+        this.setState({ isEdit: this.props.route.params.isEdit });
         AsyncStorage.getItem("domainDataId").then((value) => {
             domainStringId = value;
             this.setState({ domainId: parseInt(domainStringId) });
@@ -68,6 +70,17 @@ class AddBarcode extends Component {
             console.log('There is error getting domainDataId');
             alert('There is error getting domainDataId');
         });
+
+        AsyncStorage.getItem("storeId").then((value) => {
+            storeStringId = value;
+            this.setState({ storeId: parseInt(storeStringId) },
+                () => {
+                });
+            console.log(this.state.storeId);
+        }).catch(() => {
+            console.log('There is error getting storeId');
+            alert('There is error getting storeId');
+        });
         this.getAllDivisions();
         this.getAllCatogiries();
         this.getAllUOM();
@@ -75,9 +88,6 @@ class AddBarcode extends Component {
         this.getAllstores();
     }
 
-    componentWillUnmount() {
-
-    }
 
     getAllDivisions() {
         var divisions = [];
@@ -447,8 +457,8 @@ class AddBarcode extends Component {
             console.log('params are' + JSON.stringify(params));
             axios.post(InventoryService.addTextileBarcodes(), params).then((res) => {
                 if (res.data && res.data["isSuccess"] === "true") {
-                    // this.props.route.params.onGoBack();
                     console.log("Adding Barcode", res.data);
+                    this.props.route.params.onGoBack();
                     this.props.navigation.goBack();
                 }
                 else {
@@ -456,7 +466,10 @@ class AddBarcode extends Component {
                     alert("duplicate record already exists");
                 }
             }
-            );
+            ).catch((err) => {
+                this.setState({ loading: false });
+                alert(err);
+            });
         }
     }
 

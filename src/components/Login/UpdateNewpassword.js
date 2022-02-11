@@ -48,33 +48,36 @@ class UpdateNewpassword extends Component {
             alert('You must enter New Password');
         }
         else {
-            const params = {
-                "username": this.state.userName, //"+919493926067",
-                "confirmarionCode": this.state.code, //"Mani@1123",
-                "newPassword": this.state.newPassword,
-                //"storeName": this.state.store,//"kphb",
-            };
+            // const params = {
+            //     "username": this.state.userName, //"+919493926067",
+            //     "confirmarionCode": this.state.code, //"Mani@1123",
+            //     "newPassword": this.state.newPassword,
+            //     //"storeName": this.state.store,//"kphb",
+            // };
+            const params = '?username=' + this.state.userName + '&confirmarionCode=' + this.state.code + '&newPassword=' + this.state.newPassword;
             console.log(params);
             this.setState({ loading: true });
-            axios.post(LoginService.forgotPassword(), null, {
-                params: {
-                    "username": this.state.userName, //"+919493926067",
-                    "confirmarionCode": this.state.code, //"Mani@1123",
-                    "newPassword": this.state.newPassword,
-                }
-            }).then((res) => {
+            axios.post(LoginService.forgotPassword() + params
+            ).then((res) => {
                 if (res) {
-                    alert("Password Changed Successfully");
+                    // alert("Password Changed Successfully");
+                    console.log(res.data);
+                    if (res.data.isSuccess === "true") {
+                        alert("Password Changed Successfully");
+                    } else {
+                        alert(res.data.message);
+                    }
                     // window.location.reload();
                     this.setState({ loading: false });
                     this.props.navigation.navigate('Login');
                 }
                 else {
                     this.setState({ loading: false });
-                    alert('Invalid Credentials');
                 }
             }
-            );
+            ).catch(err => {
+                alert(err);
+            });
 
         }
     }

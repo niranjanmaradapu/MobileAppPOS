@@ -597,26 +597,25 @@ class Home extends Component {
                                 </View>
                             </View>
                         </View>
-                        <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 500 : 450 }]}>
+                        <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 500 : 550 }]}>
                             <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales by representative</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160, marginTop: 10 }}>
                                 <BarChart
                                     style={{ paddingTop: 20 }}
                                     data={this.state.topSalesChart}
                                     width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
-                                    height={380}
+                                    height={Device.isTablet ? 400 : 500}
                                     yLabelsOffset={20}
                                     yAxisLabel="₹"
                                     fromZero
                                     chartConfig={chartConfig}
-                                    verticalLabelRotation={Device.isTablet ? 0 : 45}
+                                    verticalLabelRotation={Device.isTablet ? 0 : 90}
                                 />
                             </View>
                         </View>
                     </View>
                 </ScrollView>
             </View>
-
         );
     }
 }

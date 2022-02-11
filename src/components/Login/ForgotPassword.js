@@ -52,7 +52,8 @@ class ForgotPassword extends Component {
         }
         else {
             this.setState({ loading: true });
-            axios.get(LoginService.sendVerificationCode() + this.state.userName).then((res) => {
+            const param = '?userName=' + this.state.userName;
+            axios.get(LoginService.sendVerificationCode() + param).then((res) => {
                 if (res) {
                     this.setState({ loading: false });
                     alert("Confirmation Code Sent to mail");

@@ -166,7 +166,7 @@ export default class Inventory extends Component {
                     });
                 }).catch(() => {
                     console.log('There is error saving domainDataId');
-                    alert('There is error saving domainDataId');
+                    // alert('There is error saving domainDataId');
                 });
 
             }
@@ -174,8 +174,6 @@ export default class Inventory extends Component {
             console.log('There is error getting sadasdsd');
             alert('There is error getting details');
         });
-
-
 
     }
 
@@ -196,12 +194,10 @@ export default class Inventory extends Component {
                     for (var i = 0; i < res.data["result"].length; i++) {
                         this.state.barcodesData.push(res.data["result"][i]);
                         // console.log(res.data["result"][i].productTextile.empId)
-
                     }
                 }
 
                 this.setState({ barcodesData: this.state.barcodesData });
-
             }
         }).catch(() => {
             alert('No Results Found');
@@ -280,13 +276,14 @@ export default class Inventory extends Component {
 
     navigateToAddBarcode() {
         this.props.navigation.navigate('AddBarcode', {
-            onGoback: () => this.refteshBarcodes(),
+            isEdit: false,
+            onGoBack: () => this.getAllBarcodes(),
         });
     }
 
-    refteshBarcodes() {
+    // refteshBarcodes() {
 
-    }
+    // }
 
 
 
@@ -535,9 +532,6 @@ export default class Inventory extends Component {
                         />
 
 
-
-
-
                         {this.state.flagone && (
                             <FlatList
                                 data={this.state.barcodesData}
@@ -555,8 +549,6 @@ export default class Inventory extends Component {
                                             <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>STORE: {this.state.storeName}</Text>
                                             <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.productTextile.qty}</Text>
                                             <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>VALUE: ₹{item.productTextile.value}</Text>
-
-
                                             <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
                                                 <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                             </TouchableOpacity>
