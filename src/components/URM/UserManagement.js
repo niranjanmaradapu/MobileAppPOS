@@ -329,8 +329,15 @@ export default class UserManagement extends Component {
     }
 
     filterDatepickerDoneClicked() {
+        console.log(this.state.date);
         if (parseInt(this.state.date.getDate()) < 10) {
             this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
+        }
+        else if (parseInt(this.state.date.getMonth()) < 10) {
+            this.setState({ createdDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
+        }
+        else if (parseInt(this.state.date.getDate) < 10 && parseInt(this.state.date.getMonth < 10)) {
+            this.setState({ createdDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
         }
         else {
             this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
@@ -367,16 +374,17 @@ export default class UserManagement extends Component {
         console.log(searchRole);
         axios.post(UrmService.getRolesBySearch(), searchRole).then((res) => {
             if (res) {
-                this.setState({ rolesData: res.data.result, modalVisible: false, createdDate: "", role: "", createdBy: "" }, () => {
+                this.setState({ rolesData: res.data.result, modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
                     this.setState({ filterActive: true });
                 });
 
             } else {
-                this.setState({ rolesData: res.data.result, modalVisible: false, createdDate: "", role: "", createdBy: "" }, () => {
+                this.setState({ rolesData: res.data.result, modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
                     this.setState({ filterActive: false });
                 });
             }
-
+        }).catch(err => {
+            console.warn(err);
         });
     }
 
@@ -388,7 +396,8 @@ export default class UserManagement extends Component {
             "active": this.state.userType === "Active" ? "True" : "False",
             "inActive": this.state.userType === "InActive" ? "True" : "False",
             "roleName": this.state.role ? this.state.role : null,
-            "storeName": this.state.createdBy ? this.state.createdBy : null
+            "storeName": this.state.branch ? this.state.branch : null,
+            "clientDomainId": this.state.clientId,
         };
         this.setState({ usersData: [] });
         console.log(obj);
@@ -405,6 +414,8 @@ export default class UserManagement extends Component {
                 });
             }
 
+        }).catch(err => {
+            console.warn(err);
         });
     }
 

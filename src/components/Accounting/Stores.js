@@ -196,8 +196,9 @@ export class FilterStores extends Component {
 
             }
         }
-        this.getMasterDistrictsList();
-        this.setState({ storeState: value });
+        this.setState({ storeState: value }, () => {
+            this.getMasterDistrictsList();
+        });
     };
 
 
@@ -305,7 +306,6 @@ export class FilterStores extends Component {
 
                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                             <RNPickerSelect
-                                style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                 placeholder={{
                                     label: 'STATE'
                                 }}
@@ -321,7 +321,6 @@ export class FilterStores extends Component {
                         </View>
                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                             <RNPickerSelect
-                                style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                 placeholder={{
                                     label: 'DISTRICT'
                                 }}

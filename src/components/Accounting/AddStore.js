@@ -152,27 +152,32 @@ export default class AddStore extends Component {
     }
 
     handleStoreState = (value) => {
-        this.state.dictricts = [];
+        // this.setState({ stateCode: '' }, () => {
         for (let i = 0; i < this.state.statesArray.length; i++) {
             if (this.state.statesArray[i].name === value) {
                 this.setState({ stateId: this.state.statesArray[i].id, statecode: this.state.statesArray[i].code });
             }
         }
         this.getGSTNumber();
-        this.getMasterDistrictsList();
-        this.setState({ storeState: value });
+        this.setState({ storeState: value }, () => {
+            this.getMasterDistrictsList();
+        });
+        // });
     };
 
     getMasterDistrictsList() {
-        this.setState({ loading: false });
+
+        this.setState({ loading: false, dictricts: [], dictrictArray: [] });
         const params = {
             "stateCode": this.state.statecode
         };
+        console.log(params);
         axios.get(UrmService.getDistricts(), { params }).then((res) => {
             if (res.data["result"]) {
-                var dictricts = [];
-                this.setState({ dictricts: [] });
-                this.setState({ dictrictArray: [] });
+                this.setState({ loading: false });
+                let dictricts = [];
+                // this.setState({  });
+                // this.setState({ dictrictArray: [] });
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.dictrictArray.push({ name: res.data["result"][i].districtName, id: res.data["result"][i].districtId });
                     dictricts.push({
@@ -422,7 +427,7 @@ export default class AddStore extends Component {
                         value={this.state.area}
                         onChangeText={this.handleArea}
                     />
-                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>Store Phone Number</Text>
+                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>Store Phone Number <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"

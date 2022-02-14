@@ -21,6 +21,7 @@ export default class Inventory extends Component {
             doneButtonClicked: false,
             enddoneButtonClicked: false,
             barCodeId: "",
+            rebarcodeId: "",
             startDate: "",
             endDate: "",
             flagone: true,
@@ -242,14 +243,20 @@ export default class Inventory extends Component {
         if (item.name === "Barcode List") {
             this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false });
             this.getAllBarcodes();
-            this.setState({ flagOne: true });
+            this.setState({ flagOne: true }, () => {
+                this.setState({ barcodesData: [], startDate: "", endDate: "", barCodeId: "", });
+                this.getAllBarcodes();
+            });
         } else {
             this.setState({ flagOne: false });
         }
         if (item.name === "Re-Barcode List") {
             this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: false, flagtwo: true });
             this.getbarcodeTexttileAdjustments();
-            this.setState({ flagTwo: true });
+            this.setState({ flagTwo: true }, () => {
+                this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
+                this.getbarcodeTexttileAdjustments();
+            });
         } else {
             this.setState({ flagTwo: false });
         }
@@ -357,12 +364,39 @@ export default class Inventory extends Component {
         this.setState({ date: new Date(), endDate: new Date(), datepickerOpen: false, datepickerendOpen: false });
     }
 
-    handlebarCodeId() {
+    handlebarCodeId = (value) => {
         this.setState({ barCodeId: value });
-    }
+    };
 
     applyBarcodeFilter() {
-        this.getAllBarcodes();
+
+        let list = {};
+
+        list = {
+            fromDate: this.state.startDate,
+            toDate: this.state.endDate,
+            barcode: this.state.barCodeId,
+            storeId: this.state.storeId
+        };
+
+        console.log(list);
+
+        // this.setState({ barcodesData: [] });
+
+        axios.post(InventoryService.getTextileBarcodes(), list).then(res => {
+            console.log(res.data.result);
+            let barcodes = [];
+            if (res.data && res.data.isSuccess === "true") {
+                this.setState({ barcodesData: [] });
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    this.state.barcodesData.push(res.data["result"][i]);
+                }
+                this.setState({ barcodesData: this.state.barcodesData, filterActive: true });
+            }
+        }).catch(err => {
+            alert("no records found");
+            console.log(err);
+        });
         this.setState({ modalVisible: false });
     }
     applyReBarcodeFilter() {
@@ -393,6 +427,20 @@ export default class Inventory extends Component {
     print = (item, index) => {
 
     };
+
+    clearFilterAction() {
+        if (this.state.flagone === true) {
+            this.setState({ filterActive: false, startDate: "", endDate: "", barCodeId: "", }, () => {
+                this.setState({ barcodesData: [], });
+                this.getAllBarcodes();
+            });
+        } else {
+            this.setState({ filterActive: false, startDate: "", endDate: "", barcodeId: "", }, () => {
+                this.getbarcodeTexttileAdjustments();
+            });
+        }
+    }
+
 
 
     seeDetails = (item, index) => {
@@ -505,7 +553,6 @@ export default class Inventory extends Component {
 
                 <ScrollView>
                     <View style={styles.container}>
-
                         <FlatList
                             style={styles.flatList}
                             horizontal
@@ -594,60 +641,60 @@ export default class Inventory extends Component {
                                 )}
                             />
                         )}
-                        {this.state.inventoryDelete && (
-                            <View>
-                                <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
-                                    <View style={styles.deleteMainContainer}>
-                                        <View>
-                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
-                                                <View>
-                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Barcode </Text>
-                                                </View>
-                                                <View>
-                                                    <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
-                                                        <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
-                                                    </TouchableOpacity>
-                                                </View>
-                                            </View>
-                                            <Text style={{
-                                                height: Device.isTablet ? 2 : 1,
-                                                width: deviceWidth,
-                                                backgroundColor: 'lightgray',
-                                            }}></Text>
-                                        </View>
-
-                                        <Text style={{
-                                            // position: 'absolute',
-                                            // top: 70,
-                                            height: Device.isTablet ? 40 : 20,
-                                            textAlign: 'center',
-                                            fontFamily: 'regular',
-                                            fontSize: Device.isTablet ? 23 : 18,
-                                            // marginBottom: Device.isTablet ? 25 : 0,
-                                            color: '#353C40'
-                                        }}> Are you sure want to delete Barcode?  </Text>
-
-                                        <TouchableOpacity
-                                            style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 65 : 40 }]}
-                                            onPress={() => this.deleteInventory()}
-                                        >
-                                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
-
-                                        </TouchableOpacity>
-
-                                        <TouchableOpacity
-                                            style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
-                                        >
-                                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
-
-                                        </TouchableOpacity>
-                                    </View>
-                                </Modal>
-                            </View>
-                        )}
-
                     </View>
-                </ScrollView >
+                </ScrollView>
+
+                {this.state.inventoryDelete && (
+                    <View>
+                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
+                            <View style={styles.deleteMainContainer}>
+                                <View>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                        <View>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Barcode </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                    <Text style={{
+                                        height: Device.isTablet ? 2 : 1,
+                                        width: deviceWidth,
+                                        backgroundColor: 'lightgray',
+                                    }}></Text>
+                                </View>
+
+                                <Text style={{
+                                    // position: 'absolute',
+                                    // top: 70,
+                                    height: Device.isTablet ? 40 : 20,
+                                    textAlign: 'center',
+                                    fontFamily: 'regular',
+                                    fontSize: Device.isTablet ? 23 : 18,
+                                    // marginBottom: Device.isTablet ? 25 : 0,
+                                    color: '#353C40'
+                                }}> Are you sure want to delete Barcode?  </Text>
+
+                                <TouchableOpacity
+                                    style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 65 : 40 }]}
+                                    onPress={() => this.deleteInventory()}
+                                >
+                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
+                                >
+                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+
+                                </TouchableOpacity>
+                            </View>
+                        </Modal>
+                    </View>
+                )}
                 {this.state.flagFilterBarcodeOpen && (
                     <View>
                         <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
@@ -680,6 +727,34 @@ export default class Inventory extends Component {
                                         >{this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate}</Text>
                                         <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
+                                    {this.state.datepickerOpen && this.state.flagone && (
+                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: Device.isTablet ? 15 : 10, marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
+                                                <TouchableOpacity
+                                                    style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
+                                                >
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
+
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={[Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile, { paddingLeft: 10, paddingRight: 10, backgroundColor: '#000000' }]} onPress={() => this.setState({ startDate: "" })}
+                                                >
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Clear </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerDoneClicked()}
+                                                >
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
+
+                                                </TouchableOpacity>
+                                            </View>
+                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                                date={this.state.date}
+                                                mode={'date'}
+                                                onDateChange={(date) => this.setState({ date })}
+                                            />
+                                        </View>
+                                    )}
                                     <TouchableOpacity
                                         style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
                                         testID="openModal"
@@ -690,40 +765,32 @@ export default class Inventory extends Component {
                                         >{this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate}</Text>
                                         <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
-                                    {this.state.datepickerOpen && this.state.flagone && (
-                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
-                                            <TouchableOpacity
-                                                style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
-                                            >
-                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
 
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerDoneClicked()}
-                                            >
-                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
-
-                                            </TouchableOpacity>
-                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
-                                                date={this.state.date}
-                                                mode={'date'}
-                                                onDateChange={(date) => this.setState({ date })}
-                                            />
-                                        </View>
-                                    )}
                                     {this.state.datepickerendOpen && this.state.flagone && (
-                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
-                                            <TouchableOpacity
-                                                style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
-                                            >
-                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerendDoneClicked()}
-                                            >
-                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
-
-                                            </TouchableOpacity>
+                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: '#ffffff' }}>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: Device.isTablet ? 15 : 10, marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
+                                                <View>
+                                                    <TouchableOpacity
+                                                        style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
+                                                    >
+                                                        <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                                <View>
+                                                    <TouchableOpacity
+                                                        style={[Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile, { paddingLeft: 10, paddingRight: 10, backgroundColor: '#000000' }]} onPress={() => this.setState({ endDate: "" })}
+                                                    >
+                                                        <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Clear </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                                <View>
+                                                    <TouchableOpacity
+                                                        style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerendDoneClicked()}
+                                                    >
+                                                        <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
+                                                    </TouchableOpacity>
+                                                </View>
+                                            </View>
                                             <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
                                                 date={this.state.enddate}
                                                 mode={'date'}
@@ -799,18 +866,26 @@ export default class Inventory extends Component {
                                     </TouchableOpacity>
                                     {this.state.datepickerOpen && this.state.flagtwo && (
                                         <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
-                                            <TouchableOpacity
-                                                style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
-                                            >
-                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: Device.isTablet ? 15 : 10, marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
 
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerDoneClicked()}
-                                            >
-                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
+                                                <TouchableOpacity
+                                                    style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
+                                                >
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
 
-                                            </TouchableOpacity>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={[Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile, { paddingLeft: 10, paddingRight: 10, backgroundColor: '#000000' }]} onPress={() => this.setState({ startDate: "" })}
+                                                >
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Clear </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerDoneClicked()}
+                                                >
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
+
+                                                </TouchableOpacity>
+                                            </View>
                                             <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
                                                 date={this.state.date}
                                                 mode={'date'}
@@ -820,17 +895,24 @@ export default class Inventory extends Component {
                                     )}
                                     {this.state.datepickerendOpen && this.state.flagtwo && (
                                         <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
-                                            <TouchableOpacity
-                                                style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
-                                            >
-                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity
-                                                style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerendDoneClicked()}
-                                            >
-                                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: Device.isTablet ? 15 : 10, marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
+                                                <TouchableOpacity
+                                                    style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
+                                                >
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={[Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile, { paddingLeft: 10, paddingRight: 10, backgroundColor: '#000000' }]} onPress={() => this.setState({ endDate: "" })}
+                                                >
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Clear </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerendDoneClicked()}
+                                                >
+                                                    <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
 
-                                            </TouchableOpacity>
+                                                </TouchableOpacity>
+                                            </View>
                                             <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
                                                 date={this.state.enddate}
                                                 mode={'date'}
@@ -1104,17 +1186,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff'
     },
     datePickerButton_mobile: {
-        position: 'absolute',
-        left: 20,
-        top: 10,
         height: 30,
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     datePickerEndButton_mobile: {
-        position: 'absolute',
-        right: 20,
-        top: 10,
         height: 30,
         backgroundColor: "#ED1C24",
         borderRadius: 5,
@@ -1330,9 +1406,6 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
     datePickerButton_tablet: {
-        position: 'absolute',
-        left: 20,
-        top: 10,
         height: 40,
         backgroundColor: "#ED1C24",
         borderRadius: 5,
@@ -1345,9 +1418,6 @@ const styles = StyleSheet.create({
         fontFamily: "regular"
     },
     datePickerEndButton_tablet: {
-        position: 'absolute',
-        right: 20,
-        top: 10,
         height: 40,
         backgroundColor: "#ED1C24",
         borderRadius: 5,

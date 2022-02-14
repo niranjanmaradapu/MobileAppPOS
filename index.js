@@ -13,8 +13,9 @@ axios.interceptors.request.use(
          // console.log(finalToken);
          axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken };
          //console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
-      }).catch(() => {
-         alert('There is error getting token');
+      }).catch((err) => {
+         // alert('There is error getting token');
+         // alert(err);
          console.log('There is error getting token');
       });
       return req;

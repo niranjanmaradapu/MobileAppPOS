@@ -34,6 +34,7 @@ class ForgotPassword extends Component {
     handleEmail = (text) => {
         this.setState({ userName: text });
     };
+    
     handleCode = (text) => {
         this.setState({ code: text });
     };
@@ -48,7 +49,7 @@ class ForgotPassword extends Component {
 
     async create() {
         if (this.state.userName.length === 0) {
-            alert('You must enter a Usename');
+            alert('You must enter a Username');
         }
         else {
             this.setState({ loading: true });

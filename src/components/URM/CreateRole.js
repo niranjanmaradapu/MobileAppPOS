@@ -136,7 +136,7 @@ export default class CreateRole extends Component {
                 console.log('params are' + JSON.stringify(saveObj));
                 this.setState({ loading: true });
                 axios.post(UrmService.saveRole(), saveObj).then((res) => {
-                    console.log(res.data);
+                    console.error(res.data);
                     if (res.data && res.data["isSuccess"] === "true") {
                         global.privilages = [];
                         this.props.route.params.onGoBack();
@@ -179,7 +179,7 @@ export default class CreateRole extends Component {
                 }
                 ).catch(() => {
                     this.setState({ loading: false });
-                    alert("There is an Error SAving Role");
+                    alert("There is an Error Saving Role");
                 });
 
             }

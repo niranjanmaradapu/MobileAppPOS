@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
         left: 70,
         top: 47,
         width: 300,
-        height: 20,
+        // height: 20,
         fontFamily: 'bold',
         fontSize: 18,
         color: '#353C40'
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
         left: 70,
         top: 40,
         width: 300,
-        height: 40,
+        // height: 60,
         fontFamily: 'bold',
         fontSize: 24,
         color: '#353C40'

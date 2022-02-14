@@ -61,7 +61,7 @@ export default class ReportsDashboard extends Component {
 
     componentDidMount() {
         AsyncStorage.getItem("storeId").then((value) => {
-            storeStringId = value;
+            let storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) },
                 () => {
                     this.getInvoicesGenerated();
@@ -70,9 +70,9 @@ export default class ReportsDashboard extends Component {
                     this.getTopFiveSales();
                 });
             console.log(this.state.storeId);
-        }).catch(() => {
+        }).catch((err) => {
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+            alert(err);
         });
 
 
@@ -120,7 +120,7 @@ export default class ReportsDashboard extends Component {
                         });
                 }
             }
-        }).catch(error => console.log(error), alert(error));
+        }).catch(error => alert(error));
     }
 
     getSalesSummary() {
