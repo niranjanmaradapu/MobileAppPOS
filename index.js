@@ -15,8 +15,9 @@ axios.interceptors.request.use(
          //console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
       }).catch((err) => {
          this.setState({ loading: false });
-         // alert('There is error getting token');
-         // alert(err);
+          alert('There is error getting token');
+          alert(err);
+
          console.log('There is error getting token');
       });
       return req;
