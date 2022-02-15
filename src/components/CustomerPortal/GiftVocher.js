@@ -103,36 +103,49 @@ class GiftVocher extends Component {
     }
 
     addGiftVocher() {
-        const user = AsyncStorage.getItem("username");
-        const obj = {
-            "gvNumber": this.state.gvNumber,
-            "description": this.state.description,
-            "fromDate": this.state.date,
-            "todate": this.state.enddate,
-            "clientId": user["custom:clientId1"],
-            "value": this.state.giftValue
-        };
-        axios.post(CustomerService.saveGiftVocher(), obj).then(res => {
-            if (res && res.data.isSuccess === "true") {
-                this.setState({
-                    gvNumber: '',
-                    description: '',
-                    giftValue: '',
-                    datepickerOpen: false,
-                    datepickerendOpen: false,
-                    date: new Date(),
-                    enddate: new Date(),
-                    fromDate: "",
-                    startDate: "",
-                    endDate: "",
-                    toDate: "",
-                    giftVochersList: [],
-                });
-                this.getGiftVocherList();
-                console.log(res.data);
-            }
-            alert(res.data.message);
-        });
+        if (this.state.gvNumber === "") {
+            alert("Please Enter GV Name");
+        } else if (this.state.startDate === "") {
+            alert("Please Select the Start Date");
+        } else if (this.state.endDate === "") {
+            alert("Please Select the End Date");
+        } else if (this.state.giftValue === "") {
+            alert("Please Enter the Gift Value");
+        }
+        else {
+
+
+            const user = AsyncStorage.getItem("username");
+            const obj = {
+                "gvNumber": this.state.gvNumber,
+                "description": this.state.description,
+                "fromDate": this.state.startDate,
+                "todate": this.state.endDate,
+                "clientId": user["custom:clientId1"],
+                "value": this.state.giftValue
+            };
+            axios.post(CustomerService.saveGiftVocher(), obj).then(res => {
+                if (res && res.data.isSuccess === "true") {
+                    this.setState({
+                        gvNumber: '',
+                        description: '',
+                        giftValue: '',
+                        datepickerOpen: false,
+                        datepickerendOpen: false,
+                        date: new Date(),
+                        enddate: new Date(),
+                        fromDate: "",
+                        startDate: "",
+                        endDate: "",
+                        toDate: "",
+                        giftVochersList: [],
+                    });
+                    this.getGiftVocherList();
+                    console.log(res.data);
+                }
+                alert(res.data.message);
+            });
+        }
     }
 
 
@@ -143,7 +156,7 @@ class GiftVocher extends Component {
                 <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Generate Gift Vocher</Text>
                 <TextInput
                     style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='GV NUMBER'
+                    placeholder='GV NUMBER *'
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -169,7 +182,7 @@ class GiftVocher extends Component {
                     >
                         <Text
                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
-                        >{this.state.startDate == "" ? 'START DATE' : this.state.startDate}</Text>
+                        >{this.state.startDate == "" ? 'START DATE *' : this.state.startDate}</Text>
                         <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -179,7 +192,7 @@ class GiftVocher extends Component {
                     >
                         <Text
                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
-                        >{this.state.endDate == "" ? 'END DATE' : this.state.endDate}</Text>
+                        >{this.state.endDate == "" ? 'END DATE *' : this.state.endDate}</Text>
                         <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                     </TouchableOpacity>
 
@@ -228,7 +241,7 @@ class GiftVocher extends Component {
                 <View >
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                        placeholder='ENTER VALUE'
+                        placeholder='GIFT VALUE *'
                         placeholderTextColor="#6f6f6f60"
                         textAlignVertical="center"
                         keyboardType={'default'}
