@@ -456,8 +456,34 @@ class TextilePayment extends Component {
         else if (this.state.flagOne === true && this.state.flagThree === false && parseFloat(this.state.recievedAmount) < (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10))) {
             alert('Please collect suffient amount and then only pay');
         }
-        if (global.domainName === "Textile") {
-            const params = {
+        else if (this.state.flagThree === true && this.state.verifiedCash === "") {
+            alert('Please collect some cash amount for ccpay');
+        }
+        else if (global.domainName === "Textile") {
+            let obj;
+            if(this.state.flagTwo === true){
+                obj = {"natureOfSale": "InStore",
+                "domainId": 1,
+                "storeId": this.state.storeId,
+                "grossAmount": this.state.grossAmount,
+                "totalPromoDisc": this.state.totalPromoDisc,
+                "taxAmount": this.state.taxAmount,
+                "totalManualDisc": parseInt(this.state.manualDisc),
+                "discApprovedBy": this.state.approvedBy,
+                "discType": this.state.reasonDiscount,
+                "approvedBy": null,
+                "netPayableAmount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
+                "offlineNumber": null,
+                "userId": this.state.userId,
+                "sgst": this.state.CGST,
+                "cgst": this.state.CGST,
+                "dlSlip": this.state.dsNumberList,
+                "lineItemsReVo": null,
+                "paymentAmountType": []
+            }
+        }
+       else if(this.state.flagOne === true || this.state.flagThree === true){
+            obj = {
                 "natureOfSale": "InStore",
                 "domainId": 1,
                 "storeId": this.state.storeId,
@@ -480,27 +506,39 @@ class TextilePayment extends Component {
                         "paymentType": "Cash",
                         "paymentAmount": parseFloat(this.state.verifiedCash)
                     },
-                    {
+                     {
                         "paymentType": "Card",
                         "paymentAmount": this.state.ccCardCash
                     }]
             };
-            console.log(params);
-            axios.post(NewSaleService.createOrder(), params).then((res) => {
+        }
+            console.log(obj);
+            axios.post(NewSaleService.createOrder(), obj).then((res) => {
                 console.log(res);
                 if (res.data && res.data["isSuccess"] === "true") {
-                    const cardAmount = this.state.flagThree ? JSON.stringify(Math.round(this.state.ccCardCash)) : JSON.stringify((parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString());
+                   // const cardAmount = this.state.flagTwo || this.state.flagThree ? JSON.stringify(Math.round(this.state.ccCardCash)) : JSON.stringify((parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString());
                     alert("Order created " + res.data["result"]);
                     if (this.state.flagOne === true && this.state.flagThree === false) {
                         this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
-                    const params = {
-                        "amount": cardAmount,
+                    let obj;
+                    if(this.state.flagTwo === true){
+                    obj = {
+                        "amount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
                         "info": "order creations",
                         "newsaleId": res.data["result"],
                     };
-                    axios.post(NewSaleService.payment(), params).then((res) => {
+                }else if(this.state.flagThree === true){
+                    obj = {
+                        "amount": this.state.ccCardCash,
+                        "info": "order creations",
+                        "newsaleId": res.data["result"],
+                    };
+
+                }
+                    console.log('params aresdasd', obj)
+                    axios.post(NewSaleService.payment(), obj).then((res) => {
                         // this.setState({isPayment: false});
                         const data = JSON.parse(res.data["result"]);
                         //console.log()

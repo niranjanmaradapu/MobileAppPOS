@@ -290,6 +290,7 @@ class GenerateInvoiceSlip extends Component {
         this.state.barCodeList = [];
         this.state.finalList = [];
         this.state.rBarCodeList = [];
+        this.state.dsNumberList = [];
         const params = {
             "dsNumber": this.state.dsNumber,//KLM/202227/1983752684
         };
@@ -439,7 +440,7 @@ class GenerateInvoiceSlip extends Component {
                         const totalTax = this.state.netPayableAmount * tax;
 
                         const central = totalTax / 2;
-                        this.setState({ centralGST: Math.floor(central) });
+                        this.setState({ centralGST: Math.ceil(central) });
                         slabCheck = true;
                         slabCheck = true;
                         // this.setState({ stateGST: taxData[0].taxVo.cgst, centralGST: taxData[0].taxVo.cgst });
