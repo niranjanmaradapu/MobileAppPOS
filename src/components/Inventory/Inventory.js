@@ -400,7 +400,30 @@ export default class Inventory extends Component {
         this.setState({ modalVisible: false });
     }
     applyReBarcodeFilter() {
-        this.getbarcodeTexttileAdjustments();
+        let list = {};
+
+        list = {
+            fromDate: this.state.startDate,
+            toDate: this.state.endDate,
+            currentBarcodeId: this.state.barCodeId,
+            storeId: this.state.storeId
+        };
+
+        axios.post(InventoryService.getbarcodeTexttileAdjustments(), list).then(res => {
+            console.log(res.data);
+            if (res.data && res.data.isSuccess === "true") {
+                this.setState({ reBarcodesData: [] });
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    this.state.reBarcodesData.push(res.data["result"][i]);
+                }
+                this.setState({ reBarcodesData: this.state.reBarcodesData, filterActive: true });
+            }
+        }).catch(err => {
+            alert("no records found");
+            console.log(err);
+        });
+
+
         this.setState({ modalVisible: false });
     }
 
@@ -436,6 +459,7 @@ export default class Inventory extends Component {
             });
         } else {
             this.setState({ filterActive: false, startDate: "", endDate: "", barcodeId: "", }, () => {
+                this.setState({ reBarcodesData: [] });
                 this.getbarcodeTexttileAdjustments();
             });
         }

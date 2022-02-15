@@ -147,6 +147,7 @@ export class FilterStores extends Component {
         super(props);
         this.state = {
             city: "",
+            storeName: "",
             storeDistrict: "",
             storeState: "",
             modalFalse: false,
@@ -156,7 +157,7 @@ export class FilterStores extends Component {
             statecode: '',
             dictrictArray: [],
             dictricts: [],
-            districtId: 0,
+            districtId: "",
             filterStores: [],
         };
     }
@@ -193,7 +194,6 @@ export class FilterStores extends Component {
             if (this.state.statesArray[i].name === value) {
                 this.setState({ stateId: this.state.statesArray[i].id });
                 this.setState({ statecode: this.state.statesArray[i].code });
-
             }
         }
         this.setState({ storeState: value }, () => {
@@ -239,8 +239,8 @@ export class FilterStores extends Component {
     };
 
 
-    handleCity = (value) => {
-        this.setState({ city: value });
+    handleStoreName = (value) => {
+        this.setState({ storeName: value });
     };
 
     handleStore = (value) => {
@@ -249,23 +249,24 @@ export class FilterStores extends Component {
 
 
     applyStoreFilter() {
-        if (this.state.city === "") {
-            this.state.city = null;
-        }
 
         const searchStore = {
-            "stateId": this.state.statecode,
-            // "cityId": this.state.city,
-            "districtId": this.state.districtId,
-            "storeName": this.state.city,
+            "stateId": this.state.statecode ? this.state.statecode : null,
+            "cityId": null,
+            "districtId": this.state.districtId ? this.state.districtId : null,
+            "storeName": this.state.storeName ? this.state.storeName : null,
         };
 
         console.log('store search', searchStore);
 
         axios.post(UrmService.getStoresBySearch(), searchStore).then((res) => {
             if (res) {
-                this.setState({ filterStores: res.data.result });
-                this.props.childParams(this.state.filterStores);
+                if (res.data.isSuccess === "true") {
+                    this.setState({ filterStores: res.data.result });
+                    this.props.childParams(this.state.filterStores);
+                } else {
+                    alert(res.data.message);
+                }
                 console.log(res.data);
                 this.props.modelCancelCallback();
             } else {
@@ -341,8 +342,8 @@ export class FilterStores extends Component {
                             placeholderTextColor="#6F6F6F"
                             textAlignVertical="center"
                             autoCapitalize="none"
-                            value={this.state.city}
-                            onChangeText={this.handleCity}
+                            value={this.state.storeName}
+                            onChangeText={this.handleStoreName}
                         />
                         <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
                             onPress={() => this.applyStoreFilter()}>
