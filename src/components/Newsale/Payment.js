@@ -66,6 +66,7 @@ class Payment extends Component {
             console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting domainDataId');
             alert('There is error getting domainDataId');
         });
@@ -75,6 +76,7 @@ class Payment extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -181,6 +183,7 @@ class Payment extends Component {
             }
         }
         ).catch(() => {
+            this.setState({ loading: false });
             this.setState({
                 loading: false,
                 flagCustomerOpen: false,
@@ -209,6 +212,7 @@ class Payment extends Component {
             }
         }
         ).catch(() => {
+            this.setState({ loading: false });
             this.setState({ flagCustomerOpen: false, modalVisible: false });
             alert("Unable to Get User Details");
         });
@@ -492,6 +496,7 @@ class Payment extends Component {
                             this.props.navigation.goBack();
                             //this.props.navigation.navigate('Orders', { total: this.state.totalAmount, payment: 'RazorPay' })
                         }).catch((error) => {
+                            this.setState({ loading: false });
                             console.log(error);
                             // handle failure
                             alert(`Error: ${JSON.stringify(error.code)} | ${JSON.stringify(error.description)}`);
@@ -544,6 +549,7 @@ class Payment extends Component {
                         }
                     }
                 }).catch(() => {
+                    this.setState({ loading: false });
                     this.setState({ loading: false, notfound: "Not Found" });
                     alert('No Records Found');
                 });

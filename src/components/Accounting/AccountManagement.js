@@ -157,17 +157,20 @@ export default class AccountManagement extends Component {
 
                             });
                         }).catch(() => {
+                            this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
                             alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error getting storeId');
                     alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -194,6 +197,7 @@ export default class AccountManagement extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            this.setState({ loading: false });
             alert("There is an Error while getting Domains");
         });
     }
@@ -219,6 +223,7 @@ export default class AccountManagement extends Component {
                 this.setState({ stores: this.state.stores });
             }
         }).catch(() => {
+            this.setState({ loading: false });
             this.setState({ loading: false });
             alert("There is an Error while Getting Stores");
         });

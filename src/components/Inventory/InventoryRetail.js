@@ -123,6 +123,7 @@ class InventoryRetail extends Component {
       console.log("domain data ids" + this.state.domainId);
 
     }).catch(() => {
+      this.setState({ loading: false });
       console.log('There is error getting domainDataId');
       alert('There is error getting domainDataId');
     });
@@ -133,6 +134,7 @@ class InventoryRetail extends Component {
       console.log(this.state.storeId);
       console.log("cssafsfs" + this.state.storeId);
     }).catch(() => {
+      this.setState({ loading: false });
       console.log('There is error getting storeId');
       alert('There is error getting storeId');
     });
@@ -761,6 +763,7 @@ class InventoryRetail extends Component {
       }
     }
     ).catch(() => {
+      this.setState({ loading: false });
       this.setState({ loading: false, flagCustomerOpen: false, modalVisible: false });
       alert("create customer adding not successfully");
     });
@@ -783,6 +786,7 @@ class InventoryRetail extends Component {
       }
     }
     ).catch(() => {
+      this.setState({ loading: false });
       this.setState({ flagCustomerOpen: false, modalVisible: false });
       alert("There is An error in Getting Customer Details");
     });
@@ -915,6 +919,7 @@ class InventoryRetail extends Component {
           AsyncStorage.setItem("uomData", JSON.stringify(uom)).then(() => {
             console.log('table data saved');
           }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error saving token');
             alert('There is error saving token');
           });
@@ -1282,6 +1287,7 @@ class InventoryRetail extends Component {
         this.getImageNameByScanForProductsAdd();
       })
       .catch((e) => {
+        this.setState({ loading: false });
         this.setState({ flagqtyModelOpen: false, modalVisible: false });
         console.log(e);
         Alert.alert(e.message ? e.message : e);
@@ -1322,6 +1328,7 @@ class InventoryRetail extends Component {
         this.getImageNameByScanForProductsAdd();
       })
       .catch((e) => {
+        this.setState({ loading: false });
         this.setState({ flagqtyModelOpen: false, modalVisible: false });
         console.log(e);
         Alert.alert(e.message ? e.message : e);
@@ -1354,6 +1361,7 @@ class InventoryRetail extends Component {
         this.getImageNameByScan();
       })
       .catch((e) => {
+        this.setState({ loading: false });
         this.setState({ flagqtyModelOpen: false, modalVisible: false });
         console.log(e);
         Alert.alert(e.message ? e.message : e);
@@ -1394,6 +1402,7 @@ class InventoryRetail extends Component {
         this.getImageNameByScan();
       })
       .catch((e) => {
+        this.setState({ loading: false });
         this.setState({ flagqtyModelOpen: false, modalVisible: false });
         console.log(e);
         Alert.alert(e.message ? e.message : e);
@@ -1437,6 +1446,7 @@ class InventoryRetail extends Component {
         }
       })
       .catch(function (error) {
+        this.setState({ loading: false });
         console.log(error);
         alert(error);
       });
@@ -1470,6 +1480,7 @@ class InventoryRetail extends Component {
 
       })
       .catch(function (error) {
+        this.setState({ loading: false });
         console.log(error);
         alert(error);
 
@@ -1581,6 +1592,7 @@ class InventoryRetail extends Component {
     AsyncStorage.getItem("tokenkey").then((value) => {
       console.log(value);
     }).catch(() => {
+      this.setState({ loading: false });
       console.log('There is error getting token');
       alert('There is error getting token');
     });

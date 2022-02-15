@@ -67,6 +67,7 @@ class AddBarcode extends Component {
             this.getAllpools();
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting domainDataId');
             alert('There is error getting domainDataId');
         });
@@ -78,6 +79,7 @@ class AddBarcode extends Component {
                 });
             console.log(this.state.storeId);
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -467,6 +469,7 @@ class AddBarcode extends Component {
                 }
             }
             ).catch((err) => {
+                this.setState({ loading: false });
                 this.setState({ loading: false });
                 alert(err);
             });

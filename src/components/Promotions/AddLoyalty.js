@@ -32,6 +32,7 @@ class AddLoyalty extends Component {
             console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting domainDataId');
             alert('There is error getting domainDataId');
         });
@@ -78,6 +79,7 @@ class AddLoyalty extends Component {
                 return;
             }
             ).catch(() => {
+                this.setState({ loading: false });
                 this.setState({ loading: false });
                 alert('No Records Found');
             });

@@ -121,6 +121,7 @@ export default class AddUser extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            this.setState({ loading: false });
             alert("There is an Error getting DomainId");
         });
     }
@@ -193,6 +194,7 @@ export default class AddUser extends Component {
 
         }).catch(() => {
             this.setState({ loading: false });
+            this.setState({ loading: false });
             alert("There is an Error Getting Stores");
         });
     }
@@ -220,6 +222,7 @@ export default class AddUser extends Component {
                 //  console.log(this.state.rolesArray)
             }
         }).catch(() => {
+            this.setState({ loading: false });
             this.setState({ loading: false });
             alert("There is an error Getting Roles");
         });
@@ -413,6 +416,7 @@ export default class AddUser extends Component {
                 }
                 ).catch(() => {
                     this.setState({ loading: false });
+                    this.setState({ loading: false });
                     alert("There is an Error Saving User");
                 });
 
@@ -457,6 +461,7 @@ export default class AddUser extends Component {
                     }
                 }
                 ).catch(() => {
+                    this.setState({ loading: false });
                     this.setState({ loading: false });
                     alert("There is an Error while Saving User");
                 });

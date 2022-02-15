@@ -157,6 +157,7 @@ class Home extends Component {
 
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting domainDataId');
             alert('There is error getting domainDataId');
         });
@@ -167,6 +168,7 @@ class Home extends Component {
             console.log(this.state.storeId);
             console.log("cssafsfs " + this.state.storeId);
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -174,6 +176,7 @@ class Home extends Component {
         AsyncStorage.getItem("domainName").then((value) => {
             global.domainName = value;
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting domainName');
             alert('There is error getting domainName');
         });
@@ -181,6 +184,7 @@ class Home extends Component {
         AsyncStorage.getItem("rolename").then((value) => {
             global.userrole = value;
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting userrole');
             alert('There is error getting userrole');
         });
@@ -290,17 +294,20 @@ class Home extends Component {
                                 }
                             });
                         }).catch(() => {
+            this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
                             alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
+            this.setState({ loading: false });
                     console.log('There is error getting storeId');
                     alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -313,6 +320,7 @@ class Home extends Component {
                 global.username = res.data["result"].userName;
             }
         }).catch(() => {
+            this.setState({ loading: false });
             this.setState({ loading: false });
             alert('No user details get');
         });

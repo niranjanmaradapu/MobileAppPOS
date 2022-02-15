@@ -49,6 +49,7 @@ export default class GenerateReturnSlip extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log("Store Id", this.state.storeId);
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -90,7 +91,8 @@ export default class GenerateReturnSlip extends Component {
 
                 this.setState({ netValue: costprice, quantity: quantity, isChecked: false, itemsReturn: true });
             });
-        }).catch(err => {
+        }).catch((err) => {
+            this.setState({ loading: false });
             console.log(err);
             alert('Unable to get the Invoice Details');
         });
@@ -181,7 +183,8 @@ export default class GenerateReturnSlip extends Component {
                     customerNumber: "",
                 });
             }
-        }).catch(err => {
+        }).catch((err) => {
+            this.setState({ loading: false });
             console.log(err);
             alert("Unable to Save the Return Slip");
         });

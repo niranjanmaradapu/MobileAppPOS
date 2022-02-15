@@ -85,6 +85,7 @@ class ProductEdit extends Component {
             console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting domainDataId');
             alert('There is error getting domainDataId');
         });
@@ -94,6 +95,7 @@ class ProductEdit extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -137,6 +139,7 @@ class ProductEdit extends Component {
                 this.getImageNameByScan();
             })
             .catch((e) => {
+                this.setState({ loading: false });
                 this.setState({ flagqtyModelOpen: false, modalVisible: false });
                 console.log(e);
                 Alert.alert(e.message ? e.message : e);
@@ -177,6 +180,7 @@ class ProductEdit extends Component {
                 this.getImageNameByScan();
             })
             .catch((e) => {
+                this.setState({ loading: false });
                 this.setState({ flagqtyModelOpen: false });
                 this.setState({ modalVisible: false });
                 console.log(e);
@@ -215,6 +219,7 @@ class ProductEdit extends Component {
                 }
             })
             .catch(function (error) {
+                this.setState({ loading: false });
                 console.log(error);
                 alert(error);
             });
@@ -242,6 +247,7 @@ class ProductEdit extends Component {
                     AsyncStorage.setItem("uomData", JSON.stringify(uom)).then(() => {
                         console.log('table data saved');
                     }).catch(() => {
+                        this.setState({ loading: false });
                         console.log('There is error saving token');
                         alert('There is error saving token');
                     });

@@ -101,6 +101,7 @@ class GenerateEstimationSlip extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -197,6 +198,7 @@ class GenerateEstimationSlip extends Component {
                 }
             });
         }).catch(() => {
+            this.setState({ loading: false });
             this.setState({ resultModel: false, modalVisible: false });
             alert('Error to create Delivery slip');
         });
@@ -258,6 +260,7 @@ class GenerateEstimationSlip extends Component {
                 alert(res.data.body);
             }
         }).catch(() => {
+            this.setState({ loading: false });
             alert('Please enter a valid Barcode / SM number');
         });
     }
@@ -372,6 +375,7 @@ class GenerateEstimationSlip extends Component {
         AsyncStorage.getItem("tokenkey").then((value) => {
             console.log(value);
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting token');
             alert('There is error getting token');
         });

@@ -107,6 +107,7 @@ export default class AccountingDashboard extends Component {
                 });
             console.log(this.state.storeId);
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });

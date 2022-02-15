@@ -38,6 +38,7 @@ export default class SelectDomain extends React.Component {
                         // console.log
 
                     }).catch(() => {
+                        this.setState({ loading: false });
                         console.log('There is error saving token');
                         alert('There is error saving token');
                     });
@@ -45,6 +46,7 @@ export default class SelectDomain extends React.Component {
                         // console.log
 
                     }).catch(() => {
+                        this.setState({ loading: false });
                         console.log('There is error saving token');
                         alert('There is error saving token');
                     });
@@ -68,6 +70,7 @@ export default class SelectDomain extends React.Component {
             // console.log
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error saving token');
             alert('There is error saving token');
         });
@@ -75,6 +78,7 @@ export default class SelectDomain extends React.Component {
             // console.log
 
         }).catch(() => {
+            this.setState({ loading: false });
             alert('There is error saving token');
         });
     };

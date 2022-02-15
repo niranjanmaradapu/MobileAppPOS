@@ -92,6 +92,7 @@ class EditPool extends Component {
             console.log("domain data id" + this.state.domainId);
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting domainDataId');
             alert('There is error getting domainDataId');
         });

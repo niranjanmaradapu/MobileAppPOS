@@ -110,6 +110,7 @@ export default class AddDomain extends Component {
                 }
             }
             ).catch(() => {
+            this.setState({ loading: false });
                 this.setState({ loading: false });
                 alert("There is an Error while saving Domain");
             });

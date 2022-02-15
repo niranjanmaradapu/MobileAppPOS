@@ -142,17 +142,20 @@ export default class UserManagement extends Component {
 
                             });
                         }).catch(() => {
+                            this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
                             alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error getting storeId');
                     alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -177,6 +180,7 @@ export default class UserManagement extends Component {
                 this.setState({ rolesData: this.state.rolesData });
             }
         }).catch(() => {
+            this.setState({ loading: false });
             this.setState({ loading: false });
             alert("There is an Error Getting Roles");
         });
@@ -216,6 +220,7 @@ export default class UserManagement extends Component {
                 this.setState({ usersData: this.state.usersData });
             }
         }).catch(() => {
+            this.setState({ loading: false });
             this.setState({ loading: false });
             alert("There is an Error Getting Users");
         });
@@ -383,7 +388,8 @@ export default class UserManagement extends Component {
                     this.setState({ filterActive: false });
                 });
             }
-        }).catch(err => {
+        }).catch((err) => {
+            this.setState({ loading: false });
             console.warn(err);
         });
     }
@@ -414,7 +420,8 @@ export default class UserManagement extends Component {
                 });
             }
 
-        }).catch(err => {
+        }).catch((err) => {
+            this.setState({ loading: false });
             console.warn(err);
         });
     }

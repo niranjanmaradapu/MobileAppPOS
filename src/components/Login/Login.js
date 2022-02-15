@@ -132,6 +132,7 @@ export default class Login extends Component {
                         //==============================Token Key & phone number save ===================//
                         AsyncStorage.setItem("tokenkey", JSON.stringify(token)).then(() => {
                         }).catch(() => {
+                            this.setState({ loading: false });
                             console.log('There is error saving token');
                             alert('There is error saving token');
                         });
@@ -146,6 +147,7 @@ export default class Login extends Component {
                         AsyncStorage.setItem("phone_number", jwt_decode(token)["phone_number"]).then(() => {
                             // console.log
                         }).catch(() => {
+                            this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
                             alert('There is error saving domainDataId');
                         });
@@ -154,6 +156,7 @@ export default class Login extends Component {
 
                             // console.log
                         }).catch(() => {
+                            this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
                             alert('There is error saving domainDataId');
                         });
@@ -161,6 +164,7 @@ export default class Login extends Component {
                         AsyncStorage.setItem("custom:clientId1", jwt_decode(token)["custom:clientId1"]).then(() => {
                             // console.log
                         }).catch(() => {
+                            this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
                             alert('There is error saving domainDataId');
                         });
@@ -170,11 +174,13 @@ export default class Login extends Component {
                             AsyncStorage.setItem("custom:isSuperAdmin", "true").then(() => {
                                 // console.log
                             }).catch((err) => {
+                                this.setState({ loading: false });
                                 alert(err);
                             });
                             AsyncStorage.setItem("custom:isConfigUser", "false").then(() => {
                                 // console.log
                             }).catch((err) => {
+                                this.setState({ loading: false });
                                 alert(err);
                             });
 
@@ -186,6 +192,7 @@ export default class Login extends Component {
                             AsyncStorage.setItem("custom:isConfigUser", "true").then(() => {
                                 // console.log
                             }).catch((err) => {
+                                this.setState({ loading: false });
                                 alert(err);
                             });
 
@@ -195,6 +202,7 @@ export default class Login extends Component {
                                     global.domainName = '';
                                 }
                             }).catch(() => {
+                                this.setState({ loading: false });
                                 this.setState({ loading: false });
                                 alert('No user details get');
                             });
@@ -209,6 +217,7 @@ export default class Login extends Component {
                             AsyncStorage.getItem("rolename").then((value) => {
                                 global.userrole = value;
                             }).catch(() => {
+                                this.setState({ loading: false });
                                 console.log('There is error getting storeId');
                                 alert('There is error getting storeId');
                             });
@@ -225,6 +234,7 @@ export default class Login extends Component {
                                 this.getDomainsForNormalUser();
                                 // console.log
                             }).catch(() => {
+                                this.setState({ loading: false });
                                 console.log('There is error saving domainDataId');
                                 alert('There is error saving domainDataId');
                             });
@@ -235,6 +245,7 @@ export default class Login extends Component {
                         // const clientDomainId = user["custom:clientDomians"].split(",")[0];
                         // AsyncStorage.setItem("clientDomainId", JSON.stringify(clientDomainId)).then(() => {
                         // }).catch(() => {
+                        this.setState({ loading: false });
                         //     console.log('There is error saving token')
                         // })
 
@@ -290,6 +301,7 @@ export default class Login extends Component {
                         // console.log
 
                     }).catch(() => {
+                        this.setState({ loading: false });
                         console.log('There is error saving token');
                         alert('There is error saving token');
                     });
@@ -297,6 +309,7 @@ export default class Login extends Component {
                         // console.log
 
                     }).catch(() => {
+                        this.setState({ loading: false });
                         console.log('There is error saving token');
                         alert('There is error saving token');
                     });
@@ -317,6 +330,7 @@ export default class Login extends Component {
                         // console.log
 
                     }).catch(() => {
+                        this.setState({ loading: false });
                         console.log('There is error saving token');
                         alert('There is error saving token');
                     });
@@ -325,6 +339,7 @@ export default class Login extends Component {
             });
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error saving token');
             alert('There is error saving token');
         });
@@ -349,6 +364,7 @@ export default class Login extends Component {
                     else {
                         AsyncStorage.setItem("storeId", String(res.data.result[0].id)).then(() => {
                         }).catch(() => {
+                            this.setState({ loading: false });
                             console.log('There is error saving storeName');
                             alert('There is error saving storeName');
                         });
@@ -374,6 +390,7 @@ export default class Login extends Component {
                 this.setState({ storeNames: this.state.storeNames });
                 AsyncStorage.setItem("storeId", (this.state.storeNames[0].id).toString()).then(() => {
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error saving token');
                     alert('There is error saving token');
                 });
@@ -381,6 +398,7 @@ export default class Login extends Component {
                 AsyncStorage.setItem("storeName", (this.state.storeNames[0].name)).then(() => {
 
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error saving token');
                     alert('There is error saving token');
                 });

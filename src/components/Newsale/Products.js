@@ -132,6 +132,7 @@ class Products extends Component {
                 this.getImageNameByScan();
             })
             .catch((e) => {
+                this.setState({ loading: false });
                 this.setState({ flagqtyModelOpen: false, modalVisible: false });
                 console.log(e);
                 Alert.alert(e.message ? e.message : e);
@@ -172,6 +173,7 @@ class Products extends Component {
                 this.getImageNameByScan();
             })
             .catch((e) => {
+                this.setState({ loading: false });
                 this.setState({ flagqtyModelOpen: false, modalVisible: false });
                 console.log(e);
                 Alert.alert(e.message ? e.message : e);
@@ -209,6 +211,7 @@ class Products extends Component {
 
             })
             .catch(function (error) {
+                this.setState({ loading: false });
                 console.log(error);
                 alert(error);
             });

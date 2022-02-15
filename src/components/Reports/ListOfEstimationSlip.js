@@ -48,6 +48,7 @@ export class ListOfEstimationSlip extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -178,6 +179,7 @@ export class ListOfEstimationSlip extends Component {
             }
         }
         ).catch(() => {
+            this.setState({ loading: false });
             alert('No Results Found');
             this.props.modelCancelCallback();
         });

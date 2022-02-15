@@ -83,6 +83,7 @@ class Settings extends Component {
                     // console.log
 
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error saving token');
                     alert('There is error saving token');
                 });
@@ -91,6 +92,7 @@ class Settings extends Component {
                     // console.log
 
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error saving token');
                 });
 
@@ -167,6 +169,7 @@ class Settings extends Component {
         }
         ).catch(() => {
             this.setState({ loading: false });
+            this.setState({ loading: false });
             alert('Update Api error');
         });
     }
@@ -200,6 +203,7 @@ class Settings extends Component {
 
                     });
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error getting phone numner');
                     alert('There is error getting phone numner');
                 });
@@ -228,12 +232,14 @@ class Settings extends Component {
                     });
 
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error saving token');
                     alert('There is error saving token');
                 });
             }
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -242,6 +248,7 @@ class Settings extends Component {
         AsyncStorage.getItem("phone_number").then((value) => {
             phonenumber = value;
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting phone numner');
             alert('There is error getting phone numner');
         });
@@ -268,6 +275,7 @@ class Settings extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            this.setState({ loading: false });
             alert('No user details get');
         });
         this.domainChange();
@@ -277,6 +285,7 @@ class Settings extends Component {
         AsyncStorage.getItem("domainName").then((value) => {
             global.domainName = value;
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -373,17 +382,20 @@ class Settings extends Component {
                                 }
                             });
                         }).catch(() => {
+                            this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
                             alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error getting storeId');
                     alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });

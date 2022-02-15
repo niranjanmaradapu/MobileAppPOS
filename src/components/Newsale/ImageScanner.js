@@ -54,6 +54,7 @@ export default class ImageScanner extends Component {
                     this.getImageNameByScan();
                 })
                 .catch((e) => {
+                    this.setState({ loading: false });
                     console.log(e);
                     Alert.alert(e.message ? e.message : e);
                 });
@@ -119,6 +120,7 @@ export default class ImageScanner extends Component {
 
             })
             .catch(function (error) {
+                this.setState({ loading: false });
                 console.log(error);
                 alert(error);
 

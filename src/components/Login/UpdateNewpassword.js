@@ -75,7 +75,8 @@ class UpdateNewpassword extends Component {
                     this.setState({ loading: false });
                 }
             }
-            ).catch(err => {
+            ).catch((err) => {
+                this.setState({ loading: false });
                 alert(err);
             });
 

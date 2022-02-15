@@ -17,6 +17,7 @@ export default class SplashScreen extends React.Component {
         AsyncStorage.getItem("phone_number").then((value) => {
             phonenumber = value;
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting phone numner');
             alert('There is error getting phone numner');
         });

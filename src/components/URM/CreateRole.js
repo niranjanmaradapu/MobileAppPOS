@@ -93,6 +93,7 @@ export default class CreateRole extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            this.setState({ loading: false });
             alert("There is an Error Getting Domain Id");
         });
     }
@@ -149,6 +150,7 @@ export default class CreateRole extends Component {
                 }
                 ).catch(() => {
                     this.setState({ loading: false });
+                    this.setState({ loading: false });
                     alert("There is an Error Saving Role");
                 });
             }
@@ -178,6 +180,7 @@ export default class CreateRole extends Component {
                     }
                 }
                 ).catch(() => {
+                    this.setState({ loading: false });
                     this.setState({ loading: false });
                     alert("There is an Error Saving Role");
                 });

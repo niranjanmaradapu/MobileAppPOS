@@ -69,6 +69,7 @@ class ViewReBarcode extends Component {
             // this.getAllpools()
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting domainDataId');
             alert('There is error getting domainDataId');
         });
@@ -80,6 +81,7 @@ class ViewReBarcode extends Component {
             // this.getAllBarcodes()
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -88,6 +90,7 @@ class ViewReBarcode extends Component {
             storeName = value;
             this.setState({ storeName: storeName });
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });

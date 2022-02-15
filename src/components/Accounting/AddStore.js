@@ -104,6 +104,7 @@ export default class AddStore extends Component {
             }
         }).catch(() => {
             this.setState({ loading: false });
+            this.setState({ loading: false });
             alert('There Is An Error Getting Domains List');
         });
     }
@@ -304,6 +305,7 @@ export default class AddStore extends Component {
                     }
                 }
                 ).catch(() => {
+            this.setState({ loading: false });
                     this.setState({ loading: false });
                     alert("There is an Error while Saving The Store");
                 });
@@ -338,6 +340,7 @@ export default class AddStore extends Component {
                     }
                 }
                 ).catch(() => {
+            this.setState({ loading: false });
                     this.setState({ loading: false });
                     alert("There is an Error while Saving the Store");
                 });

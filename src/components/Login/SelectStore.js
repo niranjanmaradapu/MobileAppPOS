@@ -57,12 +57,14 @@ export default class SelectStore extends React.Component {
                             // 
 
                         }).catch((err) => {
+                            this.setState({ loading: false });
                             alert(err);
                         });
 
                         AsyncStorage.setItem("storeName", (res.data.result[0].name)).then(() => {
 
                         }).catch(() => {
+                            this.setState({ loading: false });
                             console.log('There is error saving token');
                             alert('There is error saving token');
                         });
@@ -86,6 +88,7 @@ export default class SelectStore extends React.Component {
                         AsyncStorage.setItem("storeId", (this.state.storeData[0].id).toString()).then(() => {
 
                         }).catch(() => {
+                            this.setState({ loading: false });
                             console.log('There is error saving token');
                             alert('There is error saving token');
                         });
@@ -93,6 +96,7 @@ export default class SelectStore extends React.Component {
                         AsyncStorage.setItem("storeName", (this.state.storeData[0].name)).then(() => {
 
                         }).catch(() => {
+                            this.setState({ loading: false });
                             console.log('There is error saving token');
                             alert('There is error saving token');
                         });
@@ -121,12 +125,14 @@ export default class SelectStore extends React.Component {
         this.setState({ selectedItem: index });
         AsyncStorage.setItem("storeId", String(item.id)).then(() => {
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error saving storeId');
             alert('There is error saving storeId');
         });
 
         AsyncStorage.setItem("storeName", item.name).then(() => {
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error saving token');
             alert('There is error saving token');
         });

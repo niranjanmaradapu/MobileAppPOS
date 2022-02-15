@@ -75,6 +75,7 @@ export default class NewSaleReport extends Component {
 
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -122,6 +123,7 @@ export default class NewSaleReport extends Component {
             }
         }
         ).catch(() => {
+            this.setState({ loading: false });
             alert('No Results Found');
             this.props.modelCancelCallback();
         });

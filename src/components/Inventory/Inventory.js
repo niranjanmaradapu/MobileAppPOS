@@ -67,6 +67,7 @@ export default class Inventory extends Component {
 
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting domainDataId');
             alert('There is error getting domainDataId');
         });
@@ -78,6 +79,7 @@ export default class Inventory extends Component {
             this.getAllBarcodes();
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -86,6 +88,7 @@ export default class Inventory extends Component {
             storeName = value;
             this.setState({ storeName: storeName });
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -166,12 +169,14 @@ export default class Inventory extends Component {
                         }
                     });
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error saving domainDataId');
                     // alert('There is error saving domainDataId');
                 });
 
             }
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting sadasdsd');
             alert('There is error getting details');
         });
@@ -201,6 +206,7 @@ export default class Inventory extends Component {
                 this.setState({ barcodesData: this.state.barcodesData });
             }
         }).catch(() => {
+            this.setState({ loading: false });
             alert('No Results Found');
             this.setState({ loading: false });
         });
@@ -230,6 +236,7 @@ export default class Inventory extends Component {
 
             }
         }).catch(() => {
+            this.setState({ loading: false });
             alert('No Results Found');
             this.setState({ loading: false });
         });
@@ -393,7 +400,8 @@ export default class Inventory extends Component {
                 }
                 this.setState({ barcodesData: this.state.barcodesData, filterActive: true });
             }
-        }).catch(err => {
+        }).catch((err) => {
+            this.setState({ loading: false });
             alert("no records found");
             console.log(err);
         });
@@ -418,7 +426,8 @@ export default class Inventory extends Component {
                 }
                 this.setState({ reBarcodesData: this.state.reBarcodesData, filterActive: true });
             }
-        }).catch(err => {
+        }).catch((err) => {
+            this.setState({ loading: false });
             alert("no records found");
             console.log(err);
         });
@@ -458,7 +467,7 @@ export default class Inventory extends Component {
                 this.getAllBarcodes();
             });
         } else {
-            this.setState({ filterActive: false, startDate: "", endDate: "", barcodeId: "", }, () => {
+            this.setState({ filterActive: false, startDate: "", endDate: "", barCodeId: "", }, () => {
                 this.setState({ reBarcodesData: [] });
                 this.getbarcodeTexttileAdjustments();
             });

@@ -71,6 +71,7 @@ export default class ReportsDashboard extends Component {
                 });
             console.log(this.state.storeId);
         }).catch((err) => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert(err);
         });
@@ -82,6 +83,7 @@ export default class ReportsDashboard extends Component {
             this.setState({ storeName: value });
 
         }).catch(() => {
+            this.setState({ loading: false });
 
             console.log('There is error getting storeId');
             alert('There is error getting storeId');

@@ -86,6 +86,7 @@ class Promo extends Component {
             this.getAllpools();
 
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting domainDataId');
             alert('There is error getting domainDataId');
         });
@@ -193,6 +194,7 @@ class Promo extends Component {
                         }
                     });
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error saving domainDataId');
                     alert('There is error saving domainDataId');
 
@@ -200,6 +202,7 @@ class Promo extends Component {
 
             }
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting sadasdsd');
             alert('There is error getting sadasdsd');
         });
@@ -299,6 +302,7 @@ class Promo extends Component {
                 }
             }).catch(() => {
                 this.setState({ loading: false });
+                this.setState({ loading: false });
                 alert('No Records Found');
             });
 
@@ -329,6 +333,7 @@ class Promo extends Component {
                     return;
                 }
             }).catch(() => {
+                this.setState({ loading: false });
                 this.setState({ loading: false });
                 alert('No Records Found');
             });
@@ -373,6 +378,7 @@ class Promo extends Component {
                 }
             }).catch(() => {
                 this.setState({ loading: false });
+                this.setState({ loading: false });
                 alert('No Records Found');
             });
     };
@@ -413,6 +419,7 @@ class Promo extends Component {
                     }
                 }
             }).catch(() => {
+                this.setState({ loading: false });
                 this.setState({ loading: false });
                 alert('No Records Found');
             });
@@ -462,6 +469,7 @@ class Promo extends Component {
                 }
             }).catch(() => {
                 this.setState({ loading: false });
+                this.setState({ loading: false });
                 alert('No Records Found');
             });
     };
@@ -497,6 +505,7 @@ class Promo extends Component {
                     }
                 }
             }).catch(() => {
+                this.setState({ loading: false });
                 this.setState({ loading: false });
                 alert('No Records Found');
             });
@@ -534,6 +543,7 @@ class Promo extends Component {
         //             return
         //         }
         //     }).catch(() => {
+        this.setState({ loading: false });
         //         this.setState({ loading: false })
         //         alert('No Records Found')
         //     })

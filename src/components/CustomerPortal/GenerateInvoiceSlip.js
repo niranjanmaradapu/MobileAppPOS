@@ -184,6 +184,7 @@ class GenerateInvoiceSlip extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting storeId');
             alert('There is error getting storeId');
         });
@@ -247,6 +248,7 @@ class GenerateInvoiceSlip extends Component {
                 alert(res.data);
             }
         }).catch(() => {
+            this.setState({ loading: false });
             alert('Error with getting discount reasons');
         });
     }
@@ -344,6 +346,7 @@ class GenerateInvoiceSlip extends Component {
                 alert(res.data.body);
             }
         }).catch(() => {
+            this.setState({ loading: false });
             alert('Getting issue with the estimation slip lineitems');
         });
 
@@ -363,6 +366,7 @@ class GenerateInvoiceSlip extends Component {
                     console.log('data saved');
 
                 }).catch(() => {
+                    this.setState({ loading: false });
                     console.log('There is error saving token');
                     alert('There is error saving token');
                 });
@@ -590,6 +594,7 @@ class GenerateInvoiceSlip extends Component {
                 toast.error("No Data Found");
             }
         }).catch(() => {
+            this.setState({ loading: false });
             alert('Unable to get customer details');
         });
     }
@@ -631,6 +636,7 @@ class GenerateInvoiceSlip extends Component {
 
             }
         }).catch(() => {
+            this.setState({ loading: false });
             alert('Unable to get customer details');
         });
     }
@@ -718,6 +724,7 @@ class GenerateInvoiceSlip extends Component {
         AsyncStorage.getItem("tokenkey").then((value) => {
             console.log(value);
         }).catch(() => {
+            this.setState({ loading: false });
             console.log('There is error getting token');
         });
 
