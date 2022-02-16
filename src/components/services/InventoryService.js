@@ -58,6 +58,10 @@ class InventoryService {
         return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/getAllBarcodeTextiles";
     }
 
+    getTextileBarcodesDetails() {
+        return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/getBarcodeTextile"
+    }
+
     deleteTextileBarcode() {
         return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/deleteBarcode_Textile";
     }

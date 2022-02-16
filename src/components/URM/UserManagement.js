@@ -11,6 +11,7 @@ import { Chevron } from 'react-native-shapes';
 import Loader from "../../commonUtils/loader";
 import UrmService from '../services/UrmService';
 import UrmDashboard from './UrmDashboard';
+
 var deviceheight = Dimensions.get("window").height;
 var deviceWidth = Dimensions.get("window").width;
 
@@ -370,7 +371,6 @@ export default class UserManagement extends Component {
     };
 
     applyRoleFilter() {
-        this.setState({ rolesData: [] });
         const searchRole = {
             "roleName": this.state.role ? this.state.role : null,
             "createdBy": this.state.createdBy ? this.state.createdBy : null,
@@ -379,9 +379,14 @@ export default class UserManagement extends Component {
         console.log(searchRole);
         axios.post(UrmService.getRolesBySearch(), searchRole).then((res) => {
             if (res) {
-                this.setState({ rolesData: res.data.result, modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
-                    this.setState({ filterActive: true });
-                });
+                if (res.data.isSuccess === "true") {
+                    this.setState({ rolesData: res.data.result, modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
+                        this.setState({ filterActive: true });
+                    });
+                } else {
+                    this.setState({ modalVisible: false, userType: "", role: "", createdBy: "" });
+                    alert("records not found");
+                }
 
             } else {
                 this.setState({ rolesData: res.data.result, modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
@@ -405,17 +410,22 @@ export default class UserManagement extends Component {
             "storeName": this.state.branch ? this.state.branch : null,
             "clientDomainId": this.state.clientId,
         };
-        this.setState({ usersData: [] });
         console.log(obj);
         axios.post(UrmService.getUserBySearch(), obj).then((res) => {
             if (res) {
-                this.setState({ usersData: res.data.result, modalVisible: false, userType: "", role: "", createdBy: "" },
-                    () => {
-                        this.setState({ filterActive: true });
-                    });
+                console.log(res.data);
+                if (res.data.isSuccess === "true") {
+                    this.setState({ usersData: res.data.result, modalVisible: false, userType: "", role: "", createdBy: "", branch: "" },
+                        () => {
+                            this.setState({ filterActive: true });
+                        });
+                } else {
+                    this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: '' });
+                    alert("records not found");
+                }
 
             } else {
-                this.setState({ usersData: res.data.result, modalVisible: false, userType: "", role: "", createdBy: "" }, () => {
+                this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: "" }, () => {
                     this.setState({ filterActive: false });
                 });
             }
@@ -540,6 +550,7 @@ export default class UserManagement extends Component {
                                         borderColor: item.bool ? '#ED1C24' : '#858585',
                                         borderRadius: 5,
                                         marginLeft: 10,
+                                        
                                     }} onPress={() => this.topbarAction(item, index)} >
 
                                         <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
@@ -618,7 +629,7 @@ export default class UserManagement extends Component {
                                             <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>CREATED DATE: {"\n"}{item.createdDate}</Text>
                                             <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>STATUS: {"\n"}{item.active ? "active" : "Inactive"}</Text>
 
-                                            <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleedituser(item, index)}>
+                                            <TouchableOpacity style={[Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile]} onPress={() => this.handleedituser(item, index)}>
                                                 <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                             </TouchableOpacity>
 
@@ -965,17 +976,6 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
     },
 });
 
@@ -1007,17 +1007,6 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
     },
 });
 

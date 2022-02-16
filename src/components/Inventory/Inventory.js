@@ -398,12 +398,17 @@ export default class Inventory extends Component {
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.barcodesData.push(res.data["result"][i]);
                 }
-                this.setState({ barcodesData: this.state.barcodesData, filterActive: true });
+                this.setState({ barcodesData: this.state.barcodesData, filterActive: true, startDate: "", endDate: "", barCodeId: "" });
+            } else {
+                alert("records not found");
+                this.setState({ startDate: "", endDate: "", barCodeId: "" });
             }
         }).catch((err) => {
             this.setState({ loading: false });
             alert("no records found");
             console.log(err);
+            this.setState({ startDate: "", endDate: "", barCodeId: "" });
+
         });
         this.setState({ modalVisible: false });
     }
@@ -419,12 +424,16 @@ export default class Inventory extends Component {
 
         axios.post(InventoryService.getbarcodeTexttileAdjustments(), list).then(res => {
             console.log(res.data);
-            if (res.data && res.data.isSuccess === "true") {
+            console.log(res.data.result.length);
+
+            if (res.data && res.data.isSuccess === "true" || res.data.result.length > 0) {
                 this.setState({ reBarcodesData: [] });
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.reBarcodesData.push(res.data["result"][i]);
                 }
                 this.setState({ reBarcodesData: this.state.reBarcodesData, filterActive: true });
+            } else {
+                alert("results not found");
             }
         }).catch((err) => {
             this.setState({ loading: false });
@@ -479,32 +488,37 @@ export default class Inventory extends Component {
     seeDetails = (item, index) => {
         this.setState({ barcodesData: [] });
         const params = {
-            "fromDate": "",
-            "toDate": "",
+            // "fromDate": "",
+            // "toDate": "",
             "barcode": item.currentBarcodeId,
             "storeId": this.state.storeId
         };
         console.log("cssafsfssdsfdsfsdsadasd" + this.state.storeId);
-        // this.setState({ loading: true })
-        axios.post(InventoryService.getTextileBarcodes(), params).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                if (res.data["result"]) {
-                    //  this.setState({ loading: false })
-                    for (var i = 0; i < res.data["result"].length; i++) {
-                        this.state.barcodesData.push(res.data["result"][i]);
-                        // console.log(res.data["result"][i].productTextile.empId)
-                        this.props.navigation.navigate('ViewReBarcode'
-                            , {
-                                item: res.data["result"][i], isEdit: true,
-                                onGoBack: () => this.updateBarcodes(),
-                            });
+        console.log("params", params,);
+        axios.post(InventoryService.getTextileBarcodesDetails(), params).then((res) => {
+            if (res) {
+                console.log("response edit", res);
+                if (res.data && res.data["isSuccess"] === "true") {
+                    if (res.data["result"]) {
+                        //  this.setState({ loading: false })
+                        for (var i = 0; i < res.data["result"].length; i++) {
+                            this.state.barcodesData.push(res.data["result"][i]);
+                            // console.log(res.data["result"][i].productTextile.empId)
+                            this.props.navigation.navigate('ViewReBarcode'
+                                , {
+                                    item: res.data["result"][i], isEdit: true,
+                                    onGoBack: () => this.updateBarcodes(),
+                                });
 
+                        }
                     }
+
+                    this.setState({ barcodesData: this.state.barcodesData });
+
                 }
-
-                this.setState({ barcodesData: this.state.barcodesData });
-
             }
+        }).catch(err => {
+            console.log(err);
         });
 
 
@@ -658,7 +672,7 @@ export default class Inventory extends Component {
                                     >
                                         <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
                                             <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >PARENT BARCODE: {"\n"}{item.toBeBarcodeId}</Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>CHILD BARCODE: {"\n"}{item.currentBarcodeId}</Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>CHILD BARCODE: {"\n"}{item.currentBarcodeId}</Text>
                                             {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonTextsubrebar_mobile}>{ }</Text> */}
                                             <Text style={Device.isTablet ? flats.commonTextRebar_tablet : flats.commonTextRebar_mobile}>EMPLOYEE ID: {"\n"}{item.createdBy}</Text>
                                             <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>DATE: {"\n"}{item.fromDate}</Text>
@@ -1199,7 +1213,8 @@ const styles = StyleSheet.create({
         width: deviceWidth - 40,
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 10,
+        marginTop: 5,
+        marginBottom: 10,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         height: 50,

@@ -91,6 +91,7 @@ class GenerateEstimationSlip extends Component {
             },
             resultModel: false,
             resultData: "",
+            resultDsNumber: "",
         };
     }
 
@@ -185,7 +186,8 @@ class GenerateEstimationSlip extends Component {
             };
             axios.post(CustomerService.createDeliverySlip(), createObj).then((res) => {
                 if (res) {
-                    this.setState({ resultModel: true, resultData: res.data.message, modalVisible: true });
+                    console.log(res.data);
+                    this.setState({ resultModel: true, resultData: res.data.message, modalVisible: true, resultDsNumber: res.data.result });
                     // alert(res.data.message);
                     this.setState({
                         barList: [],
@@ -968,7 +970,8 @@ class GenerateEstimationSlip extends Component {
                                 </View>
                                 <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 250 : 200, }}>
                                     <View style={{ height: Device.isTablet ? 70 : 60, alignItems: 'center', marginTop: 20 }}>
-                                        <Text style={{ fontSize: Device.isTablet ? 24 : 19, fontFamily: 'medium', }} selectable={true}>{this.state.resultData}</Text>
+                                        <Text style={{ fontSize: Device.isTablet ? 24 : 19, fontFamily: 'medium', color: '#00aa00' }}>{this.state.resultData}</Text>
+                                        <Text selectable={true} style={{ fontSize: Device.isTablet ? 24 : 19, fontFamily: 'medium', }}>{this.state.resultDsNumber}</Text>
                                     </View>
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#00aa00', }]} onPress={() => this.modelCancel()}

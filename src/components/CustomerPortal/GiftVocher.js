@@ -104,7 +104,7 @@ class GiftVocher extends Component {
 
     addGiftVocher() {
         if (this.state.gvNumber === "") {
-            alert("Please Enter GV Name");
+            alert("Please Enter GV Number");
         } else if (this.state.startDate === "") {
             alert("Please Select the Start Date");
         } else if (this.state.endDate === "") {
@@ -266,7 +266,7 @@ class GiftVocher extends Component {
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>S.NO: {index + 1}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>GV NUMBER: {item.gvNumber}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile} selectable={true}>GV NUMBER: {item.gvNumber}</Text>
                                 </View>
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>FROM DATE: {item.fromDate}</Text>
