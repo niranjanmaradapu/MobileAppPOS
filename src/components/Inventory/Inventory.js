@@ -372,7 +372,7 @@ export default class Inventory extends Component {
     }
 
     handlebarCodeId = (value) => {
-        this.setState({ barCodeId: value });
+        this.setState({ barCodeId: value.trim() });
     };
 
     applyBarcodeFilter() {
@@ -426,7 +426,7 @@ export default class Inventory extends Component {
             console.log(res.data);
             console.log(res.data.result.length);
 
-            if (res.data && res.data.isSuccess === "true" || res.data.result.length > 0) {
+            if (res.data && res.data.isSuccess === "true" && res.data.result.length > 0) {
                 this.setState({ reBarcodesData: [] });
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.reBarcodesData.push(res.data["result"][i]);
