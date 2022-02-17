@@ -107,13 +107,22 @@ export default class SelectDomain extends React.Component {
                                     borderBottomColor: 'lightgray', borderBottomWidth: 0.6, marginLeft: this.state.selectedItem === index ? 0 : 0, marginRight: this.state.selectedItem === index ? 0 : 0, backgroundColor: this.state.selectedItem === index ? '#ED1C24' : '#ffffff'
                                 }}>
 
-
-                                    <View style={{ flexDirection: 'column', width: '100%', height: 100 }}>
-
-
-                                        <Image
-                                            style={Device.isTablet ? styles.image_tablet : styles.image_mobile}
-                                            source={require("../assets/images/texttile.png")} />
+                                    <View style={{ flexDirection: 'column', width: '100%', height: 100, }}>
+                                        {item.domaiName === "Textile" &&
+                                            <Image
+                                                style={Device.isTablet ? styles.image_tablet : styles.image_mobile}
+                                                source={require("../assets/images/textile.png")} />
+                                        }
+                                        {item.domaiName === "Retail" &&
+                                            <Image
+                                                style={Device.isTablet ? styles.image_tablet : styles.image_mobile}
+                                                source={require("../assets/images/retail.png")} />
+                                        }
+                                        {item.domaiName === "Electrical & Electronics" &&
+                                            <Image
+                                                style={Device.isTablet ? styles.image_tablet : styles.image_mobile}
+                                                source={require("../assets/images/electronics.png")} />
+                                        }
                                         <Text style={[Device.isTablet ? styles.text_tablet : styles.text_mobile, { color: this.state.selectedItem === index ? '#ffffff' : '#353C40' }]}>
                                             {item.domaiName}
                                         </Text>
@@ -161,8 +170,8 @@ const styles = StyleSheet.create({
     },
     text_mobile: {
         fontSize: 20,
-        fontFamily: 'medium',
         marginTop: -40,
+        fontFamily: 'medium',
         alignSelf: 'center',
     },
     saveButton_mobile: {

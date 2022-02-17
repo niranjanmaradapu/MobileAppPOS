@@ -66,9 +66,9 @@ class AddBarcode extends Component {
             console.log("domain data id" + this.state.domainId);
             this.getAllpools();
 
-        }).catch(() => {
+        }).catch((err) => {
             this.setState({ loading: false });
-            console.log('There is error getting domainDataId');
+            console.log(err);
             alert('There is error getting domainDataId');
         });
 

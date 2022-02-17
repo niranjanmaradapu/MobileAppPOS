@@ -442,7 +442,7 @@ class GenerateEstimationSlip extends Component {
                                 />
 
                                 {this.state.uom === "Pieces" && (
-                                    <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 100 }]}
+                                    <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 80 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         placeholderTextColor="#6F6F6F60"
@@ -454,7 +454,7 @@ class GenerateEstimationSlip extends Component {
                                 )}
 
                                 {this.state.uom === "Meters" && (
-                                    <TextInput style={[Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 100 }]}
+                                    <TextInput style={[Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 80 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         keyboardType={'default'}
@@ -1533,7 +1533,7 @@ const styles = StyleSheet.create({
     },
     input_mobilebutton_normal: {
         justifyContent: 'center',
-        marginLeft: deviceWidth - 100,
+        marginLeft: deviceWidth - 120,
         width: deviceWidth / 4 - 10,
         height: 44,
         marginTop: -55,
