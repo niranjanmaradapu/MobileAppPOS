@@ -248,7 +248,7 @@ export default class NewSaleReport extends Component {
                                         </TouchableOpacity>
 
                                         <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewNewSale(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 0 }} source={require('../assets/images/eye.png')} />
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/eye.png')} />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
