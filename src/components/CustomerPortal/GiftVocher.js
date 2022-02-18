@@ -102,7 +102,7 @@ class GiftVocher extends Component {
         this.setState({ giftValue: text });
     }
 
-    addGiftVocher() {
+    async addGiftVocher() {
         if (this.state.gvNumber === "") {
             alert("Please Enter GV Number");
         } else if (this.state.startDate === "") {
@@ -114,16 +114,18 @@ class GiftVocher extends Component {
         }
         else {
 
-
-            const user = AsyncStorage.getItem("username");
+            const clientId = await AsyncStorage.getItem("custom:clientId1");
+            this.setState({ clientId: clientId });
+            // const user = AsyncStorage.getItem("username");
             const obj = {
                 "gvNumber": this.state.gvNumber,
                 "description": this.state.description,
-                "fromDate": this.state.startDate,
-                "todate": this.state.endDate,
-                "clientId": user["custom:clientId1"],
+                "fromDate": this.state.date,
+                "todate": this.state.enddate,
+                "clientId": this.state.clientId,
                 "value": this.state.giftValue
             };
+            console.log(obj);
             axios.post(CustomerService.saveGiftVocher(), obj).then(res => {
                 if (res && res.data.isSuccess === "true") {
                     this.setState({

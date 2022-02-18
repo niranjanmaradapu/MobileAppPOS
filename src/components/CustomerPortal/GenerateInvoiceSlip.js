@@ -469,6 +469,7 @@ class GenerateInvoiceSlip extends Component {
                 taxAmount: this.state.taxAmount,
                 approvedBy: this.state.approvedBy,
                 reasonDiscount: this.state.reasonDiscount,
+                discountAmount: this.state.discountAmount,
                 userId: this.state.userId,
                 retailBarCodeList: this.state.retailBarCodeList,
                 dsNumberList: this.state.dsNumberList,
@@ -559,7 +560,7 @@ class GenerateInvoiceSlip extends Component {
     }
 
     handleDsNumber = (text) => {
-        this.setState({ dsNumber: text });
+        this.setState({ dsNumber: text.trim() });
     };
 
     handleBarcode = (text) => {
@@ -571,7 +572,49 @@ class GenerateInvoiceSlip extends Component {
     }
 
     tagCustomer() {
-        this.tagCustomer();
+        if (this.state.mobileNumber.length === 0 || this.state.mobileNumber.length < 10) {
+            alert("please enter a valid 10 digit mobile number");
+        } else {
+            const obj = {
+                "id": "",
+                "phoneNo": "+91" + this.state.mobileNumber,
+                "name": "",
+                "active": false,
+                "inActive": false,
+                "roleId": "",
+                "storeId": ""
+            };
+            axios.get(CustomerService.getCustomerMobile() + "/" + obj.phoneNo).then((res) => {
+                console.log(res);
+                if (res) {
+                    console.log(res.data);
+                    const mobileData = res.data.result;
+                    this.setState({
+                        userId: res.data.result.userId, customerFullName: res.data.result.userName
+                    });
+                    this.setState({ modalVisible: false });
+                    this.state.mobileData = {
+                        address: this.state.address,
+                        altMobileNo: "",
+                        dob: this.state.dob,
+                        gender: mobileData.gender,
+                        gstNumber: this.state.gstNumber,
+                        mobileNumber: mobileData.phoneNumber,
+                        name: mobileData.userName,
+                        email: this.state.customerEmail,
+                    };
+
+                    this.setState({
+                        isBillingDetails: true,
+                        customerMobilenumber: mobileData.phoneNumber,
+                    });
+
+                }
+            }).catch(() => {
+                this.setState({ loading: false });
+                alert('Unable to get customer details');
+            });
+        }
     }
 
     handleMobileNumber(text) {
@@ -600,52 +643,10 @@ class GenerateInvoiceSlip extends Component {
         });
     }
 
-    tagCustomer() {
-        const obj = {
-            "id": "",
-            "phoneNo": "+91" + this.state.mobileNumber,
-            "name": "",
-            "active": false,
-            "inActive": false,
-            "roleId": "",
-            "storeId": ""
-        };
-        axios.get(CustomerService.getCustomerMobile() + "/" + obj.phoneNo).then((res) => {
-            console.log(res);
-            if (res) {
-                console.log(res.data);
-                const mobileData = res.data.result;
-                this.setState({
-                    userId: res.data.result.userId, customerFullName: res.data.result.userName
-                });
-                this.setState({ modalVisible: false });
-                this.state.mobileData = {
-                    address: this.state.address,
-                    altMobileNo: "",
-                    dob: this.state.dob,
-                    gender: mobileData.gender,
-                    gstNumber: this.state.gstNumber,
-                    mobileNumber: mobileData.phoneNumber,
-                    name: mobileData.userName,
-                    email: this.state.customerEmail,
-                };
-
-                this.setState({
-                    isBillingDetails: true,
-                    customerMobilenumber: mobileData.phoneNumber,
-                });
-
-            }
-        }).catch(() => {
-            this.setState({ loading: false });
-            alert('Unable to get customer details');
-        });
-    }
-
 
 
     handleDiscountAmount(text) {
-        this.setState({ discountAmount: text });
+        this.setState({ discountAmount: text.trim() });
     }
 
     handleApprovedBy(text) {
@@ -657,7 +658,14 @@ class GenerateInvoiceSlip extends Component {
     };
 
     billDiscount() {
-        if (Object.keys(parseInt(this.state.discountAmount).length !== 0 && this.state.approvedBy !== "" && this.state.reasonDiscount !== '')) {
+        if (this.state.discountAmount === "") {
+            alert("discount amount cannot be empty");
+        } else if (this.state.approvedBy === "") {
+            alert("approved By cannot be empty");
+        } else if (this.state.reasonDiscount === "") {
+            alert("reason cannot be empty");
+        }
+        else {
             this.state.netPayableAmount = 0;
             const totalDisc =
                 parseInt(this.state.totalPromoDisc) + parseInt(this.state.discountAmount);
@@ -672,8 +680,6 @@ class GenerateInvoiceSlip extends Component {
             this.setState({ showDiscReason: true, promoDiscount: promDisc });
 
             this.setState({ modalVisible: false });
-        } else {
-            alert("Please Enter all fields");
         }
 
 
@@ -1071,7 +1077,7 @@ class GenerateInvoiceSlip extends Component {
                                     ref={(ref) => { this.listRef = ref; }}
                                     renderItem={({ item, index }) => (
                                         <View style={{
-                                            height: Device.isTablet ? 230 : 180,
+                                            height: Device.isTablet ? 230 : 200,
                                             backgroundColor: '#FFFFFF',
                                             borderBottomWidth: 5,
                                             borderBottomColor: '#FBFBFB',
@@ -1079,45 +1085,49 @@ class GenerateInvoiceSlip extends Component {
 
                                         }}>
 
-                                            <View style={{ flexDirection: 'column', height: Device.isTablet ? 180 : 180, }}>
-                                                <Image source={require('../assets/images/default.jpeg')}
-                                                    //source={{ uri: item.image }}
-                                                    style={{
-                                                        position: 'absolute', left: 20, top: 15, width: Device.isTablet ? 140 : 90, height: Device.isTablet ? 140 : 90,
-                                                    }} />
-                                                <Text style={{ fontSize: Device.isTablet ? 21 : 16, marginTop: 10, marginLeft: Device.isTablet ? 180 : 130, fontFamily: 'medium', color: '#353C40' }}>
+                                            <View style={{ flexDirection: 'row', height: Device.isTablet ? 200 : 190, justifyContent: 'flex-start', width: Device.isTablet ? deviceWidth - 40 : deviceWidth - 20 }}>
+                                                <View style={{ marginTop: Device.isTablet ? 40 : 20, marginLeft: Device.isTablet ? 40 : 20 }}>
+                                                    <Image source={require('../assets/images/default.jpeg')}
+                                                        //source={{ uri: item.image }}
+                                                        style={{
+                                                            width: Device.isTablet ? 140 : 90, height: Device.isTablet ? 140 : 90,
+                                                        }} />
+                                                </View>
+                                                <Text style={{ fontSize: Device.isTablet ? 21 : 16, fontFamily: 'medium', color: '#353C40' }}>
                                                     {item.itemdesc}
                                                 </Text>
-                                                <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 0, fontFamily: 'regular', color: '#808080' }}>
-                                                    ITEM:
-                                                </Text>
-                                                <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 225 : 165, marginTop: Device.isTablet ? -22 : -16, fontFamily: 'medium', color: '#353C40' }}>
-                                                    #{item.barCode}
-                                                </Text>
-                                                <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                    QUANTITY:
-                                                </Text>
-                                                <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 270 : 195, marginTop: Device.isTablet ? -22 : -16, fontFamily: 'medium', color: '#353C40' }}>
-                                                    {item.quantity}
-                                                </Text>
-
-                                                {/* <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
+                                                <View style={{ flexDirection: "column", marginLeft: Device.isTablet ? 40 : 20 }}>
+                                                    <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: Device.isTablet ? 40 : 30 }}>
+                                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
+                                                            ITEM: #{item.barCode}
+                                                        </Text>
+                                                    </View>
+                                                    <View style={{ flexDirection: 'row', }}>
+                                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
+                                                            QUANTITY: {item.quantity}
+                                                        </Text>
+                                                    </View>
+                                                    {/* <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
                                                 {item.qty} {item.productuom}
                                             </Text> */}
-                                                <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                    MRP:
-                                                </Text>
-                                                <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 230 : 160, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'medium', color: '#ED1C24' }}>
-                                                    {/* ₹ {(parseInt(item.netamount)).toString()} */}
-                                                    ₹ {item.itemPrice}
-                                                </Text>
-                                                <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 310 : 220, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'regular', color: '#808080' }}>
-                                                    DISCOUNT: ₹ 0
-                                                </Text>
-                                                <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                    GROSS AMOUNT: ₹ {item.netValue}
-                                                </Text>
-
+                                                    <View style={{ flexDirection: 'row', }}>
+                                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
+                                                            MRP:
+                                                        </Text>
+                                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'medium', color: '#ED1C24', paddingLeft: 3 }}>
+                                                            {/* ₹ {(parseInt(item.netamount)).toString()} */}
+                                                            ₹ {item.itemPrice}
+                                                        </Text>
+                                                    </View>
+                                                    <View style={{ flexDirection: 'column', }}>
+                                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
+                                                            DISCOUNT: ₹ 0
+                                                        </Text>
+                                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
+                                                            GROSS AMOUNT: ₹ {item.netValue}
+                                                        </Text>
+                                                    </View>
+                                                </View>
                                             </View>
 
                                             {/* <View style={{
@@ -1465,6 +1475,8 @@ class GenerateInvoiceSlip extends Component {
                                         textAlignVertical="center"
                                         keyboardType={'default'}
                                         autoCapitalize="none"
+                                        maxLength={10}
+                                        value={this.state.mobileNumber}
                                         onChangeText={(text) => this.handleMobileNumber(text)}
                                     />
                                     <TouchableOpacity
@@ -1511,17 +1523,17 @@ class GenerateInvoiceSlip extends Component {
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
-                                        placeholder="AMOUNT"
+                                        placeholder="AMOUNT *"
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
-                                        keyboardType={'default'}
+                                        keyboardType={'numeric'}
                                         autoCapitalize="none"
                                         onChangeText={(text) => this.handleDiscountAmount(text)}
                                     />
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
-                                        placeholder="APPROVED BY"
+                                        placeholder="APPROVED BY *"
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         keyboardType={'default'}
@@ -1531,7 +1543,7 @@ class GenerateInvoiceSlip extends Component {
                                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                                         <RNPickerSelect
                                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                                            placeholder={{ label: 'REASON', value: '' }}
+                                            placeholder={{ label: 'REASON *', value: '' }}
                                             Icon={() => {
                                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                             }}

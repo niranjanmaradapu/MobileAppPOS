@@ -2290,6 +2290,7 @@ class NewSale extends Component {
                         placeholderTextColor="#353C4050"
                         keyboardType="name-phone-pad"
                         textAlignVertical="center"
+                        maxLength={10}
                         autoCapitalize="none"
                         value={this.state.customerPhoneNumber}
                         onChangeText={(text) => this.handleCustomerPhoneNumber(text)}

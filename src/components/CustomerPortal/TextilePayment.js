@@ -71,6 +71,7 @@ class TextilePayment extends Component {
             gvToCustomerModel: false,
             gvNumber: "",
             couponDiscount: 0,
+            discountAmount: 0,
         };
     }
 
@@ -118,6 +119,7 @@ class TextilePayment extends Component {
             lineItemIdAdd: this.props.route.params.lineItemIdAdd,
             totalQty: this.props.route.params.totalQty,
             CGST: this.props.route.params.CGST,
+            discountAmount: this.props.route.params.discountAmount,
         });
 
     }
@@ -125,7 +127,7 @@ class TextilePayment extends Component {
 
     addCustomer() {
         if (this.state.customerPhoneNumber.length != 10) {
-            alert('Please Enter valid mobile number');
+            alert('Please Enter a valid 10 digit mobile number');
             return;
         }
         else if (this.state.customerName.length === 0) {
@@ -387,7 +389,7 @@ class TextilePayment extends Component {
         this.setState({ verifiedCash: this.state.recievedAmount });
         if (this.state.flagOne === true && this.state.flagThree === false) {
             if ((parseFloat(this.state.recievedAmount) < (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)))) {
-                alert('Please collect suffient amount');
+                alert('Please collect sufficient amount');
             }
             else {
                 this.setState({ returnAmount: parseFloat(this.state.recievedAmount) - (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)) });
@@ -461,83 +463,84 @@ class TextilePayment extends Component {
         }
         else if (global.domainName === "Textile") {
             let obj;
-            if(this.state.flagTwo === true){
-                obj = {"natureOfSale": "InStore",
-                "domainId": 1,
-                "storeId": this.state.storeId,
-                "grossAmount": this.state.grossAmount,
-                "totalPromoDisc": this.state.totalPromoDisc,
-                "taxAmount": this.state.taxAmount,
-                "totalManualDisc": parseInt(this.state.manualDisc),
-                "discApprovedBy": this.state.approvedBy,
-                "discType": this.state.reasonDiscount,
-                "approvedBy": null,
-                "netPayableAmount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
-                "offlineNumber": null,
-                "userId": this.state.userId,
-                "sgst": this.state.CGST,
-                "cgst": this.state.CGST,
-                "dlSlip": this.state.dsNumberList,
-                "lineItemsReVo": null,
-                "paymentAmountType": []
+            if (this.state.flagTwo === true) {
+                obj = {
+                    "natureOfSale": "InStore",
+                    "domainId": 1,
+                    "storeId": this.state.storeId,
+                    "grossAmount": this.state.grossAmount,
+                    "totalPromoDisc": this.state.totalPromoDisc,
+                    "taxAmount": this.state.taxAmount,
+                    "totalManualDisc": parseInt(this.state.manualDisc),
+                    "discApprovedBy": this.state.approvedBy,
+                    "discType": this.state.reasonDiscount,
+                    "approvedBy": null,
+                    "netPayableAmount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
+                    "offlineNumber": null,
+                    "userId": this.state.userId,
+                    "sgst": this.state.CGST,
+                    "cgst": this.state.CGST,
+                    "dlSlip": this.state.dsNumberList,
+                    "lineItemsReVo": null,
+                    "paymentAmountType": []
+                };
             }
-        }
-       else if(this.state.flagOne === true || this.state.flagThree === true){
-            obj = {
-                "natureOfSale": "InStore",
-                "domainId": 1,
-                "storeId": this.state.storeId,
-                "grossAmount": this.state.grossAmount,
-                "totalPromoDisc": this.state.totalPromoDisc,
-                "taxAmount": this.state.taxAmount,
-                "totalManualDisc": parseInt(this.state.manualDisc),
-                "discApprovedBy": this.state.approvedBy,
-                "discType": this.state.reasonDiscount,
-                "approvedBy": null,
-                "netPayableAmount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
-                "offlineNumber": null,
-                "userId": this.state.userId,
-                "sgst": this.state.CGST,
-                "cgst": this.state.CGST,
-                "dlSlip": this.state.dsNumberList,
-                "lineItemsReVo": null,
-                "paymentAmountType": [
-                    {
-                        "paymentType": "Cash",
-                        "paymentAmount": parseFloat(this.state.verifiedCash)
-                    },
-                     {
-                        "paymentType": "Card",
-                        "paymentAmount": this.state.ccCardCash
-                    }]
-            };
-        }
+            else if (this.state.flagOne === true || this.state.flagThree === true) {
+                obj = {
+                    "natureOfSale": "InStore",
+                    "domainId": 1,
+                    "storeId": this.state.storeId,
+                    "grossAmount": this.state.grossAmount,
+                    "totalPromoDisc": this.state.totalPromoDisc,
+                    "taxAmount": this.state.taxAmount,
+                    "totalManualDisc": parseInt(this.state.manualDisc),
+                    "discApprovedBy": this.state.approvedBy,
+                    "discType": this.state.reasonDiscount,
+                    "approvedBy": null,
+                    "netPayableAmount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
+                    "offlineNumber": null,
+                    "userId": this.state.userId,
+                    "sgst": this.state.CGST,
+                    "cgst": this.state.CGST,
+                    "dlSlip": this.state.dsNumberList,
+                    "lineItemsReVo": null,
+                    "paymentAmountType": [
+                        {
+                            "paymentType": "Cash",
+                            "paymentAmount": parseFloat(this.state.verifiedCash)
+                        },
+                        {
+                            "paymentType": "Card",
+                            "paymentAmount": this.state.ccCardCash
+                        }]
+                };
+            }
             console.log(obj);
             axios.post(NewSaleService.createOrder(), obj).then((res) => {
                 console.log(res);
                 if (res.data && res.data["isSuccess"] === "true") {
-                   // const cardAmount = this.state.flagTwo || this.state.flagThree ? JSON.stringify(Math.round(this.state.ccCardCash)) : JSON.stringify((parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString());
+                    // const cardAmount = this.state.flagTwo || this.state.flagThree ? JSON.stringify(Math.round(this.state.ccCardCash)) : JSON.stringify((parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString());
                     alert("Order created " + res.data["result"]);
                     if (this.state.flagOne === true && this.state.flagThree === false) {
                         this.props.route.params.onGoBack();
                         this.props.navigation.goBack();
                     }
                     let obj;
-                    if(this.state.flagTwo === true){
-                    obj = {
-                        "amount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
-                        "info": "order creations",
-                        "newsaleId": res.data["result"],
-                    };
-                }else if(this.state.flagThree === true){
-                    obj = {
-                        "amount": this.state.ccCardCash,
-                        "info": "order creations",
-                        "newsaleId": res.data["result"],
-                    };
+                    if (this.state.flagTwo === true) {
+                        obj = {
+                            "amount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
+                            "info": "order creations",
+                            "newsaleId": res.data["result"],
+                        };
+                    } else if (this.state.flagThree === true) {
+                        obj = {
+                            "amount": this.state.ccCardCash,
+                            "info": "order creations",
+                            "newsaleId": res.data["result"],
+                        };
 
-                }
-                    console.log('params aresdasd', obj)
+                    }
+                    console.log('params aresdasd', obj);
                     axios.post(NewSaleService.payment(), obj).then((res) => {
                         // this.setState({isPayment: false});
                         const data = JSON.parse(res.data["result"]);
@@ -1520,7 +1523,7 @@ class TextilePayment extends Component {
                                     color: "#353C40", fontFamily: "medium", alignItems: 'center', justifyContent: 'center', textAlign: 'center',
                                     fontSize: Device.isTablet ? 19 : 14,
                                 }}>
-                                    ₹ {this.state.totalAmount} </Text>
+                                    ₹ {parseInt(this.state.totalAmount) + parseInt(this.state.discountAmount)} </Text>
                             </View>
                             <View style={{ flexDirection: "row", justifyContent: 'space-between', marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
                                 <Text style={{
@@ -1557,7 +1560,7 @@ class TextilePayment extends Component {
                                     color: "#353C40", fontFamily: "medium", alignItems: 'center', justifyContent: 'center', textAlign: 'center',
                                     fontSize: Device.isTablet ? 19 : 14,
                                 }}>
-                                    ₹  {this.state.promoDiscount} </Text>
+                                    ₹  {this.props.route.params.discountAmount} </Text>
                             </View>
                             <View style={{ flexDirection: "row", justifyContent: 'space-between', marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
                                 <Text style={{
