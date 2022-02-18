@@ -794,7 +794,7 @@ class GenerateInvoiceSlip extends Component {
 
                             {(global.domainName === "Retail" &&
                                 <TouchableOpacity
-                                    style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
+                                    style={[Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile, { position: 'absolute', top: Device.isTablet ? 20 : 15 }]}
                                     onPress={() => this.navigateToScanCode()} >
                                     <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {('SCAN')} </Text>
                                 </TouchableOpacity>
@@ -2477,14 +2477,6 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 22,
     },
-    navButton_tablet: {
-        position: 'absolute',
-        right: 20, top: 27,
-        backgroundColor: '#ED1C24',
-        borderRadius: 5,
-        width: 155,
-        height: 42,
-    },
     input_tablet_normal_start: {
         justifyContent: 'center',
         marginLeft: 20,
@@ -2584,14 +2576,7 @@ const styles = StyleSheet.create({
         marginTop: 8,
         alignSelf: 'center'
     },
-    navButton_tablet: {
-        position: 'absolute',
-        right: 20, top: 27,
-        backgroundColor: '#ED1C24',
-        borderRadius: 5,
-        width: 155,
-        height: 42,
-    },
+
     navButtonText_tablet: {
         fontSize: 22,
         fontFamily: 'regular',
@@ -2809,14 +2794,6 @@ const styles = StyleSheet.create({
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 22,
-    },
-    navButton_tablet: {
-        position: 'absolute',
-        right: 20, top: 27,
-        backgroundColor: '#ED1C24',
-        borderRadius: 5,
-        width: 155,
-        height: 42,
     },
     input_tablet_normal_start: {
         justifyContent: 'center',
