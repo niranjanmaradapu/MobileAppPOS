@@ -93,7 +93,7 @@ class Reports extends Component {
                                                 }
                                                 if (i === 0) {
                                                     this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                }else if(subprivilage.name === "List of promotions") {
+                                                } else if (subprivilage.name === "List of promotions") {
 
                                                 }
                                                 else {
@@ -335,7 +335,7 @@ class Reports extends Component {
             });
         } else if (this.state.flagSalesSummary === true) {
             this.setState({ filterActive: false }, () => {
-                this.setState({ flagSalesSummary: true, salesSumary: [] });
+                this.setState({ flagSalesSummary: true, salesSumary: [], salesSumaryObject: [] });
             });
         } else if (this.state.flagListBarcodes === true) {
             this.setState({ filterActive: false }, () => {

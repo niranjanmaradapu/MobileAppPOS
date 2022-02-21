@@ -197,13 +197,14 @@ export default class Inventory extends Component {
             if (res.data && res.data["isSuccess"] === "true") {
                 if (res.data["result"]) {
                     this.setState({ loading: false });
-                    for (var i = 0; i < res.data["result"].length; i++) {
-                        this.state.barcodesData.push(res.data["result"][i]);
-                        // console.log(res.data["result"][i].productTextile.empId)
-                    }
+                    this.setState({ barcodesData: res.data.result });
+                    // for (var i = 0; i < res.data["result"].length; i++) {
+                    //     this.state.barcodesData.push(res.data["result"][i]);
+                    //     // console.log(res.data["result"][i].productTextile.empId)
+                    // }
                 }
 
-                this.setState({ barcodesData: this.state.barcodesData });
+                // this.setState({ barcodesData: this.state.barcodesData });
             }
         }).catch(() => {
             this.setState({ loading: false });

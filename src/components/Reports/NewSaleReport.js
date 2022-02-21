@@ -119,7 +119,8 @@ export default class NewSaleReport extends Component {
                 this.props.modelCancelCallback();
             }
             else {
-                alert(res.data.message);
+                alert(res.data.message); 
+                this.props.modelCancelCallback();
             }
         }
         ).catch(() => {

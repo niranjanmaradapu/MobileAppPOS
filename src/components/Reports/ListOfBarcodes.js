@@ -170,6 +170,7 @@ export class ListOfBarcodes extends Component {
             }
             else {
                 alert(res.data.message);
+                this.props.modelCancelCallback();
             }
         }
         ).catch(() => {
@@ -217,16 +218,17 @@ export class ListOfBarcodes extends Component {
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE MRP: {"\n"} {item.productTextile.itemMrp}</Text>
                                     <View style={flats.buttons}>
 
-                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteBarcode(item, index)}>
+                                        {/* <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteBarcode(item, index)}>
                                             <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+                                        </TouchableOpacity> */}
 
-                                        </TouchableOpacity>
-
+                                    </View>
+                                </View>
+                                    <View style={{marginRight: Device.isTablet ? 30 : 20}}>
                                         <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewBarcode(item, index)}>
                                             <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/eye.png')} />
                                         </TouchableOpacity>
                                     </View>
-                                </View>
                             </View>
                         </View>
                     )}

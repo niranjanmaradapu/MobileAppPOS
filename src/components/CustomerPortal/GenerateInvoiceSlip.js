@@ -411,7 +411,7 @@ class GenerateInvoiceSlip extends Component {
         if (this.state.returnCash >= 1) {
             this.hideCashModal();
         } else {
-            toast.error("Please collect suffient amount");
+            toast.error("Please collect sufficient amount");
         }
 
 

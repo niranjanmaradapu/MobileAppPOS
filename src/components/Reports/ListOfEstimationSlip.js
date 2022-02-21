@@ -176,6 +176,7 @@ export class ListOfEstimationSlip extends Component {
             }
             else {
                 alert(res.data.message);
+                this.props.modelCancelCallback();
             }
         }
         ).catch(() => {

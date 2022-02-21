@@ -129,18 +129,25 @@ export class GoodsReturn extends Component {
         console.log('params are' + JSON.stringify(obj));
         axios.post(ReportsService.returnSlips(), obj).then((res) => {
             console.log(res.data);
+            console.log(res.data.result.length);
             if (res.data && res.data["isSuccess"] === "true") {
-                this.props.childParamgoodsReturn(res.data.result);
-                this.props.filterActiveCallback();
-                this.props.modelCancelCallback();
+                if (res.data.result.length !== 0) {
+                    this.props.childParamgoodsReturn(res.data.result);
+                    this.props.filterActiveCallback();
+                    this.props.modelCancelCallback();
+                } else {
+                    alert("Results Not Found");
+                    this.props.modelCancelCallback();
+                }
             }
             else {
                 alert(res.data.message);
+                this.props.modelCancelCallback();
             }
         }
-        ).catch(() => {
+        ).catch((err) => {
             this.setState({ loading: false });
-            alert('No Results Found');
+            alert("There is an error getting data");
             this.props.modelCancelCallback();
         });
     }

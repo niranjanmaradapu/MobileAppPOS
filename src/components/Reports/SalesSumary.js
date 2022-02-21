@@ -134,19 +134,25 @@ export class SalesSumary extends Component {
         axios.post(ReportsService.saleReports(), obj).then((res) => {
             console.log(res.data);
             if (res.data && res.data["isSuccess"] === "true") {
-                this.props.childParamSalesSummary(res.data.result);
-                this.props.filterActiveCallback();
-                this.props.childParamSalesSummaryObject(1, 2, 3);
-                this.props.modelCancelCallback();
+                if (res.data.result.lenght !== 0) {
+                    this.props.childParamSalesSummary(res.data.result);
+                    this.props.filterActiveCallback();
+                    this.props.childParamSalesSummaryObject();
+                    this.props.modelCancelCallback();
+                } else {
+                    alert("data not available");
+                }
             }
             else {
                 alert(res.data.message);
+                this.props.modelCancelCallback();
             }
         }
         ).catch(() => {
             this.setState({ loading: false });
             alert('No Results Found');
             this.props.modelCancelCallback();
+
         });
     }
 

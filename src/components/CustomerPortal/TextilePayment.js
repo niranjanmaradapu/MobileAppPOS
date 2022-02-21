@@ -453,10 +453,10 @@ class TextilePayment extends Component {
 
     pay = () => {
         if (this.state.flagOne === true && this.state.flagThree === false && this.state.recievedAmount === "") {
-            alert('Please collect suffient amount and then only pay');
+            alert('Please collect sufficient amount and then only pay');
         }
         else if (this.state.flagOne === true && this.state.flagThree === false && parseFloat(this.state.recievedAmount) < (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10))) {
-            alert('Please collect suffient amount and then only pay');
+            alert('Please collect sufficient amount and then only pay');
         }
         else if (this.state.flagThree === true && this.state.verifiedCash === "") {
             alert('Please collect some cash amount for ccpay');
