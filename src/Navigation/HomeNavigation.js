@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import SideNavigation from './SideNavigation';
 import Login from '../components/Login/Login';
 import SelectDomain from '../components/Login/SelectDomain';
+import LoginAfterLanguageSelect from '../components/Welcome/LoginAfterLanguageSelect';
 import SelectStore from '../components/Login/SelectStore';
 import ForgotPassword from '../components/Login/ForgotPassword';
 import RegisterClient from '../components/URM/RegisterClient';
@@ -17,6 +18,7 @@ export default class HomeNavigation extends React.Component {
             <Stack.Navigator>
                 <Stack.Screen name="SideNavigation" options={{ headerShown: false }} component={SideNavigation} />
                 <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
+                <Stack.Screen name="LoginAfterLanguageSelect" options={{ headerShown: false }} component={LoginAfterLanguageSelect} />
                 <Stack.Screen name="SelectDomain" options={{ headerShown: false }} component={SelectDomain} />
                 <Stack.Screen name="SelectStore" options={{ headerShown: false }} component={SelectStore} />
                 <Stack.Screen name="ForgotPassword" options={{ headerShown: false }} component={ForgotPassword} />

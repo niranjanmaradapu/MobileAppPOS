@@ -189,12 +189,8 @@ export function DrawerContent(props) {
                             label="Profile Settings"
                             onPress={() => { props.navigation.navigate('Settings') }}
                         />
-                    </Drawer.Section>
 
-                </View>
-            </DrawerContentScrollView>
-            <Drawer.Section style={styles.bottomDrawerSection}>
-                <DrawerItem
+<DrawerItem
                     icon={({ color, size }) => (
                         <Icon
                             name="exit-to-app"
@@ -205,7 +201,24 @@ export function DrawerContent(props) {
                     label="Domain Switch"
                     onPress={() => { props.navigation.navigate('SelectDomain') }}
                 />
-            </Drawer.Section>
+
+<DrawerItem
+                        icon={({ color, size }) => (
+                            <Image
+                                style={styles.sidemenuimage}
+                                source={require('../components/assets/images/sidesettings.png')}
+                            ></Image>
+                        )}
+                    label="Language Switch"
+                    onPress={() => { props.navigation.navigate('LoginAfterLanguageSelect') }}
+                />
+                    </Drawer.Section>
+
+                </View>
+            </DrawerContentScrollView>
+            {/* <Drawer.Section style={styles.bottomDrawerSection}>
+               
+            </Drawer.Section> */}
 
             <Drawer.Section style={styles.bottomDrawerSection}>
                 <DrawerItem
