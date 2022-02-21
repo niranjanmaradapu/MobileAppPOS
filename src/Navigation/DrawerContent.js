@@ -1,24 +1,15 @@
-import React from 'react';
-import { View, StyleSheet, Image } from 'react-native';
-import {
-    useTheme,
-    Avatar,
-    Title,
-    Caption,
-    Paragraph,
-    Drawer,
-    Text,
-    TouchableRipple,
-    Switch
-} from 'react-native-paper';
 import {
     DrawerContentScrollView,
     DrawerItem
 } from '@react-navigation/drawer';
+import React from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
+import {
+    Caption, Drawer, Title
+} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import UrmService from '../components/services/UrmService';
 
 
 
@@ -29,10 +20,17 @@ export function DrawerContent(props) {
         <View style={{ flex: 1 }}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
-                    <Image
-                        style={styles.logoimage}
-                        source={require('../components/assets/images/sidemenulogo.png')}
-                    ></Image>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+                        <Image
+                            style={styles.logoimage}
+                            source={require('../components/assets/images/sidemenulogo.png')}
+                        ></Image>
+                        <TouchableOpacity style={styles.languageButton} onPress={() => { props.navigation.navigate('LoginAfterLanguageSelect'); }}>
+
+                            <Text style={styles.languageText}>{I18n.locale.toUpperCase()}</Text>
+
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.userInfoSection}>
                         <View style={{ flexDirection: 'row', marginTop: 10, backgroundColor: '#ED1C24', marginLeft: -20, }}>
                             <Image
@@ -43,8 +41,8 @@ export function DrawerContent(props) {
                                 <Title style={styles.title}>{global.username}</Title>
                                 <Caption style={styles.caption}>{global.userrole}</Caption>
                                 <Caption style={styles.middelcaption}>{global.domainName}</Caption>
-                            
-                            </View>           
+
+                            </View>
                         </View>
 
                         {/* <View style={styles.row}>
@@ -63,18 +61,18 @@ export function DrawerContent(props) {
                     <Drawer.Section style={styles.drawerSection}>
 
                         {global.previlage1 === "Dashboard" && (
-                        <DrawerItem
-                            icon={({ color, size }) => (
-                                <Icon
-                                    name="home"
-                                    color={color}
-                                    size={size}
-                                />
-                            )}
-                            label="Home"
-                            onPress={() => { props.navigation.navigate('Home') }}
-                        />
-                        )} 
+                            <DrawerItem
+                                icon={({ color, size }) => (
+                                    <Icon
+                                        name="home"
+                                        color={color}
+                                        size={size}
+                                    />
+                                )}
+                                label="Home"
+                                onPress={() => { props.navigation.navigate('Home'); }}
+                            />
+                        )}
 
                         {global.previlage2 === "Billing Portal" && global.domainName == "Retail" && (
                             <DrawerItem
@@ -85,7 +83,7 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="Billing Portal"
-                                onPress={() => { props.navigation.navigate('CustomerNavigation') }}
+                                onPress={() => { props.navigation.navigate('CustomerNavigation'); }}
                             />
                         )}
                         {global.previlage2 === "Billing Portal" && global.domainName == "Textile" && (
@@ -97,7 +95,7 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="Billing Portal"
-                                onPress={() => { props.navigation.navigate('CustomerNavigation') }}
+                                onPress={() => { props.navigation.navigate('CustomerNavigation'); }}
                             />
                         )}
 
@@ -111,7 +109,7 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="Inventory Portal"
-                                onPress={() => { props.navigation.navigate('InventoryRetailNavigation') }}
+                                onPress={() => { props.navigation.navigate('InventoryRetailNavigation'); }}
                             />
                         )}
 
@@ -124,11 +122,11 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="Inventory Portal"
-                                onPress={() => { props.navigation.navigate('InventoryNavigation') }}
+                                onPress={() => { props.navigation.navigate('InventoryNavigation'); }}
                             />
                         )}
 
-           {/* //Hold For Now // */}
+                        {/* //Hold For Now // */}
                         {/* {global.previlage4 === "Promotions & Loyalty" && (
                             <DrawerItem
                                 icon={({ color, size }) => (
@@ -150,7 +148,7 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="Accounting Portal"
-                                onPress={() => { props.navigation.navigate('AccountingNaviagtion') }}
+                                onPress={() => { props.navigation.navigate('AccountingNaviagtion'); }}
                             />
                         )}
 
@@ -163,7 +161,7 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="Reports"
-                                onPress={() => { props.navigation.navigate('ReportsNavigation') }}
+                                onPress={() => { props.navigation.navigate('ReportsNavigation'); }}
                             />
                         )}
 
@@ -176,7 +174,7 @@ export function DrawerContent(props) {
                                     ></Image>
                                 )}
                                 label="URM Portal"
-                                onPress={() => { props.navigation.navigate('UrmNavigation') }}
+                                onPress={() => { props.navigation.navigate('UrmNavigation'); }}
                             />
                         )}
                         <DrawerItem
@@ -187,37 +185,25 @@ export function DrawerContent(props) {
                                 ></Image>
                             )}
                             label="Profile Settings"
-                            onPress={() => { props.navigation.navigate('Settings') }}
+                            onPress={() => { props.navigation.navigate('Settings'); }}
                         />
 
-<DrawerItem
-                    icon={({ color, size }) => (
-                        <Icon
-                            name="exit-to-app"
-                            color={color}
-                            size={size}
-                        />
-                    )}
-                    label="Domain Switch"
-                    onPress={() => { props.navigation.navigate('SelectDomain') }}
-                />
-
-<DrawerItem
-                        icon={({ color, size }) => (
-                            <Image
-                                style={styles.sidemenuimage}
-                                source={require('../components/assets/images/sidesettings.png')}
-                            ></Image>
-                        )}
-                    label="Language Switch"
-                    onPress={() => { props.navigation.navigate('LoginAfterLanguageSelect') }}
-                />
+                        {/* <DrawerItem
+                            icon={({ color, size }) => (
+                                <Image
+                                    style={styles.sidemenuimage}
+                                    source={require('../components/assets/images/sidesettings.png')}
+                                ></Image>
+                            )}
+                            label="Language Switch"
+                            onPress={() => { props.navigation.navigate('LoginAfterLanguageSelect'); }}
+                        /> */}
                     </Drawer.Section>
 
                 </View>
             </DrawerContentScrollView>
             {/* <Drawer.Section style={styles.bottomDrawerSection}>
-               
+        
             </Drawer.Section> */}
 
             <Drawer.Section style={styles.bottomDrawerSection}>
@@ -229,8 +215,19 @@ export function DrawerContent(props) {
                             size={size}
                         />
                     )}
+                    label="Domain Switch"
+                    onPress={() => { props.navigation.navigate('SelectDomain'); }}
+                />
+                <DrawerItem
+                    icon={({ color, size }) => (
+                        <Icon
+                            name="exit-to-app"
+                            color={color}
+                            size={size}
+                        />
+                    )}
                     label="Sign Out"
-                    onPress={() => { props.navigation.navigate('Login') }}
+                    onPress={() => { props.navigation.navigate('Login'); }}
                 />
             </Drawer.Section>
         </View>
@@ -305,4 +302,22 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 16,
     },
+    languageButton: {
+        // width: Device.isTablet ? 90 : 70,
+        paddingLeft: 10,
+        paddingRight: 10,
+        height: Device.isTablet ? 40 : 30,
+        backgroundColor: '#ED1C24',
+        borderRadius: 10,
+        marginTop: 10,
+        borderColor: '#000000',
+        borderWidth: Device.isTablet ? 2 : 1,
+    },
+    languageText: {
+        color: '#ffffff',
+        fontSize: Device.isTablet ? 21 : 17,
+        fontFamily: 'medium',
+        alignSelf: 'center',
+        marginTop: 3,
+    }
 });
