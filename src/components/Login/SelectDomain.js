@@ -94,7 +94,7 @@ export default class SelectDomain extends React.Component {
                     <Text style={{
                         color: "#353C40", fontSize: 30, fontFamily: "bold", marginLeft: 20, marginTop: 100, flexDirection: 'column',
                         justifyContent: 'center',
-                    }}> {('Select Domain Type')} </Text>
+                    }}> {I18n.t('Select Domain Type')} </Text>
                     <FlatList
                         style={{ width: deviceWidth, marginTop: 10, }}
                         //scrollEnabled={false}
@@ -137,7 +137,7 @@ export default class SelectDomain extends React.Component {
                 <TouchableOpacity
                     style={Device.isTablet ? styles.continueButton_tablet : styles.continueButton_mobiile}
                     onPress={() => this.letsGoButtonAction()} >
-                    <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {('CONTINUE')} </Text>
+                    <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {I18n.t('CONTINUE')} </Text>
                 </TouchableOpacity>
             </View>
 

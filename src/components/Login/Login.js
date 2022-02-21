@@ -481,17 +481,11 @@ export default class Login extends Component {
                                     ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
 
                                 <View>
-                                    <View style={{ flexDirection: "column" }}>
+                                    <View style={{ flexDirection: Device.isTablet ? "row" : "column", justifyContent: Device.isTablet ? "space-around" : "center", alignItems: Device.isTablet ? "center" : "center" }}>
 
                                         <View style={{
-                                            position: 'absolute',
-                                            right: 20,
                                             top: 35, alignItems: 'center', flexDirection: 'row'
                                         }}>
-
-
-
-
                                             <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Forgot password')} </Text>
                                             <TouchableOpacity
                                                 onPress={() => this.forgotPassword()} >
@@ -500,8 +494,6 @@ export default class Login extends Component {
                                         </View>
 
                                         <View style={{
-                                            position: 'absolute',
-                                            left: 20,
                                             top: 35, alignItems: 'center', flexDirection: 'row'
                                         }}>
                                             <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {'Register?'} </Text>
