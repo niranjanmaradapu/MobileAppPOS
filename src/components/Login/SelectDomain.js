@@ -7,7 +7,7 @@ import I18n from 'react-native-i18n';
 import LoginService from '../services/LoginService';
 var deviceWidth = Dimensions.get('window').width;
 I18n.fallbacks = true;
-I18n.defaultLocale = 'en';
+I18n.defaultLocale = 'english';
 const data = [{ key: "Textile", image: require("../assets/images/texttile.png") }, { key: "Retail", image: require("../assets/images/retaildomain.png") }, { key: "Admin", image: require("../assets/images/admin.png") }];
 
 export default class SelectDomain extends React.Component {

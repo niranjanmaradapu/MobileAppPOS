@@ -2,7 +2,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import I18n, { getLanguages } from 'react-native-i18n';
+// Enable fallbacks if you want `en-US`
+// and `en-GB` to fallback to `en`
+I18n.fallbacks = true;
+I18n.defaultLocale = 'english';
 
+// Available languages
+I18n.translations = {
+    'english': require('../assets/translations/en'),
+    'telugu': require('../assets/translations/te'),
+    'hindi': require('../assets/translations/hi'),
+};
 
 
 export default class SplashScreen extends React.Component {
@@ -13,6 +24,10 @@ export default class SplashScreen extends React.Component {
     }
 
     componentDidMount() {
+        if ( I18n.locale == "english" || I18n.locale == "en") {
+            I18n.locale = "english"
+            this.setState({ selectedItem: 0 })
+        }
         var phonenumber = "";
         AsyncStorage.getItem("phone_number").then((value) => {
             phonenumber = value;
