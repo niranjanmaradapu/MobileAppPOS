@@ -164,9 +164,13 @@ export class ListOfBarcodes extends Component {
         axios.post(ReportsService.getListOfBarcodes(), obj).then((res) => {
             console.log(res.data);
             if (res.data && res.data["isSuccess"] === "true") {
-                this.props.childParamlistBarcodes(res.data.result);
-                this.props.filterActiveCallback();
-                this.props.modelCancelCallback();
+                if (res.data.result.length !== 0) {
+                    this.props.childParamlistBarcodes(res.data.result);
+                    this.props.filterActiveCallback();
+                    this.props.modelCancelCallback();
+                } else {
+                    alert("records not found");
+                }
             }
             else {
                 alert(res.data.message);
@@ -224,11 +228,11 @@ export class ListOfBarcodes extends Component {
 
                                     </View>
                                 </View>
-                                    <View style={{marginRight: Device.isTablet ? 30 : 20}}>
-                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewBarcode(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/eye.png')} />
-                                        </TouchableOpacity>
-                                    </View>
+                                <View style={{ marginRight: Device.isTablet ? 30 : 20 }}>
+                                    <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewBarcode(item, index)}>
+                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/eye.png')} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     )}

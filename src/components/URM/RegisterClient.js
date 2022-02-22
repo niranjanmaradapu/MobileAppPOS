@@ -50,7 +50,7 @@ class RegisterClient extends Component {
     handleEmail = (text) => {
         this.setState({ userEmail: text });
     };
-    
+
     handleAddress = (text) => {
         this.setState({ address: text });
     };
@@ -67,6 +67,8 @@ class RegisterClient extends Component {
         }
         else if (emailReg.test(this.state.userEmail) === false) {
             alert('You must enter a valid email');
+        } else if (this.state.organization === "") {
+            alert('Organization cannot be empty');
         }
         else {
             this.setState({ loading: true });
@@ -119,7 +121,7 @@ class RegisterClient extends Component {
                             this.setState({ loading: false });
                             this.props.navigation.goBack();
                         }
-                        else{
+                        else {
                             this.setState({ loading: false });
                             alert(res.data.message);
                         }
@@ -190,7 +192,7 @@ class RegisterClient extends Component {
                         value={this.state.userEmail}
                         onChangeText={this.handleEmail}
                     />
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Organisation</Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Organisation <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
