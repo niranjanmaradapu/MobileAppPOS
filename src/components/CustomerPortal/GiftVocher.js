@@ -36,7 +36,7 @@ class GiftVocher extends Component {
     getGiftVocherList() {
         axios.get(CustomerService.getGiftVocher()).then(res => {
             if (res) {
-                // console.log(res.data);
+                console.log(res.data);
                 if (res.data.result != "Record not found") {
                     this.setState({ giftVochersList: res.data.result, isGiftVocher: true });
                 }
@@ -155,7 +155,7 @@ class GiftVocher extends Component {
     render() {
         return (
             <View>
-                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Generate Gift Vocher</Text>
+                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Generate Gift Voucher</Text>
                 <TextInput
                     style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder='GV NUMBER *'
@@ -255,10 +255,10 @@ class GiftVocher extends Component {
                         style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
                         onPress={() => this.addGiftVocher()}
                     >
-                        <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}>Add Gift Vocher</Text>
+                        <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}>Add Gift Voucher</Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>List of Gift Vochers</Text>
+                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>List of Gift Vouchers</Text>
                 <FlatList
                     style={{ marginTop: 20, marginBottom: 20 }}
                     data={this.state.giftVochersList}
@@ -269,6 +269,12 @@ class GiftVocher extends Component {
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>S.NO: {index + 1}</Text>
                                     <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile} selectable={true}>GV NUMBER: {item.gvNumber}</Text>
+                                    {item.isActivated &&
+                                        <Text style={[Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile, {backgroundColor: '#009900', color: '#ffffff', padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: Device.isTablet ? 10 : 5, fontFamily: 'medium'}]}>Active </Text>
+                                    }
+                                    {!item.isActivated &&
+                                        <Text style={[Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile, { backgroundColor: '#ee0000', color: '#ffffff', padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: 5, fontFamily: 'medium' }]}>In-Active</Text>
+                                    }
                                 </View>
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>FROM DATE: {item.fromDate}</Text>

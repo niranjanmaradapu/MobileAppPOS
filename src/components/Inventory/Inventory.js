@@ -394,7 +394,7 @@ export default class Inventory extends Component {
         axios.post(InventoryService.getTextileBarcodes(), list).then(res => {
             console.log(res.data.result);
             let barcodes = [];
-            if (res.data && res.data.isSuccess === "true") {
+            if (res.data && res.data.isSuccess === "true" && res.data.result.length > 0) {
                 this.setState({ barcodesData: [] });
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.barcodesData.push(res.data["result"][i]);

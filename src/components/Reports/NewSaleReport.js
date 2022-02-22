@@ -101,34 +101,45 @@ export default class NewSaleReport extends Component {
             this.state.billPosition = null;
         }
 
-        const obj = {
-            "dateFrom": this.state.startDate,
-            "dateTo": this.state.endDate,
-            invoiceNumber: this.state.invoiceNumber,
-            custMobileNumber: this.state.mobile,
-            billStatus: this.state.billPosition,
-            storeId: this.state.storeId,
-            domainId: this.state.domainId
-        };
-        console.log('params are' + JSON.stringify(obj));
-        axios.post(ReportsService.newSaleReports(), obj).then((res) => {
-            console.log(res.data);
-            if (res.data && res.data["isSuccess"] === "true") {
-                this.props.childParamNewsales(res.data.result.newSaleVo);
-                this.props.filterActiveCallback();
-                this.props.modelCancelCallback();
+        if (this.state.mobile !== null && this.state.mobile < 10) {
+            alert("please enter a valid 10 digit mobile number");
+        } else {
+            const obj = {
+                "dateFrom": this.state.startDate,
+                "dateTo": this.state.endDate,
+                invoiceNumber: this.state.invoiceNumber,
+                custMobileNumber: this.state.mobile,
+                billStatus: this.state.billPosition,
+                storeId: this.state.storeId,
+                domainId: this.state.domainId
+            };
+            console.log('params are' + JSON.stringify(obj));
+            axios.post(ReportsService.newSaleReports(), obj).then((res) => {
+                console.log(res.data);
+                if (res.data && res.data["isSuccess"] === "true") {
+                    if (res.data.result.length !== 0) {
+                        this.props.childParamNewsales(res.data.result.newSaleVo);
+                        this.props.filterActiveCallback();
+                        this.props.modelCancelCallback();
+                    } else {
+                        alert("records not found");
+                    }
+                }
+                else {
+                    alert(res.data.message);
+                    this.props.modelCancelCallback();
+                }
             }
-            else {
-                alert(res.data.message); 
+            ).catch(() => {
+                this.setState({ loading: false });
+                alert('No Results Found');
                 this.props.modelCancelCallback();
-            }
+            });
         }
-        ).catch(() => {
-            this.setState({ loading: false });
-            alert('No Results Found');
-            this.props.modelCancelCallback();
-        });
+
+
     }
+
 
     handledeleteNewSale() {
         this.setState({ flagDeleteNewSale: true, modalVisible: true, flagViewDetail: false });
@@ -426,6 +437,8 @@ export default class NewSaleReport extends Component {
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
+                                        keyboardType='numeric'
+                                        maxLength={10}
                                         value={this.state.mobile}
                                         onChangeText={this.handleMobile}
                                     />

@@ -168,10 +168,14 @@ export class ListOfEstimationSlip extends Component {
         axios.post(ReportsService.estimationSlips(), obj).then((res) => {
             console.log(res.data);
             if (res.data && res.data["isSuccess"] === "true") {
-                this.setState({ filterActive: true });
-                this.props.childParams(res.data.result.deliverySlipVo);
-                this.props.modelCancelCallback();
-                this.props.filterActiveCallback();
+                if (res.data.result.length !== 0) {
+                    this.setState({ filterActive: true });
+                    this.props.childParams(res.data.result.deliverySlipVo);
+                    this.props.modelCancelCallback();
+                    this.props.filterActiveCallback();
+                } else {
+                    alert("records not found");
+                }
                 console.log(this.props.estimationSlip);
             }
             else {

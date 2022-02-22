@@ -140,7 +140,7 @@ export class SalesSumary extends Component {
                     this.props.childParamSalesSummaryObject();
                     this.props.modelCancelCallback();
                 } else {
-                    alert("data not available");
+                    alert("records not found");
                 }
             }
             else {
