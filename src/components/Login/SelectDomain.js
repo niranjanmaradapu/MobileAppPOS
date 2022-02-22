@@ -137,7 +137,7 @@ export default class SelectDomain extends React.Component {
                 <TouchableOpacity
                     style={Device.isTablet ? styles.continueButton_tablet : styles.continueButton_mobiile}
                     onPress={() => this.letsGoButtonAction()} >
-                    <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {I18n.t('CONTINUE')} </Text>
+                    <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {I18n.t('continue').toUpperCase()} </Text>
                 </TouchableOpacity>
             </View>
 

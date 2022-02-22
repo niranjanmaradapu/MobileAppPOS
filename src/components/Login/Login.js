@@ -486,7 +486,7 @@ export default class Login extends Component {
                                         <View style={{
                                             top: 35, alignItems: 'center', flexDirection: 'row'
                                         }}>
-                                            <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Forgot password')} </Text>
+                                            <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Forgot password')}? </Text>
                                             <TouchableOpacity
                                                 onPress={() => this.forgotPassword()} >
                                                 <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {I18n.t('Reset')} </Text>
@@ -496,10 +496,10 @@ export default class Login extends Component {
                                         <View style={{
                                             top: 35, alignItems: 'center', flexDirection: 'row'
                                         }}>
-                                            <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {'Register?'} </Text>
+                                            <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Register')}? </Text>
                                             <TouchableOpacity
                                                 onPress={() => this.registerClient()} >
-                                                <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {'Register'} </Text>
+                                                <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {I18n.t('Register')} </Text>
                                             </TouchableOpacity>
                                         </View>
 

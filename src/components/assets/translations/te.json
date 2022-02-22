@@ -8,7 +8,7 @@
     "Password": "పాస్వర్డ్",
     "Select Store": "స్టోర్ ఎంచుకోండి",
     "Remember Me": "నన్ను గుర్తు పెట్టుకో",
-    "Forgot password": "పాస్‌వర్డ్ మర్చిపోయారా?",
+    "Forgot password": "పాస్‌వర్డ్ మర్చిపోయారా",
     "Reset": "రీసెట్ చేయండి",
     "SIGN IN": "సైన్ ఇన్",
     "SAVE": "సేవ్ చేయండి",
@@ -28,7 +28,8 @@
     "T-SHIRTS": "టీ షర్టులు",
     "Sales % by category": "కేటగిరీ వారీగా విక్రయాలు %",
     "Select Domain Type": "డొమైన్ రకాన్ని ఎంచుకోండి",
-    "Select the Store": "టోర్‌ని ఎంచుకోండి",
+    "Select the Store": "స్టోర్‌ని ఎంచుకోండి",
     "Stores": "దుకాణాలు",
-    "Register": "నమోదు చేసుకోండి"
+    "Register": "నమోదు చేసుకోండి",
+    "continue": "కొనసాగుతుంది"
 }

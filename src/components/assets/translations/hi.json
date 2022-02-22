@@ -8,7 +8,7 @@
     "Password": "पासवर्ड",
     "Select Store": "स्टोर चुनें",
     "Remember Me": "मुझे याद रखें",
-    "Forgot password": "पासवर्ड भूल गए?",
+    "Forgot password": "पासवर्ड भूल गए",
     "Reset": "रीसेट",
     "SIGN IN": "साइन इन करें",
     "SAVE": "सहेजें",
@@ -28,7 +28,8 @@
     "T-SHIRTS": "टी शर्ट",
     "Sales % by category": "बिक्री% श्रेणी के अनुसार",
     "Select Domain Type": "डोमेन प्रकार चुनें",
-    "Select the Store": "स्टोर का चयन करें",
+    "Select the Store": "स्स्टोर का चयन करें",
     "Stores": "स्टोर",
-    "Register": "रजिस्टर करें"
+    "Register": "रजिस्टर करें",
+    "continue": "जारी रखें"
 }

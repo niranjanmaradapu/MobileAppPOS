@@ -168,10 +168,10 @@ export default class SelectStore extends React.Component {
                                 fontFamily: 'bold',
                                 fontSize: 18,
                                 color: '#353C40'
-                            }}> {'Stores'} </Text>
+                            }}> {I18n.t('Stores')} </Text>
                         </View>
                     )}
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {('Select the Store')} </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t('Select the Store')} </Text>
                     <FlatList
                         style={{ width: deviceWidth, marginTop: 50, marginBottom: 100, }}
                         //scrollEnabled={false}
@@ -202,7 +202,7 @@ export default class SelectStore extends React.Component {
                 <TouchableOpacity
                     style={Device.isTablet ? styles.continueButton_tablet : styles.continueButton_mobiile}
                     onPress={() => this.letsGoButtonAction()} >
-                    <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {('CONTINUE')} </Text>
+                    <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {I18n.t('continue').toUpperCase()} </Text>
                 </TouchableOpacity>
             </View>
 
