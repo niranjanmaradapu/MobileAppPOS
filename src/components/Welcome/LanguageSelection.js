@@ -5,16 +5,16 @@ import I18n, { getLanguages } from 'react-native-i18n';
 // Enable fallbacks if you want `en-US`
 // and `en-GB` to fallback to `en`
 I18n.fallbacks = true;
-I18n.defaultLocale = 'en';
+I18n.defaultLocale = 'english';
 const data = [{ key: "English" }, { key: "हिंदी" }, { key: "తెలుగు" }];
 import Device from 'react-native-device-detection';
 
 
 // Available languages
 I18n.translations = {
-    'en': require('../assets/translations/en'),
-    'te': require('../assets/translations/te'),
-    'hi': require('../assets/translations/hi'),
+    'english': require('../assets/translations/en'),
+    'telugu': require('../assets/translations/te'),
+    'hindi': require('../assets/translations/hi'),
 };
 
 export default class LanguageSelection extends React.Component {
@@ -31,6 +31,17 @@ export default class LanguageSelection extends React.Component {
         getLanguages().then(languages => {
             this.setState({ languages });
         });
+        console.log('vinod selected language isssss---->', I18n.locale)
+        if ( I18n.locale == "english" || I18n.locale == "en") {
+            I18n.locale = "english"
+            this.setState({ selectedItem: 0 })
+        }
+        else if (I18n.locale == "hindi") {
+            this.setState({ selectedItem: 1 })
+        }
+        else {
+            this.setState({ selectedItem: 2 })
+        }
     }
 
     letsGoButtonAction() {
@@ -45,13 +56,13 @@ export default class LanguageSelection extends React.Component {
 
     setLanguage = (value) => {
         if (value == "English") {
-            I18n.locale = 'en';
+            I18n.locale = 'english';
         }
-        else if (value == "Telugu") {
-            I18n.locale = 'te';
+        else if (value == "Hindi") {
+            I18n.locale = 'hindi';
         }
         else {
-            I18n.locale = 'hi';
+            I18n.locale = 'telugu';
         }
         this.setState({ language: value });
     }
@@ -60,15 +71,15 @@ export default class LanguageSelection extends React.Component {
         console.log('-------ITEM TAPPED')
         this.setState({ selectedItem: index })
         if (index == 0) {
-            I18n.locale = 'en';
+            I18n.locale = 'english';
             this.setState({ language: "English" });
         }
         else if (index == 1) {
-            I18n.locale = 'hi';
+            I18n.locale = 'hindi';
             this.setState({ language: "Hindi" });
         }
         else {
-            I18n.locale = 'te';
+            I18n.locale = 'telugu';
             this.setState({ language: "Telugu" });
         }
 

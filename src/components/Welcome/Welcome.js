@@ -1,17 +1,17 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
+import Device from 'react-native-device-detection';
 import I18n, { getLanguages } from 'react-native-i18n';
 I18n.fallbacks = true;
-I18n.defaultLocale = 'en';
-import Device from 'react-native-device-detection';
+I18n.defaultLocale = 'english';
 
 
 // Available languages
 I18n.translations = {
-    'en': require('../assets/translations/en'),
-    'te': require('../assets/translations/te'),
-    'hi': require('../assets/translations/hi'),
+    'english': require('../assets/translations/en'),
+    'telugu': require('../assets/translations/te'),
+    'hindi': require('../assets/translations/hi'),
 };
 
 export default class Welcome extends React.Component {

@@ -7,7 +7,7 @@ import I18n from 'react-native-i18n';
 import LoginService from '../services/LoginService';
 var deviceWidth = Dimensions.get('window').width;
 I18n.fallbacks = true;
-I18n.defaultLocale = 'en';
+I18n.defaultLocale = 'english';
 const data = [{ key: "Vijayawada" }, { key: "Kakinada" }, { key: "Anakapalli" }];
 
 export default class SelectStore extends React.Component {
