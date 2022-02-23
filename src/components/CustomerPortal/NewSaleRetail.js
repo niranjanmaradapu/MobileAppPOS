@@ -129,7 +129,7 @@ class NewSaleRetail extends Component {
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error getting domainDataId');
-      alert('There is error getting domainDataId');
+     // alert('There is error getting domainDataId');
     });
 
     AsyncStorage.getItem("storeId").then((value) => {
@@ -140,7 +140,7 @@ class NewSaleRetail extends Component {
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error getting storeId');
-      alert('There is error getting storeId');
+     // alert('There is error getting storeId');
     });
     this.barcodeDBStore();
     this.getItems();
@@ -225,14 +225,14 @@ class NewSaleRetail extends Component {
         }).catch(() => {
           this.setState({ loading: false });
           console.log('There is error saving domainDataId');
-          alert('There is error saving domainDataId');
+         // alert('There is error saving domainDataId');
         });
 
       }
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error getting role Name');
-      alert('There is error getting Role Name');
+     // alert('There is error getting Role Name');
     });
 
 
@@ -958,7 +958,7 @@ class NewSaleRetail extends Component {
           }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error saving token');
-            alert('There is error saving token');
+            //alert('There is error saving token');
           });
           console.log(this.state.uom);
         });
@@ -1605,7 +1605,7 @@ class NewSaleRetail extends Component {
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error getting token');
-      alert('There is error getting token');
+     // alert('There is error getting token');
     });
     const state = this.state;
 

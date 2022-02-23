@@ -124,14 +124,14 @@ class NewSaleTextile extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error saving domainDataId');
-                    alert('There is error saving domainDataId');
+                   // alert('There is error saving domainDataId');
                 });
 
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
 
     }

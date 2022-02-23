@@ -186,7 +186,7 @@ class GenerateInvoiceSlip extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
         this.getDiscountReasons();
         this.getHsnDetails();
@@ -369,7 +369,7 @@ class GenerateInvoiceSlip extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error saving token');
-                    alert('There is error saving token');
+                   // alert('There is error saving token');
                 });
 
 

@@ -87,7 +87,7 @@ class ProductEdit extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-            alert('There is error getting domainDataId');
+          //  alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -97,7 +97,7 @@ class ProductEdit extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
 
         this.setState({
@@ -249,7 +249,7 @@ class ProductEdit extends Component {
                     }).catch(() => {
                         this.setState({ loading: false });
                         console.log('There is error saving token');
-                        alert('There is error saving token');
+                       // alert('There is error saving token');
                     });
                     console.log(this.state.uom);
                     // if(this.state.uom.length === 1){

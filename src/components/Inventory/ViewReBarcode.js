@@ -71,7 +71,7 @@ class ViewReBarcode extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-            alert('There is error getting domainDataId');
+           // alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -83,7 +83,7 @@ class ViewReBarcode extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
@@ -92,7 +92,7 @@ class ViewReBarcode extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+          //  alert('There is error getting storeId');
         });
         //('dasdsadsadsad' + this.props.route.params.item)
         this.setState({
@@ -102,14 +102,14 @@ class ViewReBarcode extends Component {
             catogirieId: this.props.route.params.item.category,
             colour: this.props.route.params.item.colour,
             batchNo: this.props.route.params.item.batchNo,
-            costPrice: String(this.props.route.params.item.productTextile.costPrice),
-            listPrice: String(this.props.route.params.item.productTextile.itemMrp),
-            uomName: this.props.route.params.item.productTextile.uom,
-            hsnId: this.props.route.params.item.productTextile.hsnMasterId,
-            empId: this.props.route.params.item.productTextile.empId,
-            storeId: this.props.route.params.item.productTextile.storeId,
-            quantity: String(this.props.route.params.item.productTextile.qty),
-            productTextileId: this.props.route.params.item.productTextile.productTextileId,
+            costPrice: String(this.props.route.params.item.costPrice),
+            listPrice: String(this.props.route.params.item.itemMrp),
+            uomName: this.props.route.params.item.uom,
+            hsnId: this.props.route.params.item.hsnMasterId,
+            empId: this.props.route.params.item.empId,
+            storeId: this.props.route.params.item.storeId,
+            quantity: String(this.props.route.params.item.qty),
+            productTextileId: this.props.route.params.item.productTextileId,
             barcodeTextileId: this.props.route.params.item.barcodeTextileId
         });
         this.getAllDivisions();
@@ -423,6 +423,7 @@ class ViewReBarcode extends Component {
                 "division": this.state.divisionId,
                 "section": this.state.sectionId,
                 "subSection": this.state.subsectionId,
+                "name":"",
                 "category": this.state.catogirieId,
                 "batchNo": this.state.batchNo,
                 "colour": this.state.colour,

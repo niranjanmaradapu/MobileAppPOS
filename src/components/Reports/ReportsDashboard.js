@@ -86,7 +86,7 @@ export default class ReportsDashboard extends Component {
             this.setState({ loading: false });
 
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
 
 
         });

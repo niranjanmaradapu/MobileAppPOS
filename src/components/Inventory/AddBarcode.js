@@ -50,6 +50,7 @@ class AddBarcode extends Component {
             hsnId: null,
             storeNamesArray: [],
             storeNames: [],
+            name:"",
             storeId: "",
             domainId: 1,
             isEdit: false,
@@ -69,7 +70,7 @@ class AddBarcode extends Component {
         }).catch((err) => {
             this.setState({ loading: false });
             console.log(err);
-            alert('There is error getting domainDataId');
+           // alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -81,7 +82,7 @@ class AddBarcode extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
         this.getAllDivisions();
         this.getAllCatogiries();
@@ -364,6 +365,10 @@ class AddBarcode extends Component {
         this.setState({ colour: value });
     };
 
+    handleName = (value) => {
+        this.setState({ name: value });
+    };
+
     handleBatchNo = (value) => {
         this.setState({ batchNo: value });
     };
@@ -444,16 +449,16 @@ class AddBarcode extends Component {
                 "subSection": parseInt(this.state.subsectionId),
                 "category": parseInt(this.state.catogirieId),
                 "batchNo": this.state.batchNo,
+                "name":thiss.state.name,
                 "colour": this.state.colour,
-                "productTextile": {
-                    "qty": this.state.quantity,
-                    "costPrice": this.state.costPrice,
-                    "itemMrp": this.state.listPrice,
-                    "storeId": this.state.storeId,
-                    "empId": this.state.empId,
-                    "uom": this.state.uomName,
-                    "hsnMasterId": parseInt(this.state.hsnId),
-                }
+                "costPrice": this.state.costPrice,
+                "empId": this.state.empId,
+                "hsnCode": parseInt(this.state.hsnId),
+                "itemMrp": this.state.listPrice,
+                "domainId":1,
+                "qty": this.state.quantity,
+                "storeId": this.state.storeId,
+                "uom": this.state.uomName,
             };
             this.setState({ loading: true });
             console.log('params are' + JSON.stringify(params));
@@ -559,7 +564,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Colour <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> Colour <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Colour"
@@ -568,6 +573,16 @@ class AddBarcode extends Component {
                         autoCapitalize="none"
                         value={this.state.colour}
                         onChangeText={this.handleColour}
+                    />
+                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> Name <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        underlineColorAndroid="transparent"
+                        placeholder="Name"
+                        placeholderTextColor="#6F6F6F"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        value={this.state.name}
+                        onChangeText={this.handleName}
                     />
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Batch No <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}

@@ -55,6 +55,7 @@ class EditBarcode extends Component {
             storeName: "",
             productTextileId: 0,
             barcodeTextileId: 0,
+            name:"",
         };
     }
 
@@ -71,7 +72,7 @@ class EditBarcode extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-            alert('There is error getting domainDataId');
+            //  alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -83,7 +84,7 @@ class EditBarcode extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
@@ -92,7 +93,7 @@ class EditBarcode extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
         //('dasdsadsadsad' + this.props.route.params.item)
         this.setState({
@@ -102,15 +103,16 @@ class EditBarcode extends Component {
             catogirieId: this.props.route.params.item.category,
             colour: this.props.route.params.item.colour,
             batchNo: this.props.route.params.item.batchNo,
-            costPrice: String(this.props.route.params.item.productTextile.costPrice),
-            listPrice: String(this.props.route.params.item.productTextile.itemMrp),
-            uomName: this.props.route.params.item.productTextile.uom,
-            hsnId: this.props.route.params.item.productTextile.hsnMasterId,
-            empId: this.props.route.params.item.productTextile.empId,
-            storeId: this.props.route.params.item.productTextile.storeId,
-            quantity: String(this.props.route.params.item.productTextile.qty),
-            productTextileId: this.props.route.params.item.productTextile.productTextileId,
-            barcodeTextileId: this.props.route.params.item.barcodeTextileId
+            costPrice: String(this.props.route.params.item.costPrice),
+            listPrice: String(this.props.route.params.item.itemMrp),
+            uomName: this.props.route.params.item.uom,
+            hsnId: this.props.route.params.item.hsnMasterId,
+            empId: this.props.route.params.item.empId,
+            storeId: this.props.route.params.item.storeId,
+            quantity: String(this.props.route.params.item.qty),
+            productTextileId: this.props.route.params.item.productTextileId,
+            barcodeTextileId: this.props.route.params.item.barcodeTextileId,
+            name: this.props.route.params.item.name,
         });
         this.getAllDivisions();
         this.getAllCatogiries();
@@ -378,6 +380,10 @@ class EditBarcode extends Component {
         this.setState({ colour: value });
     };
 
+    handleName = (value) => {
+        this.setState({ name: value });
+    };
+
     handleBatchNo = (value) => {
         this.setState({ batchNo: value });
     };
@@ -419,27 +425,22 @@ class EditBarcode extends Component {
         }
         else {
             const params = {
-                "barcodeTextileId": this.state.barcodeTextileId,
+                "productTextileId": this.state.productTextileId,
                 "division": this.state.divisionId,
                 "section": this.state.sectionId,
                 "subSection": this.state.subsectionId,
+                "name": "",
                 "category": this.state.catogirieId,
                 "batchNo": this.state.batchNo,
                 "colour": this.state.colour,
-                "productTextile": {
-                    "productTextileId": this.state.productTextileId,
-                    "costPrice": this.state.costPrice,
-                    "createForLocation": 0,
-                    "empId": this.state.empId,
-                    "hsnMasterId": this.state.hsnId,
-                    "itemCode": "item1",
-                    "itemRsp": 0,
-                    "itemMrp": this.state.listPrice,
-                    "qty": this.state.quantity,
-                    "storeId": this.state.storeId,
-                    "uom": this.state.uomName,
-                    "valueAdditionCp": 0
-                }
+                "costPrice": this.state.costPrice,
+                "empId": this.state.empId,
+                "hsnCode": this.state.hsnId,
+                "itemMrp": this.state.listPrice,
+                "domainId": 1,
+                "qty": this.state.quantity,
+                "storeId": this.state.storeId,
+                "uom": this.state.uomName,
             };
             console.log('params are' + JSON.stringify(params));
             this.setState({ loading: true });
@@ -553,6 +554,18 @@ class EditBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleColour}
                     />
+
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        underlineColorAndroid="transparent"
+                        placeholder="Name"
+                        placeholderTextColor="#6F6F6F"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        value={this.state.name}
+                        editable={false} selectTextOnFocus={false}
+                        onChangeText={this.handleName}
+                    />
+
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Batch No"

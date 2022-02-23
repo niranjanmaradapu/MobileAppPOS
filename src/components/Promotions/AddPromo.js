@@ -58,7 +58,7 @@ class AddPromo extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-            alert('There is error getting domainDataId');
+           // alert('There is error getting domainDataId');
         });
         this.setState({
             promotionName: this.props.route.params.item.promotionName,

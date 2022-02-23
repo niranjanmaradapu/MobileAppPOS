@@ -51,7 +51,7 @@ export default class GenerateReturnSlip extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
     }
 

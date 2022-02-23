@@ -85,7 +85,7 @@ class Settings extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error saving token');
-                    alert('There is error saving token');
+                   // alert('There is error saving token');
                 });
                 global.domainName = this.state.domainNamesArray[i].name;
                 AsyncStorage.setItem("domainName", this.state.domainNamesArray[i].name).then(() => {
@@ -205,7 +205,7 @@ class Settings extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error getting phone numner');
-                    alert('There is error getting phone numner');
+                  //  alert('There is error getting phone numner');
                 });
             }
             else {
@@ -234,14 +234,14 @@ class Settings extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error saving token');
-                    alert('There is error saving token');
+                   // alert('There is error saving token');
                 });
             }
 
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
 
         var phonenumber = "";
@@ -250,7 +250,7 @@ class Settings extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting phone numner');
-            alert('There is error getting phone numner');
+           // alert('There is error getting phone numner');
         });
         const username = await AsyncStorage.getItem("username");
         //console.log(ProfileService.getUser() + "+919895695626")
@@ -287,7 +287,7 @@ class Settings extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("custom:isConfigUser").then((value) => {
@@ -384,20 +384,20 @@ class Settings extends Component {
                         }).catch(() => {
                             this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
-                            alert('There is error saving domainDataId');
+                           // alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error getting storeId');
-                    alert('There is error getting storeId');
+                   // alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
     }
 

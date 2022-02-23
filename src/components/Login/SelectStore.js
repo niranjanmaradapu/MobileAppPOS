@@ -66,7 +66,7 @@ export default class SelectStore extends React.Component {
                         }).catch(() => {
                             this.setState({ loading: false });
                             console.log('There is error saving token');
-                            alert('There is error saving token');
+                          //  alert('There is error saving token');
                         });
                         // 
                     }
@@ -90,7 +90,7 @@ export default class SelectStore extends React.Component {
                         }).catch(() => {
                             this.setState({ loading: false });
                             console.log('There is error saving token');
-                            alert('There is error saving token');
+                           // alert('There is error saving token');
                         });
 
                         AsyncStorage.setItem("storeName", (this.state.storeData[0].name)).then(() => {
@@ -98,7 +98,7 @@ export default class SelectStore extends React.Component {
                         }).catch(() => {
                             this.setState({ loading: false });
                             console.log('There is error saving token');
-                            alert('There is error saving token');
+                           // alert('There is error saving token');
                         });
 
                         console.log('adsadas' + this.state.storeData[0].id);
@@ -127,14 +127,14 @@ export default class SelectStore extends React.Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error saving storeId');
-            alert('There is error saving storeId');
+          //  alert('There is error saving storeId');
         });
 
         AsyncStorage.setItem("storeName", item.name).then(() => {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error saving token');
-            alert('There is error saving token');
+            // alert('There is error saving token');
         });
 
 

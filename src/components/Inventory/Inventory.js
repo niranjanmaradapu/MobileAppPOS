@@ -69,7 +69,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-            alert('There is error getting domainDataId');
+          //  alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -81,7 +81,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
@@ -90,7 +90,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
@@ -178,7 +178,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting sadasdsd');
-            alert('There is error getting details');
+           // alert('There is error getting details');
         });
 
     }
@@ -198,13 +198,8 @@ export default class Inventory extends Component {
                 if (res.data["result"]) {
                     this.setState({ loading: false });
                     this.setState({ barcodesData: res.data.result });
-                    // for (var i = 0; i < res.data["result"].length; i++) {
-                    //     this.state.barcodesData.push(res.data["result"][i]);
-                    //     // console.log(res.data["result"][i].productTextile.empId)
-                    // }
+                    console.log(res.data.result)
                 }
-
-                // this.setState({ barcodesData: this.state.barcodesData });
             }
         }).catch(() => {
             this.setState({ loading: false });
@@ -229,12 +224,8 @@ export default class Inventory extends Component {
                 console.log(res.data["result"]);
                 if (res.data["result"]) {
                     this.setState({ loading: false });
-                    for (var i = 0; i < res.data["result"].length; i++) {
-                        this.state.reBarcodesData.push(res.data["result"][i]);
-                    }
+                    this.setState({ reBarcodesData: res.data.result });
                 }
-                this.setState({ reBarcodesData: this.state.reBarcodesData });
-
             }
         }).catch(() => {
             this.setState({ loading: false });
@@ -640,10 +631,10 @@ export default class Inventory extends Component {
                                         <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
                                             <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
                                             <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>BARCODE: {"\n"}{item.barcode}</Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>LIST PRICE:  {"\n"} ₹{item.productTextile.itemMrp} </Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>LIST PRICE:  {"\n"} ₹{item.itemMrp} </Text>
                                             <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>STORE: {this.state.storeName}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.productTextile.qty}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>VALUE: ₹{item.productTextile.value}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.qty}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>VALUE: ₹{item.value}</Text>
                                             <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
                                                 <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                             </TouchableOpacity>

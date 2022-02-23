@@ -48,7 +48,7 @@ export class SalesSumary extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
@@ -57,7 +57,7 @@ export class SalesSumary extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
     }
 

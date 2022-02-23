@@ -88,7 +88,7 @@ class Promo extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-            alert('There is error getting domainDataId');
+           // alert('There is error getting domainDataId');
         });
 
 
@@ -196,7 +196,7 @@ class Promo extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error saving domainDataId');
-                    alert('There is error saving domainDataId');
+                   // alert('There is error saving domainDataId');
 
                 });
 
@@ -204,7 +204,7 @@ class Promo extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting sadasdsd');
-            alert('There is error getting sadasdsd');
+           // alert('There is error getting sadasdsd');
         });
 
     }

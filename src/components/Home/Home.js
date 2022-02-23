@@ -159,7 +159,7 @@ class Home extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-            alert('There is error getting domainDataId');
+           // alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -170,7 +170,7 @@ class Home extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("domainName").then((value) => {
@@ -178,7 +178,7 @@ class Home extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainName');
-            alert('There is error getting domainName');
+            //alert('There is error getting domainName');
         });
 
         AsyncStorage.getItem("rolename").then((value) => {
@@ -186,7 +186,7 @@ class Home extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting userrole');
-            alert('There is error getting userrole');
+           // alert('There is error getting userrole');
         });
 
         global.previlage1 = '';
@@ -296,20 +296,20 @@ class Home extends Component {
                         }).catch(() => {
             this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
-                            alert('There is error saving domainDataId');
+                           // alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
             this.setState({ loading: false });
                     console.log('There is error getting storeId');
-                    alert('There is error getting storeId');
+                   // alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
 
 

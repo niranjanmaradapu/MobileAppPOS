@@ -50,7 +50,7 @@ export class ListOfBarcodes extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
@@ -59,7 +59,7 @@ export class ListOfBarcodes extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
     }
 
@@ -197,7 +197,7 @@ export class ListOfBarcodes extends Component {
     }
 
     handleviewBarcode(item, index) {
-        this.setState({ barcode: item.barcode, mrp: item.productTextile.itemMrp, qty: item.productTextile.qty });
+        this.setState({ barcode: item.barcode, mrp: item.itemMrp, qty: item.qty });
         this.setState({ flagViewDetail: true, modalVisible: true, flagdelete: false });
     }
 
@@ -217,9 +217,9 @@ export class ListOfBarcodes extends Component {
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE STORE: {"\n"}{this.state.storeName} </Text>
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >EMP ID: {"\n"}{item.productTextile.empId} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"\n"} {item.productTextile.qty}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE MRP: {"\n"} {item.productTextile.itemMrp}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >EMP ID: {"\n"}{item.empId} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"\n"} {item.qty}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE MRP: {"\n"} {item.itemMrp}</Text>
                                     <View style={flats.buttons}>
 
                                         {/* <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteBarcode(item, index)}>

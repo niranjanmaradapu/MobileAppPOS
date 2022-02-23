@@ -34,7 +34,7 @@ export default class SplashScreen extends React.Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting phone numner');
-            alert('There is error getting phone numner');
+           // alert('There is error getting phone numner');
         });
         console.log('phone number is' + phonenumber);
         setTimeout(() => {

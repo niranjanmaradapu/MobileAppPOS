@@ -125,7 +125,7 @@ class InventoryRetail extends Component {
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error getting domainDataId');
-      alert('There is error getting domainDataId');
+     // alert('There is error getting domainDataId');
     });
 
     AsyncStorage.getItem("storeId").then((value) => {
@@ -136,7 +136,7 @@ class InventoryRetail extends Component {
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error getting storeId');
-      alert('There is error getting storeId');
+     // alert('There is error getting storeId');
     });
     this.barcodeDBStore();
     this.getItems();
@@ -921,7 +921,7 @@ class InventoryRetail extends Component {
           }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error saving token');
-            alert('There is error saving token');
+           // alert('There is error saving token');
           });
           console.log(this.state.uom);
         });
@@ -1594,7 +1594,7 @@ class InventoryRetail extends Component {
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error getting token');
-      alert('There is error getting token');
+     // alert('There is error getting token');
     });
     const state = this.state;
 

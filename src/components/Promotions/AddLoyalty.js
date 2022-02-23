@@ -34,7 +34,7 @@ class AddLoyalty extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-            alert('There is error getting domainDataId');
+           // alert('There is error getting domainDataId');
         });
     }
 

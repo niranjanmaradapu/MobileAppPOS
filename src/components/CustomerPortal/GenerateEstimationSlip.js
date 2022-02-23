@@ -104,7 +104,7 @@ class GenerateEstimationSlip extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            alert('There is error getting storeId');
+           // alert('There is error getting storeId');
         });
     }
 
@@ -156,9 +156,9 @@ class GenerateEstimationSlip extends Component {
         let lineItem = [];
         this.state.barList.forEach((element, index) => {
             const obj = {
-                "itemPrice": element.productTextile.itemMrp,
+                "itemPrice": element.itemMrp,
                 "quantity": parseInt(element.quantity),
-                "discount": element.productTextile.discount,
+                "discount": element.discount,
                 "netValue": element.totalMrp,
                 "barCode": element.barcode,
                 "domainId": 1,
@@ -249,7 +249,7 @@ class GenerateEstimationSlip extends Component {
                         if (element.quantity > 1) {
                             console.log(element.quantity);
                         } else {
-                            element.totalMrp = element.productTextile.itemMrp;
+                            element.totalMrp = element.itemMrp;
                             element.quantity = parseInt("1");
                         }
 
@@ -312,7 +312,7 @@ class GenerateEstimationSlip extends Component {
         const qtyarr = [...this.state.itemsList];
         var additem = parseInt(qtyarr[index].quantity) + 1;
         qtyarr[index].quantity = additem.toString();
-        let totalcostMrp = item.productTextile.itemMrp * parseInt(qtyarr[index].quantity);
+        let totalcostMrp = item.itemMrp * parseInt(qtyarr[index].quantity);
         item.totalMrp = totalcostMrp;
         this.setState({ itemsList: qtyarr });
 
@@ -334,7 +334,7 @@ class GenerateEstimationSlip extends Component {
             var additem = parseInt(qtyarr[index].quantity) - 1;
             qtyarr[index].quantity = additem.toString();
 
-            let totalcostMrp = item.productTextile.itemMrp * parseInt(qtyarr[index].quantity);
+            let totalcostMrp = item.itemMrp * parseInt(qtyarr[index].quantity);
             item.totalMrp = totalcostMrp;
             this.state.totalQuantity = (parseInt(this.state.totalQuantity) - 1);
             let grandTotal = 0;
@@ -379,7 +379,7 @@ class GenerateEstimationSlip extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting token');
-            alert('There is error getting token');
+           //alert('There is error getting token');
         });
 
         return (
@@ -561,7 +561,7 @@ class GenerateEstimationSlip extends Component {
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 225 : 160, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'medium', color: '#ED1C24' }}>
                                                 {/* ₹ {(parseInt(item.netamount)).toString()} */}
-                                                ₹ {item.productTextile.itemMrp}
+                                                ₹ {item.itemMrp}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 310 : 220, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'regular', color: '#808080' }}>
                                                 DISCOUNT: ₹ 0
