@@ -4,7 +4,9 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import CustomerService from '../services/CustomerService';
+
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
@@ -155,10 +157,10 @@ class GiftVocher extends Component {
     render() {
         return (
             <View>
-                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Generate Gift Voucher</Text>
+                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>{I18n.t("Generate Gift Voucher")}</Text>
                 <TextInput
                     style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='GV NUMBER *'
+                    placeholder={('GV NUMBER *')}
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -168,7 +170,7 @@ class GiftVocher extends Component {
                 />
                 <TextInput
                     style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='DESCRIPTION'
+                    placeholder={I18n.t('DESCRIPTION')}
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -243,7 +245,7 @@ class GiftVocher extends Component {
                 <View >
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                        placeholder='GIFT VALUE *'
+                        placeholder={I18n.t('GIFT VALUE *')}
                         placeholderTextColor="#6f6f6f60"
                         textAlignVertical="center"
                         keyboardType={'default'}
@@ -255,10 +257,10 @@ class GiftVocher extends Component {
                         style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
                         onPress={() => this.addGiftVocher()}
                     >
-                        <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}>Add Gift Voucher</Text>
+                        <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}>{I18n.t("Add Gift Voucher")}</Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>List of Gift Vouchers</Text>
+                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>{I18n.t("List of Gift Vouchers")}</Text>
                 <FlatList
                     style={{ marginTop: 20, marginBottom: 20 }}
                     data={this.state.giftVochersList}
@@ -270,16 +272,16 @@ class GiftVocher extends Component {
                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>S.NO: {index + 1}</Text>
                                     <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile} selectable={true}>GV NUMBER: {item.gvNumber}</Text>
                                     {item.isActivated &&
-                                        <Text style={[Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile, {backgroundColor: '#009900', color: '#ffffff', padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: Device.isTablet ? 10 : 5, fontFamily: 'medium'}]}>Active </Text>
+                                        <Text style={[Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile, { backgroundColor: '#009900', color: '#ffffff', padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: Device.isTablet ? 10 : 5, fontFamily: 'medium' }]}>{I18n.t("Active")} </Text>
                                     }
                                     {!item.isActivated &&
-                                        <Text style={[Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile, { backgroundColor: '#ee0000', color: '#ffffff', padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: 5, fontFamily: 'medium' }]}>In-Active</Text>
+                                        <Text style={[Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile, { backgroundColor: '#ee0000', color: '#ffffff', padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: 5, fontFamily: 'medium' }]}>{I18n.t("In-Active")}</Text>
                                     }
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>FROM DATE: {item.fromDate}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>TO DATE: {item.toDate}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>VALUE: {item.value}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("FROM DATE")}: {item.fromDate}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("TO DATE")}: {item.toDate}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("VALUE")}: {item.value}</Text>
                                 </View>
                             </View>
                         </View>

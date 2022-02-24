@@ -9,6 +9,7 @@ import {
     PieChart
 } from "react-native-chart-kit";
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import colors from '../../colors.json';
 import HomeGraphsService from '../services/Graphs/HomeGraphsService';
 import ProfileService from '../services/ProfileService';
@@ -159,7 +160,7 @@ class Home extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-           // alert('There is error getting domainDataId');
+            // alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -170,7 +171,7 @@ class Home extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("domainName").then((value) => {
@@ -186,7 +187,7 @@ class Home extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting userrole');
-           // alert('There is error getting userrole');
+            // alert('There is error getting userrole');
         });
 
         global.previlage1 = '';
@@ -294,22 +295,22 @@ class Home extends Component {
                                 }
                             });
                         }).catch(() => {
-            this.setState({ loading: false });
+                            this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
-                           // alert('There is error saving domainDataId');
+                            // alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
-            this.setState({ loading: false });
+                    this.setState({ loading: false });
                     console.log('There is error getting storeId');
-                   // alert('There is error getting storeId');
+                    // alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
 
 
@@ -462,7 +463,7 @@ class Home extends Component {
                     <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Home </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t("Home")} </Text>
                 </View>
 
                 <ScrollView>
@@ -495,7 +496,7 @@ class Home extends Component {
                                             marginLeft: 20, marginTop: 40,
                                         }} />
                                         <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
-                                            Today's Sales
+                                            {I18n.t("Today's Sales")}
                                         </Text>
                                         <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
                                             ₹ {this.state.toadysSale}
@@ -516,7 +517,7 @@ class Home extends Component {
                                             marginLeft: 20, marginTop: 40,
                                         }} />
                                         <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
-                                            Monthly's Sales
+                                            {I18n.t("Monthly's Sales")}
                                         </Text>
                                         <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
                                             ₹ {this.state.monthlySale}
@@ -537,7 +538,7 @@ class Home extends Component {
                                             marginLeft: 20, marginTop: 40,
                                         }} />
                                         <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, marginLeft: 60, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
-                                            This month sales v/s Last month
+                                            {I18n.t("This month sales v/s Last month")}
                                         </Text>
                                         <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 60, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
                                             {this.state.thisVsLastMonthSale} %
@@ -571,7 +572,7 @@ class Home extends Component {
                         />
                         <View>
                             <View style={styles.chartMaincontainer}>
-                                <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Sales % by category</Text>
+                                <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Sales % by category")}</Text>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
 
                                     <PieChart
@@ -606,7 +607,7 @@ class Home extends Component {
                             </View>
                         </View>
                         <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 500 : 550 }]}>
-                            <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales by representative</Text>
+                            <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Top 5 Sales by representative")}</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160, marginTop: Device.isTablet ? 10 : 20 }}>
                                 <BarChart
                                     style={{ paddingTop: 20 }}

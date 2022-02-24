@@ -2,9 +2,11 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import CreateCustomerService from '../services/CreateCustomerService';
+
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
@@ -137,11 +139,11 @@ export default class AddCustomer extends Component {
     render() {
         return (
             <View>
-                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Personal Information</Text>
-                <Text style={styles.headings}>Customer Name <Text style={{ color: 'red' }}>*</Text></Text>
+                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>{I18n.t("Personal Information")}</Text>
+                <Text style={styles.headings}>{I18n.t("Customer Name")} <Text style={{ color: 'red' }}>*</Text></Text>
                 <TextInput
                     style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='CUSTOMER NAME'
+                    placeholder={I18n.t('CUSTOMER NAME')}
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -149,12 +151,12 @@ export default class AddCustomer extends Component {
                     value={this.state.name}
                     onChangeText={(text) => this.handleCustomerName(text)}
                 />
-                <Text style={styles.headings}>Mobile Number <Text style={{ color: 'red' }}>*</Text></Text>
+                <Text style={styles.headings}>{I18n.t("Mobile Number")} <Text style={{ color: 'red' }}>*</Text></Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='MOBILE NUMBER'
+                    placeholder={I18n.t('MOBILE NUMBER')}
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
-                    keyboardType={'default'}
+                    // keyboardType={'default'}
                     autoCapitalize='none'
                     maxLength={10}
                     keyboardType={'number-pad'}
@@ -162,9 +164,9 @@ export default class AddCustomer extends Component {
                     value={this.state.phoneNumber}
                     onChangeText={(text) => this.handleMobileNumber(text)}
                 />
-                <Text style={styles.headings}>Email</Text>
+                <Text style={styles.headings}>{I18n.t("Email")}</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='Email'
+                    placeholder={I18n.t('EMAIL')}
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -172,9 +174,9 @@ export default class AddCustomer extends Component {
                     value={this.state.email}
                     onChangeText={(text) => this.handleEmail(text)}
                 />
-                <Text style={styles.headings}>Address</Text>
+                <Text style={styles.headings}>{I18n.t("Address")}</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='ADDRESS'
+                    placeholder={I18n.t('ADDRESS')}
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -182,10 +184,10 @@ export default class AddCustomer extends Component {
                     value={this.state.address}
                     onChangeText={(text) => this.handleAddress(text)}
                 />
-                <Text style={styles.headings}>Gender</Text>
+                <Text style={styles.headings}>{I18n.t("Gender")}</Text>
                 <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                     <RNPickerSelect
-                        style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
+                        // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                         placeholder={{ label: 'GENDER', value: '' }}
                         Icon={() => {
                             return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
@@ -200,10 +202,10 @@ export default class AddCustomer extends Component {
                         useNativeAndroidPickerStyle={false}
                     />
                 </View>
-                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Business Information</Text>
-                <Text style={styles.headings}>GST Number</Text>
+                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>{I18n.t("Business Information")}</Text>
+                <Text style={styles.headings}>{I18n.t("GST Number")}</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='GST NUMBER'
+                    placeholder={I18n.t('GST NUMBER')}
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -211,9 +213,9 @@ export default class AddCustomer extends Component {
                     value={this.state.gstNumber}
                     onChangeText={(text) => this.handleGstNumber(text)}
                 />
-                <Text style={styles.headings}>Company Name</Text>
+                <Text style={styles.headings}>{I18n.t("Company Name")}</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='COMPANY NAME'
+                    placeholder={I18n.t('COMPANY NAME')}
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -221,9 +223,9 @@ export default class AddCustomer extends Component {
                     value={this.state.companyName}
                     onChangeText={(text) => this.handleCompanyName(text)}
                 />
-                <Text style={styles.headings}>Email</Text>
+                <Text style={styles.headings}>{I18n.t("Email")}</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='EMAIL'
+                    placeholder={I18n.t('EMAIL')}
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -231,9 +233,9 @@ export default class AddCustomer extends Component {
                     value={this.state.gstemail}
                     onChangeText={(text) => this.handleBusinessEmail(text)}
                 />
-                <Text style={styles.headings}>Phone Number</Text>
+                <Text style={styles.headings}>{I18n.t("Phone Number")}</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='PHONE NUMBER'
+                    placeholder={I18n.t('PHONE NUMBER')}
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -241,9 +243,9 @@ export default class AddCustomer extends Component {
                     value={this.state.gstmobile}
                     onChangeText={(text) => this.handleBusinessPhone(text)}
                 />
-                <Text style={styles.headings}>Address</Text>
+                <Text style={styles.headings}>{I18n.t("Address")}</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    placeholder='ADDRESS'
+                    placeholder={I18n.t('ADDRESS')}
                     placeholderTextColor="#6f6f6f60"
                     textAlignVertical="center"
                     keyboardType={'default'}
@@ -256,7 +258,7 @@ export default class AddCustomer extends Component {
                     style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
                     onPress={() => this.addCustomer()}
                 >
-                    <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}>Add Customer</Text>
+                    <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}>{I18n.t("Add Customer")}</Text>
                 </TouchableOpacity>
             </View>
         );

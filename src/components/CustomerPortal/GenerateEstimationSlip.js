@@ -6,15 +6,18 @@ import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, T
 import RNBeep from 'react-native-a-beep';
 import { RNCamera } from 'react-native-camera';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
 import CustomerService from '../services/CustomerService';
+
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
+
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
@@ -104,7 +107,7 @@ class GenerateEstimationSlip extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
     }
 
@@ -379,7 +382,7 @@ class GenerateEstimationSlip extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting token');
-           //alert('There is error getting token');
+            //alert('There is error getting token');
         });
 
         return (
@@ -418,7 +421,7 @@ class GenerateEstimationSlip extends Component {
 
                                 <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
                                     underlineColorAndroid="transparent"
-                                    placeholder="ENTER BARCODE"
+                                    placeholder={I18n.t("ENTER BARCODE")}
                                     placeholderTextColor="#6F6F6F60"
                                     textAlignVertical="center"
                                     autoCapitalize="none"
@@ -430,7 +433,7 @@ class GenerateEstimationSlip extends Component {
 
                                 <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 350 : 150 }]}
                                     underlineColorAndroid="transparent"
-                                    placeholder="SM Number"
+                                    placeholder={I18n.t("SM Number")}
                                     placeholderTextColor="#6F6F6F60"
                                     textAlignVertical="center"
                                     keyboardType={'default'}
@@ -472,7 +475,7 @@ class GenerateEstimationSlip extends Component {
                                         Device.isTablet ? styles.input_tabletbutton_normal : styles.input_mobilebutton_normal
                                     }
                                     onPress={() => this.navigateToScanCode()} >
-                                    <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { marginTop: Device.isTablet ? 0 : 0, marginLeft: Device.isTablet ? -20 : -10 }]}> {('SCAN')} </Text>
+                                    <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { marginTop: Device.isTablet ? 0 : 0, marginLeft: Device.isTablet ? -20 : -10 }]}> {I18n.t('SCAN')} </Text>
                                 </TouchableOpacity>
 
                             </View>
@@ -533,41 +536,41 @@ class GenerateEstimationSlip extends Component {
                                                 {item.itemdesc}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: -20, fontFamily: 'regular', color: '#808080' }}>
-                                                BARCODE:
+                                                {I18n.t("BARCODE")}:
                                             </Text>
                                             <Text style={{ fontSize: 12, marginLeft: Device.isTablet ? 265 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
                                                 {item.barcode}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                QUANTITY:
+                                                {I18n.t("QUANTITY")}:
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 265 : 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
                                                 {item.quantity}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                SM:
+                                                {I18n.t("SM")}:
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 245 : 150, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
                                                 {this.state.smnumber}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                DISCOUNT TYPE:
+                                                {I18n.t("DISCOUNT TYPE")}:
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 315 : 230, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
                                                 -
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                MRP:
+                                                {I18n.t("MRP")}:
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 225 : 160, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'medium', color: '#ED1C24' }}>
                                                 {/* ₹ {(parseInt(item.netamount)).toString()} */}
                                                 ₹ {item.itemMrp}
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 310 : 220, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'regular', color: '#808080' }}>
-                                                DISCOUNT: ₹ 0
+                                                {I18n.t("DISCOUNT")}: ₹ 0
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 180 : 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                TOTAL:
+                                                {I18n.t("TOTAL")}:
                                             </Text>
                                             <Text style={{ fontSize: Device.isTablet ? 17 : 12, marginLeft: Device.isTablet ? 242 : 172, marginTop: Device.isTablet ? -20 : -15, fontFamily: 'medium', color: '#ED1C24' }}>
                                                 ₹ {item.totalMrp}
@@ -672,7 +675,7 @@ class GenerateEstimationSlip extends Component {
                                             <View>
                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                                     <View>
-                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > Delete Item </Text>
+                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > {I18n.t("Delete Item")} </Text>
                                                     </View>
                                                     <View>
                                                         <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -693,19 +696,19 @@ class GenerateEstimationSlip extends Component {
                                                     fontSize: Device.isTablet ? 23 : 18,
                                                     color: '#353C40',
                                                     marginTop: 15,
-                                                }}> Are you sure want to delete NewSale Item?  </Text>
+                                                }}> {I18n.t("Are you sure want to delete NewSale Item")} ?  </Text>
                                                 <TouchableOpacity
                                                     style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]}
                                                     onPress={() => this.deleteLineItem(item, index)}
                                                 >
-                                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("DELETE")} </Text>
                                                 </TouchableOpacity>
 
                                                 <TouchableOpacity
                                                     style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#ED1C24' }]}
                                                     onPress={() => this.modelCancel()}
                                                 >
-                                                    <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#ED1C24' }]}  > CANCEL </Text>
+                                                    <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#ED1C24' }]}  > {I18n.t("CANCEL")} </Text>
                                                 </TouchableOpacity>
                                             </View>
                                         </View>
@@ -976,7 +979,7 @@ class GenerateEstimationSlip extends Component {
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#00aa00', }]} onPress={() => this.modelCancel()}
                                     >
-                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00aa00' }]}  > BACK TO DASHBOARD </Text>
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00aa00' }]}  > {I18n.t("BACK TO DASHBOARD")} </Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -1529,6 +1532,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
+        paddingRight: 15,
         fontSize: 14,
     },
     input_mobilebutton_normal: {
@@ -1904,21 +1908,6 @@ const styles = StyleSheet.create({
         width: deviceWidth - 20,
         height: 44,
         marginTop: 10,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    input_mobile_normal: {
-        justifyContent: 'center',
-        marginLeft: deviceWidth / 2 + 30,
-        width: deviceWidth / 2 - 40,
-        height: 44,
-        marginTop: -55,
         marginBottom: 10,
         borderColor: '#8F9EB717',
         borderRadius: 3,
