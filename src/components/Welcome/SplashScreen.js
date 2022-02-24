@@ -24,7 +24,7 @@ export default class SplashScreen extends React.Component {
     }
 
     componentDidMount() {
-        if ( I18n.locale == "english" || I18n.locale == "en") {
+        if ( I18n.locale == "english" || I18n.locale == "en" || I18n.locale == "en-US") {
             I18n.locale = "english"
             this.setState({ selectedItem: 0 })
         }
