@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
@@ -492,20 +493,20 @@ export default class AddUser extends Component {
                 </View>
                 <ScrollView>
                     <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 7 }]}>
-                        User Details
+                        {I18n.t("User Details")}
                     </Text>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Name <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Name"
+                        placeholder={I18n.t("Name")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.name}
                         onChangeText={this.handleName}
                     />
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Gender</Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Gender")}</Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -524,7 +525,7 @@ export default class AddUser extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>DOB</Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("DOB")}</Text>
                     <TouchableOpacity
                         style={{
                             width: deviceWidth - 40,
@@ -545,11 +546,11 @@ export default class AddUser extends Component {
                         }}  > {this.state.dob === '' ? 'DoB' : this.state.dob} </Text>
                         <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                     </TouchableOpacity>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Mobile <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Mobile")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Mobile"
+                        placeholder={I18n.t("Mobile")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         maxLength={10}
@@ -559,11 +560,11 @@ export default class AddUser extends Component {
                         value={this.state.mobile}
                         onChangeText={this.handleMobile}
                     />
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Email <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Email")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Email"
+                        placeholder={I18n.t("Email")}
                         placeholderTextColor="#6F6F6F"
                         keyboardType='email-address'
                         textAlignVertical="center"
@@ -571,11 +572,11 @@ export default class AddUser extends Component {
                         value={this.state.email}
                         onChangeText={this.handleEmail}
                     />
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Address</Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Address")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Address"
+                        placeholder={I18n.t("Address")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
@@ -584,7 +585,7 @@ export default class AddUser extends Component {
                     />
 
                     <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 7 }]}>
-                        User Permissions
+                        {I18n.t("User Permissions")}
                     </Text>
                     <TouchableOpacity
                         style={{
@@ -596,7 +597,7 @@ export default class AddUser extends Component {
                         <Text style={{
                             marginLeft: 40, marginTop: 11, color: "#6F6F6F", fontSize: Device.isTablet ? 20 : 15,
                             fontFamily: "regular", width: 200,
-                        }}  > {'Is Super Admin'} </Text>
+                        }}  > {I18n.t('Is Super Admin')} </Text>
 
                         <Image style={{ position: 'absolute', top: 10, left: 20, }} source={
                             //require('../assets/images/chargeunselect.png')}
@@ -605,7 +606,7 @@ export default class AddUser extends Component {
 
                     {this.state.isSuperAdmin === false && (
                         <View>
-                            <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Domain</Text>
+                            <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Domain")}</Text>
                             <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                                 <RNPickerSelect
                                     placeholder={{
@@ -645,7 +646,7 @@ export default class AddUser extends Component {
                         // renderSectionHeader={({ section }) => <Text style={Device.isTablet ? styles.sectionHeaderTablet : styles.sectionHeaderMobile}>{section.title}</Text>}
                         // renderItem={({ item, index, section }) => (
                         <View>
-                            <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Stores</Text>
+                            <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Stores")}</Text>
                             <FlatList
                                 data={this.state.storesArray}
                                 style={{ marginTop: 10, }}
@@ -677,7 +678,7 @@ export default class AddUser extends Component {
                     )}
                     {this.state.isSuperAdmin === false && (
                         <View>
-                            <Text style={{ marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15, marginLeft: 20 }}>Role</Text>
+                            <Text style={{ marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15, marginLeft: 20 }}>{I18n.t("Role")}</Text>
                             <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                                 <RNPickerSelect
                                     placeholder={{
@@ -698,11 +699,11 @@ export default class AddUser extends Component {
 
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.saveUser()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
                         onPress={() => this.cancel()}>
-                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>CANCEL</Text>
+                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>{I18n.t("CANCEL")}</Text>
                     </TouchableOpacity>
                     <View style={styles.bottomContainer} ></View>
                 </ScrollView>

@@ -5,6 +5,7 @@ import Device from 'react-native-device-detection';
 import Loader from '../../commonUtils/loader';
 import UrmService from '../services/UrmService';
 var deviceWidth = Dimensions.get('window').width;
+import I18n from 'react-native-i18n';
 
 export default class Privilages extends Component {
     constructor(props) {
@@ -183,7 +184,7 @@ export default class Privilages extends Component {
                         <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                        Privileges
+                        {I18n.t("Privileges")}
                     </Text>
                 </View>
 
@@ -215,7 +216,7 @@ export default class Privilages extends Component {
 
                 <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                     onPress={() => this.saveRole()}>
-                    <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                    <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
                 </TouchableOpacity>
             </View>
 

@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
@@ -145,20 +146,20 @@ export default class UserManagement extends Component {
                         }).catch(() => {
                             this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
-                           // alert('There is error saving domainDataId');
+                            // alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error getting storeId');
-                  //  alert('There is error getting storeId');
+                    //  alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-          //  alert('There is error getting storeId');
+            //  alert('There is error getting storeId');
         });
         this.getAllUsers();
         this.getRolesList();
@@ -500,16 +501,16 @@ export default class UserManagement extends Component {
                             <Image source={require('../assets/images/menu.png')} />
                         </TouchableOpacity>
                         <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                            URM Portal
+                            {I18n.t("URM Portal")}
                         </Text>
                         {this.state.flagTwo && (
                             <TouchableOpacity style={Device.isTablet ? styles.addBarcodeButton_tablet : styles.addBarcodeButton_mobile} onPress={() => this.navigateToCreateRoles()}>
-                                <Text style={Device.isTablet ? styles.addBarcodeButtonText_tablet : styles.addBarcodeButtonText_mobile}>Create Role</Text>
+                                <Text style={Device.isTablet ? styles.addBarcodeButtonText_tablet : styles.addBarcodeButtonText_mobile}>{I18n.t("Create Role")}</Text>
                             </TouchableOpacity>
                         )}
                         {this.state.flagOne && (
-                            <TouchableOpacity style={Device.isTablet ? styles.addBarcodeButton_tablet : styles.addBarcodeButton_mobile} onPress={() => this.navigateToAddUsers()}>
-                                <Text style={Device.isTablet ? styles.addBarcodeButtonText_tablet : styles.addBarcodeButtonText_mobile}>Add User</Text>
+                            <TouchableOpacity style={[Device.isTablet ? styles.addBarcodeButton_tablet : styles.addBarcodeButton_mobile, I18n.locale === "telugu" ? { height: 40 } : {}]} onPress={() => this.navigateToAddUsers()}>
+                                <Text style={Device.isTablet ? styles.addBarcodeButtonText_tablet : styles.addBarcodeButtonText_mobile}>{I18n.t("Add User")}</Text>
                             </TouchableOpacity>
                         )}
                         {this.state.filterButton &&
@@ -550,7 +551,7 @@ export default class UserManagement extends Component {
                                         borderColor: item.bool ? '#ED1C24' : '#858585',
                                         borderRadius: 5,
                                         marginLeft: 10,
-                                        
+
                                     }} onPress={() => this.topbarAction(item, index)} >
 
                                         <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
@@ -595,11 +596,11 @@ export default class UserManagement extends Component {
                                     <View style={Device.isTablet ? styles.flatlistContainer_tablet : styles.flatlistContainer_mobile}>
                                         <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
                                             <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>ROLE: {"\n"}{item.roleName}</Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>DOMAIN: {"\n"}{item.clientDomainVo.domaiName} </Text>
-                                            <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>CREATED BY: {"\n"}{item.createdBy}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>USER COUNT:  {item.usersCount}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>DESCRIPTION: {"\n"}{item.discription}</Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("ROLE")}: {"\n"}{item.roleName}</Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("DOMAIN")}: {"\n"}{item.clientDomainVo.domaiName} </Text>
+                                            <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{I18n.t("CREATED BY")}: {"\n"}{item.createdBy}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>{I18n.t("USER COUNT")}:  {item.usersCount}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>{I18n.t("DESCRIPTION")}: {"\n"}{item.discription}</Text>
 
                                             <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditRole(item, index)}>
                                                 <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
@@ -622,12 +623,12 @@ export default class UserManagement extends Component {
                                 renderItem={({ item, index }) => (
                                     <View style={Device.isTablet ? styles.flatlistContainer2_tablet : styles.flatlistContainer2_mobile}>
                                         <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
-                                            <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >USER ID: {"\n"}{item.userId} </Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>USER NAME: {"\n"}{item.userName}</Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>ROLE: {"\n"}{item.roleName} </Text>
-                                            <Text style={Device.isTablet ? flats.commonText_tablet2 : flats.commonText_mobile2}>STORE NAME: {"\n"}{item.storeName}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>CREATED DATE: {"\n"}{item.createdDate}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>STATUS: {"\n"}{item.active ? "active" : "Inactive"}</Text>
+                                            <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >{I18n.t("USER ID")}: {"\n"}{item.userId} </Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("USER NAME")}: {"\n"}{item.userName}</Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("ROLE")}: {"\n"}{item.roleName} </Text>
+                                            <Text style={Device.isTablet ? flats.commonText_tablet2 : flats.commonText_mobile2}>{I18n.t("STORE NAME")}: {"\n"}{item.storeName}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>{I18n.t("CREATED DATE")}: {"\n"}{item.createdDate}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>{I18n.t("STATUS")}: {"\n"}{item.active ? "active" : "Inactive"}</Text>
 
                                             <TouchableOpacity style={[Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile]} onPress={() => this.handleedituser(item, index)}>
                                                 <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
@@ -649,7 +650,7 @@ export default class UserManagement extends Component {
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                                 <View>
-                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Role </Text>
+                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Delete Role")} </Text>
                                                 </View>
                                                 <View>
                                                     <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -670,7 +671,7 @@ export default class UserManagement extends Component {
                                             fontSize: Device.isTablet ? 22 : 17,
                                             color: '#353C40',
                                             marginTop: 15,
-                                        }}> Are you sure want to delete Role?  </Text>
+                                        }}> {I18n.t("Are you sure want to delete Role")} ?  </Text>
                                         <TouchableOpacity
                                             style={{
                                                 width: deviceWidth - 40,
@@ -683,7 +684,7 @@ export default class UserManagement extends Component {
                                             <Text style={{
                                                 textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
                                                 fontFamily: "regular"
-                                            }}  > DELETE </Text>
+                                            }}  > {I18n.t("DELETE")} </Text>
                                         </TouchableOpacity>
 
                                         <TouchableOpacity
@@ -698,7 +699,7 @@ export default class UserManagement extends Component {
                                             <Text style={{
                                                 textAlign: 'center', marginTop: 20, color: "#353C4050", fontSize: 15,
                                                 fontFamily: "regular"
-                                            }}  > CANCEL </Text>
+                                            }}  > {I18n.t("CANCEL")} </Text>
 
                                         </TouchableOpacity>
                                     </View>
@@ -712,7 +713,7 @@ export default class UserManagement extends Component {
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                                 <View>
-                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete User </Text>
+                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Delete User")} </Text>
                                                 </View>
                                                 <View>
                                                     <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -734,19 +735,19 @@ export default class UserManagement extends Component {
                                             fontSize: Device.isTablet ? 23 : 18,
                                             // marginBottom: Device.isTablet ? 25 : 0,
                                             color: '#353C40'
-                                        }}> Are you sure want to delete User?  </Text>
+                                        }}> {I18n.t("Are you sure want to delete User")}?  </Text>
                                         <TouchableOpacity
                                             style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 45 : 30 }]}
                                             onPress={() => this.deleteUser(item, index)}
                                         >
-                                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("DELETE")} </Text>
 
                                         </TouchableOpacity>
 
                                         <TouchableOpacity
                                             style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
                                         >
-                                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+                                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > {I18n.t("CANCEL")} </Text>
 
                                         </TouchableOpacity>
                                     </View>
@@ -760,7 +761,7 @@ export default class UserManagement extends Component {
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                                 <View>
-                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Filter By")} </Text>
                                                 </View>
                                                 <View>
                                                     <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -778,7 +779,7 @@ export default class UserManagement extends Component {
                                             <TextInput
                                                 style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                                 underlineColorAndroid="transparent"
-                                                placeholder="ROLE"
+                                                placeholder={I18n.t("ROLE")}
                                                 placeholderTextColor="#6F6F6F"
                                                 textAlignVertical="center"
                                                 autoCapitalize="none"
@@ -788,7 +789,7 @@ export default class UserManagement extends Component {
                                             <TextInput
                                                 style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                                 underlineColorAndroid="transparent"
-                                                placeholder="CREATED BY"
+                                                placeholder={I18n.t("CREATED BY")}
                                                 placeholderTextColor="#6F6F6F"
                                                 textAlignVertical="center"
                                                 autoCapitalize="none"
@@ -854,11 +855,11 @@ export default class UserManagement extends Component {
 
                                             <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
                                                 onPress={() => this.applyRoleFilter()}>
-                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
+                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >{I18n.t("APPLY")}</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
                                                 onPress={() => this.modelCancel()}>
-                                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
+                                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>{I18n.t("CANCEL")}</Text>
                                             </TouchableOpacity>
                                         </KeyboardAwareScrollView>
                                     </View>
@@ -873,7 +874,7 @@ export default class UserManagement extends Component {
                                         <View>
                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                                 <View>
-                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                                                    <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Filter By")} </Text>
                                                 </View>
                                                 <View>
                                                     <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -911,7 +912,7 @@ export default class UserManagement extends Component {
                                             <TextInput
                                                 style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                                 underlineColorAndroid="transparent"
-                                                placeholder="ROLE"
+                                                placeholder={I18n.t("ROLE")}
                                                 placeholderTextColor="#6F6F6F"
                                                 textAlignVertical="center"
                                                 autoCapitalize="none"
@@ -921,7 +922,7 @@ export default class UserManagement extends Component {
                                             <TextInput
                                                 style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                                 underlineColorAndroid="transparent"
-                                                placeholder="STORE/BRANCH"
+                                                placeholder={I18n.t("STORE/BRANCH")}
                                                 placeholderTextColor="#6F6F6F"
                                                 textAlignVertical="center"
                                                 autoCapitalize="none"
@@ -930,11 +931,11 @@ export default class UserManagement extends Component {
                                             />
                                             <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
                                                 onPress={() => this.applyUserFilter()}>
-                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
+                                                <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >{I18n.t("APPLY")}</Text>
                                             </TouchableOpacity>
                                             <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
                                                 onPress={() => this.modelCancel()}>
-                                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
+                                                <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>{I18n.t("CANCEL")}</Text>
                                             </TouchableOpacity>
                                         </KeyboardAwareScrollView>
                                     </View>
@@ -1613,6 +1614,7 @@ const flats = StyleSheet.create({
         fontSize: 12,
         marginBottom: 10,
         marginTop: -145,
+        marginLeft: 30,
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',

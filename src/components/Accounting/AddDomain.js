@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
@@ -110,7 +111,7 @@ export default class AddDomain extends Component {
                 }
             }
             ).catch(() => {
-            this.setState({ loading: false });
+                this.setState({ loading: false });
                 this.setState({ loading: false });
                 alert("There is an Error while saving Domain");
             });
@@ -131,11 +132,11 @@ export default class AddDomain extends Component {
                         <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                        Add Domain
+                        {I18n.t("Add Domain")}
                     </Text>
                 </View>
                 <ScrollView>
-                    <Text style={{ fontSize: Device.isTablet ? 22 : 17, fontFamily: 'medium', marginLeft: 20, marginBottom: 20 }}>Domain <Text style={{ color: 'red', fontFamily: 'bold' }}>*</Text></Text>
+                    <Text style={{ fontSize: Device.isTablet ? 22 : 17, fontFamily: 'medium', marginLeft: 20, marginBottom: 20 }}>{I18n.t("Domain")} <Text style={{ color: 'red', fontFamily: 'bold' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -156,7 +157,7 @@ export default class AddDomain extends Component {
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="ENTER DESCRIPTION HERE"
+                        placeholder={I18n.t("ENTER DESCRIPTION HERE")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
@@ -165,11 +166,11 @@ export default class AddDomain extends Component {
                     />
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.saveDomain()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
                         onPress={() => this.cancel()}>
-                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>CANCEL</Text>
+                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>{I18n.t("CANCEL")}</Text>
                     </TouchableOpacity>
                 </ScrollView>
             </View>

@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import { ScrollView } from 'react-native-gesture-handler';
+import I18n from 'react-native-i18n';
 import Loader from "../../commonUtils/loader";
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
@@ -159,20 +160,20 @@ export default class AccountManagement extends Component {
                         }).catch(() => {
                             this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
-                          //  alert('There is error saving domainDataId');
+                            //  alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error getting storeId');
-                  //  alert('There is error getting storeId');
+                    //  alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
         this.getDomainsList();
     }
@@ -405,7 +406,7 @@ export default class AccountManagement extends Component {
                             <Image source={require('../assets/images/menu.png')} />
                         </TouchableOpacity>
                         <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                            Accounting
+                            {I18n.t("Accounting")}
                         </Text>
 
                         {this.state.flagCreditNotes && (
@@ -450,7 +451,7 @@ export default class AccountManagement extends Component {
 
                         {this.state.flagStore && (
                             <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToAddStores()}>
-                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Store</Text>
+                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>{I18n.t("Add Store")}</Text>
                             </TouchableOpacity>
                         )}
 
@@ -475,7 +476,7 @@ export default class AccountManagement extends Component {
 
                         {this.state.flagDomain && (
                             <TouchableOpacity style={Device.isTablet ? styles.onlyNavigationToButton_tablet : styles.onlyNavigationToButton_mobile} onPress={() => this.navigateToAddDomain()}>
-                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Domain</Text>
+                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>{I18n.t("Add Domain")}</Text>
                             </TouchableOpacity>
                         )}
 

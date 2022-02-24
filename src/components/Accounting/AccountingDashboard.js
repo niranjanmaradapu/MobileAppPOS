@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { BarChart } from 'react-native-chart-kit';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import AccountingPortalGraphsService from '../services/Graphs/AccountingPortalGraphsService';
 
 var deviceWidth = Dimensions.get('window').width;
@@ -109,7 +110,7 @@ export default class AccountingDashboard extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
         this.usedBalanced();
         this.debitNotesByStore();
@@ -205,7 +206,7 @@ export default class AccountingDashboard extends Component {
         return (
             <View>
                 <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 550 }]}>
-                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Debit Notes By Store</Text>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Debit Notes By Store")}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <BarChart
                             style={{ paddingTop: 20 }}
@@ -222,7 +223,7 @@ export default class AccountingDashboard extends Component {
                 </View>
 
                 <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 550 }]}>
-                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Used Amount By Store</Text>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Used Amount By Store")}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <BarChart
                             style={{ paddingTop: 20 }}
@@ -239,7 +240,7 @@ export default class AccountingDashboard extends Component {
                 </View>
 
                 <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 550 }]}>
-                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Balanced Amount By Store</Text>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Balanced Amount By Store")}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <BarChart
                             style={{ paddingTop: 20 }}

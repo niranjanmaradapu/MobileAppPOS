@@ -2,13 +2,16 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import UrmService from '../services/UrmService';
+
 var deviceWidth = Dimensions.get("window").width;
 var deviceHeight = Dimensions.get("window").height;
+
 export class Stores extends Component {
 
     constructor(props) {
@@ -60,14 +63,14 @@ export class Stores extends Component {
                         <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >STORE ID: {index + 1} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>STORE NAME: {"\n"} {item.name}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>DOMAIN: {"\n"} {item.clientDomianlId.domaiName} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >{I18n.t("STORE ID")}: {item.id} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("STORE NAME")}: {"\n"} {item.name}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("DOMAIN")}: {"\n"} {item.clientDomianlId.domaiName} </Text>
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>LOCATION:  {"\n"} {item.cityId} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>CREATED BY: {"\n"} {item.createdBy}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>CREATED DATE: {"\n"} {item.createdDate} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("LOCATION")}:  {"\n"} {item.cityId} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("CREATED BY")}: {"\n"} {item.createdBy}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("CREATED DATE")}: {"\n"} {item.createdDate} </Text>
                                 </View>
                                 <View style={flats.buttons}>
                                     <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditStore(item, index)}>
@@ -91,7 +94,7 @@ export class Stores extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > Delete Store </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > {I18n.t("Delete Store")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 0 }} onPress={() => this.storeModelCancel()}>
@@ -115,18 +118,18 @@ export class Stores extends Component {
                                         fontSize: Device.isTablet ? 23 : 18,
                                         color: '#353C40',
                                         marginTop: 15,
-                                    }}> Are you sure want to delete Store?  </Text>
+                                    }}> {I18n.t("Are you sure want to delete Store")} ?  </Text>
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 35 : 25 }]} onPress={() => this.deleteStore(item, index)}
                                     >
-                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("DELETE")} </Text>
 
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: "#ED1C24", }]} onPress={() => this.storeModelCancel()}
                                     >
-                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: "#ED1C24" }]}  > CANCEL </Text>
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: "#ED1C24" }]}  > {I18n.t("CANCEL")} </Text>
 
                                     </TouchableOpacity>
                                 </View>
@@ -288,7 +291,7 @@ export class FilterStores extends Component {
                     <View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                             <View>
-                                <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                                <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Filter By")} </Text>
                             </View>
                             <View>
                                 <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : 0 }} onPress={() => this.modelCancel()}>
@@ -338,7 +341,7 @@ export class FilterStores extends Component {
                         <TextInput
                             style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                             underlineColorAndroid="transparent"
-                            placeholder="STORE NAME"
+                            placeholder={I18n.t("STORE NAME")}
                             placeholderTextColor="#6F6F6F"
                             textAlignVertical="center"
                             autoCapitalize="none"
@@ -347,11 +350,11 @@ export class FilterStores extends Component {
                         />
                         <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
                             onPress={() => this.applyStoreFilter()}>
-                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
+                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >{I18n.t("APPLY")}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
                             onPress={() => this.modelCancel()}>
-                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
+                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>{I18n.t("CANCEL")}</Text>
                         </TouchableOpacity>
                     </KeyboardAwareScrollView>
                 </View>

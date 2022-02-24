@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 
 var deviceWidth = Dimensions.get("window").width;
 
@@ -19,12 +20,12 @@ export default class Domain extends Component {
                                 <View style={{ flexDirection: 'row', justifyContent: 'flex-start', }}>
                                     <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S NO: {index + 1} </Text>
                                 </View>
-                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>DOMAIN: {"\n"} {item.domaiName}</Text>
-                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>CREATED BY:   {"\n"} {item.createdBy}</Text>
+                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("DOMAIN")}: {"\n"} {item.domaiName}</Text>
+                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("CREATED BY")}:   {"\n"} {item.createdBy}</Text>
                             </View>
                             <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
-                                <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>CREATED DATE: {"\n"} {item.createdDate}  </Text>
-                                <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>DESCRIPTION: {"\n"}{item.discription}  </Text>
+                                <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{I18n.t("CREATED DATE")}: {"\n"} {item.createdDate}  </Text>
+                                <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>{I18n.t("DESCRIPTION")}: {"\n"}{item.discription}  </Text>
                             </View>
                         </View>
                     )}

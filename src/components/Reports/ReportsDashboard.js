@@ -4,8 +4,10 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native';
 import { BarChart, PieChart } from 'react-native-chart-kit';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import colors from '../../colors.json';
 import ReportsGraphsService from '../services/Graphs/ReportsGraphsService';
+
 var deviceWidth = Dimensions.get('window').width;
 
 const chartConfig = {
@@ -86,7 +88,7 @@ export default class ReportsDashboard extends Component {
             this.setState({ loading: false });
 
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
 
 
         });
@@ -238,7 +240,7 @@ export default class ReportsDashboard extends Component {
         return (
             <View>
                 <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 550 }]}>
-                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Top 5 Sales</Text>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Top 5 Sales")}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <BarChart
                             style={{ paddingTop: 20 }}
@@ -256,7 +258,7 @@ export default class ReportsDashboard extends Component {
                 </View>
 
                 <View style={styles.chartMaincontainer}>
-                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Invoices Generated</Text>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Invoices Generated")}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <PieChart
                             data={this.state.invoicesChart}
@@ -289,7 +291,7 @@ export default class ReportsDashboard extends Component {
                     </View>
                 </View>
                 <View style={styles.chartMaincontainer}>
-                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Sales Summary</Text>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Sales Summary")}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <PieChart
                             data={this.state.salesSummaryChart}
@@ -321,7 +323,7 @@ export default class ReportsDashboard extends Component {
                     </View>
                 </View>
                 <View style={styles.chartMaincontainer}>
-                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Active vs Inactive Promos</Text>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Active vs Inactive Promos")}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <PieChart
                             data={this.state.activeVsInactiveChart}

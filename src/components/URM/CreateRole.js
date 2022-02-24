@@ -3,12 +3,12 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
-
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -262,27 +262,27 @@ export default class CreateRole extends Component {
                     </Text>
                 </View>
                 <ScrollView>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Role <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Role")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Role"
+                        placeholder={I18n.t("Role")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.role}
                         onChangeText={this.handleRole}
                     />
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Description <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Description")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Description"
+                        placeholder={I18n.t("Description")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.description}
                         onChangeText={this.handleDescription}
                     />
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>Domain <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Domain")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -301,12 +301,12 @@ export default class CreateRole extends Component {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 50 }}>
                         <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 7 }]}>
-                            Privileges
+                            {I18n.t("Privileges")}
                         </Text>
                         <TouchableOpacity
                             style={{ borderRadius: 5, borderColor: "#ED1C24", backgroundColor: '#ffffff', width: Device.isTablet ? 140 : 110, height: Device.isTablet ? 38 : 28, borderWidth: 1, marginTop: 7, marginRight: 20 }}
                             onPress={() => this.privilageMapping()} >
-                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#ED1C24', marginTop: 7, textAlign: 'center', alignSelf: 'center', borderRadius: 5, borderColor: "#ED1C24", }}> {('Privilege Mapping')} </Text>
+                            <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#ED1C24', marginTop: 7, textAlign: 'center', alignSelf: 'center', borderRadius: 5, borderColor: "#ED1C24", }}> {I18n.t('Privilege Mapping')} </Text>
                         </TouchableOpacity>
                     </View>
 
@@ -394,7 +394,7 @@ export default class CreateRole extends Component {
                                 alignItems: 'center', //Centered vertically
                                 flex: 1
                             }}>
-                                add more privileges buy clicking on Privilege Mapping button
+                                {I18n.t("add more privileges buy clicking on Privilege Mapping button")}
 
                             </Text>
 
@@ -405,11 +405,11 @@ export default class CreateRole extends Component {
 
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.saveRole()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
                         onPress={() => this.cancel()}>
-                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>CANCEL</Text>
+                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>{I18n.t("CANCEL")}</Text>
                     </TouchableOpacity>
                     <View style={styles.bottomContainer} ></View>
                 </ScrollView>

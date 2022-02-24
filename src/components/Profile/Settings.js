@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
@@ -12,6 +13,7 @@ import { openDatabase } from 'react-native-sqlite-storage';
 import Loader from '../../commonUtils/loader';
 import ProfileService from '../services/ProfileService';
 import UrmService from '../services/UrmService';
+
 var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
@@ -85,7 +87,7 @@ class Settings extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error saving token');
-                   // alert('There is error saving token');
+                    // alert('There is error saving token');
                 });
                 global.domainName = this.state.domainNamesArray[i].name;
                 AsyncStorage.setItem("domainName", this.state.domainNamesArray[i].name).then(() => {
@@ -205,7 +207,7 @@ class Settings extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error getting phone numner');
-                  //  alert('There is error getting phone numner');
+                    //  alert('There is error getting phone numner');
                 });
             }
             else {
@@ -234,14 +236,14 @@ class Settings extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error saving token');
-                   // alert('There is error saving token');
+                    // alert('There is error saving token');
                 });
             }
 
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
 
         var phonenumber = "";
@@ -250,7 +252,7 @@ class Settings extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting phone numner');
-           // alert('There is error getting phone numner');
+            // alert('There is error getting phone numner');
         });
         const username = await AsyncStorage.getItem("username");
         //console.log(ProfileService.getUser() + "+919895695626")
@@ -287,7 +289,7 @@ class Settings extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("custom:isConfigUser").then((value) => {
@@ -384,20 +386,20 @@ class Settings extends Component {
                         }).catch(() => {
                             this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
-                           // alert('There is error saving domainDataId');
+                            // alert('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error getting storeId');
-                   // alert('There is error getting storeId');
+                    // alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
     }
 
@@ -423,7 +425,7 @@ class Settings extends Component {
                     <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Settings </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t("Settings")} </Text>
                     {/* <TouchableOpacity
                         style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
                         onPress={() => this.signOut()} >
@@ -453,11 +455,7 @@ class Settings extends Component {
                                     <Image
                                         style={{ width: 30, height: 30, borderRadius: 10, }}
                                         source={require('../assets/images/cameraclick.png')} />
-
                                 </TouchableOpacity>
-
-
-
 
                                 {this.state.flagqtyModelOpen && (
                                     <View>
@@ -502,12 +500,12 @@ class Settings extends Component {
 
                                 <View style={{ marginTop: 0, width: deviceWidth }}>
 
-                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> NAME: </Text>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> {I18n.t("NAME")}: </Text>
 
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
-                                        placeholder="NAME"
+                                        placeholder={I18n.t("NAME")}
                                         editable={false} selectTextOnFocus={false}
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
@@ -519,13 +517,13 @@ class Settings extends Component {
 
                                 </View>
                                 <View>
-                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> DIGIGNATION: </Text>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> {I18n.t("DIGIGNATION")}: </Text>
 
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         editable={false} selectTextOnFocus={false}
                                         underlineColorAndroid="transparent"
-                                        placeholder="DIGIGNATION"
+                                        placeholder={I18n.t("DIGIGNATION")}
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -534,12 +532,12 @@ class Settings extends Component {
                                     />
                                 </View>
                                 <View>
-                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> EMAIL: </Text>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> {I18n.t("EMAIL")}: </Text>
 
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
-                                        placeholder="EMAIL"
+                                        placeholder={I18n.t("EMAIL")}
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -558,12 +556,12 @@ class Settings extends Component {
                                 </View>
 
                                 <View>
-                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> MOBILE NUMBER: </Text>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> {I18n.t("MOBILE NUMBER")}: </Text>
 
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
-                                        placeholder="MOBILE NUMBER"
+                                        placeholder={I18n.t("MOBILE NUMBER")}
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -572,7 +570,7 @@ class Settings extends Component {
                                     />
                                 </View>
                                 <View>
-                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> GENDER: </Text>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> {I18n.t("GENDER")}: </Text>
 
                                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile} >
                                         <RNPickerSelect
@@ -619,7 +617,7 @@ class Settings extends Component {
 
 
                                 <View>
-                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> DATE OF BIRTH: </Text>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> {I18n.t("DATE OF BIRTH")}: </Text>
 
                                     <TouchableOpacity
                                         style={{
@@ -648,13 +646,13 @@ class Settings extends Component {
 
                                 </View>
                                 <View>
-                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> ADDRESS: </Text>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> {I18n.t("ADDRESS")}: </Text>
 
 
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
-                                        placeholder="ADDRESS"
+                                        placeholder={I18n.t("ADDRESS")}
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -684,7 +682,7 @@ class Settings extends Component {
                                     style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                                     onPress={() => this.profileUpdate()}
                                 >
-                                    <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}> SAVE </Text>
+                                    <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}> {I18n.t("SAVE")} </Text>
                                 </TouchableOpacity>
                             </View>
 

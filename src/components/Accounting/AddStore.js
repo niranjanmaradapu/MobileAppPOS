@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
@@ -305,7 +306,7 @@ export default class AddStore extends Component {
                     }
                 }
                 ).catch(() => {
-            this.setState({ loading: false });
+                    this.setState({ loading: false });
                     this.setState({ loading: false });
                     alert("There is an Error while Saving The Store");
                 });
@@ -340,7 +341,7 @@ export default class AddStore extends Component {
                     }
                 }
                 ).catch(() => {
-            this.setState({ loading: false });
+                    this.setState({ loading: false });
                     this.setState({ loading: false });
                     alert("There is an Error while Saving the Store");
                 });
@@ -362,7 +363,7 @@ export default class AddStore extends Component {
                         <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                        {this.state.navtext}
+                        {(this.state.navtext)}
                     </Text>
                 </View>
                 <ScrollView>
@@ -373,8 +374,8 @@ export default class AddStore extends Component {
                             fontFamily: 'medium',
                             margin: 15,
                         }}
-                    >Store Details</Text>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>Store <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    >{I18n.t("Store Details")}</Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("Store")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -391,7 +392,7 @@ export default class AddStore extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>District <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("District")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -408,33 +409,33 @@ export default class AddStore extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>City</Text>
+                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("City")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="CITY"
+                        placeholder={I18n.t("CITY")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.city}
                         onChangeText={this.handleCity}
                     />
-                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>Area</Text>
+                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Area")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="AREA"
+                        placeholder={I18n.t("AREA")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.area}
                         onChangeText={this.handleArea}
                     />
-                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>Store Phone Number <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Store Phone Number")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="MOBILE"
+                        placeholder={I18n.t("Phone Number")}
                         maxLength={10}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
@@ -444,11 +445,11 @@ export default class AddStore extends Component {
                         value={this.state.mobile}
                         onChangeText={this.handleMobile}
                     />
-                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>Address</Text>
+                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{("Address")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="ADDRESS"
+                        placeholder={I18n.t("ADDRESS")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
@@ -462,8 +463,8 @@ export default class AddStore extends Component {
                             fontFamily: 'medium',
                             margin: 15,
                         }}
-                    >Store Info</Text>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>Domain <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    >{I18n.t("Store Info")}</Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("Domain")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -480,11 +481,11 @@ export default class AddStore extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>Store Name <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("Store Name")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="STORE NAME"
+                        placeholder={I18n.t("STORE NAME")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
@@ -495,7 +496,7 @@ export default class AddStore extends Component {
                         <TextInput
                             style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
                             underlineColorAndroid="transparent"
-                            placeholder="GST NUMBER"
+                            placeholder={I18n.t("GST NUMBER")}
                             placeholderTextColor="#6F6F6F"
                             textAlignVertical="center"
                             autoCapitalize="none"
@@ -506,29 +507,29 @@ export default class AddStore extends Component {
                     )}
                     {this.state.isEdit === false && (
                         <View>
-                            <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>GST Number</Text>
+                            <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("GST Number")}</Text>
                             <TextInput
                                 style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
-                                placeholder="GST NUMBER"
+                                placeholder={I18n.t("GST NUMBER")}
                                 placeholderTextColor="#6F6F6F"
                                 textAlignVertical="center"
                                 autoCapitalize="none"
                                 value={this.state.gstNumber}
                                 onChangeText={this.handleGstNumber}
                             />
-                            <Text style={{ color: '#aa0000', fontSize: Device.isTablet ? 20 : 15, marginTop: 10, marginBottom: 20, marginLeft: 20 }}>Please Provide GST Number</Text>
+                            <Text style={{ color: '#aa0000', fontSize: Device.isTablet ? 20 : 15, marginTop: 10, marginBottom: 20, marginLeft: 20 }}>{I18n.t("Please Provide GST Number")}</Text>
                         </View>
                     )}
 
 
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.saveStore()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
                         onPress={() => this.cancel()}>
-                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>CANCEL</Text>
+                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>{I18n.t("CANCEL")}</Text>
                     </TouchableOpacity>
                 </ScrollView>
             </View>
@@ -655,7 +656,6 @@ const styles = StyleSheet.create({
         left: 70,
         top: 47,
         width: 300,
-        height: 20,
         fontFamily: 'bold',
         fontSize: 18,
         color: '#353C40'

@@ -6,6 +6,8 @@ import { PieChart } from 'react-native-chart-kit';
 import Device from 'react-native-device-detection';
 import colors from '../../colors.json';
 import URMGraphsService from '../services/Graphs/URMGraphsService';
+import I18n from 'react-native-i18n';
+
 var deviceWidth = Dimensions.get('window').width;
 
 const chartConfig = {
@@ -212,7 +214,7 @@ export default class UrmDashboard extends Component {
                 {/* <Text>Dashboard</Text> */}
                 {/* {console.log(this.state.activeInactiveUsersChart)} */}
                 <View style={styles.chartMaincontainer}>
-                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Active vs InActive Users</Text>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Active vs InActive Users")}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 180 }}>
                         <PieChart
                             data={this.state.activeInactiveUsersChart}
@@ -247,7 +249,7 @@ export default class UrmDashboard extends Component {
                     </View>
                 </View>
                 <View style={styles.chartMaincontainer}>
-                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Stores vs POS Employees</Text>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Stores vs POS Employees")}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <PieChart
                             data={this.state.storesVsEmployeesChart}
@@ -280,7 +282,7 @@ export default class UrmDashboard extends Component {
                     </View>
                 </View>
                 <View style={styles.chartMaincontainer}>
-                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>Users By Roles</Text>
+                    <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Users By Roles")}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
                         <PieChart
                             data={this.state.usersByRoleChart}

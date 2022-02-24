@@ -4,9 +4,11 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 import ReportsService from '../services/ReportsService';
+
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
 
@@ -50,7 +52,7 @@ export class ListOfBarcodes extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
@@ -59,7 +61,7 @@ export class ListOfBarcodes extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
     }
 
@@ -213,13 +215,13 @@ export class ListOfBarcodes extends Component {
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >SNO: {index + 1} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>BARCODE: {"\n"} {item.barcode}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE STORE: {"\n"}{this.state.storeName} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("BARCODE")}: {"\n"} {item.barcode}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("BARCODE STORE")}: {"\n"}{this.state.storeName} </Text>
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >EMP ID: {"\n"}{item.empId} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >{I18n.t("EMP ID")}: {"\n"}{item.empId} </Text>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {"\n"} {item.qty}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE MRP: {"\n"} {item.itemMrp}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("BARCODE MRP")}: {"\n"} {item.itemMrp}</Text>
                                     <View style={flats.buttons}>
 
                                         {/* <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteBarcode(item, index)}>
@@ -244,7 +246,7 @@ export class ListOfBarcodes extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Filter By")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -323,7 +325,7 @@ export class ListOfBarcodes extends Component {
                                     <TextInput
                                         style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
-                                        placeholder="BARCODE"
+                                        placeholder={I18n.t("BARCODE")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -349,7 +351,7 @@ export class ListOfBarcodes extends Component {
                                     <TextInput
                                         style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
-                                        placeholder="EMP ID"
+                                        placeholder={I18n.t("EMP ID")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -359,7 +361,7 @@ export class ListOfBarcodes extends Component {
                                     <TextInput
                                         style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
-                                        placeholder="PRICE <"
+                                        placeholder={I18n.t("PRICE <")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -369,7 +371,7 @@ export class ListOfBarcodes extends Component {
                                     <TextInput
                                         style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
-                                        placeholder="PRICE >"
+                                        placeholder={I18n.t("PRICE >")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -378,11 +380,11 @@ export class ListOfBarcodes extends Component {
                                     />
                                     <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
                                         onPress={() => this.applyListBarcodes()}>
-                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >{I18n.t("APPLY")}</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
                                         onPress={() => this.modelCancel()}>
-                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>{I18n.t("CANCEL")}</Text>
                                     </TouchableOpacity>
                                 </KeyboardAwareScrollView>
                             </View>
@@ -397,7 +399,7 @@ export class ListOfBarcodes extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > Estimation Slip Details </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > {I18n.t("Barcode Details")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
@@ -415,7 +417,7 @@ export class ListOfBarcodes extends Component {
                                     <View style={{ flexDirection: 'column', justifyContent: 'space-around', paddingRight: Device.isTablet ? 20 : 20, paddingLeft: Device.isTablet ? 20 : 0, height: Device.isTablet ? 310 : 250 }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                BARCODE:  </Text>
+                                                {I18n.t("BARCODE")}:  </Text>
                                             <Text style={[styles.viewSubText, { color: '#00a9a9', fontFamily: 'medium' }]} selectable={true}>
                                                 {this.state.barcode} </Text>
                                         </View>
@@ -427,7 +429,7 @@ export class ListOfBarcodes extends Component {
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                STORE:  </Text>
+                                                {I18n.t("STORE")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.storeName} </Text>
                                         </View>
@@ -441,7 +443,7 @@ export class ListOfBarcodes extends Component {
                                             <TouchableOpacity
                                                 style={[Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile, { borderColor: '#00a9a9' }]} onPress={() => this.estimationModelCancel()}
                                             >
-                                                <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00a9a9' }]}  > CANCEL </Text>
+                                                <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00a9a9' }]}  > {I18n.t("CANCEL")} </Text>
                                             </TouchableOpacity>
                                         </View>
                                     </View>
