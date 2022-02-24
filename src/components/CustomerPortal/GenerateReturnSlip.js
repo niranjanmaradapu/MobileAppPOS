@@ -3,10 +3,12 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import CustomerService from '../services/CustomerService';
+
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
 
@@ -51,7 +53,7 @@ export default class GenerateReturnSlip extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
     }
 
@@ -247,7 +249,7 @@ export default class GenerateReturnSlip extends Component {
                 <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between', marginTop: 20 }}>
                     <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.25 : deviceWidth / 1.5 }]}
                         underlineColorAndroid="transparent"
-                        placeholder="INVOICE NUMBER"
+                        placeholder={I18n.t("INVOICE NUMBER")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         keyboardType={'default'}
@@ -258,14 +260,14 @@ export default class GenerateReturnSlip extends Component {
                     <TouchableOpacity
                         style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 120 : 80, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: Device.isTablet ? 10 : 5 }}
                         onPress={() => this.navigateToScanCode()} >
-                        <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 5 : 5 }]}> {('SCAN')} </Text>
+                        <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 5 : 5 }]}> {I18n.t('SCAN')} </Text>
                     </TouchableOpacity>
                 </View>
 
                 <TextInput
                     style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     underlineColorAndroid="transparent"
-                    placeholder="MOBILE NUMBER"
+                    placeholder={I18n.t("MOBILE NUMBER")}
                     placeholderTextColor="#6F6F6F"
                     textAlignVertical="center"
                     // keyboardType={'default'}
@@ -288,7 +290,7 @@ export default class GenerateReturnSlip extends Component {
                         <Text
                             style={[Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile]}
                         >
-                            SEARCH
+                            {I18n.t("SEARCH")}
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -298,7 +300,7 @@ export default class GenerateReturnSlip extends Component {
                         <Text
                             style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}
                         >
-                            CUSTOMER TAGGING
+                            {I18n.t("CUSTOMER TAGGING")}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -309,7 +311,7 @@ export default class GenerateReturnSlip extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Tag Customer </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Tag Customer")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -333,11 +335,11 @@ export default class GenerateReturnSlip extends Component {
                                         fontSize: Device.isTablet ? 23 : 18,
                                         marginBottom: Device.isTablet ? 25 : 15,
                                         color: '#353C40'
-                                    }}> Please provide customer phone number  </Text>
+                                    }}> {I18n.t("Please provide customer phone number")}  </Text>
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
-                                        placeholder="MOBILE NUMBER"
+                                        placeholder={I18n.t("MOBILE NUMBER")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         // keyboardType={'default'}
@@ -351,14 +353,14 @@ export default class GenerateReturnSlip extends Component {
                                         style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile]}
                                         onPress={() => this.customerTag()}
                                     >
-                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CONFIRM </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("CONFIRM")} </Text>
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
                                         style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
                                         onPress={() => this.modelCancel()}
                                     >
-                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > {I18n.t("CANCEL")} </Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -367,7 +369,7 @@ export default class GenerateReturnSlip extends Component {
                 )}
                 {this.state.itemsReturn && (
                     <View>
-                        <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>List Of Items For Return</Text>
+                        <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>{I18n.t("List Of Items For Return")}</Text>
                         <FlatList
                             style={{ marginTop: 20, marginBottom: 20 }}
                             data={this.state.returnInvoice}
@@ -414,9 +416,9 @@ export default class GenerateReturnSlip extends Component {
                                 </View>
                             )}
                         />
-                        <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return summary</Text>
-                        <Text style={[Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile, { marginLeft: 20 }]}>RETURN AMOUNT: {this.state.returnSlipTotal}</Text>
-                        <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>Return For Reason <Text style={{ color: "#ed1c24" }}>*</Text></Text>
+                        <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>{I18n.t("Return summary")}</Text>
+                        <Text style={[Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile, { marginLeft: 20 }]}>{I18n.t("RETURN AMOUNT")}: {this.state.returnSlipTotal}</Text>
+                        <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>{I18n.t("Return For Reason")} <Text style={{ color: "#ed1c24" }}>*</Text></Text>
                         <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                             <RNPickerSelect
                                 // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
@@ -438,7 +440,7 @@ export default class GenerateReturnSlip extends Component {
                         </View>
                         <TextInput
                             style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { height: Device.isTablet ? 175 : 155, width: deviceWidth - 40 }]}
-                            placeholder='COMMENTS'
+                            placeholder={I18n.t('COMMENTS')}
                             placeholderTextColor="#6f6f6f60"
                             textAlignVertical="center"
                             keyboardType={'default'}
@@ -453,7 +455,7 @@ export default class GenerateReturnSlip extends Component {
                             <Text
                                 style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}
                             >
-                                GENERATE RETURN SLIP
+                                {I18n.t("GENERATE RETURN SLIP")}
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -466,7 +468,7 @@ export default class GenerateReturnSlip extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > List of Return Items </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > {I18n.t("List of Return Items")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, marginRight: Device.isTablet ? 0 : -5 }} onPress={() => this.modelCancel()}>
@@ -508,14 +510,14 @@ export default class GenerateReturnSlip extends Component {
                                         style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { backgroundColor: '#00aa00' }]}
                                         onPress={() => this.generateNewSlip()}
                                     >
-                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > GENERATE NEW </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("GENERATE NEW")} </Text>
 
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#00aa00' }]} onPress={() => this.modelCancel()}
                                     >
-                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00aa00' }]}  > BACK TO DASHBOARD </Text>
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00aa00' }]}  > {I18n.t("BACK TO DASHBOARD")} </Text>
 
                                     </TouchableOpacity>
                                 </View>
@@ -551,7 +553,7 @@ export default class GenerateReturnSlip extends Component {
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#00aa00', }]} onPress={() => this.modelCancel()}
                                     >
-                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00aa00' }]}  > BACK TO DASHBOARD </Text>
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00aa00' }]}  > {I18n.t("BACK TO DASHBOARD")} </Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>

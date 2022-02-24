@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
@@ -50,7 +51,7 @@ class AddBarcode extends Component {
             hsnId: null,
             storeNamesArray: [],
             storeNames: [],
-            name:"",
+            name: "",
             storeId: "",
             domainId: 1,
             isEdit: false,
@@ -70,7 +71,7 @@ class AddBarcode extends Component {
         }).catch((err) => {
             this.setState({ loading: false });
             console.log(err);
-           // alert('There is error getting domainDataId');
+            // alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -82,7 +83,7 @@ class AddBarcode extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
         this.getAllDivisions();
         this.getAllCatogiries();
@@ -449,13 +450,13 @@ class AddBarcode extends Component {
                 "subSection": parseInt(this.state.subsectionId),
                 "category": parseInt(this.state.catogirieId),
                 "batchNo": this.state.batchNo,
-                "name":thiss.state.name,
+                "name": this.state.name,
                 "colour": this.state.colour,
                 "costPrice": this.state.costPrice,
                 "empId": this.state.empId,
                 "hsnCode": parseInt(this.state.hsnId),
                 "itemMrp": this.state.listPrice,
-                "domainId":1,
+                "domainId": 1,
                 "qty": this.state.quantity,
                 "storeId": this.state.storeId,
                 "uom": this.state.uomName,
@@ -497,10 +498,10 @@ class AddBarcode extends Component {
                     <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
                         <Image source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Add Barcode </Text>
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t("Add Barcode")} </Text>
                 </View>
                 <ScrollView>
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Division <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Division")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -516,7 +517,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Section <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -532,7 +533,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Sub Section <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Sub Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -548,7 +549,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Category <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Category")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -564,40 +565,40 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> Colour <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> {I18n.t("Colour")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Colour"
+                        placeholder={I18n.t("Colour")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.colour}
                         onChangeText={this.handleColour}
                     />
-                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> Name <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> {I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Name"
+                        placeholder={I18n.t("Name")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.name}
                         onChangeText={this.handleName}
                     />
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Batch No <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Batch No")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Batch No"
+                        placeholder={I18n.t("Batch No")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.batchNo}
                         onChangeText={this.handleBatchNo}
                     />
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Cost Price <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Cost Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Cost Price"
+                        placeholder={I18n.t("Cost Price")}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
                         placeholderTextColor="#6F6F6F"
@@ -606,10 +607,10 @@ class AddBarcode extends Component {
                         value={this.state.costPrice}
                         onChangeText={this.handleCostPrice}
                     />
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>List Price <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("List Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="List Price"
+                        placeholder={I18n.t("List Price")}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
                         placeholderTextColor="#6F6F6F"
@@ -618,7 +619,7 @@ class AddBarcode extends Component {
                         value={this.state.listPrice}
                         onChangeText={this.handleListPrice}
                     />
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>UOM <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("UOM")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -634,7 +635,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>HSN Code <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("HSN Code")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -650,7 +651,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>EMP ID <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("EMP ID")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="EMP ID"
@@ -660,7 +661,7 @@ class AddBarcode extends Component {
                         value={this.state.empId}
                         onChangeText={this.handleEMPId}
                     />
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>Store <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Store")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -688,11 +689,11 @@ class AddBarcode extends Component {
                     />
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.saveBarcode()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
                         onPress={() => this.cancel()}>
-                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>CANCEL</Text>
+                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>{I18n.t("CANCEL")}</Text>
                     </TouchableOpacity>
                     <View style={styles.bottomContainer} ></View>
                 </ScrollView>

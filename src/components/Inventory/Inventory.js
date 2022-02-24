@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 import Loader from "../../commonUtils/loader";
@@ -69,7 +70,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-          //  alert('There is error getting domainDataId');
+            //  alert('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -81,7 +82,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
@@ -90,7 +91,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
 
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
@@ -178,7 +179,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting sadasdsd');
-           // alert('There is error getting details');
+            // alert('There is error getting details');
         });
 
     }
@@ -198,7 +199,7 @@ export default class Inventory extends Component {
                 if (res.data["result"]) {
                     this.setState({ loading: false });
                     this.setState({ barcodesData: res.data.result });
-                    console.log(res.data.result)
+                    console.log(res.data.result);
                 }
             }
         }).catch(() => {
@@ -560,11 +561,11 @@ export default class Inventory extends Component {
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                        Inventory Portal
+                        {I18n.t("Inventory Portal")}
                     </Text>
                     {this.state.flagone && (
                         <TouchableOpacity style={Device.isTablet ? styles.addBarcodeButton_tablet : styles.addBarcodeButton_mobile} onPress={() => this.navigateToAddBarcode()}>
-                            <Text style={Device.isTablet ? styles.addBarcodeButtonText_tablet : styles.addBarcodeButtonText_mobile}>Add BarCode</Text>
+                            <Text style={Device.isTablet ? styles.addBarcodeButtonText_tablet : styles.addBarcodeButtonText_mobile}>{I18n.t("Add BarCode")}</Text>
                         </TouchableOpacity>
                     )}
                     {/* <TouchableOpacity
@@ -630,11 +631,11 @@ export default class Inventory extends Component {
                                     >
                                         <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
                                             <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>BARCODE: {"\n"}{item.barcode}</Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>LIST PRICE:  {"\n"} ₹{item.itemMrp} </Text>
-                                            <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>STORE: {this.state.storeName}</Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("LIST PRICE")}:  {"\n"} ₹{item.itemMrp} </Text>
+                                            <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{I18n.t("STORE")}: {this.state.storeName}</Text>
                                             <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.qty}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>VALUE: ₹{item.value}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>{I18n.t("VALUE")}: ₹{item.value}</Text>
                                             <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
                                                 <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                             </TouchableOpacity>
@@ -663,11 +664,11 @@ export default class Inventory extends Component {
                                         style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
                                     >
                                         <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
-                                            <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >PARENT BARCODE: {"\n"}{item.toBeBarcodeId}</Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>CHILD BARCODE: {"\n"}{item.currentBarcodeId}</Text>
+                                            <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >{I18n.t("PARENT BARCODE")}: {"\n"}{item.toBeBarcodeId}</Text>
+                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>{I18n.t("CHILD BARCODE")}: {"\n"}{item.currentBarcodeId}</Text>
                                             {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonTextsubrebar_mobile}>{ }</Text> */}
-                                            <Text style={Device.isTablet ? flats.commonTextRebar_tablet : flats.commonTextRebar_mobile}>EMPLOYEE ID: {"\n"}{item.createdBy}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>DATE: {"\n"}{item.fromDate}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextRebar_tablet : flats.commonTextRebar_mobile}>{I18n.t("EMPLOYEE ID")}: {"\n"}{item.createdBy}</Text>
+                                            <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>{I18n.t("DATE")}: {"\n"}{item.fromDate}</Text>
                                         </View>
                                         <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.print(item, index)}>
                                             <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/print.png')} />
@@ -690,7 +691,7 @@ export default class Inventory extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Barcode </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Delete Barcode")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -714,20 +715,20 @@ export default class Inventory extends Component {
                                     fontSize: Device.isTablet ? 23 : 18,
                                     // marginBottom: Device.isTablet ? 25 : 0,
                                     color: '#353C40'
-                                }}> Are you sure want to delete Barcode?  </Text>
+                                }}> {I18n.t("Are you sure want to delete Barcode")} ?  </Text>
 
                                 <TouchableOpacity
                                     style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 65 : 40 }]}
                                     onPress={() => this.deleteInventory()}
                                 >
-                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("DELETE")} </Text>
 
                                 </TouchableOpacity>
 
                                 <TouchableOpacity
                                     style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile} onPress={() => this.modelCancel()}
                                 >
-                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+                                    <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > {I18n.t("CANCEL")} </Text>
 
                                 </TouchableOpacity>
                             </View>
@@ -741,7 +742,7 @@ export default class Inventory extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Filter By")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -840,7 +841,7 @@ export default class Inventory extends Component {
                                     <TextInput
                                         style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
-                                        placeholder="BARCODE ID"
+                                        placeholder={I18n.t("BARCODE ID")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -849,11 +850,11 @@ export default class Inventory extends Component {
                                     />
                                     <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
                                         onPress={() => this.applyBarcodeFilter()}>
-                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >{I18n.t("APPLY")}</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
                                         onPress={() => this.modelCancel()}>
-                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>{I18n.t("CANCEL")}</Text>
                                     </TouchableOpacity>
                                 </KeyboardAwareScrollView>
                             </View>
@@ -867,7 +868,7 @@ export default class Inventory extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Filter By </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Filter By")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -962,7 +963,7 @@ export default class Inventory extends Component {
                                     <TextInput
                                         style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
-                                        placeholder="RE-BARCODE ID"
+                                        placeholder={I18n.t("RE-BARCODE ID")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -972,11 +973,11 @@ export default class Inventory extends Component {
                                     <View>
                                         <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
                                             onPress={() => this.applyReBarcodeFilter()}>
-                                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
+                                            <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >{I18n.t("APPLY")}</Text>
                                         </TouchableOpacity>
                                         <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
                                             onPress={() => this.modelCancel()}>
-                                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
+                                            <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>{I18n.t("CANCEL")}</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </KeyboardAwareScrollView>

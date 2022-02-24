@@ -5,14 +5,17 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
 import CustomerService from '../services/CustomerService';
+
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
+
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
 const createdb = openDatabase({ name: 'create_items.db', createFromLocation: 1 });
@@ -186,7 +189,7 @@ class GenerateInvoiceSlip extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-           // alert('There is error getting storeId');
+            // alert('There is error getting storeId');
         });
         this.getDiscountReasons();
         this.getHsnDetails();
@@ -369,7 +372,7 @@ class GenerateInvoiceSlip extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error saving token');
-                   // alert('There is error saving token');
+                    // alert('There is error saving token');
                 });
 
 
@@ -754,7 +757,7 @@ class GenerateInvoiceSlip extends Component {
                                     <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between' }}>
                                         <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.25 : deviceWidth / 1.4 }]}
                                             underlineColorAndroid="transparent"
-                                            placeholder="Enter DsNumber"
+                                            placeholder={I18n.t("Enter DsNumber")}
                                             placeholderTextColor="#6F6F6F60"
                                             textAlignVertical="center"
                                             keyboardType={'default'}
@@ -767,7 +770,7 @@ class GenerateInvoiceSlip extends Component {
                                         <TouchableOpacity
                                             style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 120 : 80, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: 10 }}
                                             onPress={() => this.navigateToScan()} >
-                                            <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 5 : 5 }]}> {('SCAN')} </Text>
+                                            <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 5 : 5 }]}> {I18n.t('SCAN')} </Text>
                                         </TouchableOpacity>
                                     </View>
                                 )}
@@ -775,7 +778,7 @@ class GenerateInvoiceSlip extends Component {
                                 {(global.domainName === "Retail" &&
                                     <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, {}]}
                                         underlineColorAndroid="transparent"
-                                        placeholder="Enter Barcode"
+                                        placeholder={I18n.t("Enter Barcode")}
                                         placeholderTextColor="#6F6F6F60"
                                         textAlignVertical="center"
                                         keyboardType={'default'}
@@ -796,7 +799,7 @@ class GenerateInvoiceSlip extends Component {
                                 <TouchableOpacity
                                     style={[Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile, { position: 'absolute', top: Device.isTablet ? 20 : 15 }]}
                                     onPress={() => this.navigateToScanCode()} >
-                                    <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {('SCAN')} </Text>
+                                    <Text style={Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile}> {I18n.t('SCAN')} </Text>
                                 </TouchableOpacity>
                             )}
 
@@ -887,22 +890,22 @@ class GenerateInvoiceSlip extends Component {
                                                     {item.barcodeId}
                                                 </Text>
                                                 <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                    QUANTITY:
+                                                    {I18n.t("QUANTITY")}:
                                                 </Text>
                                                 <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
                                                     {item.quantity}
                                                 </Text>
                                                 <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                    Gross Amount:
+                                                    {I18n.t("Gross Amount")}:
                                                 </Text>
                                                 <Text style={{ fontSize: 12, marginLeft: 210, marginTop: -15, fontFamily: 'medium', color: '#ED1C24' }}>
                                                     ₹ {item.netValue}
                                                 </Text>
                                                 <Text style={{ fontSize: 12, marginLeft: 245, marginTop: -15, fontFamily: 'regular', color: '#808080' }}>
-                                                    Discount: Rs. 0
+                                                    {I18n.t("Discount")}: Rs. 0
                                                 </Text>
                                                 <Text style={{ fontSize: 12, marginLeft: 130, marginTop: 6, fontFamily: 'regular', color: '#808080' }}>
-                                                    Net Value:
+                                                    {I18n.t("Net Value")}:
                                                 </Text>
                                                 <Text style={{ fontSize: 12, marginLeft: 190, marginTop: -15, fontFamily: 'medium', color: '#ED1C24' }}>
                                                     ₹ {item.listPrice}
@@ -1004,7 +1007,7 @@ class GenerateInvoiceSlip extends Component {
                                             <View>
                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                                     <View>
-                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > Delete Item </Text>
+                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > {I18n.t("Delete Item")} </Text>
                                                     </View>
                                                     <View>
                                                         <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -1026,7 +1029,7 @@ class GenerateInvoiceSlip extends Component {
                                                     fontSize: Device.isTablet ? 17 : 22,
                                                     marginTop: 15,
                                                     color: '#353C40'
-                                                }}> Are you sure want to delete NewSale Item?  </Text>
+                                                }}> {I18n.t("Are you sure want to delete NewSale Item")} ?  </Text>
                                                 <TouchableOpacity
                                                     style={{
                                                         width: deviceWidth - 40,
@@ -1039,7 +1042,7 @@ class GenerateInvoiceSlip extends Component {
                                                     <Text style={{
                                                         textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
                                                         fontFamily: "regular"
-                                                    }}  > DELETE </Text>
+                                                    }}  > {I18n.t("DELETE")} </Text>
 
                                                 </TouchableOpacity>
 
@@ -1055,7 +1058,7 @@ class GenerateInvoiceSlip extends Component {
                                                     <Text style={{
                                                         textAlign: 'center', marginTop: 20, color: "#ED1c24", fontSize: 15,
                                                         fontFamily: "regular"
-                                                    }}  > CANCEL </Text>
+                                                    }}  > {I18n.t("CANCEL")} </Text>
 
                                                 </TouchableOpacity>
                                             </View>
@@ -1099,12 +1102,12 @@ class GenerateInvoiceSlip extends Component {
                                                 <View style={{ flexDirection: "column", marginLeft: Device.isTablet ? 40 : 20 }}>
                                                     <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: Device.isTablet ? 40 : 30 }}>
                                                         <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
-                                                            ITEM: #{item.barCode}
+                                                            {I18n.t("ITEM")}: #{item.barCode}
                                                         </Text>
                                                     </View>
                                                     <View style={{ flexDirection: 'row', }}>
                                                         <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
-                                                            QUANTITY: {item.quantity}
+                                                            {I18n.t("QUANTITY")}: {item.quantity}
                                                         </Text>
                                                     </View>
                                                     {/* <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
@@ -1121,10 +1124,10 @@ class GenerateInvoiceSlip extends Component {
                                                     </View>
                                                     <View style={{ flexDirection: 'column', }}>
                                                         <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
-                                                            DISCOUNT: ₹ 0
+                                                            {I18n.t("DISCOUNT")}: ₹ 0
                                                         </Text>
                                                         <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
-                                                            GROSS AMOUNT: ₹ {item.netValue}
+                                                            {I18n.t("GROSS AMOUNT")}: ₹ {item.netValue}
                                                         </Text>
                                                     </View>
                                                 </View>
@@ -1231,7 +1234,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Items </Text>
+                                        {I18n.t("ITEMS")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1241,7 +1244,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Discount </Text>
+                                        {I18n.t("DISCOUNT")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1252,7 +1255,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Total </Text>
+                                        {I18n.t("TOTAL")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1263,7 +1266,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Customer Name </Text>
+                                        {I18n.t("CUSTOMER NAME")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1273,7 +1276,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Customer Mobile Number </Text>
+                                        Customer {I18n.t("MOBILE NUMBER")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1283,7 +1286,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Loyalty Points </Text>
+                                        {I18n.t("LOYALTY POINTS")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1293,7 +1296,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 210, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Expiry Date </Text>
+                                        {I18n.t("EXPIRY DATE")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 210, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1305,7 +1308,7 @@ class GenerateInvoiceSlip extends Component {
                                             style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
                                             onPress={() => this.pay()} >
 
-                                            <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}> Checkout </Text>
+                                            <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}> {I18n.t("Checkout")} </Text>
                                         </TouchableOpacity>
 
 
@@ -1321,7 +1324,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Items </Text>
+                                        {I18n.t("ITEMS")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 30, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1331,7 +1334,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Discount </Text>
+                                        {I18n.t("DISCOUNT")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "medium", alignItems: 'center', marginLeft: 16, top: 60, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1342,7 +1345,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Total </Text>
+                                        {I18n.t("TOTAL")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 90, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1353,7 +1356,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Customer Name </Text>
+                                        {I18n.t("CUSTOMER NAME")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 120, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1363,7 +1366,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Customer Mobile Number </Text>
+                                        {I18n.t("CUSTOMER MOBILE NUMBER")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 150, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1373,7 +1376,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Loyalty Points </Text>
+                                        {I18n.t("LOYALTY POINTS")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 180, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1383,7 +1386,7 @@ class GenerateInvoiceSlip extends Component {
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 210, fontSize: 20, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
                                     }}>
-                                        Expiry Date </Text>
+                                        {I18n.t("EXPIRY DATE")} </Text>
                                     <Text style={{
                                         color: "#353C40", fontFamily: "bold", alignItems: 'center', marginLeft: 16, top: 210, fontSize: 20, position: 'absolute', right: 10, justifyContent: 'center', textAlign: 'center', marginTop: 10,
                                         fontSize: Device.isTablet ? 19 : 14, position: 'absolute',
@@ -1419,7 +1422,7 @@ class GenerateInvoiceSlip extends Component {
                                             style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
                                             onPress={() => this.pay()} >
 
-                                            <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}> Checkout </Text>
+                                            <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}> {I18n.t("Checkout")} </Text>
                                         </TouchableOpacity>
 
 
@@ -1442,7 +1445,7 @@ class GenerateInvoiceSlip extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Tag Customer </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Tag Customer")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -1466,11 +1469,11 @@ class GenerateInvoiceSlip extends Component {
                                         fontSize: Device.isTablet ? 23 : 18,
                                         marginBottom: Device.isTablet ? 25 : 15,
                                         color: '#353C40'
-                                    }}> Please provide customer phone number  </Text>
+                                    }}> {I18n.t("Please provide customer phone number")}  </Text>
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
-                                        placeholder="MOBILE NUMBER"
+                                        placeholder={I18n.t("MOBILE NUMBER")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         keyboardType={'default'}
@@ -1483,14 +1486,14 @@ class GenerateInvoiceSlip extends Component {
                                         style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile]}
                                         onPress={() => this.tagCustomer()}
                                     >
-                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CONFIRM </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("CONFIRM")} </Text>
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
                                         style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
                                         onPress={() => this.modelCancel()}
                                     >
-                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > {I18n.t("CANCEL")} </Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -1504,7 +1507,7 @@ class GenerateInvoiceSlip extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Bill level Discount </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Bill level Discount")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -1523,7 +1526,7 @@ class GenerateInvoiceSlip extends Component {
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
-                                        placeholder="AMOUNT *"
+                                        placeholder={I18n.t("AMOUNT *")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         keyboardType={'numeric'}
@@ -1533,7 +1536,7 @@ class GenerateInvoiceSlip extends Component {
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         underlineColorAndroid="transparent"
-                                        placeholder="APPROVED BY *"
+                                        placeholder={I18n.t("APPROVED BY *")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         keyboardType={'default'}
@@ -1560,14 +1563,14 @@ class GenerateInvoiceSlip extends Component {
                                         style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile]}
                                         onPress={() => this.billDiscount()}
                                     >
-                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > CONFIRM </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("CONFIRM")} </Text>
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
                                         style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
                                         onPress={() => this.modelCancel()}
                                     >
-                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > CANCEL </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}  > {I18n.t("CANCEL")} </Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>

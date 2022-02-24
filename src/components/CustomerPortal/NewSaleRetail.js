@@ -9,6 +9,7 @@ import RNBeep from 'react-native-a-beep';
 import { RNCamera } from 'react-native-camera';
 import Device from 'react-native-device-detection';
 import { SearchBar } from "react-native-elements";
+import I18n from 'react-native-i18n';
 import ImagePicker from 'react-native-image-crop-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from "react-native-modal";
@@ -129,7 +130,7 @@ class NewSaleRetail extends Component {
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error getting domainDataId');
-     // alert('There is error getting domainDataId');
+      // alert('There is error getting domainDataId');
     });
 
     AsyncStorage.getItem("storeId").then((value) => {
@@ -140,7 +141,7 @@ class NewSaleRetail extends Component {
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error getting storeId');
-     // alert('There is error getting storeId');
+      // alert('There is error getting storeId');
     });
     this.barcodeDBStore();
     this.getItems();
@@ -225,14 +226,14 @@ class NewSaleRetail extends Component {
         }).catch(() => {
           this.setState({ loading: false });
           console.log('There is error saving domainDataId');
-         // alert('There is error saving domainDataId');
+          // alert('There is error saving domainDataId');
         });
 
       }
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error getting role Name');
-     // alert('There is error getting Role Name');
+      // alert('There is error getting Role Name');
     });
 
 
@@ -1605,7 +1606,7 @@ class NewSaleRetail extends Component {
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error getting token');
-     // alert('There is error getting token');
+      // alert('There is error getting token');
     });
     const state = this.state;
 
@@ -1636,7 +1637,7 @@ class NewSaleRetail extends Component {
           <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
             <Image source={require('../assets/images/menu.png')} />
           </TouchableOpacity>
-          <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Billing Portal </Text>
+          <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t("Billing Portal")} </Text>
           <TouchableOpacity
             style={Device.isTablet ? styles.navButton_tablet : styles.navButton_mobile}
             onPress={() => this.navigateToScanCode()} >
