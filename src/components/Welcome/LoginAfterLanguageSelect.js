@@ -31,7 +31,7 @@ export default class LoginAfterLanguageSelect extends React.Component {
         getLanguages().then(languages => {
             this.setState({ languages });
         });
-        if ( I18n.locale == "english" || I18n.locale == "en") {
+        if ( I18n.locale == "english" || I18n.locale == "en-US") {
             I18n.locale = "english"
             this.setState({ selectedItem: 0 })
         }
