@@ -198,7 +198,18 @@
     "Barcode Details": "Barcode Details",
     "PRICE <": "PRICE <",
     "PRICE >": "PRICE >",
-
-    "RETURN SLIP": "RETURN SLIP"
-    
+    "RETURN SLIP": "RETURN SLIP",
+    "Delete Estimation Slip": "Delete Estimation Slip",
+    "Are you sure want to delete Estimation Slip": "Are you sure want to delete Estimation Slip",
+    "Estimation Slip Details": "Estimation Slip Details",
+    "Delivery Slip": "Delivery Slip",
+    "GROSS AMOUNT": "GROSS AMOUNT",
+    "PROMO DISCOUNT": "PROMO DISCOUNT",
+    "NET AMOUNT": "NET AMOUNT",
+    "New Sale Report Details": "New Sale Report Details",
+    "Memo No": "Memo No",
+    "Taxable Amount": "Taxable Amount",
+    "Customer": "Customer",
+    "Are you sure want to delete New Sale Report": "Are you sure want to delete New Sale Report",
+    "Delete New Sale": "Delete New Sale"
 }

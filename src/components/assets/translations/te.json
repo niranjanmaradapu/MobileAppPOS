@@ -198,6 +198,18 @@
     "Barcode Details": "బార్‌కోడ్ వివరాలు",
     "PRICE <": "ధర <",
     "PRICE >": "ధర >",
-
-    "RETURN SLIP": "రిటర్న్ స్లిప్"
+    "RETURN SLIP": "రిటర్న్ స్లిప్",
+    "Delete Estimation Slip": "అంచనా స్లిప్‌ను తొలగించు",
+    "Are you sure want to delete Estimation Slip": "అంచనా స్లిప్‌ని మీరు ఖచ్చితంగా తొలగించాలనుకుంటున్నారా",
+    "Estimation Slip Details": "అంచనా స్లిప్ వివరాలు",
+    "Delivery Slip": "డెలివరీ స్లిప్",
+    "GROSS AMOUNT": "స్థూల మొత్తం",
+    "PROMO DISCOUNT": "ప్రోమో డిస్కౌంట్",
+    "NET AMOUNT": "నెట్ అమౌంట్",
+    "New Sale Report Details": "కొత్త విక్రయ నివేదిక వివరాలు",
+    "Memo No": "మెమో నం",
+    "Taxable Amount": "పన్ను విధించదగిన మొత్తం",
+    "Customer": "కస్టమర్",
+    "Are you sure want to delete New Sale Report": "మీరు ఖచ్చితంగా కొత్త విక్రయ నివేదికను తొలగించాలనుకుంటున్నారా",
+    "Delete New Sale": "కొత్త విక్రయాన్ని తొలగించు"
 }

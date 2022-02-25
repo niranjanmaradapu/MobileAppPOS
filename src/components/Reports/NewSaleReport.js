@@ -4,12 +4,12 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import ReportsService from '../services/ReportsService';
-import I18n from 'react-native-i18n';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -79,7 +79,7 @@ export default class NewSaleReport extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-          //  alert('There is error getting storeId');
+            //  alert('There is error getting storeId');
         });
 
 
@@ -278,7 +278,7 @@ export default class NewSaleReport extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > Delete New Sale </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > {I18n.t("Delete New Sale")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -300,18 +300,18 @@ export default class NewSaleReport extends Component {
                                         fontSize: Device.isTablet ? 23 : 18,
                                         color: '#353C40',
                                         marginTop: 10
-                                    }}> Are you sure want to delete New Sale Report ?  </Text>
+                                    }}> {I18n.t("Are you sure want to delete New Sale Report")} ?  </Text>
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 55 : 25 }]} onPress={() => this.deleteEstimationSlip(item, index)}
                                     >
-                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("DELETE")} </Text>
 
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#ED1C24' }]} onPress={() => this.estimationModelCancel()}
                                     >
-                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#ED1C24' }]}  > CANCEL </Text>
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#ED1C24' }]}  > {I18n.t("CANCEL")} </Text>
 
                                     </TouchableOpacity>
                                 </View>
@@ -476,7 +476,7 @@ export default class NewSaleReport extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > Estimation Slip Details </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > {I18n.t("New Sale Report Details")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
@@ -494,31 +494,31 @@ export default class NewSaleReport extends Component {
                                     <View style={{ flexDirection: 'column', justifyContent: 'space-around', paddingRight: Device.isTablet ? 20 : 20, paddingLeft: Device.isTablet ? 20 : 0, height: Device.isTablet ? 650 : 550 }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                Memo No:  </Text>
+                                                {I18n.t("Memo No")}:  </Text>
                                             <Text style={[styles.viewSubText, { color: '#00a9a9', fontFamily: 'medium' }]} selectable={true}>
                                                 {this.state.memono} </Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                BARCODE:  </Text>
+                                                {I18n.t("BARCODE")}:  </Text>
                                             <Text style={styles.viewSubText} selectable={true}>
                                                 {this.state.barocde} </Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                SECTION:  </Text>
+                                                {I18n.t("Section")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 - </Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                EMP ID:  </Text>
+                                                {I18n.t("EMP ID")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.empId} </Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                HSN CODE:  </Text>
+                                                {I18n.t("HSN Code")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {'HSN12345'} </Text>
                                         </View>
@@ -542,7 +542,7 @@ export default class NewSaleReport extends Component {
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                TAXABLE AMOUNT:  </Text>
+                                                {I18n.t("Taxable Amount")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 ₹ {this.state.taxableaount} </Text>
                                         </View>
@@ -566,7 +566,7 @@ export default class NewSaleReport extends Component {
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                NET AMOUNT:  </Text>
+                                                {I18n.t("NET AMOUNT")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 ₹ {this.state.mrp} </Text>
                                         </View>
@@ -578,19 +578,19 @@ export default class NewSaleReport extends Component {
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                CUSTOMER:  </Text>
+                                                {I18n.t("Customer")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.customername} </Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                MOBILE:  </Text>
+                                                {I18n.t("Mobile")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.mobile} </Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                DATE:  </Text>
+                                                {I18n.t("DATE")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.createdate} </Text>
                                         </View>
@@ -598,7 +598,7 @@ export default class NewSaleReport extends Component {
                                             <TouchableOpacity
                                                 style={[Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile, { marginTop: Device.isTablet ? 20 : 10, borderColor: '#00a9a9' }]} onPress={() => this.estimationModelCancel()}
                                             >
-                                                <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00a9a9' }]}  > CANCEL </Text>
+                                                <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00a9a9' }]}  > {I18n.t("CANCEL")} </Text>
                                             </TouchableOpacity>
                                         </View>
 

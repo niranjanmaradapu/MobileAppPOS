@@ -245,7 +245,7 @@ export class ListOfEstimationSlip extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > Delete Estimation Slip </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > {I18n.t("Delete Estimation Slip")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
@@ -267,18 +267,18 @@ export class ListOfEstimationSlip extends Component {
                                         marginTop: 15,
                                         fontSize: Device.isTablet ? 23 : 18,
                                         color: '#353C40'
-                                    }}> Are you sure want to delete Estimation Slip ?  </Text>
+                                    }}> {I18n.t("Are you sure want to delete Estimation Slip")} ?  </Text>
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 40 : 30 }]} onPress={() => this.deleteEstimationSlip(item, index)}
                                     >
-                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > DELETE </Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("DELETE")} </Text>
 
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
                                         style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#ED1C24', }]} onPress={() => this.estimationModelCancel()}
                                     >
-                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#ED1C24' }]}  > CANCEL </Text>
+                                        <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#ED1C24' }]}  > {I18n.t("CANCEL")} </Text>
 
                                     </TouchableOpacity>
                                 </View>
@@ -437,7 +437,7 @@ export class ListOfEstimationSlip extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50, }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff', }} > Estimation Slip Details </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff', }} > {I18n.t("Estimation Slip Details")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
@@ -455,7 +455,7 @@ export class ListOfEstimationSlip extends Component {
                                     <View style={{ flexDirection: 'column', justifyContent: 'space-around', height: Device.isTablet ? 300 : 250 }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                Delivery Slip:  </Text>
+                                                {I18n.t("Delivery Slip")}:  </Text>
                                             <Text style={[styles.viewSubText, { color: '#00a9a9', fontFamily: 'medium' }]} selectable={true}>
                                                 {this.state.dsnumber} </Text>
                                         </View>
@@ -473,19 +473,19 @@ export class ListOfEstimationSlip extends Component {
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                GROSS AMOUNT:  </Text>
+                                                {I18n.t("GROSS AMOUNT")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 ₹ {this.state.mrp} </Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                PROMO DISCOUNT:  </Text>
+                                                {I18n.t("PROMO DISCOUNT")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.promodisc} </Text>
                                         </View>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
                                             <Text style={styles.viewText} >
-                                                NET AMOUNT:  </Text>
+                                                {I18n.t("NET AMOUNT")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 ₹ {this.state.mrp} </Text>
                                         </View>
@@ -493,7 +493,7 @@ export class ListOfEstimationSlip extends Component {
                                             <TouchableOpacity
                                                 style={[Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile, { borderColor: '#00a9a9' }]} onPress={() => this.estimationModelCancel()}
                                             >
-                                                <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00a9a9' }]}  > CANCEL </Text>
+                                                <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#00a9a9' }]}  > {I18n.t("CANCEL")} </Text>
                                             </TouchableOpacity>
                                         </View>
                                     </View>

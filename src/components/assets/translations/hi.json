@@ -198,5 +198,18 @@
     "Barcode Details": "बारकोड विवरण",
     "PRICE <": "मूल्य <",
     "PRICE >": "मूल्य >",
-    "RETURN SLIP": "रिटर्न स्लिप"
+    "RETURN SLIP": "रिटर्न स्लिप",
+    "Delete Estimation Slip": "डिलीट एस्टीमेशन स्लिप",
+    "Are you sure want to delete Estimation Slip": "क्या आप वाकई अनुमान पर्ची हटाना चाहते हैं",
+    "Estimation Slip Details": "अनुमान पर्ची विवरण",
+    "Delivery Slip": "डिलीवरी स्लिप",
+    "GROSS AMOUNT": "सकल राशि",
+    "PROMO DISCOUNT": "प्रोमो डिस्काउंट",
+    "NET AMOUNT": "शुद्ध राशि",
+    "New Sale Report Details": "नई बिक्री रिपोर्ट विवरण",
+    "Memo No": "मेमो नहीं",
+    "Taxable Amount": "कर योग्य राशि",
+    "Customer": "ग्राहक",
+    "Are you sure want to delete New Sale Report": "क्या आप निश्चित रूप से नई बिक्री रिपोर्ट हटाना चाहते हैं",
+    "Delete New Sale": "नई बिक्री हटाएं"
 }
