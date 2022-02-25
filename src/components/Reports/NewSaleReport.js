@@ -9,6 +9,8 @@ import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import ReportsService from '../services/ReportsService';
+import I18n from 'react-native-i18n';
+
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
 
@@ -324,7 +326,7 @@ export default class NewSaleReport extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 15 }} > Filter By </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 15 }} > {I18n.t("Filter By")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
@@ -423,7 +425,7 @@ export default class NewSaleReport extends Component {
                                     <TextInput
                                         style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
-                                        placeholder="INVOICE NUMBER"
+                                        placeholder={I18n.t("INVOICE NUMBER")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -433,7 +435,7 @@ export default class NewSaleReport extends Component {
                                     <TextInput
                                         style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
-                                        placeholder="MOBILE NUMBER"
+                                        placeholder={I18n.t("MOBILE NUMBER")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -445,7 +447,7 @@ export default class NewSaleReport extends Component {
                                     <TextInput
                                         style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
                                         underlineColorAndroid="transparent"
-                                        placeholder="EMP ID"
+                                        placeholder={I18n.t("EMP ID")}
                                         placeholderTextColor="#6F6F6F"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
@@ -454,11 +456,11 @@ export default class NewSaleReport extends Component {
                                     />
                                     <TouchableOpacity style={Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile}
                                         onPress={() => this.getSaleBills()}>
-                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >APPLY</Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile} >{I18n.t("APPLY")}</Text>
                                     </TouchableOpacity>
                                     <TouchableOpacity style={Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile}
                                         onPress={() => this.modelCancel()}>
-                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>CANCEL</Text>
+                                        <Text style={Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile}>{I18n.t("CANCEL")}</Text>
                                     </TouchableOpacity>
                                 </KeyboardAwareScrollView>
                             </View>

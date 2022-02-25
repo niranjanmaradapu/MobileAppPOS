@@ -2023,7 +2023,6 @@ class InventoryRetail extends Component {
                                     textAlign: 'center', marginTop: 20, color: "#ffffff", fontSize: 15,
                                     fontFamily: "regular"
                                   }}  > DELETE </Text>
-
                                 </TouchableOpacity>
 
                                 <TouchableOpacity

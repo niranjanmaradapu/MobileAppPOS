@@ -197,5 +197,8 @@
     "BARCODE MRP": "BARCODE MRP",
     "Barcode Details": "Barcode Details",
     "PRICE <": "PRICE <",
-    "PRICE >": "PRICE >"
+    "PRICE >": "PRICE >",
+
+    "RETURN SLIP": "RETURN SLIP"
+    
 }
