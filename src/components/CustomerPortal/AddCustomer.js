@@ -51,7 +51,7 @@ export default class AddCustomer extends Component {
     addCustomer() {
         if (this.state.name === "") {
             alert("Customer Name cannot be empty");
-        } else if (this.state.phoneNumber === "") {
+        } else if (this.state.phoneNumber === "" || this.state.phoneNumber < 10) {
             alert("Mobile Number cannot be empty");
         } else {
             this.state.phoneNumber = "+91" + this.state.phoneNumber;
