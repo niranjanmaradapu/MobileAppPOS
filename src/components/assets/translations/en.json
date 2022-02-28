@@ -211,5 +211,12 @@
     "Taxable Amount": "Taxable Amount",
     "Customer": "Customer",
     "Are you sure want to delete New Sale Report": "Are you sure want to delete New Sale Report",
-    "Delete New Sale": "Delete New Sale"
+    "Delete New Sale": "Delete New Sale",
+    "Register New Client": "Register New Client",
+    "Organisation": "Organisation",
+    "Verification Code": "Verification Code",
+    "SEND": "SEND",
+    "Update New Password": "Update New Password",
+    "Confirmation Code": "Confirmation Code",
+    "New Password": "New Password"
 }

@@ -5,6 +5,8 @@ import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
+import I18n from 'react-native-i18n';
+
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
 
@@ -104,7 +106,7 @@ class UpdateNewpassword extends Component {
                                     <Image source={require('../assets/images/backButton.png')} />
                                 </TouchableOpacity>
                                 <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                                    Update New Password
+                                    {I18n.t("Update New Password")}
                                 </Text>
                             </View>
                         </View>
@@ -115,7 +117,7 @@ class UpdateNewpassword extends Component {
                             {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
                             <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
-                                placeholder="Confirmation Code"
+                                placeholder={I18n.t("Confirmation Code")}
                                 placeholderTextColor="#6F6F6F"
                                 // textAlignVertical="center"
                                 autoCapitalize="none"
@@ -129,7 +131,7 @@ class UpdateNewpassword extends Component {
                             {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
                             <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
-                                placeholder="New Password"
+                                placeholder={I18n.t("New Password")}
                                 secureTextEntry={true}
                                 placeholderTextColor="#6F6F6F"
                                 autoCapitalize="none"
@@ -161,7 +163,7 @@ class UpdateNewpassword extends Component {
                             <TouchableOpacity
                                 style={Device.isTablet ? styles.createButton_tablet : styles.createButton_mobile}
                                 onPress={() => this.create()} >
-                                <Text style={Device.isTablet ? styles.createButtonText_tablet : styles.createButtonText_mobile}> SEND  </Text>
+                                <Text style={Device.isTablet ? styles.createButtonText_tablet : styles.createButtonText_mobile}> {I18n.t("SEND")}  </Text>
                             </TouchableOpacity>
 
 

@@ -5,6 +5,8 @@ import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loader from '../../commonUtils/loader';
 import UrmService from '../services/UrmService';
+import I18n from 'react-native-i18n';
+
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
 
@@ -152,25 +154,25 @@ class RegisterClient extends Component {
                             <Image source={require('../assets/images/backButton.png')} />
                         </TouchableOpacity>
                         <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                            Register New Client
+                            {I18n.t("Register New Client")}
                         </Text>
                     </View>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Name <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Name"
+                        placeholder={I18n.t("Name")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.userName}
                         onChangeText={this.handleName}
                     />
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Mobile <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Mobile")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Mobile"
+                        placeholder={I18n.t("Mobile")}
                         maxLength={10}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
@@ -180,11 +182,11 @@ class RegisterClient extends Component {
                         value={this.state.mobile}
                         onChangeText={this.handleMobile}
                     />
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Email <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Email")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Email"
+                        placeholder={I18n.t("Email")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         keyboardType={'email-address'}
@@ -192,22 +194,22 @@ class RegisterClient extends Component {
                         value={this.state.userEmail}
                         onChangeText={this.handleEmail}
                     />
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Organisation <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Organisation")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Organisation"
+                        placeholder={I18n.t("Organisation")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.organization}
                         onChangeText={this.handleOrganization}
                     />
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>Address</Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Address")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Address"
+                        placeholder={I18n.t("Address")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         autoCapitalize="none"
@@ -216,11 +218,11 @@ class RegisterClient extends Component {
                     />
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.create()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+                <TouchableOpacity style={[Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile, {backgroundColor: "#ffffff", borderColor: "#ED142C", borderWidth: 1}]}
                         onPress={() => this.cancel()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>CANCEL</Text>
+                        <Text style={[Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile, {color: '#ED142C'}]}>{I18n.t("CANCEL")}</Text>
                     </TouchableOpacity>
                 </SafeAreaView>
             </KeyboardAwareScrollView>

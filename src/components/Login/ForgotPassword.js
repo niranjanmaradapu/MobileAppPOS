@@ -2,9 +2,11 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
+
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
 
@@ -34,7 +36,7 @@ class ForgotPassword extends Component {
     handleEmail = (text) => {
         this.setState({ userName: text });
     };
-    
+
     handleCode = (text) => {
         this.setState({ code: text });
     };
@@ -86,7 +88,7 @@ class ForgotPassword extends Component {
                                     <Image source={require('../assets/images/backButton.png')} />
                                 </TouchableOpacity>
                                 <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                                    Verification Code
+                                    {I18n.t("Verification Code")}
                                 </Text>
                             </View>
                         </View>
@@ -97,7 +99,7 @@ class ForgotPassword extends Component {
                             {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
                             <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
-                                placeholder="User Name"
+                                placeholder={I18n.t("USER NAME")}
                                 placeholderTextColor="#6F6F6F"
                                 // textAlignVertical="center"
                                 autoCapitalize="none"
@@ -141,7 +143,7 @@ class ForgotPassword extends Component {
                             <TouchableOpacity
                                 style={Device.isTablet ? styles.createButton_tablet : styles.createButton_mobile}
                                 onPress={() => this.create()} >
-                                <Text style={Device.isTablet ? styles.createButtonText_tablet : styles.createButtonText_mobile}> SEND  </Text>
+                                <Text style={Device.isTablet ? styles.createButtonText_tablet : styles.createButtonText_mobile}> {I18n.t("SEND")}  </Text>
                             </TouchableOpacity>
 
 

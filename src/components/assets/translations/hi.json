@@ -211,5 +211,12 @@
     "Taxable Amount": "कर योग्य राशि",
     "Customer": "ग्राहक",
     "Are you sure want to delete New Sale Report": "क्या आप निश्चित रूप से नई बिक्री रिपोर्ट हटाना चाहते हैं",
-    "Delete New Sale": "नई बिक्री हटाएं"
+    "Delete New Sale": "नई बिक्री हटाएं",
+    "Register New Client": "नया ग्राहक पंजीकृत करें",
+    "Organisation": "संगठन",
+    "Verification Code": "सत्यापन कोड",
+    "SEND": "भेजें",
+    "Update New Password": "नया पासवर्ड अपडेट करें",
+    "Confirmation Code": "पुष्टिकरण कोड",
+    "New Password": "नया पासवर्ड"
 }
