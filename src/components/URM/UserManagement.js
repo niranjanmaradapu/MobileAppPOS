@@ -385,7 +385,7 @@ export default class UserManagement extends Component {
                         this.setState({ filterActive: true });
                     });
                 } else {
-                    this.setState({ modalVisible: false, userType: "", role: "", createdBy: "" });
+                    this.setState({ modalVisible: false, flagFilterRoles: false, userType: "", role: "", createdBy: "" });
                     alert("records not found");
                 }
 

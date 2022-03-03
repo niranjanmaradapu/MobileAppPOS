@@ -123,7 +123,7 @@ class GiftVocher extends Component {
                 "gvNumber": this.state.gvNumber,
                 "description": this.state.description,
                 "fromDate": this.state.date,
-                "todate": this.state.enddate,
+                "toDate": this.state.enddate,
                 "clientId": this.state.clientId,
                 "value": this.state.giftValue
             };

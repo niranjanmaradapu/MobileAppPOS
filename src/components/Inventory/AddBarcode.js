@@ -263,6 +263,7 @@ class AddBarcode extends Component {
                                 value: number.name,
                                 label: number.name
                             });
+                            this.state.storeNamesArray.push({ name: number.name, id: number.id });
                         }
                         this.setState({
                             storeNames: storeNames,
@@ -385,11 +386,13 @@ class AddBarcode extends Component {
 
 
     handleStore = (value) => {
+        console.log("value", this.state.storeNamesArray);
         for (let i = 0; i < this.state.storeNamesArray.length; i++) {
             if (this.state.storeNamesArray[i].name === value) {
                 this.setState({ selectedstoreId: this.state.storeNamesArray[i].id });
             }
         }
+        console.log(this.state.selectedstoreId);
 
         this.setState({ store: value });
     };
@@ -458,7 +461,7 @@ class AddBarcode extends Component {
                 "itemMrp": this.state.listPrice,
                 "domainId": 1,
                 "qty": this.state.quantity,
-                "storeId": this.state.storeId,
+                "storeId": this.state.selectedstoreId,
                 "uom": this.state.uomName,
             };
             this.setState({ loading: true });
