@@ -48,6 +48,7 @@ export default class Inventory extends Component {
             subPrivilages: "",
             barcodeTextileId: "",
             filterActive: false,
+            error: ''
         };
     }
 
@@ -192,20 +193,20 @@ export default class Inventory extends Component {
             "barcode": this.state.barCodeId,
             "storeId": this.state.storeId
         };
-        console.log("sdsad" + this.state.endDate);
+        console.log(params);
         this.setState({ loading: true });
         axios.post(InventoryService.getTextileBarcodes(), params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 if (res.data["result"]) {
-                    this.setState({ loading: false });
-                    this.setState({ barcodesData: res.data.result });
+                    this.setState({ loading: false, barcodesData: res.data.result, error: "" });
                     console.log(res.data.result);
                 }
+                if (res.data.result.length === 0) {
+                    this.setState({ error: "Records Not Found" });
+                }
             }
-        }).catch(() => {
-            this.setState({ loading: false });
-            alert('No Results Found');
-            this.setState({ loading: false });
+        }).catch((err) => {
+            this.setState({ loading: false, error: 'Records not found' });
         });
     }
 
@@ -224,14 +225,15 @@ export default class Inventory extends Component {
             if (res.data && res.data["isSuccess"] === "true") {
                 console.log(res.data["result"]);
                 if (res.data["result"]) {
-                    this.setState({ loading: false });
-                    this.setState({ reBarcodesData: res.data.result });
+                    this.setState({ loading: false, reBarcodesData: res.data.result });
+                    console.log(res.data);
+                }
+                if (res.data.result.length === 0) {
+                    this.setState({ error: "Records Not Found" });
                 }
             }
         }).catch(() => {
-            this.setState({ loading: false });
-            alert('No Results Found');
-            this.setState({ loading: false });
+            this.setState({ loading: false, error: "Records Not Found" });
         });
 
     }
@@ -241,7 +243,7 @@ export default class Inventory extends Component {
 
     topbarAction1 = (item, index) => {
         if (item.name === "Barcode List") {
-            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false });
+            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
             this.getAllBarcodes();
             this.setState({ flagOne: true }, () => {
                 this.setState({ barcodesData: [], startDate: "", endDate: "", barCodeId: "", });
@@ -251,7 +253,7 @@ export default class Inventory extends Component {
             this.setState({ flagOne: false });
         }
         if (item.name === "Re-Barcode List") {
-            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: false, flagtwo: true });
+            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: false, flagtwo: true, error: "" });
             this.getbarcodeTexttileAdjustments();
             this.setState({ flagTwo: true }, () => {
                 this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
@@ -620,66 +622,76 @@ export default class Inventory extends Component {
 
 
                         {this.state.flagone && (
-                            <FlatList
-                                data={this.state.barcodesData}
-                                style={{ marginTop: 20 }}
-                                scrollEnabled={true}
-                                removeClippedSubviews={false}
-                                renderItem={({ item, index }) => (
-                                    <View
-                                        style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
-                                    >
-                                        <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
-                                            <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("LIST PRICE")}:  {"\n"} ₹{item.itemMrp} </Text>
-                                            <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{I18n.t("STORE")}: {this.state.storeName}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.qty}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>{I18n.t("VALUE")}: ₹{item.value}</Text>
-                                            <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
-                                                <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
-                                            </TouchableOpacity>
+                            <View>
+                                <FlatList
+                                    data={this.state.barcodesData}
+                                    style={{ marginTop: 20 }}
+                                    scrollEnabled={true}
+                                    removeClippedSubviews={false}
+                                    renderItem={({ item, index }) => (
+                                        <View
+                                            style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
+                                        >
+                                            <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
+                                                <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
+                                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
+                                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("LIST PRICE")}:  {"\n"} ₹{item.itemMrp} </Text>
+                                                <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{I18n.t("STORE")}: {this.state.storeName}</Text>
+                                                <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.qty}</Text>
+                                                <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>{I18n.t("VALUE")}: ₹{item.value}</Text>
+                                                <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
+                                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
+                                                </TouchableOpacity>
 
-                                            <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handlebarcodedeleteaction(item, index)}>
-                                                <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+                                                <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handlebarcodedeleteaction(item, index)}>
+                                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
 
-                                            </TouchableOpacity>
+                                                </TouchableOpacity>
 
-                                            {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{ }</Text> */}
+                                                {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{ }</Text> */}
 
+                                            </View>
                                         </View>
-                                    </View>
-                                )}
-                            />
+                                    )}
+                                />
+                                {this.state.error.length > 0 &&
+                                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.error}</Text>
+                                }
+                            </View>
                         )}
 
                         {this.state.flagtwo && (
-                            <FlatList
-                                data={this.state.reBarcodesData}
-                                style={{ marginTop: 20 }}
-                                scrollEnabled={true}
-                                keyExtractor={item => item}
-                                renderItem={({ item, index }) => (
-                                    <View
-                                        style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
-                                    >
-                                        <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
-                                            <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >{I18n.t("PARENT BARCODE")}: {"\n"}{item.toBeBarcodeId}</Text>
-                                            <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>{I18n.t("CHILD BARCODE")}: {"\n"}{item.currentBarcodeId}</Text>
-                                            {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonTextsubrebar_mobile}>{ }</Text> */}
-                                            <Text style={Device.isTablet ? flats.commonTextRebar_tablet : flats.commonTextRebar_mobile}>{I18n.t("EMPLOYEE ID")}: {"\n"}{item.createdBy}</Text>
-                                            <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>{I18n.t("DATE")}: {"\n"}{item.fromDate}</Text>
-                                        </View>
-                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.print(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/print.png')} />
-                                        </TouchableOpacity>
+                            <View>
+                                <FlatList
+                                    data={this.state.reBarcodesData}
+                                    style={{ marginTop: 20 }}
+                                    scrollEnabled={true}
+                                    keyExtractor={item => item}
+                                    renderItem={({ item, index }) => (
+                                        <View
+                                            style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
+                                        >
+                                            <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
+                                                <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >{I18n.t("PARENT BARCODE")}: {"\n"}{item.toBeBarcodeId}</Text>
+                                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>{I18n.t("CHILD BARCODE")}: {"\n"}{item.currentBarcodeId}</Text>
+                                                {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonTextsubrebar_mobile}>{ }</Text> */}
+                                                <Text style={Device.isTablet ? flats.commonTextRebar_tablet : flats.commonTextRebar_mobile}>{I18n.t("EMPLOYEE ID")}: {"\n"}{item.createdBy}</Text>
+                                                <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>{I18n.t("DATE")}: {"\n"}{item.fromDate}</Text>
+                                            </View>
+                                            <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.print(item, index)}>
+                                                <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/print.png')} />
+                                            </TouchableOpacity>
 
-                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.seeDetails(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/eye.png')} />
-                                        </TouchableOpacity>
-                                    </View>
-                                )}
-                            />
+                                            <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.seeDetails(item, index)}>
+                                                <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/eye.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
+                                />
+                                {this.state.error.length > 0 &&
+                                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.error}</Text>
+                                }
+                            </View>
                         )}
                     </View>
                 </ScrollView>
