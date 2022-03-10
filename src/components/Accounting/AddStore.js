@@ -298,7 +298,7 @@ export default class AddStore extends Component {
                     console.log(res.data);
                     if (res.data && res.data["isSuccess"] === "true") {
                         this.props.route.params.onGoBack();
-                        this.props.navigation.goBack();
+                        this.props.navigation.goBack(); 
                     }
                     else {
                         this.setState({ loading: false });
@@ -375,7 +375,7 @@ export default class AddStore extends Component {
                             margin: 15,
                         }}
                     >{I18n.t("Store Details")}</Text>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("Store")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("State")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}

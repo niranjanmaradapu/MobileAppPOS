@@ -238,6 +238,9 @@ export class ListOfEstimationSlip extends Component {
                         </View>
                     )}
                 />
+                {this.props.estimationSlip.length === 0 &&
+                    <Text style={{ fontSize: Device.isTablet ? 21 : 17, fontFamily: 'bold', color: '#000000', textAlign: 'center', marginTop: deviceheight/3 }}>&#9888; Results not loaded</Text>
+                }
                 {this.state.deleteEstimationSlip && (
                     <View>
                         <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
