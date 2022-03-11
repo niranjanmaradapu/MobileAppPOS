@@ -14,6 +14,7 @@ var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
 
+//The release1 branch is created from master after merging the DevOnJan to master//
 
 const data = [
     {
