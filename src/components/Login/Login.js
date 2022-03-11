@@ -14,7 +14,6 @@ var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
 
-
 const data = [
     {
         value: 1,
