@@ -98,7 +98,7 @@ class TextilePayment extends Component {
             console.log('There is error getting storeId');
            // alert('There is error getting storeId');
         });
-        console.log(this.props.route.params.totalAmount);
+        console.log('total amount is,',this.props.route.params.discountAmount);
         this.setState({
             totalAmount: this.props.route.params.totalAmount,
             grossAmount: this.props.route.params.grossAmount,
@@ -121,6 +121,8 @@ class TextilePayment extends Component {
             CGST: this.props.route.params.CGST,
             discountAmount: this.props.route.params.discountAmount,
         });
+
+
 
     }
 

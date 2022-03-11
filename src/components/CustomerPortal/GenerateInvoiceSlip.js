@@ -67,7 +67,7 @@ class GenerateInvoiceSlip extends Component {
             customerAddress: '',
             customerGSTNumber: '',
             reasonDiscount: '',
-            discountAmount: '',
+            discountAmount: '0',
             approvedBy: '',
             domainId: 1,
             storeId: 1,
@@ -661,7 +661,7 @@ class GenerateInvoiceSlip extends Component {
     };
 
     billDiscount() {
-        if (this.state.discountAmount === "") {
+        if (this.state.discountAmount === "0") {
             alert("discount amount cannot be empty");
         } else if (this.state.approvedBy === "") {
             alert("approved By cannot be empty");
