@@ -6,6 +6,9 @@ import android.net.Uri;
 
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import org.pgsqlite.SQLitePluginPackage;
+import org.pgsqlite.SQLitePluginPackage;
+import org.pgsqlite.SQLitePluginPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.reactnativecommunity.art.ARTPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
