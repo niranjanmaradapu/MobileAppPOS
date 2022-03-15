@@ -1,13 +1,13 @@
 import {
-    DrawerContentScrollView,
-    DrawerItem
+  DrawerContentScrollView,
+  DrawerItem
 } from '@react-navigation/drawer';
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 import {
-    Caption, Drawer, Title
+  Caption, Drawer, Title
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -69,7 +69,7 @@ export function DrawerContent(props) {
                                         size={size}
                                     />
                                 )}
-                                label="Home"
+                                label={I18n.t("Home")}
                                 onPress={() => { props.navigation.navigate('Home'); }}
                             />
                         )}
@@ -82,7 +82,7 @@ export function DrawerContent(props) {
                                         source={require('../components/assets/images/customerportal.png')}
                                     ></Image>
                                 )}
-                                label="Billing Portal"
+                                label={I18n.t("Billing Portal")}
                                 onPress={() => { props.navigation.navigate('CustomerNavigation'); }}
                             />
                         )}
@@ -94,7 +94,7 @@ export function DrawerContent(props) {
                                         source={require('../components/assets/images/customerportal.png')}
                                     ></Image>
                                 )}
-                                label="Billing Portal"
+                                label={I18n.t("Billing Portal")}
                                 onPress={() => { props.navigation.navigate('CustomerNavigation'); }}
                             />
                         )}
@@ -108,7 +108,7 @@ export function DrawerContent(props) {
                                         source={require('../components/assets/images/inventoryportal.png')}
                                     ></Image>
                                 )}
-                                label="Inventory Portal"
+                                label={I18n.t("Inventory Portal")}
                                 onPress={() => { props.navigation.navigate('InventoryRetailNavigation'); }}
                             />
                         )}
@@ -121,7 +121,7 @@ export function DrawerContent(props) {
                                         source={require('../components/assets/images/inventoryportal.png')}
                                     ></Image>
                                 )}
-                                label="Inventory Portal"
+                                label={I18n.t("Inventory Portal")}
                                 onPress={() => { props.navigation.navigate('InventoryNavigation'); }}
                             />
                         )}
@@ -147,7 +147,7 @@ export function DrawerContent(props) {
                                         source={require('../components/assets/images/accounting.png')}
                                     ></Image>
                                 )}
-                                label="Accounting Portal"
+                                label={I18n.t("Accounting Portal")}
                                 onPress={() => { props.navigation.navigate('AccountingNaviagtion'); }}
                             />
                         )}
@@ -160,7 +160,7 @@ export function DrawerContent(props) {
                                         source={require('../components/assets/images/reports.png')}
                                     ></Image>
                                 )}
-                                label="Reports"
+                                label={I18n.t("Reports")}
                                 onPress={() => { props.navigation.navigate('ReportsNavigation'); }}
                             />
                         )}
@@ -173,7 +173,7 @@ export function DrawerContent(props) {
                                         source={require('../components/assets/images/urmportal.png')}
                                     ></Image>
                                 )}
-                                label="URM Portal"
+                                label={I18n.t("URM Portal")}
                                 onPress={() => { props.navigation.navigate('UrmNavigation'); }}
                             />
                         )}
@@ -184,7 +184,7 @@ export function DrawerContent(props) {
                                     source={require('../components/assets/images/sidesettings.png')}
                                 ></Image>
                             )}
-                            label="Profile Settings"
+                            label={I18n.t("Profile Settings")}
                             onPress={() => { props.navigation.navigate('Settings'); }}
                         />
 
@@ -203,7 +203,7 @@ export function DrawerContent(props) {
                 </View>
             </DrawerContentScrollView>
             {/* <Drawer.Section style={styles.bottomDrawerSection}>
-        
+
             </Drawer.Section> */}
 
             <Drawer.Section style={styles.bottomDrawerSection}>
@@ -215,7 +215,7 @@ export function DrawerContent(props) {
                             size={size}
                         />
                     )}
-                    label="Domain Switch"
+                    label={I18n.t("Domain Switch")}
                     onPress={() => { props.navigation.navigate('SelectDomain'); }}
                 />
                 <DrawerItem
@@ -226,7 +226,7 @@ export function DrawerContent(props) {
                             size={size}
                         />
                     )}
-                    label="Sign Out"
+                    label={I18n.t("Sign Out")}
                     onPress={() => { props.navigation.navigate('Login'); }}
                 />
             </Drawer.Section>
