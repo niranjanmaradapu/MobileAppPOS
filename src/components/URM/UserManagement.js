@@ -94,6 +94,8 @@ export default class UserManagement extends Component {
                                                         }
                                                         if (i === 0) {
                                                             this.state.privilages.push({ bool: true, name: subprivilage.name });
+                                                        }else if (subprivilage.name === "Back Office"){
+                                                          
                                                         }
                                                         else {
                                                             this.state.privilages.push({ bool: false, name: subprivilage.name });

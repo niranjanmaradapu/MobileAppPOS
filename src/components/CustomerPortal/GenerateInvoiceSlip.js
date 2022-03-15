@@ -424,7 +424,7 @@ class GenerateInvoiceSlip extends Component {
 
     getTaxAmount() {
         let slabCheck = false;
-        // const taxDetails = 
+        // const taxDetails =
         axios.get(CustomerService.getHsnDetails()).then((response) => {
             if (response) {
                 const details = response.data.result;
@@ -464,8 +464,7 @@ class GenerateInvoiceSlip extends Component {
 
 
     pay() {
-        this.props.navigation.navigate('TextilePayment',
-            {
+      let obj = {
                 totalAmount: this.state.netPayableAmount, grossAmount: this.state.grossAmount, totalDiscount: this.state.totalDiscount,
                 CGST: this.state.centralGST, totalPromoDisc: this.state.totalPromoDisc,
                 manualDisc: this.state.manualDisc,
@@ -481,7 +480,9 @@ class GenerateInvoiceSlip extends Component {
                 customerGender: this.state.customerGender,
                 totalQty: this.state.totalQty.toString(),
                 onGoBack: () => this.invoiceUpdate(),
-            });
+            }
+        this.props.navigation.navigate('TextilePayment', obj);
+            console.log({obj})
     }
 
     invoiceUpdate() {
@@ -792,7 +793,7 @@ class GenerateInvoiceSlip extends Component {
                             </View>
 
                             {/* {(global.domainName === "Textile" &&
-                                
+
                             )} */}
 
                             {(global.domainName === "Retail" &&
@@ -3074,4 +3075,3 @@ const styles = StyleSheet.create({
     },
 
 });
-
