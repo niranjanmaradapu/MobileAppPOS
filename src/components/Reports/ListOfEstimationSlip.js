@@ -41,6 +41,7 @@ export class ListOfEstimationSlip extends Component {
             flagViewDetail: false,
             storeId: 0,
             filterActive: false,
+            estimationSlips: [1,2,3]
         };
     }
 
@@ -212,16 +213,16 @@ export class ListOfEstimationSlip extends Component {
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S.NO: {index + 1} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}> DS NUMBER: {"\n"} {item.dsNumber}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>DS DATE: {"\n"} {item.lastModified} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}> {I18n.t("DS NUMBER")}: {"\n"} {item.dsNumber}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("DS DATE")}: {"\n"} {item.lastModified} </Text>
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >DS STATUS: {"\n"}{item.status} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>GROSS AMOUNT: {"\n"} ₹{item.netAmount}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>PROMO DISC: {"\n"} {item.promoDisc} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >{I18n.t("DS STATUS")}: {"\n"}{item.status} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("GROSS AMOUNT")}: {"\n"} ₹{item.netAmount}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("PROMO DISC")}: {"\n"} {item.promoDisc} </Text>
                                 </View>
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >NET AMOUNT:{"\n"} ₹{item.netAmount} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >{I18n.t("NET AMOUNT")}:{"\n"} ₹{item.netAmount} </Text>
                                     <View style={flats.buttons}>
 
                                         <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteEstimationSlip(item, index)}>
@@ -239,7 +240,7 @@ export class ListOfEstimationSlip extends Component {
                     )}
                 />
                 {this.props.estimationSlip.length === 0 &&
-                    <Text style={{ fontSize: Device.isTablet ? 21 : 17, fontFamily: 'bold', color: '#000000', textAlign: 'center', marginTop: deviceheight/3 }}>&#9888; Results not loaded</Text>
+                    <Text style={{ fontSize: Device.isTablet ? 21 : 17, fontFamily: 'bold', color: '#000000', textAlign: 'center', marginTop: deviceheight/3 }}>&#9888; {I18n.t("Results not loaded")}</Text>
                 }
                 {this.state.deleteEstimationSlip && (
                     <View>

@@ -4,10 +4,10 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 import ReportsService from '../services/ReportsService';
-import I18n from 'react-native-i18n';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -29,6 +29,7 @@ export class SalesSumary extends Component {
             storeName: "",
             selectedStore: "",
             domainId: 0,
+            salesSumaryObject: [1,2,3]
         };
     }
 
@@ -174,12 +175,18 @@ export class SalesSumary extends Component {
                             return <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                                 <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                     <View style={flats.text}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >TRANSACTION: {"\n"}{'Sales Invoicing'} </Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>TOTAL MRP: {"\n"} ₹{this.props.salesSumary.salesSummery.totalMrp}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >{I18n.t("TRANSACTION")}: {"\n"}{'Sales Invoicing'} </Text>
+                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("TOTAL MRP")}: {"\n"}
+                                        ₹{this.props.salesSumary.salesSummery.totalMrp}
+                                        </Text>
                                     </View>
                                     <View style={flats.text}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>PROMO OFFER: {"\n"} ₹{this.props.salesSumary.salesSummery.totalDiscount} </Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>INVOICE AMOUNT: {"\n"} ₹{this.props.salesSumary.salesSummery.billValue}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("PROMO OFFER")}: {"\n"}
+                                        ₹{this.props.salesSumary.salesSummery.totalDiscount}
+                                        </Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("INVOICE AMOUNT")}: {"\n"}
+                                        ₹{this.props.salesSumary.salesSummery.billValue}
+                                        </Text>
                                     </View>
                                 </View>
                             </View>;
@@ -188,12 +195,18 @@ export class SalesSumary extends Component {
                             return <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                                 <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                     <View style={flats.text}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >TRANSACTION: {"\n"}{'Return Invoicing'} </Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>TOTAL MRP: {"\n"} ₹{this.props.salesSumary.retunSummery.totalMrp}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >{I18n.t("TRANSACTION")}: {"\n"}{'Return Invoicing'} </Text>
+                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>TOTAL MRP: {"\n"}
+                                        ₹{this.props.salesSumary.retunSummery.totalMrp}
+                                        </Text>
                                     </View>
                                     <View style={flats.text}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>PROMO OFFER: {"\n"} ₹{this.props.salesSumary.retunSummery.totalDiscount} </Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>INVOICE AMOUNT: {"\n"} ₹{this.props.salesSumary.retunSummery.billValue}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("PROMO OFFER")}: {"\n"}
+                                         ₹{this.props.salesSumary.retunSummery.totalDiscount}
+                                         </Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("INVOICE AMOUNT")}: {"\n"}
+                                         ₹{this.props.salesSumary.retunSummery.billValue}
+                                         </Text>
                                     </View>
                                 </View>
                             </View>;
@@ -204,11 +217,17 @@ export class SalesSumary extends Component {
                                 <View style={Device.isTablet ? flats.flatlistSubContainerTotal_tablet : flats.flatlistSubContainerTotal_mobile}>
                                     <View style={flats.text}>
                                         <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} ></Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>TOTAL MRP: {"\n"} ₹{this.props.salesSumary.totalMrp}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("TOTAL MRP")}: {"\n"}
+                                         ₹{this.props.salesSumary.totalMrp}
+                                         </Text>
                                     </View>
                                     <View style={flats.text}>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>PROMO OFFER: {"\n"} ₹{this.props.salesSumary.totalDiscount} </Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>INVOICE AMOUNT: {"\n"} ₹{this.props.salesSumary.billValue}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("PROMO OFFER")}: {"\n"}
+                                        ₹{this.props.salesSumary.totalDiscount}
+                                        </Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("INVOICE AMOUNT")}: {"\n"}
+                                        ₹{this.props.salesSumary.billValue}
+                                        </Text>
                                     </View>
                                 </View>
                             </View>;

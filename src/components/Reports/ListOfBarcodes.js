@@ -38,7 +38,7 @@ export class ListOfBarcodes extends Component {
             barcode: "",
             mrp: "",
             qty: "",
-
+            listBarcodes: [1,3,4]
         };
     }
 

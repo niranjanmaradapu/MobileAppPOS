@@ -219,5 +219,19 @@
     "Update New Password": "Update New Password",
     "Confirmation Code": "Confirmation Code",
     "New Password": "New Password",
-    "State": "State"
+    "State": "State",
+    "DS STATUS": "DS STATUS",
+    "DS DATE": "DS DATE",
+    "PROMO DISC": "PROMO DISC",
+    "Results not loaded": "Results not loaded",
+    "INVOICE DATE": "INVOICE DATE",
+    "BILL POSITION": "BILL POSITION",
+    "RTS NUMBER": "RTS NUMBER",
+    "RTS DATE": "RTS DATE",
+    "AMOUNT": "AMOUNT",
+    "TRANSACTION": "TRANSACTION",
+    "Sales Invoicing": "Sales Invoicing",
+    "PROMO OFFER": "PROMO OFFER",
+    "INVOICE AMOUNT": "INVOICE AMOUNT",
+    "TOTAL MRP": "TOTAL MRP"
 }

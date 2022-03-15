@@ -31,6 +31,7 @@ export class GoodsReturn extends Component {
             empId: "",
             storeId: 0,
             domainId: 0,
+            goodsReturn: [1,2,3]
         };
     }
 
@@ -197,21 +198,23 @@ export class GoodsReturn extends Component {
                                 {(item.barcodes.length !== 0 &&
                                     <View style={flats.text}>
                                         <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S NO: {index + 1} </Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>RTS NUMBER: {"\n"}{item.rtNumber}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {"\n"}{item.barcodes[0].barCode} </Text>
+                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("RTS NUMBER")}: {"\n"}{item.rtNumber}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("BARCODE")}: {"\n"}
+                                        {item.barcodes[0].barCode}
+                                        </Text>
                                     </View>
                                 )}
                                 {(item.barcodes.length === 0 &&
                                     <View style={flats.text}>
                                         <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S NO: {index + 1} </Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>RTS NUMBER: {"\n"}{item.rtNumber}</Text>
-                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {"\n"}{'-'} </Text>
+                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("RTS NUMBER")}: {"\n"}{item.rtNumber}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("BARCODE")}: {"\n"}{'-'} </Text>
                                     </View>
                                 )}
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >EMP ID: { } </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>RTS DATE: {"\n"} {item.createdInfo}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>AMOUNT: {"\n"} ₹{item.amount}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >{I18n.t("EMP ID")}: { } </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("RTS DATE")}: {"\n"} {item.createdInfo}</Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("AMOUNT")}: {"\n"} ₹{item.amount}</Text>
                                 </View>
                                 <View style={flats.text}>
                                     <View style={flats.buttons}>

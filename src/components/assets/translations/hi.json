@@ -219,5 +219,19 @@
     "Update New Password": "नया पासवर्ड अपडेट करें",
     "Confirmation Code": "पुष्टिकरण कोड",
     "New Password": "नया पासवर्ड",
-    "State": "राज्य"
-}
+    "State": "राज्य",
+    "DS STATUS": "डीएस स्थिति",
+    "DS DATE": "डीएस दिनांक",
+    "PROMO DISC": "प्रोमो डिस्क",
+    "Results not loaded": "परिणाम लोड नहीं हुए",
+    "INVOICE DATE": "चालान की तारीख",
+    "BILL POSITION": "बिल स्थिति",
+    "RTS NUMBER": "आरटीएस नंबर",
+    "RTS DATE": "आरटीएस तिथि",
+    "AMOUNT": "राशि",
+    "TRANSACTION": "लेनदेन",
+    "Sales Invoicing": "बिक्री चालान",
+    "PROMO OFFER": "प्रोमो ऑफ़र",
+    "INVOICE AMOUNT": "चालान राशि",
+    "TOTAL MRP": "कुल एमआरपी"
+  }
