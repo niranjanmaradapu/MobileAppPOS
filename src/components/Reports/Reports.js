@@ -93,7 +93,6 @@ class Reports extends Component {
                                                 if (i === 0) {
                                                     this.state.privilages.push({ bool: true, name: subprivilage.name });
                                                 } else if (subprivilage.name === "List of promotions") {
-
                                                 }
                                                 else {
                                                     this.state.privilages.push({ bool: false, name: subprivilage.name });
@@ -126,6 +125,7 @@ class Reports extends Component {
                                                     let subprivilage = res.data["result"].subPrivilages[i];
                                                     if (i === 0) {
                                                         this.state.privilages.push({ bool: true, name: subprivilage.name });
+                                                    }else if (subprivilage.name === "List of promotions") {
                                                     }
                                                     else {
                                                         this.state.privilages.push({ bool: false, name: subprivilage.name });
