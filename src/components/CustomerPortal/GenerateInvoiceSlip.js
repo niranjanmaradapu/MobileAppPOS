@@ -494,7 +494,7 @@ class GenerateInvoiceSlip extends Component {
     endEditing() {
         if (global.domainName === "Textile") {
             if (this.state.dsNumber === "") {
-                alert("Please enter DS Number");
+                alert("Please enter ES Number");
             }
             else {
                 this.getDeliverySlipDetails();
@@ -677,7 +677,7 @@ class GenerateInvoiceSlip extends Component {
                 const netPayableAmount = this.state.grandNetAmount - totalDisc;
                 this.state.netPayableAmount = netPayableAmount;
                 //  this.setState({netPayableAmount: netPayableAmount});
-                this.getTaxAmount();
+                // this.getTaxAmount();
             }
             const promDisc = parseInt(this.state.discountAmount) + parseInt(this.state.totalPromoDisc);
             console.log('vinodfdsfdsffs' + promDisc);
@@ -758,7 +758,7 @@ class GenerateInvoiceSlip extends Component {
                                     <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between' }}>
                                         <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.25 : deviceWidth / 1.4 }]}
                                             underlineColorAndroid="transparent"
-                                            placeholder={I18n.t("Enter DsNumber")}
+                                            placeholder={I18n.t("Enter ES Number")}
                                             placeholderTextColor="#6F6F6F60"
                                             textAlignVertical="center"
                                             keyboardType={'default'}

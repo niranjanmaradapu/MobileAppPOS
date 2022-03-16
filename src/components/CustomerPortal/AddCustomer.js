@@ -201,7 +201,8 @@ export default class AddCustomer extends Component {
                         value={this.state.gender}
                         useNativeAndroidPickerStyle={false}
                     />
-                </View>
+                    </View>
+                {/*
                 <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>{I18n.t("Business Information")}</Text>
                 <Text style={styles.headings}>{I18n.t("GST Number")}</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -252,7 +253,7 @@ export default class AddCustomer extends Component {
                     autoCapitalize='none'
                     value={this.state.gstaddress}
                     onChangeText={(text) => this.handleBusinessAddress(text)}
-                />
+                /> */}
 
                 <TouchableOpacity
                     style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}

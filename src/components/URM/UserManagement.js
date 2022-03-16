@@ -95,7 +95,7 @@ export default class UserManagement extends Component {
                                                         if (i === 0) {
                                                             this.state.privilages.push({ bool: true, name: subprivilage.name });
                                                         }else if (subprivilage.name === "Back Office"){
-                                                          
+
                                                         }
                                                         else {
                                                             this.state.privilages.push({ bool: false, name: subprivilage.name });
@@ -120,7 +120,7 @@ export default class UserManagement extends Component {
                                     if (len > 0) {
                                         for (let i = 0; i < len; i++) {
                                             let previlage = res.data["result"].parentPrivilages[i];
-                                            if (previlage.name === "Billing Portal") {
+                                            if (previlage.name === "URM Portal") {
 
                                                 if (length > 0) {
                                                     for (let i = 0; i < length; i++) {
@@ -131,8 +131,9 @@ export default class UserManagement extends Component {
                                                             }
                                                             if (i === 0) {
                                                                 this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                            }
-                                                            else {
+                                                            }else if (subprivilage.name === "Back Office"){
+
+                                                        }else {
                                                                 this.state.privilages.push({ bool: false, name: subprivilage.name });
                                                             }
                                                         }
