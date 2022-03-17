@@ -149,7 +149,7 @@ class TextilePayment extends Component {
         //   return
         // }
         // {
-        //   "email":"manideep6067@gmail.com",	
+        //   "email":"manideep6067@gmail.com",
         //   "phoneNumber":"8466043603",
         //   "birthDate":"07-03-1995",
         //   "gender":"male",
@@ -405,7 +405,7 @@ class TextilePayment extends Component {
     }
 
     async applyPromocode() {
-        // alert('promo code applied') 
+        // alert('promo code applied')
         // this.setState({ giftvoucher: this.state.promocode });
         // this.setState({ promoDiscount: "100" });
         const clientId = await AsyncStorage.getItem("custom:clientId1");
@@ -1067,7 +1067,7 @@ class TextilePayment extends Component {
                             </TouchableOpacity>
                         )}
                         {/* {this.state.loyaltyPoints !== "" && (
-                              <TouchableOpacity 
+                              <TouchableOpacity
                               onPress={() => this.applyPromocode()} >
                               <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#ED1C24', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('CLEAR')} </Text>
                           </TouchableOpacity>
@@ -1525,7 +1525,7 @@ class TextilePayment extends Component {
                                     color: "#353C40", fontFamily: "medium", alignItems: 'center', justifyContent: 'center', textAlign: 'center',
                                     fontSize: Device.isTablet ? 19 : 14,
                                 }}>
-                                    ₹ {parseInt(this.state.totalAmount) + parseInt(this.state.discountAmount)} </Text>
+                                    ₹ {parseInt(this.state.totalAmount) + parseInt(this.state.discountAmount) - parseInt(this.state.CGST) - parseInt(this.state.CGST)} </Text>
                             </View>
                             <View style={{ flexDirection: "row", justifyContent: 'space-between', marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
                                 <Text style={{
@@ -1601,8 +1601,9 @@ class TextilePayment extends Component {
                                     color: "#353C40", fontFamily: "bold", alignItems: 'center', fontSize: 20, justifyContent: 'center', textAlign: 'center',
                                     fontSize: 20,
                                 }}>
-                                    ₹ {(parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString()} </Text>
+                                    ₹ {(parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString()} </Text>
                             </View>
+
 
                             <View style={{ flexDirection: "row", justifyContent: 'space-between', marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
                                 <Text style={{

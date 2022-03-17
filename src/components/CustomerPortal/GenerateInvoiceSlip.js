@@ -178,6 +178,7 @@ class GenerateInvoiceSlip extends Component {
             storeId: 0,
             returnModel: false,
             returnData: "",
+            disableButton: false
         };
     }
 
@@ -267,11 +268,12 @@ class GenerateInvoiceSlip extends Component {
 
             if (item.name === "Tag Customer") {
                 this.setState({ customerTagging: true, modalVisible: true, handleBillDiscount: false });
+                this.state.privilages[1].bool = false
                 return;
             } else {
                 this.setState({ customerTagging: false, modalVisible: false });
             }
-            if (item.name === "Bill Level Discount") {
+            if (item.name === "Bill Level Discount" && this.state.disableButton === false) {
                 // this.setState({ customerTagging: true, modalVisible: true });
                 this.setState({ handleBillDiscount: true, modalVisible: true });
             } else {
@@ -341,7 +343,7 @@ class GenerateInvoiceSlip extends Component {
                 });
 
                 if (this.state.barCodeList.length > 0) {
-                    this.setState({ enablePayment: true });
+                    this.setState({ enablePayment: true, disableButton: false });
                 }
 
                 this.getTaxAmount();
@@ -454,8 +456,8 @@ class GenerateInvoiceSlip extends Component {
                     this.setState({ stateGST: 70, centralGST: 70 });
                     console.log("Checking the slab");
                 }
-                const grandTotal = this.state.netPayableAmount + this.state.centralGST + this.state.centralGST;
-                this.setState({ grandNetAmount: grandTotal });
+                const grandTotal = this.state.netPayableAmount + this.state.centralGST * 2;
+                this.setState({ grandNetAmount: grandTotal, netPayableAmount: grandTotal });
             }
         });
 
@@ -465,7 +467,9 @@ class GenerateInvoiceSlip extends Component {
 
     pay() {
       let obj = {
-                totalAmount: this.state.netPayableAmount, grossAmount: this.state.grossAmount, totalDiscount: this.state.totalDiscount,
+                totalAmount: this.state.netPayableAmount,
+                grossAmount: this.state.grossAmount,
+                totalDiscount: this.state.totalDiscount,
                 CGST: this.state.centralGST, totalPromoDisc: this.state.totalPromoDisc,
                 manualDisc: this.state.manualDisc,
                 taxAmount: this.state.taxAmount,
@@ -497,6 +501,7 @@ class GenerateInvoiceSlip extends Component {
                 alert("Please enter ES Number");
             }
             else {
+                this.setState({ disableButton: false, })
                 this.getDeliverySlipDetails();
             }
         }
@@ -670,20 +675,26 @@ class GenerateInvoiceSlip extends Component {
             alert("reason cannot be empty");
         }
         else {
-            this.state.netPayableAmount = 0;
+            // this.state.netPayableAmount = 0;
             const totalDisc =
                 parseInt(this.state.totalPromoDisc) + parseInt(this.state.discountAmount);
             if (totalDisc < this.state.grandNetAmount) {
                 const netPayableAmount = this.state.grandNetAmount - totalDisc;
                 this.state.netPayableAmount = netPayableAmount;
-                //  this.setState({netPayableAmount: netPayableAmount});
+                this.setState({netPayableAmount: netPayableAmount});
                 // this.getTaxAmount();
             }
             const promDisc = parseInt(this.state.discountAmount) + parseInt(this.state.totalPromoDisc);
             console.log('vinodfdsfdsffs' + promDisc);
             this.setState({ showDiscReason: true, promoDiscount: promDisc });
 
-            this.setState({ modalVisible: false });
+            this.setState({ modalVisible: false },
+                () => {
+                    this.setState({disableButton: true, reasonDiscount: ""})
+                    this.state.privilages[1].bool = false
+
+                });
+
         }
 
 
@@ -1110,11 +1121,7 @@ class GenerateInvoiceSlip extends Component {
                                                         <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
                                                             {I18n.t("QUANTITY")}: {item.quantity}
                                                         </Text>
-                                                    </View>
-                                                    {/* <Text style={{ fontSize: 12, marginLeft: 195, marginTop: -16, fontFamily: 'medium', color: '#353C40' }}>
-                                                {item.qty} {item.productuom}
-                                            </Text> */}
-                                                    <View style={{ flexDirection: 'row', }}>
+                                                    <View style={{ flexDirection: 'row', paddingLeft: Device.isTablet ? 25 : 15 }}>
                                                         <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
                                                             MRP:
                                                         </Text>
@@ -1123,6 +1130,8 @@ class GenerateInvoiceSlip extends Component {
                                                             ₹ {item.itemPrice}
                                                         </Text>
                                                     </View>
+                                                    </View>
+
                                                     <View style={{ flexDirection: 'column', }}>
                                                         <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
                                                             {I18n.t("DISCOUNT")}: ₹ 0
@@ -1130,6 +1139,11 @@ class GenerateInvoiceSlip extends Component {
                                                         <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>
                                                             {I18n.t("GROSS AMOUNT")}: ₹ {item.netValue}
                                                         </Text>
+                                                    </View>
+                                                    <View style={{flexDirection: 'row'}}>
+                                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080' }}>CGST: {this.state.centralGST}</Text>
+                                                        <Text style={{fontSize: Device.isTablet ? 45 : 35}}> </Text>
+                                                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'regular', color: '#808080', paddingLeft: Device.isTablet ? 25 : 15 }}>SGST: {this.state.centralGST}</Text>
                                                     </View>
                                                 </View>
                                             </View>
