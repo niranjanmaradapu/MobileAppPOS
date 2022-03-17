@@ -292,6 +292,7 @@ class GenerateInvoiceSlip extends Component {
         let costPrice = 0;
         let discount = 0;
         let total = 0;
+        this.setState({discountAmount: 0, netPayableAmount: 0, totalAmount: 0, promoDiscount: 0})
         this.state.barCodeList = [];
         this.state.finalList = [];
         this.state.rBarCodeList = [];
@@ -521,6 +522,7 @@ class GenerateInvoiceSlip extends Component {
         let costPrice = 0;
         let discount = 0;
         let total = 0;
+        this.setState({netPayableAmount: 0, totalPromoDisc: 0, grossAmount: 0})
         const params = {
             "storeId": this.state.storeId,
             "barcodeId": this.state.barcodeId,
