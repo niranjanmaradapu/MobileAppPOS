@@ -28,18 +28,18 @@ class InventoryService {
 
     //Texttile
     getAllDivisions() {
-        return REACT_NATIVE_APP_BASE_URL + '/catalog-categories/catalog/ListOfDivisions';
+        return REACT_NATIVE_APP_BASE_URL + '/inventory/catalog/ListOfDivisions';
     }
 
     getAllSections() {
-        return REACT_NATIVE_APP_BASE_URL + '/catalog-categories/catalog/getcategoriesByid';
+        return REACT_NATIVE_APP_BASE_URL + '/inventory/catalog/getcategoriesByid';
     }
 
     getAllSubSections() {
-        return REACT_NATIVE_APP_BASE_URL + '/catalog-categories/catalog/getcategoriesByid';
+        return REACT_NATIVE_APP_BASE_URL + '/inventory/catalog/getcategoriesByid';
     }
     getAllCategories() {
-        return REACT_NATIVE_APP_BASE_URL + '/catalog-categories/catalog/ListOfAllCategories';
+        return REACT_NATIVE_APP_BASE_URL + '/inventory/catalog/ListOfAllCategories';
     }
 
     getAllHsnList() {
