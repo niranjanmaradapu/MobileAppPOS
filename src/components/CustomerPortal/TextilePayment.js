@@ -477,7 +477,7 @@ class TextilePayment extends Component {
                     "discApprovedBy": this.state.approvedBy,
                     "discType": this.state.reasonDiscount,
                     "approvedBy": null,
-                    "netPayableAmount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
+                    "netPayableAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
                     "offlineNumber": null,
                     "userId": this.state.userId,
                     "sgst": this.state.CGST,
@@ -499,7 +499,7 @@ class TextilePayment extends Component {
                     "discApprovedBy": this.state.approvedBy,
                     "discType": this.state.reasonDiscount,
                     "approvedBy": null,
-                    "netPayableAmount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
+                    "netPayableAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
                     "offlineNumber": null,
                     "userId": this.state.userId,
                     "sgst": this.state.CGST,
@@ -530,7 +530,7 @@ class TextilePayment extends Component {
                     let obj;
                     if (this.state.flagTwo === true) {
                         obj = {
-                            "amount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
+                            "amount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
                             "info": "order creations",
                             "newsaleId": res.data["result"],
                         };
@@ -794,7 +794,7 @@ class TextilePayment extends Component {
                 <ScrollView>
                     <View style={styles.container}>
 
-                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 15 }}> SELECT A MODE TO PAY ₹ {(parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString()} </Text>
+                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 15 }}> SELECT A MODE TO PAY ₹ {(parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString()} </Text>
                         <FlatList
                             style={styles.flatListContainer}
                             horizontal
