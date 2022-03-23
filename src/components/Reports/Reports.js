@@ -28,7 +28,7 @@ class Reports extends Component {
             // Navigation Flags
             selectedcolor: '',
             subPrivilages: "",
-            flagDashboard: true,
+            flagDashboard: false,
             flagNewSale: false,
             flagGoodsReturn: false,
             flagSalesSummary: false,
@@ -57,6 +57,7 @@ class Reports extends Component {
             storeId: 0,
             filterActive: false,
             refreshPage: false,
+            headersNames: [],
         };
     }
 
@@ -87,20 +88,53 @@ class Reports extends Component {
                                             console.log(previlage.subPrivillages[i].parentPrivillageId);
                                             if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                                 let subprivilage = previlage.subPrivillages[i];
-                                                if (subprivilage.name === "Dashboard") {
-                                                    this.setState({ flagOne: false, flagTwo: false });
-                                                }
-                                                if (i === 0) {
-                                                    this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                } else if (subprivilage.name === "List of promotions") {
-                                                }
-                                                else {
-                                                    this.state.privilages.push({ bool: false, name: subprivilage.name });
-                                                }
+                                                this.state.headersNames.push({name: subprivilage.name})
                                             }
                                         }
+                                            this.setState({headersNames: this.state.headersNames}, () => {
+                                                for(let j = 0; j < this.state.headersNames.length; j++){
+                                                    if (j === 0) {
+                                                        this.state.privilages.push({ bool: true, name: this.state.headersNames[j].name });
+                                                    } else if (this.state.headersNames[j].name === "List of promotions") {}
+                                                    else {
+                                                        this.state.privilages.push({ bool: false, name: this.state.headersNames[j].name });
+                                                    }
+                                                }
+                                        })
+                                        this.setState({ privilages: this.state.privilages }, () =>{
+                                            console.log(this.state.privilages)
+                                            if(this.state.privilages[0].name === "Dashboard"){
+                                                this.setState({filterButton: false, flagDashboard: true})
+                                            }else{
+                                                this.setState({filterButton: true, flagDashboard: false})
+                                            }
+                                            if(this.state.privilages[0].name === "List of Estimation Slip"){
+                                                this.setState({flagEstimationSlip: true, filterActive: false, estimationSlip: []})
+                                            }else{
+                                                this.setState({flagEstimationSlip: false})
+                                            }
+                                            if(this.state.privilages[0].name === "New Sale Report"){
+                                                this.setState({ newSale: [], flagNewSale: true, filterActive: false });
+                                            }else{
+                                                this.setState({flagNewSale: false})
+                                            }
+                                            if (this.state.privilages[0].name === "Goods Return"){
+                                                this.setState({ goodsReturn: [], flagGoodsReturn: true, filterActive: false });
+                                            }else{
+                                                this.setState({flagGoodsReturn: false})
+                                            }
+                                            if(this.state.privilages[0].name === "Sales Summary"){
+                                                this.setState({ salesSumaryObject: [], flagSalesSummary: true, filterActive: false });
+                                            }else{
+                                                this.setState({flagSalesSummary: false})
+                                            }
+                                            if(this.state.privilages[0].name === "List Of Barcodes"){
+                                                this.setState({ listBarcodes: [], flagListBarcodes: true, filterActive: false });
+                                            }else{
+                                                this.setState({flagListBarcodes: false})
+                                            }
+                                        });
                                     }
-                                    this.setState({ privilages: this.state.privilages });
                                 }
                             }
                         }
@@ -123,16 +157,52 @@ class Reports extends Component {
                                             for (let i = 0; i < length; i++) {
                                                 if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
                                                     let subprivilage = res.data["result"].subPrivilages[i];
-                                                    if (i === 0) {
-                                                        this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                    }else if (subprivilage.name === "List of promotions") {
-                                                    }
+                                                    this.state.headersNames.push({name: subprivilage.name})
+                                                }
+                                            }
+                                            this.setState({headersNames: this.state.headersNames}, () => {
+                                                for(let j = 0; j < this.state.headersNames.length; j++){
+                                                    if (j === 0) {
+                                                        this.state.privilages.push({ bool: true, name: this.state.headersNames[j].name });
+                                                    } else if (this.state.headersNames[j].name === "List of promotions") {}
                                                     else {
-                                                        this.state.privilages.push({ bool: false, name: subprivilage.name });
+                                                        this.state.privilages.push({ bool: false, name: this.state.headersNames[j].name });
                                                     }
                                                 }
-                                                this.setState({ privilages: this.state.privilages });
+                                        })
+                                        this.setState({ privilages: this.state.privilages }, () =>{
+                                            console.log(this.state.privilages)
+                                            if(this.state.privilages[0].name === "Dashboard"){
+                                                this.setState({filterButton: false, flagDashboard: true})
+                                            }else{
+                                                this.setState({filterButton: true, flagDashboard: false})
                                             }
+                                            if(this.state.privilages[0].name === "List of Estimation Slip"){
+                                                this.setState({flagEstimationSlip: true, filterActive: false, estimationSlip: []})
+                                            }else{
+                                                this.setState({flagEstimationSlip: false})
+                                            }
+                                            if(this.state.privilages[0].name === "New Sale Report"){
+                                                this.setState({ newSale: [], flagNewSale: true, filterActive: false });
+                                            }else{
+                                                this.setState({flagNewSale: false})
+                                            }
+                                            if (this.state.privilages[0].name === "Goods Return"){
+                                                this.setState({ goodsReturn: [], flagGoodsReturn: true, filterActive: false });
+                                            }else{
+                                                this.setState({flagGoodsReturn: false})
+                                            }
+                                            if(this.state.privilages[0].name === "Sales Summary"){
+                                                this.setState({ salesSumaryObject: [], flagSalesSummary: true, filterActive: false });
+                                            }else{
+                                                this.setState({flagSalesSummary: false})
+                                            }
+                                            if(this.state.privilages[0].name === "List Of Barcodes"){
+                                                this.setState({ listBarcodes: [], flagListBarcodes: true, filterActive: false });
+                                            }else{
+                                                this.setState({flagListBarcodes: false})
+                                            }
+                                        });
                                         }
                                     }
                                 }

@@ -48,6 +48,7 @@ export default class Inventory extends Component {
             subPrivilages: "",
             barcodeTextileId: "",
             filterActive: false,
+            headerNames: [],
             error: ''
         };
     }
@@ -120,17 +121,19 @@ export default class Inventory extends Component {
                                             console.log(previlage.subPrivillages[i].parentPrivillageId);
                                             if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                                 let subprivilage = previlage.subPrivillages[i];
-                                                // if (subprivilage.name === "Dashboard") {
-                                                //     this.setState({ flagOne: false, flagTwo: false });
-                                                // }
-                                                if (i === 0) {
-                                                    this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                }
-                                                else {
-                                                    this.state.privilages.push({ bool: false, name: subprivilage.name });
-                                                }
+                                                this.state.headerNames.push({name: subprivilage.name})
                                             }
                                         }
+                                        this.setState({headerNames: this.state.headerNames}, () => {
+                                            for(let j = 0; j < this.state.headerNames.length; j++){
+                                                if (j === 0) {
+                                                    this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                                }
+                                                else {
+                                                    this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                                }
+                                            }
+                                        })
                                     }
                                     this.setState({ privilages: this.state.privilages });
                                 }
@@ -155,15 +158,20 @@ export default class Inventory extends Component {
                                             for (let i = 0; i < length; i++) {
                                                 if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
                                                     let subprivilage = res.data["result"].subPrivilages[i];
-                                                    if (i === 0) {
-                                                        this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                    }
-                                                    else {
-                                                        this.state.privilages.push({ bool: false, name: subprivilage.name });
-                                                    }
+                                                this.state.headerNames.push({name: subprivilage.name})
                                                 }
-                                                this.setState({ privilages: this.state.privilages });
                                             }
+                                            this.setState({headerNames: this.state.headerNames}, () => {
+                                        for(let j = 0; j < this.state.headerNames.length; j++){
+                                            if (j === 0) {
+                                                this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                            }
+                                            else {
+                                                this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                            }
+                                        }
+                                    })
+                                            this.setState({ privilages: this.state.privilages });
                                         }
                                     }
                                 }
