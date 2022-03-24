@@ -298,11 +298,11 @@ class GenerateEstimationSlip extends Component {
     };
 
     handleBarCode = (value) => {
-        this.setState({ barcodeId: value });
+        this.setState({ barcodeId: value.trim() });
     };
 
     handleQty = (value) => {
-        this.setState({ saleQuantity: value });
+        this.setState({ saleQuantity: value.trim() });
     };
 
     updateQty = (text, index) => {
@@ -355,7 +355,7 @@ class GenerateEstimationSlip extends Component {
 
 
     handleSmCode = (text) => {
-        this.setState({ smnumber: text });
+        this.setState({ smnumber: text.trim() });
     };
 
     navigateToScanCode() {
@@ -2359,4 +2359,3 @@ const styles = StyleSheet.create({
     },
 
 });
-

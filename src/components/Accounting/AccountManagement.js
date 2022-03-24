@@ -219,7 +219,7 @@ export default class AccountManagement extends Component {
             // alert('There is error getting storeId');
         });
         this.getDomainsList();
-        this.getStoresList()
+        // this.getStoresList()
     }
 
 
