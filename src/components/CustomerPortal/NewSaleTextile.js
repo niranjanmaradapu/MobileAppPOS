@@ -220,7 +220,7 @@ class NewSaleTextile extends Component {
 
     topbarAction1 = (item, index) => {
 
-        if (item.name === " Generate Estimation Slip") {
+        if (item.name === "Generate Estimation Slip") {
             this.setState({ flagGenerateEstimationSlip: true });
         } else {
             this.setState({ flagGenerateEstimationSlip: false });
