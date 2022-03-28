@@ -198,7 +198,7 @@ export class GoodsReturn extends Component {
                                 {(item.barcodes.length !== 0 &&
                                     <View style={flats.text}>
                                         <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S NO: {index + 1} </Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("RTS NUMBER")}: {"\n"}{item.rtNumber}</Text>
+                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile} selectable={true}>{I18n.t("RTS NUMBER")}: {"\n"}{item.rtNumber}</Text>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("BARCODE")}: {"\n"}
                                         {item.barcodes[0].barCode}
                                         </Text>

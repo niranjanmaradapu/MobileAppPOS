@@ -102,7 +102,9 @@ export default class UserManagement extends Component {
                                                                 for (let j = 0; j < this.state.headerNames.length; j++){
                                                                     if (j === 0) {
                                                                     this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                                                                } else {
+                                                                    }
+                                                                    else if (this.state.headerNames[j].name === "Back Office") { }
+                                                                    else {
                                                                     this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
                                                                 }
                                                                 }
@@ -114,7 +116,8 @@ export default class UserManagement extends Component {
                                                                 this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false});
                                                             }else if(this.state.privilages[0].name === "Roles") {
                                                                 this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false});
-                                                            }else {
+                                                            }
+                                                            else {
                                                                 console.log("please update the privilages in Line.no: 118")
                                                             }
                                                         });
@@ -149,10 +152,12 @@ export default class UserManagement extends Component {
                                                         console.error(this.state.headerNames)
                                                         for (let j = 0; j < this.state.headerNames.length; j++){
                                                             if (j === 0) {
-                                                            this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                                                        } else {
-                                                            this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
-                                                        }
+                                                                this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                                            }
+                                                            else if (this.state.headerNames[j].name === "Back Office") { }
+                                                            else {
+                                                                this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                                            }
                                                         }
                                                 })
                                                 this.setState({ privilages: this.state.privilages }, () => {

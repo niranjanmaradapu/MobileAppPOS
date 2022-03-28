@@ -124,6 +124,7 @@ export default class NewSaleReport extends Component {
                         this.props.childParamNewsales(res.data.result.newSaleVo);
                         this.props.filterActiveCallback();
                         this.props.modelCancelCallback();
+                        console.error(res.data.result)
                     } else {
                         alert("records not found");
                     }
@@ -150,7 +151,7 @@ export default class NewSaleReport extends Component {
 
     handleviewNewSale(item, index) {
         console.log(item);
-        this.setState({ memono: item.invoiceNumber, barocde: item.lineItemsReVo[0].barCode, hsncode: item.lineItemsReVo[0].hsnCode, empId: item.lineItemsReVo[0].empId, qty: item.totalqQty, mrp: item.totalNetAmount, taxableaount: item.totaltaxableAmount, cgst: item.totalCgst, sgst: item.totalSgst, igst: item.totalIgst, customername: item.customerName, mobile: item.mobileNumber, createdate: item.createdDate });
+        this.setState({ memono: item.invoiceNumber, barocde: item.lineItemsReVo[0].barCode, hsncode: item.lineItemsReVo[0].hsnCode, empId: item.lineItemsReVo[0].empId, qty: item.totalqQty, mrp: item.netPayableAmount, taxableaount: item.totaltaxableAmount, cgst: item.totalCgst, sgst: item.totalSgst, igst: item.totalIgst, customername: item.customerName, mobile: item.mobileNumber, createdate: item.createdDate });
         this.setState({ flagViewDetail: true, modalVisible: true, flagDeleteNewSale: false });
     }
 
@@ -254,7 +255,7 @@ export default class NewSaleReport extends Component {
                                 </View> */}
 
                                 <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >{I18n.t("NET AMOUNT")}:{"\n"} ₹ {item.totalNetAmount} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >{I18n.t("NET AMOUNT")}:{"\n"} ₹ {item.netPayableAmount} </Text>
                                     <View style={flats.buttons}>
 
                                         <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteNewSale(item, index)}>
@@ -477,7 +478,7 @@ export default class NewSaleReport extends Component {
                                 <View>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > {I18n.t("New Sale Report Details")} </Text>
+                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > {I18n.t("New Sale Report Details")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
@@ -492,7 +493,7 @@ export default class NewSaleReport extends Component {
                                     }}></Text>
                                 </View>
                                 <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 670 : 570 }}>
-                                    <View style={{ flexDirection: 'column', justifyContent: 'space-around', paddingRight: Device.isTablet ? 20 : 20, paddingLeft: Device.isTablet ? 20 : 0, height: Device.isTablet ? 650 : 550 }}>
+                                    <View style={{ flexDirection: 'column', justifyContent: 'space-around', paddingRight: Device.isTablet ? 20 : 20, paddingLeft: Device.isTablet ? 20 : 20, height: Device.isTablet ? 650 : 550 }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
                                             <Text style={styles.viewText} >
                                                 {I18n.t("Memo No")}:  </Text>
@@ -742,7 +743,6 @@ const styles = StyleSheet.create({
     //////////////
     filterCancel_mobile: {
         width: deviceWidth - 40,
-        marginLeft: 20,
         height: 50,
         backgroundColor: "#ffffff",
         borderRadius: 5,

@@ -80,6 +80,7 @@ export default class Inventory extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
             this.getAllBarcodes();
+            this.getbarcodeTexttileAdjustments()
 
         }).catch(() => {
             this.setState({ loading: false });
@@ -662,7 +663,7 @@ export default class Inventory extends Component {
                                         </View>
                                     )}
                                 />
-                                {this.state.error.length > 0 &&
+                                {this.state.barcodesData.length === 0 && this.state.error.length > 0 &&
                                     <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.error}</Text>
                                 }
                             </View>
@@ -696,7 +697,7 @@ export default class Inventory extends Component {
                                         </View>
                                     )}
                                 />
-                                {this.state.error.length > 0 &&
+                                {this.state.reBarcodesData.length === 0 && this.state.error.length > 0 &&
                                     <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.error}</Text>
                                 }
                             </View>
