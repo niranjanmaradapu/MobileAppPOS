@@ -14,6 +14,8 @@ import colors from '../../colors.json';
 import HomeGraphsService from '../services/Graphs/HomeGraphsService';
 import ProfileService from '../services/ProfileService';
 import UrmService from '../services/UrmService';
+import RNPickerSelect from 'react-native-picker-select';
+import { Chevron } from 'react-native-shapes';
 
 var deviceWidth = Dimensions.get('window').width;
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
@@ -143,6 +145,8 @@ class Home extends Component {
             },
             salesCategory: [],
             salesCategoryChart: [],
+            categoryName: "Today",
+            salesName: "Today",
         };
     }
 
@@ -323,7 +327,7 @@ class Home extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             this.setState({ loading: false });
-            alert('No user details get');
+            // alert('No user details get');
         });
         if (username) {
             this.setState({ domainId: 1 });
@@ -343,7 +347,7 @@ class Home extends Component {
             if (res.data.result !== "null") {
                 this.setState({ toadysSale: res.data.result.amount });
             }
-        }).catch(error => { console.log(error), alert(error); });
+        }).catch(error => { console.log(error)});
     }
 
     getMonthlySale() {
@@ -368,7 +372,7 @@ class Home extends Component {
 
 
     getTopSales() {
-        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
+        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId + '&name=' + this.state.salesName;
         axios.get(HomeGraphsService.getTopFiveSales() + params).then(response => {
             if (response) {
                 if (response.data.result !== "null" && response.data.result.length > 0) {
@@ -402,7 +406,7 @@ class Home extends Component {
 
 
     getSalesByCategory() {
-        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId;
+        const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId + '&name=' + this.state.categoryName;
         axios.get(HomeGraphsService.getSalesByCategory() + params).then(response => {
             if (response) {
                 if (response.data.result !== "null" && response.data.result.length > 0) {
@@ -455,6 +459,19 @@ class Home extends Component {
         // this.props.navigation.navigate('Home')
     }
 
+    handleCategoryName = (value) => {
+        this.setState({ categoryName: value }, () => {
+            console.log(this.state.categoryName)
+            this.getSalesByCategory()
+        })
+    }
+
+    handleSalesName = (value) => {
+        this.setState({ salesName: value }, () => {
+            console.log(this.state.salesName)
+            this.getTopSales()
+        })
+    }
 
     render() {
         return (
@@ -573,8 +590,27 @@ class Home extends Component {
                         <View>
                             <View style={styles.chartMaincontainer}>
                                 <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Sales % by category")}</Text>
+                                <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 60, borderColor: '#000000', borderWidth: Device.isTablet ? 2 : 1,}]}>
+                                <RNPickerSelect 
+                                    placeholder={{
+                                            label: "Today",
+                                            value: "Today",
+                                        }}
+                                        Icon={() => {
+                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                            }}
+                                            items={[
+                                                { label: 'Last One Month', value: 'LastOneMonth' },
+                                                { label: 'Last 6 Months', value: 'Last6months' },
+                                                { label: 'Last Year', value: 'LastYear' },
+                                            ]}
+                                            onValueChange={this.handleCategoryName}
+                                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                            value={this.state.categoryName}
+                                            useNativeAndroidPickerStyle={false}
+                                />
+                                </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
-
                                     <PieChart
                                         data={this.state.salesCategoryChart}
                                         style={{ paddingTop: 20, paddingLeft: 20 }}
@@ -606,8 +642,29 @@ class Home extends Component {
                                 </View>
                             </View>
                         </View>
-                        <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 500 : 550 }]}>
+                        <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 600 : 700 }]}>
                             <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Top 5 Sales by representative")}</Text>
+
+                            <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 60, borderColor: '#000000', borderWidth: Device.isTablet ? 2 : 1,}]}>
+                                <RNPickerSelect 
+                                    placeholder={{
+                                            label: "Today",
+                                            value: "Today",
+                                        }}
+                                        Icon={() => {
+                                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                            }}
+                                            items={[
+                                                { label: 'Last One Month', value: 'LastOneMonth' },
+                                                { label: 'Last 6 Months', value: 'Last6months' },
+                                                { label: 'Last Year', value: 'LastYear' },
+                                            ]}
+                                            onValueChange={this.handleSalesName}
+                                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                            value={this.state.salesName}
+                                            useNativeAndroidPickerStyle={false}
+                                />
+                                </View>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160, marginTop: Device.isTablet ? 10 : 20 }}>
                                 <BarChart
                                     style={{ paddingTop: 20 }}
@@ -630,14 +687,102 @@ class Home extends Component {
 }
 export default Home;
 
+const pickerSelectStyles_mobile = StyleSheet.create({
+    placeholder: {
+        color: "#6F6F6F",
+        fontFamily: "regular",
+        fontSize: 15,
+    },
+    inputIOS: {
+        justifyContent: 'center',
+        height: 42,
+        borderRadius: 3,
+        borderWidth: Device.isTablet ? 2 : 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+    },
+    inputAndroid: {
+        justifyContent: 'center',
+        height: 42,
+        borderRadius: 3,
+        borderWidth: Device.isTablet ? 2 : 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+        color: '#001B4A',
+
+        // marginLeft: 20,
+        // marginRight: 20,
+        // marginTop: 10,
+        // height: 40,
+        // backgroundColor: '#ffffff',
+        // borderBottomColor: '#456CAF55',
+        // color: '#001B4A',
+        // fontFamily: "bold",
+        // fontSize: 16,
+        // borderRadius: 3,
+    },
+});
+
+const pickerSelectStyles_tablet = StyleSheet.create({
+    placeholder: {
+        color: "#6F6F6F",
+        fontFamily: "regular",
+        fontSize: 20,
+    },
+    inputIOS: {
+        justifyContent: 'center',
+        height: 52,
+        borderRadius: 3,
+        borderWidth: Device.isTablet ? 2 : 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 20,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+    },
+    inputAndroid: {
+        justifyContent: 'center',
+        height: 52,
+        borderRadius: 3,
+        borderWidth: Device.isTablet ? 2 : 1,
+        fontFamily: 'regular',
+        //paddingLeft: -20,
+        fontSize: 20,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+        color: '#001B4A',
+
+        // marginLeft: 20,
+        // marginRight: 20,
+        // marginTop: 10,
+        // height: 40,
+        // backgroundColor: '#ffffff',
+        // borderBottomColor: '#456CAF55',
+        // color: '#001B4A',
+        // fontFamily: "bold",
+        // fontSize: 16,
+        // borderRadius: 3,
+    },
+});
+
 
 const styles = StyleSheet.create({
+    imagealign: {
+        marginTop: Device.isTablet ? 25 : 20,
+        marginRight: Device.isTablet ? 30 : 20,
+    },
     chartMaincontainer: {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#FFFFFF',
-        height: Device.isTablet ? 350 : 300,
+        height: Device.isTablet ? 450 : 400,
         width: deviceWidth - 40,
         margin: 20,
         borderRadius: 20,
@@ -948,6 +1093,24 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#353C40'
     },
+    rnSelect_mobile: {
+        color: '#8F9EB7',
+        fontSize: 15
+    },
+    rnSelectContainer_mobile: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: Device.isTablet ? 2 : 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
 
     // Styles For Tablet
     viewsWidth_tablet: {
@@ -1100,6 +1263,22 @@ const styles = StyleSheet.create({
         height: 280,
         borderRadius: 10
     },
+    rnSelect_tablet: {
+        color: '#8F9EB7',
+        fontSize: 20
+    },
+    rnSelectContainer_tablet: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: Device.isTablet ? 2 : 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
 });
-
-
