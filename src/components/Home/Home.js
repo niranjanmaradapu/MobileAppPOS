@@ -590,7 +590,7 @@ class Home extends Component {
                         <View>
                             <View style={styles.chartMaincontainer}>
                                 <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Sales % by category")}</Text>
-                                <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 60, borderColor: '#000000', borderWidth: Device.isTablet ? 2 : 1,}]}>
+                                <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 60, borderColor: '#000000', borderWidth: Device.isTablet ? 2 : 1,  marginTop: Device.isTablet ? 20 : 0}]}>
                                 <RNPickerSelect 
                                     placeholder={{
                                             label: "Today",
@@ -645,7 +645,7 @@ class Home extends Component {
                         <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 600 : 700 }]}>
                             <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Top 5 Sales by representative")}</Text>
 
-                            <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 60, borderColor: '#000000', borderWidth: Device.isTablet ? 2 : 1,}]}>
+                            <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 60, borderColor: '#000000', borderWidth: Device.isTablet ? 2 : 1, marginTop: Device.isTablet ? 20 : 0}]}>
                                 <RNPickerSelect 
                                     placeholder={{
                                             label: "Today",

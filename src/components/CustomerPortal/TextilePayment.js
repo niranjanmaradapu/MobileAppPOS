@@ -394,7 +394,7 @@ class TextilePayment extends Component {
                 alert('Please collect sufficient amount');
             }
             else {
-                this.setState({ returnAmount: parseFloat(this.state.recievedAmount) - (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)) });
+                this.setState({ returnAmount: parseFloat(this.state.recievedAmount) - parseFloat(this.state.totalAmount) });
             }
         }
         else if (this.state.flagThree === true)
@@ -450,7 +450,7 @@ class TextilePayment extends Component {
     }
 
     clearCashSammary() {
-        this.setState({ verifiedCash: "", recievedAmount: "" });
+        this.setState({ verifiedCash: "", recievedAmount: "", returnAmount: 0 });
     }
 
     pay = () => {
