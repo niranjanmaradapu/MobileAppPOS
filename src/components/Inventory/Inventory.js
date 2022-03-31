@@ -643,7 +643,7 @@ export default class Inventory extends Component {
                                         >
                                             <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
                                                 <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
-                                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
+                                                <Text selectable={true} style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} >{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
                                                 <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("LIST PRICE")}:  {"\n"} ₹{item.itemMrp} </Text>
                                                 <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{I18n.t("STORE")}: {this.state.storeName}</Text>
                                                 <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.qty}</Text>
