@@ -22,8 +22,9 @@ export class Stores extends Component {
         };
     }
 
-    deleteStore = (item, index) => {
-        alert("you have deleted store" + index);
+    deleteStore() {
+        alert("you have deleted store");
+        this.setState({ storesDelete: false, modalVisible: false });
     };
 
     storeModelCancel() {
@@ -120,7 +121,7 @@ export class Stores extends Component {
                                         marginTop: 15,
                                     }}> {I18n.t("Are you sure want to delete Store")} ?  </Text>
                                     <TouchableOpacity
-                                        style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 35 : 25 }]} onPress={() => this.deleteStore(item, index)}
+                                        style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 35 : 25 }]} onPress={() => this.deleteStore()}
                                     >
                                         <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("DELETE")} </Text>
 

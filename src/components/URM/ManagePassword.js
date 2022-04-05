@@ -5,6 +5,7 @@ import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loader from '../../commonUtils/loader';
 import UrmService from '../services/UrmService';
+import I18n from 'react-native-i18n';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -104,7 +105,7 @@ export default class ManagePassword extends Component {
                             <Image source={require('../assets/images/backButton.png')} />
                         </TouchableOpacity>
                         <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                            Update New Password
+                            {I18n.t("Update New Password")}
                         </Text>
                     </View>
                     {/* <TextInput
@@ -120,7 +121,7 @@ export default class ManagePassword extends Component {
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="New Password"
+                        placeholder={I18n.t("New Password")}
                         placeholderTextColor="#6F6F6F"
                         textAlignVertical="center"
                         secureTextEntry={true}
@@ -130,7 +131,7 @@ export default class ManagePassword extends Component {
                     />
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
-                        placeholder="Confirm Password"
+                        placeholder={I18n.t("Confirm Password")}
                         secureTextEntry={true}
                         placeholderTextColor="#6F6F6F"
                         autoCapitalize="none"
@@ -140,11 +141,11 @@ export default class ManagePassword extends Component {
 
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.changePassword()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.cancel()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>CANCEL</Text>
+                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("CANCEL")}</Text>
                     </TouchableOpacity>
                 </SafeAreaView>
             </KeyboardAwareScrollView>

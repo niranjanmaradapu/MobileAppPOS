@@ -123,7 +123,7 @@ export default class AddUser extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             this.setState({ loading: false });
-            alert("There is an Error getting DomainId");
+            // alert("There is an Error getting DomainId");
         });
     }
 
@@ -196,7 +196,7 @@ export default class AddUser extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             this.setState({ loading: false });
-            alert("There is an Error Getting Stores");
+            // alert("There is an Error Getting Stores");
         });
     }
 
@@ -225,7 +225,7 @@ export default class AddUser extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             this.setState({ loading: false });
-            alert("There is an error Getting Roles");
+            // alert("There is an error Getting Roles");
         });
 
     }

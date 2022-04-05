@@ -166,7 +166,7 @@
     "DS NUMBER": "डीएस नंबर",
     "Settings": "सेटिंग",
     "NAME": "नाम",
-    "DIGIGNATION": "डिजाइनेशन",
+    "DESIGNATION": "डिजाइनेशन",
     "GENDER": "लिंग",
     "DATE OF BIRTH": "जन्म की तारीख",
     "Add User": "उपयोगकर्ता जोड़ें",
@@ -234,5 +234,7 @@
     "PROMO OFFER": "प्रोमो ऑफ़र",
     "INVOICE AMOUNT": "चालान राशि",
     "TOTAL MRP": "कुल एमआरपी",
-    "Domain Switch": "डोमेन स्विच"
+    "Domain Switch": "डोमेन स्विच",
+    "Enter Barcode": "बारकोड दर्ज करें",
+    "Confirm Password": "पासवर्ड की पुष्टि करें"
 }

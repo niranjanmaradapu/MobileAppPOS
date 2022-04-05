@@ -166,7 +166,7 @@
     "DS NUMBER": "DS NUMBER",
     "Settings": "Settings",
     "NAME": "NAME",
-    "DIGIGNATION": "DIGIGNATION",
+    "DESIGNATION": "DESIGNATION",
     "GENDER": "GENDER",
     "DATE OF BIRTH": "DATE OF BIRTH",
     "Add User": "Add User",
@@ -235,5 +235,7 @@
     "INVOICE AMOUNT": "INVOICE AMOUNT",
     "TOTAL MRP": "TOTAL MRP",
     "Domain Switch": "Domain Switch",
-    "Enter ES Number": "Enter ES Number"
+    "Enter ES Number": "Enter ES Number",
+    "Enter Barcode": "Enter Barcode",
+    "Confirm Password": "Confirm Password"
 }

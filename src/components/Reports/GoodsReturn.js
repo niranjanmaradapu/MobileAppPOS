@@ -192,13 +192,14 @@ export class GoodsReturn extends Component {
                     data={this.props.goodsReturn}
                     style={{ marginTop: 20 }}
                     scrollEnabled={true}
+                    removeClippedSubviews={false}
                     renderItem={({ item, index }) => (
                         <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
                                 {(item.barcodes.length !== 0 &&
                                     <View style={flats.text}>
                                         <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S NO: {index + 1} </Text>
-                                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("RTS NUMBER")}: {"\n"}{item.rtNumber}</Text>
+                                        <Text selectable={true} style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("RTS NUMBER")}: {"\n"}{item.rtNumber}</Text>
                                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("BARCODE")}: {"\n"}
                                         {item.barcodes[0].barCode}
                                         </Text>

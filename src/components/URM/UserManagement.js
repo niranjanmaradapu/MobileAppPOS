@@ -38,10 +38,11 @@ export default class UserManagement extends Component {
             roleDelete: false,
             userDelete: false,
             privilages: [],
+            headerNames: [],
             clientId: 0,
             doneButtonClicked: false,
             navtext: '',
-            flagDashboard: true,
+            flagDashboard: false,
             filterActive: false,
         };
     }
@@ -55,13 +56,15 @@ export default class UserManagement extends Component {
             if (value === "true") {
                 for (let i = 0; i < 2; i++) {
                     if (i === 0) {
-                        this.state.privilages.push({ bool: true, name: "Users" });
+                        this.state.privilages.push({ bool: false, name: "Users" });
                     }
                     else {
-                        this.state.privilages.push({ bool: false, name: "Roles" });
+                        this.state.privilages.push({ bool: true, name: "Roles" });
                     }
                 }
-                this.setState({ privilages: this.state.privilages });
+                this.setState({ privilages: this.state.privilages }, () => {
+                    this.setState({flagTwo: true, flagOne: false, filterButton: true})
+                });
             }
             else {
                 AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
@@ -86,24 +89,39 @@ export default class UserManagement extends Component {
                                             let previlage = res.data["result"][i];
                                             if (previlage.name === "URM Portal") {
                                                 for (let i = 0; i < previlage.subPrivillages.length; i++) {
-                                                    console.log(previlage.subPrivillages[i].parentPrivillageId);
+                                                    // console.log(previlage.subPrivillages[i].parentPrivillageId);
                                                     if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                                         let subprivilage = previlage.subPrivillages[i];
-                                                        if (subprivilage.name === "Dashboard") {
-                                                            this.setState({ flagOne: false, flagTwo: false, flagDashboard: true });
+                                                        if (subprivilage.name === "Back Office"){
                                                         }
-                                                        if (i === 0) {
-                                                            this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                        }else if (subprivilage.name === "Back Office"){
-
-                                                        }
-                                                        else {
-                                                            this.state.privilages.push({ bool: false, name: subprivilage.name });
-                                                        }
+                                                        this.state.headerNames.push({name: subprivilage.name})
                                                     }
                                                 }
+                                                this.setState({headerNames: this.state.headerNames}, () => {
+                                                                console.error(this.state.headerNames)
+                                                                for (let j = 0; j < this.state.headerNames.length; j++){
+                                                                    if (j === 0) {
+                                                                    this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                                                    }
+                                                                    else if (this.state.headerNames[j].name === "Back Office") { }
+                                                                    else {
+                                                                    this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                                                }
+                                                                }
+                                                        })
+                                                this.setState({ privilages: this.state.privilages }, () => {
+                                                            if(this.state.privilages[0].name === "Dashboard"){
+                                                                this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
+                                                            }else if(this.state.privilages[0].name === "Users") {
+                                                                this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false});
+                                                            }else if(this.state.privilages[0].name === "Roles") {
+                                                                this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false});
+                                                            }
+                                                            else {
+                                                                console.log("please update the privilages in Line.no: 118")
+                                                            }
+                                                        });
                                             }
-                                            this.setState({ privilages: this.state.privilages });
                                         }
                                     }
                                 }
@@ -121,24 +139,39 @@ export default class UserManagement extends Component {
                                         for (let i = 0; i < len; i++) {
                                             let previlage = res.data["result"].parentPrivilages[i];
                                             if (previlage.name === "URM Portal") {
-
-                                                if (length > 0) {
+                                                if (length > - 1) {
                                                     for (let i = 0; i < length; i++) {
                                                         if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
-                                                            let subprivilage = res.data["result"].subPrivilages[i];
-                                                            if (subprivilage.name === "Dashboard") {
-                                                                this.setState({ flagOne: false, flagTwo: false, flagDashboard: true });
+                                                        let subprivilage = res.data["result"].subPrivilages[i];
+                                                        if (subprivilage.name === "Back Office"){
+                                                        }
+                                                        this.state.headerNames.push({name: subprivilage.name})
+                                                    }
+                                                }
+                                                this.setState({headerNames: this.state.headerNames}, () => {
+                                                        console.error(this.state.headerNames)
+                                                        for (let j = 0; j < this.state.headerNames.length; j++){
+                                                            if (j === 0) {
+                                                                this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
                                                             }
-                                                            if (i === 0) {
-                                                                this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                            }else if (subprivilage.name === "Back Office"){
-
-                                                        }else {
-                                                                this.state.privilages.push({ bool: false, name: subprivilage.name });
+                                                            else if (this.state.headerNames[j].name === "Back Office") { }
+                                                            else {
+                                                                this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
                                                             }
                                                         }
-                                                        this.setState({ privilages: this.state.privilages });
+                                                })
+                                                this.setState({ privilages: this.state.privilages }, () => {
+                                                    // console.error(this.state.privilages.length)
+                                                    if(this.state.privilages[0].name === "Dashboard"){
+                                                        this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
+                                                    }else if(this.state.privilages[0].name === "Users") {
+                                                        this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false});
+                                                    }else if(this.state.privilages[0].name === "Roles") {
+                                                        this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
+                                                    }else {
+                                                        console.log("please update the privilages in Line.no: 161")
                                                     }
+                                                });
                                                 }
                                             }
                                         }
@@ -149,20 +182,20 @@ export default class UserManagement extends Component {
                         }).catch(() => {
                             this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
-                            // alert('There is error saving domainDataId');
+                            // console.log('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error getting storeId');
-                    //  alert('There is error getting storeId');
+                    //  console.log('There is error getting storeId');
                 });
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            //  alert('There is error getting storeId');
+            //  console.log('There is error getting storeId');
         });
         this.getAllUsers();
         this.getRolesList();
@@ -187,7 +220,7 @@ export default class UserManagement extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             this.setState({ loading: false });
-            alert("There is an Error Getting Roles");
+            console.log("There is an Error Getting Roles");
         });
     }
 
@@ -227,7 +260,7 @@ export default class UserManagement extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             this.setState({ loading: false });
-            alert("There is an Error Getting Users");
+            console.log("There is an Error Getting Users");
         });
     }
 
@@ -388,13 +421,16 @@ export default class UserManagement extends Component {
                         this.setState({ filterActive: true });
                     });
                 } else {
-                    this.setState({ modalVisible: false, flagFilterRoles: false, userType: "", role: "", createdBy: "" });
-                    alert("records not found");
+                    this.setState({ modalVisible: false, flagFilterRoles: false, userType: "", role: "", createdBy: "", rolesData: "" },
+                        () => {
+                        this.setState({ filterActive: true })
+                    });
+                    console.log("records not found");
                 }
 
             } else {
-                this.setState({ rolesData: res.data.result, modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
-                    this.setState({ filterActive: false });
+                this.setState({ rolesData: "", modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
+                    this.setState({ filterActive: true });
                 });
             }
         }).catch((err) => {
@@ -424,13 +460,16 @@ export default class UserManagement extends Component {
                             this.setState({ filterActive: true });
                         });
                 } else {
-                    this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: '' });
-                    alert("records not found");
+                    this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: '', usersData: "" },
+                        () => {
+                        this.setState({ filterActive: true })
+                        console.log("records not found");
+                    });
                 }
 
             } else {
-                this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: "" }, () => {
-                    this.setState({ filterActive: false });
+                this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: "", usersData: "" }, () => {
+                    this.setState({ filterActive: true });
                 });
             }
 
@@ -441,12 +480,12 @@ export default class UserManagement extends Component {
     }
 
     deleteUser(item, index) {
-        alert("you have deleted the user");
+        console.log("you have deleted the user");
         this.setState({ modalVisible: false });
     }
 
     deleteRole(item, index) {
-        alert("you have deleted the role");
+        console.log("you have deleted the role");
         this.setState({ modalVisible: false });
     }
 
@@ -565,6 +604,7 @@ export default class UserManagement extends Component {
                                 ListFooterComponent={<View style={{ width: 15 }}></View>}
                             />
 
+                                {console.log(this.state.privilages)}
 
                         </View>
 

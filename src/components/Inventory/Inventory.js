@@ -48,6 +48,7 @@ export default class Inventory extends Component {
             subPrivilages: "",
             barcodeTextileId: "",
             filterActive: false,
+            headerNames: [],
             error: ''
         };
     }
@@ -71,7 +72,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-            //  alert('There is error getting domainDataId');
+            //  console.log('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -79,11 +80,12 @@ export default class Inventory extends Component {
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
             this.getAllBarcodes();
+            this.getbarcodeTexttileAdjustments()
 
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            // alert('There is error getting storeId');
+            // console.log('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
@@ -92,7 +94,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            // alert('There is error getting storeId');
+            // console.log('There is error getting storeId');
         });
 
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
@@ -120,17 +122,19 @@ export default class Inventory extends Component {
                                             console.log(previlage.subPrivillages[i].parentPrivillageId);
                                             if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                                 let subprivilage = previlage.subPrivillages[i];
-                                                // if (subprivilage.name === "Dashboard") {
-                                                //     this.setState({ flagOne: false, flagTwo: false });
-                                                // }
-                                                if (i === 0) {
-                                                    this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                }
-                                                else {
-                                                    this.state.privilages.push({ bool: false, name: subprivilage.name });
-                                                }
+                                                this.state.headerNames.push({name: subprivilage.name})
                                             }
                                         }
+                                        this.setState({headerNames: this.state.headerNames}, () => {
+                                            for(let j = 0; j < this.state.headerNames.length; j++){
+                                                if (j === 0) {
+                                                    this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                                }
+                                                else {
+                                                    this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                                }
+                                            }
+                                        })
                                     }
                                     this.setState({ privilages: this.state.privilages });
                                 }
@@ -155,15 +159,20 @@ export default class Inventory extends Component {
                                             for (let i = 0; i < length; i++) {
                                                 if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
                                                     let subprivilage = res.data["result"].subPrivilages[i];
-                                                    if (i === 0) {
-                                                        this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                    }
-                                                    else {
-                                                        this.state.privilages.push({ bool: false, name: subprivilage.name });
-                                                    }
+                                                this.state.headerNames.push({name: subprivilage.name})
                                                 }
-                                                this.setState({ privilages: this.state.privilages });
                                             }
+                                            this.setState({headerNames: this.state.headerNames}, () => {
+                                        for(let j = 0; j < this.state.headerNames.length; j++){
+                                            if (j === 0) {
+                                                this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                            }
+                                            else {
+                                                this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                            }
+                                        }
+                                    })
+                                            this.setState({ privilages: this.state.privilages });
                                         }
                                     }
                                 }
@@ -173,14 +182,14 @@ export default class Inventory extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error saving domainDataId');
-                    // alert('There is error saving domainDataId');
+                    // console.log('There is error saving domainDataId');
                 });
 
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting sadasdsd');
-            // alert('There is error getting details');
+            // console.log('There is error getting details');
         });
 
     }
@@ -393,16 +402,16 @@ export default class Inventory extends Component {
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.barcodesData.push(res.data["result"][i]);
                 }
-                this.setState({ barcodesData: this.state.barcodesData, filterActive: true, startDate: "", endDate: "", barCodeId: "" });
+                this.setState({ barcodesData: this.state.barcodesData, filterActive: true});
             } else {
-                alert("records not found");
-                this.setState({ startDate: "", endDate: "", barCodeId: "" });
+                console.log("records not found");
+                this.setState({barcodesData: [], filterActive: true });
             }
         }).catch((err) => {
             this.setState({ loading: false });
-            alert("no records found");
+            console.log("no records found");
             console.log(err);
-            this.setState({ startDate: "", endDate: "", barCodeId: "" });
+            this.setState({ barcodesData: [] , filterActive: true});
 
         });
         this.setState({ modalVisible: false });
@@ -428,12 +437,14 @@ export default class Inventory extends Component {
                 }
                 this.setState({ reBarcodesData: this.state.reBarcodesData, filterActive: true });
             } else {
-                alert("results not found");
+                this.setState({reBarcodesData: [], filterActive: true})
+                console.log("results not found");
             }
         }).catch((err) => {
             this.setState({ loading: false });
-            alert("no records found");
+            console.log("no records found");
             console.log(err);
+            this.setState({reBarcodesData: [], filterActive: true})
         });
 
 
@@ -466,12 +477,12 @@ export default class Inventory extends Component {
 
     clearFilterAction() {
         if (this.state.flagone === true) {
-            this.setState({ filterActive: false, startDate: "", endDate: "", barCodeId: "", }, () => {
+            this.setState({ filterActive: false, startDate: "Start Date", endDate: "End Date", barCodeId: "", }, () => {
                 this.setState({ barcodesData: [], });
                 this.getAllBarcodes();
             });
         } else {
-            this.setState({ filterActive: false, startDate: "", endDate: "", barCodeId: "", }, () => {
+            this.setState({ filterActive: false, startDate: "Start Date", endDate: "End Date", barCodeId: "", }, () => {
                 this.setState({ reBarcodesData: [] });
                 this.getbarcodeTexttileAdjustments();
             });
@@ -527,13 +538,13 @@ export default class Inventory extends Component {
             }
         }).then((res) => {
             if (res.data && res.data.isSuccess === "true") {
-                alert(res.data.result);
+                console.log(res.data.result);
                 this.setState({ inventoryDelete: false, modalVisible: false, barcodeTextileId: '' });
                 this.setState({ isAddBarcode: false });
                 this.getAllBarcodes();
             } else {
                 this.setState({ inventoryDelete: false, modalVisible: false, barcodeTextileId: '' });
-                alert(res.data.message);
+                console.log(res.data.message);
             }
         }
         );
@@ -634,7 +645,7 @@ export default class Inventory extends Component {
                                         >
                                             <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
                                                 <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
-                                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} selectable={true}>{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
+                                                <Text selectable={true} style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} >{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
                                                 <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("LIST PRICE")}:  {"\n"} ₹{item.itemMrp} </Text>
                                                 <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{I18n.t("STORE")}: {this.state.storeName}</Text>
                                                 <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.qty}</Text>
@@ -654,7 +665,7 @@ export default class Inventory extends Component {
                                         </View>
                                     )}
                                 />
-                                {this.state.error.length > 0 &&
+                                {this.state.barcodesData.length === 0 && this.state.error.length > 0 &&
                                     <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.error}</Text>
                                 }
                             </View>
@@ -688,7 +699,7 @@ export default class Inventory extends Component {
                                         </View>
                                     )}
                                 />
-                                {this.state.error.length > 0 &&
+                                {this.state.reBarcodesData.length === 0 && this.state.error.length > 0 &&
                                     <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.error}</Text>
                                 }
                             </View>

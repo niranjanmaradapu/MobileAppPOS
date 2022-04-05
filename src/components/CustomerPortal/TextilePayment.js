@@ -390,16 +390,16 @@ class TextilePayment extends Component {
     verifycash() {
         this.setState({ verifiedCash: this.state.recievedAmount });
         if (this.state.flagOne === true && this.state.flagThree === false) {
-            if ((parseFloat(this.state.recievedAmount) < (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)))) {
+            if ((parseFloat(this.state.recievedAmount) < (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)))) {
                 alert('Please collect sufficient amount');
             }
             else {
-                this.setState({ returnAmount: parseFloat(this.state.recievedAmount) - (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)) });
+                this.setState({ returnAmount: parseFloat(this.state.recievedAmount) - parseFloat(this.state.totalAmount) });
             }
         }
         else if (this.state.flagThree === true)
-            if ((parseFloat(this.state.recievedAmount) < (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)))) {
-                let ccReturn = (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)) - parseFloat(this.state.recievedAmount);
+            if ((parseFloat(this.state.recievedAmount) < (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)))) {
+                let ccReturn = (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)) - parseFloat(this.state.recievedAmount);
                 this.setState({ ccCardCash: ccReturn });
             }
     }
@@ -450,14 +450,14 @@ class TextilePayment extends Component {
     }
 
     clearCashSammary() {
-        this.setState({ verifiedCash: "", recievedAmount: "" });
+        this.setState({ verifiedCash: "", recievedAmount: "", returnAmount: 0 });
     }
 
     pay = () => {
         if (this.state.flagOne === true && this.state.flagThree === false && this.state.recievedAmount === "") {
             alert('Please collect sufficient amount and then only pay');
         }
-        else if (this.state.flagOne === true && this.state.flagThree === false && parseFloat(this.state.recievedAmount) < (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10))) {
+        else if (this.state.flagOne === true && this.state.flagThree === false && parseFloat(this.state.recievedAmount) < (parseFloat(this.state.totalAmount ) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10))) {
             alert('Please collect sufficient amount and then only pay');
         }
         else if (this.state.flagThree === true && this.state.verifiedCash === "") {
@@ -477,7 +477,7 @@ class TextilePayment extends Component {
                     "discApprovedBy": this.state.approvedBy,
                     "discType": this.state.reasonDiscount,
                     "approvedBy": null,
-                    "netPayableAmount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
+                    "netPayableAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
                     "offlineNumber": null,
                     "userId": this.state.userId,
                     "sgst": this.state.CGST,
@@ -499,7 +499,7 @@ class TextilePayment extends Component {
                     "discApprovedBy": this.state.approvedBy,
                     "discType": this.state.reasonDiscount,
                     "approvedBy": null,
-                    "netPayableAmount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
+                    "netPayableAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
                     "offlineNumber": null,
                     "userId": this.state.userId,
                     "sgst": this.state.CGST,
@@ -530,7 +530,7 @@ class TextilePayment extends Component {
                     let obj;
                     if (this.state.flagTwo === true) {
                         obj = {
-                            "amount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
+                            "amount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)),
                             "info": "order creations",
                             "newsaleId": res.data["result"],
                         };
@@ -622,7 +622,7 @@ class TextilePayment extends Component {
                             "discApprovedBy": this.state.approvedBy,
                             "discType": this.state.reasonDiscount,
                             "approvedBy": null,
-                            "netPayableAmount": (parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
+                            "netPayableAmount": (parseFloat(this.state.totalAmount ) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
                             "offlineNumber": null,
                             "userId": this.state.userId,
                             "sgst": this.state.CGST,
@@ -794,7 +794,7 @@ class TextilePayment extends Component {
                 <ScrollView>
                     <View style={styles.container}>
 
-                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 15 }}> SELECT A MODE TO PAY ₹ {(parseFloat(this.state.totalAmount + this.state.CGST * 2) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString()} </Text>
+                        <Text style={{ fontSize: Device.isTablet ? 17 : 12, fontFamily: 'medium', color: '#828282', marginLeft: 10, marginTop: 15 }}> SELECT A MODE TO PAY ₹ {(parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString()} </Text>
                         <FlatList
                             style={styles.flatListContainer}
                             horizontal

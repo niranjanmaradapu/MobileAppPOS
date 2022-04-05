@@ -95,6 +95,7 @@ class GenerateEstimationSlip extends Component {
             resultModel: false,
             resultData: "",
             resultDsNumber: "",
+            manualAmount: 0,
         };
     }
 
@@ -298,17 +299,31 @@ class GenerateEstimationSlip extends Component {
     };
 
     handleBarCode = (value) => {
-        this.setState({ barcodeId: value });
+        this.setState({ barcodeId: value.trim() });
     };
 
     handleQty = (value) => {
-        this.setState({ saleQuantity: value });
+        this.setState({ saleQuantity: value.trim() });
     };
 
-    updateQty = (text, index) => {
+    updateQty = (text, index, item) => {
         const qtyarr = [...this.state.itemsList];
-        qtyarr[index].quantity = text;
+        qtyarr[index].quantity = text === '' ? 1 : text;
+        let totalcostMrp = item.itemMrp * parseInt(qtyarr[index].quantity);
+        item.totalMrp = totalcostMrp;
         this.setState({ itemsList: qtyarr });
+        console.error(text)
+        let grandTotal = 0;
+        let totalqty = 0;
+        this.state.barList.forEach(bardata => {
+            grandTotal = grandTotal + bardata.totalMrp;
+            totalqty = totalqty + parseInt(bardata.quantity);
+        });
+
+        this.setState({ mrpAmount: grandTotal, totalQuantity: totalqty });
+
+        this.state.totalQuantity = (parseInt(this.state.totalQuantity) + 1)
+        // this.setState({ itemsList: qtyarr });
     };
 
     incrementForTable(item, index) {
@@ -355,7 +370,7 @@ class GenerateEstimationSlip extends Component {
 
 
     handleSmCode = (text) => {
-        this.setState({ smnumber: text });
+        this.setState({ smnumber: text.trim() });
     };
 
     navigateToScanCode() {
@@ -597,7 +612,9 @@ class GenerateEstimationSlip extends Component {
                                                 borderBottomWidth: 1,
                                                 borderTopWidth: 1,
                                                 borderLeftWidth: 1, paddingLeft: 10, marginLeft: 20,
-                                            }}>
+                                            }}
+                                                onPress={() => this.decreamentForTable(item, index)}
+                                            >
                                                 <Text style={{
                                                     alignSelf: 'center',
                                                     marginTop: 2,
@@ -605,7 +622,7 @@ class GenerateEstimationSlip extends Component {
                                                     fontSize: Device.isTablet ? 22 : 12,
                                                     color: '#ED1C24'
                                                 }}
-                                                    onPress={() => this.decreamentForTable(item, index)}>-</Text>
+                                                    >-</Text>
                                             </TouchableOpacity>
                                             {/* <Text> {item.qty}</Text> */}
                                             <TextInput
@@ -628,7 +645,9 @@ class GenerateEstimationSlip extends Component {
                                                 placeholder="1"
                                                 placeholderTextColor="#8F9EB7"
                                                 value={item.quantity}
-                                                onChangeText={(text) => this.updateQty(text, index)}
+                                                onChangeText={(text) => {
+                                                    this.updateQty(text, index, item)
+                                                }}
                                             />
                                             <TouchableOpacity style={{
                                                 borderColor: '#ED1C24',
@@ -638,14 +657,17 @@ class GenerateEstimationSlip extends Component {
                                                 borderBottomWidth: 1,
                                                 borderTopWidth: 1,
                                                 borderRightWidth: 1
-                                            }}>
+
+                                            }}
+                                                onPress={() => this.incrementForTable(item, index)}
+                                            >
                                                 <Text style={{
                                                     alignSelf: 'center',
                                                     marginTop: 2,
                                                     fontSize: Device.isTablet ? 22 : 12,
                                                     color: '#ED1C24'
                                                 }}
-                                                    onPress={() => this.incrementForTable(item, index)}>+</Text>
+                                                >+</Text>
 
                                             </TouchableOpacity>
 
@@ -2359,4 +2381,3 @@ const styles = StyleSheet.create({
     },
 
 });
-

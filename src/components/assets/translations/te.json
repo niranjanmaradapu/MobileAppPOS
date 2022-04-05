@@ -166,7 +166,7 @@
     "DS NUMBER": "డిఎస్ సంఖ్య",
     "Settings": "సెట్టింగ్‌లు",
     "NAME": "పేరు",
-    "DIGIGNATION": "డిజిగ్నేషన్",
+    "DESIGNATION": "డిజిగ్నేషన్",
     "GENDER": "లింగం",
     "DATE OF BIRTH": "పుట్టిన తేది",
     "Add User": "వినియోగదారుని జోడించు",
@@ -234,5 +234,7 @@
     "PROMO OFFER": "ప్రోమో ఆఫర్",
     "INVOICE AMOUNT": "ఇన్‌వాయిస్ మొత్తం",
     "TOTAL MRP": "మొత్తం ఎంఆర్పి",
-    "Domain Switch": "డొమైన్ స్విచ్"
+    "Domain Switch": "డొమైన్ స్విచ్",
+    "Enter Barcode": "బార్‌కోడ్‌ని నమోదు చేయండి",
+    "Confirm Password": "పాస్‌వర్డ్‌ని నిర్ధారించండి"
 }

@@ -66,11 +66,11 @@ export default class GenerateReturnSlip extends Component {
     };
 
     handleInvoiceNumber(text) {
-        this.setState({ invoiceNumber: text });
+        this.setState({ invoiceNumber: text.trim() });
     }
 
     handleMobileNumber(text) {
-        this.setState({ mobileNumber: text });
+        this.setState({ mobileNumber: text.trim() });
     }
 
     searchInvoice = () => {
@@ -228,7 +228,7 @@ export default class GenerateReturnSlip extends Component {
     }
 
     handleCustomerNumber(text) {
-        this.setState({ customerNumber: text });
+        this.setState({ customerNumber: text.trim() });
     }
 
     refresh() {

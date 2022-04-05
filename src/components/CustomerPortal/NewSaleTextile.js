@@ -22,7 +22,7 @@ class NewSaleTextile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            flagGenerateEstimationSlip: true,
+            flagGenerateEstimationSlip: false,
             flagGenerateInvoice: false,
             flagGenerateReturnSlip: false,
             falgAddCustomer: false,
@@ -37,6 +37,7 @@ class NewSaleTextile extends Component {
             flagfour: false,
             selectedcolor: '',
             subPrivilages: "",
+            headerNames: [],
             barcodes: [1, 2],
         };
     }
@@ -53,8 +54,8 @@ class NewSaleTextile extends Component {
                 }
                 else if (global.domainName === "Retail") {
                     domainId = "2";
-                    this.setState({ flagGenerateEstimationSlip: false });
-                    this.setState({ flagGenerateInvoice: true });
+                    // this.setState({ flagGenerateEstimationSlip: false });
+                    // this.setState({ flagGenerateInvoice: true });
                 }
                 else if (global.domainName === "Electrical & Electronics") {
                     domainId = "3";
@@ -72,19 +73,52 @@ class NewSaleTextile extends Component {
                                             console.log(previlage.subPrivillages[i].parentPrivillageId);
                                             if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                                 let subprivilage = previlage.subPrivillages[i];
-                                                if (subprivilage.name === "Dashboard") {
-                                                    this.setState({ flagOne: false, flagTwo: false });
-                                                }
-                                                if (i === 0) {
-                                                    this.state.privilages.push({ bool: true, name: subprivilage.name });
-                                                }
-                                                else {
-                                                    this.state.privilages.push({ bool: false, name: subprivilage.name });
-                                                }
+                                                    this.state.headerNames.push({name: subprivilage.name.trim() })
                                             }
                                         }
-                                    }
-                                    this.setState({ privilages: this.state.privilages });
+                                        this.setState({headerNames: this.state.headerNames}, () =>{
+                                                for (let j =0; j< this.state.headerNames.length; j++){
+                                                    if (j === 0) {
+                                                        this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                                    }
+                                                    else {
+                                                        this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                                    }
+                                                    
+                                                }
+                                            })
+                                            this.setState({ privilages: this.state.privilages },() => {
+                                                if(this.state.privilages[0].name === "Generate Estimation Slip"){
+                                                    this.setState({flagGenerateEstimationSlip: true})
+                                                }else{
+                                                    this.setState({flagGenerateEstimationSlip: false})
+                                                }
+                                                if(this.state.privilages[0].name === "Generate Invoice"){
+                                                    this.setState({flagGenerateInvoice: true})
+                                                }else{
+                                                    this.setState({flagGenerateInvoice: false})
+                                                }
+                                                if(this.state.privilages[0].name === "Generate Return Slip"){
+                                                    this.setState({flagGenerateReturnSlip: true})
+                                                }else{
+                                                    this.setState({flagGenerateReturnSlip: false})
+                                                }
+                                                if(this.state.privilages[0].name === "Add Customer"){
+                                                    this.setState({falgAddCustomer: true})
+                                                }else{
+                                                    this.setState({falgAddCustomer: false})
+                                                }
+                                                if(this.state.privilages[0].name === "Gift Voucher"){
+                                                    this.setState({flagGiftVoucher: true})
+                                                }else{
+                                                    this.setState({flagGiftVoucher: false})
+                                                }
+                                                if(this.state.privilages[0].name === "Day Closure Activity"){
+                                                    this.setState({flagDayClosure: true})
+                                                }else{
+                                                    this.setState({flagDayClosure: false})
+                                                }
+                                        });                                    }
                                 }
                             }
                         }
@@ -107,15 +141,62 @@ class NewSaleTextile extends Component {
                                             for (let i = 0; i < length; i++) {
                                                 if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
                                                     let subprivilage = res.data["result"].subPrivilages[i];
-                                                    if (i === 0) {
-                                                        this.state.privilages.push({ bool: true, name: subprivilage.name });
+                                                    this.state.headerNames.push({name: subprivilage.name.trim() })
+                                                }
+                                            }
+                                            this.setState({headerNames: this.state.headerNames}, () =>{
+                                                if (global.domainName === "Retail") {
+                                                    for (let j = 1; j < this.state.headerNames.length; j++) {
+                                                        if (j === 1) {
+                                                            this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                                        }
+                                                        else if (this.state.headerNames[j].name === "Generate Estimation Slip") {}
+                                                        else {
+                                                            this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                                        }
                                                     }
-                                                    else {
-                                                        this.state.privilages.push({ bool: false, name: subprivilage.name });
+                                                } else if (global.domainName === "Textile") {
+                                                    for (let j = 0; j < this.state.headerNames.length; j++) {
+                                                        if (j === 0) {
+                                                            this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                                        } else {
+                                                            this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                                        }
                                                     }
                                                 }
-                                                this.setState({ privilages: this.state.privilages });
-                                            }
+                                            })
+                                            this.setState({ privilages: this.state.privilages },() => {
+                                                if(this.state.privilages[0].name === "Generate Estimation Slip"){
+                                                    this.setState({flagGenerateEstimationSlip: true})
+                                                }else{
+                                                    this.setState({flagGenerateEstimationSlip: false})
+                                                }
+                                                if(this.state.privilages[0].name === "Generate Invoice"){
+                                                    this.setState({flagGenerateInvoice: true})
+                                                }else{
+                                                    this.setState({flagGenerateInvoice: false})
+                                                }
+                                                if(this.state.privilages[0].name === "Generate Return Slip"){
+                                                    this.setState({flagGenerateReturnSlip: true})
+                                                }else{
+                                                    this.setState({flagGenerateReturnSlip: false})
+                                                }
+                                                if(this.state.privilages[0].name === "Add Customer"){
+                                                    this.setState({falgAddCustomer: true})
+                                                }else{
+                                                    this.setState({falgAddCustomer: false})
+                                                }
+                                                if(this.state.privilages[0].name === "Gift Voucher"){
+                                                    this.setState({flagGiftVoucher: true})
+                                                }else{
+                                                    this.setState({flagGiftVoucher: false})
+                                                }
+                                                if(this.state.privilages[0].name === "Day Closure Activity"){
+                                                    this.setState({flagDayClosure: true})
+                                                }else{
+                                                    this.setState({flagDayClosure: false})
+                                                }
+                                        });
                                         }
                                     }
                                 }
@@ -139,7 +220,7 @@ class NewSaleTextile extends Component {
 
     topbarAction1 = (item, index) => {
 
-        if (item.name === " Generate Estimation Slip") {
+        if (item.name === "Generate Estimation Slip") {
             this.setState({ flagGenerateEstimationSlip: true });
         } else {
             this.setState({ flagGenerateEstimationSlip: false });
