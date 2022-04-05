@@ -72,7 +72,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting domainDataId');
-            //  alert('There is error getting domainDataId');
+            //  console.log('There is error getting domainDataId');
         });
 
         AsyncStorage.getItem("storeId").then((value) => {
@@ -85,7 +85,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            // alert('There is error getting storeId');
+            // console.log('There is error getting storeId');
         });
 
         AsyncStorage.getItem("storeName").then((value) => {
@@ -94,7 +94,7 @@ export default class Inventory extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            // alert('There is error getting storeId');
+            // console.log('There is error getting storeId');
         });
 
         AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
@@ -182,14 +182,14 @@ export default class Inventory extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error saving domainDataId');
-                    // alert('There is error saving domainDataId');
+                    // console.log('There is error saving domainDataId');
                 });
 
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting sadasdsd');
-            // alert('There is error getting details');
+            // console.log('There is error getting details');
         });
 
     }
@@ -402,16 +402,16 @@ export default class Inventory extends Component {
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.barcodesData.push(res.data["result"][i]);
                 }
-                this.setState({ barcodesData: this.state.barcodesData, filterActive: true, startDate: "", endDate: "", barCodeId: "" });
+                this.setState({ barcodesData: this.state.barcodesData, filterActive: true});
             } else {
-                alert("records not found");
-                this.setState({ startDate: "", endDate: "", barCodeId: "" });
+                console.log("records not found");
+                this.setState({barcodesData: [], filterActive: true });
             }
         }).catch((err) => {
             this.setState({ loading: false });
-            alert("no records found");
+            console.log("no records found");
             console.log(err);
-            this.setState({ startDate: "", endDate: "", barCodeId: "" });
+            this.setState({ barcodesData: [] , filterActive: true});
 
         });
         this.setState({ modalVisible: false });
@@ -437,12 +437,14 @@ export default class Inventory extends Component {
                 }
                 this.setState({ reBarcodesData: this.state.reBarcodesData, filterActive: true });
             } else {
-                alert("results not found");
+                this.setState({reBarcodesData: [], filterActive: true})
+                console.log("results not found");
             }
         }).catch((err) => {
             this.setState({ loading: false });
-            alert("no records found");
+            console.log("no records found");
             console.log(err);
+            this.setState({reBarcodesData: [], filterActive: true})
         });
 
 
@@ -475,12 +477,12 @@ export default class Inventory extends Component {
 
     clearFilterAction() {
         if (this.state.flagone === true) {
-            this.setState({ filterActive: false, startDate: "", endDate: "", barCodeId: "", }, () => {
+            this.setState({ filterActive: false, startDate: "Start Date", endDate: "End Date", barCodeId: "", }, () => {
                 this.setState({ barcodesData: [], });
                 this.getAllBarcodes();
             });
         } else {
-            this.setState({ filterActive: false, startDate: "", endDate: "", barCodeId: "", }, () => {
+            this.setState({ filterActive: false, startDate: "Start Date", endDate: "End Date", barCodeId: "", }, () => {
                 this.setState({ reBarcodesData: [] });
                 this.getbarcodeTexttileAdjustments();
             });
@@ -536,13 +538,13 @@ export default class Inventory extends Component {
             }
         }).then((res) => {
             if (res.data && res.data.isSuccess === "true") {
-                alert(res.data.result);
+                console.log(res.data.result);
                 this.setState({ inventoryDelete: false, modalVisible: false, barcodeTextileId: '' });
                 this.setState({ isAddBarcode: false });
                 this.getAllBarcodes();
             } else {
                 this.setState({ inventoryDelete: false, modalVisible: false, barcodeTextileId: '' });
-                alert(res.data.message);
+                console.log(res.data.message);
             }
         }
         );

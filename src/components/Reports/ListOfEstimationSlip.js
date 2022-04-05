@@ -179,17 +179,20 @@ export class ListOfEstimationSlip extends Component {
                 } else {
                     alert("records not found");
                 }
+                this.setState({startDate: "", endDate: "", dsStatus: "", barcode: "", dsNumber: ""})
                 console.log(this.props.estimationSlip);
             }
             else {
                 alert(res.data.message);
                 this.props.modelCancelCallback();
+            this.setState({startDate: "", endDate: "", dsStatus: "", barcode: "", dsNumber: ""})
             }
         }
         ).catch(() => {
             this.setState({ loading: false });
             alert('No Results Found');
             this.props.modelCancelCallback();
+            this.setState({startDate: "", endDate: "", dsStatus: "", barcode: "", dsNumber: ""})
         });
 
     }

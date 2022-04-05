@@ -182,20 +182,20 @@ export default class UserManagement extends Component {
                         }).catch(() => {
                             this.setState({ loading: false });
                             console.log('There is error saving domainDataId');
-                            // alert('There is error saving domainDataId');
+                            // console.log('There is error saving domainDataId');
                         });
 
                     }
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error getting storeId');
-                    //  alert('There is error getting storeId');
+                    //  console.log('There is error getting storeId');
                 });
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            //  alert('There is error getting storeId');
+            //  console.log('There is error getting storeId');
         });
         this.getAllUsers();
         this.getRolesList();
@@ -220,7 +220,7 @@ export default class UserManagement extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             this.setState({ loading: false });
-            alert("There is an Error Getting Roles");
+            console.log("There is an Error Getting Roles");
         });
     }
 
@@ -260,7 +260,7 @@ export default class UserManagement extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             this.setState({ loading: false });
-            alert("There is an Error Getting Users");
+            console.log("There is an Error Getting Users");
         });
     }
 
@@ -421,13 +421,16 @@ export default class UserManagement extends Component {
                         this.setState({ filterActive: true });
                     });
                 } else {
-                    this.setState({ modalVisible: false, flagFilterRoles: false, userType: "", role: "", createdBy: "" });
-                    alert("records not found");
+                    this.setState({ modalVisible: false, flagFilterRoles: false, userType: "", role: "", createdBy: "", rolesData: "" },
+                        () => {
+                        this.setState({ filterActive: true })
+                    });
+                    console.log("records not found");
                 }
 
             } else {
-                this.setState({ rolesData: res.data.result, modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
-                    this.setState({ filterActive: false });
+                this.setState({ rolesData: "", modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
+                    this.setState({ filterActive: true });
                 });
             }
         }).catch((err) => {
@@ -457,13 +460,16 @@ export default class UserManagement extends Component {
                             this.setState({ filterActive: true });
                         });
                 } else {
-                    this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: '' });
-                    alert("records not found");
+                    this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: '', usersData: "" },
+                        () => {
+                        this.setState({ filterActive: true })
+                        console.log("records not found");
+                    });
                 }
 
             } else {
-                this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: "" }, () => {
-                    this.setState({ filterActive: false });
+                this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: "", usersData: "" }, () => {
+                    this.setState({ filterActive: true });
                 });
             }
 
@@ -474,12 +480,12 @@ export default class UserManagement extends Component {
     }
 
     deleteUser(item, index) {
-        alert("you have deleted the user");
+        console.log("you have deleted the user");
         this.setState({ modalVisible: false });
     }
 
     deleteRole(item, index) {
-        alert("you have deleted the role");
+        console.log("you have deleted the role");
         this.setState({ modalVisible: false });
     }
 

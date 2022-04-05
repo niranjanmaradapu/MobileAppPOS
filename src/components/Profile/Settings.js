@@ -517,13 +517,13 @@ class Settings extends Component {
 
                                 </View>
                                 <View>
-                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> {I18n.t("DIGIGNATION")}: </Text>
+                                    <Text style={Device.isTablet ? styles.inputHeader_tablet : styles.inputHeader_mobile}> {I18n.t("DESIGNATION")}: </Text>
 
                                     <TextInput
                                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                         editable={false} selectTextOnFocus={false}
                                         underlineColorAndroid="transparent"
-                                        placeholder={I18n.t("DIGIGNATION")}
+                                        placeholder={I18n.t("DESIGNATION")}
                                         placeholderTextColor="#353C4050"
                                         textAlignVertical="center"
                                         autoCapitalize="none"

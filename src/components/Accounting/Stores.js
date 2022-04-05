@@ -22,8 +22,9 @@ export class Stores extends Component {
         };
     }
 
-    deleteStore = () => {
+    deleteStore() {
         alert("you have deleted store");
+        this.setState({ storesDelete: false, modalVisible: false });
     };
 
     storeModelCancel() {
