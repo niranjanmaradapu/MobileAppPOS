@@ -44,6 +44,8 @@ export default class UserManagement extends Component {
             navtext: '',
             flagDashboard: false,
             filterActive: false,
+            usersError: "",
+            rolesError: "",
         };
     }
 
@@ -215,11 +217,12 @@ export default class UserManagement extends Component {
                     this.setState({ loading: false });
                     this.state.rolesData.push(number);
                 }
-                this.setState({ rolesData: this.state.rolesData });
+                this.setState({ rolesData: this.state.rolesData, rolesError: "" });
+            } else {
+                this.setState({rolesError: "Records Not Found"})
             }
         }).catch(() => {
-            this.setState({ loading: false });
-            this.setState({ loading: false });
+            this.setState({ loading: false, rolesError: "Records Not Found" });
             console.log("There is an Error Getting Roles");
         });
     }
@@ -251,15 +254,13 @@ export default class UserManagement extends Component {
                         }
                     }
                     this.state.usersData.push(number);
-
-
-
                 }
-                this.setState({ usersData: this.state.usersData });
+                this.setState({ usersData: this.state.usersData, usersError: "" });
+            } else {
+                this.setState({ usersError: "Records Not Found" });
             }
         }).catch(() => {
-            this.setState({ loading: false });
-            this.setState({ loading: false });
+            this.setState({ loading: false, usersError: "Records Not Found" });
             console.log("There is an Error Getting Users");
         });
     }
@@ -313,11 +314,13 @@ export default class UserManagement extends Component {
         if (this.state.flagOne === true) {
             this.setState({ filterActive: false }, () => {
                 this.getAllUsers();
+                this.setState({userType: "", role: "", branch: ""})
             });
         }
         else if (this.state.flagTwo === true) {
             this.setState({ filterActive: false }, () => {
                 this.getRolesList();
+                this.setState({role: "", createdBy: "", createdDate: "CREATED DATE"})
             });
         }
     }
@@ -373,14 +376,14 @@ export default class UserManagement extends Component {
 
     filterDatepickerDoneClicked() {
         console.log(this.state.date);
-        if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
+        if (parseInt(this.state.date.getDate()) < 10 && parseInt(this.state.date.getMonth()) < 10) {
+            this.setState({ createdDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
         }
         else if (parseInt(this.state.date.getMonth()) < 10) {
             this.setState({ createdDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
         }
-        else if (parseInt(this.state.date.getDate) < 10 && parseInt(this.state.date.getMonth < 10)) {
-            this.setState({ createdDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
+        else if (parseInt(this.state.date.getDate()) < 10) {
+            this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
         }
         else {
             this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
@@ -418,23 +421,23 @@ export default class UserManagement extends Component {
             if (res) {
                 if (res.data.isSuccess === "true") {
                     this.setState({ rolesData: res.data.result, modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
-                        this.setState({ filterActive: true });
+                        this.setState({ filterActive: true, rolesError: "" });
                     });
                 } else {
                     this.setState({ modalVisible: false, flagFilterRoles: false, userType: "", role: "", createdBy: "", rolesData: "" },
                         () => {
-                        this.setState({ filterActive: true })
+                        this.setState({ filterActive: true, rolesError: "Records Not Found" })
                     });
                     console.log("records not found");
                 }
 
             } else {
                 this.setState({ rolesData: "", modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
-                    this.setState({ filterActive: true });
+                    this.setState({ filterActive: true, rolesError: "Records Not Found" });
                 });
             }
         }).catch((err) => {
-            this.setState({ loading: false });
+            this.setState({ loading: false, rolesError: "Records Not Found", rolesData: "" });
             console.warn(err);
         });
     }
@@ -453,28 +456,52 @@ export default class UserManagement extends Component {
         console.log(obj);
         axios.post(UrmService.getUserBySearch(), obj).then((res) => {
             if (res) {
-                console.log(res.data);
+                console.log("users Data", res.data.result);
                 if (res.data.isSuccess === "true") {
-                    this.setState({ usersData: res.data.result, modalVisible: false, userType: "", role: "", createdBy: "", branch: "" },
-                        () => {
-                            this.setState({ filterActive: true });
-                        });
+
+            let len = res.data["result"].length;
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    let number = res.data.result[i];
+                    console.log(number);
+                    this.setState({ loading: false });
+
+                    // console.log('sadsddsad' + number.stores);
+                    let len = number.stores.length;
+                    number.storeName = "";
+                    if (len > 0) {
+                        for (let i = 0; i < len; i++) {
+                            if (number.storeName === "") {
+                                number.storeName = number.storeName + number.stores[i].name;
+                            }
+                            else {
+                                number.storeName = number.storeName + "," + number.stores[i].name;
+                            }
+                        }
+                    }
+                    this.state.usersData.push(number);
+                }
+                this.setState({ usersData: this.state.usersData, modalVisible: false, userType: "", role: "", createdBy: "", branch: "" },
+                    () => {
+                        this.setState({ filterActive: true, usersError: "" });
+                    });
+            }
                 } else {
                     this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: '', usersData: "" },
                         () => {
-                        this.setState({ filterActive: true })
+                        this.setState({ filterActive: true, usersError: "Records Not Found" })
                         console.log("records not found");
                     });
                 }
 
             } else {
                 this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: "", usersData: "" }, () => {
-                    this.setState({ filterActive: true });
+                    this.setState({ filterActive: true, usersError: "Records Not Found" });
                 });
             }
 
         }).catch((err) => {
-            this.setState({ loading: false });
+            this.setState({ loading: false, usersError: "Records Not Found", usersData: "" });
             console.warn(err);
         });
     }
@@ -631,6 +658,7 @@ export default class UserManagement extends Component {
                             <UrmDashboard />
                         )}
                         {this.state.flagTwo && (
+                            <View>
                             <FlatList
                                 data={this.state.rolesData}
                                 style={{ marginTop: 20, }}
@@ -656,9 +684,14 @@ export default class UserManagement extends Component {
                                         </View>
                                     </View>
                                 )}
-                            />
+                                />
+                                {this.state.rolesData.length === 0 && this.state.rolesError.length > 0 && 
+                                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.rolesError}</Text>
+                                }
+                            </View>
                         )}
                         {this.state.flagOne && (
+                            <View>
                             <FlatList
                                 data={this.state.usersData}
                                 style={{ marginTop: 20, }}
@@ -684,7 +717,11 @@ export default class UserManagement extends Component {
                                         </View>
                                     </View>
                                 )}
-                            />
+                                />
+                                {this.state.usersData.length === 0 && this.state.usersError.length > 0 && 
+                                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.usersError}</Text>
+                                }
+                            </View>
                         )}
                         {this.state.roleDelete && (
                             <View>

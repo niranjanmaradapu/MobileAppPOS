@@ -125,66 +125,71 @@ export default class CreateRole extends Component {
         }
         else {
             if (this.state.isEdit === false) {
-                const saveObj = {
-                    "roleName": this.state.role,
-                    "description": this.state.description,
-                    "clientDomianId": this.state.domainId,
-                    "createdBy": global.username,
-                    "parentPrivilages": this.state.parentlist,
-                    "subPrivillages": this.state.childlist,
-                };
+                if (this.state.role.length < 10) {
+                    alert("Role Name Cannot Be Less Than 10 Characters")
+                } else {
+                    const saveObj = {
+                        "roleName": this.state.role,
+                        "description": this.state.description,
+                        "clientDomianId": this.state.domainId,
+                        "createdBy": global.username,
+                        "parentPrivilages": this.state.parentlist,
+                        "subPrivillages": this.state.childlist,
+                    };
 
-                console.log('params are' + JSON.stringify(saveObj));
-                this.setState({ loading: true });
-                axios.post(UrmService.saveRole(), saveObj).then((res) => {
-                    console.error(res.data);
-                    if (res.data && res.data["isSuccess"] === "true") {
-                        global.privilages = [];
-                        this.props.route.params.onGoBack();
-                        this.props.navigation.goBack();
+                    console.log('params are' + JSON.stringify(saveObj));
+                    this.setState({ loading: true });
+                    axios.post(UrmService.saveRole(), saveObj).then((res) => {
+                        console.error(res.data);
+                        if (res.data && res.data["isSuccess"] === "true") {
+                            global.privilages = [];
+                            this.props.route.params.onGoBack();
+                            this.props.navigation.goBack();
+                        }
+                        else {
+                            this.setState({ loading: false });
+                            alert(res.data.message);
+                        }
                     }
-                    else {
+                    ).catch(() => {
                         this.setState({ loading: false });
-                        alert(res.data.message);
-                    }
+                        this.setState({ loading: false });
+                        alert("There is an Error Saving Role");
+                    });
                 }
-                ).catch(() => {
-                    this.setState({ loading: false });
-                    this.setState({ loading: false });
-                    alert("There is an Error Saving Role");
-                });
             }
             else {
-                const saveObj = {
-                    "roleName": this.state.role,
-                    "description": this.state.description,
-                    "clientDomianId": this.state.domainId,
-                    "createdBy": global.username,
-                    "parentPrivilages": this.state.parentlist,
-                    "subPrivillages": this.state.roles,
-                    "roleId": this.state.roleId,
-                };
+                
+                    const saveObj = {
+                        "roleName": this.state.role,
+                        "description": this.state.description,
+                        "clientDomianId": this.state.domainId,
+                        "createdBy": global.username,
+                        "parentPrivilages": this.state.parentlist,
+                        "subPrivillages": this.state.roles,
+                        "roleId": this.state.roleId,
+                    };
 
-                console.log('params are' + JSON.stringify(saveObj));
-                this.setState({ loading: true });
-                axios.put(UrmService.editRole(), saveObj).then((res) => {
-                    console.log(res.data);
-                    if (res.data && res.data["isSuccess"] === "true") {
-                        global.privilages = [];
-                        this.props.route.params.onGoBack();
-                        this.props.navigation.goBack();
+                    console.log('params are' + JSON.stringify(saveObj));
+                    this.setState({ loading: true });
+                    axios.put(UrmService.editRole(), saveObj).then((res) => {
+                        console.log(res.data);
+                        if (res.data && res.data["isSuccess"] === "true") {
+                            global.privilages = [];
+                            this.props.route.params.onGoBack();
+                            this.props.navigation.goBack();
+                        }
+                        else {
+                            this.setState({ loading: false });
+                            alert(res.data.message);
+                        }
                     }
-                    else {
+                    ).catch(() => {
                         this.setState({ loading: false });
-                        alert(res.data.message);
-                    }
-                }
-                ).catch(() => {
-                    this.setState({ loading: false });
-                    this.setState({ loading: false });
-                    alert("There is an Error Saving Role");
-                });
-
+                        this.setState({ loading: false });
+                        alert("There is an Error Saving Role");
+                    });
+                
             }
         }
     }
@@ -394,7 +399,7 @@ export default class CreateRole extends Component {
                                 alignItems: 'center', //Centered vertically
                                 flex: 1
                             }}>
-                                {I18n.t("add more privileges buy clicking on Privilege Mapping button")}
+                                {I18n.t("add more privileges by clicking on Privilege Mapping button")}
 
                             </Text>
 
