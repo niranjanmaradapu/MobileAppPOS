@@ -87,6 +87,9 @@ export class Stores extends Component {
                         </View>
                     )}
                 />
+                {this.props.storeError.length !== 0 && 
+                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceHeight/3 }}>&#9888; {this.props.storeError}</Text>
+                }
                 {this.state.storesDelete && (
                     <View>
                         <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>

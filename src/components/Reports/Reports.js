@@ -93,10 +93,10 @@ class Reports extends Component {
                                         }
                                             this.setState({headersNames: this.state.headersNames}, () => {
                                                 for(let j = 0; j < this.state.headersNames.length; j++){
-                                                    if (j === 0) {
-                                                        this.state.privilages.push({ bool: true, name: this.state.headersNames[j].name });
-                                                    } else if (this.state.headersNames[j].name === "List of promotions") {}
-                                                    else {
+                                                if (this.state.headersNames[j].name === "List of promotions") {}
+                                                else if (j === 0) {
+                                                    this.state.privilages.push({ bool: true, name: this.state.headersNames[j].name });
+                                                } else {
                                                         this.state.privilages.push({ bool: false, name: this.state.headersNames[j].name });
                                                     }
                                                 }
@@ -108,7 +108,7 @@ class Reports extends Component {
                                             }else{
                                                 this.setState({filterButton: true, flagDashboard: false})
                                             }
-                                            if(this.state.privilages[0].name === "List of Estimation Slip"){
+                                            if(this.state.privilages[0].name === "List Of Estimation Slip"){
                                                 this.setState({flagEstimationSlip: true, filterActive: false, estimationSlip: []})
                                             }else{
                                                 this.setState({flagEstimationSlip: false})
@@ -162,22 +162,23 @@ class Reports extends Component {
                                             }
                                             this.setState({headersNames: this.state.headersNames}, () => {
                                                 for(let j = 0; j < this.state.headersNames.length; j++){
-                                                    if (j === 0) {
+                                                    if (this.state.headersNames[j].name === "List of promotions") { }
+                                                    else if (j === 0) {
                                                         this.state.privilages.push({ bool: true, name: this.state.headersNames[j].name });
-                                                    } else if (this.state.headersNames[j].name === "List of promotions") {}
+                                                    }
                                                     else {
                                                         this.state.privilages.push({ bool: false, name: this.state.headersNames[j].name });
                                                     }
                                                 }
-                                        })
-                                        this.setState({ privilages: this.state.privilages }, () =>{
+                                            })
+                                            this.setState({ privilages: this.state.privilages }, () =>{
                                             console.log(this.state.privilages)
                                             if(this.state.privilages[0].name === "Dashboard"){
                                                 this.setState({filterButton: false, flagDashboard: true})
                                             }else{
                                                 this.setState({filterButton: true, flagDashboard: false})
                                             }
-                                            if(this.state.privilages[0].name === "List of Estimation Slip"){
+                                            if(this.state.privilages[0].name === "List Of Estimation Slip"){
                                                 this.setState({flagEstimationSlip: true, filterActive: false, estimationSlip: []})
                                             }else{
                                                 this.setState({flagEstimationSlip: false})

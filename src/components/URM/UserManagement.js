@@ -115,11 +115,12 @@ export default class UserManagement extends Component {
                                                             if(this.state.privilages[0].name === "Dashboard"){
                                                                 this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
                                                             }else if(this.state.privilages[0].name === "Users") {
-                                                                this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false});
+                                                                this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
                                                             }else if(this.state.privilages[0].name === "Roles") {
-                                                                this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false});
+                                                                this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
                                                             }
                                                             else {
+                                                                this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
                                                                 console.log("please update the privilages in Line.no: 118")
                                                             }
                                                         });
@@ -170,7 +171,8 @@ export default class UserManagement extends Component {
                                                         this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false});
                                                     }else if(this.state.privilages[0].name === "Roles") {
                                                         this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
-                                                    }else {
+                                                    } else {
+                                                        this.setState({ flagOne: false, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
                                                         console.log("please update the privilages in Line.no: 161")
                                                     }
                                                 });
