@@ -25,7 +25,7 @@ export default class Inventory extends Component {
             rebarcodeId: "",
             startDate: "",
             endDate: "",
-            flagone: true,
+            flagone: false,
             flagtwo: false,
             inventoryDelete: false,
             flagFilterBarcodeOpen: false,
@@ -79,8 +79,8 @@ export default class Inventory extends Component {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) });
             console.log(this.state.storeId);
-            this.getAllBarcodes();
-            this.getbarcodeTexttileAdjustments()
+            // this.getAllBarcodes();
+            // this.getbarcodeTexttileAdjustments()
 
         }).catch(() => {
             this.setState({ loading: false });
@@ -136,7 +136,19 @@ export default class Inventory extends Component {
                                             }
                                         })
                                     }
-                                    this.setState({ privilages: this.state.privilages });
+                                    this.setState({ privilages: this.state.privilages }, () =>{
+                                        if (this.state.privilages.length > 0) {
+                                            if(this.state.privilages[0].name === "Barcode List"){
+                                                this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
+                                                this.getAllBarcodes();
+                                                this.setState({flagOne:true,flagTwo:false})
+                                            }else  if(this.state.privilages[0].name === "Re-Barcode List"){
+                                                this.setState({flagOne:false,flagTwo:true})
+                                                this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
+                                                this.getbarcodeTexttileAdjustments();
+                                            }
+                                            }
+                                            });
                                 }
                             }
                         }
@@ -172,11 +184,22 @@ export default class Inventory extends Component {
                                             }
                                         }
                                     })
-                                            this.setState({ privilages: this.state.privilages });
+                                            this.setState({ privilages: this.state.privilages }, () =>{
+                                                if(this.state.privilages[0].name === "Barcode List"){
+                                                    this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
+                                                    this.getAllBarcodes();
+                                                    this.setState({flagOne:true,flagTwo:false})
+                                                }else  if(this.state.privilages[0].name === "Re-Barcode List"){
+                                                    this.setState({flagOne:false,flagTwo:true})
+                                                    this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
+                                                    this.getbarcodeTexttileAdjustments();
+                                                }
+                                            });
                                         }
                                     }
                                 }
                             }
+                      
                         }
                     });
                 }).catch(() => {
@@ -195,6 +218,7 @@ export default class Inventory extends Component {
     }
 
     getAllBarcodes() {
+        console.warn("UUUUU")
         this.setState({ barcodesData: [] });
         const params = {
             "fromDate": this.state.startDate,
@@ -563,6 +587,7 @@ export default class Inventory extends Component {
     }
 
     render() {
+        
         return (
             <View style={styles.mainContainer}>
                 {this.state.loading &&
@@ -612,6 +637,7 @@ export default class Inventory extends Component {
                             data={this.state.privilages}
                             showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false}
+                            keyExtractor={(item,i) => i.toString()}
                             renderItem={({ item, index }) => (
                                 <TouchableOpacity style={{
                                     height: 36,
@@ -635,10 +661,11 @@ export default class Inventory extends Component {
                         {this.state.flagone && (
                             <View>
                                 <FlatList
-                                    data={this.state.barcodesData}
+                                    data={this.state.barcodesData}                              
                                     style={{ marginTop: 20 }}
                                     scrollEnabled={true}
                                     removeClippedSubviews={false}
+                                    keyExtractor={(item,i) => i.toString()}
                                     renderItem={({ item, index }) => (
                                         <View
                                             style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}

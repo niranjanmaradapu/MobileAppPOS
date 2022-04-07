@@ -211,6 +211,8 @@ export class ListOfEstimationSlip extends Component {
                     data={this.props.estimationSlip}
                     style={{ marginTop: 20 }}
                     scrollEnabled={true}
+                    keyExtractor={(item,i) => i.toString()}
+                    ListEmptyComponent={<Text style={{ fontSize: Device.isTablet ? 21 : 17, fontFamily: 'bold', color: '#000000', textAlign: 'center', marginTop: deviceheight/3 }}>&#9888; {I18n.t("Results not loaded")}</Text>}
                     renderItem={({ item, index }) => (
                         <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
@@ -242,9 +244,9 @@ export class ListOfEstimationSlip extends Component {
                         </View>
                     )}
                 />
-                {this.props.estimationSlip.length === 0 &&
+                {/* {this.props.estimationSlip.length === 0 &&
                     <Text style={{ fontSize: Device.isTablet ? 21 : 17, fontFamily: 'bold', color: '#000000', textAlign: 'center', marginTop: deviceheight/3 }}>&#9888; {I18n.t("Results not loaded")}</Text>
-                }
+                } */}
                 {this.state.deleteEstimationSlip && (
                     <View>
                         <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
