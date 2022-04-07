@@ -4,7 +4,7 @@ import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 
 var deviceWidth = Dimensions.get("window").width;
-
+var deviceheight = Dimensions.get("window").height;
 
 export default class Domain extends Component {
     render() {
@@ -30,6 +30,9 @@ export default class Domain extends Component {
                         </View>
                     )}
                 />
+                {this.props.domainError.length !== 0 && 
+                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.props.domainError}</Text>
+                }
             </View>
         );
     }

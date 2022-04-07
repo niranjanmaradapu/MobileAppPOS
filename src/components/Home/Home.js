@@ -420,9 +420,10 @@ class Home extends Component {
                             this.state.salesCategory.forEach(data => {
                                 indexName.push(data.categeoryType);
                                 indexCount.push(data.amount);
-                                colors.forEach(data => {
-                                    indexColor.push(data.normalColorCode);
-                                });
+                            });
+
+                            colors.forEach(data => {
+                                indexColor.push(data.normalColorCode);
                             });
 
                             for (var i = 0; i < this.state.salesCategory.length; i++) {
@@ -432,8 +433,6 @@ class Home extends Component {
                                     color: indexColor[i]
                                 });
                             }
-
-
 
                             this.setState({ salesCategoryChart: this.state.salesCategoryChart },
                                 () => {
@@ -460,16 +459,20 @@ class Home extends Component {
     }
 
     handleCategoryName = (value) => {
-        this.setState({ categoryName: value }, () => {
-            console.log(this.state.categoryName)
-            this.getSalesByCategory()
+        this.setState({ categoryName: "" }, () => {
+            this.setState({ categoryName: value }, () => {
+                console.log(this.state.categoryName)
+                this.getSalesByCategory()
+            })
         })
     }
 
     handleSalesName = (value) => {
-        this.setState({ salesName: value }, () => {
-            console.log(this.state.salesName)
-            this.getTopSales()
+        this.setState({ salesName: "" }, () => {            
+            this.setState({ salesName: value }, () => {
+                console.log(this.state.salesName)
+                this.getTopSales()
+            })
         })
     }
 

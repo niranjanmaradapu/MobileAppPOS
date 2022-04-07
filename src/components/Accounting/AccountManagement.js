@@ -38,15 +38,17 @@ export default class AccountManagement extends Component {
             flagFilterStore: false,
             modalVisible: true,
             privilages: [],
-            creditNotes: [1, 2],
-            debitNotes: [1, 2],
-            taxMaster: [1, 2],
-            hsnCode: [1, 2],
+            creditNotes: [],
+            debitNotes: [],
+            taxMaster: [],
+            hsnCode: [],
             stores: [],
             domains: [],
             storesDelete: false,
             filterActive: false,
             headerName: [],
+            storeError: "",
+            domainError: "",
         };
     }
 
@@ -55,6 +57,7 @@ export default class AccountManagement extends Component {
         this.setState({ privilages: [] });
         AsyncStorage.getItem("custom:isConfigUser").then((value) => {
             if (value === "true") {
+                this.getDomainsList()
                 this.setState({ flagStore: false, flagDomain: true, flagDashboard: false });
                 for (let i = 0; i < 2; i++) {
                     if (i === 0) {
@@ -86,7 +89,6 @@ export default class AccountManagement extends Component {
                             if (res.data && res.data["isSuccess"] === "true") {
                                 let len = res.data["result"].length;
                                 if (len > 0) {
-                                    if (len > 0) {
                                         for (let i = 0; i < len; i++) {
                                             let previlage = res.data["result"][i];
                                             if (previlage.name === "Accounting Portal") {
@@ -97,44 +99,49 @@ export default class AccountManagement extends Component {
                                                             this.state.headerName.push({name: subprivilage.name})
                                                     }
                                                 }
-                                                this.setState({headerName: this.state.headerName}, () => {
-                                                        for(let j = 0; j < this.state.headerName.length; j++){
-                                                            if (j === 0) {
-                                                                this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
-                                                            }
-                                                            else if (this.state.headerName[j].name === "Credit Notes") {}
+                                                this.setState({ headerName: this.state.headerName }, () => {
+                                                        console.log(this.state.headerName)
+                                                        for (let j = 0; j < this.state.headerName.length; j++){
+                                                            if (this.state.headerName[j].name === "Credit Notes") {}
                                                             else if (this.state.headerName[j].name === "Debit Notes") {}
                                                             else if (this.state.headerName[j].name === "Create Tax Master") {}
                                                             else if (this.state.headerName[j].name === "Create HSN Code") {}
+                                                            else  if (j === 0) {
+                                                                this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
+                                                            }else if (this.state.headerName[0].name !== "Dashboard") {
+                                                                if (this.state.headerName[j].name === "Stores") {
+                                                                    this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
+                                                                } else {
+                                                                    this.state.privilages.push({ bool: false, name: this.state.headerName[j].name });
+                                                                }
+                                                            }
                                                             else {
                                                                 this.state.privilages.push({ bool: false, name: this.state.headerName[j].name });
                                                             }
                                                         }
-                                                    })
-                                                    this.setState({ privilages: this.state.privilages }, () => {
+                                                })
+                                                this.setState({ privilages: this.state.privilages }, () => {
                                                         if(this.state.privilages[0].name === "Dashboard"){
                                                             this.setState({flagDashboard: true})
-                                                        }else{
-                                                            this.setState({flagDashboard: false})
-                                                        }if(this.state.privilages[0].name === "Stores"){
+                                                        } else if (this.state.privilages[0].name === "Stores") {
+                                                            this.getStoresList()
                                                             this.setState({flagStore: true})
-                                                        }else{
-                                                            this.setState({flagStore: false})
-                                                        }if(this.state.privilages[0].name === "Doamin"){
+                                                        } else if (this.state.privilages[0].name === "Doamin") {
+                                                            this.getDomainsList()
                                                             this.setState({flagDomain: true})
-                                                        }else{
-                                                            this.setState({flagDomain: false})
-                                                        }
-                                                        if (this.state.privilages[0].name === "Credit Notes" 
+                                                        }else if (this.state.privilages[0].name === "Credit Notes" 
                                                         || this.state.privilages[0].name === "Debit Notes"
                                                         || this.state.privilages[0].name === "Create Tax Master" 
                                                         || this.state.privilages[0].name === "Create HSN Code") {
+                                                            this.getStoresList()
                                                             this.setState({flagStore: true})
+                                                        }
+                                                        else {
+                                                            this.setState({ flagStore: false, flagDashboard: false, flagDomain: false })
                                                         }
                                                     });
                                             }
                                         }
-                                    }
                                 }
                             }
                         });
@@ -158,39 +165,47 @@ export default class AccountManagement extends Component {
                                                             this.state.headerName.push({name: subprivilage.name})
                                                         }
                                                     }
-                                                    this.setState({headerName: this.state.headerName}, () => {
-                                                        for(let j = 0; j < this.state.headerName.length; j++){
-                                                            if (j === 0) {
-                                                                this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
-                                                            }
-                                                            else if (this.state.headerName[j].name === "Credit Notes") {}
+                                                    this.setState({ headerName: this.state.headerName }, () => {
+                                                        console.log(this.state.headerName)
+                                                        for (let j = 0; j < this.state.headerName.length; j++){
+                                                            if (this.state.headerName[j].name === "Credit Notes") {}
                                                             else if (this.state.headerName[j].name === "Debit Notes") {}
                                                             else if (this.state.headerName[j].name === "Create Tax Master") {}
                                                             else if (this.state.headerName[j].name === "Create HSN Code") {}
+                                                            else  if (j === 0) {
+                                                                this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
+                                                            } else if (this.state.headerName[0].name !== "Dashboard") {
+                                                                if (this.state.headerName[j].name === "Stores") {
+                                                                    this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
+                                                                } else {
+                                                                    this.state.privilages.push({ bool: false, name: this.state.headerName[j].name });
+                                                                }
+                                                            }
                                                             else {
                                                                 this.state.privilages.push({ bool: false, name: this.state.headerName[j].name });
                                                             }
                                                         }
+                                                        
                                                     })
                                                     this.setState({ privilages: this.state.privilages }, () => {
-                                                        if(this.state.privilages[0].name === "Dashboard"){
+                                                        console.error(this.state.privilages)
+                                                        if(this.state.privilages[0].name === "Dashboard") {
                                                             this.setState({flagDashboard: true})
-                                                        }else{
-                                                            this.setState({flagDashboard: false})
-                                                        }if(this.state.privilages[0].name === "Stores"){
+                                                        } else if (this.state.privilages[0].name === "Stores") {
+                                                            this.getStoresList()
                                                             this.setState({flagStore: true})
-                                                        }else{
-                                                            this.setState({flagStore: false})
-                                                        }if(this.state.privilages[0].name === "Doamin"){
+                                                        } else if (this.state.privilages[0].name === "Doamin") {
+                                                            this.getDomainsList()
                                                             this.setState({flagDomain: true})
-                                                        }else{
-                                                            this.setState({flagDomain: false})
-                                                        }
-                                                        if (this.state.privilages[0].name === "Credit Notes" 
+                                                        }else if (this.state.privilages[0].name === "Credit Notes" 
                                                         || this.state.privilages[0].name === "Debit Notes"
                                                         || this.state.privilages[0].name === "Create Tax Master" 
                                                         || this.state.privilages[0].name === "Create HSN Code") {
+                                                            this.getStoresList()
                                                             this.setState({flagStore: true})
+                                                        }
+                                                        else {
+                                                            this.setState({ flagStore: false, flagDashboard: false, flagDomain: false })
                                                         }
                                                     });
                                                 }
@@ -218,8 +233,8 @@ export default class AccountManagement extends Component {
             console.log('There is error getting storeId');
             // alert('There is error getting storeId');
         });
-        this.getDomainsList();
-        // this.getStoresList()
+        // this.getDomainsList();
+        // this.getStoresList();
     }
 
 
@@ -238,12 +253,16 @@ export default class AccountManagement extends Component {
                     this.setState({ loading: false });
                     this.state.domains.push(number);
                 }
-                this.setState({ domains: this.state.domains });
+                this.setState({ domains: this.state.domains, domainError: "" });
+            } else {
+                this.setState({domainError: "Records Not Found"})
             }
         }).catch(() => {
             this.setState({ loading: false });
-            this.setState({ loading: false });
-            alert("There is an Error while getting Domains");
+            if (this.state.flagDomain === true) {
+                this.setState({domainError: "Records Not Found"})
+            //    alert("There is an Error while getting Domains");
+            }
         });
     }
 
@@ -265,12 +284,16 @@ export default class AccountManagement extends Component {
                     this.setState({ loading: false });
                     this.state.stores.push(number);
                 }
-                this.setState({ stores: this.state.stores });
+                this.setState({ stores: this.state.stores, storeError: "" });
+            } else {
+                this.setState({storeError: "Records Not Found"})
             }
         }).catch(() => {
             this.setState({ loading: false });
-            this.setState({ loading: false });
-            alert("There is an Error while Getting Stores");
+            if (this.state.flagStore === true) {
+                this.setState({storeError: "Records Not Found"})
+                // alert("There is an Error while Getting Stores");
+            }
         });
     }
 
@@ -587,6 +610,7 @@ export default class AccountManagement extends Component {
                                     stores={this.state.stores}
                                     getStoresList={this.handelGetStore}
                                     navigation={this.props.navigation}
+                                    storeError={this.state.storeError}
                                 />
                             )}
 
@@ -594,6 +618,7 @@ export default class AccountManagement extends Component {
                                 <Domain
                                     domains={this.state.domains}
                                     navigation={this.props.navigation}
+                                    domainError={this.state.domainError}
                                 />
                             )}
 

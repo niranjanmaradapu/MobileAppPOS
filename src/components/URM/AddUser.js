@@ -236,16 +236,16 @@ export default class AddUser extends Component {
 
     datepickerDoneClicked() {
         if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
-            this.setState({ dob: "0" + this.state.date.getDate() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false });
+            this.setState({ dob: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() , doneButtonClicked: true, datepickerOpen: false });
         }
         else if (parseInt(this.state.date.getDate()) < 10) {
-            this.setState({ dob: "0" + this.state.date.getDate() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false });
+            this.setState({ dob: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
         }
         else if (parseInt(this.state.date.getMonth()) < 10) {
-            this.setState({ dob: this.state.date.getDate() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false });
+            this.setState({ dob: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
         }
         else {
-            this.setState({ dob: this.state.date.getDate() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getFullYear(), doneButtonClicked: true, datepickerOpen: false });
+            this.setState({ dob: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate(), doneButtonClicked: true, datepickerOpen: false });
         }
     }
 
