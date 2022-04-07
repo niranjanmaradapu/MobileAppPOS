@@ -136,7 +136,19 @@ export default class Inventory extends Component {
                                             }
                                         })
                                     }
-                                    this.setState({ privilages: this.state.privilages });
+                                    this.setState({ privilages: this.state.privilages }, () =>{
+                                        if (this.state.privilages.length > 0) {
+                                            if(this.state.privilages[0].name === "Barcode List"){
+                                                this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
+                                                this.getAllBarcodes();
+                                                this.setState({flagOne:true,flagTwo:false})
+                                            }else  if(this.state.privilages[0].name === "Re-Barcode List"){
+                                                this.setState({flagOne:false,flagTwo:true})
+                                                this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
+                                                this.getbarcodeTexttileAdjustments();
+                                            }
+                                            }
+                                            });
                                 }
                             }
                         }
@@ -172,7 +184,7 @@ export default class Inventory extends Component {
                                             }
                                         }
                                     })
-                                            this.setState({ privilages: this.state.privilages } ,() =>{
+                                            this.setState({ privilages: this.state.privilages }, () =>{
                                                 if(this.state.privilages[0].name === "Barcode List"){
                                                     this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
                                                     this.getAllBarcodes();

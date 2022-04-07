@@ -131,12 +131,14 @@ export default class NewSaleReport extends Component {
                 }
                 else {
                     alert(res.data.message);
+                    this.props.filterActiveCallback();
                     this.props.modelCancelCallback();
                 }
             }
             ).catch(() => {
                 this.setState({ loading: false });
-                alert('No Results Found');
+                // alert('No Results Found');
+                this.props.filterActiveCallback();
                 this.props.modelCancelCallback();
             });
         }
