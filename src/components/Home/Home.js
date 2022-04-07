@@ -372,14 +372,6 @@ class Home extends Component {
 
 
     getTopSales() {
-        this.setState({topSales: [], topSalesChart: {
-                labels: [],
-                datasets: [
-                    {
-                        data: []
-                    }
-                ]
-            }})
         const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId + '&name=' + this.state.salesName;
         axios.get(HomeGraphsService.getTopFiveSales() + params).then(response => {
             if (response) {
@@ -414,7 +406,6 @@ class Home extends Component {
 
 
     getSalesByCategory() {
-        this.setState({salesCategoryChart: [], salesCategory: [] })
         const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId + '&name=' + this.state.categoryName;
         axios.get(HomeGraphsService.getSalesByCategory() + params).then(response => {
             if (response) {
