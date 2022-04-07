@@ -210,6 +210,8 @@ export class ListOfBarcodes extends Component {
                     data={this.props.listBarcodes}
                     style={{ marginTop: 20 }}
                     scrollEnabled={true}
+                    keyExtractor={(item,i) => i.toString()}
+                    ListEmptyComponent={<Text style={{ fontSize: Device.isTablet ? 21 : 17, fontFamily: 'bold', color: '#000000', textAlign: 'center', marginTop: deviceheight/3 }}>&#9888; {I18n.t("Results not loaded")}</Text>}
                     renderItem={({ item, index }) => (
                         <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
@@ -239,6 +241,7 @@ export class ListOfBarcodes extends Component {
                         </View>
                     )}
                 />
+                            
                 {this.props.flagFilterListBarcodes && (
                     <View>
                         <Modal style={{ margin: 0 }} isVisible={this.props.modalVisible}>

@@ -170,6 +170,7 @@ export class SalesSumary extends Component {
                     data={this.props.salesSumaryObject}
                     style={{ marginTop: 20 }}
                     scrollEnabled={true}
+                    ListEmptyComponent={<Text style={{ fontSize: Device.isTablet ? 21 : 17, fontFamily: 'bold', color: '#000000', textAlign: 'center', marginTop: deviceheight/3 }}>&#9888; {I18n.t("Results not loaded")}</Text>}
                     renderItem={({ item, index }) => {
                         if (index === 0) {
                             return <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
