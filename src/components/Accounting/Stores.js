@@ -60,6 +60,8 @@ export class Stores extends Component {
                     data={this.props.stores}
                     style={{ marginTop: 20, }}
                     scrollEnabled={true}
+                    keyExtractor={(item,i) => i.toString()}
+                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceHeight/3 }}>&#9888; Records Not Found</Text>}
                     renderItem={({ item, index }) => (
                         <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
@@ -87,9 +89,8 @@ export class Stores extends Component {
                         </View>
                     )}
                 />
-                {this.props.storeError.length !== 0 && 
-                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceHeight/3 }}>&#9888; {this.props.storeError}</Text>
-                }
+                {/* {this.props.storeError.length !== 0 && 
+                } */}
                 {this.state.storesDelete && (
                     <View>
                         <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
@@ -272,7 +273,9 @@ export class FilterStores extends Component {
                     this.setState({ filterStores: res.data.result });
                     this.props.childParams(this.state.filterStores);
                 } else {
-                    alert(res.data.message);
+                    // alert(res.data.message);
+                    this.setState({ filterStores: "" })
+                    this.props.childParams(this.state.filterStores)
                 }
                 console.log(res.data);
                 this.props.modelCancelCallback();

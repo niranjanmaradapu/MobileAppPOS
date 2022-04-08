@@ -501,14 +501,16 @@ export default class Inventory extends Component {
 
     clearFilterAction() {
         if (this.state.flagone === true) {
-            this.setState({ filterActive: false, startDate: "Start Date", endDate: "End Date", barCodeId: "", }, () => {
-                this.setState({ barcodesData: [], });
-                this.getAllBarcodes();
+            this.setState({ filterActive: false, startDate: "", endDate: "", barCodeId: "", }, () => {
+                this.setState({ barcodesData: [] }, () => {
+                    this.getAllBarcodes();
+                });
             });
         } else {
-            this.setState({ filterActive: false, startDate: "Start Date", endDate: "End Date", barCodeId: "", }, () => {
-                this.setState({ reBarcodesData: [] });
-                this.getbarcodeTexttileAdjustments();
+            this.setState({ filterActive: false, startDate: "", endDate: "", barCodeId: "", }, () => {
+                this.setState({ reBarcodesData: [] }, () => {
+                    this.getbarcodeTexttileAdjustments();
+                });
             });
         }
     }
@@ -665,6 +667,7 @@ export default class Inventory extends Component {
                                     style={{ marginTop: 20 }}
                                     scrollEnabled={true}
                                     removeClippedSubviews={false}
+                                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; Records Not Found</Text>}
                                     keyExtractor={(item,i) => i.toString()}
                                     renderItem={({ item, index }) => (
                                         <View
@@ -692,9 +695,8 @@ export default class Inventory extends Component {
                                         </View>
                                     )}
                                 />
-                                {this.state.barcodesData.length === 0 && this.state.error.length > 0 &&
-                                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.error}</Text>
-                                }
+                                {/* {this.state.barcodesData.length === 0 && this.state.error.length > 0 &&
+                                } */}
                             </View>
                         )}
 
@@ -705,6 +707,7 @@ export default class Inventory extends Component {
                                     style={{ marginTop: 20 }}
                                     scrollEnabled={true}
                                     keyExtractor={item => item}
+                                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; Records Not Found</Text>}
                                     renderItem={({ item, index }) => (
                                         <View
                                             style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
@@ -726,9 +729,8 @@ export default class Inventory extends Component {
                                         </View>
                                     )}
                                 />
-                                {this.state.reBarcodesData.length === 0 && this.state.error.length > 0 &&
-                                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.error}</Text>
-                                }
+                                {/* {this.state.reBarcodesData.length === 0 && this.state.error.length > 0 &&
+                                } */}
                             </View>
                         )}
                     </View>
