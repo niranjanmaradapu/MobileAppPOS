@@ -322,7 +322,7 @@ export default class UserManagement extends Component {
         else if (this.state.flagTwo === true) {
             this.setState({ filterActive: false }, () => {
                 this.getRolesList();
-                this.setState({role: "", createdBy: "", createdDate: "CREATED DATE"})
+                this.setState({role: "", createdBy: "", createdDate: ""})
             });
         }
     }
@@ -413,6 +413,7 @@ export default class UserManagement extends Component {
     };
 
     applyRoleFilter() {
+        console.log("creatBy",this.state.createdBy )
         const searchRole = {
             "roleName": this.state.role ? this.state.role : null,
             "createdBy": this.state.createdBy ? this.state.createdBy : null,
@@ -420,6 +421,7 @@ export default class UserManagement extends Component {
         };
         console.log(searchRole);
         axios.post(UrmService.getRolesBySearch(), searchRole).then((res) => {
+            console.log("KKKKK",res)
             if (res) {
                 if (res.data.isSuccess === "true") {
                     this.setState({ rolesData: res.data.result, modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
@@ -430,7 +432,7 @@ export default class UserManagement extends Component {
                         () => {
                         this.setState({ filterActive: true, rolesError: "Records Not Found" })
                     });
-                    console.log("records not found");
+                    console.log("ooooo",res.data);
                 }
 
             } else {
@@ -440,7 +442,7 @@ export default class UserManagement extends Component {
             }
         }).catch((err) => {
             this.setState({ loading: false, rolesError: "Records Not Found", rolesData: "" });
-            console.warn(err);
+            console.warn(err ,"fkjnksjdf");
         });
     }
 
@@ -606,11 +608,11 @@ export default class UserManagement extends Component {
 
                     <ScrollView>
                         <View style={styles.container}>
-
                             <FlatList
                                 style={styles.flatList}
                                 horizontal
                                 data={this.state.privilages}
+                                ListEmptyComponent={ <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.rolesError}</Text>}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
                                 renderItem={({ item, index }) => (
@@ -665,6 +667,7 @@ export default class UserManagement extends Component {
                                 data={this.state.rolesData}
                                 style={{ marginTop: 20, }}
                                 scrollEnabled={true}
+                                ListEmptyComponent={ <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.rolesError}</Text>}
                                 renderItem={({ item, index }) => (
                                     <View style={Device.isTablet ? styles.flatlistContainer_tablet : styles.flatlistContainer_mobile}>
                                         <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
@@ -687,9 +690,9 @@ export default class UserManagement extends Component {
                                     </View>
                                 )}
                                 />
-                                {this.state.rolesData.length === 0 && this.state.rolesError.length > 0 && 
+                                {/* {this.state.rolesData.length === 0 && this.state.rolesError.length > 0 && 
                                     <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.rolesError}</Text>
-                                }
+                                } */}
                             </View>
                         )}
                         {this.state.flagOne && (
@@ -894,7 +897,7 @@ export default class UserManagement extends Component {
                                                 <Text style={{
                                                     marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
                                                     fontFamily: "regular"
-                                                }}  > {this.state.doneButtonClicked == false ? 'CREATED DATE' : this.state.createdDate} </Text>
+                                                }}  > {this.state.createdDate === "" ? 'CREATED DATE' : this.state.createdDate} </Text>
                                                 <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                                             </TouchableOpacity>
                                             {this.state.datepickerOpen && (
