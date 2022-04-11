@@ -211,18 +211,18 @@ class GenerateEstimationSlip extends Component {
     }
 
     endEditing() {
-        if (this.state.uom === "") {
-            alert("Please select UOM");
-        }
-        else if (this.state.barcodeId === "") {
-            alert("Please select Barcode");
-        }
-        else if (this.state.smnumber === "") {
-            alert("Please enter SM Number");
-        }
-        else {
-            this.getLineItems();
-        }
+        // if (this.state.uom === "") {
+        //     alert("Please select UOM");
+        // }
+        // else if (this.state.barcodeId === "") {
+        //     alert("Please select Barcode");
+        // }
+        // else if (this.state.smnumber === "") {
+        //     alert("Please enter SM Number");
+        // }
+        // else {
+        this.getLineItems();
+        // }
     }
 
     getLineItems() {
@@ -412,8 +412,33 @@ class GenerateEstimationSlip extends Component {
                                 marginTop: 10,
                             }}>
                             <View>
-                                <View style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : styles.rnSelectContainer_mobile_newsale}>
-                                    <RNPickerSelect
+
+                                <View >
+                                    <TextInput style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : {
+                                        justifyContent: 'center',
+                                        margin: 20,
+                                        height: 44,
+                                        marginTop: 5,
+                                        marginBottom: 10,
+                                        borderColor: '#8F9EB717',
+                                        borderRadius: 3,
+                                        backgroundColor: '#FBFBFB',
+                                        borderWidth: 1,
+                                        fontFamily: 'regular',
+                                        paddingLeft: 15,
+                                        fontSize: 18,
+                                    }}
+                                        underlineColorAndroid="transparent"
+                                        placeholder={I18n.t("ENTER BARCODE")}
+                                        placeholderTextColor="#6F6F6F60"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.barcodeId}
+                                        // onEndEditing
+                                        onChangeText={this.handleBarCode}
+                                    // onEndEditing={() => this.endEditing()}
+                                    />
+                                    {/* <RNPickerSelect
                                         // style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : styles.rnSelectContainer_mobile_newsale}
                                         placeholder={{
                                             label: 'SELECT UOM',
@@ -431,10 +456,10 @@ class GenerateEstimationSlip extends Component {
                                         value={this.state.uom}
                                         useNativeAndroidPickerStyle={false}
 
-                                    />
+                                    /> */}
                                 </View>
 
-                                <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
+                                {/* <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
                                     underlineColorAndroid="transparent"
                                     placeholder={I18n.t("ENTER BARCODE")}
                                     placeholderTextColor="#6F6F6F60"
@@ -444,7 +469,7 @@ class GenerateEstimationSlip extends Component {
                                     // onEndEditing
                                     onChangeText={this.handleBarCode}
                                 // onEndEditing={() => this.endEditing()}
-                                />
+                                /> */}
 
                                 <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 350 : 150 }]}
                                     underlineColorAndroid="transparent"
@@ -622,7 +647,7 @@ class GenerateEstimationSlip extends Component {
                                                     fontSize: Device.isTablet ? 22 : 12,
                                                     color: '#ED1C24'
                                                 }}
-                                                    >-</Text>
+                                                >-</Text>
                                             </TouchableOpacity>
                                             {/* <Text> {item.qty}</Text> */}
                                             <TextInput
@@ -1612,7 +1637,7 @@ const styles = StyleSheet.create({
         height: 44,
         marginTop: 5,
         marginBottom: 10,
-        width: deviceWidth / 2,
+        width: deviceWidth / 4,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
