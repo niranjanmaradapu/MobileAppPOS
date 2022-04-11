@@ -70,7 +70,7 @@ class RegisterClient extends Component {
         else if (emailReg.test(this.state.userEmail) === false) {
             alert('You must enter a valid email');
         } else if (this.state.organization === "") {
-            alert('Organization cannot be empty');
+            alert('Organisation cannot be empty');
         }
         else {
             this.setState({ loading: true });

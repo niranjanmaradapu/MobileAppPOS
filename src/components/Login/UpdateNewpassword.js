@@ -44,10 +44,10 @@ class UpdateNewpassword extends Component {
 
     create() {
         if (this.state.code.length === 0) {
-            alert('You must enter a Code');
+            alert('Verification Code Cannot be Empty');
         }
-        if (this.state.newPassword.length === 0) {
-            alert('You must enter New Password');
+        else if (this.state.newPassword.length === 0) {
+            alert('New Password Cannot be Empty');
         }
         else {
             // const params = {

@@ -14,6 +14,8 @@ export default class Domain extends Component {
                     data={this.props.domains}
                     style={{ marginTop: 20, }}
                     scrollEnabled={true}
+                    keyExtractor={(item,i) => i.toString()}
+                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceHeight/3 }}>&#9888; Records Not Found</Text>}
                     renderItem={({ item, index }) => (
                         <View style={Device.isTablet ? styles.flatlistContainer_tablet : styles.flatlistContainer_mobile}>
                             <View style={Device.isTablet ? styles.flatlistSubContainer_tablet : styles.flatlistSubContainer_mobile}>
@@ -30,9 +32,9 @@ export default class Domain extends Component {
                         </View>
                     )}
                 />
-                {this.props.domainError.length !== 0 && 
+                {/* {this.props.domainError.length !== 0 && 
                     <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.props.domainError}</Text>
-                }
+                } */}
             </View>
         );
     }
