@@ -12,12 +12,16 @@ import ReportsNavigation from './ReportsNavigation';
 import CustomerNavigation from './CustomerNavigation';
 import InventoryRetailNavigation from './InventoryRetailNavigation';
 import CustomerRetailNavigation from './CustomerRetailNavigation';
+import Device from 'react-native-device-detection';
 
 const Drawer = createDrawerNavigator();
 export default class SideNavigation extends React.Component {
     render() {
         return (
-            <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+            <Drawer.Navigator screenOptions={{
+                drawerStyle: {
+                width: Device.isTablet ? 400 : 300,
+            }}} drawerContent={props => <DrawerContent {...props} />}>
                 <Drawer.Screen name="Home" options={{ headerShown: false }} component={Home} />
                 <Drawer.Screen name="Settings" options={{ headerShown: false }} component={Settings} />
                 <Drawer.Screen name="PromoNavigation" options={{ headerShown: false }} component={PromoNavigation} />

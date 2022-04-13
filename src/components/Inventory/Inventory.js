@@ -126,8 +126,9 @@ export default class Inventory extends Component {
                                             }
                                         }
                                         this.setState({headerNames: this.state.headerNames}, () => {
-                                            for(let j = 0; j < this.state.headerNames.length; j++){
-                                                if (j === 0) {
+                                            for (let j = 0; j < this.state.headerNames.length; j++){
+                                                if(this.state.headerNames[j].name === "Product Combo") {}
+                                                else if (j === 0) {
                                                     this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
                                                 }
                                                 else {
@@ -175,8 +176,9 @@ export default class Inventory extends Component {
                                                 }
                                             }
                                             this.setState({headerNames: this.state.headerNames}, () => {
-                                        for(let j = 0; j < this.state.headerNames.length; j++){
-                                            if (j === 0) {
+                                                for (let j = 0; j < this.state.headerNames.length; j++){
+                                            if(this.state.headerNames[j].name === "Product Combo") {}
+                                            else if (j === 0) {
                                                 this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
                                             }
                                             else {

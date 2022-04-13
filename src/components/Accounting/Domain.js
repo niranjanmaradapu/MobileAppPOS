@@ -4,7 +4,7 @@ import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 
 var deviceWidth = Dimensions.get("window").width;
-var deviceheight = Dimensions.get("window").height;
+var deviceHeight = Dimensions.get("window").height;
 
 export default class Domain extends Component {
     render() {

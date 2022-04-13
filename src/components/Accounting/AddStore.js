@@ -160,8 +160,8 @@ export default class AddStore extends Component {
                 this.setState({ stateId: this.state.statesArray[i].id, statecode: this.state.statesArray[i].code });
             }
         }
-        this.getGSTNumber();
         this.setState({ storeState: value }, () => {
+            this.getGSTNumber();
             this.getMasterDistrictsList();
         });
         // });
@@ -255,9 +255,13 @@ export default class AddStore extends Component {
             "stateCode": this.state.statecode,
         };
         axios.get(UrmService.getGSTNumber(), { params }).then((res) => {
-            console.log(res);
+            console.error(res.data.result);
             if (res) {
-                this.setState({ gstNumber: res.data.result.gstNumber });
+                if (res.data.result !== null) {
+                    this.setState({ gstNumber: res.data.result.gstNumber });
+                } else {
+                    this.setState({gstNumber: ""})
+                }
             }
         });
     }
