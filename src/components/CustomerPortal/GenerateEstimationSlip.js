@@ -1845,7 +1845,6 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         height: 54,
         marginTop: 5,
-        width: deviceWidth / 2,
         marginBottom: 10,
         borderColor: '#8F9EB717',
         borderRadius: 3,
