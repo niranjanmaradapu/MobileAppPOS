@@ -447,6 +447,7 @@ export default class UserManagement extends Component {
     }
 
     applyUserFilter() {
+        this.setState({ usersData: [] });
         const obj = {
             "id": null,
             "phoneNo": null,
@@ -457,7 +458,7 @@ export default class UserManagement extends Component {
             "storeName": this.state.branch ? this.state.branch : null,
             "clientDomainId": this.state.clientId,
         };
-        console.log(obj);
+        console.log('search filter', obj);
         axios.post(UrmService.getUserBySearch(), obj).then((res) => {
             if (res) {
                 console.log("users Data", res.data.result);
