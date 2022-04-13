@@ -437,27 +437,26 @@ export default class Login extends Component {
                     }
                     <SafeAreaView style={{ flex: 1 }}>
                         <View style={styles.container}>
-                            <Image source={require('../assets/images/Subtraction.png')} style={Device.isTablet ? styles.bottomImage_tablet : styles.bottomImage_mobile} />
-                            <View style={{ flex: 1, marginTop: '5%', backgroundColor: '#FFFFFF' }}>
-                                {/* <Image source={require('../assets/images/logo.png')} style={styles.logoImage} /> */}
-                                {/* <Text></Text> */}
-                                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}> {I18n.t('Hey')} </Text>
-                                <Text style={Device.isTablet ? styles.headerText2_tablet : styles.headerText2_mobile}> {I18n.t('Login Now')} </Text>
-                                {/* <View style={{ marginTop: 15, marginLeft: 18, flexDirection: 'row' }}>
-
-                                    <Text style={{ fontSize: 16, color: '#858585', fontFamily: "regular", }}>If you are new / </Text>
-                                    <TouchableOpacity
-                                        onPress={() => this.signUpButtonClicked()} >
-                                        <Text style={{ color: '#353C40', fontSize: 16, fontFamily: "bold", textDecorationLine: 'underline' }}> Create Account </Text>
-                                    </TouchableOpacity>
-                                </View> */}
-
-
+                            <View style={{ display: 'flex', flexDirection: 'row' ,justifyContent: 'center', alignItems: "center", marginTop: 50 }}>
+                                <View style={styles.hexagon}>
+                                  <View style={styles.hexagonInner} />
+                                  <View style={styles.hexagonBefore} />
+                                    <View style={styles.hexagonAfter} />
+                                    <Text style={styles.logoDesign}>R</Text>
+                                </View>
+                                <View>
+                                <Text style={styles.mainLogo}>EASY RETAIL</Text>
+                                <Text style={styles.subLogo}>in-store & Online</Text>
+                                </View>
                             </View>
+                            <Image source={require('../assets/images/Subtraction.png')} style={Device.isTablet ? styles.bottomImage_tablet : styles.bottomImage_mobile} />
+                            <View style={{ flex: 1, backgroundColor: '#FFFFFF', marginTop: 40 }}>
+                                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}> {I18n.t('Login')} </Text>
+                            </View>
+                                
 
 
-
-                            <View style={{ flex: 2 }}>
+                            <View style={{ flex: Device.isTablet ? 4 : 7 }}>
                                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                     underlineColorAndroid="transparent"
                                     placeholder={I18n.t('Username')}
@@ -482,6 +481,16 @@ export default class Login extends Component {
                                 <View>
                                     <View style={{ flexDirection: Device.isTablet ? "row" : "column", justifyContent: Device.isTablet ? "space-around" : "center", alignItems: Device.isTablet ? "center" : "center" }}>
 
+                                         <View style={{
+                                            top: 35, alignItems: 'center', flexDirection: 'row'
+                                        }}>
+                                            <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Register')}? </Text>
+                                            <TouchableOpacity
+                                                onPress={() => this.registerClient()} >
+                                                <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {I18n.t('Register')} </Text>
+                                            </TouchableOpacity>
+                                        </View>
+
                                         <View style={{
                                             top: 35, alignItems: 'center', flexDirection: 'row'
                                         }}>
@@ -489,16 +498,6 @@ export default class Login extends Component {
                                             <TouchableOpacity
                                                 onPress={() => this.forgotPassword()} >
                                                 <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {I18n.t('Reset')} </Text>
-                                            </TouchableOpacity>
-                                        </View>
-
-                                        <View style={{
-                                            top: 35, alignItems: 'center', flexDirection: 'row'
-                                        }}>
-                                            <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Register')}? </Text>
-                                            <TouchableOpacity
-                                                onPress={() => this.registerClient()} >
-                                                <Text style={Device.isTablet ? styles.navigationButtonText_tablet : styles.navigationButtonText_mobile}> {I18n.t('Register')} </Text>
                                             </TouchableOpacity>
                                         </View>
 
@@ -557,9 +556,8 @@ const pickerSelectStyles = StyleSheet.create({
 const styles = StyleSheet.create({
     logoImage: {
         alignSelf: 'center',
-        width: 300,
-        height: 230,
-
+        width: 500,
+        height: 300,
     },
     containerForActivity: {
         flex: 1,
@@ -590,17 +588,25 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
         // alignItems: 'center',
     },
+    mainLogo: {
+        color: '#ED1C24',
+        fontSize: Device.isTablet ? 40 : 30,
+        fontFamily: "bold",
+    },
+    subLogo: {
+        fontSize: 25,
+        fontFamily: 'medium',
+    },
 
     // Mobile Styles
     hederText_mobile: {
         color: "#353C40",
-        fontSize: 20,
         fontFamily: "bold",
-        marginLeft: 10,
-        marginTop: 100,
+        marginLeft: 20,
+        marginTop: 20,
         flexDirection: 'column',
         justifyContent: 'center',
-        fontSize: 28,
+        fontSize: 25,
     },
     headerText2_mobile: {
         color: "#353C40",
@@ -670,7 +676,7 @@ const styles = StyleSheet.create({
         color: "#353C40",
         fontSize: 40,
         fontFamily: "bold",
-        marginLeft: 10,
+        marginLeft: 20,
         marginTop: 100,
         flexDirection: 'column',
         justifyContent: 'center',
@@ -736,6 +742,53 @@ const styles = StyleSheet.create({
         fontFamily: "bold",
         textDecorationLine: 'underline'
     },
+    hexagon: {
+        width: Device.isTablet ? 120 : 70,
+        height: Device.isTablet ? 55 : 25,
+        position: 'relative',
+    },
+    logoDesign: {
+        position: 'absolute',
+        top: Device.isTablet ? -5 : -10,
+        bottom: 0,
+        left: Device.isTablet ? 35 : 15,
+        color: "#FFF",
+        fontSize: Device.isTablet ? 50 : 30,
+        fontFamily: "bold"
+     },
+  hexagonInner: {
+    width: Device.isTablet ? 100 : 50,
+    height: Device.isTablet ? 55 : 25,
+    backgroundColor: "red",
+  },
+  hexagonAfter: {
+    position: "absolute",
+    bottom: Device.isTablet ? -25 : -15,
+    left: 0,
+    width: 0,
+    height: 0,
+    borderStyle: "solid",
+    borderLeftWidth: Device.isTablet ? 50 : 25,
+    borderLeftColor: "transparent",
+    borderRightWidth: Device.isTablet ? 50 : 25,
+    borderRightColor: "transparent",
+    borderTopWidth: Device.isTablet ? 25 : 15,
+    borderTopColor: "red",
+  },
+  hexagonBefore: {
+    position: "absolute",
+    top: Device.isTablet ? -25 : -15,
+    left: 0,
+    width: 0,
+    height: 0,
+    borderStyle: "solid",
+    borderLeftWidth: Device.isTablet ? 50 : 25,
+    borderLeftColor: "transparent",
+    borderRightWidth: Device.isTablet ? 50 : 25,
+    borderRightColor: "transparent",
+    borderBottomWidth: Device.isTablet ? 25 : 15,
+    borderBottomColor: "red",
+  },
 });;
 
 // Unused Styles
