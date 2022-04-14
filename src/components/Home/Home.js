@@ -145,8 +145,8 @@ class Home extends Component {
             },
             salesCategory: [],
             salesCategoryChart: [],
-            categoryName: "",
-            salesName: "",
+            categoryName: "Today",
+            salesName: "Today",
         };
     }
 
@@ -336,8 +336,8 @@ class Home extends Component {
         this.getTodaySale();
         this.getMonthlySale();
         this.getLastVsThisMonthSale();
-        // this.getTopSales();
-        // this.getSalesByCategory();
+        this.getTopSales();
+        this.getSalesByCategory();
     }
 
     getTodaySale() {
@@ -406,10 +406,10 @@ class Home extends Component {
 
 
     getSalesByCategory() {
-        this.setState({salesCategoryChart: []})
         const params = '?storeId=' + this.state.storeId + '&domainId=' + this.state.domainId + '&name=' + this.state.categoryName;
         axios.get(HomeGraphsService.getSalesByCategory() + params).then(response => {
             if (response) {
+                this.setState({salesCategoryChart: []})
                 if (response.data.result !== "null" && response.data.result.length > 0) {
                     console.log("Sales By Category", response.data.result);
                     this.setState({ salesCategory: response.data.result },
@@ -460,13 +460,11 @@ class Home extends Component {
     }
 
     handleCategoryName = (value) => {
-        this.setState({ categoryName: "" }, () => {
-            this.setState({ categoryName: value }, () => {
-                console.log(this.state.categoryName)
-                if (this.state.categoryName !== "") {
-                    this.getSalesByCategory()
-                } 
-            })
+        this.setState({ categoryName: value }, () => {
+            console.log(this.state.categoryName)
+            if (this.state.categoryName !== "") {
+                this.getSalesByCategory()
+            } 
         })
     }
 
@@ -601,14 +599,13 @@ class Home extends Component {
                                 <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 60, borderColor: '#000000', borderWidth: Device.isTablet ? 2 : 1,  marginTop: Device.isTablet ? 20 : 0}]}>
                                 <RNPickerSelect 
                                     placeholder={{
-                                            label: "Select",
-                                            value: "",
+                                            label: "Today",
+                                            value: "Today",
                                         }}
                                         Icon={() => {
                                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                             }}
                                         items={[
-                                                {label: 'Today', value: 'Today'},
                                                 { label: 'Last One Month', value: 'LastOneMonth' },
                                                 { label: 'Last 6 Months', value: 'Last6months' },
                                                 { label: 'Last Year', value: 'LastYear' },
@@ -657,8 +654,8 @@ class Home extends Component {
                             <View style={[Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile, { width: deviceWidth - 60, borderColor: '#000000', borderWidth: Device.isTablet ? 2 : 1, marginTop: Device.isTablet ? 20 : 0}]}>
                                 <RNPickerSelect 
                                     placeholder={{
-                                            label: "Select",
-                                            value: "",
+                                            label: "Today",
+                                            value: "Today",
                                         }}
                                         Icon={() => {
                                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;

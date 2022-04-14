@@ -451,7 +451,7 @@ export default class Login extends Component {
                             </View>
                             <Image source={require('../assets/images/Subtraction.png')} style={Device.isTablet ? styles.bottomImage_tablet : styles.bottomImage_mobile} />
                             <View style={{ flex: 1, backgroundColor: '#FFFFFF', marginTop: 40 }}>
-                                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}> {I18n.t('Login')} </Text>
+                                <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}> {I18n.t('Sign-In')} </Text>
                             </View>
                                 
 
@@ -758,7 +758,7 @@ const styles = StyleSheet.create({
      },
   hexagonInner: {
     width: Device.isTablet ? 100 : 50,
-    height: Device.isTablet ? 55 : 25,
+    height: Device.isTablet ? 55 : 25.2,
     backgroundColor: "red",
   },
   hexagonAfter: {
