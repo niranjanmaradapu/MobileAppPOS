@@ -469,13 +469,11 @@ class Home extends Component {
     }
 
     handleSalesName = (value) => {
-        this.setState({ salesName: "" }, () => {
-            this.setState({ salesName: value }, () => {
-                console.log(this.state.salesName)
-                if (this.state.salesName !== "") {
-                    this.getTopSales()
-                }
-            })
+        this.setState({ salesName: value }, () => {
+            console.log(this.state.salesName)
+            if (this.state.salesName !== "") {
+                this.getTopSales()
+            }
         })
     }
 
