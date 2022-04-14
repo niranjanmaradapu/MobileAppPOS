@@ -18,6 +18,7 @@ import { FilterStores, Stores } from './Stores.js';
 
 
 var deviceWidth = Dimensions.get("window").width;
+var deviceheight = Dimensions.get("window").height;
 
 
 export default class AccountManagement extends Component {
@@ -120,26 +121,28 @@ export default class AccountManagement extends Component {
                                                             }
                                                         }
                                                 })
-                                                this.setState({ privilages: this.state.privilages }, () => {
-                                                        if(this.state.privilages[0].name === "Dashboard"){
-                                                            this.setState({flagDashboard: true})
+                                                if (this.state.privilages.length > 0) {
+                                                    this.setState({ privilages: this.state.privilages }, () => {
+                                                        if (this.state.privilages[0].name === "Dashboard") {
+                                                            this.setState({ flagDashboard: true })
                                                         } else if (this.state.privilages[0].name === "Stores") {
                                                             this.getStoresList()
-                                                            this.setState({flagStore: true})
+                                                            this.setState({ flagStore: true })
                                                         } else if (this.state.privilages[0].name === "Doamin") {
                                                             this.getDomainsList()
-                                                            this.setState({flagDomain: true})
-                                                        }else if (this.state.privilages[0].name === "Credit Notes" 
-                                                        || this.state.privilages[0].name === "Debit Notes"
-                                                        || this.state.privilages[0].name === "Create Tax Master" 
-                                                        || this.state.privilages[0].name === "Create HSN Code") {
+                                                            this.setState({ flagDomain: true })
+                                                        } else if (this.state.privilages[0].name === "Credit Notes"
+                                                            || this.state.privilages[0].name === "Debit Notes"
+                                                            || this.state.privilages[0].name === "Create Tax Master"
+                                                            || this.state.privilages[0].name === "Create HSN Code") {
                                                             this.getStoresList()
-                                                            this.setState({flagStore: true})
+                                                            this.setState({ flagStore: true })
                                                         }
                                                         else {
                                                             this.setState({ flagStore: false, flagDashboard: false, flagDomain: false })
                                                         }
                                                     });
+                                                }
                                             }
                                         }
                                 }
@@ -187,27 +190,31 @@ export default class AccountManagement extends Component {
                                                         }
                                                         
                                                     })
-                                                    this.setState({ privilages: this.state.privilages }, () => {
-                                                        console.error(this.state.privilages)
-                                                        if(this.state.privilages[0].name === "Dashboard") {
-                                                            this.setState({flagDashboard: true})
-                                                        } else if (this.state.privilages[0].name === "Stores") {
-                                                            this.getStoresList()
-                                                            this.setState({flagStore: true})
-                                                        } else if (this.state.privilages[0].name === "Doamin") {
-                                                            this.getDomainsList()
-                                                            this.setState({flagDomain: true})
-                                                        }else if (this.state.privilages[0].name === "Credit Notes" 
-                                                        || this.state.privilages[0].name === "Debit Notes"
-                                                        || this.state.privilages[0].name === "Create Tax Master" 
-                                                        || this.state.privilages[0].name === "Create HSN Code") {
-                                                            this.getStoresList()
-                                                            this.setState({flagStore: true})
-                                                        }
-                                                        else {
-                                                            this.setState({ flagStore: false, flagDashboard: false, flagDomain: false })
-                                                        }
-                                                    });
+                                                    if (this.state.privilages.length > 0) {
+                                                        this.setState({ privilages: this.state.privilages }, () => {
+                                                            console.error(this.state.privilages)
+                                                            if (this.state.privilages[0].name === "Dashboard") {
+                                                                this.setState({ flagDashboard: true })
+                                                            } else if (this.state.privilages[0].name === "Stores") {
+                                                                this.getStoresList()
+                                                                this.setState({ flagStore: true })
+                                                            } else if (this.state.privilages[0].name === "Doamin") {
+                                                                this.getDomainsList()
+                                                                this.setState({ flagDomain: true })
+                                                            } else if (this.state.privilages[0].name === "Credit Notes"
+                                                                || this.state.privilages[0].name === "Debit Notes"
+                                                                || this.state.privilages[0].name === "Create Tax Master"
+                                                                || this.state.privilages[0].name === "Create HSN Code") {
+                                                                this.getStoresList()
+                                                                this.setState({ flagStore: true })
+                                                            }
+                                                            else {
+                                                                this.setState({ flagStore: false, flagDashboard: false, flagDomain: false })
+                                                            }
+                                                        });
+                                                    } else {
+                                                        
+                                                    }
                                                 }
                                             }
                                         }
@@ -554,6 +561,7 @@ export default class AccountManagement extends Component {
                                 data={this.state.privilages}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
+                                ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3, marginLeft: deviceWidth/3.5 }}>&#9888; Privilages  Not Found</Text>}
                                 renderItem={({ item, index }) => (
                                     <TouchableOpacity style={{
                                         height: 36,
