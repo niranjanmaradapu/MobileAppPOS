@@ -7,6 +7,20 @@ var deviceWidth = Dimensions.get("window").width;
 var deviceHeight = Dimensions.get("window").height;
 
 export default class Domain extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            channelFull : false
+        }
+    }
+
+    componentDidMount() {
+        if (this.props.domains.length === this.props.channelsList.length) {
+            this.setState({channelFull: true})
+        }
+    }
+
     render() {
         return (
             <View>
@@ -32,6 +46,9 @@ export default class Domain extends Component {
                         </View>
                     )}
                 />
+                {this.props.domains.length > 0 && this.state.channelFull && 
+                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: Device.isTablet ? 20 : 10}}>user have all the domains</Text>
+                }
                 {/* {this.props.domainError.length !== 0 && 
                     <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.props.domainError}</Text>
                 } */}

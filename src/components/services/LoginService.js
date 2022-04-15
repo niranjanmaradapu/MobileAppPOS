@@ -23,6 +23,11 @@ class LoginService {
     }
 
 
+    channelsList() {
+        return REACT_NATIVE_APP_BASE_URL + '/user-management/client/getMasterDomains';
+    }
+
+
     createUser() {
         return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/createUser';
     }

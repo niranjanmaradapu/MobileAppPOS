@@ -50,6 +50,7 @@ export default class AccountManagement extends Component {
             headerName: [],
             storeError: "",
             domainError: "",
+            channelsList: [],
         };
     }
 
@@ -261,6 +262,7 @@ export default class AccountManagement extends Component {
                     this.state.domains.push(number);
                 }
                 this.setState({ domains: this.state.domains, domainError: "" });
+                this.getChannelsList()
             } else {
                 this.setState({domainError: "Records Not Found"})
             }
@@ -370,6 +372,15 @@ export default class AccountManagement extends Component {
         }
 
     };
+
+
+    getChannelsList() {
+        axios.get(LoginService.channelsList()).then(res => {
+            if (res) {
+                this.setState({ channelsList: res.data.result })
+            }
+        })
+    }
 
 
 
@@ -627,6 +638,7 @@ export default class AccountManagement extends Component {
                                     domains={this.state.domains}
                                     navigation={this.props.navigation}
                                     domainError={this.state.domainError}
+                                    channelsList={this.state.channelsList}
                                 />
                             )}
 
