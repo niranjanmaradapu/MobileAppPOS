@@ -227,7 +227,7 @@ class GenerateEstimationSlip extends Component {
 
     getLineItems() {
         const params = {
-            "barcode": this.state.barcodeId,
+            "barcode": this.state.barcodeId.trim(),
             "storeId": this.state.storeId,
         };
         axios.get(CustomerService.getDeliverySlip(), { params }).then((res) => {
@@ -299,11 +299,11 @@ class GenerateEstimationSlip extends Component {
     };
 
     handleBarCode = (value) => {
-        this.setState({ barcodeId: value.trim() });
+        this.setState({ barcodeId: value });
     };
 
     handleQty = (value) => {
-        this.setState({ saleQuantity: value.trim() });
+        this.setState({ saleQuantity: value });
     };
 
     updateQty = (text, index, item) => {
@@ -413,7 +413,7 @@ class GenerateEstimationSlip extends Component {
                             }}>
                             <View>
 
-                                <View >
+                                <View style={{display: 'flex', flexDirection: Device.isTablet ? 'row' : 'column' }} >
                                     <TextInput style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : {
                                         justifyContent: 'center',
                                         margin: 20,
@@ -457,6 +457,18 @@ class GenerateEstimationSlip extends Component {
                                         useNativeAndroidPickerStyle={false}
 
                                     /> */}
+                                <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 350 : 150 }]}
+                                    underlineColorAndroid="transparent"
+                                    placeholder={I18n.t("SM Number")}
+                                    placeholderTextColor="#6F6F6F60"
+                                    textAlignVertical="center"
+                                    keyboardType={'default'}
+                                    autoCapitalize="none"
+                                    value={this.state.smnumber}
+                                    // onEndEditing
+                                    onChangeText={(text) => this.handleSmCode(text)}
+                                    onEndEditing={() => this.endEditing()}
+                                />
                                 </View>
 
                                 {/* <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
@@ -471,18 +483,6 @@ class GenerateEstimationSlip extends Component {
                                 // onEndEditing={() => this.endEditing()}
                                 /> */}
 
-                                <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 350 : 150 }]}
-                                    underlineColorAndroid="transparent"
-                                    placeholder={I18n.t("SM Number")}
-                                    placeholderTextColor="#6F6F6F60"
-                                    textAlignVertical="center"
-                                    keyboardType={'default'}
-                                    autoCapitalize="none"
-                                    value={this.state.smnumber}
-                                    // onEndEditing
-                                    onChangeText={(text) => this.handleSmCode(text)}
-                                    onEndEditing={() => this.endEditing()}
-                                />
 
                                 {this.state.uom === "Pieces" && (
                                     <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 80 }]}
@@ -1790,7 +1790,7 @@ const styles = StyleSheet.create({
         width: deviceWidth / 4 - 100,
         height: 55,
         borderRadius: 10,
-        marginTop: -65,
+        marginTop: -70,
         marginBottom: 10,
         borderColor: '#8F9EB717',
         backgroundColor: '#ED1C24',

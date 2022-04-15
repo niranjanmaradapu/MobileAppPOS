@@ -561,19 +561,19 @@ export default class AccountManagement extends Component {
                                 data={this.state.privilages}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
-                                ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3, marginLeft: deviceWidth/3.5 }}>&#9888; Privilages  Not Found</Text>}
+                                ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3, marginLeft: deviceWidth/3.5 }}>&#9888; Privileges  Not Found</Text>}
                                 renderItem={({ item, index }) => (
                                     <TouchableOpacity style={{
-                                        height: 36,
-                                        width: 200,
-                                        borderWidth: 1,
+                                        height: Device.isTablet ? 46 : 36,
+                                        width: Device.isTablet ? 250 : 200,
+                                        borderWidth: Device.isTablet ? 2 : 1,
                                         backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
                                         borderColor: item.bool ? '#ED1C24' : '#858585',
-                                        borderRadius: 5,
+                                        borderRadius: Device.isTablet ? 10 : 5,
                                         marginLeft: 10,
                                     }} onPress={() => this.topbarAction(item, index)} >
 
-                                        <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
+                                        <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
                                             {item.name}
                                         </Text>
                                     </TouchableOpacity>
@@ -1112,9 +1112,9 @@ const styles = StyleSheet.create({
         right: 70,
         top: 40,
         backgroundColor: '#ED1C24',
-        borderRadius: 5,
-        width: 110,
-        height: 32,
+        borderRadius: 10,
+        width: 120,
+        height: 35,
         textAlign: 'center',
         alignItems: 'center',
     },
@@ -1123,9 +1123,9 @@ const styles = StyleSheet.create({
         right: 20,
         top: 40,
         backgroundColor: '#ED1C24',
-        borderRadius: 5,
-        width: 110,
-        height: 32,
+        borderRadius: 10,
+        width: 120,
+        height: 35,
         textAlign: 'center',
         alignItems: 'center',
     },

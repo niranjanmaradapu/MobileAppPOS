@@ -525,7 +525,7 @@ class GenerateInvoiceSlip extends Component {
         this.setState({netPayableAmount: 0, totalPromoDisc: 0, grossAmount: 0})
         const params = {
             "storeId": this.state.storeId,
-            "barcodeId": this.state.barcodeId,
+            "barcodeId": this.state.barcodeId.trim(),
         };
         console.log(params);
         axios.get(CustomerService.getRetailBarcode(), { params }).then((res) => {
@@ -571,7 +571,7 @@ class GenerateInvoiceSlip extends Component {
     }
 
     handleDsNumber = (text) => {
-        this.setState({ dsNumber: text.trim() });
+        this.setState({ dsNumber: text });
     };
 
     handleBarcode = (text) => {
@@ -782,7 +782,7 @@ class GenerateInvoiceSlip extends Component {
                                             onEndEditing={() => this.endEditing()}
                                         />
                                         <TouchableOpacity
-                                            style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 120 : 80, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: 10 }}
+                                            style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 120 : 80, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: Device.isTablet ? 5 : 10 }}
                                             onPress={() => this.navigateToScan()} >
                                             <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 5 : 5 }]}> {I18n.t('SCAN')} </Text>
                                         </TouchableOpacity>
