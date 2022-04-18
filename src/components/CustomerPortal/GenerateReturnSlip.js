@@ -66,7 +66,7 @@ export default class GenerateReturnSlip extends Component {
     };
 
     handleInvoiceNumber(text) {
-        this.setState({ invoiceNumber: text.trim() });
+        this.setState({ invoiceNumber: text });
     }
 
     handleMobileNumber(text) {
@@ -75,7 +75,7 @@ export default class GenerateReturnSlip extends Component {
 
     searchInvoice = () => {
         const obj = {
-            invoiceNo: this.state.invoiceNumber,
+            invoiceNo: this.state.invoiceNumber.trim(),
             mobileNo: this.state.mobileNumber,
             domianId: 1
         };
@@ -258,7 +258,7 @@ export default class GenerateReturnSlip extends Component {
                         onChangeText={(text) => this.handleInvoiceNumber(text)}
                     />
                     <TouchableOpacity
-                        style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 120 : 80, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: Device.isTablet ? 10 : 5 }}
+                        style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 120 : 80, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: 5 }}
                         onPress={() => this.navigateToScanCode()} >
                         <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 5 : 5 }]}> {I18n.t('SCAN')} </Text>
                     </TouchableOpacity>
@@ -284,7 +284,7 @@ export default class GenerateReturnSlip extends Component {
                     }}
                 >
                     <TouchableOpacity
-                        style={[Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile, { borderRadius: 5, height: 36, borderWidth: Device.isTablet ? 2 : 1, borderColor: '#858585' }]}
+                        style={[Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile, { borderRadius: Device.isTablet ? 10 : 5, height: Device.isTablet ? 46 : 36, borderWidth: Device.isTablet ? 2 : 1, borderColor: '#858585' }]}
                         onPress={this.searchInvoice}
                     >
                         <Text
@@ -294,7 +294,7 @@ export default class GenerateReturnSlip extends Component {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={[Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile, { borderRadius: 5, height: 36, borderWidth: Device.isTablet ? 2 : 1, borderColor: '#858585' }]}
+                        style={[Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile, { borderRadius: Device.isTablet ? 10 : 5, height: Device.isTablet ? 46 : 36, borderWidth: Device.isTablet ? 2 : 1, borderColor: '#858585' }]}
                         onPress={this.handleCutomerTagging}
                     >
                         <Text

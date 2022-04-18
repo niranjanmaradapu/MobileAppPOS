@@ -32,6 +32,7 @@ const chartConfig = {
     },
     propsForLabels: {
         fontFamily: "regular",
+        fontSize: Device.isTablet ? 17 : 12,
     },
 };
 

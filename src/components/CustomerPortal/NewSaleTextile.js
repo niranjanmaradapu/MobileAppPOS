@@ -309,16 +309,16 @@ class NewSaleTextile extends Component {
                             showsHorizontalScrollIndicator={false}
                             renderItem={({ item, index }) => (
                                 <TouchableOpacity style={{
-                                    height: 36,
-                                    width: 200,
-                                    borderWidth: 1,
+                                    height: Device.isTablet ? 46 : 36,
+                                    width: Device.isTablet ? 250 : 200,
+                                    borderWidth: Device.isTablet ? 2 : 1,
                                     backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
                                     borderColor: item.bool ? '#ED1C24' : '#858585',
-                                    borderRadius: 5,
+                                    borderRadius: Device.isTablet ? 10 : 5,
                                     marginLeft: 10,
                                 }} onPress={() => this.topbarAction1(item, index)} >
 
-                                    <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
+                                    <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular', }}>
                                         {item.name}
                                     </Text>
                                 </TouchableOpacity>
