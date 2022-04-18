@@ -122,8 +122,9 @@ export default class AccountManagement extends Component {
                                                             }
                                                         }
                                                 })
-                                                if (this.state.privilages.length > 0) {
+                                                // if (this.state.privilages.length > 0) {
                                                     this.setState({ privilages: this.state.privilages }, () => {
+                                                        if (this.state.privilages.length > 0){
                                                         if (this.state.privilages[0].name === "Dashboard") {
                                                             this.setState({ flagDashboard: true })
                                                         } else if (this.state.privilages[0].name === "Stores") {
@@ -142,8 +143,9 @@ export default class AccountManagement extends Component {
                                                         else {
                                                             this.setState({ flagStore: false, flagDashboard: false, flagDomain: false })
                                                         }
+                                                    }
                                                     });
-                                                }
+                                                // }
                                             }
                                         }
                                 }
