@@ -113,6 +113,7 @@ export default class UserManagement extends Component {
                                                                 }
                                                         })
                                                 this.setState({ privilages: this.state.privilages }, () => {
+                                                    if (this.state.privilages.length > 0) {
                                                             if(this.state.privilages[0].name === "Dashboard"){
                                                                 this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
                                                             }else if(this.state.privilages[0].name === "Users") {
@@ -124,6 +125,7 @@ export default class UserManagement extends Component {
                                                                 this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
                                                                 console.log("please update the privilages in Line.no: 118")
                                                             }
+                                                        }
                                                         });
                                             }
                                         }
@@ -166,6 +168,7 @@ export default class UserManagement extends Component {
                                                 })
                                                 this.setState({ privilages: this.state.privilages }, () => {
                                                     // console.error(this.state.privilages.length)
+                                                    if (this.state.privilages.length > 0) {
                                                     if(this.state.privilages[0].name === "Dashboard"){
                                                         this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
                                                     }else if(this.state.privilages[0].name === "Users") {
@@ -176,6 +179,7 @@ export default class UserManagement extends Component {
                                                         this.setState({ flagOne: false, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
                                                         console.log("please update the privilages in Line.no: 161")
                                                     }
+                                                }
                                                 });
                                                 }
                                             }

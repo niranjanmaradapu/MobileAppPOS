@@ -88,6 +88,7 @@ class NewSaleTextile extends Component {
                                                 }
                                             })
                                             this.setState({ privilages: this.state.privilages },() => {
+                                                if (this.state.privilages.length > 0){
                                                 if(this.state.privilages[0].name === "Generate Estimation Slip"){
                                                     this.setState({flagGenerateEstimationSlip: true})
                                                 }else{
@@ -118,6 +119,7 @@ class NewSaleTextile extends Component {
                                                 }else{
                                                     this.setState({flagDayClosure: false})
                                                 }
+                                            }
                                         });                                    }
                                 }
                             }
@@ -166,6 +168,7 @@ class NewSaleTextile extends Component {
                                                 }
                                             })
                                             this.setState({ privilages: this.state.privilages },() => {
+                                                if (this.state.privilages.length > 0){
                                                 if(this.state.privilages[0].name === "Generate Estimation Slip"){
                                                     this.setState({flagGenerateEstimationSlip: true})
                                                 }else{
@@ -196,6 +199,7 @@ class NewSaleTextile extends Component {
                                                 }else{
                                                     this.setState({flagDayClosure: false})
                                                 }
+                                            }
                                         });
                                         }
                                     }

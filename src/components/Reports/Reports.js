@@ -103,6 +103,7 @@ class Reports extends Component {
                                         })
                                         this.setState({ privilages: this.state.privilages }, () =>{
                                             console.log(this.state.privilages)
+                                            if (this.state.privilages.length > 0) {
                                             if(this.state.privilages[0].name === "Dashboard"){
                                                 this.setState({filterButton: false, flagDashboard: true})
                                             }else{
@@ -133,6 +134,7 @@ class Reports extends Component {
                                             }else{
                                                 this.setState({flagListBarcodes: false})
                                             }
+                                        }
                                         });
                                     }
                                 }
@@ -173,6 +175,7 @@ class Reports extends Component {
                                             })
                                             this.setState({ privilages: this.state.privilages }, () =>{
                                             console.log(this.state.privilages)
+                                            if (this.state.privilages.length > 0) {
                                             if(this.state.privilages[0].name === "Dashboard"){
                                                 this.setState({filterButton: false, flagDashboard: true})
                                             }else{
@@ -203,6 +206,7 @@ class Reports extends Component {
                                             }else{
                                                 this.setState({flagListBarcodes: false})
                                             }
+                                        }
                                         });
                                         }
                                     }
