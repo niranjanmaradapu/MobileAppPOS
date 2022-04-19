@@ -8,6 +8,7 @@ import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
 import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
+import I18n from 'react-native-i18n';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -94,7 +95,7 @@ class ViewReBarcode extends Component {
             console.log('There is error getting storeId');
           //  alert('There is error getting storeId');
         });
-        //('dasdsadsadsad' + this.props.route.params.item)
+        console.log('dasdsadsadsad' + this.props.route.params.item)
         this.setState({
             divisionId: this.props.route.params.item.division,
             sectionId: this.props.route.params.item.section,
@@ -105,7 +106,7 @@ class ViewReBarcode extends Component {
             costPrice: String(this.props.route.params.item.costPrice),
             listPrice: String(this.props.route.params.item.itemMrp),
             uomName: this.props.route.params.item.uom,
-            hsnId: this.props.route.params.item.hsnMasterId,
+            hsnCode: this.props.route.params.item.hsnCode,
             empId: this.props.route.params.item.empId,
             storeId: this.props.route.params.item.storeId,
             quantity: String(this.props.route.params.item.qty),
@@ -432,7 +433,7 @@ class ViewReBarcode extends Component {
                     "costPrice": this.state.costPrice,
                     "createForLocation": 0,
                     "empId": this.state.empId,
-                    "hsnMasterId": this.state.hsnId,
+                    "hsnCode": this.state.hsnCode,
                     "itemCode": "item1",
                     "itemRsp": 0,
                     "itemMrp": this.state.listPrice,
@@ -479,6 +480,7 @@ class ViewReBarcode extends Component {
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Re-Barcode Details </Text>
                 </View>
                 <ScrollView>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Division")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -495,6 +497,7 @@ class ViewReBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -511,6 +514,7 @@ class ViewReBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Sub Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -527,6 +531,7 @@ class ViewReBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Category")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -543,6 +548,7 @@ class ViewReBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> {I18n.t("Colour")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Colour"
@@ -553,6 +559,18 @@ class ViewReBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleColour}
                     />
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> {I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        underlineColorAndroid="transparent"
+                        placeholder="Name"
+                        placeholderTextColor="#6F6F6F"
+                        textAlignVertical="center"
+                        autoCapitalize="none"
+                        value={this.state.name}
+                        editable={false} selectTextOnFocus={false}
+                        onChangeText={this.handleName}
+                    />
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Batch No")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Batch No"
@@ -563,6 +581,7 @@ class ViewReBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleBatchNo}
                     />
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Cost Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Cost Price"
@@ -573,6 +592,7 @@ class ViewReBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleCostPrice}
                     />
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("List Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="List Price"
@@ -583,6 +603,7 @@ class ViewReBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleListPrice}
                     />
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("UOM")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="UOM"
@@ -593,6 +614,7 @@ class ViewReBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
 
                     />
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("HSN Code")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -609,6 +631,7 @@ class ViewReBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("EMP ID")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="EMP ID"
@@ -619,7 +642,7 @@ class ViewReBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleEMPId}
                     />
-
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Store")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Store"
@@ -630,7 +653,7 @@ class ViewReBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleStore}
                     />
-
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>QTY <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="QTY"
@@ -893,7 +916,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 14,
+        fontSize: 19,
         color: '#001B4A',
     },
     input_tablet_edit: {
@@ -909,7 +932,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 14,
+        fontSize: 19,
     },
     rnSelect_tablet: {
         color: '#8F9EB7',

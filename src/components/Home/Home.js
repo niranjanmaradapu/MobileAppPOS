@@ -506,65 +506,83 @@ class Home extends Component {
                             renderItem={({ item, index }) => {
                                 if (item.key === 1) {
                                     return <View style={{
-                                        height: 120,
-                                        width: 250,
-                                        borderWidth: 1,
+                                        height:Device.isTablet ? 150 : 120,
+                                        width: Device.isTablet ? 300 : 250,
+                                        borderWidth: Device.isTablet ? 2 : 1,
                                         backgroundColor: "#33D087",
                                         borderColor: '#ffffff',
                                         borderRadius: 10,
                                         marginLeft: 10,
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
                                     }}>
-                                        <Image source={require('../assets/images/todaysales.png')} style={{
-                                            marginLeft: 20, marginTop: 40,
-                                        }} />
-                                        <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
-                                            {I18n.t("Today's Sales")}
-                                        </Text>
-                                        <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
-                                            ₹ {this.state.toadysSale}
-                                        </Text>
+                                            <Image source={require('../assets/images/todaysales.png')} style={{
+                                                marginTop: Device.isTablet ? -10 : -5
+                                            }} />
+                                        <View style={{ marginLeft: Device.isTablet ? 10 : 5}}>
+                                                <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', color: "#ffffff", fontFamily: 'medium' }}>
+                                                    {I18n.t("Today's Sales")}
+                                                </Text>
+                                                <Text style={{ fontSize: Device.isTablet ? 40 : 30, marginTop: 0, color: "#ffffff", fontFamily: 'bold' }}>
+                                                    ₹ {this.state.toadysSale}
+                                                </Text>
+                                            </View>
                                     </View>;
                                 }
                                 if (item.key === 2) {
                                     return <View style={{
-                                        height: 120,
-                                        width: 250,
-                                        borderWidth: 1,
+                                        height: Device.isTablet ? 150 : 120,
+                                        width: Device.isTablet ? 300 : 250,
+                                        borderWidth: Device.isTablet ? 2 : 1,
                                         backgroundColor: "#37CBE4",
                                         borderColor: '#ffffff',
                                         borderRadius: 10,
                                         marginLeft: 10,
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
                                     }}>
                                         <Image source={require('../assets/images/monthlysales.png')} style={{
-                                            marginLeft: 20, marginTop: 40,
+                                           marginTop: Device.isTablet ? -10 : -5,
                                         }} />
-                                        <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
+                                        <View style={{marginLeft: Device.isTablet ? 10 : 5}}>
+                                        <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', color: "#ffffff", fontFamily: 'regular' }}>
                                             {I18n.t("Monthly's Sales")}
                                         </Text>
-                                        <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 80, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
+                                        <Text style={{ fontSize: Device.isTablet ? 40 : 30, marginTop: 0, color: "#ffffff", fontFamily: 'bold' }}>
                                             ₹ {this.state.monthlySale}
                                         </Text>
+                                        </View>
                                     </View>;
                                 }
                                 if (item.key === 3) {
                                     return <View style={{
-                                        height: 120,
-                                        width: 250,
-                                        borderWidth: 1,
+                                        height: Device.isTablet ? 150 : 120,
+                                        width: Device.isTablet ? 300 : 250,
+                                        borderWidth: Device.isTablet ? 2 : 1,
                                         backgroundColor: "#fc9834",
                                         borderColor: '#ffffff',
                                         borderRadius: 10,
                                         marginLeft: 10,
+                                        display: 'flex',
+                                        flexDirection: 'row',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
                                     }}>
                                         <Image source={require('../assets/images/monthlysales.png')} style={{
-                                            marginLeft: 20, marginTop: 40,
+                                            marginTop: Device.isTablet ? -10 : -5,
                                         }} />
-                                        <Text style={{ fontSize: 15, alignItems: 'center', alignSelf: 'center', marginTop: -50, marginLeft: 60, fontSize: 16, color: "#ffffff", fontFamily: 'regular' }}>
-                                            {I18n.t("This month sales v/s Last month")}
+                                        <View style={{marginLeft: Device.isTablet ? 10 : 5,  maxWidth: Device.isTablet ? 200 : 180}}>
+                                        <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', color: "#ffffff", fontFamily: 'regular', }}>
+                                            {I18n.t(`This month sales v/s Last month`)}
                                         </Text>
-                                        <Text style={{ fontSize: 15, marginTop: 0, marginLeft: 60, fontSize: 30, color: "#ffffff", fontFamily: 'bold' }}>
+                                        <Text style={{ fontSize: Device.isTablet ? 40 : 30, marginTop: 0, color: "#ffffff", fontFamily: 'bold' }}>
                                             {this.state.thisVsLastMonthSale} %
                                         </Text>
+                                        </View>
                                     </View>;
 
                                 }
