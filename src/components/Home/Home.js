@@ -695,7 +695,7 @@ class Home extends Component {
                                     data={this.state.topSalesChart}
                                     width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
                                     height={Device.isTablet ? 400 : 500}
-                                    yLabelsOffset={20}
+                                    yLabelsOffset={Device.isTablet ? 0 : 20}
                                     yAxisLabel="₹"
                                     fromZero
                                     chartConfig={chartConfig}
