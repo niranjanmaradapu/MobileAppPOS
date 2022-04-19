@@ -540,14 +540,14 @@ export default class Inventory extends Component {
                         // for (var i = 0; i < res.data["result"].length; i++) {
                             this.state.barcodesData.push(res.data["result"]);
                             // console.log(res.data["result"][i].productTextile.empId)
-                            // this.props.navigation.navigate('ViewReBarcode'
-                            // , {
-                            //     item: res.data["result"], isEdit: true,
-                            //     onGoBack: () => this.updateBarcodes(),
-                            // });
+                            this.props.navigation.navigate('ViewReBarcode'
+                            , {
+                                item: res.data["result"], isEdit: true,
+                                onGoBack: () => this.updateBarcodes(),
+                            });
                             
-                            // }
-                        }
+                            }
+                        // }
                         
                         console.log(res.data)
                     this.setState({ barcodesData: this.state.barcodesData });
