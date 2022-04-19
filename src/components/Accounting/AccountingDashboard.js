@@ -214,7 +214,7 @@ export default class AccountingDashboard extends Component {
                             style={{ paddingTop: 20 }}
                             data={this.state.debitNotesByStoreGraph}
                             width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
-                            yLabelsOffset={20} xLabelsOffset={Device.isTablet ? 0 : -20}
+                            yLabelsOffset={Device.isTablet ? -10 : 20} xLabelsOffset={Device.isTablet ? 0 : -20}
                             height={Device.isTablet ? 300 : 450}
                             yAxisLabel="₹"
                             fromZero
@@ -226,13 +226,13 @@ export default class AccountingDashboard extends Component {
 
                 <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : 550 }]}>
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Used Amount By Store")}</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - 160 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 160 : deviceWidth - 160 }}>
                         <BarChart
                             style={{ paddingTop: 20 }}
                             data={this.state.usedAmountByStoreGraph}
-                            width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
+                            width={Device.isTablet ? deviceWidth - 150 : deviceWidth - 60}
                             height={Device.isTablet ? 300 : 450}
-                            yLabelsOffset={20} xLabelsOffset={Device.isTablet ? 0 : -20}
+                            yLabelsOffset={Device.isTablet ? -10 : 20} xLabelsOffset={Device.isTablet ? 0 : -20}
                             yAxisLabel="₹"
                             fromZero
                             chartConfig={chartConfig}
@@ -249,7 +249,7 @@ export default class AccountingDashboard extends Component {
                             data={this.state.balncedAmountByStoreGraph}
                             width={Device.isTablet ? deviceWidth - 120 : deviceWidth - 60}
                             height={Device.isTablet ? 300 : 450}
-                            yLabelsOffset={20} xLabelsOffset={Device.isTablet ? 0 : -20}
+                            yLabelsOffset={Device.isTablet ? -10 : 20} xLabelsOffset={Device.isTablet ? 0 : -20}
                             yAxisLabel="₹"
                             fromZero
                             chartConfig={balancedChartConfig}

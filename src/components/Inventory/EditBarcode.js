@@ -8,6 +8,7 @@ import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
 import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
+import I18n from 'react-native-i18n';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -106,7 +107,7 @@ class EditBarcode extends Component {
             costPrice: String(this.props.route.params.item.costPrice),
             listPrice: String(this.props.route.params.item.itemMrp),
             uomName: this.props.route.params.item.uom,
-            hsnId: this.props.route.params.item.hsnMasterId,
+            hsnCode: this.props.route.params.item.hsnCode,
             empId: this.props.route.params.item.empId,
             storeId: this.props.route.params.item.storeId,
             quantity: String(this.props.route.params.item.qty),
@@ -435,7 +436,7 @@ class EditBarcode extends Component {
                 "colour": this.state.colour,
                 "costPrice": this.state.costPrice,
                 "empId": this.state.empId,
-                "hsnCode": this.state.hsnId,
+                "hsnCode": this.state.hsnCode,
                 "itemMrp": this.state.listPrice,
                 "domainId": 1,
                 "qty": this.state.quantity,
@@ -479,6 +480,7 @@ class EditBarcode extends Component {
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> Edit Barcode </Text>
                 </View>
                 <ScrollView>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Division")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -496,6 +498,7 @@ class EditBarcode extends Component {
                         />
 
                     </View>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -512,6 +515,7 @@ class EditBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Sub Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -528,6 +532,7 @@ class EditBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Category")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -544,6 +549,7 @@ class EditBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> {I18n.t("Colour")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Colour"
@@ -554,7 +560,7 @@ class EditBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleColour}
                     />
-
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> {I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Name"
@@ -565,7 +571,7 @@ class EditBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleName}
                     />
-
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Batch No")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Batch No"
@@ -576,6 +582,7 @@ class EditBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleBatchNo}
                     />
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Cost Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Cost Price"
@@ -586,6 +593,7 @@ class EditBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleCostPrice}
                     />
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("List Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
                         underlineColorAndroid="transparent"
                         placeholder="List Price"
@@ -595,6 +603,7 @@ class EditBarcode extends Component {
                         value={this.state.listPrice}
                         onChangeText={this.handleListPrice}
                     />
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("UOM")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="UOM"
@@ -605,6 +614,7 @@ class EditBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
 
                     />
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("HSN Code")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -613,6 +623,7 @@ class EditBarcode extends Component {
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                             }}
+                            disabled={true}
                             items={this.state.hsncodes}
                             onValueChange={this.handleHSNCode}
                             style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
@@ -620,6 +631,7 @@ class EditBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("EMP ID")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="EMP ID"
@@ -630,7 +642,7 @@ class EditBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleEMPId}
                     />
-
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Store")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="Store"
@@ -641,7 +653,7 @@ class EditBarcode extends Component {
                         editable={false} selectTextOnFocus={false}
                         onChangeText={this.handleStore}
                     />
-
+                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>QTY <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
                         underlineColorAndroid="transparent"
                         placeholder="QTY"
@@ -894,6 +906,7 @@ const styles = StyleSheet.create({
     },
     input_tablet: {
         justifyContent: 'center',
+        color: '#000000',
         marginLeft: 20,
         marginRight: 20,
         height: 54,
@@ -905,7 +918,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 14,
+        fontSize: 19,
     },
     input_tablet_edit: {
         justifyContent: 'center',
@@ -920,7 +933,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 14,
+        fontSize: 19,
     },
     rnSelect_tablet: {
         color: '#8F9EB7',

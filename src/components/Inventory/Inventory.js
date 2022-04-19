@@ -280,7 +280,7 @@ export default class Inventory extends Component {
 
     topbarAction1 = (item, index) => {
         if (item.name === "Barcode List") {
-            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
+            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "", filterActive: false });
             this.getAllBarcodes();
             this.setState({ flagOne: true }, () => {
                 this.setState({ barcodesData: [], startDate: "", endDate: "", barCodeId: "", });
@@ -290,7 +290,7 @@ export default class Inventory extends Component {
             this.setState({ flagOne: false });
         }
         if (item.name === "Re-Barcode List") {
-            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: false, flagtwo: true, error: "" });
+            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: false, flagtwo: true, error: "", filterActive: false });
             this.getbarcodeTexttileAdjustments();
             this.setState({ flagTwo: true }, () => {
                 this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
@@ -530,25 +530,26 @@ export default class Inventory extends Component {
             "storeId": this.state.storeId
         };
         console.log("cssafsfssdsfdsfsdsadasd" + this.state.storeId);
-        console.log("params", params,);
-        axios.post(InventoryService.getTextileBarcodesDetails(), params).then((res) => {
+        console.error("params", params,);
+        axios.get(InventoryService.getTextileBarcodesDetails(), { params } ).then((res) => {
             if (res) {
                 console.log("response edit", res);
                 if (res.data && res.data["isSuccess"] === "true") {
                     if (res.data["result"]) {
                         //  this.setState({ loading: false })
-                        for (var i = 0; i < res.data["result"].length; i++) {
-                            this.state.barcodesData.push(res.data["result"][i]);
+                        // for (var i = 0; i < res.data["result"].length; i++) {
+                            this.state.barcodesData.push(res.data["result"]);
                             // console.log(res.data["result"][i].productTextile.empId)
-                            this.props.navigation.navigate('ViewReBarcode'
-                                , {
-                                    item: res.data["result"][i], isEdit: true,
-                                    onGoBack: () => this.updateBarcodes(),
-                                });
-
+                            // this.props.navigation.navigate('ViewReBarcode'
+                            // , {
+                            //     item: res.data["result"], isEdit: true,
+                            //     onGoBack: () => this.updateBarcodes(),
+                            // });
+                            
+                            // }
                         }
-                    }
-
+                        
+                        console.log(res.data)
                     this.setState({ barcodesData: this.state.barcodesData });
 
                 }
