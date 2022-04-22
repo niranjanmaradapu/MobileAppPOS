@@ -512,11 +512,7 @@ class TextilePayment extends Component {
                         {
                             "paymentType": "Cash",
                             "paymentAmount": parseFloat(this.state.verifiedCash)
-                        },{
-                            "paymentType": "Card",
-                            "paymentAmount": this.state.ccCardCash
-                        }
-                    ]
+                        }]
                 }
             }
             else if (this.state.flagThree === true) {
