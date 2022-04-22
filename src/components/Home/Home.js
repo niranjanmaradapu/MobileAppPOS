@@ -678,7 +678,6 @@ class Home extends Component {
                                                 return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                                             }}
                                     items={[
-                                                {label: 'Today', value: 'Today'},
                                                 { label: 'Last One Month', value: 'LastOneMonth' },
                                                 { label: 'Last 6 Months', value: 'Last6months' },
                                                 { label: 'Last Year', value: 'LastYear' },

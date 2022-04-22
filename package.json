@@ -48,6 +48,7 @@
     "react-native-qr-decode-image-camera": "^1.0.4",
     "react-native-razorpay": "^2.2.7",
     "react-native-reanimated": "^2.2.0",
+    "react-native-responsive-screen": "^1.4.2",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "~3.6.0",
     "react-native-shapes": "^0.1.0",

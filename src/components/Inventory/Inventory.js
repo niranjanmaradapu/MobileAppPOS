@@ -49,7 +49,8 @@ export default class Inventory extends Component {
             barcodeTextileId: "",
             filterActive: false,
             headerNames: [],
-            error: ''
+            error: '',
+            pageNo: 0,
         };
     }
 
@@ -222,7 +223,6 @@ export default class Inventory extends Component {
     }
 
     getAllBarcodes() {
-        console.warn("UUUUU")
         this.setState({ barcodesData: [] });
         const params = {
             "fromDate": this.state.startDate,
@@ -232,11 +232,12 @@ export default class Inventory extends Component {
         };
         console.log(params);
         this.setState({ loading: true });
-        axios.post(InventoryService.getTextileBarcodes(), params).then((res) => {
+        axios.post(InventoryService.getTextileBarcodes() + '?page=' + parseInt(this.state.pageNo) + '&size=10', params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 if (res.data["result"]) {
-                    this.setState({ loading: false, barcodesData: res.data.result, error: "" });
+                    this.setState({ loading: false, barcodesData: res.data.result.content, error: "" });
                     console.log(res.data.result);
+                    console.warn("BarList",this.state.barcodesData)
                 }
                 if (res.data.result.length === 0) {
                     this.setState({ error: "Records Not Found" });
@@ -1431,9 +1432,9 @@ const styles = StyleSheet.create({
         right: 70,
         top: 40,
         backgroundColor: '#ED1C24',
-        borderRadius: 10,
-        width: 120,
-        height: 35,
+        borderRadius: 5,
+        width: 110,
+        height: 32,
         textAlign: 'center',
         alignItems: 'center',
     },

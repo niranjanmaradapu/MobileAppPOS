@@ -15,6 +15,8 @@ import ReportsDashboard from './ReportsDashboard';
 import { SalesSumary } from './SalesSumary';
 var deviceWidth = Dimensions.get('window').width;
 var deviceWidth = Dimensions.get('window').width;
+var deviceheight = Dimensions.get('window').height;
+
 const data = [true, false, false, false, false, false, false, false, false];
 
 
@@ -459,6 +461,7 @@ class Reports extends Component {
                             data={this.state.privilages}
                             showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false}
+                            ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3, marginLeft: deviceWidth/3.5 }}>&#9888; Privileges  Not Found</Text>}
                             renderItem={({ item, index }) => (
                                 <TouchableOpacity style={{
                                     height: Device.isTablet ? 46 : 36,
