@@ -388,19 +388,19 @@ class TextilePayment extends Component {
     };
 
     verifycash() {
-        this.setState({ verifiedCash: this.state.recievedAmount });
         if (this.state.flagOne === true && this.state.flagThree === false) {
             if ((parseFloat(this.state.recievedAmount) < (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)))) {
                 alert('Please collect sufficient amount');
             }
             else {
                 this.setState({ returnAmount: parseFloat(this.state.recievedAmount) - parseFloat(this.state.totalAmount) });
+                this.setState({ verifiedCash: this.state.totalAmount });
             }
         }
         else if (this.state.flagThree === true)
             if ((parseFloat(this.state.recievedAmount) < (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)))) {
                 let ccReturn = (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)) - parseFloat(this.state.recievedAmount);
-                this.setState({ ccCardCash: ccReturn });
+                this.setState({ ccCardCash: ccReturn, verifiedCash: this.state.recievedAmount });
             }
     }
 
@@ -487,7 +487,39 @@ class TextilePayment extends Component {
                     "paymentAmountType": []
                 };
             }
-            else if (this.state.flagOne === true || this.state.flagThree === true) {
+            else if (this.state.flagOne === true) {
+                obj = {
+                    "natureOfSale": "InStore",
+                    "domainId": 1,
+                    "storeId": this.state.storeId,
+                    "grossAmount": this.state.grossAmount,
+                    "totalPromoDisc": this.state.totalPromoDisc,
+                    "taxAmount": this.state.taxAmount,
+                    "totalManualDisc": parseInt(this.state.manualDisc),
+                    "discApprovedBy": this.state.approvedBy,
+                    "discType": this.state.reasonDiscount,
+                    "approvedBy": null,
+                    "netPayableAmount": (parseFloat(this.state.totalAmount) - parseFloat(this.state.totalDiscount) - parseFloat(this.state.promoDiscount) - parseFloat(this.state.redeemedPints / 10)).toString(),
+                    "offlineNumber": null,
+                    "userId": this.state.userId,
+                    "sgst": this.state.CGST,
+                    "cgst": this.state.CGST,
+                    "dlSlip": this.state.dsNumberList,
+                    "lineItemsReVo": null,
+                    "recievedAmount": this.state.recievedAmount,
+                    "returnAmount": this.state.returnAmount,
+                    "paymentAmountType": [
+                        {
+                            "paymentType": "Cash",
+                            "paymentAmount": parseFloat(this.state.verifiedCash)
+                        },{
+                            "paymentType": "Card",
+                            "paymentAmount": this.state.ccCardCash
+                        }
+                    ]
+                }
+            }
+            else if (this.state.flagThree === true) {
                 obj = {
                     "natureOfSale": "InStore",
                     "domainId": 1,
