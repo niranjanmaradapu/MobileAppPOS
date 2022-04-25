@@ -4,9 +4,11 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
+import ThemedDialog from 'react-native-elements/dist/dialog/Dialog';
 import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
+import { ActivityIndicator } from 'react-native-paper';
 import Loader from "../../commonUtils/loader";
 import InventoryService from '../services/InventoryService';
 import UrmService from '../services/UrmService';
@@ -50,8 +52,9 @@ export default class Inventory extends Component {
             filterActive: false,
             headerNames: [],
             error: '',
-            pageNo: 0,
+            pageNo: 1,
         };
+        this.onEndReachedCalledDuringMomentum = true;
     }
 
     handleBackButtonClick() {
@@ -61,6 +64,7 @@ export default class Inventory extends Component {
 
 
     componentDidMount() {
+        this.setState({ loading: true });
         var domainStringId = "";
         var storeStringId = "";
         var storeName = "";
@@ -223,7 +227,7 @@ export default class Inventory extends Component {
     }
 
     getAllBarcodes() {
-        this.setState({ barcodesData: [] });
+        // this.setState({ barcodesData: [] });
         const params = {
             "fromDate": this.state.startDate,
             "toDate": this.state.endDate,
@@ -231,11 +235,11 @@ export default class Inventory extends Component {
             "storeId": this.state.storeId
         };
         console.log(params);
-        this.setState({ loading: true });
+        // this.setState({ loading: true });
         axios.post(InventoryService.getTextileBarcodes() + '?page=' + parseInt(this.state.pageNo) + '&size=10', params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 if (res.data["result"]) {
-                    this.setState({ loading: false, barcodesData: res.data.result.content, error: "" });
+                    this.setState({ loading: false, barcodesData:this.state.barcodesData.concat( res.data.result.content), error: "" });
                     console.log(res.data.result);
                     console.warn("BarList",this.state.barcodesData)
                 }
@@ -259,7 +263,7 @@ export default class Inventory extends Component {
         };
         console.log(params);
         this.setState({ loading: true });
-        axios.post(InventoryService.getbarcodeTexttileAdjustments(), params).then((res) => {
+        axios.post(InventoryService.getbarcodeTexttileAdjustments()+ '?page=' + parseInt(this.state.pageNo) + '&size=10', params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 console.log(res.data["result"]);
                 if (res.data["result"]) {
@@ -593,6 +597,14 @@ export default class Inventory extends Component {
                 onGoBack: () => this.updateBarcodes(),
             });
     }
+    loadMoreList =()=>{
+      
+            console.log("OOOOOOO")
+            this.setState({pageNo:this.state.pageNo+1},()=>{
+                this.getAllBarcodes()
+            })
+
+    }
 
     render() {
         
@@ -672,10 +684,11 @@ export default class Inventory extends Component {
                                     data={this.state.barcodesData}                              
                                     style={{ marginTop: 20 }}
                                     scrollEnabled={true}
-                                    removeClippedSubviews={false}
+                                    // removeClippedSubviews={false}
                                     ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; Records Not Found</Text>}
                                     keyExtractor={(item,i) => i.toString()}
                                     renderItem={({ item, index }) => (
+                                        <View style={{flex:1}}>
                                         <View
                                             style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
                                         >
@@ -696,10 +709,13 @@ export default class Inventory extends Component {
                                                 </TouchableOpacity>
 
                                                 {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{ }</Text> */}
-
+                                                </View>
                                             </View>
                                         </View>
                                     )}
+                                    onEndReached={()=>{this.loadMoreList()}}
+                                    onEndReachedThreshold={10}
+                                    ListFooterComponent={() => { return <ActivityIndicator size={"small"}/> }}
                                 />
                                 {/* {this.state.barcodesData.length === 0 && this.state.error.length > 0 &&
                                 } */}
@@ -715,6 +731,7 @@ export default class Inventory extends Component {
                                     keyExtractor={item => item}
                                     ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; Records Not Found</Text>}
                                     renderItem={({ item, index }) => (
+                                        
                                         <View
                                             style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
                                         >
