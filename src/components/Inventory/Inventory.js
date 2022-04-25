@@ -559,6 +559,7 @@ export default class Inventory extends Component {
         }).catch(err => {
             console.log(err);
         });
+        
 
 
     };
