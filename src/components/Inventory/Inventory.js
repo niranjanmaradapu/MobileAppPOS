@@ -49,7 +49,9 @@ export default class Inventory extends Component {
             barcodeTextileId: "",
             filterActive: false,
             headerNames: [],
-            error: ''
+            error: '',
+            nextPage: 0,
+            textPage: 0
         };
     }
 
@@ -122,12 +124,12 @@ export default class Inventory extends Component {
                                             console.log(previlage.subPrivillages[i].parentPrivillageId);
                                             if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                                 let subprivilage = previlage.subPrivillages[i];
-                                                this.state.headerNames.push({name: subprivilage.name})
+                                                this.state.headerNames.push({ name: subprivilage.name })
                                             }
                                         }
-                                        this.setState({headerNames: this.state.headerNames}, () => {
-                                            for (let j = 0; j < this.state.headerNames.length; j++){
-                                                if(this.state.headerNames[j].name === "Product Combo") {}
+                                        this.setState({ headerNames: this.state.headerNames }, () => {
+                                            for (let j = 0; j < this.state.headerNames.length; j++) {
+                                                if (this.state.headerNames[j].name === "Product Combo") { }
                                                 else if (j === 0) {
                                                     this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
                                                 }
@@ -137,19 +139,19 @@ export default class Inventory extends Component {
                                             }
                                         })
                                     }
-                                    this.setState({ privilages: this.state.privilages }, () =>{
+                                    this.setState({ privilages: this.state.privilages }, () => {
                                         if (this.state.privilages.length > 0) {
-                                            if(this.state.privilages[0].name === "Barcode List"){
+                                            if (this.state.privilages[0].name === "Barcode List") {
                                                 this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
                                                 this.getAllBarcodes();
-                                                this.setState({flagOne:true,flagTwo:false})
-                                            }else  if(this.state.privilages[0].name === "Re-Barcode List"){
-                                                this.setState({flagOne:false,flagTwo:true})
+                                                this.setState({ flagOne: true, flagTwo: false })
+                                            } else if (this.state.privilages[0].name === "Re-Barcode List") {
+                                                this.setState({ flagOne: false, flagTwo: true })
                                                 this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
                                                 this.getbarcodeTexttileAdjustments();
                                             }
-                                            }
-                                            });
+                                        }
+                                    });
                                 }
                             }
                         }
@@ -172,38 +174,38 @@ export default class Inventory extends Component {
                                             for (let i = 0; i < length; i++) {
                                                 if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
                                                     let subprivilage = res.data["result"].subPrivilages[i];
-                                                this.state.headerNames.push({name: subprivilage.name})
+                                                    this.state.headerNames.push({ name: subprivilage.name })
                                                 }
                                             }
-                                            this.setState({headerNames: this.state.headerNames}, () => {
-                                                for (let j = 0; j < this.state.headerNames.length; j++){
-                                            if(this.state.headerNames[j].name === "Product Combo") {}
-                                            else if (j === 0) {
-                                                this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                                            }
-                                            else {
-                                                this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
-                                            }
-                                        }
-                                    })
-                                            this.setState({ privilages: this.state.privilages }, () =>{
+                                            this.setState({ headerNames: this.state.headerNames }, () => {
+                                                for (let j = 0; j < this.state.headerNames.length; j++) {
+                                                    if (this.state.headerNames[j].name === "Product Combo") { }
+                                                    else if (j === 0) {
+                                                        this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                                    }
+                                                    else {
+                                                        this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                                    }
+                                                }
+                                            })
+                                            this.setState({ privilages: this.state.privilages }, () => {
                                                 if (this.state.privilages.length > 0) {
-                                                if(this.state.privilages[0].name === "Barcode List"){
-                                                    this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
-                                                    this.getAllBarcodes();
-                                                    this.setState({flagOne:true,flagTwo:false})
-                                                }else  if(this.state.privilages[0].name === "Re-Barcode List"){
-                                                    this.setState({flagOne:false,flagTwo:true})
-                                                    this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
-                                                    this.getbarcodeTexttileAdjustments();
+                                                    if (this.state.privilages[0].name === "Barcode List") {
+                                                        this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
+                                                        this.getAllBarcodes();
+                                                        this.setState({ flagOne: true, flagTwo: false })
+                                                    } else if (this.state.privilages[0].name === "Re-Barcode List") {
+                                                        this.setState({ flagOne: false, flagTwo: true })
+                                                        this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
+                                                        this.getbarcodeTexttileAdjustments();
+                                                    }
                                                 }
-                                            }
                                             });
                                         }
                                     }
                                 }
                             }
-                      
+
                         }
                     });
                 }).catch(() => {
@@ -232,7 +234,7 @@ export default class Inventory extends Component {
         };
         console.log(params);
         this.setState({ loading: true });
-        axios.post(InventoryService.getTextileBarcodes(), params).then((res) => {
+        axios.post(InventoryService.getTextileBarcodes() + '?page=' + parseInt(this.state.nextPage) + '&size=5', params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 if (res.data["result"]) {
                     this.setState({ loading: false, barcodesData: res.data.result, error: "" });
@@ -258,7 +260,7 @@ export default class Inventory extends Component {
         };
         console.log(params);
         this.setState({ loading: true });
-        axios.post(InventoryService.getbarcodeTexttileAdjustments(), params).then((res) => {
+        axios.post(InventoryService.getbarcodeTexttileAdjustments() + '?page=' + parseInt(this.state.textPage) + '&size=5', params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 console.log(res.data["result"]);
                 if (res.data["result"]) {
@@ -430,16 +432,16 @@ export default class Inventory extends Component {
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.barcodesData.push(res.data["result"][i]);
                 }
-                this.setState({ barcodesData: this.state.barcodesData, filterActive: true});
+                this.setState({ barcodesData: this.state.barcodesData, filterActive: true });
             } else {
                 console.log("records not found");
-                this.setState({barcodesData: [], filterActive: true });
+                this.setState({ barcodesData: [], filterActive: true });
             }
         }).catch((err) => {
             this.setState({ loading: false });
             console.log("no records found");
             console.log(err);
-            this.setState({ barcodesData: [] , filterActive: true});
+            this.setState({ barcodesData: [], filterActive: true });
 
         });
         this.setState({ modalVisible: false });
@@ -465,14 +467,14 @@ export default class Inventory extends Component {
                 }
                 this.setState({ reBarcodesData: this.state.reBarcodesData, filterActive: true });
             } else {
-                this.setState({reBarcodesData: [], filterActive: true})
+                this.setState({ reBarcodesData: [], filterActive: true })
                 console.log("results not found");
             }
         }).catch((err) => {
             this.setState({ loading: false });
             console.log("no records found");
             console.log(err);
-            this.setState({reBarcodesData: [], filterActive: true})
+            this.setState({ reBarcodesData: [], filterActive: true })
         });
 
 
@@ -531,25 +533,25 @@ export default class Inventory extends Component {
         };
         console.log("cssafsfssdsfdsfsdsadasd" + this.state.storeId);
         console.error("params", params,);
-        axios.get(InventoryService.getTextileBarcodesDetails(), { params } ).then((res) => {
+        axios.get(InventoryService.getTextileBarcodesDetails(), { params }).then((res) => {
             if (res) {
                 console.log("response edit", res);
                 if (res.data && res.data["isSuccess"] === "true") {
                     if (res.data["result"]) {
                         //  this.setState({ loading: false })
                         // for (var i = 0; i < res.data["result"].length; i++) {
-                            this.state.barcodesData.push(res.data["result"]);
-                            // console.log(res.data["result"][i].productTextile.empId)
-                            this.props.navigation.navigate('ViewReBarcode'
+                        this.state.barcodesData.push(res.data["result"]);
+                        // console.log(res.data["result"][i].productTextile.empId)
+                        this.props.navigation.navigate('ViewReBarcode'
                             , {
                                 item: res.data["result"], isEdit: true,
                                 onGoBack: () => this.updateBarcodes(),
                             });
-                            
-                            }
-                        // }
-                        
-                        console.log(res.data)
+
+                    }
+                    // }
+
+                    console.log(res.data)
                     this.setState({ barcodesData: this.state.barcodesData });
 
                 }
@@ -592,9 +594,20 @@ export default class Inventory extends Component {
                 onGoBack: () => this.updateBarcodes(),
             });
     }
+    handleList = () => {
 
+        this.state.nextPage * 5 === this.state.barcodesData && this.setState({ nextPage: this.state.nextPage + 1 }, () => {
+            this.getAllBarcodes()
+        })
+    }
+    handleTextList = () => {
+
+        this.state.textPage * 5 === this.state.reBarcodesData && this.setState({ nextPage: this.state.nextPage + 1 }, () => {
+           this.getbarcodeTexttileAdjustments()
+        })
+    }
     render() {
-        
+
         return (
             <View style={styles.mainContainer}>
                 {this.state.loading &&
@@ -644,7 +657,7 @@ export default class Inventory extends Component {
                             data={this.state.privilages}
                             showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false}
-                            keyExtractor={(item,i) => i.toString()}
+                            keyExtractor={(item, i) => i.toString()}
                             renderItem={({ item, index }) => (
                                 <TouchableOpacity style={{
                                     height: Device.isTablet ? 46 : 36,
@@ -668,12 +681,12 @@ export default class Inventory extends Component {
                         {this.state.flagone && (
                             <View>
                                 <FlatList
-                                    data={this.state.barcodesData}                              
+                                    data={this.state.barcodesData}
                                     style={{ marginTop: 20 }}
                                     scrollEnabled={true}
                                     removeClippedSubviews={false}
-                                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; Records Not Found</Text>}
-                                    keyExtractor={(item,i) => i.toString()}
+                                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight / 3 }}>&#9888; Records Not Found</Text>}
+                                    keyExtractor={(item, i) => i.toString()}
                                     renderItem={({ item, index }) => (
                                         <View
                                             style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
@@ -699,6 +712,7 @@ export default class Inventory extends Component {
                                             </View>
                                         </View>
                                     )}
+                                    onEndReached={this.handleList()}
                                 />
                                 {/* {this.state.barcodesData.length === 0 && this.state.error.length > 0 &&
                                 } */}
@@ -712,7 +726,7 @@ export default class Inventory extends Component {
                                     style={{ marginTop: 20 }}
                                     scrollEnabled={true}
                                     keyExtractor={item => item}
-                                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; Records Not Found</Text>}
+                                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight / 3 }}>&#9888; Records Not Found</Text>}
                                     renderItem={({ item, index }) => (
                                         <View
                                             style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
