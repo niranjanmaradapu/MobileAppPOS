@@ -19,6 +19,8 @@ class ForgotPassword extends Component {
             code: '',
             newPassword: '',
             confirmPassword: '',
+            errors: {},
+            userValid: true,
         };
     }
 
@@ -50,8 +52,10 @@ class ForgotPassword extends Component {
     };
 
     async create() {
+        let errors = {}
         if (this.state.userName.length === 0) {
-            alert('You must enter a Username');
+            errors["username"] = "Please Enter a valid userName"
+            this.setState({errors: errors, userValid: false})
         }
         else {
             this.setState({ loading: true });
@@ -63,12 +67,12 @@ class ForgotPassword extends Component {
                     this.props.navigation.navigate('UpdateNewpassword', { userName: this.state.userName });
                 }
             });
-
         }
     }
 
 
     render() {
+        const userValid = this.state.userValid
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
@@ -97,16 +101,17 @@ class ForgotPassword extends Component {
 
                         <View style={{ flex: 6 }}>
                             {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
-                            <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                            <TextInput
+                                style={userValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder={I18n.t("USER NAME")}
-                                placeholderTextColor="#6F6F6F"
+                                placeholderTextColor={userValid ? "#6F6F6F" : "#dd0000"}
                                 // textAlignVertical="center"
                                 autoCapitalize="none"
                                 onChangeText={this.handleEmail}
                                 value={this.state.userName}
                                 ref={inputemail => { this.emailValueInput = inputemail; }} />
-
+                                {!userValid && <Text style={styles.errorRecords}>&#9888; {this.state.errors["username"]}</Text>}
 
                             {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
                             {/* <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -192,7 +197,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 300,
         height: 230,
-
+    },
+    errorRecords: {
+        color: '#dd0000',
+        fontSize: Device.isTablet ? 17 : 12,
+        marginLeft: 30,
     },
     containerForActivity: {
         flex: 1,
@@ -277,6 +286,21 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
+    inputError_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
 
     createButton_mobile: {
         backgroundColor: '#ED1C24',
@@ -340,6 +364,21 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    inputError_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 20,
