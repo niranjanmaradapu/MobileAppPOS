@@ -20,6 +20,16 @@ class RegisterClient extends Component {
             mobile: '',
             userEmail: "",
             address: "",
+            nameError: "",
+            organizationError: "",
+            mobileError: "",
+            emailError: "",
+            addressError: "",
+            errors: {},
+            organizationValid: true,
+            mobileValid: true,
+            emailValid: true,
+            nameValid: true,
         };
     }
 
@@ -41,39 +51,100 @@ class RegisterClient extends Component {
         this.setState({ userName: text });
     };
 
+    handleNameValid = () => {
+        this.setState({nameValid: true})
+    }
+
     handleOrganization = (text) => {
         this.setState({ organization: text });
     };
+
+    handleOrganizationValid = () => {
+        if (this.state.organization.length > 3) {
+            this.setState({organizationValid: true})
+        }
+    }
 
     handleMobile = (text) => {
         this.setState({ mobile: text });
     };
 
+    handleMobileValid = () => {
+        if (this.state.mobile.length === 10) {
+            this.setState({mobileValid: true})
+        }
+    }
+
     handleEmail = (text) => {
         this.setState({ userEmail: text });
     };
+
+    handleEmailValid = () => {
+        const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (emailReg.test(this.state.userEmail)) {
+            this.setState({emailValid: true})
+        }
+    }
 
     handleAddress = (text) => {
         this.setState({ address: text });
     };
 
 
-
-    create() {
+    handleValidation() {
+        let formIsValid = true
+        let errors = {}
         const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         const mobReg = /^[0-9\b]+$/;
-        if (this.state.userName.length === 0) {
-            alert('You must enter a name');
-        } else if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
-            alert('You must enter a valid mobile number');
+
+        if (this.state.userName.length < 6) { 
+            formIsValid = false
+            errors["userName"] = "Username Must be 6 Digits or more"
+            this.setState({nameValid: false})
         }
-        else if (emailReg.test(this.state.userEmail) === false) {
-            alert('You must enter a valid email');
-        } else if (this.state.organization === "") {
-            alert('Organisation cannot be empty');
+
+        if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
+            formIsValid = false
+            errors["Mobile"] = "Enter a Valid 10 Digit MobileNumber"
+            this.setState({mobileValid: false})
         }
-        else {
-            this.setState({ loading: true });
+
+        if (emailReg.test(this.state.userEmail) === false) {
+            formIsValid = false
+            errors["Email"] = "Enter a Valid Email id"
+            this.setState({emailValid: false})
+        }
+
+        if (this.state.organization.length < 3) {
+            formIsValid = false
+            errors["organization"] = "Organization Name must be 3 digits or more"
+            this.setState({organizationValid: false})
+        }
+
+        this.setState({ errors: errors })
+        return formIsValid
+}       
+
+
+    create() {
+        
+        // if (this.state.userName.length === 0) {
+        //     // alert('You must enter a name');
+        //     this.setState({nameError: "you must enter a valid username"})
+        // } else if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
+        //     this.setState({mobileError: "You must enter a valid 10 digit mobile number"})
+        //     // alert('You must enter a valid mobile number');
+        // }
+        // else if (emailReg.test(this.state.userEmail) === false) {
+        //     this.setState({emailError: 'You must enter a valid email-id'})
+        //     // alert('You must enter a valid email');
+        // } else if (this.state.organization === "") {
+        //     // alert('Organisation cannot be empty');
+        //     this.setState({organizationError: 'Organisation cannot be empty'})
+        // }
+        const formIsValid = this.handleValidation()
+        if(formIsValid) {
+            this.setState({ loading: true, nameError: "", mobileError: "", emailError: "", organizationError: "" });
             const obj = {
                 name: this.state.userName,
                 organizationName: this.state.organization,
@@ -139,8 +210,11 @@ class RegisterClient extends Component {
         }
     }
 
-
     render() {
+        const nameValid = this.state.nameValid
+        const mobileValid = this.state.mobileValid
+        const organizationValid = this.state.organizationValid
+        const emailValid = this.state.emailValid
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
@@ -159,52 +233,60 @@ class RegisterClient extends Component {
                     </View>
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={nameValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Name")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={nameValid ? "#6F6F6F" : '#dd0000'}
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.userName}
                         onChangeText={this.handleName}
+                        onBlur={this.handleNameValid}
                     />
+                    {!nameValid && <Text style={styles.errorsRecords}>&#9888; { this.state.errors["userName"] }</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Mobile")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={mobileValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Mobile")}
                         maxLength={10}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={mobileValid ? "#6F6F6F" : '#dd0000'}
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.mobile}
+                        onBlur={this.handleMobileValid}
                         onChangeText={this.handleMobile}
                     />
+                    {!mobileValid && <Text style={styles.errorsRecords}>&#9888; { this.state.errors["Mobile"] }</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Email")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={emailValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Email")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={emailValid ? "#6F6F6F" : '#dd0000'}
                         textAlignVertical="center"
                         keyboardType={'email-address'}
                         autoCapitalize="none"
                         value={this.state.userEmail}
+                        onBlur={this.handleEmailValid}
                         onChangeText={this.handleEmail}
                     />
+                    {!emailValid && <Text style={styles.errorsRecords}>&#9888; { this.state.errors["Email"] }</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Organisation")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={organizationValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Organisation")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={organizationValid ? "#6F6F6F" : '#dd0000'}
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.organization}
+                        onBlur={this.handleOrganizationValid}
                         onChangeText={this.handleOrganization}
                     />
+                    {!organizationValid && <Text style={styles.errorsRecords}>&#9888; { this.state.errors["organization"] }</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Address")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -236,6 +318,12 @@ const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,
     },
+    errorsRecords: {
+        color: '#dd0000',
+        fontSize: Device.isTablet ? 17 : 12,
+        // fontFamily: 'medium',
+        marginLeft: 30,
+    },
 
     // Styles For Mobile
     viewsWidth_mobile: {
@@ -257,7 +345,7 @@ const styles = StyleSheet.create({
         left: 70,
         top: 47,
         width: 300,
-        height: 20,
+        // height: 20,
         fontFamily: 'bold',
         fontSize: 18,
         color: '#353C40'
@@ -270,6 +358,21 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 10,
         borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    inputError_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
@@ -327,6 +430,21 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    inputError_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 6,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 20,

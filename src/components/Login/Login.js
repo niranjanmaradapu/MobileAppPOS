@@ -61,6 +61,9 @@ export default class Login extends Component {
             storeNames: [],
             sessionData: '',
             roleName: '',
+            errors: {},
+            userValid: true,
+            passwordValid: true,
 
 
         };
@@ -86,26 +89,55 @@ export default class Login extends Component {
     handleEmail = (text) => {
         this.setState({ userName: text });
     };
+
+    handleEmailValid = () => {
+        if (this.state.userName.length > 0) {
+            this.setState({ userValid: true})
+        }
+    }
+
     handlePassword = (text) => {
         this.setState({ password: text });
     };
+
+    handlePasswordValid = () => {
+        if (this.state.password.length > 0) {
+            this.setState({passwordValid: true})
+        }
+    } 
+
     handleStore = (value) => {
         this.setState({ store: value });
     };
 
     registerClient() {
-        console.log('adsadasdd');
+        // console.log('adsadasdd');
         this.props.navigation.navigate('RegisterClient');
+    }
+
+    validationForm() {
+        let isFormValid = true
+        let errors = {}
+
+        if (this.state.userName.length === 0) {
+            isFormValid = false
+            errors["userName"] = "Please Enter the username"
+            this.setState({userValid: false})
+        }
+        if (this.state.password.length === 0) {
+            isFormValid = false
+            errors["password"] = "Please Enter the password"
+            this.setState({ passwordValid: false})
+        }
+
+        this.setState({ errors: errors })
+        return isFormValid
     }
 
     login() {
         AsyncStorage.removeItem('tokenkey');
-        if (this.state.userName.length === 0) {
-            alert('You must enter a Usename');
-        } else if (this.state.password.length === 0) {
-            alert('You must enter a Password');
-        }
-        else {
+        const isFormValid = this.validationForm()
+        if(isFormValid) {
             const params = {
                 "email": this.state.userName, //"+919493926067",
                 "password": this.state.password, //"Mani@1123",
@@ -423,10 +455,14 @@ export default class Login extends Component {
 
     async componentDidMount() {
         AsyncStorage.removeItem('phone_number');
+        
+
     }
 
 
     render() {
+        const userValid = this.state.userValid
+        const passValid = this.state.passwordValid
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
@@ -457,26 +493,30 @@ export default class Login extends Component {
 
 
                             <View style={{ flex: Device.isTablet ? 4 : 7 }}>
-                                <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                <TextInput
+                                    style={userValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                                     underlineColorAndroid="transparent"
                                     placeholder={I18n.t('Username')}
-                                    placeholderTextColor="#6F6F6F"
+                                    placeholderTextColor={userValid ? "#6F6F6F" : "#dd0000"}
                                     // textAlignVertical="center"
                                     autoCapitalize="none"
                                     onChangeText={this.handleEmail}
+                                    onBlur={this.handleEmailValid}
                                     value={this.state.userName}
                                     ref={inputemail => { this.emailValueInput = inputemail; }} />
+                                {!userValid && <Text style={styles.errorRecords}>&#9888; {this.state.errors["userName"]}</Text>}
 
-
-                                <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                <TextInput style={passValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                                     underlineColorAndroid="transparent"
                                     placeholder={I18n.t('Password')}
                                     secureTextEntry={true}
-                                    placeholderTextColor="#6F6F6F"
+                                    placeholderTextColor={passValid ? "#6F6F6F" : "#dd0000"}
                                     autoCapitalize="none"
                                     onChangeText={this.handlePassword}
+                                    onBlur={this.handlePasswordValid}
                                     value={this.state.password}
                                     ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
+                                {!passValid && <Text style={styles.errorRecords}>&#9888; {this.state.errors["password"]}</Text>}
 
                                 <View>
                                     <View style={{ flexDirection: Device.isTablet ? "row" : "column", justifyContent: Device.isTablet ? "space-around" : "center", alignItems: Device.isTablet ? "center" : "center" }}>
@@ -527,6 +567,7 @@ const pickerSelectStyles = StyleSheet.create({
         fontFamily: "regular",
         fontSize: 14,
     },
+
     inputIOS: {
         marginLeft: 0,
         marginRight: 0,
@@ -558,6 +599,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 500,
         height: 300,
+    },
+    errorRecords: {
+        color: '#dd0000',
+        fontSize: Device.isTablet ? 17 : 12,
+        marginLeft: 30,
     },
     containerForActivity: {
         flex: 1,
@@ -641,6 +687,21 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
+    inputError_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
     signInButton_mobile: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
@@ -709,6 +770,21 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 22,
+    },
+    inputError_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 60,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 6,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 22,

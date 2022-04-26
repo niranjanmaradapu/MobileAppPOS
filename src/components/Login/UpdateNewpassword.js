@@ -19,6 +19,9 @@ class UpdateNewpassword extends Component {
             code: '',
             newPassword: '',
             confirmPassword: '',
+            errors: {},
+            newPasswordValid: true,
+            confirmPasswordValid: true,
         };
     }
 
@@ -37,19 +40,46 @@ class UpdateNewpassword extends Component {
         this.setState({ code: text });
     };
 
+    handleNewPasswordValid = () => {
+        if (this.state.code.length > 5) {
+            this.setState({newPasswordValid: true})
+        }
+    }
+
     handleNewPassword = (text) => {
         this.setState({ newPassword: text });
     };
 
+    handleConfirmValid = () => {
+        if (this.state.code === this.state.newPassword) {
+            this.setState({confirmPasswordValid: true})
+        }
+    }
+
+    validationPasswords() {
+        let isFormValid = true
+        let errors = {}
+
+        if (this.state.code.length < 5) {
+            isFormValid = false
+            errors["password1"] = "Password must be atleast 5 digits long"
+            this.setState({newPasswordValid: false})
+        }
+
+        if (this.state.newPassword.length === 0 || this.state.code !== this.state.newPassword) {
+            isFormValid = false
+            errors["password2"] = "Passwords are not matching"
+            this.setState({confirmPasswordValid: false})
+        }
+
+        this.setState({errors: errors})
+        return isFormValid
+    }
+
 
     create() {
-        if (this.state.code.length === 0) {
-            alert('Verification Code Cannot be Empty');
-        }
-        else if (this.state.newPassword.length === 0) {
-            alert('New Password Cannot be Empty');
-        }
-        else {
+        const isFormValid = this.validationPasswords()
+        if (isFormValid) {
             // const params = {
             //     "username": this.state.userName, //"+919493926067",
             //     "confirmarionCode": this.state.code, //"Mani@1123",
@@ -85,8 +115,9 @@ class UpdateNewpassword extends Component {
         }
     }
 
-
     render() {
+        let passValid = this.state.newPasswordValid
+        let confirmValid = this.state.confirmPasswordValid
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
@@ -115,29 +146,32 @@ class UpdateNewpassword extends Component {
 
                         <View style={{ flex: 6 }}>
                             {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
-                            <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                            <TextInput
+                                style={passValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder={I18n.t("Confirmation Code")}
-                                placeholderTextColor="#6F6F6F"
+                                placeholderTextColor={passValid ? "#6F6F6F": "#dd0000"}
                                 // textAlignVertical="center"
                                 autoCapitalize="none"
                                 onChangeText={this.handleEmail}
                                 value={this.state.code}
+                                onBlur={this.handleNewPasswordValid}
                                 ref={inputemail => { this.emailValueInput = inputemail; }} />
-
-
-
+                            {!passValid && <Text style={styles.errorRecords}>&#9888; {this.state.errors["password1"]}</Text>}
 
                             {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
-                            <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                            <TextInput
+                                style={confirmValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder={I18n.t("New Password")}
                                 secureTextEntry={true}
-                                placeholderTextColor="#6F6F6F"
+                                placeholderTextColor={confirmValid ? "#6F6F6F" : "#dd0000"}
                                 autoCapitalize="none"
                                 onChangeText={this.handleNewPassword}
+                                onBlur={this.handleConfirmValid}
                                 value={this.state.newPassword}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
+                            {!confirmValid && <Text style={styles.errorRecords}>&#9888; {this.state.errors["password2"]}</Text>}
 
                             {/* <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"
@@ -212,7 +246,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 300,
         height: 230,
-
+    },
+    errorRecords: {
+        color: '#dd0000',
+        fontSize: Device.isTablet ? 17 : 12,
+        marginLeft: 30,
     },
     containerForActivity: {
         flex: 1,
@@ -297,6 +335,21 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
+    inputError_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
 
     createButton_mobile: {
         backgroundColor: '#ED1C24',
@@ -360,6 +413,21 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    inputError_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 20,
