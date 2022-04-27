@@ -362,6 +362,25 @@ export default class AddUser extends Component {
         });
     }
 
+    handleEmailValid = () => {
+        const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (emailReg.test(this.state.email) === true) {
+            this.setState({emailValid: true})
+        }
+    }
+
+    handleMobileValid = () => {
+        if (this.state.mobile.length >= 10) {
+            this.setState({mobileValid: true})
+        }
+    }
+
+    handleNameValid = () => {
+        if (this.state.name.length >= 6) {
+            this.setState({nameValid: true})
+        }
+    }
+
     validationForm() {
         const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         const mobReg = /^[0-9\b]+$/;
@@ -373,13 +392,13 @@ export default class AddUser extends Component {
             this.setState({ nameValid: false })
         }
 
-        if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile)) {
+        if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
             isFormValid = false
             errors["mobile"] = "/ Enter a 10 digit valid mobile number"
             this.setState({mobileValid: false})
         }
 
-        if (emailReg.test(this.state.email)) {
+        if (emailReg.test(this.state.email) === false) {
             isFormValid = false
             errors["email"] = "/ Enter a valid Email Id"
             this.setState({emailValid: false})
@@ -519,15 +538,18 @@ export default class AddUser extends Component {
                     </Text>
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={nameValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Name")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={nameValid ? "#6F6F6F" : "#dd0000"}
                         textAlignVertical="center"
                         autoCapitalize="none"
+                        onBlur={this.handleNameValid}
+                        maxLength={25}
                         value={this.state.name}
                         onChangeText={this.handleName}
                     />
+                        {!nameValid && <Text style={styles.errorsRecords}> { this.state.errors["name"] }</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Gender")}</Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
@@ -570,11 +592,12 @@ export default class AddUser extends Component {
                     </TouchableOpacity>
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Mobile")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={mobileValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Mobile")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={mobileValid ? "#6F6F6F" : "#dd0000"}
                         textAlignVertical="center"
+                        onBlur={this.handleMobileValid}
                         maxLength={10}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
@@ -582,18 +605,21 @@ export default class AddUser extends Component {
                         value={this.state.mobile}
                         onChangeText={this.handleMobile}
                     />
+                    {!mobileValid && <Text style={styles.errorsRecords}> { this.state.errors["mobile"] }</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Email")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={emailValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Email")}
-                        placeholderTextColor="#6F6F6F"
+                        onBlur={this.handleEmailValid}
+                        placeholderTextColor={emailValid ? "#6F6F6F" : "#dd0000"}
                         keyboardType='email-address'
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.email}
                         onChangeText={this.handleEmail}
                     />
+                    {!emailValid && <Text style={styles.errorsRecords}> { this.state.errors["email"] }</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Address")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -877,6 +903,12 @@ const styles = StyleSheet.create({
         fontFamily: 'medium',
         color: '#353C40',
     },
+    errorsRecords: {
+        color: '#dd0000',
+        fontSize: Device.isTablet ? 17 : 12,
+        // fontFamily: 'medium',
+        marginLeft: 30,
+    },
 
     // Styles For Mobile
     viewsWidth_mobile: {
@@ -911,6 +943,21 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 10,
         borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    inputError_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
@@ -1007,6 +1054,21 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    inputError_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 20,
