@@ -51,10 +51,16 @@ class ForgotPassword extends Component {
         this.setState({ confirmPassword: text });
     };
 
+    handleEmailValid = () => {
+        if (this.state.userName.length >= 6) {
+            this.setState({userValid: true})
+        }
+    }
+
     async create() {
         let errors = {}
-        if (this.state.userName.length === 0) {
-            errors["username"] = "Please Enter a valid userName"
+        if (this.state.userName.length < 6) {
+            errors["username"] = "/ UserName must be 6 characters long"
             this.setState({errors: errors, userValid: false})
         }
         else {
@@ -108,10 +114,12 @@ class ForgotPassword extends Component {
                                 placeholderTextColor={userValid ? "#6F6F6F" : "#dd0000"}
                                 // textAlignVertical="center"
                                 autoCapitalize="none"
+                                maxLength={25}
                                 onChangeText={this.handleEmail}
+                                onBlur={this.handleEmailValid}
                                 value={this.state.userName}
                                 ref={inputemail => { this.emailValueInput = inputemail; }} />
-                                {!userValid && <Text style={styles.errorRecords}>&#9888; {this.state.errors["username"]}</Text>}
+                                {!userValid && <Text style={styles.errorRecords}>{this.state.errors["username"]}</Text>}
 
                             {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
                             {/* <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}

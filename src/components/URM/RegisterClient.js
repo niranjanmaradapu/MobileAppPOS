@@ -52,7 +52,9 @@ class RegisterClient extends Component {
     };
 
     handleNameValid = () => {
-        this.setState({nameValid: true})
+        if (this.state.name.length >= 6) {
+            this.setState({nameValid: true})
+        }
     }
 
     handleOrganization = (text) => {
@@ -60,7 +62,7 @@ class RegisterClient extends Component {
     };
 
     handleOrganizationValid = () => {
-        if (this.state.organization.length > 3) {
+        if (this.state.organization.length >= 3) {
             this.setState({organizationValid: true})
         }
     }
@@ -99,25 +101,25 @@ class RegisterClient extends Component {
 
         if (this.state.userName.length < 6) { 
             formIsValid = false
-            errors["userName"] = "Username Must be 6 Digits or more"
+            errors["userName"] = "/ Username Must be 6 characters long"
             this.setState({nameValid: false})
         }
 
         if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
             formIsValid = false
-            errors["Mobile"] = "Enter a Valid 10 Digit MobileNumber"
+            errors["Mobile"] = "/ Enter a Valid 10 Digit MobileNumber"
             this.setState({mobileValid: false})
         }
 
         if (emailReg.test(this.state.userEmail) === false) {
             formIsValid = false
-            errors["Email"] = "Enter a Valid Email id"
+            errors["Email"] = "/ Enter a Valid Email id"
             this.setState({emailValid: false})
         }
 
         if (this.state.organization.length < 3) {
             formIsValid = false
-            errors["organization"] = "Organization Name must be 3 digits or more"
+            errors["organization"] = "/ Organization must be 3 characters long"
             this.setState({organizationValid: false})
         }
 
@@ -238,12 +240,13 @@ class RegisterClient extends Component {
                         placeholder={I18n.t("Name")}
                         placeholderTextColor={nameValid ? "#6F6F6F" : '#dd0000'}
                         textAlignVertical="center"
+                        maxLength={25}
                         autoCapitalize="none"
                         value={this.state.userName}
                         onChangeText={this.handleName}
                         onBlur={this.handleNameValid}
                     />
-                    {!nameValid && <Text style={styles.errorsRecords}>&#9888; { this.state.errors["userName"] }</Text>}
+                    {!nameValid && <Text style={styles.errorsRecords}> { this.state.errors["userName"] }</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Mobile")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={mobileValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -259,7 +262,7 @@ class RegisterClient extends Component {
                         onBlur={this.handleMobileValid}
                         onChangeText={this.handleMobile}
                     />
-                    {!mobileValid && <Text style={styles.errorsRecords}>&#9888; { this.state.errors["Mobile"] }</Text>}
+                    {!mobileValid && <Text style={styles.errorsRecords}> { this.state.errors["Mobile"] }</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Email")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={emailValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -273,7 +276,7 @@ class RegisterClient extends Component {
                         onBlur={this.handleEmailValid}
                         onChangeText={this.handleEmail}
                     />
-                    {!emailValid && <Text style={styles.errorsRecords}>&#9888; { this.state.errors["Email"] }</Text>}
+                    {!emailValid && <Text style={styles.errorsRecords}> { this.state.errors["Email"] }</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Organisation")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
                         style={organizationValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -282,11 +285,12 @@ class RegisterClient extends Component {
                         placeholderTextColor={organizationValid ? "#6F6F6F" : '#dd0000'}
                         textAlignVertical="center"
                         autoCapitalize="none"
+                        maxLength={10}
                         value={this.state.organization}
                         onBlur={this.handleOrganizationValid}
                         onChangeText={this.handleOrganization}
                     />
-                    {!organizationValid && <Text style={styles.errorsRecords}>&#9888; { this.state.errors["organization"] }</Text>}
+                    {!organizationValid && <Text style={styles.errorsRecords}> { this.state.errors["organization"] }</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Address")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}

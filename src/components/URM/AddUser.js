@@ -51,6 +51,10 @@ export default class AddUser extends Component {
             storeNames: [],
             navtext: '',
             userId: 0,
+            errors: {},
+            mobileValid: true,
+            emailValid: true,
+            nameValid: true,
         };
     }
 
@@ -358,25 +362,43 @@ export default class AddUser extends Component {
         });
     }
 
+    validationForm() {
+        const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        const mobReg = /^[0-9\b]+$/;
+        let isFormValid = true
+        let errors = {}
+        if (this.state.name.length < 6) {
+            isFormValid = false
+            errors["name"] = "/ Username must be 6 characters long"
+            this.setState({ nameValid: false })
+        }
+
+        if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile)) {
+            isFormValid = false
+            errors["mobile"] = "/ Enter a 10 digit valid mobile number"
+            this.setState({mobileValid: false})
+        }
+
+        if (emailReg.test(this.state.email)) {
+            isFormValid = false
+            errors["email"] = "/ Enter a valid Email Id"
+            this.setState({emailValid: false})
+        }
+
+        this.setState({errors: errors})
+        return isFormValid
+     }
+
     saveUser() {
         for (let i = 0; i < this.state.selectedStoresArray.length; i++) {
             if (this.state.selectedStoresArray[i].selectedindex === 1) {
                 this.state.selectedStoresFinalArray.push({ name: this.state.selectedStoresArray[i].name, id: this.state.selectedStoresArray[i].id });
             }
         }
-        const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        const mobReg = /^[0-9\b]+$/;
         console.log(this.state.selectedStoresFinalArray);
-        if (this.state.name === "") {
-            alert("Please Enter Name");
-        }
-        else if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
-            alert('You must enter a valid mobile number');
-        }
-        else if (emailReg.test(this.state.email) === false) {
-            alert("Please Enter a valid email");
-        }
-        else {
+        const isFormValid = this.validationForm()
+
+        if(isFormValid) {
             if (this.state.isEdit === false) {
                 const clientDomain = this.state.domainId !== 0 ? this.state.domainId : this.state.clientId;
                 const saveObj = {
@@ -461,22 +483,22 @@ export default class AddUser extends Component {
                         alert(res.data.message);
                     }
                 }
-                ).catch(() => {
+                ).catch((err) => {
                     this.setState({ loading: false });
                     this.setState({ loading: false });
-                    alert("There is an Error while Saving User");
+                    alert(err);
                 });
-
             }
         }
-
-
     }
 
 
 
 
     render() {
+        const nameValid = this.state.nameValid
+        const mobileValid = this.state.mobileValid
+        const emailValid = this.state.emailValid
         return (
             <View style={styles.mainContainer}>
                 {this.state.loading &&
