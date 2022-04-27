@@ -31,6 +31,10 @@ export default class CreateRole extends Component {
             childlist: [],
             isEdit: false,
             roleId: 0,
+            errors: {},
+            roleValid: true,
+            domainValid: true,
+            descriptionValid: true,
         };
     }
 
@@ -113,17 +117,50 @@ export default class CreateRole extends Component {
         this.props.navigation.goBack(null);
     }
 
+    handleRoleValid = () => {
+        if (this.state.role.length >= 6) {
+            this.setState({roleValid: true})
+        }
+    }
+
+    handleDescriptionValid = () => {
+        if (this.state.description.length > 0) {
+            this.setState({descriptionValid: true})
+        }
+    }
+
+    validationForm() {
+        let errors = {}
+        let isFormValid = true
+
+        if (this.state.role.length < 6) {
+            isFormValid = false
+            errors["role"] = "/ Role Must be 6 characters long"
+            this.setState({roleValid: false})
+        }
+
+        if (this.state.description === "") {
+            isFormValid = false
+            errors["description"] = "/ Enter the Description"
+            this.setState({descriptionValid: false})
+        }
+
+        if (this.state.domain === "") {
+            isFormValid = false
+            errors["domain"] = "/ Select the Domain"
+            this.setState({domainValid: false})
+        }
+
+        this.setState({errors: errors})
+        return isFormValid
+
+    }
+
     saveRole() {
         console.log(this.state.parentlist);
         console.log(this.state.childlist);
-        if (this.state.role === "") {
-            alert("Please Enter Role");
-        } else if (this.state.description === "") {
-            alert("Please Enter description");
-        } else if (this.state.domain === "") {
-            alert("Please Select Domain");
-        }
-        else {
+        const isFormValid = this.validationForm()
+        if(isFormValid) {
             if (this.state.isEdit === false) {
                 if (this.state.role.length < 10) {
                     alert("Role Name Cannot Be Less Than 10 Characters")
@@ -239,11 +276,14 @@ export default class CreateRole extends Component {
 
 
     handleDomain = (value) => {
-        this.setState({ domain: value });
         for (let i = 0; i < this.state.domainsArray.length; i++) {
             if (this.state.domainsArray[i].name === value) {
                 this.setState({ domainId: this.state.domainsArray[i].id });
             }
+        }
+        this.setState({ domain: value });
+        if (this.state.domain !== "") {
+            this.setState({domainValid: true})
         }
     };
 
@@ -252,6 +292,9 @@ export default class CreateRole extends Component {
     };
 
     render() {
+        const roleValid = this.state.roleValid
+        const descriptionValid = this.state.descriptionValid
+        const domainValid = this.state.domainValid
         return (
             <View style={styles.mainContainer}>
                 {this.state.loading &&
@@ -268,42 +311,50 @@ export default class CreateRole extends Component {
                 </View>
                 <ScrollView>
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Role")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    <TextInput
+                        style={roleValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Role")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={roleValid ? "#6F6F6F" : "#dd0000"}
+                        maxLength={25}
                         textAlignVertical="center"
                         autoCapitalize="none"
+                        onBlur={this.handleRoleValid}
                         value={this.state.role}
                         onChangeText={this.handleRole}
                     />
+                    {!roleValid && <Text style={styles.errorRecords}>{this.state.errors["role"]}</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Description")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    <TextInput
+                        style={descriptionValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Description")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={descriptionValid ? "#6F6F6F" : "#dd0000"}
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.description}
+                        onBlur={this.handleDescriptionValid}
                         onChangeText={this.handleDescription}
                     />
+                    {!descriptionValid && <Text style={styles.errorRecords}>{this.state.errors["description"]}</Text>}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Domain")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Domain',
-                                // value:this.state.domain,
+                                value: '',
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={domainValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.domains}
                             onValueChange={this.handleDomain}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={domainValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.domain}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    {!domainValid && <Text style={styles.errorRecords}>{this.state.errors["domain"]}</Text>}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 50 }}>
                         <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 7 }]}>
                             {I18n.t("Privileges")}
@@ -422,46 +473,61 @@ export default class CreateRole extends Component {
         );
     }
 }
-
-const pickerSelectStyles_mobile = StyleSheet.create({
+const pickerSelectStyles = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 52 : 42,
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 52 : 42,
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
+    },
+});
 
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
+const pickerSelectStylesErrors = StyleSheet.create({
+    placeholder: {
+        color: "#dd0000",
+        fontFamily: "regular",
+        fontSize: Device.isTablet ? 20 : 15,
+    },
+    inputIOS: {
+        justifyContent: 'center',
+        height: Device.isTablet ? 52 : 42,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        fontSize: Device.isTablet ? 20 : 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+    },
+    inputAndroid: {
+        justifyContent: 'center',
+        height: Device.isTablet ? 52 : 42,
+        borderRadius: 3,
+        borderWidth: 1,
+        fontFamily: 'regular',
+        fontSize: Device.isTablet ? 20 : 15,
+        borderColor: '#FBFBFB',
+        backgroundColor: '#FBFBFB',
+        color: '#001B4A',
     },
 });
 
@@ -567,6 +633,21 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
+    inputError_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
     rnSelect_mobile: {
         color: '#8F9EB7',
         fontSize: 15
@@ -656,6 +737,21 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    inputError_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 20,
