@@ -11,6 +11,7 @@ import LoginService from '../services/LoginService';
 import ProfileService from '../services/ProfileService';
 import { urmErrorMessages } from '../Errors/errors';
 import UrmService from '../services/UrmService';
+import Message from '../Errors/Message';
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
@@ -506,7 +507,8 @@ export default class Login extends Component {
                                     onBlur={this.handleEmailValid}
                                     value={this.state.userName}
                                     ref={inputemail => { this.emailValueInput = inputemail; }} />
-                                {!userValid && <Text style={styles.errorRecords}>{this.state.errors["userName"]}</Text>}
+                                {!userValid && <Message message={this.state.errors["userName"]} />}
+                                
 
                                 <TextInput style={passValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                                     underlineColorAndroid="transparent"
@@ -519,7 +521,7 @@ export default class Login extends Component {
                                     onBlur={this.handlePasswordValid}
                                     value={this.state.password}
                                     ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
-                                {!passValid && <Text style={styles.errorRecords}>{this.state.errors["password"]}</Text>}
+                                {!passValid && <Message message={this.state.errors["password"]} />}
 
                                 <View>
                                     <View style={{ flexDirection: Device.isTablet ? "row" : "column", justifyContent: Device.isTablet ? "space-around" : "center", alignItems: Device.isTablet ? "center" : "center" }}>

@@ -10,6 +10,7 @@ import Loader from '../../commonUtils/loader';
 import { urmErrorMessages } from '../Errors/errors';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
+import Message from '../Errors/Message';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -163,9 +164,6 @@ export default class CreateRole extends Component {
         const isFormValid = this.validationForm()
         if(isFormValid) {
             if (this.state.isEdit === false) {
-                if (this.state.role.length < 10) {
-                    alert("Role Name Cannot Be Less Than 10 Characters")
-                } else {
                     const saveObj = {
                         "roleName": this.state.role,
                         "description": this.state.description,
@@ -194,7 +192,6 @@ export default class CreateRole extends Component {
                         this.setState({ loading: false });
                         alert("There is an Error Saving Role");
                     });
-                }
             }
             else {
                 
@@ -324,7 +321,7 @@ export default class CreateRole extends Component {
                         value={this.state.role}
                         onChangeText={this.handleRole}
                     />
-                    {!roleValid && <Text style={styles.errorRecords}>{this.state.errors["role"]}</Text>}
+                    {!roleValid && <Message message={this.state.errors["role"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Description")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={descriptionValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -337,7 +334,7 @@ export default class CreateRole extends Component {
                         onBlur={this.handleDescriptionValid}
                         onChangeText={this.handleDescription}
                     />
-                    {!descriptionValid && <Text style={styles.errorRecords}>{this.state.errors["description"]}</Text>}
+                    {!descriptionValid && <Message message={this.state.errors["description"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Domain")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
@@ -355,7 +352,7 @@ export default class CreateRole extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    {!domainValid && <Text style={styles.errorRecords}>{this.state.errors["domain"]}</Text>}
+                    {!domainValid && <Message message={this.state.errors["domain"]} />}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 50 }}>
                         <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 7 }]}>
                             {I18n.t("Privileges")}

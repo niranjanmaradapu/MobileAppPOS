@@ -7,7 +7,8 @@ export const urmErrorMessages = {
   email: "/ Enter a valid Email Id, ex: someone@example.com",
   orginisation: "/ Organisation name must be 3 characters or more",
   description: "/ Enter the Description",
-  domain: "/ Select the Domain"
+  domain: "/ Select the Domain",
+  customerName: "/ Customer name must be 6 characters or more",
 }
 
 export const inventoryErrorMessages = {

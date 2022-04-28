@@ -7,6 +7,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { urmErrorMessages } from '../Errors/errors';
 import CreateCustomerService from '../services/CreateCustomerService';
+import Message from '../Errors/Message';
 
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
@@ -60,7 +61,7 @@ export default class AddCustomer extends Component {
 
         if (this.state.name.length < 6) {
             isFormValid = false
-            errors["name"] = urmErrorMessages.userNanme
+            errors["name"] = urmErrorMessages.customerName
             this.setState({nameValid: false})
         }
 
@@ -191,7 +192,7 @@ export default class AddCustomer extends Component {
                     value={this.state.name}
                     onChangeText={(text) => this.handleCustomerName(text)}
                 />
-                {!nameValid && <Text style={styles.errorsRecords}> { this.state.errors["name"] }</Text>}
+                {!nameValid && <Message message={this.state.errors["name"]} />}
                 <Text style={styles.headings}>{I18n.t("Mobile Number")} <Text style={{ color: 'red' }}>*</Text></Text>
                 <TextInput
                     style={mobileValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -207,7 +208,7 @@ export default class AddCustomer extends Component {
                     value={this.state.phoneNumber}
                     onChangeText={(text) => this.handleMobileNumber(text)}
                 />
-                {!mobileValid && <Text style={styles.errorsRecords}> { this.state.errors["mobile"] }</Text>}
+                {!mobileValid && <Message message={this.state.errors["mobile"]} />}
                 <Text style={styles.headings}>{I18n.t("Email")}</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder={I18n.t('EMAIL')}

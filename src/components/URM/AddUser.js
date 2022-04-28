@@ -11,6 +11,7 @@ import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 import { urmErrorMessages } from '../Errors/errors';
+import Message from '../Errors/Message';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -550,7 +551,7 @@ export default class AddUser extends Component {
                         value={this.state.name}
                         onChangeText={this.handleName}
                     />
-                        {!nameValid && <Text style={styles.errorsRecords}> { this.state.errors["name"] }</Text>}
+                        {!nameValid && <Message message={this.state.errors["name"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Gender")}</Text>
                     <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                         <RNPickerSelect
@@ -606,7 +607,7 @@ export default class AddUser extends Component {
                         value={this.state.mobile}
                         onChangeText={this.handleMobile}
                     />
-                    {!mobileValid && <Text style={styles.errorsRecords}> { this.state.errors["mobile"] }</Text>}
+                    {!mobileValid && <Message message={this.state.errors["mobile"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Email")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={emailValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -620,7 +621,7 @@ export default class AddUser extends Component {
                         value={this.state.email}
                         onChangeText={this.handleEmail}
                     />
-                    {!emailValid && <Text style={styles.errorsRecords}> { this.state.errors["email"] }</Text>}
+                    {!emailValid && <Message message={this.state.errors["email"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Address")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
