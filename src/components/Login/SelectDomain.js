@@ -28,13 +28,13 @@ export default class SelectDomain extends React.Component {
         console.log('dsdasdsdadsadas is' + clientId);
         axios.get(LoginService.getDomainsList() + clientId).then((res) => {
             let len = res.data["result"].length;
-            console.log('sdasdasdsd' + len);
+            console.log('sdasdasdsd', );
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
                     let number = res.data.result[i];
                     console.log(number);
                     this.state.domainData.push(number);
-                    AsyncStorage.setItem("domainDataId", (res.data.result[0].clientDomainaId).toString()).then(() => {
+                    AsyncStorage.setItem("domainDataId", (res.data.result[0].id).toString()).then(() => {
                         // console.log
 
                     }).catch(() => {
@@ -66,7 +66,7 @@ export default class SelectDomain extends React.Component {
         this.setState({ selectedItem: index });
         console.log('asdsadsd is' + item.clientDomainaId);
         // if (index == 0) {
-        AsyncStorage.setItem("domainDataId", (item.clientDomainaId).toString()).then(() => {
+        AsyncStorage.setItem("domainDataId", (item.id).toString()).then(() => {
             // console.log
 
         }).catch(() => {
