@@ -328,7 +328,7 @@ export default class Login extends Component {
                 }
                 else {
                     console.log('vinoddddgfgfgdgg');
-                    AsyncStorage.setItem("domainDataId", String(res.data.result[0].clientDomainaId)).then(() => {
+                    AsyncStorage.setItem("domainDataId", String(res.data.result[0].id)).then(() => {
                         // console.log
 
                     }).catch(() => {
