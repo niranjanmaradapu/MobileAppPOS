@@ -7,8 +7,10 @@ import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
+import { inventoryErrorMessages } from '../Errors/errors';
 import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
+import Message from '../Errors/Message';
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
@@ -55,6 +57,21 @@ class AddBarcode extends Component {
             storeId: "",
             domainId: 1,
             isEdit: false,
+            errors: {},
+            divisionValid: true,
+            sectionValid: true,
+            subSectionValid: true,
+            categoryValid: true,
+            colorValid: true,
+            nameValid: true,
+            batchNoValid: true,
+            costPriceValid: true,
+            listPriceValid: true,
+            uomValid: true,
+            hsnValid: true,
+            empValid: true,
+            storeValid: true,
+            qtyValid: true,
         };
     }
 
@@ -316,6 +333,9 @@ class AddBarcode extends Component {
         }
         this.getAllSections();
         this.setState({ division: value });
+        if (this.state.divisionId !== null) {
+            this.setState({divisionValid: true})
+        }
     };
 
     handleSection = (value) => {
@@ -326,6 +346,9 @@ class AddBarcode extends Component {
         }
         this.getAllSubsections();
         this.setState({ section: value });
+        if (this.state.sectionId !== null) {
+            this.setState({sectionValid: true})
+        }
     };
 
     handleSubSection = (value) => {
@@ -335,6 +358,9 @@ class AddBarcode extends Component {
             }
         }
         this.setState({ subSection: value });
+        if (this.state.subsectionId !== null) {
+            this.setState({subSectionValid: true})
+        }
     };
     handleCateory = (value) => {
         for (let i = 0; i < this.state.catogiriesArray.length; i++) {
@@ -343,6 +369,9 @@ class AddBarcode extends Component {
             }
         }
         this.setState({ category: value });
+        if (this.state.catogirieId !== null) {
+            this.setState({categoryValid: true})
+        }
     };
 
     handleUOM = (value) => {
@@ -352,6 +381,9 @@ class AddBarcode extends Component {
             }
         }
         this.setState({ uomName: value });
+        if (this.state.uomId !== null) {
+            this.setState({uomValid: true})
+        }
     };
 
     handleHSNCode = (value) => {
@@ -361,28 +393,60 @@ class AddBarcode extends Component {
             }
         }
         this.setState({ hsnCode: value });
+        if (this.state.hsnId !== null) {
+            this.setState({hsnValid: true})
+        }
     };
 
     handleColour = (value) => {
         this.setState({ colour: value });
     };
 
+    handleColourValid = () => {
+        if (this.state.colour.length >= 3) {
+            this.setState({colorValid: true})
+        }
+    }
+
     handleName = (value) => {
         this.setState({ name: value });
     };
+
+    handleNameValid = () => {
+        if (this.state.name.length >= 6) {
+            this.setState({nameValid: true})
+        }
+    }
 
     handleBatchNo = (value) => {
         this.setState({ batchNo: value });
     };
 
+    handleBatchNoValid = () => {
+        if (this.state.batchNo.length > 0) {
+            this.setState({batchNoValid: true})
+        }
+    }
+
     handleCostPrice = (value) => {
         this.setState({ costPrice: value });
     };
+
+    handleCostPriceValid = () => {
+        if (this.state.costPrice.length > 0) {
+            this.setState({costPriceValid: true})
+        }
+    }
 
     handleListPrice = (value) => {
         this.setState({ listPrice: value });
     };
 
+    handleListPriceValid = () => {
+        if (this.state.listPrice.length > 0) {
+            this.setState({listPriceValid: true})
+        }
+    }
 
 
     handleStore = (value) => {
@@ -401,52 +465,108 @@ class AddBarcode extends Component {
         this.setState({ empId: value });
     };
 
+    handleEMPIdValid = () => {
+        if (this.state.empId >= 3) {
+            this.setState({empValid: true})
+        }
+    }
+
     handleQuantity = (value) => {
         this.setState({ quantity: value });
     };
 
+    handleQuantityValid = () => {
+        if (this.state.quantity.length > 0) {
+            this.setState({qtyValid: true})
+        }
+    }
+
+    validationForm() {
+
+        let isFormValid = true
+        let errors = {}
+
+        
+        if (this.state.name.length < 6) {
+            isFormValid = false
+            errors["name"] = inventoryErrorMessages.name
+            this.setState({nameValid: false})
+        }
+
+        if (this.state.divisionId === null) {
+            isFormValid = false
+            errors["divison"] = inventoryErrorMessages.divisionId
+            this.setState({divisionValid: false})
+        }
+        if (this.state.sectionId === null) {
+            isFormValid = false
+            errors["section"] = inventoryErrorMessages.sectionId
+            this.setState({sectionValid: false})
+        }
+        if (this.state.subsectionId === null) {
+            isFormValid = false
+            errors["subSection"] = inventoryErrorMessages.subSectionId
+            this.setState({subSectionValid: false})
+        }
+        if (this.state.catogirieId === null) {
+            isFormValid = false
+            errors["category"] = inventoryErrorMessages.category
+            this.setState({categoryValid: false})
+        }
+        if (String(this.state.colour).length < 3) {
+            isFormValid = false
+            errors["color"] = inventoryErrorMessages.colour
+            this.setState({colorValid: false})
+        }
+        if (String(this.state.batchNo).length === 0) {
+            isFormValid = false
+            errors["batchNo"] = inventoryErrorMessages.batchNo
+            this.setState({batchNoValid: false})
+        }
+        if (this.state.costPrice === null) {
+            isFormValid = false
+            errors["costPrice"] = inventoryErrorMessages.costPrice
+            this.setState({costPriceValid: false})
+        }
+        if (this.state.listPrice === null) {
+            isFormValid = false
+            errors["listPrice"] = inventoryErrorMessages.listPrice
+            this.setState({listPriceValid: false})
+        }
+        if (this.state.uomId === null) {
+            isFormValid = false
+            errors["uom"] = inventoryErrorMessages.uom
+            this.setState({uomValid: false})
+        }
+        if (this.state.hsnId === null) {
+            isFormValid = false
+            errors["hsn"] = inventoryErrorMessages.hsnCode
+            this.setState({hsnValid: false})
+        }
+        if (String(this.state.empId).length < 3) {
+            isFormValid = false
+            errors["emp"] = inventoryErrorMessages.empId
+            this.setState({empValid: false})
+        }
+        if (this.state.store === undefined) {
+            isFormValid = false
+            errors["store"] = inventoryErrorMessages.store
+            this.setState({storeValid: false})
+        }
+        if (String(this.state.quantity).length === 0) {
+            isFormValid = false
+            errors["qty"] = inventoryErrorMessages.qty
+            this.setState({qtyValid: false})
+        }
+
+        this.setState({errors: errors})
+        return isFormValid
+    }
+
     saveBarcode() {
         console.log(this.state.store);
-        if (this.state.divisionId === null) {
-            alert("please select the Division");
-        }
-        else if (this.state.sectionId === null) {
-            alert("please select the Section");
-        }
-        else if (this.state.subsectionId === null) {
-            alert("please select the Sub Section");
-        }
-        else if (this.state.catogirieId === null) {
-            alert("please select the category");
-        }
-        else if (String(this.state.colour).length === 0) {
-            alert("please enter the Colour");
-        }
-        else if (String(this.state.batchNo).length === 0) {
-            alert("please enter the Batch No");
-        }
-        else if (this.state.costPrice === null) {
-            alert("please enter the Cost Price");
-        }
-        else if (this.state.listPrice === null) {
-            alert("please enter the List price");
-        }
-        else if (this.state.uomId === null) {
-            alert("please select the UOM");
-        }
-        else if (this.state.hsnId === null) {
-            alert("please enter the Hsn code");
-        }
-        else if (String(this.state.empId).length === 0) {
-            alert("please enter the Emp ID");
-        }
-        else if (this.state.store === undefined) {
-            alert("please select the Store");
-        }
-        else if (String(this.state.quantity).length === 0) {
-            alert("please enter the Qty");
-        }
-        else {
+        const isFormValid = this.validationForm()
+        if(isFormValid) {
             const params = {
                 "division": parseInt(this.state.divisionId),
                 "section": parseInt(this.state.sectionId),
@@ -491,6 +611,20 @@ class AddBarcode extends Component {
 
 
     render() {
+        const divisionValid = this.state.divisionValid
+        const sectionValid = this.state.sectionValid
+        const subSectionValid = this.state.subSectionValid
+        const categoryValid = this.state.categoryValid
+        const colorValid = this.state.colorValid
+        const nameValid = this.state.nameValid
+        const batchNoValid = this.state.batchNoValid
+        const costPriceValid = this.state.costPriceValid
+        const listPriceValid = this.state.listPriceValid
+        const uomValid = this.state.uomValid
+        const hsnValid = this.state.hsnValid
+        const empValid = this.state.empValid
+        const storeValid = this.state.storeValid
+        const qtyValid = this.state.qtyValid
         return (
             <View style={styles.mainContainer}>
                 {this.state.loading &&
@@ -505,191 +639,226 @@ class AddBarcode extends Component {
                 </View>
                 <ScrollView>
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Division")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                    <View style={divisionValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Division'
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={divisionValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.divisions}
                             onValueChange={this.handleDivision}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={divisionValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.division}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                            {!divisionValid && <Message message={this.state.errors["divison"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                    <View style={sectionValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Section'
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={sectionValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.secions}
                             onValueChange={this.handleSection}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={sectionValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.section}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                        {!sectionValid && <Message message={this.state.errors["section"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Sub Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                    <View style={subSectionValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Sub Section'
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={subSectionValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.subsecions}
                             onValueChange={this.handleSubSection}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={subSectionValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.subSection}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                        {!subSectionValid && <Message message={this.state.errors["subSection"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Category")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                    <View style={categoryValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Category'
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={categoryValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.catogiries}
                             onValueChange={this.handleCateory}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={categoryValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.category}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                        {!categoryValid && <Message message={this.state.errors["category"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> {I18n.t("Colour")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    <TextInput
+                        style={colorValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Colour")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={colorValid ? "#6F6F6F" : "#dd0000"}
                         textAlignVertical="center"
+                        maxLength={12}
                         autoCapitalize="none"
+                        onBlur={this.handleColourValid}
                         value={this.state.colour}
                         onChangeText={this.handleColour}
                     />
+                    {!colorValid && <Message message={this.state.errors["color"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> {I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    <TextInput
+                        style={nameValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Name")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={nameValid ? "#6F6F6F" : "#dd0000"}
+                        maxLength={25}
                         textAlignVertical="center"
                         autoCapitalize="none"
                         value={this.state.name}
+                        onBlur={this.handleNameValid}
                         onChangeText={this.handleName}
                     />
+                    {!nameValid && <Message message={this.state.errors["name"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Batch No")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    <TextInput
+                        style={batchNoValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Batch No")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={batchNoValid ? "#6F6F6F" : "#dd0000"}
                         textAlignVertical="center"
+                        maxLength={12}
                         autoCapitalize="none"
                         value={this.state.batchNo}
+                        onBlur={this.handleBatchNoValid}
                         onChangeText={this.handleBatchNo}
                     />
+                    {!batchNoValid && <Message message={this.state.errors["batchNo"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Cost Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    <TextInput
+                        style={costPriceValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Cost Price")}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={costPriceValid ? "#6F6F6F" : "#dd0000"}
                         textAlignVertical="center"
                         autoCapitalize="none"
+                        maxLength={10}
                         value={this.state.costPrice}
+                        onBlur={this.handleCostPriceValid}
                         onChangeText={this.handleCostPrice}
                     />
+                    {!costPriceValid && <Message message={this.state.errors["costPrice"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("List Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    <TextInput
+                        style={listPriceValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("List Price")}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={listPriceValid ? "#6F6F6F" : "#dd0000"}
                         textAlignVertical="center"
                         autoCapitalize="none"
+                        maxLength={10}
                         value={this.state.listPrice}
                         onChangeText={this.handleListPrice}
+                        onBlur={this.handleListPriceValid}
                     />
+                    {!listPriceValid && <Message message={this.state.errors["listPrice"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("UOM")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                    <View style={uomValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'UOM'
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={uomValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.uom}
                             onValueChange={this.handleUOM}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={uomValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.uomName}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    {!uomValid && <Message message={this.state.errors["uom"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("HSN Code")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                    <View style={hsnValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'HSN Code'
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={hsnValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.hsncodes}
                             onValueChange={this.handleHSNCode}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={hsnValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.hsnCode}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    {!hsnValid && <Message message={this.state.errors["hsn"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("EMP ID")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    <TextInput
+                        style={empValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="EMP ID"
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={empValid ? "#6F6F6F" : "#dd0000"}
                         textAlignVertical="center"
+                        maxLength={10}
                         autoCapitalize="none"
                         value={this.state.empId}
+                        onBlur={this.handleEMPIdValid}
                         onChangeText={this.handleEMPId}
                     />
+                    {!empValid && <Message message={this.state.errors["emp"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Store")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                    <View style={storeValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Store'
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={storeValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.storeNames}
                             onValueChange={this.handleStore}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={storeValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.store}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    {!storeValid && <Message message={this.state.errors["store"]} />}
                     <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>QTY <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    <TextInput
+                        style={storeValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder="QTY"
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={storeValid ?"#6F6F6F" : '#dd0000'}
                         textAlignVertical="center"
+                        maxLength={12}
                         autoCapitalize="none"
                         value={this.state.quantity}
+                        onBlur={this.handleQuantityValid}
                         onChangeText={this.handleQuantity}
                     />
+                    {!qtyValid && <Message message={this.state.errors["qty"]} />}
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.saveBarcode()}>
                         <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
@@ -707,90 +876,63 @@ class AddBarcode extends Component {
 
 export default AddBarcode;
 
-const pickerSelectStyles_mobile = StyleSheet.create({
+const pickerSelectStyles = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
     },
 });
 
-const pickerSelectStyles_tablet = StyleSheet.create({
+const pickerSelectStylesErrors = StyleSheet.create({
     placeholder: {
-        color: "#6F6F6F",
+        color: "#dd0000",
         fontFamily: "regular",
-        fontSize: 20,
+        fontSize: Device.isTablet ? 20 : 15,
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 52,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 52,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
     },
 });
-
 const styles = StyleSheet.create({
     mainContainer: {
         backgroundColor: '#ffffff'
@@ -801,6 +943,11 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         margin: 50,
+    },
+    errorRecords: {
+        color: '#dd0000',
+        fontSize: Device.isTablet ? 17 : 12,
+        marginLeft: 30,
     },
 
     // Styles For Mobiles
@@ -843,6 +990,21 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
+    inputError_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
     rnSelect_mobile: {
         color: '#8F9EB7',
         fontSize: 15
@@ -854,6 +1016,20 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 10,
         borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    rnSelectContainerError_mobile: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
@@ -930,6 +1106,21 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 20,
     },
+    inputError_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
     rnSelect_tablet: {
         color: '#8F9EB7',
         fontSize: 20
@@ -944,6 +1135,20 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    rnSelectContainerError_tablet: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 20,

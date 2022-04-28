@@ -6,6 +6,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import I18n from 'react-native-i18n';
+import { urmErrorMessages } from '../Errors/errors';
+import Message from '../Errors/Message';
 
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
@@ -41,7 +43,7 @@ class UpdateNewpassword extends Component {
     };
 
     handleNewPasswordValid = () => {
-        if (this.state.code.length > 5) {
+        if (this.state.code.length >= 8) {
             this.setState({newPasswordValid: true})
         }
     }
@@ -60,15 +62,15 @@ class UpdateNewpassword extends Component {
         let isFormValid = true
         let errors = {}
 
-        if (this.state.code.length < 5) {
+        if (this.state.code.length < 8) {
             isFormValid = false
-            errors["password1"] = "Password must be atleast 5 digits long"
+            errors["password1"] = urmErrorMessages.password
             this.setState({newPasswordValid: false})
         }
 
         if (this.state.newPassword.length === 0 || this.state.code !== this.state.newPassword) {
             isFormValid = false
-            errors["password2"] = "Passwords are not matching"
+            errors["password2"] = urmErrorMessages.confirmPassword
             this.setState({confirmPasswordValid: false})
         }
 
@@ -153,17 +155,19 @@ class UpdateNewpassword extends Component {
                                 placeholderTextColor={passValid ? "#6F6F6F": "#dd0000"}
                                 // textAlignVertical="center"
                                 autoCapitalize="none"
+                                maxLength={25}
                                 onChangeText={this.handleEmail}
                                 value={this.state.code}
                                 onBlur={this.handleNewPasswordValid}
                                 ref={inputemail => { this.emailValueInput = inputemail; }} />
-                            {!passValid && <Text style={styles.errorRecords}>&#9888; {this.state.errors["password1"]}</Text>}
+                            {!passValid && <Message message={this.state.errors["password1"]} />}
 
                             {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
                             <TextInput
                                 style={confirmValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder={I18n.t("New Password")}
+                                maxLength={25}
                                 secureTextEntry={true}
                                 placeholderTextColor={confirmValid ? "#6F6F6F" : "#dd0000"}
                                 autoCapitalize="none"
@@ -171,7 +175,7 @@ class UpdateNewpassword extends Component {
                                 onBlur={this.handleConfirmValid}
                                 value={this.state.newPassword}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
-                            {!confirmValid && <Text style={styles.errorRecords}>&#9888; {this.state.errors["password2"]}</Text>}
+                            {!confirmValid && <Message message={this.state.errors["password2"]} />}
 
                             {/* <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"

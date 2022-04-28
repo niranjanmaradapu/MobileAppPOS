@@ -5,7 +5,9 @@ import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import { urmErrorMessages } from '../Errors/errors';
 import CreateCustomerService from '../services/CreateCustomerService';
+import Message from '../Errors/Message';
 
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
@@ -40,7 +42,10 @@ export default class AddCustomer extends Component {
             gstmobile: "",
             gstaddress: "",
             isCustomer: "true",
-            isConfigUser: "false"
+            isConfigUser: "false",
+            errors: {},
+            nameValid: true,
+            mobileValid: true,
         };
     }
 
@@ -48,12 +53,31 @@ export default class AddCustomer extends Component {
         this.addCustomer = this.addCustomer.bind(this);
     }
 
+    validationCheck() {
+        let errors = {}
+        let isFormValid = true
+        const mobReg = /^[0-9\b]+$/;
+
+
+        if (this.state.name.length < 6) {
+            isFormValid = false
+            errors["name"] = urmErrorMessages.customerName
+            this.setState({nameValid: false})
+        }
+
+        if (mobReg.test(this.state.mobile) === false || this.state.mobile.length < 10) {
+            isFormValid = false
+            errors["mobile"] = urmErrorMessages.mobile
+            this.setState({mobileValid: false})
+        }
+
+        this.setState({errors: errors})
+        return isFormValid
+    }
+
     addCustomer() {
-        if (this.state.name === "") {
-            alert("Customer Name cannot be empty");
-        } else if (this.state.phoneNumber === "" || this.state.phoneNumber < 10) {
-            alert("Mobile Number cannot be empty");
-        } else {
+        const isFormValid = this.validationCheck()
+        if (isFormValid) {
             this.state.phoneNumber = "+91" + this.state.phoneNumber;
             axios.post(CreateCustomerService.addCustomer(), this.state).then(res => {
                 if (res) {
@@ -98,8 +122,20 @@ export default class AddCustomer extends Component {
         this.setState({ username: text, name: text });
     }
 
+    handleNameValid = () => {
+        if (this.state.name.length >= 6) {
+            this.setState({nameValid})
+        }
+    }
+
     handleMobileNumber(text) {
         this.setState({ phoneNumber: text });
+    }
+
+    handleMobileValid = () => {
+        if (this.state.mobile.length >= 10) {
+            this.setState({mobileValid: true})
+        }
     }
 
     handleEmail(text) {
@@ -137,33 +173,42 @@ export default class AddCustomer extends Component {
 
 
     render() {
+        const nameValid = this.state.nameValid
+        const mobileValid = this.state.mobileValid
+
         return (
             <View>
                 <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>{I18n.t("Personal Information")}</Text>
                 <Text style={styles.headings}>{I18n.t("Customer Name")} <Text style={{ color: 'red' }}>*</Text></Text>
                 <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    style={nameValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                     placeholder={I18n.t('CUSTOMER NAME')}
-                    placeholderTextColor="#6f6f6f60"
+                    placeholderTextColor={nameValid ? "#6F6F6F" : '#dd0000'}
                     textAlignVertical="center"
                     keyboardType={'default'}
+                    maxLength={25}
+                    onBlur={this.handleNameValid}
                     autoCapitalize='none'
                     value={this.state.name}
                     onChangeText={(text) => this.handleCustomerName(text)}
                 />
+                {!nameValid && <Message message={this.state.errors["name"]} />}
                 <Text style={styles.headings}>{I18n.t("Mobile Number")} <Text style={{ color: 'red' }}>*</Text></Text>
-                <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                <TextInput
+                    style={mobileValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                     placeholder={I18n.t('MOBILE NUMBER')}
-                    placeholderTextColor="#6f6f6f60"
+                    placeholderTextColor={mobileValid ? "#6F6F6F" : '#dd0000'}
                     textAlignVertical="center"
                     // keyboardType={'default'}
                     autoCapitalize='none'
                     maxLength={10}
                     keyboardType={'number-pad'}
+                    onBlur={this.handleMobileValid}
                     textContentType='telephoneNumber'
                     value={this.state.phoneNumber}
                     onChangeText={(text) => this.handleMobileNumber(text)}
                 />
+                {!mobileValid && <Message message={this.state.errors["mobile"]} />}
                 <Text style={styles.headings}>{I18n.t("Email")}</Text>
                 <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                     placeholder={I18n.t('EMAIL')}
@@ -284,6 +329,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
+    
     inputAndroid: {
         justifyContent: 'center',
         height: 42,
@@ -356,7 +402,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 300,
         height: 230,
-
+    },
+    errorsRecords: {
+        color: '#dd0000',
+        fontSize: Device.isTablet ? 17 : 12,
+        // fontFamily: 'medium',
+        marginLeft: 30,
     },
     headings: {
         fontSize: Device.isTablet ? 20 : 15,
@@ -432,6 +483,21 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 10,
         borderColor: '#8F9EB717',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    inputError_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
@@ -527,6 +593,21 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 22,
+    },
+    inputError_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 60,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 22,
