@@ -5,6 +5,7 @@ import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import { urmErrorMessages } from '../../errors';
 import CreateCustomerService from '../services/CreateCustomerService';
 
 var deviceheight = Dimensions.get('window').height;
@@ -59,13 +60,13 @@ export default class AddCustomer extends Component {
 
         if (this.state.name.length < 6) {
             isFormValid = false
-            errors["name"] = "/ Name must be 6 characters long"
+            errors["name"] = urmErrorMessages.userNanme
             this.setState({nameValid: false})
         }
 
         if (mobReg.test(this.state.mobile) === false || this.state.mobile.length < 10) {
             isFormValid = false
-            errors["mobile"] = "/ Enter a valid 10 digit Mobile number"
+            errors["mobile"] = urmErrorMessages.mobile
             this.setState({mobileValid: false})
         }
 

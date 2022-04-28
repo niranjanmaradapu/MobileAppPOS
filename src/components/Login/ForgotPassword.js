@@ -6,6 +6,7 @@ import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
+import { urmErrorMessages } from '../../errors';
 
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
@@ -60,7 +61,7 @@ class ForgotPassword extends Component {
     async create() {
         let errors = {}
         if (this.state.userName.length < 6) {
-            errors["username"] = "/ UserName must be 6 characters long"
+            errors["username"] = urmErrorMessages.userNanme
             this.setState({errors: errors, userValid: false})
         }
         else {

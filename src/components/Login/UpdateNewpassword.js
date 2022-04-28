@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import I18n from 'react-native-i18n';
+import { urmErrorMessages } from '../../errors';
 
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
@@ -62,13 +63,13 @@ class UpdateNewpassword extends Component {
 
         if (this.state.code.length < 8) {
             isFormValid = false
-            errors["password1"] = "/ Password must be 8 characters long"
+            errors["password1"] = urmErrorMessages.password
             this.setState({newPasswordValid: false})
         }
 
         if (this.state.newPassword.length === 0 || this.state.code !== this.state.newPassword) {
             isFormValid = false
-            errors["password2"] = "/ Passwords are not matching"
+            errors["password2"] = urmErrorMessages.confirmPassword
             this.setState({confirmPasswordValid: false})
         }
 

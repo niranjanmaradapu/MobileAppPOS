@@ -7,6 +7,7 @@ import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
+import { inventoryErrorMessages } from '../../errors';
 import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
 
@@ -484,77 +485,79 @@ class AddBarcode extends Component {
         let isFormValid = true
         let errors = {}
 
+        
+        if (this.state.name.length < 6) {
+            isFormValid = false
+            errors["name"] = inventoryErrorMessages.name
+            this.setState({nameValid: false})
+        }
+
         if (this.state.divisionId === null) {
             isFormValid = false
-            errors["divison"] = "/ Please Select the Division"
+            errors["divison"] = inventoryErrorMessages.divisionId
             this.setState({divisionValid: false})
         }
         if (this.state.sectionId === null) {
             isFormValid = false
-            errors["section"] = "/ Please Select the Section"
+            errors["section"] = inventoryErrorMessages.sectionId
             this.setState({sectionValid: false})
         }
         if (this.state.subsectionId === null) {
             isFormValid = false
-            errors["subSection"] = "/ Please Select the Sub Section"
+            errors["subSection"] = inventoryErrorMessages.subSectionId
             this.setState({subSectionValid: false})
         }
         if (this.state.catogirieId === null) {
             isFormValid = false
-            errors["category"] = "/ Please Select the Category"
+            errors["category"] = inventoryErrorMessages.category
             this.setState({categoryValid: false})
         }
         if (String(this.state.colour).length < 3) {
             isFormValid = false
-            errors["color"] = "/ Colour must be 3 characters long"
+            errors["color"] = inventoryErrorMessages.colour
             this.setState({colorValid: false})
         }
         if (String(this.state.batchNo).length === 0) {
             isFormValid = false
-            errors["batchNo"] = "/ Please Enter the BatchNo"
+            errors["batchNo"] = inventoryErrorMessages.batchNo
             this.setState({batchNoValid: false})
         }
         if (this.state.costPrice === null) {
             isFormValid = false
-            errors["costPrice"] = "/ Please Enter the Cost Price"
+            errors["costPrice"] = inventoryErrorMessages.costPrice
             this.setState({costPriceValid: false})
         }
         if (this.state.listPrice === null) {
             isFormValid = false
-            errors["listPrice"] = "/ Please Enter the List Price"
+            errors["listPrice"] = inventoryErrorMessages.listPrice
             this.setState({listPriceValid: false})
         }
         if (this.state.uomId === null) {
             isFormValid = false
-            errors["uom"] = "/ Please Select the Uom"
+            errors["uom"] = inventoryErrorMessages.uom
             this.setState({uomValid: false})
         }
         if (this.state.hsnId === null) {
             isFormValid = false
-            errors["hsn"] = "/ Please Select the HSN Code"
+            errors["hsn"] = inventoryErrorMessages.hsnCode
             this.setState({hsnValid: false})
         }
         if (String(this.state.empId).length < 3) {
             isFormValid = false
-            errors["emp"] = "/ Emp Id must be 3 characters long"
+            errors["emp"] = inventoryErrorMessages.empId
             this.setState({empValid: false})
         }
         if (this.state.store === undefined) {
             isFormValid = false
-            errors["store"] = "/ Please Select the Store"
+            errors["store"] = inventoryErrorMessages.store
             this.setState({storeValid: false})
         }
         if (String(this.state.quantity).length === 0) {
             isFormValid = false
-            errors["qty"] = "/ Please Enter the Qty"
+            errors["qty"] = inventoryErrorMessages.qty
             this.setState({qtyValid: false})
         }
 
-        if (this.state.name.length < 6) {
-            isFormValid = false
-            errors["name"] = "/ Name must be 6 characters long"
-            this.setState({nameValid: false})
-        }
         this.setState({errors: errors})
         return isFormValid
     }

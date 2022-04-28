@@ -9,6 +9,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import ProfileService from '../services/ProfileService';
+import { urmErrorMessages } from '../../errors';
 import UrmService from '../services/UrmService';
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
@@ -121,12 +122,12 @@ export default class Login extends Component {
 
         if (this.state.userName.length < 6) {
             isFormValid = false
-            errors["userName"] = "/ Username must be 6 characters long"
+            errors["userName"] = urmErrorMessages.userNanme
             this.setState({userValid: false})
         }
         if (this.state.password.length < 8) {
             isFormValid = false
-            errors["password"] = "/ Password must be 8 characters long"
+            errors["password"] = urmErrorMessages.password
             this.setState({ passwordValid: false})
         }
 

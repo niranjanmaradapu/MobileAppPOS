@@ -61,7 +61,7 @@ export default class ManagePassword extends Component {
         // } else 
         if (this.state.newPassword.length === 0) {
             alert("New Password Cannot be Empty");
-        } else if (this.state.confirmPassword.length === 0) {
+    } else if (this.state.confirmPassword.length === 0) {
             alert('you must enter confirm password');
         } else if (this.state.confirmPassword !== this.state.newPassword) {
             alert('new password and confirm password should be same');

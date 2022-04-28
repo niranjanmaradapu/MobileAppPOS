@@ -6,6 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import UrmService from '../services/UrmService';
 import I18n from 'react-native-i18n';
+import { urmErrorMessages } from '../../errors';
 
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
@@ -101,25 +102,25 @@ class RegisterClient extends Component {
 
         if (this.state.userName.length < 6) { 
             formIsValid = false
-            errors["userName"] = "/ Username Must be 6 characters long"
+            errors["userName"] = urmErrorMessages.userNanme
             this.setState({nameValid: false})
         }
 
         if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
             formIsValid = false
-            errors["Mobile"] = "/ Enter a Valid 10 Digit MobileNumber"
+            errors["Mobile"] = urmErrorMessages.mobile
             this.setState({mobileValid: false})
         }
 
         if (emailReg.test(this.state.userEmail) === false) {
             formIsValid = false
-            errors["Email"] = "/ Enter a Valid Email id"
+            errors["Email"] = urmErrorMessages.email
             this.setState({emailValid: false})
         }
 
         if (this.state.organization.length < 3) {
             formIsValid = false
-            errors["organization"] = "/ Organization must be 3 characters long"
+            errors["organization"] = urmErrorMessages.orginisation
             this.setState({organizationValid: false})
         }
 
