@@ -446,7 +446,7 @@ export default class AccountManagement extends Component {
     }
 
     navigateToAddDomain() {
-        this.props.navigation.navigate('AddDomain', {
+        this.props.navigation.navigate('AddStore', {
             onGoBack: () => this.getDomains(),
         });
     }

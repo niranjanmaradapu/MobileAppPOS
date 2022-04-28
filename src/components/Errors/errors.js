@@ -7,7 +7,6 @@ export const urmErrorMessages = {
   email: "/ Enter a valid Email Id, ex: someone@example.com",
   orginisation: "/ Organisation name must be 3 characters or more",
   description: "/ Enter the Description",
-  domain: "/ Select the Domain",
   customerName: "/ Customer name must be 6 characters or more",
 }
 
@@ -24,6 +23,13 @@ export const inventoryErrorMessages = {
   uom: "/ Please select the UOM",
   hsnCode: "/ Please select the HSN Code",
   empId: "/ Emp Id must be 3 characters or more",
-  store: "/ Please select the store",
   qty: "/ Please enter the Qty",
+}
+
+export const accountingErrorMessages = {
+  domain: "/ Please select the Domain",
+  store: "/ Please select the store",
+  district: "/ Please select the district",
+  storeName: "/ Store Name must be 6 characters or more",
+  gst: "/ Enter the valid GST Number"
 }

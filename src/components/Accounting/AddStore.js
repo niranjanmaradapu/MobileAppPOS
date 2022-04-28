@@ -7,6 +7,7 @@ import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
+import { accountingErrorMessages, urmErrorMessages } from '../Errors/errors';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 
@@ -41,6 +42,12 @@ export default class AddStore extends Component {
             storeId: 0,
             navtext: '',
             isEdit: false,
+            errors: {},
+            storeValid: true,
+            districtValid: true,
+            domianValid: true,
+            mobileValid: true,
+            gstValid: true,
         };
     }
 
@@ -264,6 +271,45 @@ export default class AddStore extends Component {
                 }
             }
         });
+    }
+
+    validationForm() {
+        let errors = {}
+        let formIsValid = true
+
+        if (this.state.storeState === "") {
+            errors["store"] = accountingErrorMessages.store
+            formIsValid = false
+            this.setState({storeValid: false})
+        }
+        if (this.state.storeDistrict === "") {
+            errors["district"] = accountingErrorMessages.district
+            formIsValid = false
+            this.setState({districtValid: false})
+        }
+        if (this.state.domain === "") {
+            errors["domain"] = accountingErrorMessages.domain
+            formIsValid = false
+            this.setState({domianValid: false})
+        }
+        if (this.state.storeName === "") {
+            errors["store"] = accountingErrorMessages.store
+            formIsValid = false
+            this.setState({storeValid: false})
+        }
+        if (this.state.mobile.length === 0 || this.state.mobile.length < 10) {
+            errors["mobile"] = urmErrorMessages.mobile
+            formIsValid = false
+            this.setState({mobileValid: false})
+        }
+        if (this.state.gstNumber.length === 0) {
+            errors["gst"] = accountingErrorMessages.gst
+            formIsValid = false
+            this.setState({gstValid: false})
+        }
+
+        this.setState({errors: errors})
+        return formIsValid
     }
 
     saveStore() {

@@ -7,7 +7,7 @@ import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
-import { inventoryErrorMessages } from '../Errors/errors';
+import { accountingErrorMessages, inventoryErrorMessages } from '../Errors/errors';
 import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
 import Message from '../Errors/Message';
@@ -550,7 +550,7 @@ class AddBarcode extends Component {
         }
         if (this.state.store === undefined) {
             isFormValid = false
-            errors["store"] = inventoryErrorMessages.store
+            errors["store"] = accountingErrorMessages.store
             this.setState({storeValid: false})
         }
         if (String(this.state.quantity).length === 0) {
@@ -933,6 +933,7 @@ const pickerSelectStylesErrors = StyleSheet.create({
         color: '#001B4A',
     },
 });
+
 const styles = StyleSheet.create({
     mainContainer: {
         backgroundColor: '#ffffff'

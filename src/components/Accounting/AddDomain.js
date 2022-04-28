@@ -8,6 +8,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
 import UrmService from '../services/UrmService';
+import { accountingErrorMessages } from '../Errors/errors';
+import Message from "../Errors/Message"
 
 var deviceWidth = Dimensions.get('window').width;
 export default class AddDomain extends Component {
@@ -21,6 +23,8 @@ export default class AddDomain extends Component {
             domainsArray: [],
             domains: [],
             domainId: 0,
+            errors: {},
+            domainValid: true,
         };
     }
 
@@ -67,6 +71,10 @@ export default class AddDomain extends Component {
                 // this.setState({  });
             }
         }
+
+        if (this.state.domainName !== "") {
+            this.setState({domainValid: true})
+        }
     };
 
 
@@ -81,15 +89,23 @@ export default class AddDomain extends Component {
         this.setState({ description: value });
     };
 
-    saveDomain() {
-        if (this.state.domainName === "") {
-            alert("please select the domainName");
-        }
-        // else if (this.state.description.length === 0) {
-        //     alert("please enter description");
+    validationForm() {
+        let errors = {}
+        let formIsValid = true
 
-        // }
-        else {
+        if (this.state.domainName === "") {
+            errors["domain"] = accountingErrorMessages.domain
+            formIsValid = false
+            this.setState({domainValid: false})
+        }
+
+        this.setState({errors: errors})
+        return formIsValid
+    }
+
+    saveDomain() {
+        const formIsValid = this.validationForm()
+        if (formIsValid) {
             const obj = {
                 "name": this.state.domainName,
                 "discription": this.state.description,
@@ -121,6 +137,7 @@ export default class AddDomain extends Component {
 
 
     render() {
+        const domainValid = this.state.domainValid
         return (
             <View style={styles.mainContainer}>
                 {this.state.loading &&
@@ -137,23 +154,25 @@ export default class AddDomain extends Component {
                 </View>
                 <ScrollView>
                     <Text style={{ fontSize: Device.isTablet ? 22 : 17, fontFamily: 'medium', marginLeft: 20, marginBottom: 20 }}>{I18n.t("Domain")} <Text style={{ color: 'red', fontFamily: 'bold' }}>*</Text></Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                    <View
+                        style={domainValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'DOMAIN'
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={domainValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.domains}
                             onValueChange={this.handleDomain}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={domainValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.domainName}
                             useNativeAndroidPickerStyle={false}
                         />
 
                     </View>
+                    {!domainValid && <Message message={this.state.errors["domain"]} />}
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
@@ -178,87 +197,61 @@ export default class AddDomain extends Component {
     }
 }
 
-const pickerSelectStyles_mobile = StyleSheet.create({
+const pickerSelectStyles = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
     },
 });
 
-const pickerSelectStyles_tablet = StyleSheet.create({
+const pickerSelectStylesErrors = StyleSheet.create({
     placeholder: {
-        color: "#6F6F6F",
+        color: "#dd0000",
         fontFamily: "regular",
-        fontSize: 20,
+        fontSize: Device.isTablet ? 20 : 15,
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 52,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 52,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
     },
 });
 
@@ -376,6 +369,20 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 14,
     },
+    rnSelectContainerError_mobile: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
 
     // Styles For Tablet
     viewsWidth_tablet: {
@@ -473,6 +480,20 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+        rnSelectContainerError_tablet: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 20,

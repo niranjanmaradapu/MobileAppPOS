@@ -7,7 +7,7 @@ import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
-import { urmErrorMessages } from '../Errors/errors';
+import { accountingErrorMessages, urmErrorMessages } from '../Errors/errors';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 import Message from '../Errors/Message';
@@ -149,7 +149,7 @@ export default class CreateRole extends Component {
 
         if (this.state.domain === "") {
             isFormValid = false
-            errors["domain"] = urmErrorMessages.domain
+            errors["domain"] = accountingErrorMessages.domain
             this.setState({domainValid: false})
         }
 
