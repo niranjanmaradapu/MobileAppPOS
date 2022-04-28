@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import UrmService from '../services/UrmService';
 import I18n from 'react-native-i18n';
-import { urmErrorMessages } from '../../errors';
+import { urmErrorMessages } from '../Errors/errors';
 
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;

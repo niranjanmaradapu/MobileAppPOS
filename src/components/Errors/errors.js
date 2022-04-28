@@ -1,10 +1,13 @@
 export const urmErrorMessages = {
   userNanme: "/ Username must be 6 characters or more",
+  roleName: "/ Rolename must be 6 characters or more",
   password: "/ Password must be 8 characters or more",
   confirmPassword: "/ Passwords are not matching",
   mobile: "/ Enter a valid 10 digit mobile number",
   email: "/ Enter a valid Email Id, ex: someone@example.com",
   orginisation: "/ Organisation name must be 3 characters or more",
+  description: "/ Enter the Description",
+  domain: "/ Select the Domain"
 }
 
 export const inventoryErrorMessages = {

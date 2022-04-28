@@ -7,6 +7,7 @@ import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
+import { urmErrorMessages } from '../Errors/errors';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 
@@ -135,19 +136,19 @@ export default class CreateRole extends Component {
 
         if (this.state.role.length < 6) {
             isFormValid = false
-            errors["role"] = "/ Role Must be 6 characters long"
+            errors["role"] = urmErrorMessages.roleName
             this.setState({roleValid: false})
         }
 
         if (this.state.description === "") {
             isFormValid = false
-            errors["description"] = "/ Enter the Description"
+            errors["description"] = urmErrorMessages.description
             this.setState({descriptionValid: false})
         }
 
         if (this.state.domain === "") {
             isFormValid = false
-            errors["domain"] = "/ Select the Domain"
+            errors["domain"] = urmErrorMessages.domain
             this.setState({domainValid: false})
         }
 

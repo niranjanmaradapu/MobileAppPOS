@@ -5,7 +5,7 @@ import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
-import { urmErrorMessages } from '../../errors';
+import { urmErrorMessages } from '../Errors/errors';
 import CreateCustomerService from '../services/CreateCustomerService';
 
 var deviceheight = Dimensions.get('window').height;

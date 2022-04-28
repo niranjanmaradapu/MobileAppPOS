@@ -7,7 +7,7 @@ import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
-import { inventoryErrorMessages } from '../../errors';
+import { inventoryErrorMessages } from '../Errors/errors';
 import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
 

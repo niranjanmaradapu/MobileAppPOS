@@ -10,6 +10,7 @@ import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
+import { urmErrorMessages } from '../Errors/errors';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -388,19 +389,19 @@ export default class AddUser extends Component {
         let errors = {}
         if (this.state.name.length < 6) {
             isFormValid = false
-            errors["name"] = "/ Username must be 6 characters long"
+            errors["name"] = urmErrorMessages.userNanme
             this.setState({ nameValid: false })
         }
 
         if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
             isFormValid = false
-            errors["mobile"] = "/ Enter a 10 digit valid mobile number"
+            errors["mobile"] = urmErrorMessages.mobile
             this.setState({mobileValid: false})
         }
 
         if (emailReg.test(this.state.email) === false) {
             isFormValid = false
-            errors["email"] = "/ Enter a valid Email Id"
+            errors["email"] = urmErrorMessages.email
             this.setState({emailValid: false})
         }
 
