@@ -28,7 +28,7 @@ export const inventoryErrorMessages = {
 
 export const accountingErrorMessages = {
   domain: "/ Please select the Domain",
-  store: "/ Please select the store",
+  state: "/ Please select the state",
   district: "/ Please select the district",
   storeName: "/ Store Name must be 6 characters or more",
   gst: "/ Enter the valid GST Number"

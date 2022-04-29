@@ -10,6 +10,7 @@ import Loader from '../../commonUtils/loader';
 import { accountingErrorMessages, urmErrorMessages } from '../Errors/errors';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
+import Message from '../Errors/Message'
 
 var deviceHeight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
@@ -44,6 +45,7 @@ export default class AddStore extends Component {
             isEdit: false,
             errors: {},
             storeValid: true,
+            stateValid: true,
             districtValid: true,
             domianValid: true,
             mobileValid: true,
@@ -124,6 +126,10 @@ export default class AddStore extends Component {
             }
         }
         this.setState({ domain: value });
+
+        if (this.state.domain !== "" && this.state.domain !== undefined) {
+            this.setState({domianValid: true})
+        }
     };
 
 
@@ -172,6 +178,10 @@ export default class AddStore extends Component {
             this.getMasterDistrictsList();
         });
         // });
+
+        if (this.state.storeState !== "" && this.state.storeState !== undefined) {
+            this.setState({stateValid: true})
+        }
     };
 
     getMasterDistrictsList() {
@@ -215,6 +225,10 @@ export default class AddStore extends Component {
             }
         }
         this.setState({ storeDistrict: value });
+
+        if (this.state.storeDistrict !== "" && this.state.storeDistrict !== undefined) {
+            this.setState({districtValid: true})
+        }
     };
 
 
@@ -262,7 +276,6 @@ export default class AddStore extends Component {
             "stateCode": this.state.statecode,
         };
         axios.get(UrmService.getGSTNumber(), { params }).then((res) => {
-            console.error(res.data.result);
             if (res) {
                 if (res.data.result !== null) {
                     this.setState({ gstNumber: res.data.result.gstNumber });
@@ -276,28 +289,30 @@ export default class AddStore extends Component {
     validationForm() {
         let errors = {}
         let formIsValid = true
+        console.log(this.state.domain)
+             const mobReg = /^[0-9\b]+$/;
 
-        if (this.state.storeState === "") {
-            errors["store"] = accountingErrorMessages.store
+        if (this.state.storeState === "" || this.state.storeState === undefined) {
+            errors["state"] = accountingErrorMessages.state
             formIsValid = false
-            this.setState({storeValid: false})
+            this.setState({stateValid: false})
         }
         if (this.state.storeDistrict === "") {
             errors["district"] = accountingErrorMessages.district
             formIsValid = false
             this.setState({districtValid: false})
         }
-        if (this.state.domain === "") {
+        if (this.state.domain === "" || this.state.domain === undefined) {
             errors["domain"] = accountingErrorMessages.domain
             formIsValid = false
             this.setState({domianValid: false})
         }
-        if (this.state.storeName === "") {
-            errors["store"] = accountingErrorMessages.store
+        if (this.state.storeName === "" || this.state.storeName === undefined) {
+            errors["store"] = accountingErrorMessages.storeName
             formIsValid = false
             this.setState({storeValid: false})
         }
-        if (this.state.mobile.length === 0 || this.state.mobile.length < 10) {
+        if (mobReg.test(this.state.mobile) === false || this.state.mobile.length < 10) {
             errors["mobile"] = urmErrorMessages.mobile
             formIsValid = false
             this.setState({mobileValid: false})
@@ -312,21 +327,28 @@ export default class AddStore extends Component {
         return formIsValid
     }
 
-    saveStore() {
-        if (this.state.storeState === "") {
-            alert("Please Enter All Mandatory Fields");
-        } else if (this.state.storeDistrict === "") {
-            alert("Please Enter All Mandatory Fields");
-        } else if (this.state.domain === "") {
-            alert("Please Enter All Mandatory Fields");
-        } else if (this.state.storeName === "") {
-            alert("Please Enter All Mandatory Fields");
-        } else if (this.state.mobile.length === 0 || this.state.mobile.length < 10) {
-            alert("Please Enter a valid 10 digit mobile number");
-        } else if (this.state.gstNumber.length === 0) {
-            alert("Please Enter GST Number");
+    handleGstNumberValid = () => {
+        if (this.state.gstNumber.length !== 0) {
+            this.setState({gstValid: true})
         }
-        else {
+    }
+
+    handleStoreNameValid = () => {
+        if (this.state.storeName.length >= 6) {
+            this.setState({storeValid: true})
+        }
+    }
+
+    handleMobileValid = () => {
+        const mobReg = /^[0-9\b]+$/;
+        if (this.state.mobile.length >= 10 && mobReg.test(this.state.mobile) === true) {
+            this.setState({mobileValid: true})
+        }
+    }
+
+    saveStore() {
+        const formIsValid = this.validationForm()
+        if (formIsValid) {
             if (this.state.isEdit === false) {
                 const saveObj = {
                     "name": this.state.storeName,
@@ -402,6 +424,12 @@ export default class AddStore extends Component {
 
 
     render() {
+        const storeValid = this.state.storeValid
+        const districtValid = this.state.districtValid
+        const mobileValid = this.state.mobileValid
+        const domianValid = this.state.domianValid
+        const stateValid = this.state.stateValid
+        const gstValid = this.state.gstValid
         return (
             <View style={styles.mainContainer}>
                 {this.state.loading &&
@@ -426,39 +454,41 @@ export default class AddStore extends Component {
                         }}
                     >{I18n.t("Store Details")}</Text>
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("State")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                    <View style={stateValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'STATE'
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={stateValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.states}
                             onValueChange={this.handleStoreState}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={stateValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.storeState}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    {!stateValid && <Message message={this.state.errors["state"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("District")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                    <View style={districtValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'DISTRICT'
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={districtValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.dictricts}
                             onValueChange={this.handleDistrict}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={districtValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.storeDistrict}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    {!districtValid && <Message message={this.state.errors["district"]} />}
                     <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("City")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -470,6 +500,7 @@ export default class AddStore extends Component {
                         value={this.state.city}
                         onChangeText={this.handleCity}
                     />
+
                     <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Area")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -483,18 +514,20 @@ export default class AddStore extends Component {
                     />
                     <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Store Phone Number")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={mobileValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Phone Number")}
                         maxLength={10}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={mobileValid ? "#6F6F6F" : "#dd0000"}
                         textAlignVertical="center"
                         autoCapitalize="none"
+                        onBlur={this.handleMobileValid}
                         value={this.state.mobile}
                         onChangeText={this.handleMobile}
                     />
+                    {!mobileValid && <Message message={this.state.errors["mobile"]} />}
                     <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{("Address")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -515,33 +548,36 @@ export default class AddStore extends Component {
                         }}
                     >{I18n.t("Store Info")}</Text>
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("Domain")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                    <View style={domianValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
                                 label: 'DOMAIN'
                             }}
                             Icon={() => {
-                                return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                                return <Chevron style={styles.imagealign} size={1.5} color={domianValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.domains}
                             onValueChange={this.handleDomain}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={domianValid ? pickerSelectStyles : pickerSelectStylesErrors}
                             value={this.state.domain}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
+                    {!domianValid && <Message message={this.state.errors["domain"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("Store Name")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={storeValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("STORE NAME")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={storeValid ? "#6F6F6F" : "#dd0000"}
                         textAlignVertical="center"
                         autoCapitalize="none"
+                        onBlur={this.handleStoreNameValid}
                         value={this.state.storeName}
                         onChangeText={this.handleStoreName}
                     />
+                    {!storeValid && <Message message={this.state.errors["store"]} />}
                     {this.state.isEdit === true && (
                         <TextInput
                             style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
@@ -559,13 +595,14 @@ export default class AddStore extends Component {
                         <View>
                             <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("GST Number")}</Text>
                             <TextInput
-                                style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                                style={gstValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                                 underlineColorAndroid="transparent"
                                 placeholder={I18n.t("GST NUMBER")}
-                                placeholderTextColor="#6F6F6F"
+                                placeholderTextColor={gstValid ? "#6F6F6F" : "#dd0000"}
                                 textAlignVertical="center"
                                 autoCapitalize="none"
                                 value={this.state.gstNumber}
+                                onBlur={this.handleGstNumberValid}
                                 onChangeText={this.handleGstNumber}
                             />
                             <Text style={{ color: '#aa0000', fontSize: Device.isTablet ? 20 : 15, marginTop: 10, marginBottom: 20, marginLeft: 20 }}>{I18n.t("Please Provide GST Number")}</Text>
@@ -588,89 +625,64 @@ export default class AddStore extends Component {
 }
 
 
-const pickerSelectStyles_mobile = StyleSheet.create({
+const pickerSelectStyles = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 42,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
     },
 });
 
-const pickerSelectStyles_tablet = StyleSheet.create({
+const pickerSelectStylesErrors = StyleSheet.create({
     placeholder: {
-        color: "#6F6F6F",
+        color: "#dd0000",
         fontFamily: "regular",
-        fontSize: 20,
+        fontSize: Device.isTablet ? 20 : 15,
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 52,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 52,
+        height: Device.isTablet ? 50 : 40,
         borderRadius: 3,
-        borderWidth: 1,
+        borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
+        fontSize: Device.isTablet ? 20 : 15,
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
     },
 });
+
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -700,6 +712,35 @@ const styles = StyleSheet.create({
         top: 30,
         width: 40,
         height: 40,
+    },
+    inputError_mobile: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
+    rnSelectContainerError_mobile: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
     },
     headerTitle_mobile: {
         position: 'absolute',
@@ -837,6 +878,35 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    rnSelectContainerError_tablet: {
+        justifyContent: 'center',
+        margin: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 20,
+    },
+    inputError_tablet: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: 54,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
         fontSize: 20,
