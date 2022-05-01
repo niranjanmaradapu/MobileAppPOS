@@ -9,7 +9,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import ProfileService from '../services/ProfileService';
-import { urmErrorMessages } from '../Errors/errors';
+import { errorLength, urmErrorMessages } from '../Errors/errors';
 import UrmService from '../services/UrmService';
 import Message from '../Errors/Message';
 var deviceheight = Dimensions.get('window').height;
@@ -93,7 +93,7 @@ export default class Login extends Component {
     };
 
     handleEmailValid = () => {
-        if (this.state.userName.length >= 6) {
+        if (this.state.userName.length >= errorLength.name) {
             this.setState({ userValid: true})
         }
     }
@@ -103,7 +103,7 @@ export default class Login extends Component {
     };
 
     handlePasswordValid = () => {
-        if (this.state.password.length >= 8) {
+        if (this.state.password.length >= errorLength.password) {
             this.setState({passwordValid: true})
         }
     } 
@@ -121,12 +121,12 @@ export default class Login extends Component {
         let isFormValid = true
         let errors = {}
 
-        if (this.state.userName.length < 6) {
+        if (this.state.userName.length < errorLength.name) {
             isFormValid = false
             errors["userName"] = urmErrorMessages.userNanme
             this.setState({userValid: false})
         }
-        if (this.state.password.length < 8) {
+        if (this.state.password.length < errorLength.password) {
             isFormValid = false
             errors["password"] = urmErrorMessages.password
             this.setState({ passwordValid: false})

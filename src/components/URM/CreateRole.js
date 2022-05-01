@@ -7,7 +7,7 @@ import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
-import { accountingErrorMessages, urmErrorMessages } from '../Errors/errors';
+import { accountingErrorMessages, errorLength, urmErrorMessages } from '../Errors/errors';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 import Message from '../Errors/Message';
@@ -120,7 +120,7 @@ export default class CreateRole extends Component {
     }
 
     handleRoleValid = () => {
-        if (this.state.role.length >= 6) {
+        if (this.state.role.length >= errorLength.name) {
             this.setState({roleValid: true})
         }
     }
@@ -135,7 +135,7 @@ export default class CreateRole extends Component {
         let errors = {}
         let isFormValid = true
 
-        if (this.state.role.length < 6) {
+        if (this.state.role.length < errorLength.name) {
             isFormValid = false
             errors["role"] = urmErrorMessages.roleName
             this.setState({roleValid: false})
