@@ -167,20 +167,21 @@ export default class AddStore extends Component {
     }
 
     handleStoreState = (value) => {
-        // this.setState({ stateCode: '' }, () => {
-        for (let i = 0; i < this.state.statesArray.length; i++) {
-            if (this.state.statesArray[i].name === value) {
-                this.setState({ stateId: this.state.statesArray[i].id, statecode: this.state.statesArray[i].code });
+        if (value === "") {
+            this.setState({ stateId: "", storeState: "" })
+        } else {
+            for (let i = 0; i < this.state.statesArray.length; i++) {
+                if (this.state.statesArray[i].name === value) {
+                    this.setState({ stateId: this.state.statesArray[i].id, statecode: this.state.statesArray[i].code });
+                }
             }
-        }
-        this.setState({ storeState: value }, () => {
-            this.getGSTNumber();
-            this.getMasterDistrictsList();
-        });
-        // });
-
-        if (this.state.storeState !== "" && this.state.storeState !== undefined) {
-            this.setState({stateValid: true})
+            this.setState({ storeState: value }, () => {
+                this.getGSTNumber();
+                this.getMasterDistrictsList();
+            });
+            if (this.state.storeState !== "" && this.state.storeState !== undefined) {
+                this.setState({ stateValid: true })
+            }
         }
     };
 
