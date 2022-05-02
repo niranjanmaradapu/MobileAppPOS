@@ -113,7 +113,6 @@ export default class Login extends Component {
     };
 
     registerClient() {
-        // console.log('adsadasdd');
         this.props.navigation.navigate('RegisterClient');
     }
 
