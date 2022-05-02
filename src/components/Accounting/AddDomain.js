@@ -65,15 +65,19 @@ export default class AddDomain extends Component {
     }
 
     handleDomain = (value) => {
-        for (let i = 0; i < this.state.domainsArray.length; i++) {
-            if (this.state.domainsArray[i].name === value) {
-                this.setState({ domainId: this.state.domainsArray[i].id, domainName: value });
-                // this.setState({  });
+        if (value === "" || value === undefined) {
+            this.setState({ domainId: 0, domainName: "" })
+        } else {
+            for (let i = 0; i < this.state.domainsArray.length; i++) {
+                if (this.state.domainsArray[i].name === value) {
+                    this.setState({ domainId: this.state.domainsArray[i].id, domainName: value });
+                    // this.setState({  });
+                }
             }
-        }
 
-        if (this.state.domainName !== "") {
-            this.setState({domainValid: true})
+            if (this.state.domainName !== "") {
+                this.setState({ domainValid: true })
+            }
         }
     };
 

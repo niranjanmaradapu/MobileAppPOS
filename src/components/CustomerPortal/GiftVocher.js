@@ -777,7 +777,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     filterDateButton_tablet: {
-        width: deviceWidth / 2.2,
+        width: deviceWidth / 2.3,
         marginLeft: 20,
         marginRight: 20,
         marginTop: 10,

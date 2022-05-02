@@ -326,75 +326,99 @@ class AddBarcode extends Component {
     }
 
     handleDivision = (value) => {
-        for (let i = 0; i < this.state.divisionArray.length; i++) {
-            if (this.state.divisionArray[i].name === value) {
-                this.setState({ divisionId: this.state.divisionArray[i].id });
+        if (value === "" || value === undefined) {
+            this.setState({ divisionId: 0, division: "" })
+        } else {
+            for (let i = 0; i < this.state.divisionArray.length; i++) {
+                if (this.state.divisionArray[i].name === value) {
+                    this.setState({ divisionId: this.state.divisionArray[i].id });
+                }
             }
-        }
-        this.getAllSections();
-        this.setState({ division: value });
-        if (this.state.divisionId !== null) {
-            this.setState({divisionValid: true})
+            this.getAllSections();
+            this.setState({ division: value });
+            if (this.state.divisionId !== null) {
+                this.setState({ divisionValid: true })
+            }
         }
     };
 
     handleSection = (value) => {
-        for (let i = 0; i < this.state.secionArray.length; i++) {
-            if (this.state.secionArray[i].name === value) {
-                this.setState({ sectionId: this.state.secionArray[i].id });
+        if (value === "" || value === undefined) {
+            this.setState({ sectionId: 0, section: "" })
+        } else {
+            for (let i = 0; i < this.state.secionArray.length; i++) {
+                if (this.state.secionArray[i].name === value) {
+                    this.setState({ sectionId: this.state.secionArray[i].id });
+                }
             }
-        }
-        this.getAllSubsections();
-        this.setState({ section: value });
-        if (this.state.sectionId !== null) {
-            this.setState({sectionValid: true})
+            this.getAllSubsections();
+            this.setState({ section: value });
+            if (this.state.sectionId !== null) {
+                this.setState({ sectionValid: true })
+            }
         }
     };
 
     handleSubSection = (value) => {
-        for (let i = 0; i < this.state.subsecionArray.length; i++) {
-            if (this.state.subsecionArray[i].name === value) {
-                this.setState({ subsectionId: this.state.subsecionArray[i].id });
+        if (value === "" || value === undefined) {
+            this.setState({ subSectionId: 0, subSection: "" })
+        } else {
+            for (let i = 0; i < this.state.subsecionArray.length; i++) {
+                if (this.state.subsecionArray[i].name === value) {
+                    this.setState({ subsectionId: this.state.subsecionArray[i].id });
+                }
             }
-        }
-        this.setState({ subSection: value });
-        if (this.state.subsectionId !== null) {
-            this.setState({subSectionValid: true})
+            this.setState({ subSection: value });
+            if (this.state.subsectionId !== null) {
+                this.setState({ subSectionValid: true })
+            }
         }
     };
     handleCateory = (value) => {
-        for (let i = 0; i < this.state.catogiriesArray.length; i++) {
-            if (this.state.catogiriesArray[i].name === value) {
-                this.setState({ catogirieId: this.state.catogiriesArray[i].id });
+        if (value === "" || value === undefined) {
+            this.setState({ catogirieId: 0, category: "" })
+        } else {
+            for (let i = 0; i < this.state.catogiriesArray.length; i++) {
+                if (this.state.catogiriesArray[i].name === value) {
+                    this.setState({ catogirieId: this.state.catogiriesArray[i].id });
+                }
             }
-        }
-        this.setState({ category: value });
-        if (this.state.catogirieId !== null) {
-            this.setState({categoryValid: true})
+            this.setState({ category: value });
+            if (this.state.catogirieId !== null) {
+                this.setState({ categoryValid: true })
+            }
         }
     };
 
     handleUOM = (value) => {
-        for (let i = 0; i < this.state.uomArray.length; i++) {
-            if (this.state.uomArray[i].name === value) {
-                this.setState({ uomId: this.state.uomArray[i].id });
+        if (value === "" || value === undefined) {
+            this.setState({ uomId: 0, uomName: "" })
+        } else {
+            for (let i = 0; i < this.state.uomArray.length; i++) {
+                if (this.state.uomArray[i].name === value) {
+                    this.setState({ uomId: this.state.uomArray[i].id });
+                }
             }
-        }
-        this.setState({ uomName: value });
-        if (this.state.uomId !== null) {
-            this.setState({uomValid: true})
+            this.setState({ uomName: value });
+            if (this.state.uomId !== null) {
+                this.setState({ uomValid: true })
+            }
         }
     };
 
     handleHSNCode = (value) => {
-        for (let i = 0; i < this.state.hsncodesArray.length; i++) {
-            if (this.state.hsncodesArray[i].name === value) {
-                this.setState({ hsnId: this.state.hsncodesArray[i].id });
+        if (value === "" || value === undefined) {
+            this.setState({ hsnId: 0, hsnCode: "" })
+        } else {
+            for (let i = 0; i < this.state.hsncodesArray.length; i++) {
+                if (this.state.hsncodesArray[i].name === value) {
+                    this.setState({ hsnId: this.state.hsncodesArray[i].id });
+                }
             }
-        }
-        this.setState({ hsnCode: value });
-        if (this.state.hsnId !== null) {
-            this.setState({hsnValid: true})
+            this.setState({ hsnCode: value });
+            if (this.state.hsnId !== null) {
+                this.setState({ hsnValid: true })
+            }
         }
     };
 
@@ -450,15 +474,18 @@ class AddBarcode extends Component {
 
 
     handleStore = (value) => {
-        console.log("value", this.state.storeNamesArray);
-        for (let i = 0; i < this.state.storeNamesArray.length; i++) {
-            if (this.state.storeNamesArray[i].name === value) {
-                this.setState({ selectedstoreId: this.state.storeNamesArray[i].id });
+        if (value === "" || value === undefined) {
+            this.setState({ store: "", selectedstoreId: 0 })
+        } else {
+            console.log("value", this.state.storeNamesArray);
+            for (let i = 0; i < this.state.storeNamesArray.length; i++) {
+                if (this.state.storeNamesArray[i].name === value) {
+                    this.setState({ selectedstoreId: this.state.storeNamesArray[i].id });
+                }
             }
+            console.log(this.state.selectedstoreId);
+            this.setState({ store: value });
         }
-        console.log(this.state.selectedstoreId);
-
-        this.setState({ store: value });
     };
 
     handleEMPId = (value) => {

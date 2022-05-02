@@ -618,7 +618,7 @@ export default class UserManagement extends Component {
                                 style={styles.flatList}
                                 horizontal
                                 data={this.state.privilages}
-                                ListEmptyComponent={ <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.rolesError}</Text>}
+                                ListEmptyComponent={ <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight / 3, marginLeft: deviceWidth / 3 }}>&#9888; privileges not found</Text>}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
                                 renderItem={({ item, index }) => (

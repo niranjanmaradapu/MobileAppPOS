@@ -525,7 +525,7 @@ class Home extends Component {
                                                 <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', color: "#ffffff", fontFamily: 'medium' }}>
                                                     {I18n.t("Today's Sales")}
                                                 </Text>
-                                                <Text style={{ fontSize: Device.isTablet ? 40 : 30, marginTop: 0, color: "#ffffff", fontFamily: 'bold' }}>
+                                                <Text style={{ fontSize: Device.isTablet ? 40 : 30, marginTop: 0, color: "#ffffff", fontFamily: 'bold', maxWidth: Device.isTablet ? 230 : 180 }}>
                                                     ₹ {this.state.toadysSale}
                                                 </Text>
                                             </View>
@@ -552,7 +552,7 @@ class Home extends Component {
                                         <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', color: "#ffffff", fontFamily: 'regular' }}>
                                             {I18n.t("Monthly's Sales")}
                                         </Text>
-                                        <Text style={{ fontSize: Device.isTablet ? 40 : 30, marginTop: 0, color: "#ffffff", fontFamily: 'bold' }}>
+                                        <Text style={{ fontSize: Device.isTablet ? 40 : 30, marginTop: 0, color: "#ffffff", fontFamily: 'bold', maxWidth: Device.isTablet ? 230 : 180 }}>
                                             ₹ {this.state.monthlySale}
                                         </Text>
                                         </View>
@@ -579,7 +579,7 @@ class Home extends Component {
                                         <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', color: "#ffffff", fontFamily: 'regular', }}>
                                             {I18n.t(`This month sales v/s Last month`)}
                                         </Text>
-                                        <Text style={{ fontSize: Device.isTablet ? 40 : 30, marginTop: 0, color: "#ffffff", fontFamily: 'bold' }}>
+                                        <Text style={{ fontSize: Device.isTablet ? 40 : 30, marginTop: 0, color: "#ffffff", fontFamily: 'bold', maxWidth: Device.isTablet ? 230 : 180 }}>
                                             {this.state.thisVsLastMonthSale} %
                                         </Text>
                                         </View>

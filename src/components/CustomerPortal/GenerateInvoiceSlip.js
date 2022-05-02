@@ -769,7 +769,7 @@ class GenerateInvoiceSlip extends Component {
 
                                 {(global.domainName === "Textile" &&
                                     <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between' }}>
-                                        <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.25 : deviceWidth / 1.4 }]}
+                                        <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.35 : deviceWidth / 1.4 }]}
                                             underlineColorAndroid="transparent"
                                             placeholder={I18n.t("Enter ES Number")}
                                             placeholderTextColor="#6F6F6F60"
@@ -782,7 +782,7 @@ class GenerateInvoiceSlip extends Component {
                                             onEndEditing={() => this.endEditing()}
                                         />
                                         <TouchableOpacity
-                                            style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 120 : 80, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: Device.isTablet ? 5 : 10 }}
+                                            style={{ backgroundColor: "#ED1C24", width: Device.isTablet ? 120 : 80, height: Device.isTablet ? 55 : 45, borderRadius: 10, marginTop: Device.isTablet ? 10 : 10 }}
                                             onPress={() => this.navigateToScan()} >
                                             <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 5 : 5 }]}> {I18n.t('SCAN')} </Text>
                                         </TouchableOpacity>

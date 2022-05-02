@@ -120,15 +120,18 @@ export default class AddStore extends Component {
     }
 
     handleDomain = (value) => {
-        for (let i = 0; i < this.state.domainsArray.length; i++) {
-            if (this.state.domainsArray[i].name === value) {
-                this.setState({ domainId: this.state.domainsArray[i].id });
+        if (value === "" || value === undefined) {
+            this.setState({ domainId: 0, domain: "" })
+        } else {
+            for (let i = 0; i < this.state.domainsArray.length; i++) {
+                if (this.state.domainsArray[i].name === value) {
+                    this.setState({ domainId: this.state.domainsArray[i].id });
+                }
             }
-        }
-        this.setState({ domain: value });
-
-        if (this.state.domain !== "" && this.state.domain !== undefined) {
-            this.setState({domianValid: true})
+            this.setState({ domain: value });
+            if (this.state.domain !== "" && this.state.domain !== undefined) {
+                this.setState({ domianValid: true })
+            }
         }
     };
 
@@ -167,8 +170,8 @@ export default class AddStore extends Component {
     }
 
     handleStoreState = (value) => {
-        if (value === "") {
-            this.setState({ stateId: "", storeState: "" })
+        if (value === "" || value === undefined) {
+            this.setState({ stateId: 0, storeState: "", stateCode: "", dictricts: [], dictrictArray: [] })
         } else {
             for (let i = 0; i < this.state.statesArray.length; i++) {
                 if (this.state.statesArray[i].name === value) {
@@ -219,16 +222,19 @@ export default class AddStore extends Component {
     }
 
     handleDistrict = (value) => {
-        for (let i = 0; i < this.state.dictrictArray.length; i++) {
-            if (this.state.dictrictArray[i].name === value) {
-                console.log('district name vinod is' + this.state.dictrictArray[i].id);
-                this.setState({ districtId: this.state.dictrictArray[i].id });
+        if (value === "" || value === undefined) {
+            this.setState({ storeDistrict: "", districtId: ""})
+        } else {
+            for (let i = 0; i < this.state.dictrictArray.length; i++) {
+                if (this.state.dictrictArray[i].name === value) {
+                    console.log('district name vinod is' + this.state.dictrictArray[i].id);
+                    this.setState({ districtId: this.state.dictrictArray[i].id });
+                }
             }
-        }
-        this.setState({ storeDistrict: value });
-
-        if (this.state.storeDistrict !== "" && this.state.storeDistrict !== undefined) {
-            this.setState({districtValid: true})
+            this.setState({ storeDistrict: value });
+            if (this.state.storeDistrict !== "" && this.state.storeDistrict !== undefined) {
+                this.setState({ districtValid: true })
+            }
         }
     };
 
@@ -298,7 +304,7 @@ export default class AddStore extends Component {
             formIsValid = false
             this.setState({stateValid: false})
         }
-        if (this.state.storeDistrict === "") {
+        if (this.state.storeDistrict === "" || this.state.storeDistrict === undefined) {
             errors["district"] = accountingErrorMessages.district
             formIsValid = false
             this.setState({districtValid: false})

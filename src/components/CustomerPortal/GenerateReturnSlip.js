@@ -247,7 +247,7 @@ export default class GenerateReturnSlip extends Component {
         return (
             <View>
                 <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between', marginTop: 20 }}>
-                    <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.25 : deviceWidth / 1.5 }]}
+                    <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.35 : deviceWidth / 1.5 }]}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("INVOICE NUMBER")}
                         placeholderTextColor="#6F6F6F"

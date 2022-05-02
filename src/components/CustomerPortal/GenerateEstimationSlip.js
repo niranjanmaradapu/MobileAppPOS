@@ -412,33 +412,8 @@ class GenerateEstimationSlip extends Component {
                                 marginTop: 10,
                             }}>
                             <View>
-
-                                <View style={{display: 'flex', flexDirection: Device.isTablet ? 'row' : 'column' }} >
-                                    <TextInput style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : {
-                                        justifyContent: 'center',
-                                        margin: 20,
-                                        height: 44,
-                                        marginTop: 5,
-                                        marginBottom: 10,
-                                        borderColor: '#8F9EB717',
-                                        borderRadius: 3,
-                                        backgroundColor: '#FBFBFB',
-                                        borderWidth: 1,
-                                        fontFamily: 'regular',
-                                        paddingLeft: 15,
-                                        fontSize: 18,
-                                    }}
-                                        underlineColorAndroid="transparent"
-                                        placeholder={I18n.t("ENTER BARCODE")}
-                                        placeholderTextColor="#6F6F6F60"
-                                        textAlignVertical="center"
-                                        autoCapitalize="none"
-                                        value={this.state.barcodeId}
-                                        // onEndEditing
-                                        onChangeText={this.handleBarCode}
-                                    // onEndEditing={() => this.endEditing()}
-                                    />
-                                    {/* <RNPickerSelect
+                                <View style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : styles.rnSelectContainer_mobile_newsale}>
+                                    <RNPickerSelect
                                         // style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : styles.rnSelectContainer_mobile_newsale}
                                         placeholder={{
                                             label: 'SELECT UOM',
@@ -456,8 +431,22 @@ class GenerateEstimationSlip extends Component {
                                         value={this.state.uom}
                                         useNativeAndroidPickerStyle={false}
 
-                                    /> */}
-                                <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 350 : 150 }]}
+                                    />
+                                </View>
+
+                                <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
+                                    underlineColorAndroid="transparent"
+                                    placeholder={I18n.t("ENTER BARCODE")}
+                                    placeholderTextColor="#6F6F6F60"
+                                    textAlignVertical="center"
+                                    autoCapitalize="none"
+                                    value={this.state.barcodeId}
+                                    // onEndEditing
+                                    onChangeText={this.handleBarCode}
+                                // onEndEditing={() => this.endEditing()}
+                                />
+
+                                <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 250 : 150 }]}
                                     underlineColorAndroid="transparent"
                                     placeholder={I18n.t("SM Number")}
                                     placeholderTextColor="#6F6F6F60"
@@ -469,23 +458,9 @@ class GenerateEstimationSlip extends Component {
                                     onChangeText={(text) => this.handleSmCode(text)}
                                     onEndEditing={() => this.endEditing()}
                                 />
-                                </View>
-
-                                {/* <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
-                                    underlineColorAndroid="transparent"
-                                    placeholder={I18n.t("ENTER BARCODE")}
-                                    placeholderTextColor="#6F6F6F60"
-                                    textAlignVertical="center"
-                                    autoCapitalize="none"
-                                    value={this.state.barcodeId}
-                                    // onEndEditing
-                                    onChangeText={this.handleBarCode}
-                                // onEndEditing={() => this.endEditing()}
-                                /> */}
-
 
                                 {this.state.uom === "Pieces" && (
-                                    <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 80 }]}
+                                    <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 2.0 : deviceWidth / 2.15, width: Device.isTablet ? 100 : 80 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         placeholderTextColor="#6F6F6F60"
@@ -497,7 +472,7 @@ class GenerateEstimationSlip extends Component {
                                 )}
 
                                 {this.state.uom === "Meters" && (
-                                    <TextInput style={[Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 80 }]}
+                                    <TextInput style={[Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal, { marginLeft: Device.isTablet ? deviceWidth / 2.0 : deviceWidth / 2.15, width: Device.isTablet ? 100 : 80 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         keyboardType={'default'}
@@ -515,10 +490,11 @@ class GenerateEstimationSlip extends Component {
                                         Device.isTablet ? styles.input_tabletbutton_normal : styles.input_mobilebutton_normal
                                     }
                                     onPress={() => this.navigateToScanCode()} >
-                                    <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { marginTop: Device.isTablet ? 0 : 0, marginLeft: Device.isTablet ? -20 : -10 }]}> {I18n.t('SCAN')} </Text>
+                                    <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { marginTop: Device.isTablet ? 10 : 0, marginLeft: Device.isTablet ? -10 : -10 }]}> {I18n.t('SCAN')} </Text>
                                 </TouchableOpacity>
 
                             </View>
+
                             {this.state.itemsList.length !== 0 && (
                                 <FlatList
                                     style={styles.flatList}
@@ -1785,9 +1761,9 @@ const styles = StyleSheet.create({
         fontSize: 22,
     },
     input_tabletbutton_normal: {
-        justifyContent: 'center',
+        // justifyContent: 'center',
         marginLeft: deviceWidth - 145,
-        width: deviceWidth / 4 - 100,
+        width: deviceWidth / 5.5,
         height: 55,
         borderRadius: 10,
         marginTop: -70,
