@@ -68,7 +68,7 @@ export class Stores extends Component {
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >{I18n.t("STORE ID")}: {item.id} </Text>
                                     <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("STORE NAME")}: {"\n"} {item.name}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("DOMAIN")}: {"\n"} {item.clientDomianlId.domaiName} </Text>
+                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("DOMAIN")}: {"\n"} {item.id.domaiName} </Text>
                                 </View>
                                 <View style={flats.text}>
                                     <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("LOCATION")}:  {"\n"} {item.cityId} </Text>

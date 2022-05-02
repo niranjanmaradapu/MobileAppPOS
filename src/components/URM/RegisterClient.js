@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import UrmService from '../services/UrmService';
 import I18n from 'react-native-i18n';
-import { urmErrorMessages } from '../Errors/errors';
+import { errorLength, urmErrorMessages } from '../Errors/errors';
 import Message from '../Errors/Message';
 
 var deviceheight = Dimensions.get('window').height;
@@ -54,7 +54,7 @@ class RegisterClient extends Component {
     };
 
     handleNameValid = () => {
-        if (this.state.name.length >= 6) {
+        if (this.state.name.length >= errorLength.name) {
             this.setState({nameValid: true})
         }
     }
@@ -64,7 +64,7 @@ class RegisterClient extends Component {
     };
 
     handleOrganizationValid = () => {
-        if (this.state.organization.length >= 3) {
+        if (this.state.organization.length >= errorLength.orginisation) {
             this.setState({organizationValid: true})
         }
     }
@@ -74,7 +74,7 @@ class RegisterClient extends Component {
     };
 
     handleMobileValid = () => {
-        if (this.state.mobile.length === 10) {
+        if (this.state.mobile.length === errorLength.mobile) {
             this.setState({mobileValid: true})
         }
     }
@@ -101,13 +101,13 @@ class RegisterClient extends Component {
         const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
         const mobReg = /^[0-9\b]+$/;
 
-        if (this.state.userName.length < 6) { 
+        if (this.state.userName.length < errorLength.name) { 
             formIsValid = false
             errors["userName"] = urmErrorMessages.userNanme
             this.setState({nameValid: false})
         }
 
-        if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
+        if (this.state.mobile.length !== errorLength.mobile || mobReg.test(this.state.mobile) === false) {
             formIsValid = false
             errors["Mobile"] = urmErrorMessages.mobile
             this.setState({mobileValid: false})
@@ -119,7 +119,7 @@ class RegisterClient extends Component {
             this.setState({emailValid: false})
         }
 
-        if (this.state.organization.length < 3) {
+        if (this.state.organization.length < errorLength.orginisation) {
             formIsValid = false
             errors["organization"] = urmErrorMessages.orginisation
             this.setState({organizationValid: false})

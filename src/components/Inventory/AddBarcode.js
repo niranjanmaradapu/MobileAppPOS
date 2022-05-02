@@ -7,7 +7,7 @@ import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
-import { inventoryErrorMessages } from '../Errors/errors';
+import { accountingErrorMessages, errorLength, inventoryErrorMessages } from '../Errors/errors';
 import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
 import Message from '../Errors/Message';
@@ -403,7 +403,7 @@ class AddBarcode extends Component {
     };
 
     handleColourValid = () => {
-        if (this.state.colour.length >= 3) {
+        if (this.state.colour.length >= errorLength.colour) {
             this.setState({colorValid: true})
         }
     }
@@ -413,7 +413,7 @@ class AddBarcode extends Component {
     };
 
     handleNameValid = () => {
-        if (this.state.name.length >= 6) {
+        if (this.state.name.length >= errorLength.name) {
             this.setState({nameValid: true})
         }
     }
@@ -487,7 +487,7 @@ class AddBarcode extends Component {
         let errors = {}
 
         
-        if (this.state.name.length < 6) {
+        if (this.state.name.length < errorLength.name) {
             isFormValid = false
             errors["name"] = inventoryErrorMessages.name
             this.setState({nameValid: false})
@@ -513,7 +513,7 @@ class AddBarcode extends Component {
             errors["category"] = inventoryErrorMessages.category
             this.setState({categoryValid: false})
         }
-        if (String(this.state.colour).length < 3) {
+        if (String(this.state.colour).length < errorLength.colour) {
             isFormValid = false
             errors["color"] = inventoryErrorMessages.colour
             this.setState({colorValid: false})
@@ -543,14 +543,14 @@ class AddBarcode extends Component {
             errors["hsn"] = inventoryErrorMessages.hsnCode
             this.setState({hsnValid: false})
         }
-        if (String(this.state.empId).length < 3) {
+        if (String(this.state.empId).length < errorLength.empId) {
             isFormValid = false
             errors["emp"] = inventoryErrorMessages.empId
             this.setState({empValid: false})
         }
         if (this.state.store === undefined) {
             isFormValid = false
-            errors["store"] = inventoryErrorMessages.store
+            errors["store"] = accountingErrorMessages.store
             this.setState({storeValid: false})
         }
         if (String(this.state.quantity).length === 0) {
@@ -933,6 +933,7 @@ const pickerSelectStylesErrors = StyleSheet.create({
         color: '#001B4A',
     },
 });
+
 const styles = StyleSheet.create({
     mainContainer: {
         backgroundColor: '#ffffff'
