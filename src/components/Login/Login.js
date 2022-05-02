@@ -117,6 +117,7 @@ export default class Login extends Component {
         this.props.navigation.navigate('RegisterClient');
     }
 
+
     validationForm() {
         let isFormValid = true
         let errors = {}
