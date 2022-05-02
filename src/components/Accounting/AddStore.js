@@ -7,7 +7,7 @@ import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
-import { accountingErrorMessages, urmErrorMessages } from '../Errors/errors';
+import { accountingErrorMessages, errorLength, urmErrorMessages } from '../Errors/errors';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 import Message from '../Errors/Message'
@@ -167,20 +167,21 @@ export default class AddStore extends Component {
     }
 
     handleStoreState = (value) => {
-        // this.setState({ stateCode: '' }, () => {
-        for (let i = 0; i < this.state.statesArray.length; i++) {
-            if (this.state.statesArray[i].name === value) {
-                this.setState({ stateId: this.state.statesArray[i].id, statecode: this.state.statesArray[i].code });
+        if (value === "") {
+            this.setState({ stateId: "", storeState: "" })
+        } else {
+            for (let i = 0; i < this.state.statesArray.length; i++) {
+                if (this.state.statesArray[i].name === value) {
+                    this.setState({ stateId: this.state.statesArray[i].id, statecode: this.state.statesArray[i].code });
+                }
             }
-        }
-        this.setState({ storeState: value }, () => {
-            this.getGSTNumber();
-            this.getMasterDistrictsList();
-        });
-        // });
-
-        if (this.state.storeState !== "" && this.state.storeState !== undefined) {
-            this.setState({stateValid: true})
+            this.setState({ storeState: value }, () => {
+                this.getGSTNumber();
+                this.getMasterDistrictsList();
+            });
+            if (this.state.storeState !== "" && this.state.storeState !== undefined) {
+                this.setState({ stateValid: true })
+            }
         }
     };
 
@@ -307,12 +308,12 @@ export default class AddStore extends Component {
             formIsValid = false
             this.setState({domianValid: false})
         }
-        if (this.state.storeName === "" || this.state.storeName === undefined) {
+        if (this.state.storeName.length < errorLength.name || this.state.storeName === undefined) {
             errors["store"] = accountingErrorMessages.storeName
             formIsValid = false
             this.setState({storeValid: false})
         }
-        if (mobReg.test(this.state.mobile) === false || this.state.mobile.length < 10) {
+        if (mobReg.test(this.state.mobile) === false || this.state.mobile.length < errorLength.mobile) {
             errors["mobile"] = urmErrorMessages.mobile
             formIsValid = false
             this.setState({mobileValid: false})
@@ -334,14 +335,14 @@ export default class AddStore extends Component {
     }
 
     handleStoreNameValid = () => {
-        if (this.state.storeName.length >= 6) {
+        if (this.state.storeName.length >= errorLength.name) {
             this.setState({storeValid: true})
         }
     }
 
     handleMobileValid = () => {
         const mobReg = /^[0-9\b]+$/;
-        if (this.state.mobile.length >= 10 && mobReg.test(this.state.mobile) === true) {
+        if (this.state.mobile.length >= errorLength.mobile && mobReg.test(this.state.mobile) === true) {
             this.setState({mobileValid: true})
         }
     }

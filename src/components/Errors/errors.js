@@ -33,3 +33,16 @@ export const accountingErrorMessages = {
   storeName: "/ Store Name must be 6 characters or more",
   gst: "/ Enter the valid GST Number"
 }
+
+export const errorLength = {
+  name: 6,
+  storeName: 6,
+  roleName: 6,
+  barcodeName: 6,
+  mobile: 10,
+  password: 8,
+  smNumber: 4,
+  colour: 3,
+  empId: 3,
+  orginisation: 3,
+}

@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import I18n from 'react-native-i18n';
-import { urmErrorMessages } from '../Errors/errors';
+import { errorLength, urmErrorMessages } from '../Errors/errors';
 import Message from '../Errors/Message';
 
 var deviceheight = Dimensions.get('window').height;
@@ -62,7 +62,7 @@ class UpdateNewpassword extends Component {
         let isFormValid = true
         let errors = {}
 
-        if (this.state.code.length < 8) {
+        if (this.state.code.length < errorLength.password) {
             isFormValid = false
             errors["password1"] = urmErrorMessages.password
             this.setState({newPasswordValid: false})

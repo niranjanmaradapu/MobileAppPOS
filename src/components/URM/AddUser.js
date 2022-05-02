@@ -10,7 +10,7 @@ import { Chevron } from 'react-native-shapes';
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
-import { urmErrorMessages } from '../Errors/errors';
+import { errorLength, urmErrorMessages } from '../Errors/errors';
 import Message from '../Errors/Message';
 
 var deviceWidth = Dimensions.get('window').width;
@@ -372,13 +372,13 @@ export default class AddUser extends Component {
     }
 
     handleMobileValid = () => {
-        if (this.state.mobile.length >= 10) {
+        if (this.state.mobile.length >= errorLength.mobile) {
             this.setState({mobileValid: true})
         }
     }
 
     handleNameValid = () => {
-        if (this.state.name.length >= 6) {
+        if (this.state.name.length >= errorLength.name) {
             this.setState({nameValid: true})
         }
     }
@@ -388,13 +388,13 @@ export default class AddUser extends Component {
         const mobReg = /^[0-9\b]+$/;
         let isFormValid = true
         let errors = {}
-        if (this.state.name.length < 6) {
+        if (this.state.name.length < errorLength.name) {
             isFormValid = false
             errors["name"] = urmErrorMessages.userNanme
             this.setState({ nameValid: false })
         }
 
-        if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
+        if (this.state.mobile.length !== errorLength.mobile || mobReg.test(this.state.mobile) === false) {
             isFormValid = false
             errors["mobile"] = urmErrorMessages.mobile
             this.setState({mobileValid: false})
