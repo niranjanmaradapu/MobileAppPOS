@@ -99,7 +99,7 @@ export default class Login extends Component {
         this.props.navigation.navigate('RegisterClient');
     }
 
-    login() {
+    login() { 
         AsyncStorage.removeItem('tokenkey');
         if (this.state.userName.length === 0) {
             alert('You must enter a Usename');
