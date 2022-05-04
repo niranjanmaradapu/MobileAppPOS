@@ -19,7 +19,9 @@ import Loader from '../../commonUtils/loader';
 import CreateCustomerService from '../services/CreateCustomerService';
 import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
-import NewSaleService from '../services/NewSaleService';
+import NewSaleService from '../services/NewSaleService'
+import { RH, RW,RF } from '../../Responsive';
+
 var deviceWidth = Dimensions.get('window').width;
 // Connction to access the pre-populated db
 const db = openDatabase({ name: 'tbl_items.db', createFromLocation: 1 });
@@ -1645,13 +1647,13 @@ class InventoryRetail extends Component {
               showsHorizontalScrollIndicator={false}
               renderItem={({ item, index }) => (
                 <TouchableOpacity style={{
-                  height: 36,
-                  width: 200,
+                  height: RH(36),
+                  width: RW(200),
                   borderWidth: 1,
                   backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
                   borderColor: item.bool ? '#ED1C24' : '#858585',
                   borderRadius: 5,
-                  marginLeft: 10,
+                  marginLeft: RW(10),
                 }} onPress={() => this.topbarAction1(item, index)} >
 
                   <Text style={{ fontSize: 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
@@ -1659,7 +1661,7 @@ class InventoryRetail extends Component {
                   </Text>
                 </TouchableOpacity>
               )}
-              ListFooterComponent={<View style={{ width: 15 }}></View>}
+              ListFooterComponent={<View style={{ width: RW(15) }}></View>}
             />
 
 
@@ -1678,15 +1680,15 @@ class InventoryRetail extends Component {
                     flex: 1, justifyContent: 'center', //Centered horizontally
                     alignItems: 'center', color: '#ffffff'
                   }}>
-                    <View style={{ flexDirection: 'column', flex: 0, marginLeft: 0, marginTop: 30, marginRight: 0, backgroundColor: "#ffffff", borderRadius: 20, }}>
+                    <View style={{ flexDirection: 'column', flex: 0, marginLeft: 0, marginTop: RH(30), marginRight: 0, backgroundColor: "#ffffff", borderRadius: 20, }}>
 
                       <Image
-                        style={{ width: 80, height: 80, resizeMode: "cover", borderRadius: 40, borderColor: '#F2F2F2', alignSelf: 'center', borderWidth: 2, }}
+                        style={{ width: RW(80), height: RH(80), resizeMode: "cover", borderRadius: 40, borderColor: '#F2F2F2', alignSelf: 'center', borderWidth: 2, }}
                         source={this.state.image}
                       />
-                      <TouchableOpacity style={{ width: 30, height: 30, borderRadius: 10, alignSelf: 'center', top: -20, left: 15 }} onPress={() => this.imageAction()}>
+                      <TouchableOpacity style={{ width: RW(30), height: RH(30), borderRadius: 10, alignSelf: 'center', top: -RH(20), left: RW(15) }} onPress={() => this.imageAction()}>
                         <Image
-                          style={{ width: 30, height: 30, borderRadius: 10, }}
+                          style={{ width: RW(30), height: RH(30), borderRadius: 10, }}
                           source={require('../assets/images/cameraclick.png')} />
 
                       </TouchableOpacity>
@@ -1703,16 +1705,16 @@ class InventoryRetail extends Component {
                             }}>
                               <View style={{
                                 position: 'absolute',
-                                right: 20,
-                                left: 20,
+                                right: RW(20),
+                                left: RW(20),
                                 alignItems: 'center',
                                 justifyContent: 'flex-start',
                                 backgroundColor: "#ffffff", borderRadius: 20,
                               }}>
                                 <TouchableOpacity
-                                  style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: 200, marginTop: 20, height: 32, alignSelf: 'center' }}
+                                  style={{ backgroundColor: '#ED1C24', borderRadius: 5, width: RW(200), marginTop: RH(20), height: RH(32), alignSelf: 'center' }}
                                   onPress={() => this.pickSingleWithCameraForProductsAdd(true)} >
-                                  <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('Select Product Image With Camera')} </Text>
+                                  <Text style={{ fontSize: RF(12), fontFamily: 'regular', color: '#ffffff', marginLeft: RW(10), marginTop: RH(8), alignSelf: 'center' }}> {('Select Product Image With Camera')} </Text>
                                 </TouchableOpacity>
 
                                 <TouchableOpacity

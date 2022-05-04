@@ -11,6 +11,7 @@ import { accountingErrorMessages, errorLength, inventoryErrorMessages } from '..
 import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
 import Message from '../Errors/Message';
+import {RH,RW,RF} from '../../Responsive';
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
@@ -638,7 +639,7 @@ class AddBarcode extends Component {
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t("Add Barcode")} </Text>
                 </View>
                 <ScrollView>
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Division")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Division")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={divisionValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -655,7 +656,7 @@ class AddBarcode extends Component {
                         />
                     </View>
                             {!divisionValid && <Message message={this.state.errors["divison"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={sectionValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -672,7 +673,7 @@ class AddBarcode extends Component {
                         />
                     </View>
                         {!sectionValid && <Message message={this.state.errors["section"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Sub Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Sub Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={subSectionValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -689,7 +690,7 @@ class AddBarcode extends Component {
                         />
                     </View>
                         {!subSectionValid && <Message message={this.state.errors["subSection"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Category")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Category")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={categoryValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -706,7 +707,7 @@ class AddBarcode extends Component {
                         />
                     </View>
                         {!categoryValid && <Message message={this.state.errors["category"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> {I18n.t("Colour")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}> {I18n.t("Colour")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={colorValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
@@ -720,7 +721,7 @@ class AddBarcode extends Component {
                         onChangeText={this.handleColour}
                     />
                     {!colorValid && <Message message={this.state.errors["color"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}> {I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}> {I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={nameValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
@@ -734,7 +735,7 @@ class AddBarcode extends Component {
                         onChangeText={this.handleName}
                     />
                     {!nameValid && <Message message={this.state.errors["name"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Batch No")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Batch No")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={batchNoValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
@@ -748,7 +749,7 @@ class AddBarcode extends Component {
                         onChangeText={this.handleBatchNo}
                     />
                     {!batchNoValid && <Message message={this.state.errors["batchNo"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Cost Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Cost Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={costPriceValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
@@ -764,7 +765,7 @@ class AddBarcode extends Component {
                         onChangeText={this.handleCostPrice}
                     />
                     {!costPriceValid && <Message message={this.state.errors["costPrice"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("List Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("List Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={listPriceValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
@@ -780,7 +781,7 @@ class AddBarcode extends Component {
                         onBlur={this.handleListPriceValid}
                     />
                     {!listPriceValid && <Message message={this.state.errors["listPrice"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("UOM")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("UOM")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={uomValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -797,7 +798,7 @@ class AddBarcode extends Component {
                         />
                     </View>
                     {!uomValid && <Message message={this.state.errors["uom"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("HSN Code")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("HSN Code")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={hsnValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -814,7 +815,7 @@ class AddBarcode extends Component {
                         />
                     </View>
                     {!hsnValid && <Message message={this.state.errors["hsn"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("EMP ID")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("EMP ID")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={empValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
@@ -828,7 +829,7 @@ class AddBarcode extends Component {
                         onChangeText={this.handleEMPId}
                     />
                     {!empValid && <Message message={this.state.errors["emp"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Store")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Store")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={storeValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
                             placeholder={{
@@ -845,7 +846,7 @@ class AddBarcode extends Component {
                         />
                     </View>
                     {!storeValid && <Message message={this.state.errors["store"]} />}
-                    <Text style={{ marginTop: 10, marginBottom: 10, marginLeft: 20, fontSize: Device.isTablet ? 20 : 15 }}>QTY <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>QTY <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={storeValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
@@ -880,25 +881,25 @@ const pickerSelectStyles = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
-        fontSize: Device.isTablet ? 20 : 15,
+        fontSize: Device.isTablet ? 20 : RF(15),
     },
     inputIOS: {
         justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
+        height: Device.isTablet ? 50 : RF(40),
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
+        fontSize: Device.isTablet ? 20 : RF(15),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
+        height: Device.isTablet ? 50 : RH(40),
         borderRadius: 3,
         borderWidth: 1,
         fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
+        fontSize: Device.isTablet ? 20 : RF(15),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
@@ -909,25 +910,25 @@ const pickerSelectStylesErrors = StyleSheet.create({
     placeholder: {
         color: "#dd0000",
         fontFamily: "regular",
-        fontSize: Device.isTablet ? 20 : 15,
+        fontSize: Device.isTablet ? 20 : RF(15),
     },
     inputIOS: {
         justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
+        height: Device.isTablet ? 50 : RH(40),
         borderRadius: 3,
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
+        fontSize: Device.isTablet ? 20 : RF(15),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
+        height: Device.isTablet ? 50 : RH(40),
         borderRadius: 3,
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
+        fontSize: Device.isTablet ? 20 : (15),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
@@ -939,16 +940,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff'
     },
     imagealign: {
-        marginTop: Device.isTablet ? 25 : 20,
-        marginRight: Device.isTablet ? 30 : 20,
+        marginTop: Device.isTablet ? 25 : RW(20),
+        marginRight: Device.isTablet ? 30 :RW(20),
     },
     bottomContainer: {
         margin: 50,
     },
     errorRecords: {
         color: '#dd0000',
-        fontSize: Device.isTablet ? 17 : 12,
-        marginLeft: 30,
+        fontSize: Device.isTablet ? 17 : RW(12),
+        marginLeft: RW(30),
     },
 
     // Styles For Mobiles
@@ -956,104 +957,104 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',
-        fontSize: 24,
-        height: 70,
+        fontSize: RF(24),
+        height: RH(70),
     },
     backButton_mobile: {
         position: 'absolute',
         left: 10,
         top: 10,
-        width: 40,
-        height: 40,
+        width: RW(40),
+        height: RH(40),
     },
     headerTitle_mobile: {
         position: 'absolute',
-        left: 70,
-        top: 27,
-        width: 300,
-        height: 20,
+        left: RW(70),
+        top: RW(27),
+        width: RW(300),
+        height: RH(20),
         fontFamily: 'bold',
-        fontSize: 18,
+        fontSize: RF(18),
         color: '#353C40'
     },
     input_mobile: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(44),
+        marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
+        paddingLeft: RW(15),
+        fontSize: RF(14),
     },
     inputError_mobile: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(44),
+        marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#dd0000',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
+        paddingLeft: RW(15),
+        fontSize: RF(14),
     },
     rnSelect_mobile: {
         color: '#8F9EB7',
-        fontSize: 15
+        fontSize: RF(15)
     },
     rnSelectContainer_mobile: {
         justifyContent: 'center',
-        margin: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
+        margin: RW(20),
+        height: RH(44),
+        marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
+        paddingLeft: RW(15),
+        fontSize: RF(14),
     },
     rnSelectContainerError_mobile: {
         justifyContent: 'center',
-        margin: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
+        margin: RW(20),
+        height: RH(44),
+        marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#dd0000',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
+        paddingLeft: RW(15),
+        fontSize: RF(14),
     },
     saveButton_mobile: {
-        margin: 8,
-        height: 50,
+        margin: RH(8),
+        height: RH(50),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     saveButtonText_mobile: {
         textAlign: 'center',
-        marginTop: 15,
+        marginTop: RH(15),
         color: "#ffffff",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     cancelButton_mobile: {
-        margin: 8,
-        height: 50,
+        margin: RH(8),
+        height: RW(50),
         backgroundColor: "#ffffff",
         borderRadius: 5,
         borderWidth: 1,
@@ -1061,9 +1062,9 @@ const styles = StyleSheet.create({
     },
     cancelButtonText_mobile: {
         textAlign: 'center',
-        marginTop: 15,
+        marginTop: RH(15),
         color: "#353C4050",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
 
@@ -1072,55 +1073,55 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',
-        fontSize: 28,
-        height: 90,
+        fontSize: RF(28),
+        height: RH(90),
     },
     backButton_tablet: {
         position: 'absolute',
-        left: 10,
-        top: 20,
-        width: 90,
-        height: 90,
+        left: RW(10),
+        top: RW(20),
+        width: RW(90),
+        height: RH(90),
     },
     headerTitle_tablet: {
         position: 'absolute',
-        left: 70,
-        top: 32,
-        width: 300,
-        height: 40,
+        left: RW(70),
+        top: RH(32),
+        width: RW(300),
+        height: RH(40),
         fontFamily: 'bold',
-        fontSize: 24,
+        fontSize: RF(24),
         color: '#353C40'
     },
     input_tablet: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(54),
         marginTop: 5,
-        marginBottom: 10,
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
+        paddingLeft: RW(15),
+        fontSize: RF(20),
     },
     inputError_tablet: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(54),
         marginTop: 5,
-        marginBottom: 10,
+        marginBottom: RH(10),
         borderColor: '#dd0000',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 2,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
+        paddingLeft: RW(15),
+        fontSize: RF(20),
     },
     rnSelect_tablet: {
         color: '#8F9EB7',
@@ -1128,35 +1129,35 @@ const styles = StyleSheet.create({
     },
     rnSelectContainer_tablet: {
         justifyContent: 'center',
-        margin: 20,
-        height: 54,
+        margin: RH(20),
+        height: RH(54),
         marginTop: 5,
-        marginBottom: 10,
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
+        paddingLeft: RH(15),
+        fontSize: RF(20),
     },
     rnSelectContainerError_tablet: {
         justifyContent: 'center',
-        margin: 20,
-        height: 54,
+        margin: RW(20),
+        height: RH(54),
         marginTop: 5,
-        marginBottom: 10,
+        marginBottom: RH(10),
         borderColor: '#dd0000',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 20,
+        fontSize: RF(20),
     },
     saveButton_tablet: {
-        margin: 8,
-        height: 60,
+        margin: RH(8),
+        height: RH(60),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
@@ -1164,12 +1165,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 15,
         color: "#ffffff",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     cancelButton_tablet: {
-        margin: 8,
-        height: 60,
+        margin: RW(8),
+        height: RH(60),
         backgroundColor: "#ffffff",
         borderRadius: 5,
         borderWidth: 1,
@@ -1177,9 +1178,9 @@ const styles = StyleSheet.create({
     },
     cancelButtonText_tablet: {
         textAlign: 'center',
-        marginTop: 15,
+        marginTop: RH(15),
         color: "#353C4050",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
 });

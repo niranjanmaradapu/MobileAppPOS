@@ -12,6 +12,7 @@ import { ActivityIndicator } from 'react-native-paper';
 import Loader from "../../commonUtils/loader";
 import InventoryService from '../services/InventoryService';
 import UrmService from '../services/UrmService';
+import { RH, RW,RF } from '../../Responsive';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -127,12 +128,12 @@ export default class Inventory extends Component {
                                             console.log(previlage.subPrivillages[i].parentPrivillageId);
                                             if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                                 let subprivilage = previlage.subPrivillages[i];
-                                                this.state.headerNames.push({name: subprivilage.name})
+                                                this.state.headerNames.push({ name: subprivilage.name })
                                             }
                                         }
-                                        this.setState({headerNames: this.state.headerNames}, () => {
-                                            for (let j = 0; j < this.state.headerNames.length; j++){
-                                                if(this.state.headerNames[j].name === "Product Combo") {}
+                                        this.setState({ headerNames: this.state.headerNames }, () => {
+                                            for (let j = 0; j < this.state.headerNames.length; j++) {
+                                                if (this.state.headerNames[j].name === "Product Combo") { }
                                                 else if (j === 0) {
                                                     this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
                                                 }
@@ -142,19 +143,19 @@ export default class Inventory extends Component {
                                             }
                                         })
                                     }
-                                    this.setState({ privilages: this.state.privilages }, () =>{
+                                    this.setState({ privilages: this.state.privilages }, () => {
                                         if (this.state.privilages.length > 0) {
-                                            if(this.state.privilages[0].name === "Barcode List"){
+                                            if (this.state.privilages[0].name === "Barcode List") {
                                                 this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
                                                 this.getAllBarcodes();
-                                                this.setState({flagOne:true,flagTwo:false})
-                                            }else  if(this.state.privilages[0].name === "Re-Barcode List"){
-                                                this.setState({flagOne:false,flagTwo:true})
+                                                this.setState({ flagOne: true, flagTwo: false })
+                                            } else if (this.state.privilages[0].name === "Re-Barcode List") {
+                                                this.setState({ flagOne: false, flagTwo: true })
                                                 this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
                                                 this.getbarcodeTexttileAdjustments();
                                             }
-                                            }
-                                            });
+                                        }
+                                    });
                                 }
                             }
                         }
@@ -177,38 +178,38 @@ export default class Inventory extends Component {
                                             for (let i = 0; i < length; i++) {
                                                 if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
                                                     let subprivilage = res.data["result"].subPrivilages[i];
-                                                this.state.headerNames.push({name: subprivilage.name})
+                                                    this.state.headerNames.push({ name: subprivilage.name })
                                                 }
                                             }
-                                            this.setState({headerNames: this.state.headerNames}, () => {
-                                                for (let j = 0; j < this.state.headerNames.length; j++){
-                                            if(this.state.headerNames[j].name === "Product Combo") {}
-                                            else if (j === 0) {
-                                                this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                                            }
-                                            else {
-                                                this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
-                                            }
-                                        }
-                                    })
-                                            this.setState({ privilages: this.state.privilages }, () =>{
+                                            this.setState({ headerNames: this.state.headerNames }, () => {
+                                                for (let j = 0; j < this.state.headerNames.length; j++) {
+                                                    if (this.state.headerNames[j].name === "Product Combo") { }
+                                                    else if (j === 0) {
+                                                        this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                                    }
+                                                    else {
+                                                        this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                                    }
+                                                }
+                                            })
+                                            this.setState({ privilages: this.state.privilages }, () => {
                                                 if (this.state.privilages.length > 0) {
-                                                if(this.state.privilages[0].name === "Barcode List"){
-                                                    this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
-                                                    this.getAllBarcodes();
-                                                    this.setState({flagOne:true,flagTwo:false})
-                                                }else  if(this.state.privilages[0].name === "Re-Barcode List"){
-                                                    this.setState({flagOne:false,flagTwo:true})
-                                                    this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
-                                                    this.getbarcodeTexttileAdjustments();
+                                                    if (this.state.privilages[0].name === "Barcode List") {
+                                                        this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
+                                                        this.getAllBarcodes();
+                                                        this.setState({ flagOne: true, flagTwo: false })
+                                                    } else if (this.state.privilages[0].name === "Re-Barcode List") {
+                                                        this.setState({ flagOne: false, flagTwo: true })
+                                                        this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
+                                                        this.getbarcodeTexttileAdjustments();
+                                                    }
                                                 }
-                                            }
                                             });
                                         }
                                     }
                                 }
                             }
-                      
+
                         }
                     });
                 }).catch(() => {
@@ -239,9 +240,9 @@ export default class Inventory extends Component {
         axios.post(InventoryService.getTextileBarcodes() + '?page=' + parseInt(this.state.pageNo) + '&size=10', params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 if (res.data["result"]) {
-                    this.setState({ loading: false, barcodesData:this.state.barcodesData.concat( res.data.result.content), error: "" });
+                    this.setState({ loading: false, barcodesData: this.state.barcodesData.concat(res.data.result.content), error: "" });
                     console.log(res.data.result);
-                    console.warn("BarList",this.state.barcodesData)
+                    console.warn("BarList", this.state.barcodesData)
                 }
                 if (res.data.result.length === 0) {
                     this.setState({ error: "Records Not Found" });
@@ -263,7 +264,7 @@ export default class Inventory extends Component {
         };
         console.log(params);
         this.setState({ loading: true });
-        axios.post(InventoryService.getbarcodeTexttileAdjustments()+ '?page=' + parseInt(this.state.pageNo) + '&size=10', params).then((res) => {
+        axios.post(InventoryService.getbarcodeTexttileAdjustments() + '?page=' + parseInt(this.state.pageNo) + '&size=10', params).then((res) => {
             if (res.data && res.data["isSuccess"] === "true") {
                 console.log(res.data["result"]);
                 if (res.data["result"]) {
@@ -435,16 +436,16 @@ export default class Inventory extends Component {
                 for (var i = 0; i < res.data["result"].length; i++) {
                     this.state.barcodesData.push(res.data["result"][i]);
                 }
-                this.setState({ barcodesData: this.state.barcodesData, filterActive: true});
+                this.setState({ barcodesData: this.state.barcodesData, filterActive: true });
             } else {
                 console.log("records not found");
-                this.setState({barcodesData: [], filterActive: true });
+                this.setState({ barcodesData: [], filterActive: true });
             }
         }).catch((err) => {
             this.setState({ loading: false });
             console.log("no records found");
             console.log(err);
-            this.setState({ barcodesData: [] , filterActive: true});
+            this.setState({ barcodesData: [], filterActive: true });
 
         });
         this.setState({ modalVisible: false });
@@ -470,14 +471,14 @@ export default class Inventory extends Component {
                 }
                 this.setState({ reBarcodesData: this.state.reBarcodesData, filterActive: true });
             } else {
-                this.setState({reBarcodesData: [], filterActive: true})
+                this.setState({ reBarcodesData: [], filterActive: true })
                 console.log("results not found");
             }
         }).catch((err) => {
             this.setState({ loading: false });
             console.log("no records found");
             console.log(err);
-            this.setState({reBarcodesData: [], filterActive: true})
+            this.setState({ reBarcodesData: [], filterActive: true })
         });
 
 
@@ -536,25 +537,25 @@ export default class Inventory extends Component {
         };
         console.log("cssafsfssdsfdsfsdsadasd" + this.state.storeId);
         console.error("params", params,);
-        axios.get(InventoryService.getTextileBarcodesDetails(), { params } ).then((res) => {
+        axios.get(InventoryService.getTextileBarcodesDetails(), { params }).then((res) => {
             if (res) {
                 console.log("response edit", res);
                 if (res.data && res.data["isSuccess"] === "true") {
                     if (res.data["result"]) {
                         //  this.setState({ loading: false })
                         // for (var i = 0; i < res.data["result"].length; i++) {
-                            this.state.barcodesData.push(res.data["result"]);
-                            // console.log(res.data["result"][i].productTextile.empId)
-                            this.props.navigation.navigate('ViewReBarcode'
+                        this.state.barcodesData.push(res.data["result"]);
+                        // console.log(res.data["result"][i].productTextile.empId)
+                        this.props.navigation.navigate('ViewReBarcode'
                             , {
                                 item: res.data["result"], isEdit: true,
                                 onGoBack: () => this.updateBarcodes(),
                             });
-                            
-                            }
-                        // }
-                        
-                        console.log(res.data)
+
+                    }
+                    // }
+
+                    console.log(res.data)
                     this.setState({ barcodesData: this.state.barcodesData });
 
                 }
@@ -597,17 +598,17 @@ export default class Inventory extends Component {
                 onGoBack: () => this.updateBarcodes(),
             });
     }
-    loadMoreList =()=>{
-      
-            console.log("OOOOOOO")
-            this.setState({pageNo:this.state.pageNo+1},()=>{
-                this.getAllBarcodes()
-            })
+    loadMoreList = () => {
+
+        console.log("OOOOOOO")
+        this.setState({ pageNo: this.state.pageNo + 1 }, () => {
+            this.getAllBarcodes()
+        })
 
     }
 
     render() {
-        
+
         return (
             <View style={styles.mainContainer}>
                 {this.state.loading &&
@@ -636,14 +637,14 @@ export default class Inventory extends Component {
                             <TouchableOpacity
                                 style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
                                 onPress={() => this.filterAction()} >
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                                <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/promofilter.png')} />
                             </TouchableOpacity>
                         }
                         {this.state.filterActive &&
                             <TouchableOpacity
                                 style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
                                 onPress={() => this.clearFilterAction()} >
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+                                <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/clearFilterSearch.png')} />
                             </TouchableOpacity>
                         }
                     </View>
@@ -657,16 +658,16 @@ export default class Inventory extends Component {
                             data={this.state.privilages}
                             showsVerticalScrollIndicator={false}
                             showsHorizontalScrollIndicator={false}
-                            keyExtractor={(item,i) => i.toString()}
+                            keyExtractor={(item, i) => i.toString()}
                             renderItem={({ item, index }) => (
                                 <TouchableOpacity style={{
-                                    height: Device.isTablet ? 46 : 36,
-                                    width: Device.isTablet ? 250 : 200,
+                                    height: Device.isTablet ? 46 : RH(36),
+                                    width: Device.isTablet ? 250 : RW(200),
                                     borderWidth: Device.isTablet ? 2 : 1,
                                     backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
                                     borderColor: item.bool ? '#ED1C24' : '#858585',
                                     borderRadius: Device.isTablet ? 10 : 5,
-                                    marginLeft: 10,
+                                    marginLeft: RW(10),
                                 }} onPress={() => this.topbarAction1(item, index)} >
 
                                     <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
@@ -681,41 +682,41 @@ export default class Inventory extends Component {
                         {this.state.flagone && (
                             <View>
                                 <FlatList
-                                    data={this.state.barcodesData}                              
+                                    data={this.state.barcodesData}
                                     style={{ marginTop: 20 }}
                                     scrollEnabled={true}
                                     // removeClippedSubviews={false}
-                                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; Records Not Found</Text>}
-                                    keyExtractor={(item,i) => i.toString()}
+                                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : RF(17), marginTop: deviceheight / 3 }}>&#9888; Records Not Found</Text>}
+                                    keyExtractor={(item, i) => i.toString()}
                                     renderItem={({ item, index }) => (
-                                        <View style={{flex:1}}>
-                                        <View
-                                            style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
-                                        >
-                                            <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
-                                                <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
-                                                <Text selectable={true} style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} >{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
-                                                <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("LIST PRICE")}:  {"\n"} ₹{item.itemMrp} </Text>
-                                                <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{I18n.t("STORE")}: {this.state.storeName}</Text>
-                                                <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.qty}</Text>
-                                                <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>{I18n.t("VALUE")}: ₹{item.value}</Text>
-                                                <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
-                                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
-                                                </TouchableOpacity>
+                                        <View style={{ flex: 1 }}>
+                                            <View
+                                                style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
+                                            >
+                                                <View style={Device.isTablet ? styles.barcodesFlatlistSubContainer_tablet : styles.barcodesFlatlistSubContainer_mobile}>
+                                                    <Text style={Device.isTablet ? flats.mainText_tablet : flats.mainText_mobile} >S.NO: {index + 1} </Text>
+                                                    <Text selectable={true} style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile} >{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
+                                                    <Text style={Device.isTablet ? flats.subText_tablet : flats.subText_mobile}>{I18n.t("LIST PRICE")}:  {"\n"} ₹{item.itemMrp} </Text>
+                                                    <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{I18n.t("STORE")}: {this.state.storeName}</Text>
+                                                    <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>QTY:  {item.qty}</Text>
+                                                    <Text style={Device.isTablet ? flats.commonTextsub_tablet : flats.commonTextsub_mobile}>{I18n.t("VALUE")}: ₹{item.value}</Text>
+                                                    <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditbarcode(item, index)}>
+                                                        <Image style={styles.image} source={require('../assets/images/edit.png')} />
+                                                    </TouchableOpacity>
 
-                                                <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handlebarcodedeleteaction(item, index)}>
-                                                    <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+                                                    <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handlebarcodedeleteaction(item, index)}>
+                                                        <Image style={styles.image} source={require('../assets/images/delete.png')} />
 
-                                                </TouchableOpacity>
+                                                    </TouchableOpacity>
 
-                                                {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{ }</Text> */}
+                                                    {/* <Text style={Device.isTablet ? flats.commonText_tablet : flats.commonText_mobile}>{ }</Text> */}
                                                 </View>
                                             </View>
                                         </View>
                                     )}
-                                    onEndReached={()=>{this.loadMoreList()}}
+                                    onEndReached={() => { this.loadMoreList() }}
                                     onEndReachedThreshold={10}
-                                    ListFooterComponent={() => { return <ActivityIndicator size={"small"}/> }}
+                                    ListFooterComponent={() => { return <ActivityIndicator size={"small"} /> }}
                                 />
                                 {/* {this.state.barcodesData.length === 0 && this.state.error.length > 0 &&
                                 } */}
@@ -729,9 +730,9 @@ export default class Inventory extends Component {
                                     style={{ marginTop: 20 }}
                                     scrollEnabled={true}
                                     keyExtractor={item => item}
-                                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; Records Not Found</Text>}
+                                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : RF(17), marginTop: deviceheight / 3 }}>&#9888; Records Not Found</Text>}
                                     renderItem={({ item, index }) => (
-                                        
+
                                         <View
                                             style={Device.isTablet ? styles.barcodesFlatlistContainer_tablet : styles.barcodesFlatlistContainer_mobile}
                                         >
@@ -743,11 +744,11 @@ export default class Inventory extends Component {
                                                 <Text style={Device.isTablet ? flats.commonTextRebar2_tablet : flats.commonTextRebar2_mobile}>{I18n.t("DATE")}: {"\n"}{item.fromDate}</Text>
                                             </View>
                                             <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.print(item, index)}>
-                                                <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/print.png')} />
+                                                <Image style={styles.image} source={require('../assets/images/print.png')} />
                                             </TouchableOpacity>
 
                                             <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.seeDetails(item, index)}>
-                                                <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/eye.png')} />
+                                                <Image style={styles.image} source={require('../assets/images/eye.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     )}
@@ -764,30 +765,26 @@ export default class Inventory extends Component {
                         <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
                             <View style={styles.deleteMainContainer}>
                                 <View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                    <View style={styles.deleteView}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Delete Barcode")} </Text>
+                                            <Text style={styles.deleteID} > {I18n.t("Delete Barcode")} </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={styles.cancelModel} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <Text style={{
-                                        height: Device.isTablet ? 2 : 1,
-                                        width: deviceWidth,
-                                        backgroundColor: 'lightgray',
-                                    }}></Text>
+                                    <Text style={styles.spaceText}></Text>
                                 </View>
 
                                 <Text style={{
                                     // position: 'absolute',
                                     // top: 70,
-                                    height: Device.isTablet ? 40 : 20,
+                                    height: Device.isTablet ? 40 : RH(20),
                                     textAlign: 'center',
                                     fontFamily: 'regular',
-                                    fontSize: Device.isTablet ? 23 : 18,
+                                    fontSize: Device.isTablet ? 23 : RF(18),
                                     // marginBottom: Device.isTablet ? 25 : 0,
                                     color: '#353C40'
                                 }}> {I18n.t("Are you sure want to delete Barcode")} ?  </Text>
@@ -815,21 +812,17 @@ export default class Inventory extends Component {
                         <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
                             <View style={styles.filterMainContainer} >
                                 <View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                    <View style={styles.deleteView}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Filter By")} </Text>
+                                            <Text style={styles.deleteID} > {I18n.t("Filter By")} </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
-                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            <TouchableOpacity style={styles.cancelModel} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: RH(5) }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <Text style={{
-                                        height: Device.isTablet ? 2 : 1,
-                                        width: deviceWidth,
-                                        backgroundColor: 'lightgray',
-                                    }}></Text>
+                                    <Text style={styles.spaceText}></Text>
                                 </View>
                                 <KeyboardAwareScrollView enableOnAndroid={true} >
                                     <TouchableOpacity
@@ -840,11 +833,11 @@ export default class Inventory extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                        <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
                                     {this.state.datepickerOpen && this.state.flagone && (
-                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
-                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: Device.isTablet ? 15 : 10, marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
+                                        <View style={styles.dateTopView}>
+                                            <View style={styles.dateTop2}>
                                                 <TouchableOpacity
                                                     style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
                                                 >
@@ -863,7 +856,7 @@ export default class Inventory extends Component {
 
                                                 </TouchableOpacity>
                                             </View>
-                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                            <DatePicker style={styles.date}
                                                 date={this.state.date}
                                                 mode={'date'}
                                                 onDateChange={(date) => this.setState({ date })}
@@ -878,12 +871,12 @@ export default class Inventory extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                        <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
 
                                     {this.state.datepickerendOpen && this.state.flagone && (
-                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: '#ffffff' }}>
-                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: Device.isTablet ? 15 : 10, marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
+                                        <View style={styles.dateTopView}>
+                                            <View style={styles.dateTop2}>
                                                 <View>
                                                     <TouchableOpacity
                                                         style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
@@ -906,7 +899,7 @@ export default class Inventory extends Component {
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
-                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                            <DatePicker style={styles.date}
                                                 date={this.state.enddate}
                                                 mode={'date'}
                                                 onDateChange={(enddate) => this.setState({ enddate })}
@@ -941,21 +934,17 @@ export default class Inventory extends Component {
                         <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
                             <View style={styles.filterMainContainer} >
                                 <View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                    <View style={styles.deleteView}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Filter By")} </Text>
+                                            <Text style={styles.deleteID} > {I18n.t("Filter By")} </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={styles.cancelModel} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <Text style={{
-                                        height: Device.isTablet ? 2 : 1,
-                                        width: deviceWidth,
-                                        backgroundColor: 'lightgray',
-                                    }}></Text>
+                                    <Text style={styles.spaceText}></Text>
                                 </View>
                                 <KeyboardAwareScrollView enableOnAndroid={true} >
 
@@ -967,7 +956,7 @@ export default class Inventory extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                        <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
                                     <TouchableOpacity
                                         style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
@@ -977,11 +966,11 @@ export default class Inventory extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                        <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
                                     {this.state.datepickerOpen && this.state.flagtwo && (
-                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
-                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: Device.isTablet ? 15 : 10, marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
+                                        <View style={styles.dateTopView}>
+                                            <View style={styles.dateTop2}>
 
                                                 <TouchableOpacity
                                                     style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
@@ -1001,7 +990,7 @@ export default class Inventory extends Component {
 
                                                 </TouchableOpacity>
                                             </View>
-                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                            <DatePicker style={styles.date}
                                                 date={this.state.date}
                                                 mode={'date'}
                                                 onDateChange={(date) => this.setState({ date })}
@@ -1009,8 +998,8 @@ export default class Inventory extends Component {
                                         </View>
                                     )}
                                     {this.state.datepickerendOpen && this.state.flagtwo && (
-                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
-                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: Device.isTablet ? 15 : 10, marginLeft: Device.isTablet ? 20 : 10, marginRight: Device.isTablet ? 20 : 10 }}>
+                                        <View style={styles.dateTopView}>
+                                            <View style={styles.dateTop2}>
                                                 <TouchableOpacity
                                                     style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
                                                 >
@@ -1028,7 +1017,7 @@ export default class Inventory extends Component {
 
                                                 </TouchableOpacity>
                                             </View>
-                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                            <DatePicker style={styles.date}
                                                 date={this.state.enddate}
                                                 mode={'date'}
                                                 onDateChange={(enddate) => this.setState({ enddate })}
@@ -1066,21 +1055,17 @@ export default class Inventory extends Component {
 
                             <View style={styles.deleteMainContainer}>
                                 <View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                    <View style={styles.deleteView}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > Delete Barcode Id </Text>
+                                            <Text style={styles.deleteID} > Delete Barcode Id </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
-                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            <TouchableOpacity style={styles.cancelModel} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: RH(5) }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
-                                    <Text style={{
-                                        height: Device.isTablet ? 2 : 1,
-                                        width: deviceWidth,
-                                        backgroundColor: 'lightgray',
-                                    }}></Text>
+                                    <Text style={styles.spaceText}></Text>
                                 </View>
 
                                 <Text style={Device.isTablet ? flats.deleteSubHeading_tablet : flats.deleteSubHeading_mobile}> Are you sure want to delete Barcode?  </Text>
@@ -1107,6 +1092,50 @@ export default class Inventory extends Component {
 }
 
 const styles = StyleSheet.create({
+    image: { alignSelf: 'center', top: RH(5), height: Device.isTablet ? 30 : RH(20), width: Device.isTablet ? 30 : RW(20) },
+    spaceText: {
+        height: Device.isTablet ? 2 : 1,
+        width: deviceWidth,
+        backgroundColor: 'lightgray',
+    },
+    cancelModel: {
+        width: Device.isTablet ? 60 : RW(50),
+        height: Device.isTablet ? 60 : RH(50),
+        marginTop: Device.isTablet ? 20 : RH(15),
+    },
+    deleteID: {
+        marginTop: RH(15),
+        fontSize: Device.isTablet ? 22 : RF(17),
+        marginLeft: RW(20)
+    },
+    deleteView: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 5,
+        height: Device.isTablet ? 60 : RH(50)
+    },
+    date: {
+        width: deviceWidth,
+        height: RH(200),
+        marginTop: RH(50),
+    },
+    calenderpng: {
+        position: 'absolute',
+        top: RH(10),
+        right: 0,
+    },
+    dateTopView: {
+        height: RW(280),
+        width: deviceWidth,
+        backgroundColor: 'ffffff'
+    },
+    dateTop2: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: Device.isTablet ? 15 : RH(10),
+        marginLeft: Device.isTablet ? 20 : RW(10),
+        marginRight: Device.isTablet ? 20 : RW(10)
+    },
     mainContainer: {
         flex: 1,
     },
@@ -1132,20 +1161,20 @@ const styles = StyleSheet.create({
     },
     deleteMainContainer: {
         backgroundColor: '#ffffff',
-        marginTop: Device.isTablet ? deviceheight - 350 : deviceheight - 240,
-        height: Device.isTablet ? 350 : 240,
+        marginTop: Device.isTablet ? deviceheight - 350 : deviceheight - RH(240),
+        height: Device.isTablet ? 350 : RH(240),
     },
     modelCloseImage: {
         fontFamily: 'regular',
         fontSize: 12,
         position: 'absolute',
         top: 10,
-        right: Device.isTablet ? 15 : 30,
+        right: Device.isTablet ? 15 : RW(30),
     },
     filterMainContainer: {
         backgroundColor: '#ffffff',
         marginTop: Device.isTablet ? deviceheight - 500 : deviceheight - 400,
-        height: Device.isTablet ? 500 : 400,
+        height: Device.isTablet ? 500 : RH(400),
     },
 
     // Styles For Mobile
@@ -1154,18 +1183,18 @@ const styles = StyleSheet.create({
         width: deviceWidth,
         textAlign: 'center',
         fontSize: 24,
-        height: Device.isAndroid ? 70 : 84,
+        height: Device.isAndroid ? 70 : RH(84),
     },
     backButton_mobile: {
         position: 'absolute',
-        left: 10,
+        left: RW(10),
         bottom: 0,
-        width: 40,
-        height: 40,
+        width: RW(40),
+        height: RH(40),
     },
     flatList: {
-        marginTop: 20,
-        marginBottom: 20
+        marginTop: RH(20),
+        marginBottom: RH(20)
     },
     container: {
         flex: 1,
@@ -1174,64 +1203,64 @@ const styles = StyleSheet.create({
     },
     headerTitle_mobile: {
         position: 'absolute',
-        left: 70,
-        bottom: 10,
-        width: 300,
-        height: 25,
+        left: RW(70),
+        bottom: RH(10),
+        width: RW(300),
+        height: RH(25),
         fontFamily: 'bold',
-        fontSize: 18,
+        fontSize: RF(18),
         color: '#353C40'
     },
     filterButton_mobile: {
         position: 'absolute',
-        right: 20,
-        top: 30,
+        right: RW(20),
+        top: RH(30),
         backgroundColor: '#ffffff',
         borderRadius: 5,
-        width: 30,
-        height: 32,
+        width: RW(30),
+        height: RH(32),
     },
     modalContainer_mobile: {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
         alignSelf: 'center',
-        marginRight: 20,
+        marginRight: RW(20),
         borderRadius: 5,
-        marginTop: 20,
+        marginTop: RH(20),
         borderColor: '#ED1C24',
         width: '100%',
-        height: 50,
+        height: RH(50),
     },
     modalButton_mobile: {
         borderColor: '#353C40',
-        height: 32,
+        height: RH(32),
         width: "33.3%",
         borderWidth: Device.isTablet ? 2 : 1,
         alignSelf: "flex-start",
     },
     modalButtonText_mobile: {
-        height: 32,
-        width: 100,
+        height: RH(32),
+        width: RW(100),
         marginTop: 5,
         fontFamily: "medium",
-        fontSize: 12,
+        fontSize: RF(12),
         textAlign: 'center',
         alignItems: 'center',
     },
     addBarcodeButton_mobile: {
         position: 'absolute',
-        right: 70,
+        right: RW(70),
         bottom: 5,
         backgroundColor: '#ED1C24',
         borderRadius: 5,
-        width: 110,
-        height: 32,
+        width: RW(110),
+        height: RH(32),
         textAlign: 'center',
         alignItems: 'center',
     },
     addBarcodeButtonText_mobile: {
-        fontSize: 12,
+        fontSize: RF(12),
         fontFamily: 'regular',
         color: '#ffffff',
         marginTop: 8,
@@ -1241,120 +1270,120 @@ const styles = StyleSheet.create({
     filterBarcodeContainer_mobile: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -20,
+        marginLeft: -RW(20),
         backgroundColor: "#ffffff",
-        height: 400,
+        height: RH(400),
         position: 'absolute',
-        bottom: -20,
+        bottom: -RH(20),
     },
     filterByTitle_mobile: {
         position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 20,
+        left: RW(20),
+        top: RH(15),
+        width: RW(300),
+        height: RH(20),
         fontFamily: 'medium',
-        fontSize: 16,
+        fontSize: RF(16),
         color: '#353C40'
     },
     filterByTitleDecoration_mobile: {
         height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
-        marginTop: 50,
+        marginTop: RH(50),
     },
     filterCloseButton_mobile: {
         position: 'absolute',
         right: 8,
         top: 15,
-        width: 50,
-        height: 50,
+        width: RW(50),
+        height: RH(50),
     },
     filterCloseImage_mobile: {
         fontFamily: 'regular',
-        fontSize: 12,
+        fontSize: RF(12),
         position: 'absolute',
-        top: 15,
+        top: RH(15),
         right: 0,
     },
     filterDateButton_mobile: {
         width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
+        marginLeft: RW(20),
+        marginRight: RW(20),
         marginTop: 5,
-        marginBottom: 10,
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
-        height: 50,
+        height: RH(50),
         backgroundColor: "#F6F6F6",
         borderRadius: 5,
     },
     filterDateButtonText_mobile: {
-        marginLeft: 16,
-        marginTop: 20,
+        marginLeft: RW(16),
+        marginTop: RH(20),
         color: "#6F6F6F",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     datePickerContainer_mobile: {
-        height: 280,
+        height: RH(280),
         width: deviceWidth,
         backgroundColor: '#ffffff'
     },
     datePickerButton_mobile: {
-        height: 30,
+        height: RH(30),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     datePickerEndButton_mobile: {
-        height: 30,
+        height: RH(30),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     datePickerButtonText_mobile: {
         textAlign: 'center',
-        marginTop: 5,
+        marginTop: RH(5),
         color: "#ffffff",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     input_mobile: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
+        marginLeft: RW(20),
+        marginRight:RW (20),
+        height: RH(44),
+        marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
+        paddingLeft: RH(15),
+        fontSize: RF(14),
     },
     filterApplyButton_mobile: {
         width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 50,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(20),
+        height: RH(50),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     filterButtonText_mobile: {
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: RH(20),
         color: "#ffffff",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     filterCancelButton_mobile: {
         width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 50,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(20),
+        height: RH(50),
         backgroundColor: "#ffffff",
         borderRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1362,13 +1391,13 @@ const styles = StyleSheet.create({
     },
     filterButtonCancelText_mobile: {
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: RH(20),
         color: "#000000",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     barcodesFlatlistContainer_mobile: {
-        height: 140,
+        height: RH(140),
         backgroundColor: '#FBFBFB',
         borderBottomWidth: 5,
         borderBottomColor: '#FFFFFF',
@@ -1379,7 +1408,7 @@ const styles = StyleSheet.create({
     barcodesFlatlistSubContainer_mobile: {
         flexDirection: 'column',
         width: '100%',
-        height: 140,
+        height: RH(140),
     },
 
     // Styles For Tablet
@@ -1387,79 +1416,79 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',
-        fontSize: 28,
-        height: 90,
+        fontSize: RF(28),
+        height: RH(90),
     },
     backButton_tablet: {
         position: 'absolute',
-        left: 10,
-        top: 38,
-        width: 90,
-        height: 90,
+        left: RW(10),
+        top:RH(38),
+        width: RW(90),
+        height: RH(90),
     },
     headerTitle_tablet: {
         position: 'absolute',
-        left: 70,
-        top: 40,
-        width: 300,
-        height: 40,
+        left: RW(70),
+        top: RH(40),
+        width: RW(300),
+        height: RH(40),
         fontFamily: 'bold',
-        fontSize: 24,
+        fontSize: RF(24),
         color: '#353C40'
     },
     filterButton_tablet: {
         position: 'absolute',
-        right: 20,
-        top: 40,
+        right: RW(20),
+        top: RH(40),
         backgroundColor: '#ffffff',
         borderRadius: 5,
-        width: 35,
-        height: 37,
+        width: RW(35),
+        height: RH(37),
     },
     modalContainer_tablet: {
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
         alignSelf: 'center',
-        marginRight: 20,
+        marginRight: RW(20),
         borderRadius: 5,
-        marginTop: 20,
+        marginTop: RH(20),
         borderColor: '#ED1C24',
         width: '100%',
-        height: 50,
+        height: RH(50),
     },
     modalButton_tablet: {
         borderColor: '#353C40',
-        height: 42,
+        height: RH(42),
         width: "33.3%",
         borderWidth: Device.isTablet ? 2 : 1,
         alignSelf: "flex-start",
     },
     modalButtonText_tablet: {
-        height: 42,
-        width: 210,
+        height: RH(42),
+        width: RW(210),
         marginTop: 5,
         fontFamily: "medium",
-        fontSize: 17,
+        fontSize: RF(17),
         textAlign: 'center',
         alignItems: 'center',
     },
     addBarcodeButton_tablet: {
         position: 'absolute',
-        right: 70,
-        top: 40,
+        right: RW(70),
+        top: RH(40),
         backgroundColor: '#ED1C24',
         borderRadius: 5,
-        width: 110,
-        height: 32,
+        width: RW(110),
+        height: RH(32),
         textAlign: 'center',
         alignItems: 'center',
     },
     addBarcodeButtonText_tablet: {
-        fontSize: 17,
+        fontSize: RF(17),
         fontFamily: 'regular',
         color: '#ffffff',
-        marginTop: 6,
+        marginTop: RH(6),
         textAlign: 'center',
         alignSelf: 'center'
     },
@@ -1467,114 +1496,114 @@ const styles = StyleSheet.create({
     filterBarcodeContainer_tablet: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -40,
+        marginLeft: -RW(40),
         backgroundColor: "#ffffff",
-        height: 500,
+        height:RH(500),
         position: 'absolute',
-        bottom: -40,
+        bottom: -RH(40),
     },
     filterByTitle_tablet: {
         position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 30,
+        left: RW(20),
+        top: RH(15),
+        width: RW(300),
+        height: RH(30),
         fontFamily: 'medium',
-        fontSize: 21,
+        fontSize: RF(21),
         color: '#353C40'
     },
     filterByTitleDecoration_tablet: {
         height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
-        marginTop: 60,
+        marginTop: RH(60),
     },
     filterCloseButton_tablet: {
         position: 'absolute',
-        right: 24,
-        top: 10,
-        width: 60, height: 60,
+        right: RW(24),
+        top: RH(10),
+        width: RW(60), height: RH(60),
     },
     filterCloseImage_tablet: {
         color: '#ED1C24',
         fontFamily: 'regular',
-        fontSize: 17,
+        fontSize: RF(17),
         position: 'absolute',
-        top: 10,
+        top: RH(10),
         right: 0,
     },
     filterDateButton_tablet: {
         width: deviceWidth - 30,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 10,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
-        height: 60,
+        height: RH(60),
         backgroundColor: "#F6F6F6",
         borderRadius: 5,
     },
     filterDateButtonText_tablet: {
-        marginLeft: 16,
-        marginTop: 20,
+        marginLeft:RW(16),
+        marginTop: RH(20),
         color: "#6F6F6F",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     datePickerButton_tablet: {
-        height: 40,
+        height: RH(40),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     datePickerButtonText_tablet: {
         textAlign: 'center',
-        marginTop: 5,
+        marginTop: RH(5),
         color: "#ffffff",
-        fontSize: 20,
+        fontSize: Rf(20),
         fontFamily: "regular"
     },
     datePickerEndButton_tablet: {
-        height: 40,
+        height: RH(40),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     input_tablet: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(54),
         marginTop: 5,
-        marginBottom: 10,
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
+        paddingLeft: RW(15),
+        fontSize: RF(20),
     },
     filterApplyButton_tablet: {
         width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 60,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(20),
+        height: RH(60),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     filterButtonText_tablet: {
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: RH(20),
         color: "#ffffff",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     filterCancelButton_tablet: {
         width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 60,
+        marginLeft: RW(20),
+        marginRight: Rw(20),
+        marginTop: RH(20),
+        height: RH(60),
         backgroundColor: "#ffffff",
         borderRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1582,13 +1611,13 @@ const styles = StyleSheet.create({
     },
     filterButtonCancelText_tablet: {
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: RH(20),
         color: "#000000",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     barcodesFlatlistContainer_tablet: {
-        height: 160,
+        height: RH(160),
         backgroundColor: '#FBFBFB',
         borderBottomWidth: 5,
         borderBottomColor: '#FFFFFF',
@@ -1599,7 +1628,7 @@ const styles = StyleSheet.create({
     barcodesFlatlistSubContainer_tablet: {
         flexDirection: 'column',
         width: '100%',
-        height: 160,
+        height: RH(160),
     },
 
 });
@@ -1608,74 +1637,74 @@ const styles = StyleSheet.create({
 
 const flats = StyleSheet.create({
     mainText_mobile: {
-        fontSize: 16,
-        marginLeft: 16,
-        marginTop: 10,
-        marginBottom: 10,
+        fontSize:RF(16),
+        marginLeft: RW(16),
+        marginTop: RH(10),
+        marginBottom: RH(10),
         fontFamily: 'medium',
         color: '#ED1C24',
     },
     subText_mobile: {
-        fontSize: 12,
-        marginLeft: 16,
-        marginTop: 10,
-        marginBottom: 10,
+        fontSize: RF(12),
+        marginLeft: RW(16),
+        marginTop: RH(10),
+        marginBottom: RH(10),
         fontFamily: 'medium',
         color: '#353C40'
     },
     commonText_mobile: {
-        fontSize: 12,
-        marginBottom: 10,
-        marginTop: -95,
+        fontSize: RF(12),
+        marginBottom: RH(10),
+        marginTop: -RH(95),
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
     },
     commonTextRebar_mobile: {
-        fontSize: 12,
-        marginBottom: 10,
-        marginTop: -95,
-        marginLeft: 110,
+        fontSize: RF(12),
+        marginBottom: RH(10),
+        marginTop: -RH(95),
+        marginLeft: RW(110),
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
     },
     commonTextRebar2_mobile: {
-        fontSize: 12,
-        marginBottom: 10,
-        marginTop: 10,
-        marginLeft: 110,
+        fontSize: RF(12),
+        marginBottom: RH(10),
+        marginTop: RH(10),
+        marginLeft: RW(110),
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
     },
     commonTextsubrebar_mobile: {
-        fontSize: 12,
-        marginBottom: 10,
-        marginTop: 10,
+        fontSize: RF(12),
+        marginBottom: RH(10),
+        marginTop: RH(10),
         position: 'absolute',
-        right: 20,
+        right: RW(20),
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
     },
     commonTextsubreba2_mobile: {
-        fontSize: 12,
-        marginBottom: 10,
-        marginTop: 100,
+        fontSize: RF(12),
+        marginBottom: RH(10),
+        marginTop: RH(100),
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
     },
     commonTextsub_mobile: {
-        fontSize: 12,
-        marginBottom: 10,
-        marginTop: 10,
+        fontSize: RF(12),
+        marginBottom: RH(10),
+        marginTop: RH(10),
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
@@ -1683,10 +1712,10 @@ const flats = StyleSheet.create({
     },
     editButton_mobile: {
         position: 'absolute',
-        right: 50,
-        top: 90,
-        width: 30,
-        height: 30,
+        right: RW(50),
+        top: RH(90),
+        width: RW(30),
+        height: RH(30),
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1695,10 +1724,10 @@ const flats = StyleSheet.create({
     },
     deleteButton_mobile: {
         position: 'absolute',
-        right: 20,
-        top: 90,
-        width: 30,
-        height: 30,
+        right: RW(20),
+        top: RH(90),
+        width:RW(30),
+        height: RH(30),
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1707,18 +1736,18 @@ const flats = StyleSheet.create({
     deleteBarcodeContainer_mobile: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -20,
+        marginLeft: -RW(20),
         backgroundColor: "#ffffff",
-        height: 260,
+        height: RH(260),
         position: 'absolute',
-        bottom: -20,
+        bottom: -RH(20),
     },
     deleteBarcodeHeading_mobile: {
         position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 20,
+        left: RW(20),
+        top: RH(15),
+        width: RW(300),
+        height: RH(20),
         fontFamily: 'medium',
         fontSize: 16,
         color: '#353C40'
@@ -1727,54 +1756,54 @@ const flats = StyleSheet.create({
     // Tablet styles
 
     mainText_tablet: {
-        fontSize: 21,
-        marginLeft: 16,
-        marginTop: 10,
-        marginBottom: 10,
+        fontSize: RF(21),
+        marginLeft: RW(16),
+        marginTop: RH(10),
+        marginBottom: RH(10),
         fontFamily: 'medium',
         color: '#ED1C24',
     },
     subText_tablet: {
-        fontSize: 17,
-        marginLeft: 16,
-        marginTop: 10,
-        marginBottom: 10,
+        fontSize: RF(17),
+        marginLeft: RW(16),
+        marginTop: RH(10),
+        marginBottom: RH(10),
         fontFamily: 'medium',
         color: '#353C40'
     },
     commonText_tablet: {
-        fontSize: 17,
-        marginBottom: 10,
-        marginTop: -120,
+        fontSize: RF(17),
+        marginBottom: RH(10),
+        marginTop: -RH(120),
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
     },
     commonTextRebar_tablet: {
-        fontSize: 17,
-        marginBottom: 10,
-        marginTop: -120,
-        marginLeft: 100,
+        fontSize: RF(17),
+        marginBottom: RH(10),
+        marginTop: -RH(120),
+        marginLeft: RW(100),
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
     },
     commonTextRebar2_tablet: {
-        fontSize: 17,
-        marginBottom: 10,
-        marginTop: 10,
-        marginLeft: 100,
+        fontSize: RF(17),
+        marginBottom: RH(10),
+        marginTop: RH(10),
+        marginLeft: RW(100),
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
         color: '#808080'
     },
     commonTextsub_tablet: {
-        fontSize: 17,
-        marginBottom: 10,
-        marginTop: 10,
+        fontSize: RF(17),
+        marginBottom: RH(10),
+        marginTop: RH(10),
         alignSelf: 'center',
         textAlign: 'center',
         fontFamily: 'regular',
@@ -1782,10 +1811,10 @@ const flats = StyleSheet.create({
     },
     editButton_tablet: {
         position: 'absolute',
-        right: 70,
-        top: 90,
-        width: 50,
-        height: 50,
+        right: RW(70),
+        top: RH(90),
+        width: RW(50),
+        height: RH(50),
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1794,10 +1823,10 @@ const flats = StyleSheet.create({
     },
     deleteButton_tablet: {
         position: 'absolute',
-        right: 20,
-        top: 90,
-        width: 50,
-        height: 50,
+        right: RW(20),
+        top: RH(90),
+        width: RW(50),
+        height: RH(50),
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1806,18 +1835,18 @@ const flats = StyleSheet.create({
     deleteBarcodeContainer_tablet: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -20,
+        marginLeft: -RH(20),
         backgroundColor: "#ffffff",
-        height: 280,
+        height: RH(280),
         position: 'absolute',
-        bottom: -20,
+        bottom: -RH(20),
     },
     deleteBarcodeHeading_tablet: {
         position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 30,
+        left: RW(20),
+        top: RH(15),
+        width: RW(300),
+        height: RH(30),
         fontFamily: 'medium',
         fontSize: 21,
         color: '#353C40'
