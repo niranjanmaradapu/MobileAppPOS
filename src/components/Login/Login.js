@@ -9,7 +9,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import ProfileService from '../services/ProfileService';
-import { errorLength, urmErrorMessages } from '../Errors/errors';
+import { errorLength, errorLengttMax, urmErrorMessages } from '../Errors/errors';
 import UrmService from '../services/UrmService';
 import Message from '../Errors/Message';
 var deviceheight = Dimensions.get('window').height;
@@ -504,7 +504,7 @@ export default class Login extends Component {
                                     // textAlignVertical="center"
                                 autoCapitalize="none"
                                     onChangeText={this.handleEmail}
-                                    maxLength={25}
+                                    maxLength={errorLengttMax.name}
                                     onBlur={this.handleEmailValid}
                                     value={this.state.userName}
                                     ref={inputemail => { this.emailValueInput = inputemail; }} />

@@ -1,5 +1,5 @@
 export const urmErrorMessages = {
-  userNanme: "/ Username must be 6 characters or more",
+  userNanme: "/ Username must be 6-25 characters",
   roleName: "/ Rolename must be 6 characters or more",
   password: "/ Password must be 8 characters or more",
   confirmPassword: "/ Passwords are not matching",
@@ -45,4 +45,8 @@ export const errorLength = {
   colour: 3,
   empId: 3,
   orginisation: 3,
+}
+
+export const errorLengttMax = {
+  name: 25,
 }
