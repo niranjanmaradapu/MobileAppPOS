@@ -61,8 +61,9 @@ class UpdateNewpassword extends Component {
     validationPasswords() {
         let isFormValid = true
         let errors = {}
+        let passReg = /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])$/;
 
-        if (this.state.code.length < errorLength.password) {
+        if (this.state.code.length < errorLength.password || passReg.test(this.state.code) === false) {
             isFormValid = false
             errors["password1"] = urmErrorMessages.password
             this.setState({newPasswordValid: false})

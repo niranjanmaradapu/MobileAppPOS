@@ -9,7 +9,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import LoginService from '../services/LoginService';
 import ProfileService from '../services/ProfileService';
-import { errorLength, errorLengttMax, urmErrorMessages } from '../Errors/errors';
+import { errorLength, errorLengthMax, urmErrorMessages } from '../Errors/errors';
 import UrmService from '../services/UrmService';
 import Message from '../Errors/Message';
 var deviceheight = Dimensions.get('window').height;
@@ -124,7 +124,7 @@ export default class Login extends Component {
 
         if (this.state.userName.length < errorLength.name) {
             isFormValid = false
-            errors["userName"] = urmErrorMessages.userNanme
+            errors["userName"] = urmErrorMessages.userName
             this.setState({userValid: false})
         }
         if (this.state.password.length < errorLength.password) {
@@ -452,7 +452,7 @@ export default class Login extends Component {
 
     forgotPassword() {
 
-        this.props.navigation.navigate('ForgotPassword', { username: this.state.userName });
+        this.props.navigation.navigate('ManagePassword', { username: this.state.userName });
 
     }
 
@@ -504,7 +504,7 @@ export default class Login extends Component {
                                     // textAlignVertical="center"
                                 autoCapitalize="none"
                                     onChangeText={this.handleEmail}
-                                    maxLength={errorLengttMax.name}
+                                    // maxLength={errorLengthMax.name}
                                     onBlur={this.handleEmailValid}
                                     value={this.state.userName}
                                     ref={inputemail => { this.emailValueInput = inputemail; }} />
@@ -517,7 +517,7 @@ export default class Login extends Component {
                                     secureTextEntry={true}
                                     placeholderTextColor={passValid ? "#6F6F6F" : "#dd0000"}
                                     autoCapitalize="none"
-                                    maxLength={25}
+                                    maxLength={errorLengthMax.password}
                                     onChangeText={this.handlePassword}
                                     onBlur={this.handlePasswordValid}
                                     value={this.state.password}

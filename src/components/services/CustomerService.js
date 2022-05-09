@@ -15,7 +15,7 @@ class CustomerService {
     }
 
     getHsnDetails() {
-        return REACT_NATIVE_APP_BASE_URL + "/hsn-details/hsnDetails/getHsnDetails";
+        return REACT_NATIVE_APP_BASE_URL + "/hsn-details/hsn-details/getHsnDetails";
     }
 
     saveSale() {
@@ -77,6 +77,3 @@ class CustomerService {
 
 }
 export default new CustomerService();
-
-
-

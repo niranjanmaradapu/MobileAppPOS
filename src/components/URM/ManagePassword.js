@@ -6,7 +6,10 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import UrmService from '../services/UrmService';
 import I18n from 'react-native-i18n';
+import { errorLength, urmErrorMessages } from '../Errors/errors';
+import Message from '../Errors/Message';
 
+var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
 
 export default class ManagePassword extends Component {
@@ -21,6 +24,9 @@ export default class ManagePassword extends Component {
             roleName: "",
             userName: "",
             confirmPassword: "",
+            errors: {},
+            newPasswordValid: true,
+            confirmPasswordValid: true,
         };
     }
 
@@ -55,18 +61,31 @@ export default class ManagePassword extends Component {
         return true;
     }
 
-    changePassword() {
-        // if (this.state.password.length === 0) {
-        //     alert("Current Password Cannot be Empty")
-        // } else 
-        if (this.state.newPassword.length === 0) {
-            alert("New Password Cannot be Empty");
-    } else if (this.state.confirmPassword.length === 0) {
-            alert('you must enter confirm password');
-        } else if (this.state.confirmPassword !== this.state.newPassword) {
-            alert('new password and confirm password should be same');
+        validationPasswords() {
+        let isFormValid = true
+        let errors = {}
+        let passReg = /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])$/;
+
+        if (this.state.newPassword.length < errorLength.password || passReg.test(this.state.newPassword) === false) {
+            isFormValid = false
+            errors["password1"] = urmErrorMessages.createPassword
+            this.setState({newPasswordValid: false})
         }
-        else {
+
+        if (this.state.newPassword.length === 0 || this.state.newPassword !== this.state.confirmPassword) {
+            isFormValid = false
+            errors["password2"] = urmErrorMessages.confirmPassword
+            this.setState({confirmPasswordValid: false})
+        }
+
+        this.setState({errors: errors})
+        return isFormValid
+    }
+
+
+    changePassword() {
+        const isFormValid = this.validationPasswords()
+        if (isFormValid) {
             this.setState({ loading: true });
             const obj = {
                 userName: this.state.userName,
@@ -92,6 +111,8 @@ export default class ManagePassword extends Component {
     }
 
     render() {
+        let passValid = this.state.newPasswordValid
+        let confirmValid = this.state.confirmPasswordValid
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
@@ -129,6 +150,7 @@ export default class ManagePassword extends Component {
                         value={this.state.newPassword}
                         onChangeText={this.handleNewPassword}
                     />
+                    {!passValid && <Message message={this.state.errors["password1"]} />}
                     <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Confirm Password")}
@@ -138,6 +160,7 @@ export default class ManagePassword extends Component {
                         onChangeText={this.handleConfirmPassword}
                         value={this.state.confirmPassword}
                         ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
+                    {!confirmValid && <Message message={this.state.errors["password2"]} />}
 
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.changePassword()}>

@@ -6,7 +6,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Loader from '../../commonUtils/loader';
 import UrmService from '../services/UrmService';
 import I18n from 'react-native-i18n';
-import { errorLength, urmErrorMessages } from '../Errors/errors';
+import { errorLength, errorLengthMax, urmErrorMessages } from '../Errors/errors';
 import Message from '../Errors/Message';
 
 var deviceheight = Dimensions.get('window').height;
@@ -85,7 +85,7 @@ class RegisterClient extends Component {
 
     handleEmailValid = () => {
         const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if (emailReg.test(this.state.userEmail)) {
+        if (emailReg.test(this.state.userEmail) === true) {
             this.setState({emailValid: true})
         }
     }
@@ -103,7 +103,7 @@ class RegisterClient extends Component {
 
         if (this.state.userName.length < errorLength.name) { 
             formIsValid = false
-            errors["userName"] = urmErrorMessages.userNanme
+            errors["userName"] = urmErrorMessages.userName
             this.setState({nameValid: false})
         }
 
@@ -242,7 +242,7 @@ class RegisterClient extends Component {
                         placeholder={I18n.t("Name")}
                         placeholderTextColor={nameValid ? "#6F6F6F" : '#dd0000'}
                         textAlignVertical="center"
-                        maxLength={25}
+                        maxLength={errorLengthMax.name}
                         autoCapitalize="none"
                         value={this.state.userName}
                         onChangeText={this.handleName}
@@ -254,7 +254,7 @@ class RegisterClient extends Component {
                         style={mobileValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Mobile")}
-                        maxLength={10}
+                        maxLength={errorLengthMax.mobile}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
                         placeholderTextColor={mobileValid ? "#6F6F6F" : '#dd0000'}
@@ -287,7 +287,7 @@ class RegisterClient extends Component {
                         placeholderTextColor={organizationValid ? "#6F6F6F" : '#dd0000'}
                         textAlignVertical="center"
                         autoCapitalize="none"
-                        maxLength={10}
+                        maxLength={errorLengthMax.organisation}
                         value={this.state.organization}
                         onBlur={this.handleOrganizationValid}
                         onChangeText={this.handleOrganization}

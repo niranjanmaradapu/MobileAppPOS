@@ -390,7 +390,7 @@ export default class AddUser extends Component {
         let errors = {}
         if (this.state.name.length < errorLength.name) {
             isFormValid = false
-            errors["name"] = urmErrorMessages.userNanme
+            errors["name"] = urmErrorMessages.userName
             this.setState({ nameValid: false })
         }
 
