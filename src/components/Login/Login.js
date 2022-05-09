@@ -12,6 +12,7 @@ import ProfileService from '../services/ProfileService';
 import { errorLength, errorLengttMax, urmErrorMessages } from '../Errors/errors';
 import UrmService from '../services/UrmService';
 import Message from '../Errors/Message';
+import { RH, RW,RF } from '../../Responsive';
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
@@ -528,7 +529,7 @@ export default class Login extends Component {
                                     <View style={{ flexDirection: Device.isTablet ? "row" : "column", justifyContent: Device.isTablet ? "space-around" : "center", alignItems: Device.isTablet ? "center" : "center" }}>
 
                                          <View style={{
-                                            top: 35, alignItems: 'center', flexDirection: 'row'
+                                            top: RH(35), alignItems: 'center', flexDirection: 'row'
                                         }}>
                                             <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Register')}? </Text>
                                             <TouchableOpacity
@@ -538,7 +539,7 @@ export default class Login extends Component {
                                         </View>
 
                                         <View style={{
-                                            top: 35, alignItems: 'center', flexDirection: 'row'
+                                            top: RH(35), alignItems: 'center', flexDirection: 'row'
                                         }}>
                                             <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Forgot password')}? </Text>
                                             <TouchableOpacity
@@ -571,45 +572,45 @@ const pickerSelectStyles = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
-        fontSize: 14,
+        fontSize: RF(14),
     },
 
     inputIOS: {
         marginLeft: 0,
         marginRight: 0,
-        height: 50,
-        marginTop: 20,
+        height: RH(50),
+        marginTop: RH(20),
         backgroundColor: '#F6F6F6',
         borderColor: '#F6F6F6',
         color: '#6F6F6F',
         fontFamily: "regular",
         borderWidth: 5,
-        fontSize: 14,
+        fontSize: RF(14),
     },
     inputAndroid: {
         marginLeft: 0,
         marginRight: 0,
-        height: 50,
-        marginTop: 20,
+        height: RH(50),
+        marginTop: RH(20),
         backgroundColor: '#F6F6F6',
         borderColor: '#F6F6F6',
         color: '#6F6F6F',
         fontFamily: "regular",
         borderWidth: 5,
-        fontSize: 14,
+        fontSize: RF(14),
     },
 });
 
 const styles = StyleSheet.create({
     logoImage: {
         alignSelf: 'center',
-        width: 500,
-        height: 300,
+        width: RW(500),
+        height: RH(300),
     },
     errorRecords: {
         color: '#dd0000',
         fontSize: Device.isTablet ? 17 : 12,
-        marginLeft: 30,
+        marginLeft: RW(30),
     },
     containerForActivity: {
         flex: 1,
@@ -619,17 +620,17 @@ const styles = StyleSheet.create({
     },
     title: {
         color: 'white',
-        fontSize: 20,
-        margin: 20
+        fontSize: RF(20),
+        margin:RH(20)
     },
     imagealign: {
-        marginTop: 40,
-        marginRight: 10,
+        marginTop: RH(40),
+        marginRight: RF(10),
     },
     container: {
         flex: 1,
         justifyContent: 'center',
-        height: deviceheight + 40,
+        height: deviceheight + RH(40),
         backgroundColor: '#FFFFFF'
     },
     ytdImageValue: {
@@ -642,11 +643,11 @@ const styles = StyleSheet.create({
     },
     mainLogo: {
         color: '#ED1C24',
-        fontSize: Device.isTablet ? 40 : 30,
+        fontSize: Device.isTablet ? RF(40) : RF(30),
         fontFamily: "bold",
     },
     subLogo: {
-        fontSize: 25,
+        fontSize: RF(25),
         fontFamily: 'medium',
     },
 
@@ -654,68 +655,68 @@ const styles = StyleSheet.create({
     hederText_mobile: {
         color: "#353C40",
         fontFamily: "bold",
-        marginLeft: 20,
-        marginTop: 20,
+        marginLeft: RW(20),
+        marginTop: RH(20),
         flexDirection: 'column',
         justifyContent: 'center',
-        fontSize: 25,
+        fontSize: RF(25),
     },
     headerText2_mobile: {
         color: "#353C40",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "bold",
-        marginLeft: 10,
+        marginLeft: RW(10),
         marginTop: 0,
         flexDirection: 'column',
         justifyContent: 'center',
-        height: 45,
-        fontSize: 28,
+        height: RH(45),
+        fontSize: RF(28),
     },
     bottomImage_mobile: {
         position: 'absolute',
         right: 0,
-        bottom: 40,
-        width: 162,
-        height: 170
+        bottom: RH(40),
+        width: RW(162),
+        height: RH(170)
     },
     input_mobile: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(44),
         marginTop: 5,
-        marginBottom: 10,
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 14,
+        fontSize: RF(14),
     },
     inputError_mobile: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(44),
         marginTop: 5,
-        marginBottom: 10,
+        marginBottom: RH(10),
         borderColor: '#dd0000',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
+        paddingLeft: RW(15),
+        fontSize: RF(14),
     },
     signInButton_mobile: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 100,
-        width: deviceWidth - 40,
-        height: 50,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(100),
+        width: deviceWidth - RW(40),
+        height: RH(50),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
@@ -723,17 +724,17 @@ const styles = StyleSheet.create({
     signInButtonText_mobile: {
         color: 'white',
         alignSelf: 'center',
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular",
     },
     navigationText_mobile: {
-        fontSize: 16,
+        fontSize: RF(16),
         color: '#858585',
         fontFamily: "regular",
     },
     navigationButtonText_mobile: {
         color: '#353C40',
-        fontSize: 16,
+        fontSize: RF(16),
         fontFamily: "bold",
         textDecorationLine: 'underline'
     },
@@ -741,50 +742,50 @@ const styles = StyleSheet.create({
     // Tablet Styles
     headerText_tablet: {
         color: "#353C40",
-        fontSize: 40,
+        fontSize: RF(40),
         fontFamily: "bold",
-        marginLeft: 20,
-        marginTop: 100,
+        marginLeft: RW(20),
+        marginTop: RH(100),
         flexDirection: 'column',
         justifyContent: 'center',
     },
     headerText2_tablet: {
         color: "#353C40",
-        fontSize: 40,
+        fontSize: RF(40),
         fontFamily: "bold",
-        marginLeft: 10,
+        marginLeft: RW(10),
         marginTop: 0,
         flexDirection: 'column',
         justifyContent: 'center',
-        height: 55,
+        height: RH(55),
     },
     bottomImage_tablet: {
         position: 'absolute',
         right: 0,
-        bottom: 40,
-        width: 202,
-        height: 230
+        bottom: RH(40),
+        width: RW(202),
+        height: RH(230)
     },
     input_tablet: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 60,
-        marginTop: 5,
-        marginBottom: 10,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(60),
+        marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 22,
+        paddingLeft: RW(15),
+        fontSize: RF(22),
     },
     inputError_tablet: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 60,
+        marginLeft: RF(20),
+        marginRight: RH(20),
+        height: RH(60),
         marginTop: 5,
         marginBottom: 10,
         borderColor: '#dd0000',
@@ -793,16 +794,16 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 22,
+        fontSize: RF(22),
     },
     signInButton_tablet: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 100,
-        width: deviceWidth - 40,
-        height: 60,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(100),
+        width: deviceWidth - RW(40),
+        height: RH(60),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
@@ -810,7 +811,7 @@ const styles = StyleSheet.create({
     signInButtonText_tablet: {
         color: 'white',
         alignSelf: 'center',
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular",
     },
     navigationText_tablet: {
@@ -820,32 +821,32 @@ const styles = StyleSheet.create({
     },
     navigationButtonText_tablet: {
         color: '#353C40',
-        fontSize: 22,
+        fontSize: RF(22),
         fontFamily: "bold",
         textDecorationLine: 'underline'
     },
     hexagon: {
-        width: Device.isTablet ? 120 : 70,
-        height: Device.isTablet ? 55 : 25,
+        width: Device.isTablet ? 120 : RW(70),
+        height: Device.isTablet ? 55 : RH(25),
         position: 'relative',
     },
     logoDesign: {
         position: 'absolute',
-        top: Device.isTablet ? -5 : -10,
+        top: Device.isTablet ? -5 : -RH(10),
         bottom: 0,
-        left: Device.isTablet ? 35 : 15,
+        left: Device.isTablet ? 35 : RW(15),
         color: "#FFF",
-        fontSize: Device.isTablet ? 50 : 30,
+        fontSize: Device.isTablet ? 50 : RF(30),
         fontFamily: "bold"
      },
   hexagonInner: {
-    width: Device.isTablet ? 100 : 50,
-    height: Device.isTablet ? 55 : 25.2,
+    width: Device.isTablet ? 100 : RW(50),
+    height: Device.isTablet ? 55 : RH(25.2),
     backgroundColor: "red",
   },
   hexagonAfter: {
     position: "absolute",
-    bottom: Device.isTablet ? -25 : -15,
+    bottom: Device.isTablet ? -25 : -RH(15),
     left: 0,
     width: 0,
     height: 0,
@@ -859,7 +860,7 @@ const styles = StyleSheet.create({
   },
   hexagonBefore: {
     position: "absolute",
-    top: Device.isTablet ? -25 : -15,
+    top: Device.isTablet ? -25 : -RH(15),
     left: 0,
     width: 0,
     height: 0,

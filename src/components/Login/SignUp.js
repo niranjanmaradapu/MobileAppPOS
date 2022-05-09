@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, Image, Text, TouchableOpacity, TextInput, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { RF, RH, RW } from '../../Responsive';
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
 
@@ -161,8 +162,8 @@ const pickerSelectStyles = StyleSheet.create({
 const styles = StyleSheet.create({
     logoImage: {
         alignSelf: 'center',
-        width: 300,
-        height: 230,
+        width: RW(300),
+        height: RH(230),
 
     },
     containerForActivity: {
@@ -175,29 +176,29 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         width: deviceWidth,
         textAlign: 'center',
-        fontSize: 24,
-        height: 84,
+        fontSize: RF(24),
+        height: RH(84),
     },
     signUptext: {
         marginTop: 40,
         fontFamily: "bold",
         alignSelf: 'center',
         color: '#FFFFFF',
-        fontSize: 20,
+        fontSize: RF(20),
     },
     title: {
         color: 'white',
-        fontSize: 20,
-        margin: 20
+        fontSize: RF(20),
+        margin: RH(20)
     },
     imagealign: {
-        marginTop: 18,
+        marginTop: RH(18),
         marginLeft: 0,
     },
     container: {
         flex: 1,
         justifyContent: 'center',
-        height: deviceheight + 40,
+        height: deviceheight + RH(40),
         backgroundColor: '#FFFFFF'
     },
     ytdImageValue: {
@@ -209,36 +210,36 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
     },
     input: {
-        marginLeft: 20,
-        marginRight: 20,
-        height: 50,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(50),
         backgroundColor: '#F6F6F6',
         borderColor: '#F6F6F6',
         color: '#6F6F6F',
         fontFamily: "regular",
         borderWidth: 5,
-        fontSize: 14,
+       fontSize: RF(14),
     },
     passwordInput: {
-        marginLeft: 20,
-        marginRight: 20,
-        height: 50,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(50),
         marginBottom: 5,
-        marginTop: 20,
+        marginTop: RH(20),
         backgroundColor: '#F6F6F6',
         borderColor: '#F6F6F6',
         color: '#6F6F6F',
         fontFamily: "regular",
         borderWidth: 5,
-        fontSize: 14,
+       fontSize: RF(14),
     },
     signInButton: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 30,
-        height: 44,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(30),
+        height: RH(44),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
@@ -246,22 +247,22 @@ const styles = StyleSheet.create({
     signInText: {
         color: '#002C46',
         alignSelf: 'center',
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "bold",
     },
 
     signInFieldStyle: {
         color: '#456CAF55',
-        marginLeft: 30,
-        marginTop: 15,
-        fontSize: 12,
+        marginLeft: RW(30),
+        marginTop: RH(15),
+        fontSize: RF(12),
         fontFamily: "regular",
     },
     signinContinueText: {
         color: '#456CAF55',
         alignSelf: 'center',
         marginTop: 5,
-        fontSize: 13,
+        fontSize: RF(13),
         fontFamily: "regular",
     },
     getStartedText: {
@@ -269,13 +270,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         fontStyle: 'normal',
         fontWeight: 'bold',
-        fontSize: 14
+       fontSize: RF(14)
     },
     signInButtonText: {
         color: 'white',
         alignSelf: 'center',
         fontFamily: "regular",
-        fontSize: 14,
+       fontSize: RF(14),
     },
     spinnerTextalign: {
         flex: 9.4,

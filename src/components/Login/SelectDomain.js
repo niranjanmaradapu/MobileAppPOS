@@ -5,6 +5,7 @@ import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View }
 import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 import LoginService from '../services/LoginService';
+import { RH, RW,RF } from '../../Responsive';
 var deviceWidth = Dimensions.get('window').width;
 I18n.fallbacks = true;
 I18n.defaultLocale = 'english';
@@ -107,7 +108,7 @@ export default class SelectDomain extends React.Component {
                                     borderBottomColor: 'lightgray', borderBottomWidth: 0.6, marginLeft: this.state.selectedItem === index ? 0 : 0, marginRight: this.state.selectedItem === index ? 0 : 0, backgroundColor: this.state.selectedItem === index ? '#ED1C24' : '#ffffff'
                                 }}>
 
-                                    <View style={{ flexDirection: 'column', width: '100%', height: 100, }}>
+                                    <View style={{ flexDirection: 'column', width: '100%', height: RH(100), }}>
                                         {item.domaiName === "Textile" &&
                                             <Image
                                                 style={Device.isTablet ? styles.image_tablet : styles.image_mobile}
@@ -149,9 +150,9 @@ export default class SelectDomain extends React.Component {
 const styles = StyleSheet.create({
     logoImage: {
         alignSelf: 'center',
-        width: 177,
-        height: 219,
-        marginTop: 40,
+        width: RW(177),
+        height: RH(219),
+        marginTop: RH(40),
     },
     container: {
         flex: 1,
@@ -162,39 +163,39 @@ const styles = StyleSheet.create({
 
     // Mobile
     image_mobile: {
-        width: 60,
-        height: 60,
+        width: RW(60),
+        height: RH(60),
         borderRadius: 30,
-        marginLeft: 30,
-        marginTop: 20,
+        marginLeft: RW(30),
+        marginTop: RH(20),
     },
     text_mobile: {
-        fontSize: 20,
-        marginTop: -40,
+        fontSize: RF(20),
+        marginTop: -RH(40),
         fontFamily: 'medium',
         alignSelf: 'center',
     },
     saveButton_mobile: {
-        margin: 8,
-        height: 50,
+        margin: RH(8),
+        height: RH(50),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     saveButtonText_mobile: {
         textAlign: 'center',
-        marginTop: 15,
+        marginTop: RH(15),
         color: "#ffffff",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     continueButton_mobiile: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         position: 'absolute',
-        marginLeft: 20,
-        width: deviceWidth - 40,
-        bottom: 30,
-        height: 44,
+        marginLeft: RW(20),
+        width: deviceWidth - RW(40),
+        bottom: RH(30),
+        height: RH(44),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
@@ -203,33 +204,33 @@ const styles = StyleSheet.create({
         color: 'white',
         justifyContent: 'center',
         alignSelf: 'center',
-        fontSize: 14,
+        fontSize: RF(14),
         fontFamily: "regular",
     },
 
 
     // Tablet
     image_tablet: {
-        width: 90,
-        height: 90,
+        width: RW(90),
+        height: RH(90),
         borderRadius: 45,
-        marginLeft: 30,
-        marginTop: 5,
+        marginLeft: RW(30),
+        marginTop: RH(5),
     },
     text_tablet: {
-        fontSize: 30,
+        fontSize: RF(30),
         fontFamily: 'medium',
-        marginTop: -65,
+        marginTop: -RH(65),
         alignSelf: 'center',
     },
     continueButton_tablet: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         position: 'absolute',
-        marginLeft: 20,
-        width: deviceWidth - 40,
-        bottom: 30,
-        height: 60,
+        marginLeft: RW(20),
+        width: deviceWidth - RW(40),
+        bottom: RH(30),
+        height: RH(60),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
         color: 'white',
         justifyContent: 'center',
         alignSelf: 'center',
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular",
     },
 

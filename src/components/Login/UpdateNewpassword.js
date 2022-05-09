@@ -8,6 +8,7 @@ import LoginService from '../services/LoginService';
 import I18n from 'react-native-i18n';
 import { errorLength, urmErrorMessages } from '../Errors/errors';
 import Message from '../Errors/Message';
+import { RF, RH, RW } from '../../Responsive';
 
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
@@ -419,31 +420,31 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 20,
+        fontSize: RF(20),
     },
     inputError_tablet: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(54),
+        marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#dd0000',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: 2,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
+        paddingLeft: RW(15),
+        fontSize: RF(20),
     },
     createButton_tablet: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        width: deviceWidth - 40,
-        height: 60,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(20),
+        width: deviceWidth - RW(40),
+        height: RH(60),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
@@ -451,7 +452,7 @@ const styles = StyleSheet.create({
     createButtonText_tablet: {
         color: 'white',
         alignSelf: 'center',
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular",
     },
 });
