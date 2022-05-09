@@ -5,6 +5,7 @@ import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View }
 import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 import LoginService from '../services/LoginService';
+import { RH, RW,RF } from '../../Responsive';
 var deviceWidth = Dimensions.get('window').width;
 I18n.fallbacks = true;
 I18n.defaultLocale = 'english';
@@ -152,28 +153,28 @@ export default class SelectStore extends React.Component {
 
                             <TouchableOpacity style={{
                                 position: 'absolute',
-                                left: 10,
-                                top: 30,
-                                width: 40,
-                                height: 40,
+                                left: RW(10),
+                                top: RH(30),
+                                width: RW(40),
+                                height: RH(40),
                             }} onPress={() => this.handleBackButtonClick()}>
                                 <Image source={require('../assets/images/backButton.png')} />
                             </TouchableOpacity>
                             <Text style={{
                                 position: 'absolute',
-                                left: 70,
-                                top: 47,
-                                width: 300,
-                                height: 20,
+                                left: RW(70),
+                                top: RW(47),
+                                width: RW(300),
+                                height: RH(20),
                                 fontFamily: 'bold',
-                                fontSize: 18,
+                                fontSize: RF(18),
                                 color: '#353C40'
                             }}> {I18n.t('Stores')} </Text>
                         </View>
                     )}
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t('Select the Store')} </Text>
                     <FlatList
-                        style={{ width: deviceWidth, marginTop: 50, marginBottom: 100, }}
+                        style={{ width: deviceWidth, marginTop: RH(50), marginBottom: RH(100), }}
                         //scrollEnabled={false}
                         ListHeaderComponent={() => {
                             return (<Text></Text>);
@@ -210,44 +211,44 @@ export default class SelectStore extends React.Component {
     }
 }
 
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        flexDirection: 'row',
-        marginLeft: 24,
-        marginRight: 24,
-        marginTop: 2,
-        height: 34,
-        borderColor: '#AAAAAA',
-        backgroundColor: 'white',
-        color: 'black',
-        textAlign: 'center',
-    },
-    inputAndroid: {
-        flexDirection: 'row',
-        width: 100,
-        // marginLeft: 24,
-        // marginRight: 24,
-        marginTop: 2,
-        height: 34,
-        borderColor: '#AAAAAA',
-        backgroundColor: 'white',
-        color: 'black',
-        textAlign: 'center',
-    },
-});
+// const pickerSelectStyles = StyleSheet.create({
+//     inputIOS: {
+//         flexDirection: 'row',
+//         marginLeft: 24,
+//         marginRight: 24,
+//         marginTop: 2,
+//         height: 34,
+//         borderColor: '#AAAAAA',
+//         backgroundColor: 'white',
+//         color: 'black',
+//         textAlign: 'center',
+//     },
+//     inputAndroid: {
+//         flexDirection: 'row',
+//         width: 100,
+//         // marginLeft: 24,
+//         // marginRight: 24,
+//         marginTop: 2,
+//         height: 34,
+//         borderColor: '#AAAAAA',
+//         backgroundColor: 'white',
+//         color: 'black',
+//         textAlign: 'center',
+//     },
+// });
 
 
 
 const styles = StyleSheet.create({
     imagealign: {
-        marginTop: 14,
-        marginRight: 10,
+        marginTop: RH(14),
+        marginRight: RH(10),
     },
     logoImage: {
-        width: 302,
-        height: 275,
+        width: RW(302),
+        height: RH(275),
         position: 'absolute',
-        top: 130
+        top: RH(130)
     },
     container: {
         flex: 1,
@@ -258,32 +259,32 @@ const styles = StyleSheet.create({
     // Styles For Mobile
     headerTitle_mobile: {
         color: "#353C40",
-        fontSize: 30,
+        fontSize: RF(30),
         fontFamily: "bold",
-        marginLeft: 20,
-        marginTop: 100,
+        marginLeft: RW(20),
+        marginTop: RH(100),
         flexDirection: 'column',
         justifyContent: 'center',
     },
     domainButton_mobile: {
         flexDirection: 'column',
         width: '100%',
-        height: 80
+        height: RH(80)
     },
     domainButtonText_mobile: {
-        fontSize: 18,
-        marginTop: 30,
-        marginLeft: 20,
+        fontSize: RF(18),
+        marginTop: RH(30),
+        marginLeft: RW(20),
         fontFamily: 'medium',
     },
     continueButton_mobiile: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         position: 'absolute',
-        marginLeft: 20,
-        width: deviceWidth - 40,
-        bottom: 30,
-        height: 44,
+        marginLeft: RW(20),
+        width: deviceWidth - RW(40),
+        bottom: RH(30),
+        height: RH(44),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
@@ -292,39 +293,39 @@ const styles = StyleSheet.create({
         color: 'white',
         justifyContent: 'center',
         alignSelf: 'center',
-        fontSize: 14,
+        fontSize: RF(14),
         fontFamily: "regular",
     },
 
     // Styles For Tablet
     headerTitle_tablet: {
         color: "#353C40",
-        fontSize: 40,
+        fontSize: RF(40),
         fontFamily: "bold",
-        marginLeft: 20,
-        marginTop: 100,
+        marginLeft: RW(20),
+        marginTop: RH(100),
         flexDirection: 'column',
         justifyContent: 'center',
     },
     domainButton_tablet: {
         flexDirection: 'column',
         width: '100%',
-        height: 100
+        height: RH(100)
     },
     domainButtonText_tablet: {
-        fontSize: 28,
-        marginTop: 30,
-        marginLeft: 20,
+        fontSize: RF(28),
+        marginTop: RH(30),
+        marginLeft: RW(20),
         fontFamily: 'medium',
     },
     continueButton_tablet: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         position: 'absolute',
-        marginLeft: 20,
-        width: deviceWidth - 40,
-        bottom: 30,
-        height: 60,
+        marginLeft: RW(20),
+        width: deviceWidth - RW(40),
+        bottom: RH(30),
+        height: RH(60),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
