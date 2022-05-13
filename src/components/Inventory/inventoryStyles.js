@@ -59,16 +59,16 @@ export const buttonContainer = {
 }
 
 export const buttonStyle = {
-  width:RW(30),
-  height: RH(30),
+  width: Device.isTablet ? RW(50) : RW(30),
+  height: Device.isTablet ? RW(50) : RW(30),
   borderBottomRightRadius: 5,
   borderTopRightRadius: 5,
   borderWidth: Device.isTablet ? 2 : 1,
 }
 
 export const buttonStyle1 = {
-  width:RW(30),
-  height: RH(30),
+  width: Device.isTablet ? RW(50) : RW(30),
+  height: Device.isTablet ? RW(50) : RW(30),
   borderBottomLeftRadius: 5,
   borderTopLeftRadius: 5,
   borderWidth: Device.isTablet ? 2 : 1,

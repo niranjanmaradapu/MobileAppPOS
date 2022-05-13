@@ -54,7 +54,7 @@ class RegisterClient extends Component {
     };
 
     handleNameValid = () => {
-        if (this.state.name.length >= errorLength.name) {
+        if (this.state.userName.length >= errorLength.name) {
             this.setState({nameValid: true})
         }
     }
