@@ -8,6 +8,7 @@ import I18n from 'react-native-i18n';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
 import ReportsService from '../services/ReportsService';
+import { RH, RW,RF } from '../../Responsive';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -208,10 +209,10 @@ export class ListOfBarcodes extends Component {
             <View>
                 <FlatList
                     data={this.props.listBarcodes}
-                    style={{ marginTop: 20 }}
+                    style={{ marginTop: RH(20) }}
                     scrollEnabled={true}
                     keyExtractor={(item,i) => i.toString()}
-                    ListEmptyComponent={<Text style={{ fontSize: Device.isTablet ? 21 : 17, fontFamily: 'bold', color: '#000000', textAlign: 'center', marginTop: deviceheight/3 }}>&#9888; {I18n.t("Results not loaded")}</Text>}
+                    ListEmptyComponent={<Text style={{ fontSize: Device.isTablet ? RF(21) : RF(17), fontFamily: 'bold', color: '#000000', textAlign: 'center', marginTop: deviceheight/3 }}>&#9888; {I18n.t("Results not loaded")}</Text>}
                     renderItem={({ item, index }) => (
                         <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
                             <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
@@ -232,7 +233,7 @@ export class ListOfBarcodes extends Component {
 
                                     </View>
                                 </View>
-                                <View style={{ marginRight: Device.isTablet ? 30 : 20 }}>
+                                <View style={{ marginRight: Device.isTablet ? RW(30) : RW(20) }}>
                                     <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewBarcode(item, index)}>
                                         <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/eye.png')} />
                                     </TouchableOpacity>
@@ -247,13 +248,13 @@ export class ListOfBarcodes extends Component {
                         <Modal style={{ margin: 0 }} isVisible={this.props.modalVisible}>
                             <View style={styles.filterMainContainer} >
                                 <View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: RH(5), height: Device.isTablet ? RW(60) : RW(50) }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Filter By")} </Text>
+                                            <Text style={{ marginTop: RH(15), fontSize: Device.isTablet ? RF(22) :RF (17), marginLeft: RW(20) }} > {I18n.t("Filter By")} </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
-                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                            <TouchableOpacity style={{ width: Device.isTablet ? RW(60) : RW(50), height: Device.isTablet ? RH(60) : RH(50), marginTop: Device.isTablet ? RH(20) : RH(15), }} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: RH(5) }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
@@ -272,10 +273,10 @@ export class ListOfBarcodes extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.startDate == "" ? 'START DATE' : this.state.startDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                        <Image style={{ position: 'absolute', top: RH(10), right: 0, }} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
                                     {this.state.datepickerOpen && (
-                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: '#ffffff' }}>
+                                        <View style={{ height: RH(280), width: deviceWidth, backgroundColor: '#ffffff' }}>
                                             <TouchableOpacity
                                                 style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
                                             >
@@ -288,7 +289,7 @@ export class ListOfBarcodes extends Component {
                                                 <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
 
                                             </TouchableOpacity>
-                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                            <DatePicker style={{ width: deviceWidth, height: RH(200), marginTop: RH(50), }}
                                                 date={this.state.date}
                                                 mode={'date'}
                                                 onDateChange={(date) => this.setState({ date })}
@@ -303,10 +304,10 @@ export class ListOfBarcodes extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.endDate == "" ? 'END DATE' : this.state.endDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                        <Image style={{ position: 'absolute', top: RH(10), right: 0, }} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
                                     {this.state.datepickerendOpen && (
-                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: '#ffffff' }}>
+                                        <View style={{ height: RH(280), width: deviceWidth, backgroundColor: '#ffffff' }}>
                                             <TouchableOpacity
                                                 style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
                                             >
@@ -318,7 +319,7 @@ export class ListOfBarcodes extends Component {
                                                 <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
 
                                             </TouchableOpacity>
-                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                            <DatePicker style={{ width: deviceWidth, height: RH(200), marginTop: RH(50), }}
                                                 date={this.state.enddate}
                                                 mode={'date'}
                                                 onDateChange={(enddate) => this.setState({ enddate })}
@@ -326,7 +327,7 @@ export class ListOfBarcodes extends Component {
                                         </View>
                                     )}
                                     <TextInput
-                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - RW(40) }]}
                                         underlineColorAndroid="transparent"
                                         placeholder={I18n.t("BARCODE")}
                                         placeholderTextColor="#6F6F6F"
@@ -352,7 +353,7 @@ export class ListOfBarcodes extends Component {
                                         />
                                     </View> */}
                                     <TextInput
-                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - RW(40) }]}
                                         underlineColorAndroid="transparent"
                                         placeholder={I18n.t("EMP ID")}
                                         placeholderTextColor="#6F6F6F"
@@ -362,7 +363,7 @@ export class ListOfBarcodes extends Component {
                                         onChangeText={this.handleEmpId}
                                     />
                                     <TextInput
-                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - RW(40) }]}
                                         underlineColorAndroid="transparent"
                                         placeholder={I18n.t("PRICE <")}
                                         placeholderTextColor="#6F6F6F"
@@ -372,7 +373,7 @@ export class ListOfBarcodes extends Component {
                                         onChangeText={this.handleFromPrice}
                                     />
                                     <TextInput
-                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - RW(40) }]}
                                         underlineColorAndroid="transparent"
                                         placeholder={I18n.t("PRICE >")}
                                         placeholderTextColor="#6F6F6F"
@@ -398,15 +399,15 @@ export class ListOfBarcodes extends Component {
                 {this.state.flagViewDetail && (
                     <View>
                         <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
-                            <View style={[styles.filterMainContainer, { height: Device.isTablet ? 400 : 300, marginTop: Device.isTablet ? deviceheight - 400 : deviceheight - 350, backgroundColor: '#00a9a9' }]}>
+                            <View style={[styles.filterMainContainer, { height: Device.isTablet ? RH(400) : RH(300), marginTop: Device.isTablet ? deviceheight - RH(400) : deviceheight - RH(350), backgroundColor: '#00a9a9' }]}>
                                 <View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: RH(5), height: Device.isTablet ? RH(60) : RH(50) }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > {I18n.t("Barcode Details")} </Text>
+                                            <Text style={{ marginTop: RH(15), fontSize: Device.isTablet ? RF(22) :RF (17), marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > {I18n.t("Barcode Details")} </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
-                                                <Image style={{ margin: 5, height: Device.isTablet ? 20 : 15, width: Device.isTablet ? 20 : 15, }} source={require('../assets/images/modalCloseWhite.png')} />
+                                            <TouchableOpacity style={{ width: Device.isTablet ? RW(60) : RW(50), height: Device.isTablet ? (60) : 50, marginTop: Device.isTablet ?RH (20) :RH (15), }} onPress={() => this.estimationModelCancel()}>
+                                                <Image style={{ margin: 5, height: Device.isTablet ?RH (20) :RH (15), width: Device.isTablet ?RW (20) :RW (15), }} source={require('../assets/images/modalCloseWhite.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
@@ -416,27 +417,27 @@ export class ListOfBarcodes extends Component {
                                         backgroundColor: 'lightgray',
                                     }}></Text>
                                 </View>
-                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 350 : 300 }}>
-                                    <View style={{ flexDirection: 'column', justifyContent: 'space-around', paddingRight: Device.isTablet ? 20 : 20, paddingLeft: Device.isTablet ? 20 : 0, height: Device.isTablet ? 310 : 250 }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? RH(350) : RH(300) }}>
+                                    <View style={{ flexDirection: 'column', justifyContent: 'space-around', paddingRight: Device.isTablet ? RW(20) : RW(20), paddingLeft: Device.isTablet ? RW(20) : 0, height: Device.isTablet ? RH(310) : RH(250) }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : RW(10), paddingLeft: Device.isTablet ? 0 : RW(10 )}}>
                                             <Text style={styles.viewText} >
                                                 {I18n.t("BARCODE")}:  </Text>
                                             <Text style={[styles.viewSubText, { color: '#00a9a9', fontFamily: 'medium' }]} selectable={true}>
                                                 {this.state.barcode} </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : RW(10 ), paddingLeft: Device.isTablet ? 0 : RW(10 )}}>
                                             <Text style={styles.viewText} >
                                                 MRP:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.mrp} </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : RW(10 ), paddingLeft: Device.isTablet ? 0 : RW(10 )}}>
                                             <Text style={styles.viewText} >
                                                 {I18n.t("STORE")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.storeName} </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : 10, paddingLeft: Device.isTablet ? 0 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 0 : RW(10 ), paddingLeft: Device.isTablet ? 0 : RW(10 )}}>
                                             <Text style={styles.viewText} >
                                                 QTY:  </Text>
                                             <Text style={styles.viewSubText} >
@@ -467,7 +468,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
-        fontSize: 15,
+        fontSize: RF(15),
     },
     inputIOS: {
         justifyContent: 'center',
@@ -476,7 +477,7 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: RF(15),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
@@ -487,20 +488,20 @@ const pickerSelectStyles_mobile = StyleSheet.create({
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: RF(15),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
 
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
+        // marginLeft: RW(20),
+        // marginRight: RW(20),
+        // margintop: RH(10),
+        // height: RH(40),
         // backgroundColor: '#ffffff',
         // borderBottomColor: '#456CAF55',
         // color: '#001B4A',
         // fontFamily: "bold",
-        // fontSize: 16,
+        // fontSize: RF(16),
         // borderRadius: 3,
     },
 });
@@ -509,7 +510,7 @@ const pickerSelectStyles_tablet = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
-        fontSize: 20,
+        fontSize: RF(20),
     },
     inputIOS: {
         justifyContent: 'center',
@@ -518,7 +519,7 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 20,
+        fontSize: RF(20),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
@@ -529,20 +530,20 @@ const pickerSelectStyles_tablet = StyleSheet.create({
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 20,
+        fontSize: RF(20),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
 
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
+        // marginLeft: RW(20),
+        // marginRight: RW(20),
+        // margintop: RH(10),
+        // height: RH(40),
         // backgroundColor: '#ffffff',
         // borderBottomColor: '#456CAF55',
         // color: '#001B4A',
         // fontFamily: "bold",
-        // fontSize: 16,
+        // fontSize: RF(16),
         // borderRadius: 3,
     },
 });
@@ -551,55 +552,55 @@ const pickerSelectStyles_tablet = StyleSheet.create({
 const styles = StyleSheet.create({
 
     imagealign: {
-        marginTop: Device.isTablet ? 25 : 20,
-        marginRight: Device.isTablet ? 30 : 20,
+        marginTop: Device.isTablet ? RH(25) : RH(20),
+        marginRight: Device.isTablet ? RW(30) : RW(20),
     },
     filterByClsoeButton: {
         position: 'absolute',
-        top: 10,
-        right: Device.isTablet ? 24 : 14,
-        width: Device.isTablet ? 60 : 50,
-        height: Device.isTablet ? 60 : 50,
+        top: RH(10),
+        right: Device.isTablet ? RW(24) : RW(14),
+        width: Device.isTablet ? RW(60) : RW(50),
+        height: Device.isTablet ? RH(60) : RH(50),
     },
     modelCloseImage: {
         fontFamily: 'regular',
-        fontSize: 12,
+        fontSize:RF (12),
         position: 'absolute',
-        top: 10,
-        right: Device.isTablet ? 15 : 10,
+        top: RH(10),
+        right: Device.isTablet ?RW(15) : RW(10),
     },
     deleteMainContainer: {
-        marginLeft: -40,
-        marginRight: -40,
+        marginLeft: -RW(40),
+        marginRight: -RW(40),
         backgroundColor: '#ffffff',
-        paddingLeft: Device.isTablet ? 0 : 20,
-        marginTop: Device.isTablet ? deviceheight - 350 : deviceheight - 240,
-        height: Device.isTablet ? 350 : 240,
+        paddingLeft: Device.isTablet ? 0 : RW(20),
+        marginTop: Device.isTablet ? deviceheight - RH(350) : deviceheight - RH(240),
+        height: Device.isTablet ? RH(350) : RH(240),
     },
     filterMainContainer: {
-        // marginLeft: -40,
+        // marginLeft: -RW(40),
         // marginRight: -40,
         // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
-        marginTop: Device.isTablet ? deviceheight - 670 : deviceheight - 570,
-        height: Device.isTablet ? 670 : 570,
+        marginTop: Device.isTablet ? deviceheight - RH(670) : deviceheight - RH(570),
+        height: Device.isTablet ? RH(670) : RH(570),
     },
     viewText: {
-        fontSize: Device.isTablet ? 22 : 17,
+        fontSize: Device.isTablet ? RF(22) :RF (17),
         fontFamily: 'bold',
         color: "#353C40"
     },
     viewSubText: {
-        fontSize: Device.isTablet ? 22 : 17,
+        fontSize: Device.isTablet ? RF(22) :RF (17),
         fontFamily: 'regular',
         color: "#353C40"
     },
 
     //////////////
     filterCancel_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        height: 50,
+        width: deviceWidth - RW(40),
+        marginLeft: RW(20),
+        height: RH(50),
         backgroundColor: "#ffffff",
         borderRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -609,297 +610,297 @@ const styles = StyleSheet.create({
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 22,
+        left: RW(10),
+        fontSize: RF(22),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 80,
+        position: 'absolute', top: RH(80),
     },
     viewtext_mobile: {
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 14,
+        left: RW(10),
+        fontSize: RF(14),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 60,
+        position: 'absolute', top: RH(60),
     },
     viewsubtext_tablet: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 22,
+        marginLeft: RW(16),
+        fontSize: RF(22),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 80,
+        top: RH(80),
     },
     viewsubtext_mobile: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 14,
+        marginLeft: RW(16),
+        fontSize: RF(14),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 60,
+        top: RH(60),
     },
 
     viewtext1_tablet: {
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 22,
+        left: RW(10),
+        fontSize: RF(22),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 110,
+        position: 'absolute', top: RH(110),
 
     },
     viewsubtext1_tablet: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 22,
+        marginLeft: RW(16),
+        fontSize: RF(22),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 110,
+        top: RH(110),
     },
 
     viewtext1_mobile: {
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 14,
+        left: RW(10),
+        fontSize: RF(14),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 90,
+        position: 'absolute', top: RH(90),
     },
 
     viewsubtext1_mobile: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 14,
+        marginLeft: RW(16),
+        fontSize: RF(14),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 90,
+        top: RH(90),
     },
     viewtext2_tablet: {
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 22,
+        left: RW(10),
+        fontSize: RF(22),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 140,
+        position: 'absolute', top: RH(140),
 
     },
     viewsubtext2_tablet: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 22,
+        marginLeft: RW(16),
+        fontSize: RF(22),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 140,
+        top: RH(140),
     },
 
     viewtext2_mobile: {
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 14,
+        left: RW(10),
+        fontSize: RF(14),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 120,
+        position: 'absolute', top: RH(120),
     },
 
     viewsubtext2_mobile: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 14,
+        marginLeft: RW(16),
+        fontSize: RF(14),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 120,
+        top: RH(120),
     },
     viewtext3_tablet: {
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 22,
+        left: RW(10),
+        fontSize: RF(22),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 170,
+        position: 'absolute', top: RH(170),
 
     },
     viewsubtext3_tablet: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 22,
+        marginLeft: RW(16),
+        fontSize: RF(22),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 170,
+        top: RH(170),
     },
 
     viewtext3_mobile: {
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 14,
+        left: RW(10),
+        fontSize: RF(14),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 150,
+        position: 'absolute', top: RH(150),
     },
 
     viewsubtext3_mobile: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 14,
+        marginLeft: RW(16),
+        fontSize: RF(14),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 150,
+        top: RH(150),
     },
     viewtext4_tablet: {
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 22,
+        left: RW(10),
+        fontSize: RF(22),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 200,
+        position: 'absolute', top: RH(200),
 
     },
     viewsubtext4_tablet: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 22,
+        marginLeft: RW(16),
+        fontSize: RF(22),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 200,
+        top: RH(200),
     },
 
     viewtext4_mobile: {
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 14,
+        left: RW(10),
+        fontSize: RF(14),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 180,
+        position: 'absolute', top: RH(180),
     },
 
     viewsubtext4_mobile: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 14,
+        marginLeft: RW(16),
+        fontSize: RF(14),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 180,
+        top: RH(180),
     },
     viewtext5_tablet: {
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 22,
+        left: RW(10),
+        fontSize: RF(22),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 230,
+        position: 'absolute', top: RH(230),
 
     },
     viewsubtext5_tablet: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 22,
+        marginLeft: RW(16),
+        fontSize: RF(22),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 230,
+        top: RH(230),
     },
 
     viewtext5_mobile: {
         color: "#353C40",
         fontFamily: "regular",
         alignItems: 'center',
-        left: 10,
-        fontSize: 14,
+        left: RW(10),
+        fontSize: RF(14),
         justifyContent: 'center',
         textAlign: 'center',
-        position: 'absolute', top: 210,
+        position: 'absolute', top: RH(210),
     },
 
     viewsubtext5_mobile: {
         color: "#353C40",
         fontFamily: "bold",
         alignItems: 'center',
-        marginLeft: 16,
-        fontSize: 14,
+        marginLeft: RW(16),
+        fontSize: RF(14),
         position: 'absolute',
-        right: 10,
+        right: RW(10),
         justifyContent: 'center',
         textAlign: 'center',
         position: 'absolute',
-        top: 210,
+        top: RH(210),
     },
     filterCancel_tablet: {
-        width: deviceWidth - 40,
-        height: 60,
+        width: deviceWidth - RW(40),
+        height: RH(60),
         backgroundColor: "#ffffff",
         borderRadius: 5,
         borderWidth: 2,
@@ -912,127 +913,127 @@ const styles = StyleSheet.create({
     filterMainContainer_mobile: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -20,
+        marginLeft: -RW(20),
         backgroundColor: "#ffffff",
-        height: 600,
+        height: RH(600),
         position: 'absolute',
-        bottom: -20,
+        bottom: -RH(20),
     },
     filterByTitle_mobile: {
         position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 20,
+        left: RW(20),
+        top: RH(15),
+        width: RW(300),
+        height: RH(20),
         fontFamily: 'medium',
-        fontSize: 16,
+        fontSize: RF(16),
         color: '#353C40'
     },
     filterByTitleDecoration_mobile: {
         height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
-        marginTop: 50,
+        marginTop: RH(50),
     },
     filterCloseButton_mobile: {
         position: 'absolute',
-        right: 8,
-        top: 15,
-        width: 50, height: 50,
+        right: RW(8),
+        top: RH(15),
+        width: RW(50), height: RH(50),
     },
     filterDateButton_mobile: {
-        width: deviceWidth - 40,
-        marginTop: 5,
-        marginBottom: 10,
-        marginLeft: 20,
-        marginRight: 20,
-        paddingLeft: 15,
+        width: deviceWidth - RW(40),
+        marginTop: RH(5),
+        marginBottom: RH(10),
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        paddingLeft: RW(15),
         borderColor: '#8F9EB717',
         borderRadius: 3,
-        height: 50,
+        height: RH(50),
         backgroundColor: "#F6F6F6",
         borderRadius: 5,
     },
     filterDateButtonText_mobile: {
-        marginLeft: 16,
-        marginTop: 20,
+        marginLeft: RW(16),
+        marginTop: RH(20),
         color: "#6F6F6F",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     datePickerContainer_mobile: {
-        height: 280,
+        height: RH(280),
         width: deviceWidth,
         backgroundColor: '#ffffff'
     },
     datePickerButton_mobile: {
         position: 'absolute',
-        left: 20,
-        top: 10,
-        height: 30,
+        left: RW(20),
+        top: RH(10),
+        height: RH(30),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     datePickerEndButton_mobile: {
         position: 'absolute',
-        right: 20,
-        top: 10,
-        height: 30,
+        right:RW (20),
+        top: RH(10),
+        height: RH(30),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     datePickerButtonText_mobile: {
         textAlign: 'center',
-        marginTop: 5,
+        marginTop: RH(5),
         color: "#ffffff",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     input_mobile: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(44),
+        marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
+        paddingLeft: RW(15),
+        fontSize: RF(14),
     },
     filterCloseImage_mobile: {
         color: '#ED1C24',
         fontFamily: 'regular',
-        fontSize: 12,
+        fontSize:RF (12),
         position: 'absolute',
-        top: 10,
+        top: RH(10),
         right: 0,
     },
     filterApplyButton_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 50,
+        width: deviceWidth - RW(40),
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(20),
+        height: RH(50),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     filterButtonText_mobile: {
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: RH(20),
         color: "#ffffff",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     filterCancelButton_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 50,
+        width: deviceWidth - RW(40),
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(20),
+        height: RH(50),
         backgroundColor: "#ffffff",
         borderRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1040,107 +1041,107 @@ const styles = StyleSheet.create({
     },
     filterButtonCancelText_mobile: {
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: RH(20),
         color: "#000000",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     rnSelect_mobile: {
         color: '#8F9EB7',
-        fontSize: 15
+        fontSize: RF(15)
     },
     rnSelectContainer_mobile: {
         justifyContent: 'center',
-        margin: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
+        margin: RH(20),
+        height: RH(44),
+        marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
+        paddingLeft: RW(15),
+        fontSize: RF(14),
     },
 
     // Styles For Tablet
     filterMainContainer_tablet: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -40,
+        marginLeft: -RW(40),
         backgroundColor: "#ffffff",
-        height: 670,
+        height: RH(670),
         position: 'absolute',
-        bottom: -40,
+        bottom: -RH(40),
     },
     filterByTitle_tablet: {
         position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 30,
+        left: RW(20),
+        top: RH(15),
+        width: RW(300),
+        height: RH(30),
         fontFamily: 'medium',
-        fontSize: 21,
+        fontSize: RF(21),
         color: '#353C40'
     },
     filterByTitleDecoration_tablet: {
         height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
-        marginTop: 60,
+        margintop: RH(60),
     },
     input_tablet: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(54),
+        marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
+        paddingLeft: RW(15),
+        fontSize: RF(20),
     },
     filterCloseButton_tablet: {
         position: 'absolute',
-        right: 24,
-        top: 10,
-        width: 60, height: 60,
+        right: RW(24),
+        top: RH(10),
+        width: RW(60), height: RH(60),
     },
     filterCloseImage_tablet: {
         color: '#ED1C24',
         fontFamily: 'regular',
-        fontSize: 17,
+        fontSize: RF(17),
         position: 'absolute',
-        top: 10,
-        right: 24,
+        top: RH(10),
+        right: RW(24),
     },
     filterApplyButton_tablet: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 60,
+        width: deviceWidth - RW(40),
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(20),
+        height: RH(60),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     filterButtonText_tablet: {
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: RH(20),
         color: "#ffffff",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     filterCancelButton_tablet: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 60,
+        width: deviceWidth - RW(40),
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(20),
+        height: RH(60),
         backgroundColor: "#ffffff",
         borderRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1148,71 +1149,71 @@ const styles = StyleSheet.create({
     },
     filterButtonCancelText_tablet: {
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: RH(20),
         color: "#000000",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     filterDateButton_tablet: {
-        width: deviceWidth - 40,
-        marginTop: 5,
-        marginBottom: 10,
-        marginLeft: 20,
-        marginRight: 20,
-        paddingLeft: 15,
+        width: deviceWidth - RW(40),
+        marginTop: RH(5),
+        marginBottom: RH(10),
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        paddingLeft: RW(15),
         borderColor: '#8F9EB717',
         borderRadius: 3,
-        height: 60,
+        height: RH(60),
         backgroundColor: "#F6F6F6",
         borderRadius: 5,
     },
     filterDateButtonText_tablet: {
-        marginLeft: 16,
-        marginTop: 20,
+        marginLeft: RW(16),
+        marginTop: RH(20),
         color: "#6F6F6F",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     datePickerButton_tablet: {
         position: 'absolute',
-        left: 20,
-        top: 10,
-        height: 40,
+        left: RW(20),
+        top: RH(10),
+        height: RH(40),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     datePickerButtonText_tablet: {
         textAlign: 'center',
-        marginTop: 5,
+        marginTop: RH(5),
         color: "#ffffff",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     datePickerEndButton_tablet: {
         position: 'absolute',
-        right: 20,
-        top: 10,
-        height: 40,
+        right:RW (20),
+        top: RH(10),
+        height: RH(40),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     rnSelect_tablet: {
         color: '#8F9EB7',
-        fontSize: 20
+        fontSize: RF(20)
     },
     rnSelectContainer_tablet: {
         justifyContent: 'center',
-        margin: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
+        margin: RH(20),
+        height: RH(54),
+        marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
+        paddingLeft: RW(15),
+        fontSize: RF(20),
     },
 
 
@@ -1237,7 +1238,7 @@ const flats = StyleSheet.create({
 
     // flats for Mobile
     flatlistContainer_mobile: {
-        height: 150,
+        height: RH(150),
         backgroundColor: '#fbfbfb',
         borderBottomWidth: 5,
         borderBottomColor: '#ffffff',
@@ -1249,29 +1250,29 @@ const flats = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        paddingLeft: 10,
+        paddingleft: RW(10),
         paddingRight: 10,
         alignItems: 'center',
-        height: 140
+        height: RH(140)
     },
     flatlistTextAccent_mobile: {
         fontFamily: 'medium',
-        fontSize: 16,
+        fontSize: RF(16),
         color: '#ED1C24'
     },
     flatlistText_mobile: {
         fontFamily: 'regular',
-        fontSize: 12,
+        fontSize:RF (12),
         color: '#353c40'
     },
     flatlistTextCommon_mobile: {
         fontFamily: 'regular',
-        fontSize: 12,
+        fontSize:RF (12),
         color: '#808080'
     },
     editButton_mobile: {
         width: 30,
-        height: 30,
+        height: RH(30),
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1279,8 +1280,8 @@ const flats = StyleSheet.create({
         // borderRadius:5,
     },
     deleteButton_mobile: {
-        width: 30,
-        height: 30,
+        width: RW(30),
+        height: RH(30),
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1290,7 +1291,7 @@ const flats = StyleSheet.create({
 
     // flats for Tablet
     flatlistContainer_tablet: {
-        height: 200,
+        height: RH(200),
         backgroundColor: '#fbfbfb',
         borderBottomWidth: 5,
         borderBottomColor: '#ffffff',
@@ -1302,34 +1303,34 @@ const flats = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        paddingLeft: 20,
-        paddingRight: 20,
+        paddingleft: RW(20),
+        paddingright:RW (20),
         alignItems: 'center',
-        height: 160
+        height: RH(160)
     },
     flatlistTextAccent_tablet: {
         fontFamily: 'medium',
-        fontSize: 21,
+        fontSize: RF(21),
         color: '#ED1C24'
     },
     flatlistText_tablet: {
         fontFamily: 'regular',
-        fontSize: 21,
+        fontSize: RF(21),
         color: '#353c40'
     },
     flatlistTextCommon_tablet: {
         fontFamily: 'regular',
-        fontSize: 17,
+        fontSize: RF(17),
         color: '#808080'
     },
     flatlstTextCommon_tablet: {
         fontFamily: 'regular',
-        fontSize: 17,
+        fontSize: RF(17),
         color: '#808080'
     },
     editButton_tablet: {
-        width: 50,
-        height: 50,
+        width: RW(50),
+        height: RH(50),
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1337,8 +1338,8 @@ const flats = StyleSheet.create({
         // borderRadius:5,
     },
     deleteButton_tablet: {
-        width: 50,
-        height: 50,
+        width: RW(50),
+        height: RH(50),
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
