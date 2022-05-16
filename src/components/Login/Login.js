@@ -509,7 +509,7 @@ export default class Login extends Component {
                                     onBlur={this.handleEmailValid}
                                     value={this.state.userName}
                                     ref={inputemail => { this.emailValueInput = inputemail; }} />
-                                {!userValid && <Message message={this.state.errors["userName"]} />}
+                                {!userValid && <Message imp={true} message={this.state.errors["userName"]} />}
                                 
 
                                 <TextInput style={passValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -523,7 +523,7 @@ export default class Login extends Component {
                                     onBlur={this.handlePasswordValid}
                                     value={this.state.password}
                                     ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
-                                {!passValid && <Message message={this.state.errors["password"]} />}
+                                {!passValid && <Message imp={true} message={this.state.errors["password"]} />}
 
                                 <View>
                                     <View style={{ flexDirection: Device.isTablet ? "row" : "column", justifyContent: Device.isTablet ? "space-around" : "center", alignItems: Device.isTablet ? "center" : "center" }}>

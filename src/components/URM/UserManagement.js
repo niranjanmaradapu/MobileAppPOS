@@ -14,7 +14,9 @@ import Loader from "../../commonUtils/loader";
 import UrmService from '../services/UrmService';
 import UrmDashboard from './UrmDashboard';
 import EmptyList from '../Errors/EmptyList';
-import { buttonContainer, buttonStyle, buttonStyle1, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, deleteContainer, deleteText, filterApplyBtnText, filterBtn, filterCancelBtn, filterCancelBtnText, filterCloseImage, filterHeading, filterInput, filterMainContainer, filterRnPicker, filterSubContainer, filterSubmitBtn, flatListMainContainer, flatlistSubContainer, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, highText, imageStyle, menuButton, textContainer, textStyleLight, textStyleMedium, urmNavigationButtons, urmNavigationButtonsText } from './urmStyles';
+import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton,  headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer,  buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText} from '../Styles/Styles';
+import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
+import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 
 var deviceheight = Dimensions.get("window").height;
 var deviceWidth = Dimensions.get("window").width;
@@ -628,8 +630,8 @@ export default class UserManagement extends Component {
                                     showsVerticalScrollIndicator={false}
                                     showsHorizontalScrollIndicator={false}
                                     renderItem={({ item, index }) => (
-                                    <TouchableOpacity style={[urmNavigationButtons, {backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF', borderColor: item.bool ? '#ED1C24' : '#858585',}]} onPress={() => this.topbarAction(item, index)} >
-                                            <Text style={[urmNavigationButtonsText, {color: item.bool ? "#FFFFFF" : '#858585',}]}>
+                                    <TouchableOpacity style={[pageNavigationBtn, {backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF', borderColor: item.bool ? '#ED1C24' : '#858585',}]} onPress={() => this.topbarAction(item, index)} >
+                                            <Text style={[pageNavigationBtnText, {color: item.bool ? "#FFFFFF" : '#858585',}]}>
                                                 {item.name}
                                             </Text>
                                         </TouchableOpacity>
@@ -641,25 +643,6 @@ export default class UserManagement extends Component {
 
                         </View>
                                 
-
-                        {/* <View style={Device.isTablet ? styles.modalContainer_tablet : styles.modalContainer_mobile}>
-                        <TouchableOpacity style={[this.state.flagOne ? styles.modalActive : styles.modalInActive, Device.isTablet ? styles.modalButton_tablet : styles.modalButton_mobile, styles.modalButton1]}
-                            onPress={() => this.topbarAction1()} >
-                            <View>
-                                <Text style={[Device.isTablet ? styles.modalButtonText_tablet : styles.modalButtonText_mobile, this.state.flagOne ? styles.modalActiveText : styles.modalInActiveText]}>
-                                    Roles
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={[this.state.flagTwo ? styles.modalActive : styles.modalInActive, Device.isTablet ? styles.modalButton_tablet : styles.modalButton_mobile, styles.modalButton2]}
-                            onPress={() => this.topbarAction2()} >
-                            <View>
-                                <Text style={[Device.isTablet ? styles.modalButtonText_tablet : styles.modalButtonText_mobile, this.state.flagTwo ? styles.modalActiveText : styles.modalInActiveText]} >
-                                    Users
-                                </Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View> */}
 
                         {this.state.flagDashboard && (
                             <UrmDashboard />
@@ -689,11 +672,11 @@ export default class UserManagement extends Component {
                                             <Text style={textStyleLight}>{I18n.t("DESCRIPTION")}: {item.discription}</Text>
                                             <View style={buttonContainer}>
                                             <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditRole(item, index)}>
-                                                <Image style={imageStyle} source={require('../assets/images/edit.png')} />
+                                                <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
                                             </TouchableOpacity>
 
                                             <TouchableOpacity style={buttonStyle} onPress={() => this.handleRoledeleteaction(item, index)}>
-                                                <Image style={imageStyle} source={require('../assets/images/delete.png')} />
+                                                <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
                                             </TouchableOpacity>
                                             </View>
                                         </View>
@@ -730,10 +713,10 @@ export default class UserManagement extends Component {
                                             <Text style={textStyleLight}>{I18n.t("CREATED DATE")}: {"\n"}{item.createdDate}</Text>
                                             <View style={buttonContainer}>
                                             <TouchableOpacity style={buttonStyle1} onPress={() => this.handleedituser(item, index)}>
-                                                <Image style={imageStyle} source={require('../assets/images/edit.png')} />
+                                                <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
                                             </TouchableOpacity>
                                             <TouchableOpacity style={buttonStyle} onPress={() => this.handleuserdeleteaction(item, index)}>
-                                                <Image style={imageStyle} source={require('../assets/images/delete.png')} />
+                                                <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
                                             </TouchableOpacity>
                                             </View>
                                             </View>
@@ -752,12 +735,12 @@ export default class UserManagement extends Component {
                                     <View style={deleteContainer}>
                                         <View>
                                             <View style={filterSubContainer}>
-                                                <View>
+                                                <View style={deleteHeader}>
                                                     <Text style={filterHeading} > {I18n.t("Delete Role")} </Text>
                                                 </View>
                                                 <View>
                                                     <TouchableOpacity style={filterCloseImage} onPress={() => this.modelCancel()}>
-                                                        <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                        <Image style={deleteCloseBtn} source={require('../assets/images/modelcancel.png')} />
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
@@ -790,13 +773,13 @@ export default class UserManagement extends Component {
                                 <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
                                     <View style={deleteContainer}>
                                         <View>
-                                            <View style={filterSubContainer}>
+                                            <View style={deleteHeader}>
                                                 <View>
-                                                    <Text style={filterHeading} > {I18n.t("Delete User")} </Text>
+                                                    <Text style={deleteHeading} > {I18n.t("Delete User")} </Text>
                                                 </View>
                                                 <View>
                                                     <TouchableOpacity style={filterCloseImage} onPress={() => this.modelCancel()}>
-                                                        <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
+                                                        <Image style={deleteCloseBtn} source={require('../assets/images/modalCloseWhite.png')} />
                                                     </TouchableOpacity>
                                                 </View>
                                             </View>
@@ -848,7 +831,7 @@ export default class UserManagement extends Component {
                                         </View>
                                         <KeyboardAwareScrollView enableOnAndroid={true} >
                                             <TextInput
-                                                style={filterInput}
+                                                style={inputField}
                                                 underlineColorAndroid="transparent"
                                                 placeholder={I18n.t("ROLE")}
                                                 placeholderTextColor="#6F6F6F"
@@ -858,7 +841,7 @@ export default class UserManagement extends Component {
                                                 onChangeText={this.handleRole}
                                             />
                                             <TextInput
-                                                style={filterInput}
+                                                style={inputField}
                                                 underlineColorAndroid="transparent"
                                                 placeholder={I18n.t("CREATED BY")}
                                                 placeholderTextColor="#6F6F6F"
@@ -897,13 +880,13 @@ export default class UserManagement extends Component {
                                                 </View>
                                             )}
 
-                                            <TouchableOpacity style={filterSubmitBtn}
+                                            <TouchableOpacity style={submitBtn}
                                                 onPress={() => this.applyRoleFilter()}>
-                                                <Text style={filterApplyBtnText} >{I18n.t("APPLY")}</Text>
+                                                <Text style={submitBtnText} >{I18n.t("APPLY")}</Text>
                                             </TouchableOpacity>
-                                            <TouchableOpacity style={filterCancelBtn}
+                                            <TouchableOpacity style={cancelBtn}
                                                 onPress={() => this.modelCancel()}>
-                                                <Text style={filterCancelBtnText}>{I18n.t("CANCEL")}</Text>
+                                                <Text style={cancelBtnText}>{I18n.t("CANCEL")}</Text>
                                             </TouchableOpacity>
                                         </KeyboardAwareScrollView>
                                     </View>
@@ -934,9 +917,8 @@ export default class UserManagement extends Component {
                                         </View>
                                         <KeyboardAwareScrollView enableOnAndroid={true} >
 
-                                            <View style={filterRnPicker}>
+                                            <View style={rnPickerContainer}>
                                                 <RNPickerSelect
-                                                    // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                                     placeholder={{
                                                         label: 'USER TYPE'
                                                     }}
@@ -948,13 +930,13 @@ export default class UserManagement extends Component {
                                                         { label: 'InActive', value: 'InActive' },
                                                     ]}
                                                     onValueChange={this.handleUSerType}
-                                                    style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                                    style={rnPicker}
                                                     value={this.state.userType}
                                                     useNativeAndroidPickerStyle={false}
                                                 />
                                             </View>
                                             <TextInput
-                                                style={filterInput}
+                                                style={inputField}
                                                 underlineColorAndroid="transparent"
                                                 placeholder={I18n.t("ROLE")}
                                                 placeholderTextColor="#6F6F6F"
@@ -964,7 +946,7 @@ export default class UserManagement extends Component {
                                                 onChangeText={this.handleRole}
                                             />
                                             <TextInput
-                                                style={filterInput}
+                                                style={inputField}
                                                 underlineColorAndroid="transparent"
                                                 placeholder={I18n.t("STORE/BRANCH")}
                                                 placeholderTextColor="#6F6F6F"
@@ -973,13 +955,13 @@ export default class UserManagement extends Component {
                                                 value={this.state.branch}
                                                 onChangeText={this.handleBranch}
                                             />
-                                            <TouchableOpacity style={filterSubmitBtn}
+                                            <TouchableOpacity style={submitBtn}
                                                 onPress={() => this.applyUserFilter()}>
-                                                <Text style={filterApplyBtnText} >{I18n.t("APPLY")}</Text>
+                                                <Text style={submitBtnText} >{I18n.t("APPLY")}</Text>
                                             </TouchableOpacity>
-                                            <TouchableOpacity style={filterCancelBtn}
+                                            <TouchableOpacity style={cancelBtn}
                                                 onPress={() => this.modelCancel()}>
-                                                <Text style={filterCancelBtnText}>{I18n.t("CANCEL")}</Text>
+                                                <Text style={cancelBtnText}>{I18n.t("CANCEL")}</Text>
                                             </TouchableOpacity>
                                         </KeyboardAwareScrollView>
                                     </View>
@@ -993,67 +975,6 @@ export default class UserManagement extends Component {
     }
 }
 
-const pickerSelectStyles_mobile = StyleSheet.create({
-    placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: RF(15),
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: RH(42),
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: RF(15),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: RH(42),
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: RF(15),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-    },
-});
-
-const pickerSelectStyles_tablet = StyleSheet.create({
-    placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: RF(20),
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: RH(52),
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: RF(20),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: RH(52),
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: RF(20),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-    },
-});
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -1070,737 +991,5 @@ const styles = StyleSheet.create({
     },
     flatList: {
         marginTop: 20
-    },
-    modalActive: {
-        backgroundColor: '#000000',
-    },
-    modalInActive: {
-        backgroundColor: '#ffffff',
-    },
-    modalActiveText: {
-        color: '#ffffff',
-    },
-    modalInActiveText: {
-        color: '#000000',
-    },
-    modalButton1: {
-        borderBottomLeftRadius: 5,
-        borderTopLeftRadius: 5,
-    },
-    modalButton2: {
-        borderBottomRightRadius: 5,
-        borderTopRightRadius: 5,
-    },
-    deleteMainContainer: {
-        // marginLeft: -40,
-        // marginRight: -40,
-        // paddingLeft: Device.isTablet ? 0 : 20,
-        backgroundColor: '#ffffff',
-        marginTop: Device.isTablet ? deviceheight - 300 : deviceheight - 250,
-        height: Device.isTablet ? 300 : 250,
-    },
-    modelCloseImage: {
-        fontFamily: 'regular',
-        fontSize: 12,
-        position: 'absolute',
-        top: 10,
-        right: Device.isTablet ? 15 : 30,
-    },
-    filterMainContainer: {
-        // marginLeft: -40,
-        // marginRight: -40,
-        // paddingLeft: Device.isTablet ? 0 : 20,
-        backgroundColor: '#ffffff',
-        marginTop: Device.isTablet ? deviceheight - 500 : deviceheight - 400,
-        height: Device.isTablet ? 500 : 400,
-    },
-
-    // Styles For Mobile
-    viewsWidth_mobile: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 24,
-        height: Device.isAndroid ? 70 : 84,
-    },
-    backButton_mobile: {
-        position: 'absolute',
-        left: 10,
-        bottom: 0,
-        width: 40,
-        height: 40,
-    },
-    headerTitle_mobile: {
-        position: 'absolute',
-        left: 70,
-        bottom: 10,
-        width: 300,
-        height: 25,
-        fontFamily: 'bold',
-        fontSize: 18,
-        color: '#353C40'
-    },
-    filterButton_mobile: {
-        position: 'absolute',
-        right: 20,
-        top: 30,
-        backgroundColor: '#ffffff',
-        borderRadius: 5,
-        width: 30,
-        height: 32,
-    },
-    modalContainer_mobile: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        alignSelf: 'center',
-        marginRight: 20,
-        borderRadius: 5,
-        marginTop: 20,
-        borderColor: '#ED1C24',
-        width: '100%',
-        height: 50,
-    },
-    modalButton_mobile: {
-        borderColor: '#353C40',
-        height: 32,
-        width: "33.3%",
-        borderWidth: 1,
-        alignSelf: "flex-start",
-    },
-    modalButtonText_mobile: {
-        height: 32,
-        width: 100,
-        marginTop: 5,
-        fontFamily: "medium",
-        fontSize: 12,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    addBarcodeButton_mobile: {
-        position: 'absolute',
-        right: 70,
-        bottom: 5,
-        backgroundColor: '#ED1C24',
-        borderRadius: 5,
-        width: 110,
-        height: 32,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    addBarcodeButtonText_mobile: {
-        fontSize: 12,
-        fontFamily: 'regular',
-        color: '#ffffff',
-        marginTop: 8,
-        textAlign: 'center',
-        alignSelf: 'center'
-    },
-    filterBarcodeContainer_mobile: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -20,
-        backgroundColor: "#ffffff",
-        height: 400,
-        position: 'absolute',
-        bottom: -20,
-    },
-    filterByTitle_mobile: {
-        position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 20,
-        fontFamily: 'medium',
-        fontSize: 16,
-        color: '#353C40'
-    },
-    filterByTitleDecoration_mobile: {
-        height: Device.isTablet ? 2 : 1,
-        width: deviceWidth,
-        backgroundColor: 'lightgray',
-        marginTop: 50,
-    },
-    filterCloseButton_mobile: {
-        position: 'absolute',
-        right: 8,
-        top: 15,
-        width: 50, height: 50,
-    },
-    filterCloseImage_mobile: {
-        color: '#ED1C24',
-        fontFamily: 'regular',
-        fontSize: 12,
-        position: 'absolute',
-        top: 10,
-        right: 0,
-    },
-    filterDateButton_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        height: 50,
-        backgroundColor: "#F6F6F6",
-        borderRadius: 5,
-    },
-    filterDateButtonText_mobile: {
-        marginLeft: 16,
-        marginTop: 20,
-        color: "#6F6F6F",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    datePickerContainer_mobile: {
-        height: 280,
-        width: deviceWidth,
-        backgroundColor: '#ffffff'
-    },
-    datePickerButton_mobile: {
-        position: 'absolute',
-        left: 20,
-        top: 10,
-        height: 30,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    datePickerEndButton_mobile: {
-        position: 'absolute',
-        right: 20,
-        top: 10,
-        height: 30,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    datePickerButtonText_mobile: {
-        textAlign: 'center',
-        marginTop: 5,
-        color: "#ffffff",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    input_mobile: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    filterApplyButton_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 50,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    filterButtonText_mobile: {
-        textAlign: 'center',
-        marginTop: 20,
-        color: "#ffffff",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    filterCancelButton_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 50,
-        backgroundColor: "#ffffff",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "#353C4050",
-    },
-    filterButtonCancelText_mobile: {
-        textAlign: 'center',
-        marginTop: 20,
-        color: "#000000",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    flatlistContainer_mobile: {
-        height: 140,
-        backgroundColor: '#FBFBFB',
-        borderBottomWidth: 5,
-        borderBottomColor: '#FFFFFF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    flatlistContainer2_mobile: {
-        height: 180,
-        backgroundColor: '#FBFBFB',
-        borderBottomWidth: 5,
-        borderBottomColor: '#FFFFFF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    flatlistSubContainer_mobile: {
-        flexDirection: 'column',
-        width: '100%',
-        height: 140,
-    },
-    rnSelect_mobile: {
-        color: '#8F9EB7',
-        fontSize: 15
-    },
-    rnSelectContainer_mobile: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-
-    // Styles For Tablet
-    viewsWidth_tablet: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 28,
-        height: 90,
-    },
-    backButton_tablet: {
-        position: 'absolute',
-        left: 10,
-        top: 38,
-        width: 90,
-        height: 90,
-    },
-    headerTitle_tablet: {
-        position: 'absolute',
-        left: 70,
-        top: 40,
-        width: 300,
-        height: 40,
-        fontFamily: 'bold',
-        fontSize: 24,
-        color: '#353C40'
-    },
-    filterButton_tablet: {
-        position: 'absolute',
-        right: 20,
-        top: 40,
-        backgroundColor: '#ffffff',
-        borderRadius: 5,
-        width: 35,
-        height: 37,
-    },
-    modalContainer_tablet: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        alignSelf: 'center',
-        marginRight: 20,
-        borderRadius: 5,
-        marginTop: 20,
-        borderColor: '#ED1C24',
-        width: '100%',
-        height: 50,
-    },
-    modalButton_tablet: {
-        borderColor: '#353C40',
-        height: 42,
-        width: "33.3%",
-        borderWidth: 1,
-        alignSelf: "flex-start",
-    },
-    modalButtonText_tablet: {
-        height: 42,
-        width: 210,
-        marginTop: 5,
-        fontFamily: "medium",
-        fontSize: 17,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    addBarcodeButton_tablet: {
-        position: 'absolute',
-        right: 70,
-        top: 40,
-        backgroundColor: '#ED1C24',
-        borderRadius: 10,
-        width: 120,
-        height: 35,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    addBarcodeButtonText_tablet: {
-        fontSize: 17,
-        fontFamily: 'regular',
-        color: '#ffffff',
-        marginTop: 6,
-        textAlign: 'center',
-        alignSelf: 'center'
-    },
-    filterBarcodeContainer_tablet: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -40,
-        backgroundColor: "#ffffff",
-        height: 500,
-        position: 'absolute',
-        bottom: -40,
-    },
-    filterByTitle_tablet: {
-        position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 30,
-        fontFamily: 'medium',
-        fontSize: 21,
-        color: '#353C40'
-    },
-    filterByTitleDecoration_tablet: {
-        height: Device.isTablet ? 2 : 1,
-        width: deviceWidth,
-        backgroundColor: 'lightgray',
-        marginTop: 60,
-    },
-    filterCloseButton_tablet: {
-        position: 'absolute',
-        right: 24,
-        top: 10,
-        width: 60, height: 60,
-    },
-    filterCloseImage_tablet: {
-        color: '#ED1C24',
-        fontFamily: 'regular',
-        fontSize: 17,
-        position: 'absolute',
-        top: 10,
-        right: 24,
-    },
-    filterDateButton_tablet: {
-        width: deviceWidth - 30,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        height: 60,
-        backgroundColor: "#F6F6F6",
-        borderRadius: 5,
-    },
-    filterDateButtonText_tablet: {
-        marginLeft: 16,
-        marginTop: 20,
-        color: "#6F6F6F",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    datePickerButton_tablet: {
-        position: 'absolute',
-        left: 20,
-        top: 10,
-        height: 40,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    datePickerButtonText_tablet: {
-        textAlign: 'center',
-        marginTop: 5,
-        color: "#ffffff",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    datePickerEndButton_tablet: {
-        position: 'absolute',
-        right: 20,
-        top: 10,
-        height: 40,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    input_tablet: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-    filterApplyButton_tablet: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 60,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    filterButtonText_tablet: {
-        textAlign: 'center',
-        marginTop: 20,
-        color: "#ffffff",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    filterCancelButton_tablet: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 60,
-        backgroundColor: "#ffffff",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "#353C4050",
-    },
-    filterButtonCancelText_tablet: {
-        textAlign: 'center',
-        marginTop: 20,
-        color: "#000000",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    flatlistContainer_tablet: {
-        height: 160,
-        backgroundColor: '#FBFBFB',
-        borderBottomWidth: 5,
-        borderBottomColor: '#FFFFFF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    flatlistContainer2_tablet: {
-        height: 220,
-        backgroundColor: '#FBFBFB',
-        borderBottomWidth: 5,
-        borderBottomColor: '#FFFFFF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    flatlistSubContainer_tablet: {
-        flexDirection: 'column',
-        width: '100%',
-        height: 185,
-    },
-    rnSelect_tablet: {
-        color: '#8F9EB7',
-        fontSize: 20
-    },
-    rnSelectContainer_tablet: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-
-});
-
-// Styles For Flat-Lists
-
-const flats = StyleSheet.create({
-    mainText_mobile: {
-        fontSize: 16,
-        marginLeft: 16,
-        marginTop: 10,
-        marginBottom: 10,
-        fontFamily: 'medium',
-        color: '#ED1C24',
-    },
-    subText_mobile: {
-        fontSize: 12,
-        marginLeft: 16,
-        marginTop: 10,
-        marginBottom: 10,
-        fontFamily: 'medium',
-        color: '#353C40'
-    },
-    commonText_mobile: {
-        fontSize: 12,
-        marginBottom: 10,
-        marginTop: -125,
-        alignSelf: 'center',
-        textAlign: 'center',
-        fontFamily: 'regular',
-        color: '#808080'
-    },
-    commonText_mobile2: {
-        fontSize: 12,
-        marginBottom: 10,
-        marginTop: -145,
-        marginLeft: 30,
-        alignSelf: 'center',
-        textAlign: 'center',
-        fontFamily: 'regular',
-        color: '#808080'
-    },
-    commonTextsub_mobile: {
-        fontSize: 12,
-        marginBottom: 10,
-        marginTop: 10,
-        alignSelf: 'center',
-        textAlign: 'center',
-        fontFamily: 'regular',
-        color: '#808080'
-    },
-    editButton_mobile: {
-        position: 'absolute',
-        right: 50,
-        top: 90,
-        width: 30,
-        height: 30,
-        borderBottomLeftRadius: 5,
-        borderTopLeftRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-        // borderRadius:5,
-    },
-    deleteButton_mobile: {
-        position: 'absolute',
-        right: 20,
-        top: 90,
-        width: 30,
-        height: 30,
-        borderBottomRightRadius: 5,
-        borderTopRightRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-    },
-    deleteBarcodeContainer_mobile: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -20,
-        backgroundColor: "#ffffff",
-        height: 260,
-        position: 'absolute',
-        bottom: -20,
-    },
-    deleteBarcodeHeading_mobile: {
-        position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 20,
-        fontFamily: 'medium',
-        fontSize: 16,
-        color: '#353C40'
-    },
-
-    // Tablet styles
-
-    mainText_tablet: {
-        fontSize: 21,
-        marginLeft: 16,
-        marginTop: 20,
-        marginBottom: 10,
-        fontFamily: 'medium',
-        color: '#ED1C24',
-    },
-    subText_tablet: {
-        fontSize: 17,
-        marginLeft: 16,
-        marginTop: 10,
-        marginBottom: 10,
-        fontFamily: 'medium',
-        color: '#353C40'
-    },
-    commonText_tablet: {
-        fontSize: 17,
-        marginBottom: 10,
-        marginTop: -155,
-        alignSelf: 'center',
-        textAlign: 'center',
-        fontFamily: 'regular',
-        color: '#808080'
-    },
-    commonText_tablet2: {
-        fontSize: 17,
-        marginBottom: 10,
-        marginTop: -190,
-        alignSelf: 'center',
-        textAlign: 'center',
-        fontFamily: 'regular',
-        color: '#808080'
-    },
-    commonTextsub_tablet: {
-        fontSize: 17,
-        marginBottom: 10,
-        marginTop: 10,
-        alignSelf: 'center',
-        textAlign: 'center',
-        fontFamily: 'regular',
-        color: '#808080'
-    },
-    editButton_tablet: {
-        position: 'absolute',
-        right: 60,
-        top: 90,
-        width: 40,
-        height: 40,
-        borderBottomLeftRadius: 5,
-        borderTopLeftRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-        // borderRadius:5,
-    },
-    deleteButton_tablet: {
-        position: 'absolute',
-        right: 20,
-        top: 90,
-        width: 40,
-        height: 40,
-        borderBottomRightRadius: 5,
-        borderTopRightRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-    },
-    deleteBarcodeContainer_tablet: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -20,
-        backgroundColor: "#ffffff",
-        height: 280,
-        position: 'absolute',
-        bottom: -20,
-    },
-    deleteBarcodeHeading_tablet: {
-        position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 30,
-        fontFamily: 'medium',
-        fontSize: 21,
-        color: '#353C40'
     },
 });

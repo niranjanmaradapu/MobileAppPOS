@@ -11,6 +11,7 @@ export const urmErrorMessages = {
   orginisation: "/ Organisation name must be 3-25 characters long",
   description: "/ Enter the Description",
   customerName: "/ Customer name must be 3-25 characters",
+  gstNumber: "/ Gst Number must be 15 characters or more",
 }
 
 export const inventoryErrorMessages = {

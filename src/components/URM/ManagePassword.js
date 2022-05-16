@@ -64,7 +64,7 @@ export default class ManagePassword extends Component {
         validationPasswords() {
         let isFormValid = true
         let errors = {}
-        let passReg = /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])$/;
+        let passReg = /([^a-zA-Z0-9\s])\w+/g;
 
         if (this.state.newPassword.length < errorLength.password || passReg.test(this.state.newPassword) === false) {
             isFormValid = false
@@ -150,7 +150,7 @@ export default class ManagePassword extends Component {
                         value={this.state.newPassword}
                         onChangeText={this.handleNewPassword}
                     />
-                    {!passValid && <Message message={this.state.errors["password1"]} />}
+                    {!passValid && <Message imp={true} message={this.state.errors["password1"]} />}
                     <TextInput style={confirmValid ? styles.inputField : styles.inputFieldError}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Confirm Password")}
@@ -160,7 +160,7 @@ export default class ManagePassword extends Component {
                         onChangeText={this.handleConfirmPassword}
                         value={this.state.confirmPassword}
                         ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
-                    {!confirmValid && <Message message={this.state.errors["password2"]} />}
+                    {!confirmValid && <Message imp={true} message={this.state.errors["password2"]} />}
 
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.changePassword()}>

@@ -162,7 +162,7 @@ class UpdateNewpassword extends Component {
                                 value={this.state.code}
                                 onBlur={this.handleNewPasswordValid}
                                 ref={inputemail => { this.emailValueInput = inputemail; }} />
-                            {!passValid && <Message message={this.state.errors["password1"]} />}
+                            {!passValid && <Message imp={true} message={this.state.errors["password1"]} />}
 
                             {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
                             <TextInput
@@ -177,7 +177,7 @@ class UpdateNewpassword extends Component {
                                 onBlur={this.handleConfirmValid}
                                 value={this.state.newPassword}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
-                            {!confirmValid && <Message message={this.state.errors["password2"]} />}
+                            {!confirmValid && <Message imp={true} message={this.state.errors["password2"]} />}
 
                             {/* <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                                 underlineColorAndroid="transparent"

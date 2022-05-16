@@ -172,7 +172,7 @@ export default class AddDomain extends Component {
                         />
 
                     </View>
-                    {!domainValid && <Message message={this.state.errors["domain"]} />}
+                    {!domainValid && <Message imp={true} message={this.state.errors["domain"]} />}
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
                         underlineColorAndroid="transparent"

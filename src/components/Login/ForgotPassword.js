@@ -121,7 +121,7 @@ class ForgotPassword extends Component {
                                 onBlur={this.handleEmailValid}
                                 value={this.state.userName}
                                 ref={inputemail => { this.emailValueInput = inputemail; }} />
-                            {!userValid && <Message message={this.state.errors["username"]}/>}
+                            {!userValid && <Message imp={true} message={this.state.errors["username"]}/>}
 
                             {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
                             {/* <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}

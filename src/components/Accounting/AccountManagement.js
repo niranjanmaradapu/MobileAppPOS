@@ -9,6 +9,7 @@ import Loader from "../../commonUtils/loader";
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 import AccountingDashboard from './AccountingDashboard';
+import { pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton,  headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2} from '../Styles/Styles';
 import CreateHSNCode from './CreateHSNCode';
 import CreateTaxMaster from './CreateTaxMaster';
 import { CreditNotes, FilterCreditNotes } from './CreditNotes';
@@ -51,6 +52,7 @@ export default class AccountManagement extends Component {
             storeError: "",
             domainError: "",
             channelsList: [],
+            channelFull: false
         };
     }
 
@@ -380,6 +382,9 @@ export default class AccountManagement extends Component {
         axios.get(LoginService.channelsList()).then(res => {
             if (res) {
                 this.setState({ channelsList: res.data.result })
+                if (this.state.domains.length === this.state.channelsList.length) {
+                    this.setState({channelFull: true})
+                }
             }
         })
     }
@@ -485,57 +490,67 @@ export default class AccountManagement extends Component {
                         loading={this.state.loading} />
                 }
                 <SafeAreaView style={styles.mainContainer}>
-                    <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                        <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handlemenuButtonClick()}>
+                    <View style={headerTitleContainer} >
+                        <View style={headerTitleSubContainer}>
+                        <TouchableOpacity style={menuButton} onPress={() => this.handlemenuButtonClick()}>
                             <Image source={require('../assets/images/menu.png')} />
                         </TouchableOpacity>
-                        <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                        <Text style={headerTitle}>
                             {I18n.t("Accounting")}
                         </Text>
+                        </View>
+
+                        <View style={headerTitleSubContainer2}>
 
                         {this.state.flagCreditNotes && (
-                            <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToAddCreditNotes()}>
-                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Credit</Text>
+                            <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddCreditNotes()}>
+                                <Text style={headerNavigationBtnText}>Add Credit</Text>
                             </TouchableOpacity>
                         )}
 
                         {this.state.flagCreditNotes && (
                             <TouchableOpacity
-                                style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                style={filterBtn}
                                 onPress={() => this.filterAction()} >
                                 <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
                             </TouchableOpacity>
                         )}
 
                         {this.state.flagDebitNotes && (
-                            <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToAdDebitNotes()}>
-                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Debit</Text>
+                            <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAdDebitNotes()}>
+                                <Text style={headerNavigationBtnText}>Add Debit</Text>
                             </TouchableOpacity>
                         )}
 
                         {this.state.flagDebitNotes && (
                             <TouchableOpacity
-                                style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                style={filterBtn}
                                 onPress={() => this.filterAction()} >
                                 <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
                             </TouchableOpacity>
                         )}
 
                         {this.state.flagHSNCode && (
-                            <TouchableOpacity style={Device.isTablet ? styles.onlyNavigationToButton_tablet : styles.onlyNavigationToButton_mobile} onPress={() => this.navigateToAddHsnCode()}>
-                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add HSN</Text>
+                            <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddHsnCode()}>
+                                <Text style={headerNavigationBtnText}>Add HSN</Text>
                             </TouchableOpacity>
                         )}
 
                         {this.state.flagTaxMaster && (
-                            <TouchableOpacity style={Device.isTablet ? styles.onlyNavigationToButton_tablet : styles.onlyNavigationToButton_mobile} onPress={() => this.navigateToAddTax()}>
-                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>Add Tax</Text>
+                            <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddTax()}>
+                                <Text style={headerNavigationBtnText}>Add Tax</Text>
                             </TouchableOpacity>
                         )}
 
                         {this.state.flagStore && (
-                            <TouchableOpacity style={Device.isTablet ? styles.navigationToButton_tablet : styles.navigationToButton_mobile} onPress={() => this.navigateToAddStores()}>
-                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>{I18n.t("Add Store")}</Text>
+                            <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddStores()}>
+                                <Text style={headerNavigationBtnText}>{I18n.t("Add Store")}</Text>
+                            </TouchableOpacity>
+                            )}
+
+                            {this.state.flagDomain && (
+                            <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddDomain()}>
+                                <Text style={headerNavigationBtnText}>{I18n.t("Add Domain")}</Text>
                             </TouchableOpacity>
                         )}
 
@@ -543,27 +558,21 @@ export default class AccountManagement extends Component {
                             <View>
                                 {!this.state.filterActive &&
                                     <TouchableOpacity
-                                        style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                        style={filterBtn}
                                         onPress={() => this.filterAction()} >
                                         <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
                                     </TouchableOpacity>
                                 }
                                 {this.state.filterActive &&
                                     <TouchableOpacity
-                                        style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                        style={filterBtn}
                                         onPress={() => this.clearFilterAction()} >
                                         <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
                                     </TouchableOpacity>
                                 }
                             </View>
                         )}
-
-                        {this.state.flagDomain && (
-                            <TouchableOpacity style={Device.isTablet ? styles.onlyNavigationToButton_tablet : styles.onlyNavigationToButton_mobile} onPress={() => this.navigateToAddDomain()}>
-                                <Text style={Device.isTablet ? styles.navigationToButtonText_tablet : styles.navigationToButtonText_mobile}>{I18n.t("Add Domain")}</Text>
-                            </TouchableOpacity>
-                        )}
-
+                        </View>
                     </View>
                     <ScrollView>
                         <View style={styles.container}>
@@ -576,17 +585,9 @@ export default class AccountManagement extends Component {
                                 showsHorizontalScrollIndicator={false}
                                 ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3, marginLeft: deviceWidth/3.5 }}>&#9888; Privileges  Not Found</Text>}
                                 renderItem={({ item, index }) => (
-                                    <TouchableOpacity style={{
-                                        height: Device.isTablet ? 46 : 36,
-                                        width: Device.isTablet ? 250 : 200,
-                                        borderWidth: Device.isTablet ? 2 : 1,
-                                        backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
-                                        borderColor: item.bool ? '#ED1C24' : '#858585',
-                                        borderRadius: Device.isTablet ? 10 : 5,
-                                        marginLeft: 10,
-                                    }} onPress={() => this.topbarAction(item, index)} >
+                                    <TouchableOpacity style={[pageNavigationBtn, {backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF', borderColor: item.bool ? '#ED1C24' : '#858585',}]} onPress={() => this.topbarAction(item, index)} >
 
-                                        <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
+                                        <Text style={[pageNavigationBtnText, {color: item.bool ? "#FFFFFF" : '#858585',}]}>
                                             {item.name}
                                         </Text>
                                     </TouchableOpacity>
@@ -640,7 +641,7 @@ export default class AccountManagement extends Component {
                                     domains={this.state.domains}
                                     navigation={this.props.navigation}
                                     domainError={this.state.domainError}
-                                    channelsList={this.state.channelsList}
+                                    channelFull={this.state.channelFull}
                                 />
                             )}
 
@@ -668,9 +669,6 @@ export default class AccountManagement extends Component {
                                     />
                                 </View>
                             )}
-
-
-
                         </View>
                     </ScrollView>
                 </SafeAreaView>
@@ -678,90 +676,6 @@ export default class AccountManagement extends Component {
         );
     }
 }
-
-const pickerSelectStyles_mobile = StyleSheet.create({
-    placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: 15,
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: 42,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: 42,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
-    },
-});
-
-const pickerSelectStyles_tablet = StyleSheet.create({
-    placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: 20,
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: 52,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: 52,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
-    },
-});
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -778,699 +692,5 @@ const styles = StyleSheet.create({
     },
     flatList: {
         marginTop: 20
-    },
-    modalActive: {
-        backgroundColor: '#000000',
-    },
-    modalInActive: {
-        backgroundColor: '#ffffff',
-    },
-    modalActiveText: {
-        color: '#ffffff',
-    },
-    modalInActiveText: {
-        color: '#000000',
-    },
-    modalButton1: {
-        borderBottomLeftRadius: 5,
-        borderTopLeftRadius: 5,
-    },
-    modalButton2: {
-        borderBottomRightRadius: 5,
-        borderTopRightRadius: 5,
-    },
-
-    // Styles For Mobile
-    viewsWidth_mobile: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 24,
-        height: Device.isAndroid ? 70 : 84,
-    },
-    menuButton_mobile: {
-        position: 'absolute',
-        left: 10,
-        bottom: 5,
-        width: 40,
-        height: 40,
-    },
-    headerTitle_mobile: {
-        position: 'absolute',
-        left: 70,
-        bottom: 10,
-        width: 300,
-        height: 25,
-        fontFamily: 'bold',
-        fontSize: 18,
-        color: '#353C40'
-    },
-    filterButton_mobile: {
-        position: 'absolute',
-        right: 20,
-        top: 30,
-        backgroundColor: '#ffffff',
-        borderRadius: 5,
-        width: 30,
-        height: 32,
-    },
-    modalContainer_mobile: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        alignSelf: 'center',
-        marginRight: 20,
-        borderRadius: 5,
-        marginTop: 20,
-        borderColor: '#ED1C24',
-        width: '100%',
-        height: 50,
-    },
-    modalButton_mobile: {
-        borderColor: '#353C40',
-        height: 32,
-        width: "33.3%",
-        borderWidth: 1,
-        alignSelf: "flex-start",
-    },
-    modalButtonText_mobile: {
-        height: 32,
-        width: 100,
-        marginTop: 5,
-        fontFamily: "medium",
-        fontSize: 12,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    navigationToButton_mobile: {
-        position: 'absolute',
-        right: 70,
-        bottom: 10,
-        backgroundColor: '#ED1C24',
-        borderRadius: 5,
-        width: 110,
-        height: 32,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    onlyNavigationToButton_mobile: {
-        position: 'absolute',
-        right: 20,
-        bottom: 10,
-        backgroundColor: '#ED1C24',
-        borderRadius: 5,
-        width: 110,
-        height: 32,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    navigationToButtonText_mobile: {
-        fontSize: 12,
-        fontFamily: 'regular',
-        color: '#ffffff',
-        marginTop: 8,
-        textAlign: 'center',
-        alignSelf: 'center'
-    },
-    filterBarcodeContainer_mobile: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -20,
-        backgroundColor: "#ffffff",
-        height: 500,
-        position: 'absolute',
-        bottom: -20,
-    },
-    filterByTitle_mobile: {
-        position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 20,
-        fontFamily: 'medium',
-        fontSize: 16,
-        color: '#353C40'
-    },
-    filterByTitleDecoration_mobile: {
-        height: Device.isTablet ? 2 : 1,
-        width: deviceWidth,
-        backgroundColor: 'lightgray',
-        marginTop: 50,
-    },
-    filterCloseButton_mobile: {
-        position: 'absolute',
-        right: 8,
-        top: 15,
-        width: 50, height: 50,
-    },
-    filterCloseImage_mobile: {
-        color: '#ED1C24',
-        fontFamily: 'regular',
-        fontSize: 12,
-        position: 'absolute',
-        top: 10,
-        right: 0,
-    },
-    filterDateButton_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        height: 50,
-        backgroundColor: "#F6F6F6",
-        borderRadius: 5,
-    },
-    filterDateButtonText_mobile: {
-        marginLeft: 16,
-        marginTop: 20,
-        color: "#6F6F6F",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    datePickerContainer_mobile: {
-        height: 280,
-        width: deviceWidth,
-        backgroundColor: '#ffffff'
-    },
-    datePickerButton_mobile: {
-        position: 'absolute',
-        left: 20,
-        top: 10,
-        height: 30,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    datePickerEndButton_mobile: {
-        position: 'absolute',
-        right: 20,
-        top: 10,
-        height: 30,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    datePickerButtonText_mobile: {
-        textAlign: 'center',
-        marginTop: 5,
-        color: "#ffffff",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    input_mobile: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    filterApplyButton_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 50,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    filterButtonText_mobile: {
-        textAlign: 'center',
-        marginTop: 20,
-        color: "#ffffff",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    filterCancelButton_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 50,
-        backgroundColor: "#ffffff",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "#353C4050",
-    },
-    filterButtonCancelText_mobile: {
-        textAlign: 'center',
-        marginTop: 20,
-        color: "#000000",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    flatlistContainer_mobile: {
-        height: 140,
-        backgroundColor: '#FBFBFB',
-        borderBottomWidth: 5,
-        borderBottomColor: '#FFFFFF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    flatlistSubContainer_mobile: {
-        flexDirection: 'column',
-        width: '100%',
-        height: 140,
-    },
-    rnSelect_mobile: {
-        color: '#8F9EB7',
-        fontSize: 15
-    },
-    rnSelectContainer_mobile: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-
-    // Styles For Tablet
-    viewsWidth_tablet: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 28,
-        height: 90,
-    },
-    menuButton_tablet: {
-        position: 'absolute',
-        left: 10,
-        top: 38,
-        width: 90,
-        height: 90,
-    },
-    headerTitle_tablet: {
-        position: 'absolute',
-        left: 70,
-        top: 40,
-        width: 300,
-        height: 40,
-        fontFamily: 'bold',
-        fontSize: 24,
-        color: '#353C40'
-    },
-    filterButton_tablet: {
-        position: 'absolute',
-        right: 20,
-        top: 40,
-        backgroundColor: '#ffffff',
-        borderRadius: 5,
-        width: 35,
-        height: 37,
-    },
-    modalContainer_tablet: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'row',
-        alignSelf: 'center',
-        marginRight: 20,
-        borderRadius: 5,
-        marginTop: 20,
-        borderColor: '#ED1C24',
-        width: '100%',
-        height: 50,
-    },
-    modalButton_tablet: {
-        borderColor: '#353C40',
-        height: 42,
-        width: "33.3%",
-        borderWidth: 1,
-        alignSelf: "flex-start",
-    },
-    modalButtonText_tablet: {
-        height: 42,
-        width: 210,
-        marginTop: 5,
-        fontFamily: "medium",
-        fontSize: 17,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    navigationToButton_tablet: {
-        position: 'absolute',
-        right: 70,
-        top: 40,
-        backgroundColor: '#ED1C24',
-        borderRadius: 10,
-        width: 120,
-        height: 35,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    onlyNavigationToButton_tablet: {
-        position: 'absolute',
-        right: 20,
-        top: 40,
-        backgroundColor: '#ED1C24',
-        borderRadius: 10,
-        width: 120,
-        height: 35,
-        textAlign: 'center',
-        alignItems: 'center',
-    },
-    navigationToButtonText_tablet: {
-        fontSize: 17,
-        fontFamily: 'regular',
-        color: '#ffffff',
-        marginTop: 6,
-        textAlign: 'center',
-        alignSelf: 'center'
-    },
-    filterBarcodeContainer_tablet: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -40,
-        backgroundColor: "#ffffff",
-        height: 600,
-        position: 'absolute',
-        bottom: -40,
-    },
-    filterByTitle_tablet: {
-        position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 30,
-        fontFamily: 'medium',
-        fontSize: 21,
-        color: '#353C40'
-    },
-    filterByTitleDecoration_tablet: {
-        height: Device.isTablet ? 2 : 1,
-        width: deviceWidth,
-        backgroundColor: 'lightgray',
-        marginTop: 60,
-    },
-    filterCloseButton_tablet: {
-        position: 'absolute',
-        right: 24,
-        top: 10,
-        width: 60, height: 60,
-    },
-    filterCloseImage_tablet: {
-        color: '#ED1C24',
-        fontFamily: 'regular',
-        fontSize: 17,
-        position: 'absolute',
-        top: 10,
-        right: 24,
-    },
-    filterDateButton_tablet: {
-        width: deviceWidth - 30,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        height: 60,
-        backgroundColor: "#F6F6F6",
-        borderRadius: 5,
-    },
-    filterDateButtonText_tablet: {
-        marginLeft: 16,
-        marginTop: 20,
-        color: "#6F6F6F",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    datePickerButton_tablet: {
-        position: 'absolute',
-        left: 20,
-        top: 10,
-        height: 40,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    datePickerButtonText_tablet: {
-        textAlign: 'center',
-        marginTop: 5,
-        color: "#ffffff",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    datePickerEndButton_tablet: {
-        position: 'absolute',
-        right: 20,
-        top: 10,
-        height: 40,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    input_tablet: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-    filterApplyButton_tablet: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 60,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    filterButtonText_tablet: {
-        textAlign: 'center',
-        marginTop: 20,
-        color: "#ffffff",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    filterCancelButton_tablet: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 60,
-        backgroundColor: "#ffffff",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "#353C4050",
-    },
-    filterButtonCancelText_tablet: {
-        textAlign: 'center',
-        marginTop: 20,
-        color: "#000000",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    flatlistContainer_tablet: {
-        height: 160,
-        backgroundColor: '#FBFBFB',
-        borderBottomWidth: 5,
-        borderBottomColor: '#FFFFFF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    flatlistSubContainer_tablet: {
-        flexDirection: 'column',
-        width: '100%',
-        height: 160,
-    },
-    rnSelect_tablet: {
-        color: '#8F9EB7',
-        fontSize: 20
-    },
-    rnSelectContainer_tablet: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-
-});
-
-// Styles For Flat-Lists
-
-const flats = StyleSheet.create({
-    mainText_mobile: {
-        fontSize: 16,
-        marginLeft: 16,
-        marginTop: 10,
-        marginBottom: 10,
-        fontFamily: 'medium',
-        color: '#ED1C24',
-    },
-    subText_mobile: {
-        fontSize: 12,
-        marginLeft: 16,
-        marginTop: 10,
-        marginBottom: 10,
-        fontFamily: 'medium',
-        color: '#353C40'
-    },
-    commonText_mobile: {
-        fontSize: 12,
-        marginBottom: 10,
-        marginTop: -90,
-        alignSelf: 'center',
-        textAlign: 'center',
-        fontFamily: 'regular',
-        color: '#808080'
-    },
-    commonTextsub_mobile: {
-        fontSize: 12,
-        marginBottom: 10,
-        marginTop: 10,
-        alignSelf: 'center',
-        textAlign: 'center',
-        fontFamily: 'regular',
-        color: '#808080'
-    },
-    editButton_mobile: {
-        position: 'absolute',
-        right: 50,
-        top: 90,
-        width: 30,
-        height: 30,
-        borderBottomLeftRadius: 5,
-        borderTopLeftRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-        // borderRadius:5,
-    },
-    deleteButton_mobile: {
-        position: 'absolute',
-        right: 20,
-        top: 90,
-        width: 30,
-        height: 30,
-        borderBottomRightRadius: 5,
-        borderTopRightRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-    },
-    deleteBarcodeContainer_mobile: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -20,
-        backgroundColor: "#ffffff",
-        height: 260,
-        position: 'absolute',
-        bottom: -20,
-    },
-    deleteBarcodeHeading_mobile: {
-        position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 20,
-        fontFamily: 'medium',
-        fontSize: 16,
-        color: '#353C40'
-    },
-
-    // Tablet styles
-
-    mainText_tablet: {
-        fontSize: 21,
-        marginLeft: 16,
-        marginTop: 10,
-        marginBottom: 10,
-        fontFamily: 'medium',
-        color: '#ED1C24',
-    },
-    subText_tablet: {
-        fontSize: 17,
-        marginLeft: 16,
-        marginTop: 10,
-        marginBottom: 10,
-        fontFamily: 'medium',
-        color: '#353C40'
-    },
-    commonText_tablet: {
-        fontSize: 17,
-        marginBottom: 10,
-        marginTop: -120,
-        alignSelf: 'center',
-        textAlign: 'center',
-        fontFamily: 'regular',
-        color: '#808080'
-    },
-    commonTextsub_tablet: {
-        fontSize: 17,
-        marginBottom: 10,
-        marginTop: 10,
-        alignSelf: 'center',
-        textAlign: 'center',
-        fontFamily: 'regular',
-        color: '#808080'
-    },
-    editButton_tablet: {
-        position: 'absolute',
-        right: 50,
-        top: 90,
-        width: 30,
-        height: 40,
-        borderBottomLeftRadius: 5,
-        borderTopLeftRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-        // borderRadius:5,
-    },
-    deleteButton_tablet: {
-        position: 'absolute',
-        right: 20,
-        top: 90,
-        width: 30,
-        height: 40,
-        borderBottomRightRadius: 5,
-        borderTopRightRadius: 5,
-        borderWidth: 1,
-        borderColor: "lightgray",
-    },
-    deleteBarcodeContainer_tablet: {
-        width: deviceWidth,
-        alignItems: 'center',
-        marginLeft: -20,
-        backgroundColor: "#ffffff",
-        height: 280,
-        position: 'absolute',
-        bottom: -20,
-    },
-    deleteBarcodeHeading_tablet: {
-        position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 30,
-        fontFamily: 'medium',
-        fontSize: 21,
-        color: '#353C40'
     },
 });

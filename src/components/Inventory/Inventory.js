@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, ClipboardStatic } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import ThemedDialog from 'react-native-elements/dist/dialog/Dialog';
@@ -13,8 +13,9 @@ import Loader from "../../commonUtils/loader";
 import InventoryService from '../services/InventoryService';
 import UrmService from '../services/UrmService';
 import { RH, RW, RF } from '../../Responsive';
-import { listEmptyMessage } from '../Styles'
-import { buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, highText, imageStyle, textContainer, textStyleLight, textStyleMedium } from './inventoryStyles'
+import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton,  headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer,  buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText} from '../Styles/Styles';
+import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
+import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 
 
 var deviceWidth = Dimensions.get("window").width;
@@ -56,7 +57,7 @@ export default class Inventory extends Component {
             filterActive: false,
             headerNames: [],
             error: '',
-            pageNo: 1,
+            pageNo: 0,
         };
         this.onEndReachedCalledDuringMomentum = true;
     }
@@ -618,38 +619,38 @@ export default class Inventory extends Component {
                     <Loader
                         loading={this.state.loading} />
                 }
-                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                    <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
+                <View style={headerTitleContainer} >
+                    <View style={headerTitleSubContainer}>
+                    <TouchableOpacity style={menuButton} onPress={() => this.handleBackButtonClick()}>
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                    <Text style={headerTitle}>
                         {I18n.t("Inventory Portal")}
                     </Text>
+                    </View>
+                    <View style={headerTitleSubContainer2}>
                     {this.state.flagone && (
-                        <TouchableOpacity style={Device.isTablet ? styles.addBarcodeButton_tablet : styles.addBarcodeButton_mobile} onPress={() => this.navigateToAddBarcode()}>
-                            <Text style={Device.isTablet ? styles.addBarcodeButtonText_tablet : styles.addBarcodeButtonText_mobile}>{I18n.t("Add BarCode")}</Text>
+                        <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddBarcode()}>
+                            <Text style={headerNavigationBtnText}>{I18n.t("Add BarCode")}</Text>
                         </TouchableOpacity>
                     )}
-                    {/* <TouchableOpacity
-            style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ED1C24', borderRadius: 5, width: 105, height: 32, }}
-            onPress={() => this.navigateToScanCode()} >
-            <Text style={{ fontSize: 12, fontFamily: 'regular', color: '#ffffff', marginLeft: 10, marginTop: 8, alignSelf: 'center' }}> {('NEW SALE SCAN')} </Text>
-          </TouchableOpacity> */}
+                    
                     <View>
                         {!this.state.filterActive &&
                             <TouchableOpacity
-                                style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                style={filterBtn}
                                 onPress={() => this.filterAction()} >
                                 <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/promofilter.png')} />
                             </TouchableOpacity>
                         }
                         {this.state.filterActive &&
                             <TouchableOpacity
-                                style={Device.isTablet ? styles.filterButton_tablet : styles.filterButton_mobile}
+                                style={filterBtn}
                                 onPress={() => this.clearFilterAction()} >
                                 <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/clearFilterSearch.png')} />
                             </TouchableOpacity>
                         }
+                    </View>
                     </View>
                 </View>
 
@@ -663,17 +664,12 @@ export default class Inventory extends Component {
                             showsHorizontalScrollIndicator={false}
                             keyExtractor={(item, i) => i.toString()}
                             renderItem={({ item, index }) => (
-                                <TouchableOpacity style={{
-                                    height: Device.isTablet ? 46 : RH(36),
-                                    width: Device.isTablet ? 250 : RW(200),
-                                    borderWidth: Device.isTablet ? 2 : 1,
+                                <TouchableOpacity style={[pageNavigationBtn, {
                                     backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
                                     borderColor: item.bool ? '#ED1C24' : '#858585',
-                                    borderRadius: Device.isTablet ? 10 : 5,
-                                    marginLeft: RW(10),
-                                }} onPress={() => this.topbarAction1(item, index)} >
+                                }]} onPress={() => this.topbarAction1(item, index)} >
 
-                                    <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular' }}>
+                                    <Text style={[pageNavigationBtnText, {color: item.bool ? "#FFFFFF" : '#858585',}]}>
                                         {item.name}
                                     </Text>
                                 </TouchableOpacity>
@@ -698,7 +694,7 @@ export default class Inventory extends Component {
                     <Text style={highText}>S.NO: { index + 1 }</Text>
                   </View>
                   <View style={textContainer}>
-                    <Text selectable={true} style={textStyleMedium}>{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
+                    <Text style={textStyleMedium} selectable={true}>{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
                     <Text style={textStyleLight}>QTY:  {item.qty}</Text>
                   </View>
                   <View style={textContainer}>
@@ -709,10 +705,10 @@ export default class Inventory extends Component {
                     <Text style={textStyleMedium}>{I18n.t("LIST PRICE")}: ₹{item.itemMrp}</Text>
                     <View style={buttonContainer}>
                       <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditbarcode(item, index)}>
-                        <Image style={imageStyle} source={require('../assets/images/edit.png')} />
+                        <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
                       </TouchableOpacity>
                       <TouchableOpacity style={buttonStyle} onPress={() => this.handlebarcodedeleteaction(item, index)}>
-                        <Image style={imageStyle} source={require('../assets/images/delete.png')} />
+                        <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
                       </TouchableOpacity>
                     </View>
                   </View>

@@ -12,6 +12,9 @@ import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 import { errorLength, urmErrorMessages } from '../Errors/errors';
 import Message from '../Errors/Message';
+import { cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, inputField, inputHeading, rnPicker, rnPickerContainer, submitBtn, submitBtnText } from '../Styles/FormFields';
+import { RW, RF, RH } from '../../Responsive';
+import { headerTitle, headerTitleContainer, headerTitleSubContainer, menuButton } from '../Styles/Styles';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -526,21 +529,23 @@ export default class AddUser extends Component {
                     <Loader
                         loading={this.state.loading} />
                 }
-                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                    <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/backButton.png')} />
+                <View style={headerTitleContainer} >
+                    <View style={headerTitleSubContainer}>
+                    <TouchableOpacity style={menuButton} onPress={() => this.handleBackButtonClick()}>
+                        <Image style={{marginTop: -5}} source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                    <Text style={headerTitle}>
                         {this.state.navtext}
                     </Text>
+                    </View>
                 </View>
                 <ScrollView>
-                    <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 7 }]}>
+                    <Text style={inputHeading}>
                         {I18n.t("User Details")}
                     </Text>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={inputHeading}>{I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={nameValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: nameValid ? "#6F6F6F" : "#dd0000"}]}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Name")}
                         placeholderTextColor={nameValid ? "#6F6F6F" : "#dd0000"}
@@ -551,9 +556,9 @@ export default class AddUser extends Component {
                         value={this.state.name}
                         onChangeText={this.handleName}
                     />
-                        {!nameValid && <Message message={this.state.errors["name"]} />}
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Gender")}</Text>
-                    <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                        {!nameValid && <Message imp={true} message={this.state.errors["name"]} />}
+                    <Text style={inputHeading}>{I18n.t("Gender")}</Text>
+                    <View style={rnPickerContainer}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Gender'
@@ -566,35 +571,23 @@ export default class AddUser extends Component {
                                 { label: 'Female', value: 'Female' },
                             ]}
                             onValueChange={this.handleGender}
-                            style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                            style={rnPicker}
                             value={this.state.gender}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("DOB")}</Text>
+                    <Text style={inputHeading}>{I18n.t("DOB")}</Text>
                     <TouchableOpacity
-                        style={{
-                            width: deviceWidth - 40,
-                            marginLeft: 20,
-                            marginRight: 20,
-                            marginTop: 10,
-                            marginBottom: 10,
-                            borderColor: '#8F9EB717',
-                            borderRadius: 3,
-                            height: 50, backgroundColor: "#F6F6F6", borderRadius: 5,
-                        }} testID="openModal"
+                        style={dateSelector} testID="openModal"
 
                         onPress={() => this.datepickerClicked()}
                     >
-                        <Text style={{
-                            marginLeft: 16, marginTop: 20, color: "#6F6F6F", fontSize: 15,
-                            fontFamily: "regular"
-                        }}  > {this.state.dob === '' ? 'DoB' : this.state.dob} </Text>
+                        <Text style={dateText}  > {this.state.dob === '' ? 'DoB' : this.state.dob} </Text>
                         <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
                     </TouchableOpacity>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Mobile")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={inputHeading}>{I18n.t("Mobile")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={mobileValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: mobileValid ? "#6F6F6F" : "#dd0000"}]}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Mobile")}
                         placeholderTextColor={mobileValid ? "#6F6F6F" : "#dd0000"}
@@ -607,10 +600,10 @@ export default class AddUser extends Component {
                         value={this.state.mobile}
                         onChangeText={this.handleMobile}
                     />
-                    {!mobileValid && <Message message={this.state.errors["mobile"]} />}
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Email")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    {!mobileValid && <Message imp={true} message={this.state.errors["mobile"]} />}
+                    <Text style={inputHeading}>{I18n.t("Email")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={emailValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: emailValid ? "#6F6F6F" : "#dd0000"}]}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Email")}
                         onBlur={this.handleEmailValid}
@@ -621,10 +614,10 @@ export default class AddUser extends Component {
                         value={this.state.email}
                         onChangeText={this.handleEmail}
                     />
-                    {!emailValid && <Message message={this.state.errors["email"]} />}
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Address")}</Text>
+                    {!emailValid && <Message imp={true} message={this.state.errors["email"]} />}
+                    <Text style={inputHeading}>{I18n.t("Address")}</Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={inputField}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Address")}
                         placeholderTextColor="#6F6F6F"
@@ -634,30 +627,24 @@ export default class AddUser extends Component {
                         onChangeText={this.handleAddress}
                     />
 
-                    <Text style={[Device.isTablet ? styles.subheading_tablet : styles.subheading_mobile, { marginTop: 7 }]}>
+                    <Text style={[inputHeading, { marginTop: 7, color: '#dd0000' }]}>
                         {I18n.t("User Permissions")}
                     </Text>
+                    <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
                     <TouchableOpacity
-                        style={{
-                            width: 200, marginTop: 0, marginBottom: 10,
-                        }}
-
+                        style={adminBtn}
                         onPress={() => this.issuperAdmin()}
                     >
-                        <Text style={{
-                            marginLeft: 40, marginTop: 11, color: "#6F6F6F", fontSize: Device.isTablet ? 20 : 15,
-                            fontFamily: "regular", width: 200,
-                        }}  > {I18n.t('Is Super Admin')} </Text>
-
-                        <Image style={{ position: 'absolute', top: 10, left: 20, }} source={
-                            //require('../assets/images/chargeunselect.png')}
-                            this.state.isSuperAdmin ? require('../assets/images/selected.png') : require('../assets/images/langunselect.png')} />
+                        <Image style={adminBtnImage} source={
+                            this.state.isSuperAdmin ? require('../assets/images/selectedMedium.png') : require('../assets/images/langunselectMedium.png')} />
                     </TouchableOpacity>
+                        <Text style={adminBtnText}> {I18n.t('Is Super Admin')} </Text>
+                    </View>
 
                     {this.state.isSuperAdmin === false && (
                         <View>
-                            <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Domain")}</Text>
-                            <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                            <Text style={inputHeading}>{I18n.t("Domain")}</Text>
+                            <View style={rnPickerContainer}>
                                 <RNPickerSelect
                                     placeholder={{
                                         label: 'Domain'
@@ -667,7 +654,7 @@ export default class AddUser extends Component {
                                     }}
                                     items={this.state.domains}
                                     onValueChange={this.handleDomain}
-                                    style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                    style={rnPicker}
                                     value={this.state.domain}
                                     useNativeAndroidPickerStyle={false}
                                 />
@@ -675,28 +662,8 @@ export default class AddUser extends Component {
                         </View>
                     )}
                     {this.state.isSuperAdmin === false && (
-                        // <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                        //     <RNPickerSelect
-                        //         style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                        //         placeholder={{
-                        //             label: 'Select Store'
-                        //         }}
-                        //         Icon={() => {
-                        //             return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                        //         }}
-                        //         items={this.state.stores}
-                        //         onValueChange={this.handleStore}
-                        //         style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                        //         value={this.state.store}
-                        //         useNativeAndroidPickerStyle={false}
-                        //     />
-                        // </View>
-                        // <SectionList
-                        // sections={this.state.previlages}
-                        // renderSectionHeader={({ section }) => <Text style={Device.isTablet ? styles.sectionHeaderTablet : styles.sectionHeaderMobile}>{section.title}</Text>}
-                        // renderItem={({ item, index, section }) => (
                         <View>
-                            <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10 }}>{I18n.t("Stores")}</Text>
+                            <Text style={inputHeading}>{I18n.t("Stores")}</Text>
                             <FlatList
                                 data={this.state.storesArray}
                                 style={{ marginTop: 10, }}
@@ -704,23 +671,21 @@ export default class AddUser extends Component {
                                 renderItem={({ item, index }) => (
                                     <TouchableOpacity onPress={() => this.selectedPrivilage(item, index)}>
 
-                                        <View style={Device.isTablet ? styles.item : styles.item}>
+                                        <View style={storesSelector}>
                                             <Text>
                                                 {item.name}
                                             </Text>
 
                                             {item.selectedindex === 1 && (
-                                                <Image source={require('../assets/images/selected.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
+                                                <Image source={require('../assets/images/selectedMedium.png')} style={adminBtnImage} />
                                             )}
                                             {item.selectedindex === 0 && (
-                                                <Image source={require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 15 }} />
+                                                <Image source={require('../assets/images/langunselectMedium.png')} style={adminBtnImage} />
                                             )}
                                         </View>
 
                                         {/* </View> */}
                                     </TouchableOpacity>
-
-
 
                                 )}
                             />
@@ -728,8 +693,8 @@ export default class AddUser extends Component {
                     )}
                     {this.state.isSuperAdmin === false && (
                         <View>
-                            <Text style={{ marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15, marginLeft: 20 }}>{I18n.t("Role")}</Text>
-                            <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                            <Text style={inputHeading}>{I18n.t("Role")}</Text>
+                            <View style={rnPickerContainer}>
                                 <RNPickerSelect
                                     placeholder={{
                                         label: 'Role'
@@ -739,7 +704,7 @@ export default class AddUser extends Component {
                                     }}
                                     items={this.state.roles}
                                     onValueChange={this.handleRole}
-                                    style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
+                                    style={rnPicker}
                                     value={this.state.role}
                                     useNativeAndroidPickerStyle={false}
                                 />
@@ -747,47 +712,31 @@ export default class AddUser extends Component {
                         </View>
                     )}
 
-                    <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+                    <TouchableOpacity style={submitBtn}
                         onPress={() => this.saveUser()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
+                        <Text style={submitBtnText}>{I18n.t("SAVE")}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
+                    <TouchableOpacity style={cancelBtn}
                         onPress={() => this.cancel()}>
-                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>{I18n.t("CANCEL")}</Text>
+                        <Text style={cancelBtnText}>{I18n.t("CANCEL")}</Text>
                     </TouchableOpacity>
                     <View style={styles.bottomContainer} ></View>
                 </ScrollView>
                 {this.state.datepickerOpen && (
-                    <View style={{ height: 280, width: deviceWidth, backgroundColor: 'ffffff' }}>
+                    <View style={datePickerContainer}>
                         <TouchableOpacity
-                            style={{
-                                position: 'absolute',
-                                left: 20,
-                                top: 10,
-                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                            }} onPress={() => this.datepickerCancelClicked()}
+                            style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
                         >
-                            <Text style={{
-                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                fontFamily: "regular"
-                            }}  > Cancel </Text>
+                            <Text style={datePickerBtnText}  > Cancel </Text>
 
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={{
-                                position: 'absolute',
-                                right: 20,
-                                top: 10,
-                                height: 30, backgroundColor: "#ED1C24", borderRadius: 5,
-                            }} onPress={() => this.datepickerDoneClicked()}
+                            style={datePickerButton2} onPress={() => this.datepickerDoneClicked()}
                         >
-                            <Text style={{
-                                textAlign: 'center', marginTop: 5, color: "#ffffff", fontSize: 15,
-                                fontFamily: "regular"
-                            }}  > Done </Text>
+                            <Text style={datePickerBtnText}  > Done </Text>
 
                         </TouchableOpacity>
-                        <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                        <DatePicker style={datePicker}
                             date={this.state.date}
                             mode={'date'}
                             onDateChange={(date) => this.setState({ date })}
@@ -799,91 +748,34 @@ export default class AddUser extends Component {
     }
 }
 
-const pickerSelectStyles_mobile = StyleSheet.create({
-    placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: 15,
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: 42,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: 42,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
+const adminBtn = {
+    width: RW(40),
+    // marginTop: RH(5),
+    marginBottom: RH(10),
+    marginLeft: RW(40),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+}
 
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
-    },
-});
+const adminBtnImage = {
+    height: Device.isTablet ? RH(30) : RH(25),
+    width: Device.isTablet ? RW(30) : RW(25)
+}
 
-const pickerSelectStyles_tablet = StyleSheet.create({
-    placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: 20,
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: 52,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: 52,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        //paddingLeft: -20,
-        fontSize: 20,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
+const adminBtnText = {
+    fontSize: RF(13),
+    color: '#000000',
+}
 
-        // marginLeft: 20,
-        // marginRight: 20,
-        // marginTop: 10,
-        // height: 40,
-        // backgroundColor: '#ffffff',
-        // borderBottomColor: '#456CAF55',
-        // color: '#001B4A',
-        // fontFamily: "bold",
-        // fontSize: 16,
-        // borderRadius: 3,
-    },
-});
-
-
+const storesSelector = {
+    padding: RW(15),
+    fontSize: RF(13),
+    height: RH(44),
+    backgroundColor: '#ffffff',
+    fontFamily: 'medium',
+    color: '#353C40',
+}
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -895,237 +787,6 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         margin: 50,
-    },
-    item: {
-        padding: 15,
-        fontSize: 18,
-        height: 44,
-        backgroundColor: '#ffffff',
-        fontSize: 18,
-        fontFamily: 'medium',
-        color: '#353C40',
-    },
-    errorsRecords: {
-        color: '#dd0000',
-        fontSize: Device.isTablet ? 17 : 12,
-        // fontFamily: 'medium',
-        marginLeft: 30,
-    },
-
-    // Styles For Mobile
-    viewsWidth_mobile: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 24,
-        height: 84,
-    },
-    backButton_mobile: {
-        position: 'absolute',
-        left: 10,
-        top: 30,
-        width: 40,
-        height: 40,
-    },
-    headerTitle_mobile: {
-        position: 'absolute',
-        left: 70,
-        top: 47,
-        width: 300,
-        height: 20,
-        fontFamily: 'bold',
-        fontSize: 18,
-        color: '#353C40'
-    },
-    input_mobile: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    inputError_mobile: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#dd0000',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    rnSelect_mobile: {
-        color: '#8F9EB7',
-        fontSize: 15
-    },
-    rnSelectContainer_mobile: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    saveButton_mobile: {
-        margin: 8,
-        height: 50,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    saveButtonText_mobile: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#ffffff",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    subheading_mobile: {
-        fontFamily: 'medium',
-        fontSize: 16,
-        color: "red",
-        marginLeft: 20,
-    },
-    cancelButton_mobile: {
-        margin: 8,
-        height: 50,
-        backgroundColor: "#ffffff",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "#353C4050",
-    },
-    cancelButtonText_mobile: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#353C4050",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-
-    // Styles For Tablet
-    viewsWidth_tablet: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 28,
-        height: 90,
-    },
-    backButton_tablet: {
-        position: 'absolute',
-        left: 10,
-        top: 25,
-        width: 90,
-        height: 90,
-    },
-    headerTitle_tablet: {
-        position: 'absolute',
-        left: 70,
-        top: 40,
-        width: 300,
-        height: 40,
-        fontFamily: 'bold',
-        fontSize: 24,
-        color: '#353C40'
-    },
-    input_tablet: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-    inputError_tablet: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#dd0000',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 2,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-    rnSelect_tablet: {
-        color: '#8F9EB7',
-        fontSize: 20
-    },
-    rnSelectContainer_tablet: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-    saveButton_tablet: {
-        margin: 8,
-        height: 60,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    subheading_tablet: {
-        fontFamily: 'medium',
-        fontSize: 21,
-        color: "red",
-        marginLeft: 20,
-    },
-    saveButtonText_tablet: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#ffffff",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    cancelButton_tablet: {
-        margin: 8,
-        height: 60,
-        backgroundColor: "#ffffff",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "#353C4050",
-    },
-    cancelButtonText_tablet: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#353C4050",
-        fontSize: 20,
-        fontFamily: "regular"
     },
 
 });
