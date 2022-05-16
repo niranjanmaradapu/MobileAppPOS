@@ -10,6 +10,8 @@ import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import ReportsService from '../services/ReportsService';
+import { RH, RW,RF } from '../../Responsive';
+import { Row } from 'react-native-table-component';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -231,12 +233,12 @@ export class ListOfEstimationSlip extends Component {
                                     <View style={flats.buttons}>
 
                                         <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteEstimationSlip(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
+                                            <Image style={{ alignSelf: 'center', top: RH(5), height: Device.isTablet ? RH(30) : RH(20), width: Device.isTablet ? RW(30) : RW(20) }} source={require('../assets/images/delete.png')} />
 
                                         </TouchableOpacity>
 
                                         <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewEstimationSlip(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/eye.png')} />
+                                            <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/eye.png')} />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -252,13 +254,13 @@ export class ListOfEstimationSlip extends Component {
                         <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
                             <View style={[styles.deleteMainContainer, { backgroundColor: "#ED1C24" }]}>
                                 <View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: RH(5), height: Device.isTablet ? RH(60) : RH(50) }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff' }} > {I18n.t("Delete Estimation Slip")} </Text>
+                                            <Text style={{ marginTop: RH(15), fontSize: Device.isTablet ? RF(22) : RF(17), marginLeft: Device.isTablet ? RW(10) : 5, color: '#ffffff' }} > {I18n.t("Delete Estimation Slip")} </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.estimationModelCancel()}>
-                                                <Image style={{ margin: 5, height: Device.isTablet ? 20 : 15, width: Device.isTablet ? 20 : 15, }} source={require('../assets/images/modalCloseWhite.png')} />
+                                            <TouchableOpacity style={{ width: Device.isTablet ? RW(60) : RW(50), height: Device.isTablet ? RH(60) : RH(50), marginTop: Device.isTablet ? RH(20) : RH(15), }} onPress={() => this.estimationModelCancel()}>
+                                                <Image style={{ margin: RH(5), height: Device.isTablet ? RH(20) : RH(15), width: Device.isTablet ? RW(20) : RW(15), }} source={require('../assets/images/modalCloseWhite.png')} />
                                             </TouchableOpacity>
                                         </View>
                                     </View>
@@ -268,17 +270,17 @@ export class ListOfEstimationSlip extends Component {
                                         backgroundColor: 'lightgray',
                                     }}></Text>
                                 </View>
-                                <View style={{ backgroundColor: "#ffffff", height: Device.isTablet ? 300 : 250 }}>
+                                <View style={{ backgroundColor: "#ffffff", height: Device.isTablet ? RH(300) : RH(250) }}>
                                     <Text style={{
                                         // height: Device.isTablet ? 40 : 20,
                                         textAlign: 'center',
                                         fontFamily: 'regular',
                                         marginTop: 15,
-                                        fontSize: Device.isTablet ? 23 : 18,
+                                        fontSize: Device.isTablet ? RF(23) : RF(18),
                                         color: '#353C40'
                                     }}> {I18n.t("Are you sure want to delete Estimation Slip")} ?  </Text>
                                     <TouchableOpacity
-                                        style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 40 : 30 }]} onPress={() => this.deleteEstimationSlip(item, index)}
+                                        style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? RH(40) : RH(30) }]} onPress={() => this.deleteEstimationSlip(item, index)}
                                     >
                                         <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("DELETE")} </Text>
 
@@ -302,12 +304,12 @@ export class ListOfEstimationSlip extends Component {
                         <Modal isVisible={this.props.modalVisible} style={{ margin: 0 }}>
                             <View style={styles.filterMainContainer} >
                                 <View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: RH(5), height: Device.isTablet ? RH(60) : RH(50) }}>
                                         <View>
-                                            <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20 }} > {I18n.t("Filter By")} </Text>
+                                            <Text style={{ marginTop: RH(15), fontSize: Device.isTablet ? RF(22) :RF( 17), marginLeft: RW(20) }} > {I18n.t("Filter By")} </Text>
                                         </View>
                                         <View>
-                                            <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
+                                            <TouchableOpacity style={{ width: Device.isTablet ? RW(60) : RW(50), height: Device.isTablet ? RH(60) : RH(50), marginTop: Device.isTablet ? RH(20) : RH(15), }} onPress={() => this.modelCancel()}>
                                                 <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
                                             </TouchableOpacity>
                                         </View>
@@ -328,10 +330,10 @@ export class ListOfEstimationSlip extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.startDate == "" ? 'START DATE' : this.state.startDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                        <Image style={{ position: 'absolute', top: RH(10), right: 0, }} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
                                     {this.state.datepickerOpen && (
-                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: '#ffffff' }}>
+                                        <View style={{ height: RH(280), width: deviceWidth, backgroundColor: '#ffffff' }}>
                                             <TouchableOpacity
                                                 style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
                                             >
@@ -344,7 +346,7 @@ export class ListOfEstimationSlip extends Component {
                                                 <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
 
                                             </TouchableOpacity>
-                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                            <DatePicker style={{ width: deviceWidth, height: RH(200), marginTop: RH(50), }}
                                                 date={this.state.date}
                                                 mode={'date'}
                                                 onDateChange={(date) => this.setState({ date })}
@@ -359,10 +361,10 @@ export class ListOfEstimationSlip extends Component {
                                         <Text
                                             style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
                                         >{this.state.endDate == "" ? 'END DATE' : this.state.endDate}</Text>
-                                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
+                                        <Image style={{ position: 'absolute', top: RH(10), right: 0, }} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
                                     {this.state.datepickerendOpen && (
-                                        <View style={{ height: 280, width: deviceWidth, backgroundColor: '#ffffff' }}>
+                                        <View style={{ height: RH(280), width: deviceWidth, backgroundColor: '#ffffff' }}>
                                             <TouchableOpacity
                                                 style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
                                             >
@@ -374,7 +376,7 @@ export class ListOfEstimationSlip extends Component {
                                                 <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
 
                                             </TouchableOpacity>
-                                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
+                                            <DatePicker style={{ width: deviceWidth, height: RH(200), marginTop: RH(50), }}
                                                 date={this.state.enddate}
                                                 mode={'date'}
                                                 onDateChange={(enddate) => this.setState({ enddate })}
@@ -404,7 +406,7 @@ export class ListOfEstimationSlip extends Component {
 
                                     </View>
                                     <TextInput
-                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - 40 }]}
+                                        style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth - RW(40) }]}
                                         underlineColorAndroid="transparent"
                                         placeholder={I18n.t("DS NUMBER")}
                                         placeholderTextColor="#6F6F6F"
@@ -444,7 +446,7 @@ export class ListOfEstimationSlip extends Component {
 
                             <View style={[styles.filterMainContainer, { height: Device.isTablet ? 400 : 350, marginTop: Device.isTablet ? deviceheight - 400 : deviceheight - 350, backgroundColor: '#00a9a9' }]}>
                                 <View>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50, }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between',  marginTop: RH(5), height: Device.isTablet ? 60 : 50, }}>
                                         <View>
                                             <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: Device.isTablet ? 10 : 5, color: '#ffffff', }} > {I18n.t("Estimation Slip Details")} </Text>
                                         </View>
@@ -460,45 +462,45 @@ export class ListOfEstimationSlip extends Component {
                                         backgroundColor: 'lightgray',
                                     }}></Text>
                                 </View>
-                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 350 : 300, width: deviceWidth, margin: 0 }}>
-                                    <View style={{ flexDirection: 'column', justifyContent: 'space-around', height: Device.isTablet ? 300 : 250 }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
+                                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? RH(350) : RH(300), width: deviceWidth, margin: 0 }}>
+                                    <View style={{ flexDirection: 'column', justifyContent: 'space-around', height: Device.isTablet ? RH(300) : RH(250) }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? RH(20) : RH(10), paddingLeft:  Device.isTablet ? RH(20) : RH(10) }}>
                                             <Text style={styles.viewText} >
                                                 {I18n.t("Delivery Slip")}:  </Text>
                                             <Text style={[styles.viewSubText, { color: '#00a9a9', fontFamily: 'medium' }]} selectable={true}>
                                                 {this.state.dsnumber} </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? RH(20) : RH(10), paddingLeft:  Device.isTablet ? RH(20) : RH(10) }}>
                                             <Text style={styles.viewText} >
                                                 SM:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 - </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? RH(20) : RH(10), paddingLeft:Device.isTablet ? RH(20) : RH(10) }}>
                                             <Text style={styles.viewText} >
                                                 QTY:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.qty} </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? RH(20) : RH(10), paddingLeft:Device.isTablet ? RH(20) : RH(10) }}>
                                             <Text style={styles.viewText} >
                                                 {I18n.t("GROSS AMOUNT")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 ₹ {this.state.mrp} </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? RH(20) : RH(10), paddingLeft:Device.isTablet ? RH(20) : RH(10) }}>
                                             <Text style={styles.viewText} >
                                                 {I18n.t("PROMO DISCOUNT")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 {this.state.promodisc} </Text>
                                         </View>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingRight: Device.isTablet ? RH(20) : RH(10), paddingLeft:Device.isTablet ? RH(20) : RH(10) }}>
                                             <Text style={styles.viewText} >
                                                 {I18n.t("NET AMOUNT")}:  </Text>
                                             <Text style={styles.viewSubText} >
                                                 ₹ {this.state.mrp} </Text>
                                         </View>
-                                        <View style={{ paddingRight: Device.isTablet ? 20 : 10, paddingLeft: Device.isTablet ? 20 : 10 }}>
+                                        <View style={{ paddingRight: Device.isTablet ? RH(20) : RH(10), paddingLeft:Device.isTablet ? RH(20) : RH(10) }}>
                                             <TouchableOpacity
                                                 style={[Device.isTablet ? styles.filterCancel_tablet : styles.filterCancel_mobile, { borderColor: '#00a9a9' }]} onPress={() => this.estimationModelCancel()}
                                             >
@@ -520,33 +522,33 @@ const pickerSelectStyles_mobile = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
-        fontSize: 15,
+        fontSize: RF(15),
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 42,
+        height: RH(42),
         borderRadius: 3,
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: RF(15),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 42,
+        height: RF(42),
         borderRadius: 3,
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 15,
+        fontSize: RF(15),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
 
-        // marginLeft: 20,
-        // marginRight: 20,
+        // marginLeft: RW(20),
+        // marginRight: RW(20),
         // marginTop: 10,
         // height: 40,
         // backgroundColor: '#ffffff',
@@ -562,33 +564,33 @@ const pickerSelectStyles_tablet = StyleSheet.create({
     placeholder: {
         color: "#6F6F6F",
         fontFamily: "regular",
-        fontSize: 20,
+        fontSize: RF(20),
     },
     inputIOS: {
         justifyContent: 'center',
-        height: 52,
+         height: RH(52),
         borderRadius: 3,
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 20,
+        fontSize: RF(20),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
     },
     inputAndroid: {
         justifyContent: 'center',
-        height: 52,
+         height: RH(52),
         borderRadius: 3,
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
         //paddingLeft: -20,
-        fontSize: 20,
+        fontSize: RF(20),
         borderColor: '#FBFBFB',
         backgroundColor: '#FBFBFB',
         color: '#001B4A',
 
-        // marginLeft: 20,
-        // marginRight: 20,
+        // marginLeft: RW(20),
+        // marginRight: RW(20),
         // marginTop: 10,
         // height: 40,
         // backgroundColor: '#ffffff',
@@ -604,39 +606,39 @@ const pickerSelectStyles_tablet = StyleSheet.create({
 const styles = StyleSheet.create({
 
     imagealign: {
-        marginTop: Device.isTablet ? 25 : 20,
-        marginRight: Device.isTablet ? 30 : 20,
+        marginTop: Device.isTablet ? RH(25 ): RH(20),
+        marginRight: Device.isTablet ? RW(30) : RW(20),
     },
     modelCloseImage: {
         fontFamily: 'regular',
-        fontSize: 12,
+        fontSize: RF(12),
         position: 'absolute',
-        top: 10,
-        right: Device.isTablet ? 20 : 30,
+        top: RH(10),
+        right: Device.isTablet ? RW(20) : RW(30),
     },
     deleteMainContainer: {
         // marginLeft: -40,
         // marginRight: -40,
         // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
-        marginTop: Device.isTablet ? deviceheight - 350 : deviceheight - 240,
-        height: Device.isTablet ? 350 : 300,
+        marginTop: Device.isTablet ? deviceheight - RW(350) : deviceheight - RW(240),
+        height: Device.isTablet ? RH(350) : RH(300),
     },
     filterMainContainer: {
         // marginLeft: -40,
         // marginRight: -40,
         // paddingLeft: Device.isTablet ? 0 : 20,
         backgroundColor: '#ffffff',
-        marginTop: Device.isTablet ? deviceheight - 630 : deviceheight - 530,
-        height: Device.isTablet ? 630 : 530,
+        marginTop: Device.isTablet ? deviceheight - RH(630) : deviceheight - RH(530),
+        height: Device.isTablet ? RH(630) : RH(530),
     },
     viewText: {
-        fontSize: Device.isTablet ? 22 : 17,
+        fontSize: Device.isTablet ? RF(22) : RF(17),
         fontFamily: 'bold',
         color: "#353C40"
     },
     viewSubText: {
-        fontSize: Device.isTablet ? 22 : 17,
+        fontSize: Device.isTablet ? RF(22 ): RF(17),
         fontFamily: 'regular',
         color: "#353C40"
     },
@@ -646,125 +648,125 @@ const styles = StyleSheet.create({
     filterMainContainer_mobile: {
         width: deviceWidth,
         alignItems: 'center',
-        marginLeft: -20,
+        marginLeft: -RW(20),
         backgroundColor: "#ffffff",
-        height: 530,
+        height: RH(530),
         position: 'absolute',
-        bottom: -20,
+        bottom: -RH(20),
     },
     filterByTitle_mobile: {
         position: 'absolute',
-        left: 20,
-        top: 15,
-        width: 300,
-        height: 20,
+        left: RW(20),
+        top: RH(15),
+        width: RW(300),
+        height: RH(20),
         fontFamily: 'medium',
-        fontSize: 16,
+        fontSize: RF(16),
         color: '#353C40'
     },
     filterByTitleDecoration_mobile: {
         height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
-        marginTop: 50,
+         marginTop: RH(5),
     },
     filterCloseButton_mobile: {
         position: 'absolute',
-        right: 8,
-        top: 15,
-        width: 50, height: 50,
+        right: RW(8),
+        top: RH(15),
+        width: RW(50), height: RH(50),
     },
     filterDateButton_mobile: {
-        width: deviceWidth - 40,
-        marginTop: 5,
-        marginBottom: 10,
-        marginLeft: 20,
-        marginRight: 20,
-        paddingLeft: 15,
+        width: deviceWidth - RW(40),
+         marginTop: RH(5),
+        marginBottom: RH(10),
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        paddingLeft: RW(15),
         borderColor: '#8F9EB717',
         borderRadius: 3,
-        height: 50,
+        height: RH(50),
         backgroundColor: "#F6F6F6",
         borderRadius: 5,
     },
     filterDateButtonText_mobile: {
-        marginLeft: 16,
-        marginTop: 20,
+        marginLeft: RW(16),
+        marginTop: RH(20),
         color: "#6F6F6F",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     datePickerContainer_mobile: {
-        height: 280,
+        height: RH(280),
         width: deviceWidth,
         backgroundColor: '#ffffff'
     },
     datePickerButton_mobile: {
         position: 'absolute',
-        left: 20,
-        top: 10,
-        height: 30,
+        left: RW(20),
+        top: RH(10),
+        height: RH(30),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     datePickerEndButton_mobile: {
         position: 'absolute',
-        right: 20,
-        top: 10,
-        height: 30,
+        right: RW(20),
+        top: RH(10),
+        height: RH(30),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     datePickerButtonText_mobile: {
         textAlign: 'center',
-        marginTop: 5,
+         marginTop: RH(5),
         color: "#ffffff",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     input_mobile: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(44),
+         marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
+        paddingLeft: RW(15),
+        fontSize: RF(14),
     },
     filterCloseImage_mobile: {
         color: '#ED1C24',
         fontFamily: 'regular',
-        fontSize: 12,
+        fontSize: RF(12),
         position: 'absolute',
-        top: 10,
+        top: RH(10),
         right: 0,
     },
     filterApplyButton_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 50,
+        width: deviceWidth - RW(40),
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(20),
+        height: RH(50),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     filterButtonText_mobile: {
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: RH(20),
         color: "#ffffff",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     filterCancelButton_mobile: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
+        width: deviceWidth - RW(40),
+        marginLeft: RW(20),
+        marginRight: RW(20),
         marginTop: 20,
         height: 50,
         backgroundColor: "#ffffff",
@@ -776,25 +778,25 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 20,
         color: "#000000",
-        fontSize: 15,
+        fontSize: RF(15),
         fontFamily: "regular"
     },
     rnSelect_mobile: {
         color: '#8F9EB7',
-        fontSize: 15
+        fontSize: RF(15)
     },
     rnSelectContainer_mobile: {
         justifyContent: 'center',
-        margin: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
+        margin: RH(20),
+        height: RH(44),
+         marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
+        paddingLeft: RW(15),
         fontSize: 14,
     },
 
@@ -813,7 +815,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: 20,
         top: 15,
-        width: 300,
+        width: RW(300),
         height: 30,
         fontFamily: 'medium',
         fontSize: 21,
@@ -1056,55 +1058,55 @@ const styles = StyleSheet.create({
     ////////
     input_tablet: {
         justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        height: RH(54),
+         marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
+        paddingLeft: RW(15),
+        fontSize: RF(20),
     },
     filterCloseButton_tablet: {
         position: 'absolute',
-        right: 24,
-        top: 10,
-        width: 60, height: 60,
+        right: RW(24),
+        top: RH(10),
+        width: RW(60), height: RW(60),
     },
     filterCloseImage_tablet: {
         color: '#ED1C24',
         fontFamily: 'regular',
-        fontSize: 17,
+        fontSize: RF(17),
         position: 'absolute',
-        top: 10,
-        right: 24,
+        top: RH(10),
+        right: RW(24),
     },
     filterApplyButton_tablet: {
         width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 60,
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(20),
+        height: RH(60),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     filterButtonText_tablet: {
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: RH(20),
         color: "#ffffff",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     filterCancelButton_tablet: {
-        width: deviceWidth - 40,
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        height: 60,
+        width: deviceWidth - RW(40),
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        marginTop: RH(20),
+        height: RH(60),
         backgroundColor: "#ffffff",
         borderRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1112,71 +1114,71 @@ const styles = StyleSheet.create({
     },
     filterButtonCancelText_tablet: {
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: RH(20),
         color: "#000000",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     filterDateButton_tablet: {
-        width: deviceWidth - 40,
-        marginTop: 5,
-        marginBottom: 10,
-        marginLeft: 20,
-        marginRight: 20,
-        paddingLeft: 15,
+        width: deviceWidth - RW(40),
+         marginTop: RH(5),
+        marginBottom: RH(10),
+        marginLeft: RW(20),
+        marginRight: RW(20),
+        paddingLeft: RW(15),
         borderColor: '#8F9EB717',
         borderRadius: 3,
-        height: 60,
+        height: RH(60),
         backgroundColor: "#F6F6F6",
         borderRadius: 5,
     },
     filterDateButtonText_tablet: {
-        marginLeft: 16,
-        marginTop: 20,
+        marginLeft: RW(16),
+        marginTop: RH(20),
         color: "#6F6F6F",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     datePickerButton_tablet: {
         position: 'absolute',
-        left: 20,
-        top: 10,
-        height: 40,
+        left: RW(20),
+        top: RH(10),
+        height: RH(40),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     datePickerButtonText_tablet: {
         textAlign: 'center',
-        marginTop: 5,
+         marginTop: RH(5),
         color: "#ffffff",
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular"
     },
     datePickerEndButton_tablet: {
         position: 'absolute',
-        right: 20,
-        top: 10,
-        height: 40,
+        right: RW(20),
+        top: RH(10),
+        height: RH(40),
         backgroundColor: "#ED1C24",
         borderRadius: 5,
     },
     rnSelect_tablet: {
         color: '#8F9EB7',
-        fontSize: 20
+        fontSize: RF(20)
     },
     rnSelectContainer_tablet: {
         justifyContent: 'center',
-        margin: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
+        margin: RH(20),
+        height: RH(54),
+         marginTop: RH(5),
+        marginBottom: RH(10),
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
         borderWidth: Device.isTablet ? 2 : 1,
         fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
+        paddingLeft: RW(15),
+        fontSize: RF(20),
     },
 
 
@@ -1200,7 +1202,7 @@ const flats = StyleSheet.create({
 
     // flats for Mobile
     flatlistContainer_mobile: {
-        height: 150,
+        height: RH(150),
         backgroundColor: '#fbfbfb',
         borderBottomWidth: 5,
         borderBottomColor: '#ffffff',
@@ -1212,29 +1214,29 @@ const flats = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingLeft: RW(10),
+        paddingRight: RW(10),
         alignItems: 'center',
-        height: 140
+        height: RH(140)
     },
     flatlistTextAccent_mobile: {
         fontFamily: 'medium',
-        fontSize: 16,
+        fontSize: RF(16),
         color: '#ED1C24'
     },
     flatlistText_mobile: {
         fontFamily: 'regular',
-        fontSize: 12,
+        fontSize: RF(12),
         color: '#353c40'
     },
     flatlistTextCommon_mobile: {
         fontFamily: 'regular',
-        fontSize: 12,
+        fontSize: RF(12),
         color: '#808080'
     },
     editButton_mobile: {
-        width: 30,
-        height: 30,
+        width: RW(30),
+        height: RH(30),
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1242,8 +1244,8 @@ const flats = StyleSheet.create({
         // borderRadius:5,
     },
     deleteButton_mobile: {
-        width: 30,
-        height: 30,
+        width: RW(30),
+        height: RH(30),
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1253,7 +1255,7 @@ const flats = StyleSheet.create({
 
     // flats for Tablet
     flatlistContainer_tablet: {
-        height: 200,
+        height: RH(200),
         backgroundColor: '#fbfbfb',
         borderBottomWidth: 5,
         borderBottomColor: '#ffffff',
@@ -1265,34 +1267,34 @@ const flats = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        paddingLeft: 20,
-        paddingRight: 20,
+        paddingLeft: RW(20),
+        paddingRight: RW(20),
         alignItems: 'center',
-        height: 160
+        height: RH(160)
     },
     flatlistTextAccent_tablet: {
         fontFamily: 'medium',
-        fontSize: 21,
+        fontSize: RF(21),
         color: '#ED1C24'
     },
     flatlistText_tablet: {
         fontFamily: 'regular',
-        fontSize: 21,
+        fontSize: RF(21),
         color: '#353c40'
     },
     flatlistTextCommon_tablet: {
         fontFamily: 'regular',
-        fontSize: 17,
+        fontSize: RF(17),
         color: '#808080'
     },
     flatlstTextCommon_tablet: {
         fontFamily: 'regular',
-        fontSize: 17,
+        fontSize: RF(17),
         color: '#808080'
     },
     editButton_tablet: {
-        width: 50,
-        height: 50,
+        width: RF(50),
+        height: RF(50),
         borderBottomLeftRadius: 5,
         borderTopLeftRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,
@@ -1300,8 +1302,8 @@ const flats = StyleSheet.create({
         // borderRadius:5,
     },
     deleteButton_tablet: {
-        width: 50,
-        height: 50,
+        width: RF(50),
+        height: RF(50),
         borderBottomRightRadius: 5,
         borderTopRightRadius: 5,
         borderWidth: Device.isTablet ? 2 : 1,

@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Image, Dimensions, TouchableOpacity } from 'rea
 var deviceWidth = Dimensions.get('window').width;
 import Device from 'react-native-device-detection';
 import I18n, { getLanguages } from 'react-native-i18n';
+import { RH, RW,RF } from '../../Responsive';
 I18n.fallbacks = true;
 I18n.defaultLocale = 'english';
 
@@ -68,10 +69,10 @@ export default class Welcome extends React.Component {
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
         flexDirection: 'row',
-        marginLeft: 24,
-        marginRight: 24,
+        marginLeft: RW(24),
+        marginRight: RW(24),
         marginTop: 2,
-        height: 34,
+        height: RH(34),
         borderColor: '#AAAAAA',
         backgroundColor: 'white',
         color: 'black',
@@ -79,9 +80,9 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputAndroid: {
         flexDirection: 'row',
-        width: 100,
+        width: RW(100),
         marginTop: 2,
-        height: 34,
+        height: RH(34),
         borderColor: '#AAAAAA',
         backgroundColor: 'white',
         color: 'black',
@@ -94,8 +95,8 @@ const pickerSelectStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
     imagealign: {
-        marginTop: 14,
-        marginRight: 10,
+        marginTop: RH(14),
+        marginRight: RW(10),
     },
     container: {
         flex: 1,
@@ -109,44 +110,44 @@ const styles = StyleSheet.create({
     // Styles For Mobile
 
     logoImage_mobile: {
-        width: 302,
-        height: 275,
+        width: RW(302),
+        height: RH(275),
         position: 'absolute',
-        top: 130
+        top: RH(130)
     },
     
     // Styles For Mobile
     headerContainer_mobile: { 
         flex: 1, 
-        marginTop: 450, 
+        marginTop: RH(450), 
         width: deviceWidth, 
-        height: 200 
+        height: RH(200)
     },
     headerGreeting_mobile: { 
         color: "#353C4050", 
-        fontSize: 16, 
+        fontSize: RF(16), 
         fontFamily: "bold", 
-        marginLeft: 20, 
-        marginTop: 20 
+        marginLeft: RW(20), 
+        marginTop: RH(20)
     },
     headerTitle_mobile: {
         color: "#353C40", 
-        fontSize: 30, 
+        fontSize: RF(30), 
         fontFamily: "bold", 
-        marginLeft: 20, 
-        marginTop: 20, 
+        marginLeft: RW(20), 
+        marginTop: RW(20), 
         flexDirection: 'column', 
-        height: 135,
+        height: RH(135),
         justifyContent: 'center',
     },
     letsGoButton_mobile: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         position: 'absolute',
-        marginLeft: 20,
-        width: deviceWidth - 40,
-        bottom: 30,
-        height: 44,
+        marginLeft: RW(20),
+        width: deviceWidth - RW(40),
+        bottom: RH(30),
+        height: RH(44),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
@@ -155,48 +156,48 @@ const styles = StyleSheet.create({
         color: 'white',
         justifyContent: 'center',
         alignSelf: 'center',
-        fontSize: 14,
+        fontSize: RF(14),
         fontFamily: "regular",
     },
 
     // Styles For Tablet
     logoImage_tablet: {
-        width: 402,
-        height: 375,
+        width: RW(402),
+        height: RH(375),
         position: 'absolute',
-        top: 130
+        top: RH(130)
     },
     headerContainer_tablet: { 
         flex: 1, 
-        marginTop: 450, 
+        marginTop: RH(450), 
         width: deviceWidth, 
-        height: 200 
+        height: RH(200) 
     },
     headerGreeting_tablet: { 
         color: "#353C4050", 
-        fontSize: 26, 
+        fontSize: RF(26), 
         fontFamily: "bold", 
-        marginLeft: 20, 
-        marginTop: 20 
+        marginLeft: RW(20), 
+        marginTop: RH(20) 
     },
     headerTitle_tablet: {
         color: "#353C40", 
-        fontSize: 40, 
+        fontSize: RF(40), 
         fontFamily: "bold", 
-        marginLeft: 20, 
-        marginTop: 20, 
+        marginLeft: RW(20), 
+        marginTop: RH(20), 
         flexDirection: 'column', 
-        height: 135,
+        height: RH(135),
         justifyContent: 'center',
     },
     letsGoButton_tablet: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         position: 'absolute',
-        marginLeft: 20,
-        width: deviceWidth - 40,
-        bottom: 30,
-        height: 60,
+        marginLeft: RW(20),
+        width: deviceWidth - RW(40),
+        bottom: RH(30),
+        height: RH(60),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
         color: 'white',
         justifyContent: 'center',
         alignSelf: 'center',
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular",
     },
 

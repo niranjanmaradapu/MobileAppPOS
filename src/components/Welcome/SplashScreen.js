@@ -3,6 +3,7 @@ import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import I18n, { getLanguages } from 'react-native-i18n';
+import { RH, RW,RF } from '../../Responsive';
 // Enable fallbacks if you want `en-US`
 // and `en-GB` to fallback to `en`
 I18n.fallbacks = true;
@@ -62,8 +63,8 @@ export default class SplashScreen extends React.Component {
 const styles = StyleSheet.create({
     logoImage_mobile: {
         alignSelf: 'center',
-        width: 177,
-        height: 219,
+        width: RW(177),
+        height: RH(219),
     },
     container: {
         flex: 1,
@@ -75,21 +76,21 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: "#353C40",
         position: 'absolute',
-        bottom: 70,
-        fontSize: 14
+        bottom: RH(70),
+        fontSize: RF(14)
     },
 
     logoImage_tablet: {
         alignSelf: 'center',
-        width: 207,
-        height: 259,
+        width: RW(207),
+        height: RH(259),
     },
     splashText_tablet: {
         textAlign: 'center',
         color: "#353C40",
         position: 'absolute',
-        bottom: 70,
-        fontSize: 24
+        bottom: RH(70),
+        fontSize: RF(24)
     }
 
 });

@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, Image, Dimensions, FlatList, TouchableOpacity } from 'react-native';
 var deviceWidth = Dimensions.get('window').width;
 import I18n, { getLanguages } from 'react-native-i18n';
+import { RH, RW,RF } from '../../Responsive';
 // Enable fallbacks if you want `en-US`
 // and `en-GB` to fallback to `en`
 I18n.fallbacks = true;
@@ -93,11 +94,11 @@ export default class LanguageSelection extends React.Component {
             <View style={styles.container}>
                 <View>
                     <Text style={{
-                        color: "#353C40", fontSize: 30, fontFamily: "bold", marginLeft: 20, marginTop: 100, flexDirection: 'column',
+                        color: "#353C40", fontSize: RF(30), fontFamily: "bold", marginLeft: RW(20), marginTop: RH(100), flexDirection: 'column',
                         justifyContent: 'center',
                     }}> {('Choose the language')} </Text>
                     <FlatList
-                        style={{ width: deviceWidth, marginTop: 50, }}
+                        style={{ width: deviceWidth, marginTop: RH(50), }}
                         scrollEnabled={false}
                         ListHeaderComponent={this.renderHeader}
                         data={data}
@@ -172,14 +173,14 @@ const pickerSelectStyles = StyleSheet.create({
 
 const styles = StyleSheet.create({
     imagealign: {
-        marginTop: 14,
-        marginRight: 10,
+        marginTop: RH(14),
+        marginRight: RW(10),
     },
     logoImage: {
-        width: 302,
-        height: 275,
+        width: RW(302),
+        height: RH(275),
         position: 'absolute',
-        top: 130
+        top: RH(130)
     },
     container: {
         flex: 1,
@@ -192,22 +193,22 @@ const styles = StyleSheet.create({
     langaugeButton_mobile: {
         flexDirection: 'column', 
         width: '100%', 
-        height: 80 
+        height: RH(80) 
     },
     languageButtonText_mobile: {
-        fontSize: 18, 
-        marginTop: 30, 
-        marginLeft: 20, 
+        fontSize: RF(18), 
+        marginTop: RH(30), 
+        marginLeft: RW(20), 
         fontFamily: 'medium',
     },
     continueButton_mobiile: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         position: 'absolute',
-        marginLeft: 20,
-        width: deviceWidth - 40,
-        bottom: 30,
-        height: 44,
+        marginLeft: RW(20),
+        width: deviceWidth - RW(40),
+        bottom: RH(30),
+        height: RH(44),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
@@ -216,7 +217,7 @@ const styles = StyleSheet.create({
         color: 'white',
         justifyContent: 'center',
         alignSelf: 'center',
-        fontSize: 14,
+        fontSize: RF(14),
         fontFamily: "regular",
     },
 
@@ -224,22 +225,22 @@ const styles = StyleSheet.create({
     langaugeButton_tablet: {
         flexDirection: 'column', 
         width: '100%', 
-        height: 100 
+        height: RH(100) 
     },
     languageButtonText_tablet: {
-        fontSize: 28, 
-        marginTop: 30, 
-        marginLeft: 20, 
+        fontSize: RF(28), 
+        marginTop: RH(30), 
+        marginLeft: RW(20), 
         fontFamily: 'medium',
     },
     continueButton_tablet: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
         position: 'absolute',
-        marginLeft: 20,
-        width: deviceWidth - 40,
-        bottom: 30,
-        height: 60,
+        marginLeft: RW(20),
+        width: deviceWidth - RW(40),
+        bottom: RH(30),
+        height: RH(60),
         borderRadius: 10,
         fontWeight: 'bold',
         // marginBottom:100,
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
         color: 'white',
         justifyContent: 'center',
         alignSelf: 'center',
-        fontSize: 20,
+        fontSize: RF(20),
         fontFamily: "regular",
     },
 })
