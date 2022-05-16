@@ -1,6 +1,6 @@
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
 import React, { Component } from 'react'
-import { listEmptyMessage } from '../Styles'
+import { listEmptyMessage } from '../Styles/Styles'
 import { buttonContainer, buttonStyle, flatListMainContainer, flatlistSubContainer, highText, imaheStyle, textContainer } from './inventoryStyles'
 import I18n from 'react-native-i18n'
 export class Barcode extends Component {

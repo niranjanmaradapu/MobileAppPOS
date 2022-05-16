@@ -471,7 +471,7 @@ export default class AddStore extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    {!stateValid && <Message message={this.state.errors["state"]} />}
+                    {!stateValid && <Message imp={true} message={this.state.errors["state"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("District")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <View style={districtValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
@@ -489,7 +489,7 @@ export default class AddStore extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    {!districtValid && <Message message={this.state.errors["district"]} />}
+                    {!districtValid && <Message imp={true} message={this.state.errors["district"]} />}
                     <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("City")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -528,7 +528,7 @@ export default class AddStore extends Component {
                         value={this.state.mobile}
                         onChangeText={this.handleMobile}
                     />
-                    {!mobileValid && <Message message={this.state.errors["mobile"]} />}
+                    {!mobileValid && <Message imp={true} message={this.state.errors["mobile"]} />}
                     <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{("Address")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
@@ -565,7 +565,7 @@ export default class AddStore extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    {!domianValid && <Message message={this.state.errors["domain"]} />}
+                    {!domianValid && <Message imp={true} message={this.state.errors["domain"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("Store Name")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
                         style={storeValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -578,7 +578,7 @@ export default class AddStore extends Component {
                         value={this.state.storeName}
                         onChangeText={this.handleStoreName}
                     />
-                    {!storeValid && <Message message={this.state.errors["store"]} />}
+                    {!storeValid && <Message imp={true} message={this.state.errors["store"]} />}
                     {this.state.isEdit === true && (
                         <TextInput
                             style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}

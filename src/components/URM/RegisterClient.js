@@ -54,7 +54,7 @@ class RegisterClient extends Component {
     };
 
     handleNameValid = () => {
-        if (this.state.name.length >= errorLength.name) {
+        if (this.state.userName.length >= errorLength.name) {
             this.setState({nameValid: true})
         }
     }
@@ -181,7 +181,7 @@ class RegisterClient extends Component {
                         isConfigUser: "true",
                         clientDomain: [],
                         isSuperAdmin: "false",
-                        createdBy: "NA",
+                        createdBy: 0,
                     };
 
                     axios.post(UrmService.saveUser(), clientObj).then((res) => {
@@ -248,7 +248,7 @@ class RegisterClient extends Component {
                         onChangeText={this.handleName}
                         onBlur={this.handleNameValid}
                     />
-                    {!nameValid && <Message message={this.state.errors["userName"]} />}
+                    {!nameValid && <Message imp={true} message={this.state.errors["userName"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Mobile")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={mobileValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -264,7 +264,7 @@ class RegisterClient extends Component {
                         onBlur={this.handleMobileValid}
                         onChangeText={this.handleMobile}
                     />
-                    {!mobileValid && <Message message={this.state.errors["Mobile"]} />}
+                    {!mobileValid && <Message imp={true} message={this.state.errors["Mobile"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Email")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={emailValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -278,7 +278,7 @@ class RegisterClient extends Component {
                         onBlur={this.handleEmailValid}
                         onChangeText={this.handleEmail}
                     />
-                    {!emailValid && <Message message={this.state.errors["Email"]} />}
+                    {!emailValid && <Message imp={true} message={this.state.errors["Email"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Organisation")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
                         style={organizationValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -292,7 +292,7 @@ class RegisterClient extends Component {
                         onBlur={this.handleOrganizationValid}
                         onChangeText={this.handleOrganization}
                     />
-                    {!organizationValid && <Message message={this.state.errors["organization"]} />}
+                    {!organizationValid && <Message imp={true} message={this.state.errors["organization"]} />}
                     <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, color: '#000000', marginTop: 10, marginBottom: 10, }}>{I18n.t("Address")}</Text>
                     <TextInput
                         style={Device.isTablet ? styles.input_tablet : styles.input_mobile}

@@ -43,7 +43,7 @@ class InventoryService {
     }
 
     getAllHsnList() {
-        return REACT_NATIVE_APP_BASE_URL + '/hsn-details/hsnDetails/getHsnDetails';
+        return REACT_NATIVE_APP_BASE_URL + '/hsn-details/hsn-details/getHsnDetails';
     }
 
     addTextileBarcodes() {

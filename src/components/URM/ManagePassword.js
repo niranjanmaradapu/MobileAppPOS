@@ -64,7 +64,7 @@ export default class ManagePassword extends Component {
         validationPasswords() {
         let isFormValid = true
         let errors = {}
-        let passReg = /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])$/;
+        let passReg = /([^a-zA-Z0-9\s])\w+/g;
 
         if (this.state.newPassword.length < errorLength.password || passReg.test(this.state.newPassword) === false) {
             isFormValid = false
@@ -140,27 +140,27 @@ export default class ManagePassword extends Component {
                         onChangeText={this.handlePassword}
                     /> */}
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={passValid ? styles.inputField : styles.inputFieldError}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("New Password")}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={passValid ? "#6F6F6F" : "#dd0000"}
                         textAlignVertical="center"
                         secureTextEntry={true}
                         autoCapitalize="none"
                         value={this.state.newPassword}
                         onChangeText={this.handleNewPassword}
                     />
-                    {!passValid && <Message message={this.state.errors["password1"]} />}
-                    <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    {!passValid && <Message imp={true} message={this.state.errors["password1"]} />}
+                    <TextInput style={confirmValid ? styles.inputField : styles.inputFieldError}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Confirm Password")}
                         secureTextEntry={true}
-                        placeholderTextColor="#6F6F6F"
+                        placeholderTextColor={confirmValid ? "#6F6F6F" : "#dd0000"}
                         autoCapitalize="none"
                         onChangeText={this.handleConfirmPassword}
                         value={this.state.confirmPassword}
                         ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
-                    {!confirmValid && <Message message={this.state.errors["password2"]} />}
+                    {!confirmValid && <Message imp={true} message={this.state.errors["password2"]} />}
 
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.changePassword()}>
@@ -206,11 +206,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#353C40'
     },
-    input_mobile: {
+    inputField: {
         justifyContent: 'center',
         marginLeft: 20,
         marginRight: 20,
-        height: 44,
+        height: Device.isTablet ? 54 : 44,
         marginTop: 5,
         marginBottom: 10,
         borderColor: '#8F9EB717',
@@ -219,7 +219,22 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         fontFamily: 'regular',
         paddingLeft: 15,
-        fontSize: 14,
+        fontSize: Device.isTablet ? 20 : 14,
+    },
+    inputFieldError: {
+        justifyContent: 'center',
+        marginLeft: 20,
+        marginRight: 20,
+        height: Device.isTablet ? 54 : 44,
+        marginTop: 5,
+        marginBottom: 10,
+        borderColor: '#dd0000',
+        borderRadius: 3,
+        backgroundColor: '#FBFBFB',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: Device.isTablet ? 20 : 14,
     },
     saveButton_mobile: {
         margin: 8,

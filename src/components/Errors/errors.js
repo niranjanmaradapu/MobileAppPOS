@@ -3,13 +3,15 @@ export const urmErrorMessages = {
   nanme: "/ Name must be 3-25 characters long",
   roleName: "/ Rolename must be 3-25 characters long",
   password: "/ Password must be 8-25 characters long",
-  createPassword: '/ Password must contatin atleast one Captial & lower letter with one special character & length must be 8-25 characters',
+  createPassword: '/ Use 8-25 characters with a mix of letters, numbers & symbols',
   confirmPassword: "/ Passwords are not matching",
+  passwordSpace: "/ whitespaces are not allowed in passwords",
   mobile: "/ Enter a valid 10 digit mobile number",
   email: "/ Enter a valid Email Id, ex: someone@example.com",
   orginisation: "/ Organisation name must be 3-25 characters long",
   description: "/ Enter the Description",
   customerName: "/ Customer name must be 3-25 characters",
+  gstNumber: "/ Gst Number must be 15 characters or more",
 }
 
 export const inventoryErrorMessages = {

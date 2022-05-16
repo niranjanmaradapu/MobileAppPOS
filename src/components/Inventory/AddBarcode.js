@@ -655,7 +655,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                            {!divisionValid && <Message message={this.state.errors["divison"]} />}
+                            {!divisionValid && <Message imp={true} message={this.state.errors["divison"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={sectionValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
@@ -672,7 +672,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                        {!sectionValid && <Message message={this.state.errors["section"]} />}
+                        {!sectionValid && <Message imp={true} message={this.state.errors["section"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Sub Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={subSectionValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
@@ -689,7 +689,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                        {!subSectionValid && <Message message={this.state.errors["subSection"]} />}
+                        {!subSectionValid && <Message imp={true} message={this.state.errors["subSection"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Category")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={categoryValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
@@ -706,7 +706,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                        {!categoryValid && <Message message={this.state.errors["category"]} />}
+                        {!categoryValid && <Message imp={true} message={this.state.errors["category"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}> {I18n.t("Colour")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={colorValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -720,7 +720,7 @@ class AddBarcode extends Component {
                         value={this.state.colour}
                         onChangeText={this.handleColour}
                     />
-                    {!colorValid && <Message message={this.state.errors["color"]} />}
+                    {!colorValid && <Message imp={true} message={this.state.errors["color"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}> {I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={nameValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -734,7 +734,7 @@ class AddBarcode extends Component {
                         onBlur={this.handleNameValid}
                         onChangeText={this.handleName}
                     />
-                    {!nameValid && <Message message={this.state.errors["name"]} />}
+                    {!nameValid && <Message imp={true} message={this.state.errors["name"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Batch No")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={batchNoValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -748,7 +748,7 @@ class AddBarcode extends Component {
                         onBlur={this.handleBatchNoValid}
                         onChangeText={this.handleBatchNo}
                     />
-                    {!batchNoValid && <Message message={this.state.errors["batchNo"]} />}
+                    {!batchNoValid && <Message imp={true} message={this.state.errors["batchNo"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Cost Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={costPriceValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -764,7 +764,7 @@ class AddBarcode extends Component {
                         onBlur={this.handleCostPriceValid}
                         onChangeText={this.handleCostPrice}
                     />
-                    {!costPriceValid && <Message message={this.state.errors["costPrice"]} />}
+                    {!costPriceValid && <Message imp={true} message={this.state.errors["costPrice"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("List Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={listPriceValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -780,7 +780,7 @@ class AddBarcode extends Component {
                         onChangeText={this.handleListPrice}
                         onBlur={this.handleListPriceValid}
                     />
-                    {!listPriceValid && <Message message={this.state.errors["listPrice"]} />}
+                    {!listPriceValid && <Message imp={true} message={this.state.errors["listPrice"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("UOM")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={uomValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
@@ -797,7 +797,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    {!uomValid && <Message message={this.state.errors["uom"]} />}
+                    {!uomValid && <Message imp={true} message={this.state.errors["uom"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("HSN Code")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={hsnValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
@@ -814,7 +814,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    {!hsnValid && <Message message={this.state.errors["hsn"]} />}
+                    {!hsnValid && <Message imp={true} message={this.state.errors["hsn"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("EMP ID")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={empValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -828,7 +828,7 @@ class AddBarcode extends Component {
                         onBlur={this.handleEMPIdValid}
                         onChangeText={this.handleEMPId}
                     />
-                    {!empValid && <Message message={this.state.errors["emp"]} />}
+                    {!empValid && <Message imp={true} message={this.state.errors["emp"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Store")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <View style={storeValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
                         <RNPickerSelect
@@ -845,7 +845,7 @@ class AddBarcode extends Component {
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
-                    {!storeValid && <Message message={this.state.errors["store"]} />}
+                    {!storeValid && <Message imp={true} message={this.state.errors["store"]} />}
                     <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>QTY <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
                         style={storeValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
@@ -859,7 +859,7 @@ class AddBarcode extends Component {
                         onBlur={this.handleQuantityValid}
                         onChangeText={this.handleQuantity}
                     />
-                    {!qtyValid && <Message message={this.state.errors["qty"]} />}
+                    {!qtyValid && <Message imp={true} message={this.state.errors["qty"]} />}
                     <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
                         onPress={() => this.saveBarcode()}>
                         <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
