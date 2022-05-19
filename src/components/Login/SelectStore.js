@@ -10,6 +10,7 @@ var deviceWidth = Dimensions.get('window').width;
 I18n.fallbacks = true;
 I18n.defaultLocale = 'english';
 const data = [{ key: "Vijayawada" }, { key: "Kakinada" }, { key: "Anakapalli" }];
+import { backButton, backButtonImage, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, menuButton } from '../Styles/Styles';
 
 export default class SelectStore extends React.Component {
     constructor(props) {
@@ -149,33 +150,18 @@ export default class SelectStore extends React.Component {
             <View style={styles.container}>
                 <View>
                     {this.state.isFromDomain === true && (
-                        <View style={styles.viewswidth}>
-
-                            <TouchableOpacity style={{
-                                position: 'absolute',
-                                left: RW(10),
-                                top: RH(30),
-                                width: RW(40),
-                                height: RH(40),
-                            }} onPress={() => this.handleBackButtonClick()}>
-                                <Image source={require('../assets/images/backButton.png')} />
+                        <View style={headerTitleContainer}>
+                            <View style={headerTitleSubContainer}>
+                            <TouchableOpacity style={backButton} onPress={() => this.handleBackButtonClick()}>
+                                <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
                             </TouchableOpacity>
-                            <Text style={{
-                                position: 'absolute',
-                                left: RW(70),
-                                top: RW(47),
-                                width: RW(300),
-                                height: RH(20),
-                                fontFamily: 'bold',
-                                fontSize: RF(18),
-                                color: '#353C40'
-                            }}> {I18n.t('Stores')} </Text>
+                            <Text style={headerTitle}> {I18n.t('Stores')} </Text>
+                            </View>
                         </View>
                     )}
                     <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t('Select the Store')} </Text>
                     <FlatList
-                        style={{ width: deviceWidth, marginTop: RH(50), marginBottom: RH(100), }}
-                        //scrollEnabled={false}
+                        style={{ width: deviceWidth, marginTop: RH(10)}}
                         ListHeaderComponent={() => {
                             return (<Text></Text>);
                         }}
@@ -200,44 +186,18 @@ export default class SelectStore extends React.Component {
                         )}
                     />
                 </View>
+                <View style={styles.continueButtonContainer}>
                 <TouchableOpacity
-                    style={Device.isTablet ? styles.continueButton_tablet : styles.continueButton_mobiile}
+                    style={styles.continueButton}
                     onPress={() => this.letsGoButtonAction()} >
-                    <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {I18n.t('continue').toUpperCase()} </Text>
+                    <Text style={styles.continueButtonText}> {I18n.t('continue').toUpperCase()} </Text>
                 </TouchableOpacity>
+                </View>
             </View>
 
         );
     }
 }
-
-// const pickerSelectStyles = StyleSheet.create({
-//     inputIOS: {
-//         flexDirection: 'row',
-//         marginLeft: 24,
-//         marginRight: 24,
-//         marginTop: 2,
-//         height: 34,
-//         borderColor: '#AAAAAA',
-//         backgroundColor: 'white',
-//         color: 'black',
-//         textAlign: 'center',
-//     },
-//     inputAndroid: {
-//         flexDirection: 'row',
-//         width: 100,
-//         // marginLeft: 24,
-//         // marginRight: 24,
-//         marginTop: 2,
-//         height: 34,
-//         borderColor: '#AAAAAA',
-//         backgroundColor: 'white',
-//         color: 'black',
-//         textAlign: 'center',
-//     },
-// });
-
-
 
 const styles = StyleSheet.create({
     imagealign: {
@@ -256,13 +216,38 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#FFFFFF",
     },
+    continueButtonContainer: {
+        width: deviceWidth,
+        backgroundColor: '#8F9EB7',
+        position: 'absolute',
+        bottom: RH(0),
+        height: Device.isTablet ? RH(100) : RH(70),
+    },
+        continueButton: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        marginLeft: RW(20),
+        width: deviceWidth - RW(40),
+        height: Device.isTablet ? RH(60) : RH(44),
+        borderRadius: 10,
+        fontWeight: 'bold',
+        marginTop: 10,
+    },
+    continueButtonText: {
+        color: 'white',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        fontSize: RF(14),
+        fontFamily: "regular",
+    },
+
     // Styles For Mobile
     headerTitle_mobile: {
         color: "#353C40",
         fontSize: RF(30),
         fontFamily: "bold",
         marginLeft: RW(20),
-        marginTop: RH(100),
+        // marginTop: RH(100),
         flexDirection: 'column',
         justifyContent: 'center',
     },
@@ -272,38 +257,20 @@ const styles = StyleSheet.create({
         height: RH(80)
     },
     domainButtonText_mobile: {
-        fontSize: RF(18),
+        fontSize: RF(15),
         marginTop: RH(30),
         marginLeft: RW(20),
         fontFamily: 'medium',
     },
-    continueButton_mobiile: {
-        backgroundColor: '#ED1C24',
-        justifyContent: 'center',
-        position: 'absolute',
-        marginLeft: RW(20),
-        width: deviceWidth - RW(40),
-        bottom: RH(30),
-        height: RH(44),
-        borderRadius: 10,
-        fontWeight: 'bold',
-        // marginBottom:100,
-    },
-    continueButtonText_mobile: {
-        color: 'white',
-        justifyContent: 'center',
-        alignSelf: 'center',
-        fontSize: RF(14),
-        fontFamily: "regular",
-    },
+
 
     // Styles For Tablet
     headerTitle_tablet: {
         color: "#353C40",
-        fontSize: RF(40),
+        fontSize: RF(30),
         fontFamily: "bold",
         marginLeft: RW(20),
-        marginTop: RH(100),
+        // marginTop: RH(100),
         flexDirection: 'column',
         justifyContent: 'center',
     },
@@ -313,7 +280,7 @@ const styles = StyleSheet.create({
         height: RH(100)
     },
     domainButtonText_tablet: {
-        fontSize: RF(28),
+        fontSize: RF(20),
         marginTop: RH(30),
         marginLeft: RW(20),
         fontFamily: 'medium',
@@ -321,10 +288,8 @@ const styles = StyleSheet.create({
     continueButton_tablet: {
         backgroundColor: '#ED1C24',
         justifyContent: 'center',
-        position: 'absolute',
         marginLeft: RW(20),
         width: deviceWidth - RW(40),
-        bottom: RH(30),
         height: RH(60),
         borderRadius: 10,
         fontWeight: 'bold',

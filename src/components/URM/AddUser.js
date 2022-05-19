@@ -91,6 +91,9 @@ export default class AddUser extends Component {
         }
         this.setState({ clientId: clientId });
         this.getDomainsList();
+
+        const userId = await AsyncStorage.getItem("custom:userId")
+        this.setState({userId: userId})
     }
 
     async getDomainsList() {
@@ -102,7 +105,7 @@ export default class AddUser extends Component {
                 if (len > 0) {
                     for (let i = 0; i < len; i++) {
                         let number = res.data.result[i];
-                        this.state.domainsArray.push({ name: number.domaiName, id: number.clientDomainaId });
+                        this.state.domainsArray.push({ name: number.domaiName, id: number.id });
                         domains.push({
                             value: this.state.domainsArray[i].name,
                             label: this.state.domainsArray[i].name
@@ -393,7 +396,7 @@ export default class AddUser extends Component {
         let errors = {}
         if (this.state.name.length < errorLength.name) {
             isFormValid = false
-            errors["name"] = urmErrorMessages.userName
+            errors["name"] = urmErrorMessages.name
             this.setState({ nameValid: false })
         }
 
@@ -445,7 +448,7 @@ export default class AddUser extends Component {
                     "isConfigUser": "false",
                     "clientDomain": [clientDomain],
                     "isSuperAdmin": JSON.stringify(this.state.isSuperAdmin),
-                    "createdBy": global.username,
+                    "createdBy": parseInt(this.state.userId),
 
                 };
                 console.log('params are' + JSON.stringify(saveObj));
@@ -669,12 +672,9 @@ export default class AddUser extends Component {
                                 style={{ marginTop: 10, }}
                                 scrollEnabled={true}
                                 renderItem={({ item, index }) => (
-                                    <TouchableOpacity onPress={() => this.selectedPrivilage(item, index)}>
+                                    <TouchableOpacity style={storesSelectorBtn} onPress={() => this.selectedPrivilage(item, index)}>
 
                                         <View style={storesSelector}>
-                                            <Text>
-                                                {item.name}
-                                            </Text>
 
                                             {item.selectedindex === 1 && (
                                                 <Image source={require('../assets/images/selectedMedium.png')} style={adminBtnImage} />
@@ -682,6 +682,10 @@ export default class AddUser extends Component {
                                             {item.selectedindex === 0 && (
                                                 <Image source={require('../assets/images/langunselectMedium.png')} style={adminBtnImage} />
                                             )}
+
+                                            <Text style={adminBtnText}>
+                                                {item.name}
+                                            </Text>
                                         </View>
 
                                         {/* </View> */}
@@ -760,7 +764,8 @@ const adminBtn = {
 
 const adminBtnImage = {
     height: Device.isTablet ? RH(30) : RH(25),
-    width: Device.isTablet ? RW(30) : RW(25)
+    width: Device.isTablet ? RW(30) : RW(25),
+    marginRight: RW(10)
 }
 
 const adminBtnText = {
@@ -768,13 +773,23 @@ const adminBtnText = {
     color: '#000000',
 }
 
-const storesSelector = {
-    padding: RW(15),
-    fontSize: RF(13),
-    height: RH(44),
+const storesSelectorBtn = {
+    height: Device.isTablet ? RH(54) : RH(44),
+    width: deviceWidth - RW(40),
+    marginLeft: RW(20),
+    marginRight: RW(20),
     backgroundColor: '#ffffff',
-    fontFamily: 'medium',
-    color: '#353C40',
+    borderColor: '#d5d5d5',
+    borderBottomWidth: 1,
+    marginBottom: 5,
+    borderRadius: Device.isTablet ? 10 : 5,
+}
+
+const storesSelector = {
+    display: 'flex',
+    flexDirection: 'row',
+    paddingLeft: 10,
+    paddingTop: 7,
 }
 
 const styles = StyleSheet.create({

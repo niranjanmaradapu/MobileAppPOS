@@ -24,7 +24,7 @@ export default class Domain extends Component {
                     style={{ marginTop: 20, }}
                     scrollEnabled={true}
                     keyExtractor={(item,i) => i.toString()}
-                    ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceHeight/3 }}>&#9888; Records Not Found</Text>}
+                    ListEmptyComponent={<Text style={domainEmpty}>&#9888; Records Not Found</Text>}
                     renderItem={({ item, index }) => (
                         <View style={flatListMainContainer}>
                             <View style={flatlistSubContainer}>
@@ -46,7 +46,7 @@ export default class Domain extends Component {
                     )}
                 />
                 {this.props.domains.length > 0 && this.props.channelFull && 
-                    <Text style={domainError}>user have all the domains</Text>
+                    <Text style={domainFull}>user have all the domains</Text>
                 }
                 {/* {this.props.domainError.length !== 0 && 
                     <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.props.domainError}</Text>
@@ -56,10 +56,18 @@ export default class Domain extends Component {
     }
 }
 
-const domainError = {
+const domainFull = {
   color: '#cc241d',
   textAlign: "center",
   fontFamily: "bold",
   fontSize: RF(17),
   marginTop: Device.isTablet ? RH(20) : RH(10)
+}
+
+const domainEmpty = {
+    color: '#cc241d',
+    textAlign: "center",
+    fontFamily: "bold",
+    fontSize: RF(17),
+    marginTop: deviceHeight / 3
 }

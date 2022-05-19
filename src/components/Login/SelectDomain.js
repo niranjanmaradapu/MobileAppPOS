@@ -93,7 +93,7 @@ export default class SelectDomain extends React.Component {
                 <View>
                     {/* <Image source={require('../assets/images/welcomeLogo.png')} style={styles.logoImage} /> */}
                     <Text style={{
-                        color: "#353C40", fontSize: 30, fontFamily: "bold", marginLeft: 20, marginTop: 100, flexDirection: 'column',
+                        color: "#353C40", fontSize: 30, fontFamily: "bold", marginLeft: 20, marginTop: Device.isTablet ? 50 : 30, flexDirection: 'column',
                         justifyContent: 'center',
                     }}> {I18n.t('Select Domain Type')} </Text>
                     <FlatList
@@ -135,11 +135,13 @@ export default class SelectDomain extends React.Component {
                         )}
                     />
                 </View>
+                <View style={styles.continueButtonContainer}>
                 <TouchableOpacity
-                    style={Device.isTablet ? styles.continueButton_tablet : styles.continueButton_mobiile}
+                    style={styles.continueButton}
                     onPress={() => this.letsGoButtonAction()} >
-                    <Text style={Device.isTablet ? styles.continueButtonText_tablet : styles.continueButtonText_mobile}> {I18n.t('continue').toUpperCase()} </Text>
+                    <Text style={styles.continueButtonText}> {I18n.t('continue').toUpperCase()} </Text>
                 </TouchableOpacity>
+                </View>
             </View>
 
         );
@@ -160,6 +162,30 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "#FFFFFF",
     },
+        continueButtonContainer: {
+        width: deviceWidth,
+        backgroundColor: '#8F9EB7',
+        position: 'absolute',
+        bottom: RH(0),
+        height: Device.isTablet ? RH(100) : RH(70),
+    },
+        continueButton: {
+        backgroundColor: '#ED1C24',
+        justifyContent: 'center',
+        marginLeft: RW(20),
+        width: deviceWidth - RW(40),
+        height: Device.isTablet ? RH(60) : RH(44),
+        borderRadius: 10,
+        fontWeight: 'bold',
+        marginTop: 10,
+    },
+    continueButtonText: {
+        color: 'white',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        fontSize: RF(14),
+        fontFamily: "regular",
+    },
 
     // Mobile
     image_mobile: {
@@ -170,7 +196,7 @@ const styles = StyleSheet.create({
         marginTop: RH(20),
     },
     text_mobile: {
-        fontSize: RF(20),
+        fontSize: RF(17),
         marginTop: -RH(40),
         fontFamily: 'medium',
         alignSelf: 'center',
@@ -218,7 +244,7 @@ const styles = StyleSheet.create({
         marginTop: RH(5),
     },
     text_tablet: {
-        fontSize: RF(30),
+        fontSize: RF(20),
         fontFamily: 'medium',
         marginTop: -RH(65),
         alignSelf: 'center',

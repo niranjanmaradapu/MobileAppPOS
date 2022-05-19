@@ -62,7 +62,7 @@ class ForgotPassword extends Component {
     async create() {
         let errors = {}
         if (this.state.userName.length < errorLength.name) {
-            errors["username"] = urmErrorMessages.userName
+            errors["username"] = urmErrorMessages.name
             this.setState({errors: errors, userValid: false})
         }
         else {

@@ -10,6 +10,8 @@ import Loader from '../../commonUtils/loader';
 import UrmService from '../services/UrmService';
 import { accountingErrorMessages } from '../Errors/errors';
 import Message from "../Errors/Message"
+import { cancelBtn, cancelBtnText, inputField, inputHeading, rnPicker, rnPickerContainer, rnPickerError, submitBtn, submitBtnText } from '../Styles/FormFields';
+import { backButton, backButtonImage, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, menuButton } from '../Styles/Styles';
 
 var deviceWidth = Dimensions.get('window').width;
 export default class AddDomain extends Component {
@@ -19,6 +21,7 @@ export default class AddDomain extends Component {
         this.state = {
             domainName: "",
             clientId: 0,
+            userId: 0,
             description: "",
             domainsArray: [],
             domains: [],
@@ -35,7 +38,8 @@ export default class AddDomain extends Component {
 
     async componentDidMount() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
-        this.setState({ clientId: clientId });
+        const userId = await AsyncStorage.getItem("custom:userId")
+        this.setState({ clientId: clientId, userId: userId });
 
         this.getMasterDomainsList();
     }
@@ -110,8 +114,8 @@ export default class AddDomain extends Component {
                 "name": this.state.domainName,
                 "discription": this.state.description,
                 "masterDomianId": this.state.domainId,
-                "clientId": this.state.clientId,
-                "createdBy": global.username
+                "clientId": parseInt(this.state.clientId),
+                "createdBy": parseInt(this.state.userId)
             };
             console.log('params are' + JSON.stringify(obj));
             this.setState({ loading: true });
@@ -126,10 +130,10 @@ export default class AddDomain extends Component {
                     alert(res.data.message);
                 }
             }
-            ).catch(() => {
+            ).catch((err) => {
                 this.setState({ loading: false });
                 this.setState({ loading: false });
-                alert("There is an Error while saving Domain");
+                alert(err);
             });
 
         }
@@ -144,18 +148,20 @@ export default class AddDomain extends Component {
                     <Loader
                         loading={this.state.loading} />
                 }
-                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                    <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/backButton.png')} />
+                <View style={headerTitleContainer} >
+                    <View style={headerTitleSubContainer}>
+                    <TouchableOpacity style={backButton} onPress={() => this.handleBackButtonClick()}>
+                        <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                    <Text style={headerTitle}>
                         {I18n.t("Add Domain")}
                     </Text>
+                    </View>
                 </View>
                 <ScrollView>
-                    <Text style={{ fontSize: Device.isTablet ? 22 : 17, fontFamily: 'medium', marginLeft: 20, marginBottom: 20 }}>{I18n.t("Domain")} <Text style={{ color: 'red', fontFamily: 'bold' }}>*</Text></Text>
+                    <Text style={inputHeading}>{I18n.t("Domain")} <Text style={{ color: 'red', fontFamily: 'bold' }}>*</Text></Text>
                     <View
-                        style={domainValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
+                        style={[inputField,  {borderColor: domainValid ? "grey" : '#dd0000'} ]}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
@@ -166,11 +172,10 @@ export default class AddDomain extends Component {
                             }}
                             items={this.state.domains}
                             onValueChange={this.handleDomain}
-                            style={domainValid ? pickerSelectStyles : pickerSelectStylesErrors}
+                            style={domainValid ? rnPicker : rnPickerError}
                             value={this.state.domainName}
                             useNativeAndroidPickerStyle={false}
                         />
-
                     </View>
                     {!domainValid && <Message imp={true} message={this.state.errors["domain"]} />}
                     <TextInput
@@ -183,77 +188,19 @@ export default class AddDomain extends Component {
                         value={this.state.description}
                         onChangeText={this.handleDescription}
                     />
-                    <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+                    <TouchableOpacity style={submitBtn}
                         onPress={() => this.saveDomain()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
+                        <Text style={submitBtnText}>{I18n.t("SAVE")}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
+                    <TouchableOpacity style={cancelBtn}
                         onPress={() => this.cancel()}>
-                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>{I18n.t("CANCEL")}</Text>
+                        <Text style={cancelBtnText}>{I18n.t("CANCEL")}</Text>
                     </TouchableOpacity>
                 </ScrollView>
             </View>
         );
     }
 }
-
-const pickerSelectStyles = StyleSheet.create({
-    placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: Device.isTablet ? 20 : 15,
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-    },
-});
-
-const pickerSelectStylesErrors = StyleSheet.create({
-    placeholder: {
-        color: "#dd0000",
-        fontFamily: "regular",
-        fontSize: Device.isTablet ? 20 : 15,
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
-        borderRadius: 3,
-        borderWidth: Device.isTablet ? 2 : 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
-        borderRadius: 3,
-        borderWidth: Device.isTablet ? 2 : 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-    },
-});
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -266,237 +213,6 @@ const styles = StyleSheet.create({
     },
     bottomContainer: {
         margin: 50,
-    },
-
-    // Styles For Mobile
-
-    viewsWidth_mobile: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 24,
-        height: 84,
-    },
-    backButton_mobile: {
-        position: 'absolute',
-        left: 10,
-        top: 30,
-        width: 40,
-        height: 40,
-    },
-    headerTitle_mobile: {
-        position: 'absolute',
-        left: 70,
-        top: 47,
-        width: 300,
-        height: 20,
-        fontFamily: 'bold',
-        fontSize: 18,
-        color: '#353C40'
-    },
-    input_mobile: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 144,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    saveButton_mobile: {
-        margin: 8,
-        height: 50,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    saveButtonText_mobile: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#ffffff",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    cancelButton_mobile: {
-        margin: 8,
-        height: 50,
-        backgroundColor: "#ffffff",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "#353C4050",
-    },
-    cancelButtonText_mobile: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#353C4050",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    flatlistContainer_mobile: {
-        height: 140,
-        backgroundColor: '#FBFBFB',
-        borderBottomWidth: 5,
-        borderBottomColor: '#FFFFFF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    flatlistSubContainer_mobile: {
-        flexDirection: 'column',
-        width: '100%',
-        height: 140,
-    },
-    rnSelect_mobile: {
-        color: '#8F9EB7',
-        fontSize: 15
-    },
-    rnSelectContainer_mobile: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    rnSelectContainerError_mobile: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#dd0000',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-
-    // Styles For Tablet
-    viewsWidth_tablet: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 28,
-        height: 90,
-    },
-    backButton_tablet: {
-        position: 'absolute',
-        left: 10,
-        top: 25,
-        width: 90,
-        height: 90,
-    },
-    headerTitle_tablet: {
-        position: 'absolute',
-        left: 70,
-        top: 40,
-        width: 300,
-        height: 40,
-        fontFamily: 'bold',
-        fontSize: 24,
-        color: '#353C40'
-    },
-    input_tablet: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 254,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-    saveButton_tablet: {
-        margin: 8,
-        height: 60,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    saveButtonText_tablet: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#ffffff",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    cancelButton_tablet: {
-        margin: 8,
-        height: 60,
-        backgroundColor: "#ffffff",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "#353C4050",
-    },
-    cancelButtonText_tablet: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#353C4050",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    flatlistContainer_tablet: {
-        height: 160,
-        backgroundColor: '#FBFBFB',
-        borderBottomWidth: 5,
-        borderBottomColor: '#FFFFFF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    flatlistSubContainer_tablet: {
-        flexDirection: 'column',
-        width: '100%',
-        height: 160,
-    },
-    rnSelect_tablet: {
-        color: '#8F9EB7',
-        fontSize: 20
-    },
-    rnSelectContainer_tablet: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-        rnSelectContainerError_tablet: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#dd0000',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 2,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
+    }
 
 });

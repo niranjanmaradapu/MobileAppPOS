@@ -16,6 +16,7 @@ import { RH, RW,RF } from '../../Responsive';
 var deviceheight = Dimensions.get('window').height;
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
+import { cancelBtn, cancelBtnText, inputField, inputHeading, rnPicker, rnPickerContainer, rnPickerError, submitBtn, submitBtnText } from '../Styles/FormFields';
 
 const data = [
     {
@@ -123,12 +124,12 @@ export default class Login extends Component {
         let isFormValid = true
         let errors = {}
 
-        if (this.state.userName.length < errorLength.name) {
+        if (this.state.userName.length < 1) {
             isFormValid = false
-            errors["userName"] = urmErrorMessages.userName
+            errors["userName"] = urmErrorMessages.loginUserName
             this.setState({userValid: false})
         }
-        if (this.state.password.length < errorLength.password) {
+        if (this.state.password.length < 1) {
             isFormValid = false
             errors["password"] = urmErrorMessages.password
             this.setState({ passwordValid: false})
@@ -150,6 +151,7 @@ export default class Login extends Component {
             AsyncStorage.setItem("username", this.state.userName);
             AsyncStorage.removeItem('tokenkey');
             AsyncStorage.removeItem('custom:clientId1');
+            AsyncStorage.removeItem('custom:userId')
             AsyncStorage.removeItem('phone_number');
             AsyncStorage.removeItem('domainDataId');
             AsyncStorage.removeItem('storeId');
@@ -164,6 +166,7 @@ export default class Login extends Component {
 
                     if (res.data.result.authenticationResult) {
                         const token = res.data.result.authenticationResult.idToken;
+                        console.log(token)
                         //==============================Token Key & phone number save ===================//
                         AsyncStorage.setItem("tokenkey", JSON.stringify(token)).then(() => {
                         }).catch(() => {
@@ -178,6 +181,13 @@ export default class Login extends Component {
                             axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken };
                             //console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
                         });
+
+                        AsyncStorage.setItem("custom:userId", jwt_decode(token)["custom:userId"]).then(() => {
+                            // console.log
+                        }).catch(() => {
+                            this.setState({ loading: false })
+                            console.log('there is error saving userId')
+                        })
 
                         AsyncStorage.setItem("phone_number", jwt_decode(token)["phone_number"]).then(() => {
                             // console.log
@@ -306,17 +316,14 @@ export default class Login extends Component {
 
                 }
                 else {
-                    alert('Invalid Credentials');
+                    alert(res.data.message);
                     this.emailValueInput.clear();
                     this.passwordValueInput.clear();
                     this.setState({ userName: '', password: '', selectedOption: null, loading: false });
                 }
-
-
-            }
-
-
-            );
+            }).catch(err => {
+                console.log(err)
+            })
         }
     }
 
@@ -392,7 +399,6 @@ export default class Login extends Component {
             if (len > 0) {
                 for (let i = 0; i < len; i++) {
                     if (res.data["result"].length > 1) {
-
                         this.props.navigation.navigate('SelectStore', { isFromDomain: false });
 
                     }
@@ -452,9 +458,7 @@ export default class Login extends Component {
 
 
     forgotPassword() {
-
-        this.props.navigation.navigate('ManagePassword', { username: this.state.userName });
-
+        this.props.navigation.navigate('ForgotPassword', { username: this.state.userName });
     }
 
     async componentDidMount() {
@@ -498,7 +502,7 @@ export default class Login extends Component {
 
                             <View style={{ flex: Device.isTablet ? 4 : 7 }}>
                                 <TextInput
-                                    style={userValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                                    style={[inputField, {borderColor: userValid ? '#8F9EB717' : '#dd0000' }]}
                                     underlineColorAndroid="transparent"
                                     placeholder={I18n.t('Username')}
                                     placeholderTextColor={userValid ? "#6F6F6F" : "#dd0000"}
@@ -512,7 +516,7 @@ export default class Login extends Component {
                                 {!userValid && <Message imp={true} message={this.state.errors["userName"]} />}
                                 
 
-                                <TextInput style={passValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                                <TextInput style={[inputField, {borderColor: passValid ? '#8F9EB717' : '#dd0000'}]}
                                     underlineColorAndroid="transparent"
                                     placeholder={I18n.t('Password')}
                                     secureTextEntry={true}
@@ -529,7 +533,7 @@ export default class Login extends Component {
                                     <View style={{ flexDirection: Device.isTablet ? "row" : "column", justifyContent: Device.isTablet ? "space-around" : "center", alignItems: Device.isTablet ? "center" : "center" }}>
 
                                          <View style={{
-                                            top: RH(35), alignItems: 'center', flexDirection: 'row'
+                                            alignItems: 'center', flexDirection: 'row'
                                         }}>
                                             <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Register')}? </Text>
                                             <TouchableOpacity
@@ -539,7 +543,7 @@ export default class Login extends Component {
                                         </View>
 
                                         <View style={{
-                                            top: RH(35), alignItems: 'center', flexDirection: 'row'
+                                            alignItems: 'center', flexDirection: 'row'
                                         }}>
                                             <Text style={Device.isTablet ? styles.navigationText_tablet : styles.navigationText_mobile}> {I18n.t('Forgot password')}? </Text>
                                             <TouchableOpacity
@@ -551,9 +555,9 @@ export default class Login extends Component {
                                     </View>
                                 </View>
                                 <TouchableOpacity
-                                    style={Device.isTablet ? styles.signInButton_tablet : styles.signInButton_mobile}
+                                    style={submitBtn}
                                     onPress={() => this.login()} >
-                                    <Text style={Device.isTablet ? styles.signInButtonText_tablet : styles.signInButtonText_mobile}> {I18n.t('SIGN IN')} </Text>
+                                    <Text style={submitBtnText}> {I18n.t('SIGN IN')} </Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -566,40 +570,6 @@ export default class Login extends Component {
         );
     }
 }
-
-
-const pickerSelectStyles = StyleSheet.create({
-    placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: RF(14),
-    },
-
-    inputIOS: {
-        marginLeft: 0,
-        marginRight: 0,
-        height: RH(50),
-        marginTop: RH(20),
-        backgroundColor: '#F6F6F6',
-        borderColor: '#F6F6F6',
-        color: '#6F6F6F',
-        fontFamily: "regular",
-        borderWidth: 5,
-        fontSize: RF(14),
-    },
-    inputAndroid: {
-        marginLeft: 0,
-        marginRight: 0,
-        height: RH(50),
-        marginTop: RH(20),
-        backgroundColor: '#F6F6F6',
-        borderColor: '#F6F6F6',
-        color: '#6F6F6F',
-        fontFamily: "regular",
-        borderWidth: 5,
-        fontSize: RF(14),
-    },
-});
 
 const styles = StyleSheet.create({
     logoImage: {
@@ -679,54 +649,6 @@ const styles = StyleSheet.create({
         width: RW(162),
         height: RH(170)
     },
-    input_mobile: {
-        justifyContent: 'center',
-        marginLeft: RW(20),
-        marginRight: RW(20),
-        height: RH(44),
-        marginTop: 5,
-        marginBottom: RH(10),
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: RF(14),
-    },
-    inputError_mobile: {
-        justifyContent: 'center',
-        marginLeft: RW(20),
-        marginRight: RW(20),
-        height: RH(44),
-        marginTop: 5,
-        marginBottom: RH(10),
-        borderColor: '#dd0000',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: RW(15),
-        fontSize: RF(14),
-    },
-    signInButton_mobile: {
-        backgroundColor: '#ED1C24',
-        justifyContent: 'center',
-        marginLeft: RW(20),
-        marginRight: RW(20),
-        marginTop: RH(100),
-        width: deviceWidth - RW(40),
-        height: RH(50),
-        borderRadius: 10,
-        fontWeight: 'bold',
-        // marginBottom:100,
-    },
-    signInButtonText_mobile: {
-        color: 'white',
-        alignSelf: 'center',
-        fontSize: RF(15),
-        fontFamily: "regular",
-    },
     navigationText_mobile: {
         fontSize: RF(16),
         color: '#858585',
@@ -745,7 +667,7 @@ const styles = StyleSheet.create({
         fontSize: RF(40),
         fontFamily: "bold",
         marginLeft: RW(20),
-        marginTop: RH(100),
+        marginTop: RH(50),
         flexDirection: 'column',
         justifyContent: 'center',
     },
@@ -765,54 +687,6 @@ const styles = StyleSheet.create({
         bottom: RH(40),
         width: RW(202),
         height: RH(230)
-    },
-    input_tablet: {
-        justifyContent: 'center',
-        marginLeft: RW(20),
-        marginRight: RW(20),
-        height: RH(60),
-        marginTop: RH(5),
-        marginBottom: RH(10),
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: RW(15),
-        fontSize: RF(22),
-    },
-    inputError_tablet: {
-        justifyContent: 'center',
-        marginLeft: RF(20),
-        marginRight: RH(20),
-        height: RH(60),
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#dd0000',
-        borderRadius: 6,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 2,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: RF(22),
-    },
-    signInButton_tablet: {
-        backgroundColor: '#ED1C24',
-        justifyContent: 'center',
-        marginLeft: RW(20),
-        marginRight: RW(20),
-        marginTop: RH(100),
-        width: deviceWidth - RW(40),
-        height: RH(60),
-        borderRadius: 10,
-        fontWeight: 'bold',
-        // marginBottom:100,
-    },
-    signInButtonText_tablet: {
-        color: 'white',
-        alignSelf: 'center',
-        fontSize: RF(20),
-        fontFamily: "regular",
     },
     navigationText_tablet: {
         fontSize: 22,
@@ -872,43 +746,4 @@ const styles = StyleSheet.create({
     borderBottomWidth: Device.isTablet ? 25 : 15,
     borderBottomColor: "red",
   },
-});;
-
-// Unused Styles
-// {
-//     signInFieldStyle: {
-//         color: '#456CAF55',
-//         marginLeft: 30,
-//         marginTop: 15,
-//         fontSize: 12,
-//         fontFamily: "regular",
-//     },
-//     signinContinueText: {
-//         color: '#456CAF55',
-//         alignSelf: 'center',
-//         fontSize: 13,
-//         marginTop: 5,
-//         fontFamily: "regular",
-//     },
-// getStartedText: {
-//     color: 'black',
-//     alignSelf: 'center',
-//     fontStyle: 'normal',
-//     fontWeight: 'bold',
-//     fontSize: 14
-// },
-// signInText: {
-//     color: '#002C46',
-//     alignSelf: 'center',
-//     fontSize: 28,
-//     fontFamily: "bold",
-//     marginTop: 25,
-// },
-// spinnerTextalign: {
-//     flex: 9.4,
-//     color: '#A2A2A2',
-//     justifyContent: 'center',
-//     textAlign: "center",
-//     color: 'black',
-// },
-// }
+});

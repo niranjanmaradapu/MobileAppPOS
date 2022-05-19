@@ -11,6 +11,8 @@ import { accountingErrorMessages, errorLength, urmErrorMessages } from '../Error
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 import Message from '../Errors/Message'
+import { cancelBtn, cancelBtnText, inputField, inputHeading, rnPicker, rnPickerContainer, rnPickerError, submitBtn, submitBtnText } from '../Styles/FormFields';
+import { backButton, backButtonImage, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, menuButton } from '../Styles/Styles';
 
 var deviceHeight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
@@ -30,6 +32,7 @@ export default class AddStore extends Component {
             address: "",
             domain: "",
             clientId: 0,
+            userId: 0,
             statesArray: [],
             states: [],
             stateId: 0,
@@ -55,7 +58,9 @@ export default class AddStore extends Component {
 
     async componentDidMount() {
         const clientId = await AsyncStorage.getItem("custom:clientId1");
-        this.setState({ clientId: clientId });
+        const userId = await AsyncStorage.getItem("custom:userId");
+        console.log(userId)
+        this.setState({ clientId: clientId, userId: userId });
         this.setState({ isEdit: this.props.route.params.isEdit });
         if (this.state.isEdit === true) {
             this.setState({
@@ -66,12 +71,13 @@ export default class AddStore extends Component {
                 area: this.props.route.params.item.area,
                 mobile: this.props.route.params.item.phoneNumber,
                 address: this.props.route.params.item.address,
-                domainId: this.props.route.params.item.clientDomianlId.clientDomainaId,
+                domainId: this.props.route.params.item.id.domaiName,
                 storeName: this.props.route.params.item.name,
                 storeId: this.props.route.params.item.id,
             });
             console.log(this.props.route.params.item);
             this.setState({ navtext: 'Edit Store' });
+        
         }
         else {
             this.setState({ navtext: 'Add Store' });
@@ -88,11 +94,12 @@ export default class AddStore extends Component {
         var domains = [];
         axios.get(LoginService.getDomainsList() + this.state.clientId).then((res) => {
             if (res.data["result"]) {
+                console.log("domain", res.data.result)
                 let len = res.data["result"].length;
                 if (len > 0) {
                     for (let i = 0; i < len; i++) {
                         let number = res.data.result[i];
-                        this.state.domainsArray.push({ name: number.domaiName, id: number.clientDomainaId });
+                        this.state.domainsArray.push({ name: number.domaiName, id: number.id });
                         domains.push({
                             value: this.state.domainsArray[i].name,
                             label: this.state.domainsArray[i].name
@@ -100,7 +107,6 @@ export default class AddStore extends Component {
 
                         if (number.clientDomainaId === this.state.domainId) {
                             this.setState({ domain: this.state.domainsArray[i].name });
-
                         }
 
                     }
@@ -120,12 +126,15 @@ export default class AddStore extends Component {
     }
 
     handleDomain = (value) => {
+        console.log(value)
         for (let i = 0; i < this.state.domainsArray.length; i++) {
             if (this.state.domainsArray[i].name === value) {
                 this.setState({ domainId: this.state.domainsArray[i].id });
+                console.log(this.state.domainsArray[i].id)
             }
         }
         this.setState({ domain: value });
+
 
         if (this.state.domain !== "" && this.state.domain !== undefined) {
             this.setState({domianValid: true})
@@ -318,7 +327,7 @@ export default class AddStore extends Component {
             formIsValid = false
             this.setState({mobileValid: false})
         }
-        if (this.state.gstNumber.length === 0) {
+        if (this.state.gstNumber.length < errorLength.gstNumber) {
             errors["gst"] = accountingErrorMessages.gst
             formIsValid = false
             this.setState({gstValid: false})
@@ -359,8 +368,8 @@ export default class AddStore extends Component {
                     "area": this.state.area,
                     "address": this.state.address,
                     "phoneNumber": this.state.mobile,
-                    "domainId": this.state.domainId,
-                    "createdBy": global.username,
+                    "domainId": parseInt(this.state.domainId),
+                    "createdBy": parseInt(this.state.userId),
                     "stateCode": this.state.statecode,
                     "gstNumber": this.state.gstNumber,
                     "clientId": this.state.clientId
@@ -395,7 +404,7 @@ export default class AddStore extends Component {
                     "address": this.state.address,
                     "phoneNumber": this.state.mobile,
                     "domainId": this.state.domainId,
-                    "createdBy": global.username,
+                    "createdBy": parseInt(this.state.userId),
                     "stateCode": this.state.statecode,
                     "gstNumber": this.state.gstNumber,
                     "clientId": this.state.clientId
@@ -437,13 +446,15 @@ export default class AddStore extends Component {
                     <Loader
                         loading={this.state.loading} />
                 }
-                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                    <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/backButton.png')} />
+                <View style={headerTitleContainer} >
+                    <View style={headerTitleSubContainer}>
+                    <TouchableOpacity style={backButton} onPress={() => this.handleBackButtonClick()}>
+                        <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                    <Text style={headerTitle}>
                         {(this.state.navtext)}
                     </Text>
+                    </View>
                 </View>
                 <ScrollView>
                     <Text
@@ -454,8 +465,8 @@ export default class AddStore extends Component {
                             margin: 15,
                         }}
                     >{I18n.t("Store Details")}</Text>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("State")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
-                    <View style={stateValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
+                    <Text style={inputHeading}>{I18n.t("State")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    <View style={[rnPickerContainer, {borderColor: stateValid ? '#8F9EB717' : '#dd0000'}]}> 
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
@@ -466,14 +477,14 @@ export default class AddStore extends Component {
                             }}
                             items={this.state.states}
                             onValueChange={this.handleStoreState}
-                            style={stateValid ? pickerSelectStyles : pickerSelectStylesErrors}
+                            style={stateValid ? rnPicker : rnPickerError}
                             value={this.state.storeState}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
                     {!stateValid && <Message imp={true} message={this.state.errors["state"]} />}
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("District")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
-                    <View style={districtValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
+                    <Text style={inputHeading}>{I18n.t("District")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    <View style={[rnPickerContainer, {borderColor: districtValid ? '#8F9EB717' : '#dd0000'}]}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
@@ -484,15 +495,15 @@ export default class AddStore extends Component {
                             }}
                             items={this.state.dictricts}
                             onValueChange={this.handleDistrict}
-                            style={districtValid ? pickerSelectStyles : pickerSelectStylesErrors}
+                            style={districtValid ? rnPicker : rnPickerError}
                             value={this.state.storeDistrict}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
                     {!districtValid && <Message imp={true} message={this.state.errors["district"]} />}
-                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("City")}</Text>
+                    <Text style={inputHeading}>{I18n.t("City")}</Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={inputField}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("CITY")}
                         placeholderTextColor="#6F6F6F"
@@ -502,9 +513,9 @@ export default class AddStore extends Component {
                         onChangeText={this.handleCity}
                     />
 
-                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Area")}</Text>
+                    <Text style={inputHeading}>{I18n.t("Area")}</Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={inputField}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("AREA")}
                         placeholderTextColor="#6F6F6F"
@@ -513,9 +524,9 @@ export default class AddStore extends Component {
                         value={this.state.area}
                         onChangeText={this.handleArea}
                     />
-                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("Store Phone Number")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    <Text style={inputHeading}>{I18n.t("Store Phone Number")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
-                        style={mobileValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: mobileValid ? '#8F9EB717' : '#dd0000'}]}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Phone Number")}
                         maxLength={10}
@@ -529,9 +540,9 @@ export default class AddStore extends Component {
                         onChangeText={this.handleMobile}
                     />
                     {!mobileValid && <Message imp={true} message={this.state.errors["mobile"]} />}
-                    <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{("Address")}</Text>
+                    <Text style={inputHeading}>{("Address")}</Text>
                     <TextInput
-                        style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                        style={inputField}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("ADDRESS")}
                         placeholderTextColor="#6F6F6F"
@@ -548,27 +559,28 @@ export default class AddStore extends Component {
                             margin: 15,
                         }}
                     >{I18n.t("Store Info")}</Text>
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("Domain")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
-                    <View style={domianValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
+                    <Text style={inputHeading}>{I18n.t("Domain")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    <View style={[rnPickerContainer, {borderColor: domianValid ? '#8F9EB717' : '#dd0000'}]}>
                         <RNPickerSelect
                             // style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                             placeholder={{
-                                label: 'DOMAIN'
+                                label: 'DOMAIN',
+                                value: ""
                             }}
                             Icon={() => {
                                 return <Chevron style={styles.imagealign} size={1.5} color={domianValid ? "gray" : "#dd0000"} />;
                             }}
                             items={this.state.domains}
                             onValueChange={this.handleDomain}
-                            style={domianValid ? pickerSelectStyles : pickerSelectStylesErrors}
+                            style={domianValid ? rnPicker : rnPickerError}
                             value={this.state.domain}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
                     {!domianValid && <Message imp={true} message={this.state.errors["domain"]} />}
-                    <Text style={{ fontSize: Device.isTablet ? 20 : 15, marginLeft: 20, marginBottom: 10, marginTop: 10 }}>{I18n.t("Store Name")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
+                    <Text style={inputHeading}>{I18n.t("Store Name")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                     <TextInput
-                        style={storeValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: storeValid ? '#8F9EB717' : '#dd0000'}]}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("STORE NAME")}
                         placeholderTextColor={storeValid ? "#6F6F6F" : "#dd0000"}
@@ -580,109 +592,55 @@ export default class AddStore extends Component {
                     />
                     {!storeValid && <Message imp={true} message={this.state.errors["store"]} />}
                     {this.state.isEdit === true && (
+                        <View>
+                            <Text style={inputHeading}>{I18n.t("GST Number")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                         <TextInput
-                            style={Device.isTablet ? styles.input_tablet_edit : styles.input_mobile_edit}
+                            style={inputField}
                             underlineColorAndroid="transparent"
                             placeholder={I18n.t("GST NUMBER")}
                             placeholderTextColor="#6F6F6F"
                             textAlignVertical="center"
+                            maxLength={15}
                             autoCapitalize="none"
                             value={this.state.gstNumber}
                             editable={false} selectTextOnFocus={false}
                             onChangeText={this.handleGstNumber}
                         />
+                        </View>
                     )}
                     {this.state.isEdit === false && (
                         <View>
-                            <Text style={{ marginLeft: 20, marginTop: 10, marginBottom: 10, fontSize: Device.isTablet ? 20 : 15 }}>{I18n.t("GST Number")}</Text>
+                            <Text style={inputHeading}>{I18n.t("GST Number")} <Text style={{ color: '#aa0000' }}>*</Text></Text>
                             <TextInput
-                                style={gstValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                                style={[inputField, {borderColor: gstValid ? '#8F9EB717' : '#dd0000'}]}
                                 underlineColorAndroid="transparent"
                                 placeholder={I18n.t("GST NUMBER")}
                                 placeholderTextColor={gstValid ? "#6F6F6F" : "#dd0000"}
                                 textAlignVertical="center"
                                 autoCapitalize="none"
+                                maxLength={15}
                                 value={this.state.gstNumber}
                                 onBlur={this.handleGstNumberValid}
                                 onChangeText={this.handleGstNumber}
                             />
-                            <Text style={{ color: '#aa0000', fontSize: Device.isTablet ? 20 : 15, marginTop: 10, marginBottom: 20, marginLeft: 20 }}>{I18n.t("Please Provide GST Number")}</Text>
+                    {!gstValid && <Message imp={true} message={this.state.errors["gst"]} />}
                         </View>
                     )}
 
 
-                    <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+                    <TouchableOpacity style={submitBtn}
                         onPress={() => this.saveStore()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
+                        <Text style={submitBtnText}>{I18n.t("SAVE")}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
+                    <TouchableOpacity style={cancelBtn}
                         onPress={() => this.cancel()}>
-                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>{I18n.t("CANCEL")}</Text>
+                        <Text style={cancelBtnText}>{I18n.t("CANCEL")}</Text>
                     </TouchableOpacity>
                 </ScrollView>
             </View>
         );
     }
 }
-
-
-const pickerSelectStyles = StyleSheet.create({
-    placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: Device.isTablet ? 20 : 15,
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-    },
-});
-
-const pickerSelectStylesErrors = StyleSheet.create({
-    placeholder: {
-        color: "#dd0000",
-        fontFamily: "regular",
-        fontSize: Device.isTablet ? 20 : 15,
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
-        borderRadius: 3,
-        borderWidth: Device.isTablet ? 2 : 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : 40,
-        borderRadius: 3,
-        borderWidth: Device.isTablet ? 2 : 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : 15,
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-    },
-});
 
 
 const styles = StyleSheet.create({
@@ -697,295 +655,4 @@ const styles = StyleSheet.create({
     bottomContainer: {
         margin: 50,
     },
-
-    // Styles For Mobile
-
-    viewsWidth_mobile: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 24,
-        height: 84,
-    },
-    backButton_mobile: {
-        position: 'absolute',
-        left: 10,
-        top: 30,
-        width: 40,
-        height: 40,
-    },
-    inputError_mobile: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#dd0000',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    rnSelectContainerError_mobile: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#dd0000',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    headerTitle_mobile: {
-        position: 'absolute',
-        left: 70,
-        top: 47,
-        width: 300,
-        fontFamily: 'bold',
-        fontSize: 18,
-        color: '#353C40'
-    },
-    input_mobile: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    input_mobile_edit: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#DCE3F2',
-        borderRadius: 3,
-        backgroundColor: '#DCE3F2',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    saveButton_mobile: {
-        margin: 8,
-        height: 50,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    saveButtonText_mobile: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#ffffff",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    cancelButton_mobile: {
-        margin: 8,
-        height: 50,
-        backgroundColor: "#ffffff",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "#353C4050",
-    },
-    cancelButtonText_mobile: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#353C4050",
-        fontSize: 15,
-        fontFamily: "regular"
-    },
-    flatlistContainer_mobile: {
-        height: 140,
-        backgroundColor: '#FBFBFB',
-        borderBottomWidth: 5,
-        borderBottomColor: '#FFFFFF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    flatlistSubContainer_mobile: {
-        flexDirection: 'column',
-        width: '100%',
-        height: 140,
-    },
-    rnSelect_mobile: {
-        color: '#8F9EB7',
-        fontSize: 15
-    },
-    rnSelectContainer_mobile: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-
-    // Styles For Tablet
-    viewsWidth_tablet: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 28,
-        height: 90,
-    },
-    backButton_tablet: {
-        position: 'absolute',
-        left: 10,
-        top: 25,
-        width: 90,
-        height: 90,
-    },
-    headerTitle_tablet: {
-        position: 'absolute',
-        left: 70,
-        top: 40,
-        width: 300,
-        height: 40,
-        fontFamily: 'bold',
-        fontSize: 24,
-        color: '#353C40'
-    },
-    input_tablet: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-    rnSelectContainerError_tablet: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#dd0000',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 2,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-    inputError_tablet: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#dd0000',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 2,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-    input_tablet_edit: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#DCE3F2',
-        borderRadius: 3,
-        backgroundColor: '#DCE3F2',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    saveButton_tablet: {
-        margin: 8,
-        height: 60,
-        backgroundColor: "#ED1C24",
-        borderRadius: 5,
-    },
-    saveButtonText_tablet: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#ffffff",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    cancelButton_tablet: {
-        margin: 8,
-        height: 60,
-        backgroundColor: "#ffffff",
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: "#353C4050",
-    },
-    cancelButtonText_tablet: {
-        textAlign: 'center',
-        marginTop: 15,
-        color: "#353C4050",
-        fontSize: 20,
-        fontFamily: "regular"
-    },
-    flatlistContainer_tablet: {
-        height: 160,
-        backgroundColor: '#FBFBFB',
-        borderBottomWidth: 5,
-        borderBottomColor: '#FFFFFF',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center'
-    },
-    flatlistSubContainer_tablet: {
-        flexDirection: 'column',
-        width: '100%',
-        height: 160,
-    },
-    rnSelect_tablet: {
-        color: '#8F9EB7',
-        fontSize: 20
-    },
-    rnSelectContainer_tablet: {
-        justifyContent: 'center',
-        margin: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 20,
-    },
-
 });

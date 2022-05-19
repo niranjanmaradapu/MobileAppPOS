@@ -12,6 +12,8 @@ import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
 import Message from '../Errors/Message';
 import {RH,RW,RF} from '../../Responsive';
+import { cancelBtn, cancelBtnText, inputField, inputHeading, rnPicker, rnPickerContainer, rnPickerError, submitBtn, submitBtnText } from '../Styles/FormFields';
+import { backButton, backButtonImage, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, menuButton } from '../Styles/Styles';
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
@@ -612,6 +614,7 @@ class AddBarcode extends Component {
 
 
     render() {
+        // const [divisionValid, sectionValid, subSectionValid, categoryValid, colorValid, nameValid, batchNoValid, costPriceValid, listPriceValid, uomValid, hsnValid,empValid, storeValid, qtyValid] = this.state
         const divisionValid = this.state.divisionValid
         const sectionValid = this.state.sectionValid
         const subSectionValid = this.state.subSectionValid
@@ -632,15 +635,17 @@ class AddBarcode extends Component {
                     <Loader
                         loading={this.state.loading} />
                 }
-                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
-                    <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/backButton.png')} />
+                <View style={headerTitleContainer}>
+                    <View style={headerTitleSubContainer}>
+                    <TouchableOpacity style={[backButton]} onPress={() => this.handleBackButtonClick()}>
+                        <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t("Add Barcode")} </Text>
+                    <Text style={headerTitle}> {I18n.t("Add Barcode")} </Text>
+                    </View>
                 </View>
                 <ScrollView>
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Division")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={divisionValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
+                    <Text style={inputHeading}>{I18n.t("Division")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <View style={[rnPickerContainer, {borderColor: divisionValid ? '#8F9EB718' : '#dd0000'}]}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Division'
@@ -650,14 +655,14 @@ class AddBarcode extends Component {
                             }}
                             items={this.state.divisions}
                             onValueChange={this.handleDivision}
-                            style={divisionValid ? pickerSelectStyles : pickerSelectStylesErrors}
+                            style={divisionValid ? rnPicker : rnPickerError}
                             value={this.state.division}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
                             {!divisionValid && <Message imp={true} message={this.state.errors["divison"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={sectionValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
+                    <Text style={inputHeading}>{I18n.t("Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <View style={[rnPickerContainer, {borderColor: sectionValid ? '#8F9EB718' : '#dd0000'}]}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Section'
@@ -667,14 +672,14 @@ class AddBarcode extends Component {
                             }}
                             items={this.state.secions}
                             onValueChange={this.handleSection}
-                            style={sectionValid ? pickerSelectStyles : pickerSelectStylesErrors}
+                            style={sectionValid ? rnPicker : rnPickerError}
                             value={this.state.section}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
                         {!sectionValid && <Message imp={true} message={this.state.errors["section"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Sub Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={subSectionValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
+                    <Text style={inputHeading}>{I18n.t("Sub Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <View style={[rnPickerContainer, {borderColor: subSectionValid ? '#8F9EB718' : '#dd0000'}]}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Sub Section'
@@ -684,14 +689,14 @@ class AddBarcode extends Component {
                             }}
                             items={this.state.subsecions}
                             onValueChange={this.handleSubSection}
-                            style={subSectionValid ? pickerSelectStyles : pickerSelectStylesErrors}
+                            style={subSectionValid ? rnPicker : rnPickerError}
                             value={this.state.subSection}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
                         {!subSectionValid && <Message imp={true} message={this.state.errors["subSection"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Category")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={categoryValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
+                    <Text style={inputHeading}>{I18n.t("Category")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <View style={[rnPickerContainer, {borderColor: categoryValid ? '#8F9EB718' : '#dd0000'}]}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Category'
@@ -701,18 +706,18 @@ class AddBarcode extends Component {
                             }}
                             items={this.state.catogiries}
                             onValueChange={this.handleCateory}
-                            style={categoryValid ? pickerSelectStyles : pickerSelectStylesErrors}
+                            style={categoryValid ? rnPicker : rnPickerError}
                             value={this.state.category}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
                         {!categoryValid && <Message imp={true} message={this.state.errors["category"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}> {I18n.t("Colour")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={inputHeading}> {I18n.t("Colour")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={colorValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: colorValid ? '#8F9EB718' : '#dd0000'}]}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Colour")}
-                        placeholderTextColor={colorValid ? "#6F6F6F" : "#dd0000"}
+                        placeholderTextColor={colorValid ? "#6F6F6F17" : "#dd0000"}
                         textAlignVertical="center"
                         maxLength={12}
                         autoCapitalize="none"
@@ -721,12 +726,12 @@ class AddBarcode extends Component {
                         onChangeText={this.handleColour}
                     />
                     {!colorValid && <Message imp={true} message={this.state.errors["color"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}> {I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={inputHeading}> {I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={nameValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: nameValid ? '#8F9EB718' : '#dd0000'}]}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Name")}
-                        placeholderTextColor={nameValid ? "#6F6F6F" : "#dd0000"}
+                        placeholderTextColor={nameValid ? "#6F6F6F17" : "#dd0000"}
                         maxLength={25}
                         textAlignVertical="center"
                         autoCapitalize="none"
@@ -735,12 +740,12 @@ class AddBarcode extends Component {
                         onChangeText={this.handleName}
                     />
                     {!nameValid && <Message imp={true} message={this.state.errors["name"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Batch No")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={inputHeading}>{I18n.t("Batch No")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={batchNoValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: batchNoValid ? '#8F9EB718' : '#dd0000'}]}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Batch No")}
-                        placeholderTextColor={batchNoValid ? "#6F6F6F" : "#dd0000"}
+                        placeholderTextColor={batchNoValid ? "#6F6F6F17" : "#dd0000"}
                         textAlignVertical="center"
                         maxLength={12}
                         autoCapitalize="none"
@@ -749,14 +754,14 @@ class AddBarcode extends Component {
                         onChangeText={this.handleBatchNo}
                     />
                     {!batchNoValid && <Message imp={true} message={this.state.errors["batchNo"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Cost Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={inputHeading}>{I18n.t("Cost Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={costPriceValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: costPriceValid ? '#8F9EB718' : '#dd0000'}]}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("Cost Price")}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
-                        placeholderTextColor={costPriceValid ? "#6F6F6F" : "#dd0000"}
+                        placeholderTextColor={costPriceValid ? "#6F6F6F17" : "#dd0000"}
                         textAlignVertical="center"
                         autoCapitalize="none"
                         maxLength={10}
@@ -765,14 +770,14 @@ class AddBarcode extends Component {
                         onChangeText={this.handleCostPrice}
                     />
                     {!costPriceValid && <Message imp={true} message={this.state.errors["costPrice"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("List Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={inputHeading}>{I18n.t("List Price")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={listPriceValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: listPriceValid ? '#8F9EB718' : '#dd0000'}]}
                         underlineColorAndroid="transparent"
                         placeholder={I18n.t("List Price")}
                         keyboardType={'numeric'}
                         textContentType='telephoneNumber'
-                        placeholderTextColor={listPriceValid ? "#6F6F6F" : "#dd0000"}
+                        placeholderTextColor={listPriceValid ? "#6F6F6F17" : "#dd0000"}
                         textAlignVertical="center"
                         autoCapitalize="none"
                         maxLength={10}
@@ -781,8 +786,8 @@ class AddBarcode extends Component {
                         onBlur={this.handleListPriceValid}
                     />
                     {!listPriceValid && <Message imp={true} message={this.state.errors["listPrice"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("UOM")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={uomValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
+                    <Text style={inputHeading}>{I18n.t("UOM")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <View style={[rnPickerContainer, {borderColor: uomValid ? '#8F9EB718' : '#dd0000'}]}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'UOM'
@@ -792,14 +797,14 @@ class AddBarcode extends Component {
                             }}
                             items={this.state.uom}
                             onValueChange={this.handleUOM}
-                            style={uomValid ? pickerSelectStyles : pickerSelectStylesErrors}
+                            style={uomValid ? rnPicker : rnPickerError}
                             value={this.state.uomName}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
                     {!uomValid && <Message imp={true} message={this.state.errors["uom"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("HSN Code")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={hsnValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
+                    <Text style={inputHeading}>{I18n.t("HSN Code")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <View style={[rnPickerContainer, {borderColor: hsnValid ? '#8F9EB718' : '#dd0000'}]}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'HSN Code'
@@ -809,18 +814,18 @@ class AddBarcode extends Component {
                             }}
                             items={this.state.hsncodes}
                             onValueChange={this.handleHSNCode}
-                            style={hsnValid ? pickerSelectStyles : pickerSelectStylesErrors}
+                            style={hsnValid ? rnPicker : rnPickerError}
                             value={this.state.hsnCode}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
                     {!hsnValid && <Message imp={true} message={this.state.errors["hsn"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("EMP ID")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={inputHeading}>{I18n.t("EMP ID")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={empValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: empValid ? '#8F9EB718' : '#dd0000'}]}
                         underlineColorAndroid="transparent"
                         placeholder="EMP ID"
-                        placeholderTextColor={empValid ? "#6F6F6F" : "#dd0000"}
+                        placeholderTextColor={empValid ? "#6F6F6F17" : "#dd0000"}
                         textAlignVertical="center"
                         maxLength={10}
                         autoCapitalize="none"
@@ -829,8 +834,8 @@ class AddBarcode extends Component {
                         onChangeText={this.handleEMPId}
                     />
                     {!empValid && <Message imp={true} message={this.state.errors["emp"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>{I18n.t("Store")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-                    <View style={storeValid ? Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile : Device.isTablet ? styles.rnSelectContainerError_tablet : styles.rnSelectContainerError_mobile}>
+                    <Text style={inputHeading}>{I18n.t("Store")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <View style={[rnPickerContainer, {borderColor: storeValid ? '#8F9EB718' : '#dd0000'}]}>
                         <RNPickerSelect
                             placeholder={{
                                 label: 'Store'
@@ -840,18 +845,18 @@ class AddBarcode extends Component {
                             }}
                             items={this.state.storeNames}
                             onValueChange={this.handleStore}
-                            style={storeValid ? pickerSelectStyles : pickerSelectStylesErrors}
+                            style={storeValid ? rnPicker : rnPickerError}
                             value={this.state.store}
                             useNativeAndroidPickerStyle={false}
                         />
                     </View>
                     {!storeValid && <Message imp={true} message={this.state.errors["store"]} />}
-                    <Text style={{ marginTop: RW(10), marginBottom: RW(10), marginLeft: RW(20), fontSize: Device.isTablet ? 20 : RF(15) }}>QTY <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+                    <Text style={inputHeading}>QTY <Text style={{ color: '#aa0000' }}>*</Text> </Text>
                     <TextInput
-                        style={storeValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                        style={[inputField, {borderColor: storeValid ? '#8F9EB718' : '#dd0000'}]}
                         underlineColorAndroid="transparent"
                         placeholder="QTY"
-                        placeholderTextColor={storeValid ?"#6F6F6F" : '#dd0000'}
+                        placeholderTextColor={storeValid ?"#6F6F6F17" : '#dd0000'}
                         textAlignVertical="center"
                         maxLength={12}
                         autoCapitalize="none"
@@ -860,13 +865,13 @@ class AddBarcode extends Component {
                         onChangeText={this.handleQuantity}
                     />
                     {!qtyValid && <Message imp={true} message={this.state.errors["qty"]} />}
-                    <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+                    <TouchableOpacity style={submitBtn}
                         onPress={() => this.saveBarcode()}>
-                        <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>{I18n.t("SAVE")}</Text>
+                        <Text style={submitBtnText}>{I18n.t("SAVE")}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
+                    <TouchableOpacity style={cancelBtn}
                         onPress={() => this.cancel()}>
-                        <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>{I18n.t("CANCEL")}</Text>
+                        <Text style={cancelBtnText}>{I18n.t("CANCEL")}</Text>
                     </TouchableOpacity>
                     <View style={styles.bottomContainer} ></View>
                 </ScrollView>
@@ -876,64 +881,6 @@ class AddBarcode extends Component {
 }
 
 export default AddBarcode;
-
-const pickerSelectStyles = StyleSheet.create({
-    placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: Device.isTablet ? 20 : RF(15),
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : RF(40),
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : RF(15),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : RH(40),
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : RF(15),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-    },
-});
-
-const pickerSelectStylesErrors = StyleSheet.create({
-    placeholder: {
-        color: "#dd0000",
-        fontFamily: "regular",
-        fontSize: Device.isTablet ? 20 : RF(15),
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : RH(40),
-        borderRadius: 3,
-        borderWidth: Device.isTablet ? 2 : 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : RF(15),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 50 : RH(40),
-        borderRadius: 3,
-        borderWidth: Device.isTablet ? 2 : 1,
-        fontFamily: 'regular',
-        fontSize: Device.isTablet ? 20 : (15),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-    },
-});
 
 const styles = StyleSheet.create({
     mainContainer: {
@@ -1008,7 +955,7 @@ const styles = StyleSheet.create({
         fontSize: RF(14),
     },
     rnSelect_mobile: {
-        color: '#8F9EB7',
+        color: '#8F9EB718',
         fontSize: RF(15)
     },
     rnSelectContainer_mobile: {
@@ -1124,7 +1071,7 @@ const styles = StyleSheet.create({
         fontSize: RF(20),
     },
     rnSelect_tablet: {
-        color: '#8F9EB7',
+        color: '#8F9EB718',
         fontSize: 20
     },
     rnSelectContainer_tablet: {

@@ -45,6 +45,16 @@ export const menuButton = {
   marginRight: RW(10),
 }
 
+export const backButton = {
+  width: Device.isTablet ? RW(50) : RW(40),
+  height: Device.isTablet ? RH(40) : RH(30),
+  marginRight: RW(20),
+}
+
+export const backButtonImage = {
+  marginTop: Device.isTablet ? 0 : RH(-10)
+}
+
 export const headerNavigationBtn = {
   backgroundColor: '#ED1C24',
   borderRadius: 10,
@@ -57,7 +67,7 @@ export const headerNavigationBtn = {
 
 export const headerNavigationBtnText = {
   fontSize: RF(12),
-  marginTop: Device.isTablet ? 0 : RH(5),
+  marginTop: RH(5),
   fontFamily: 'regular',
   color: '#ffffff',
   textAlign: 'center',
@@ -90,7 +100,7 @@ export const pageNavigationBtnText = {
   fontSize: RF(16),
   alignItems: 'center',
   alignSelf: 'center',
-  marginTop: Device.isTablet ? 0 : RH(5),
+  marginTop: RH(5),
   fontFamily: 'regular'
 }
 
