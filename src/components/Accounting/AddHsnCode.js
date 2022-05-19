@@ -90,7 +90,6 @@ export default class AddHsnCode extends Component {
                 />
                 <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                     <RNPickerSelect
-                        style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                         placeholder={{
                             label: 'TAX APPLICABLE'
                         }}
@@ -106,7 +105,6 @@ export default class AddHsnCode extends Component {
                 </View>
                 <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                     <RNPickerSelect
-                        style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                         placeholder={{
                             label: 'TAX %'
                         }}
@@ -122,7 +120,6 @@ export default class AddHsnCode extends Component {
                 </View>
                 <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                     <RNPickerSelect
-                        style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                         placeholder={{
                             label: 'SLAB'
                         }}

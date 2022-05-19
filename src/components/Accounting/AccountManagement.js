@@ -106,11 +106,7 @@ export default class AccountManagement extends Component {
                                                 this.setState({ headerName: this.state.headerName }, () => {
                                                         console.log(this.state.headerName)
                                                         for (let j = 0; j < this.state.headerName.length; j++){
-                                                            if (this.state.headerName[j].name === "Credit Notes") {}
-                                                            else if (this.state.headerName[j].name === "Debit Notes") {}
-                                                            else if (this.state.headerName[j].name === "Create Tax Master") {}
-                                                            else if (this.state.headerName[j].name === "Create HSN Code") {}
-                                                            else  if (j === 0) {
+                                                            if (j === 0) {
                                                                 this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
                                                             }else if (this.state.headerName[0].name !== "Dashboard") {
                                                                 if (this.state.headerName[j].name === "Stores") {
@@ -135,12 +131,6 @@ export default class AccountManagement extends Component {
                                                         } else if (this.state.privilages[0].name === "Doamin") {
                                                             this.getDomainsList()
                                                             this.setState({ flagDomain: true })
-                                                        } else if (this.state.privilages[0].name === "Credit Notes"
-                                                            || this.state.privilages[0].name === "Debit Notes"
-                                                            || this.state.privilages[0].name === "Create Tax Master"
-                                                            || this.state.privilages[0].name === "Create HSN Code") {
-                                                            this.getStoresList()
-                                                            this.setState({ flagStore: true })
                                                         }
                                                         else {
                                                             this.setState({ flagStore: false, flagDashboard: false, flagDomain: false })
@@ -176,11 +166,7 @@ export default class AccountManagement extends Component {
                                                     this.setState({ headerName: this.state.headerName }, () => {
                                                         console.log(this.state.headerName)
                                                         for (let j = 0; j < this.state.headerName.length; j++){
-                                                            if (this.state.headerName[j].name === "Credit Notes") {}
-                                                            else if (this.state.headerName[j].name === "Debit Notes") {}
-                                                            else if (this.state.headerName[j].name === "Create Tax Master") {}
-                                                            else if (this.state.headerName[j].name === "Create HSN Code") {}
-                                                            else  if (j === 0) {
+                                                            if (j === 0) {
                                                                 this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
                                                             } else if (this.state.headerName[0].name !== "Dashboard") {
                                                                 if (this.state.headerName[j].name === "Stores") {

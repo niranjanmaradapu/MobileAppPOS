@@ -209,7 +209,6 @@ export class FilterCreditNotes extends Component {
                             </Text>
                             <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
                                 <RNPickerSelect
-                                    style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                                     placeholder={{
                                         label: 'SELECT STORE'
                                     }}

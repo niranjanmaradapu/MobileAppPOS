@@ -1,8 +1,9 @@
 export const urmErrorMessages = {
+  loginUserName: "/ please enter the userName",
   userName: "/ Username must be 3-25 characters long",
-  nanme: "/ Name must be 3-25 characters long",
+  name: "/ Name must be 3-25 characters long",
   roleName: "/ Rolename must be 3-25 characters long",
-  password: "/ Password must be 8-25 characters long",
+  password: "/ Please enter the password",
   createPassword: '/ Use 8-25 characters with a mix of letters, numbers & symbols',
   confirmPassword: "/ Passwords are not matching",
   passwordSpace: "/ whitespaces are not allowed in passwords",
@@ -12,6 +13,7 @@ export const urmErrorMessages = {
   description: "/ Enter the Description",
   customerName: "/ Customer name must be 3-25 characters",
   gstNumber: "/ Gst Number must be 15 characters or more",
+  verificationCode: '/ Please enter the verification code'
 }
 
 export const inventoryErrorMessages = {
@@ -35,7 +37,8 @@ export const accountingErrorMessages = {
   state: "/ Please select the state",
   district: "/ Please select the district",
   storeName: "/ Store Name must be 3 characters or more",
-  gst: "/ Enter the valid GST Number"
+  gst: "/ Enter the valid 15 Digit GST Number",
+  store: "/ Please select the store"
 }
 
 export const errorLength = {

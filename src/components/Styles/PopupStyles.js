@@ -9,7 +9,7 @@ var deviceWidth = Dimensions.get("window").width
 export const filterMainContainer = {
   backgroundColor: '#ffffff',
   marginTop: Device.isTablet ? deviceHeight - RH(500) : deviceHeight - RH(400),
-  height: Device.isTablet ? RH(500) : RH(400),
+  minHeight: Device.isTablet ? RH(500) : RH(400),
 }
 
 export const filterSubContainer = {

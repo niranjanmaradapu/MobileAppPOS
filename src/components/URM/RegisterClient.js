@@ -103,7 +103,7 @@ class RegisterClient extends Component {
 
         if (this.state.userName.length < errorLength.name) { 
             formIsValid = false
-            errors["userName"] = urmErrorMessages.userName
+            errors["userName"] = urmErrorMessages.name
             this.setState({nameValid: false})
         }
 
@@ -131,21 +131,6 @@ class RegisterClient extends Component {
 
 
     create() {
-        
-        // if (this.state.userName.length === 0) {
-        //     // alert('You must enter a name');
-        //     this.setState({nameError: "you must enter a valid username"})
-        // } else if (this.state.mobile.length !== 10 || mobReg.test(this.state.mobile) === false) {
-        //     this.setState({mobileError: "You must enter a valid 10 digit mobile number"})
-        //     // alert('You must enter a valid mobile number');
-        // }
-        // else if (emailReg.test(this.state.userEmail) === false) {
-        //     this.setState({emailError: 'You must enter a valid email-id'})
-        //     // alert('You must enter a valid email');
-        // } else if (this.state.organization === "") {
-        //     // alert('Organisation cannot be empty');
-        //     this.setState({organizationError: 'Organisation cannot be empty'})
-        // }
         const formIsValid = this.handleValidation()
         if(formIsValid) {
             this.setState({ loading: true, nameError: "", mobileError: "", emailError: "", organizationError: "" });
@@ -202,15 +187,18 @@ class RegisterClient extends Component {
                             this.setState({ loading: false });
                             alert(res.data.message);
                         }
-                    });
+                    }).catch(err => {
+                        console.log(err)
+                    })
 
                 }
                 else {
                     this.setState({ loading: false });
-                    alert("duplicate record already exists");
+                    alert(res.data.message);
                 }
-            }
-            );
+            }).catch(err => {
+                console.log(err)
+            })
         }
     }
 

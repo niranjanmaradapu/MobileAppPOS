@@ -9,6 +9,8 @@ import I18n from 'react-native-i18n';
 import { errorLength, urmErrorMessages } from '../Errors/errors';
 import Message from '../Errors/Message';
 import { RF, RH, RW } from '../../Responsive';
+import { backButton, backButtonImage, headerTitle, headerTitleContainer } from '../Styles/Styles';
+import { inputField, inputHeading, submitBtn, submitBtnText } from '../Styles/FormFields';
 
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get('window').width;
@@ -23,8 +25,8 @@ class UpdateNewpassword extends Component {
             newPassword: '',
             confirmPassword: '',
             errors: {},
-            newPasswordValid: true,
-            confirmPasswordValid: true,
+            codeValid: true,
+            passwordValid: true,
         };
     }
 
@@ -43,9 +45,9 @@ class UpdateNewpassword extends Component {
         this.setState({ code: text });
     };
 
-    handleNewPasswordValid = () => {
+    handlecodeValid = () => {
         if (this.state.code.length >= 8) {
-            this.setState({newPasswordValid: true})
+            this.setState({codeValid: true})
         }
     }
 
@@ -53,27 +55,27 @@ class UpdateNewpassword extends Component {
         this.setState({ newPassword: text });
     };
 
-    handleConfirmValid = () => {
+    handlepasswordValid = () => {
         if (this.state.code === this.state.newPassword) {
-            this.setState({confirmPasswordValid: true})
+            this.setState({passwordValid: true})
         }
     }
 
     validationPasswords() {
         let isFormValid = true
         let errors = {}
-        let passReg = /^(?!.*\s)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_₹])$/;
-
-        if (this.state.code.length < errorLength.password || passReg.test(this.state.code) === false) {
+        let passReg = /([^a-zA-Z0-9\s])\w+/g;
+        if (this.state.code.length < 1) {
             isFormValid = false
-            errors["password1"] = urmErrorMessages.password
-            this.setState({newPasswordValid: false})
+            errors["code"] = urmErrorMessages.verificationCode
+            this.setState({codeValid: false})
         }
 
-        if (this.state.newPassword.length === 0 || this.state.code !== this.state.newPassword) {
+
+        if (this.state.newPassword.length < errorLength.password || passReg.test(this.state.newPassword) === false) {
             isFormValid = false
-            errors["password2"] = urmErrorMessages.confirmPassword
-            this.setState({confirmPasswordValid: false})
+            errors["password"] = urmErrorMessages.createPassword
+            this.setState({passwordValid: false})
         }
 
         this.setState({errors: errors})
@@ -120,8 +122,8 @@ class UpdateNewpassword extends Component {
     }
 
     render() {
-        let passValid = this.state.newPasswordValid
-        let confirmValid = this.state.confirmPasswordValid
+        let codeValid = this.state.codeValid
+        let passwordValid = this.state.passwordValid
         return (
             <KeyboardAwareScrollView KeyboardAwareScrollView
                 enableOnAndroid={true}>
@@ -133,84 +135,56 @@ class UpdateNewpassword extends Component {
                 <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
 
                     <View style={styles.container}>
-                        <View style={{ flex: 1, marginTop: '0%', backgroundColor: '#FFFFFF' }}>
-                            {/* <Image source={require('../assets/images/logo.png')} style={styles.logoImage} /> */}
-                            {/* <Text></Text> */}
-                            <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                                <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                                    <Image source={require('../assets/images/backButton.png')} />
+                        <View style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+                            <View style={headerTitleContainer} >
+                                <TouchableOpacity style={backButton} onPress={() => this.handleBackButtonClick()}>
+                                    <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
                                 </TouchableOpacity>
-                                <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                                <Text style={headerTitle}>
                                     {I18n.t("Update New Password")}
                                 </Text>
                             </View>
                         </View>
 
-
-
                         <View style={{ flex: 6 }}>
-                            {/* <Text style={styles.signInFieldStyle}> User Name </Text> */}
+                            <Text style={inputHeading}> Verification Code </Text>
                             <TextInput
-                                style={passValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                                style={[inputField, {borderColor: codeValid ? "#8F9EB717" : "#dd0000"}]}
                                 underlineColorAndroid="transparent"
                                 placeholder={I18n.t("Confirmation Code")}
-                                placeholderTextColor={passValid ? "#6F6F6F": "#dd0000"}
+                                placeholderTextColor={codeValid ? "#6F6F6F": "#dd0000"}
                                 // textAlignVertical="center"
                                 autoCapitalize="none"
                                 maxLength={25}
                                 onChangeText={this.handleEmail}
                                 value={this.state.code}
-                                onBlur={this.handleNewPasswordValid}
+                                onBlur={this.handlecodeValid}
                                 ref={inputemail => { this.emailValueInput = inputemail; }} />
-                            {!passValid && <Message imp={true} message={this.state.errors["password1"]} />}
+                            {!codeValid && <Message imp={true} message={this.state.errors["code"]} />}
 
-                            {/* <Text style={styles.signInFieldStyle}> Password </Text> */}
+                            <Text style={inputHeading}> Password </Text>
                             <TextInput
-                                style={confirmValid ? Device.isTablet ? styles.input_tablet : styles.input_mobile : Device.isTablet ? styles.inputError_tablet : styles.inputError_mobile}
+                                style={[inputField, { borderColor: passwordValid ? "#8F9EB717" : "#dd0000"}]}
                                 underlineColorAndroid="transparent"
                                 placeholder={I18n.t("New Password")}
                                 maxLength={25}
                                 secureTextEntry={true}
-                                placeholderTextColor={confirmValid ? "#6F6F6F" : "#dd0000"}
+                                placeholderTextColor={passwordValid ? "#6F6F6F" : "#dd0000"}
                                 autoCapitalize="none"
                                 onChangeText={this.handleNewPassword}
-                                onBlur={this.handleConfirmValid}
+                                onBlur={this.handlepasswordValid}
                                 value={this.state.newPassword}
                                 ref={inputpassword => { this.passwordValueInput = inputpassword; }} />
-                            {!confirmValid && <Message imp={true} message={this.state.errors["password2"]} />}
-
-                            {/* <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                underlineColorAndroid="transparent"
-                                placeholder="New Password"
-                                secureTextEntry={true}
-                                placeholderTextColor="#6F6F6F"
-                                autoCapitalize="none"
-                                onChangeText={this.handleNewPassword}
-                                //value={this.state.password}
-                                ref={inputpassword => { this.passwordValueInput = inputpassword }} />
-
-                            <TextInput style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                                underlineColorAndroid="transparent"
-                                placeholder="Confirm Password"
-                                secureTextEntry={true}
-                                placeholderTextColor="#6F6F6F"
-                                autoCapitalize="none"
-                                onChangeText={this.handleConfirmPassword}
-                                //value={this.state.password}
-                                ref={inputpassword => { this.passwordValueInput = inputpassword }} /> */}
-
+                            {!passwordValid && <Message imp={true} message={this.state.errors["password"]} />}
 
                             <TouchableOpacity
-                                style={Device.isTablet ? styles.createButton_tablet : styles.createButton_mobile}
+                                style={submitBtn}
                                 onPress={() => this.create()} >
-                                <Text style={Device.isTablet ? styles.createButtonText_tablet : styles.createButtonText_mobile}> {I18n.t("SEND")}  </Text>
+                                <Text style={submitBtnText}> {I18n.t("SEND")}  </Text>
                             </TouchableOpacity>
-
-
                         </View>
                     </View>
                 </SafeAreaView>
-
             </KeyboardAwareScrollView>
         );
     }
@@ -218,242 +192,11 @@ class UpdateNewpassword extends Component {
 
 export default UpdateNewpassword;
 
-
-const pickerSelectStyles = StyleSheet.create({
-    placeholder: {
-        color: '#456CAF55',
-        fontWeight: "800",
-        fontSize: 16,
-    },
-    inputIOS: {
-        marginLeft: 0,
-        marginRight: 0,
-        height: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: '#456CAF55',
-        color: '#001B4A',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-    inputAndroid: {
-        marginLeft: 0,
-        marginRight: 0,
-        height: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: '#456CAF55',
-        color: '#001B4A',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-});
-
 const styles = StyleSheet.create({
-    logoImage: {
-        alignSelf: 'center',
-        width: 300,
-        height: 230,
-    },
-    errorRecords: {
-        color: '#dd0000',
-        fontSize: Device.isTablet ? 17 : 12,
-        marginLeft: 30,
-    },
-    containerForActivity: {
-        flex: 1,
-        backgroundColor: '#623FA0',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    viewswidth: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 24,
-        height: 84,
-    },
-    signUptext: {
-        marginTop: 40,
-        fontFamily: "bold",
-        alignSelf: 'center',
-        color: '#FFFFFF',
-        fontSize: 20,
-    },
-    title: {
-        color: 'white',
-        fontSize: 20,
-        margin: 20
-    },
-    imagealign: {
-        marginTop: 18,
-        marginLeft: 0,
-    },
     container: {
         flex: 1,
         justifyContent: 'center',
         height: deviceheight + 40,
         backgroundColor: '#FFFFFF'
-    },
-    ytdImageValue: {
-        alignSelf: 'center',
-    },
-    loading: {
-        flex: 1,
-        justifyContent: 'center'
-        // alignItems: 'center',
-    },
-    // Styles For Mobile
-    viewsWidth_mobile: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 24,
-        height: 84,
-    },
-    backButton_mobile: {
-        position: 'absolute',
-        left: 10,
-        top: 30,
-        width: 40,
-        height: 40,
-    },
-    headerTitle_mobile: {
-        position: 'absolute',
-        left: 70,
-        top: 47,
-        width: 300,
-        height: 25,
-        fontFamily: 'bold',
-        fontSize: 18,
-        color: '#353C40'
-    },
-    input_mobile: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-    inputError_mobile: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 44,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#dd0000',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
-
-    createButton_mobile: {
-        backgroundColor: '#ED1C24',
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        marginTop: 20,
-        width: deviceWidth - 40,
-        height: 50,
-        borderRadius: 10,
-        fontWeight: 'bold',
-        // marginBottom:100,
-    },
-    createButtonText_mobile: {
-        color: 'white',
-        alignSelf: 'center',
-        fontSize: 15,
-        fontFamily: "regular",
-    },
-    // signInFieldStyle: {
-    //     color: '#456CAF55',
-    //     marginLeft: 30,
-    //     marginTop: 15,
-    //     fontSize: 12,
-    //     fontFamily: "regular",
-    // },
-
-    // Styles For Tablet
-    viewsWidth_tablet: {
-        backgroundColor: '#ffffff',
-        width: deviceWidth,
-        textAlign: 'center',
-        fontSize: 28,
-        height: 90,
-    },
-    backButton_tablet: {
-        position: 'absolute',
-        left: 10,
-        top: 25,
-        width: 90,
-        height: 90,
-    },
-    headerTitle_tablet: {
-        position: 'absolute',
-        left: 70,
-        top: 40,
-        width: 300,
-        height: 40,
-        fontFamily: 'bold',
-        fontSize: 24,
-        color: '#353C40'
-    },
-    input_tablet: {
-        justifyContent: 'center',
-        marginLeft: 20,
-        marginRight: 20,
-        height: 54,
-        marginTop: 5,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: RF(20),
-    },
-    inputError_tablet: {
-        justifyContent: 'center',
-        marginLeft: RW(20),
-        marginRight: RW(20),
-        height: RH(54),
-        marginTop: RH(5),
-        marginBottom: RH(10),
-        borderColor: '#dd0000',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 2,
-        fontFamily: 'regular',
-        paddingLeft: RW(15),
-        fontSize: RF(20),
-    },
-    createButton_tablet: {
-        backgroundColor: '#ED1C24',
-        justifyContent: 'center',
-        marginLeft: RW(20),
-        marginRight: RW(20),
-        marginTop: RH(20),
-        width: deviceWidth - RW(40),
-        height: RH(60),
-        borderRadius: 10,
-        fontWeight: 'bold',
-        // marginBottom:100,
-    },
-    createButtonText_tablet: {
-        color: 'white',
-        alignSelf: 'center',
-        fontSize: RF(20),
-        fontFamily: "regular",
     },
 });

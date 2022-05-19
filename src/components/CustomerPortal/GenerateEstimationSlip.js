@@ -12,7 +12,9 @@ import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
+import { RF } from '../../Responsive';
 import CustomerService from '../services/CustomerService';
+import { inputField, rnPicker, rnPickerContainer } from '../Styles/FormFields';
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
@@ -100,7 +102,9 @@ class GenerateEstimationSlip extends Component {
     }
 
 
-    componentDidMount() {
+    async componentDidMount() {
+        const userId = await AsyncStorage.getItem("custom:userId")
+        this.setState({smnumber: userId})
         AsyncStorage.getItem("storeId").then((value) => {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) });
@@ -211,18 +215,7 @@ class GenerateEstimationSlip extends Component {
     }
 
     endEditing() {
-        // if (this.state.uom === "") {
-        //     alert("Please select UOM");
-        // }
-        // else if (this.state.barcodeId === "") {
-        //     alert("Please select Barcode");
-        // }
-        // else if (this.state.smnumber === "") {
-        //     alert("Please enter SM Number");
-        // }
-        // else {
         this.getLineItems();
-        // }
     }
 
     getLineItems() {
@@ -397,7 +390,6 @@ class GenerateEstimationSlip extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting token');
-            //alert('There is error getting token');
         });
 
         return (
@@ -412,34 +404,20 @@ class GenerateEstimationSlip extends Component {
                                 marginTop: 10,
                             }}>
                             <View>
-
-                                <View style={{display: 'flex', flexDirection: Device.isTablet ? 'row' : 'column' }} >
-                                    <TextInput style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : {
-                                        justifyContent: 'center',
-                                        margin: 20,
-                                        height: 44,
-                                        marginTop: 5,
-                                        marginBottom: 10,
-                                        borderColor: '#8F9EB717',
-                                        borderRadius: 3,
-                                        backgroundColor: '#FBFBFB',
-                                        borderWidth: 1,
-                                        fontFamily: 'regular',
-                                        paddingLeft: 15,
-                                        fontSize: 18,
-                                    }}
+                                <View style={{ display: 'flex', flexDirection: 'column' }} >
+                                    <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <TextInput style={[inputField, {width: deviceWidth / 2}]}
                                         underlineColorAndroid="transparent"
                                         placeholder={I18n.t("ENTER BARCODE")}
                                         placeholderTextColor="#6F6F6F60"
                                         textAlignVertical="center"
                                         autoCapitalize="none"
                                         value={this.state.barcodeId}
-                                        // onEndEditing
                                         onChangeText={this.handleBarCode}
-                                    // onEndEditing={() => this.endEditing()}
+                                        onEndEditing={() => this.endEditing()}
                                     />
-                                    {/* <RNPickerSelect
-                                        // style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : styles.rnSelectContainer_mobile_newsale}
+                                    <View style={[rnPickerContainer, {width: deviceWidth / 3}]}>
+                                    <RNPickerSelect
                                         placeholder={{
                                             label: 'SELECT UOM',
                                             value: "",
@@ -452,12 +430,14 @@ class GenerateEstimationSlip extends Component {
                                             { label: 'Meters', value: 'Meters' },
                                         ]}
                                         onValueChange={this.handleUOM}
-                                        style={pickerSelectStyles}
+                                        style={[rnPicker]}
                                         value={this.state.uom}
                                         useNativeAndroidPickerStyle={false}
-
-                                    /> */}
-                                <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 350 : 150 }]}
+                                    />
+                                    </View>
+                                    </View>
+                                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                                <TextInput style={[inputField, { width: Device.isTablet ? 130 : 80 }]}
                                     underlineColorAndroid="transparent"
                                     placeholder={I18n.t("SM Number")}
                                     placeholderTextColor="#6F6F6F60"
@@ -467,25 +447,9 @@ class GenerateEstimationSlip extends Component {
                                     value={this.state.smnumber}
                                     // onEndEditing
                                     onChangeText={(text) => this.handleSmCode(text)}
-                                    onEndEditing={() => this.endEditing()}
                                 />
-                                </View>
-
-                                {/* <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
-                                    underlineColorAndroid="transparent"
-                                    placeholder={I18n.t("ENTER BARCODE")}
-                                    placeholderTextColor="#6F6F6F60"
-                                    textAlignVertical="center"
-                                    autoCapitalize="none"
-                                    value={this.state.barcodeId}
-                                    // onEndEditing
-                                    onChangeText={this.handleBarCode}
-                                // onEndEditing={() => this.endEditing()}
-                                /> */}
-
-
                                 {this.state.uom === "Pieces" && (
-                                    <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 80 }]}
+                                    <TextInput style={[inputField, { width: Device.isTablet ? 130 : 80 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         placeholderTextColor="#6F6F6F60"
@@ -497,7 +461,7 @@ class GenerateEstimationSlip extends Component {
                                 )}
 
                                 {this.state.uom === "Meters" && (
-                                    <TextInput style={[Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 80 }]}
+                                    <TextInput style={[inputField, {width: Device.isTablet ? 130 : 80 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         keyboardType={'default'}
@@ -509,15 +473,15 @@ class GenerateEstimationSlip extends Component {
                                     />
                                 )}
 
-
                                 <TouchableOpacity
                                     style={
-                                        Device.isTablet ? styles.input_tabletbutton_normal : styles.input_mobilebutton_normal
+                                        styles.input_mobilebutton
                                     }
                                     onPress={() => this.navigateToScanCode()} >
-                                    <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { marginTop: Device.isTablet ? 0 : 0, marginLeft: Device.isTablet ? -20 : -10 }]}> {I18n.t('SCAN')} </Text>
+                                    <Text style={[styles.navButtonText]}> {I18n.t('SCAN')} </Text>
                                 </TouchableOpacity>
-
+                                    </View>
+                                </View>
                             </View>
                             {this.state.itemsList.length !== 0 && (
                                 <FlatList
@@ -1172,7 +1136,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     imagealign: {
-        marginTop: Device.isTablet ? 25 : 20,
+        marginTop: Device.isTablet ? 10 : 5,
         marginRight: Device.isTablet ? 30 : 20,
     },
     itemscount: {
@@ -1509,6 +1473,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
+        input_mobilebutton: {
+        justifyContent: 'center',
+        width: deviceWidth / 4,
+        height: 44,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 10,
+        backgroundColor: '#ED1C24',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+        marginTop: 10,
+    },
+        navButtonText: {
+        fontSize: RF(14),
+        fontFamily: 'regular',
+        color: '#ffffff',
+    },
+
 
 
     // Styles For Mobile
@@ -1536,6 +1520,8 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#353C40'
     },
+
+
     input_mobile: {
         justifyContent: 'center',
         marginLeft: deviceWidth / 2 + 30,
@@ -1582,21 +1568,7 @@ const styles = StyleSheet.create({
         paddingRight: 15,
         fontSize: 14,
     },
-    input_mobilebutton_normal: {
-        justifyContent: 'center',
-        marginLeft: deviceWidth - 120,
-        width: deviceWidth / 4 - 10,
-        height: 44,
-        marginTop: -55,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 10,
-        backgroundColor: '#ED1C24',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-    },
+
 
     input_mobile_normal_start: {
         justifyContent: 'center',
@@ -2058,14 +2030,6 @@ const styles = StyleSheet.create({
         color: '#ffffff',
         marginLeft: 10,
         marginTop: 8,
-        alignSelf: 'center'
-    },
-    navButtonText_mobile: {
-        fontSize: 17,
-        fontFamily: 'regular',
-        color: '#ffffff',
-        marginLeft: 10,
-        marginTop: 0,
         alignSelf: 'center'
     },
 

@@ -16,6 +16,7 @@ import ProfileService from '../services/ProfileService';
 import UrmService from '../services/UrmService';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import { headerTitle, headerTitleContainer, headerTitleSubContainer, menuButton } from '../Styles/Styles';
 
 var deviceWidth = Dimensions.get('window').width;
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
@@ -46,70 +47,6 @@ const chartConfig = {
         fontFamily: "regular",
         fontSize: Device.isTablet ? 17 : 12,
     },
-};
-
-const salesByCategoryPie = [
-
-    {
-        name: "SHIRTS",
-        population: 19.5,
-        color: "rgba(131, 167, 234, 1)",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-
-    },
-    {
-        name: "SAREES",
-        population: 17.1,
-        color: "#F00",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "KIDS",
-        population: 15.5,
-        color: "#0063C6",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "JEANS",
-        population: 15.2,
-        color: "#e26a00",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "T-SHIRTS",
-        population: 12.3,
-        color: "rgb(0, 0, 255)",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "WOMEN",
-        population: 10.01,
-        color: "#ff0",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    },
-    {
-        name: "OTHERS",
-        population: 10.01,
-        color: "#7F7F7F",
-        legendFontColor: "#7F7F7F",
-        legendFontSize: 15
-    }
-];
-
-
-const topSalesManBar = {
-    labels: ["John", "Raju", "Gayathri", "Vignesh", "Ramya"],
-    datasets: [
-        {
-            data: [45, 35, 28, 18.5, 12]
-        }
-    ]
 };
 
 global.previlage1 = '';
@@ -481,11 +418,13 @@ class Home extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
-                    <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
+                <View style={headerTitleContainer}>
+                    <View style={headerTitleSubContainer}>
+                    <TouchableOpacity style={menuButton} onPress={() => this.handleMenuButtonClick()}>
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t("Home")} </Text>
+                    <Text style={headerTitle}> {I18n.t("Home")} </Text>
+                    </View>
                 </View>
 
                 <ScrollView>
