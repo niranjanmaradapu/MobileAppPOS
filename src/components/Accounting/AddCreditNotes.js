@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import NewSaleService from '../services/NewSaleService';
+import { cancelBtn, cancelBtnText, inputFieldDisabled, inputArea, inputField, inputHeading, rnPicker, rnPickerContainer, submitBtn, submitBtnText } from '../Styles/FormFields';
+import { backButton, backButtonImage, headerTitle, headerTitleContainer, headerTitleSubContainer } from '../Styles/Styles';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -16,14 +19,20 @@ export default class AddCreditNotes extends Component {
             mobileNumber: "",
             empId: "",
             creditAmmount: "",
-            stores: [],
-            selcetedStore: "",
+            storeName: "",
             approves: [],
             approvedBy: "",
             datepickerOpen: false,
             date: new Date(),
             fromDate: "",
             createdDate: "",
+            createdBy: "",
+            comments: "",
+            trasanctionTypes: [
+                {label: 'Card', value: 'Card'},
+                {label: 'Cash', value: 'Cash'}
+            ],
+            trasanctionMode: '',
         };
     }
 
@@ -49,57 +58,57 @@ export default class AddCreditNotes extends Component {
         this.setState({ creditAmmount: value });
     };
 
-    handleSelectStore = (value) => {
-        this.setState({ selcetedStore: value });
+    handleStore = (value) => {
+        this.setState({ storeName: value });
     };
-
-    handleApprovedBy = (value) => {
-        this.setState({ approvedBy: value });
-    };
-
-    datepickerClicked() {
-        this.setState({ datepickerOpen: true });
-    }
-
-    datepickerDoneClicked() {
-        // if (parseInt(this.state.date.getDate()) < 10) {
-        //     this.setState({ fromDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-0" + this.state.date.getDate() });
-        // }
-        // else {
-        this.setState({ createdDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
-        // }
-
-        this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
-    }
-
-    datepickerCancelClicked() {
-        this.setState({ date: new Date(), enddate: new Date(), datepickerOpen: false, datepickerendOpen: false });
-    }
 
     saveCredit() {
         alert("you have saved")
     }
+
+    handleComments = (value) => {
+        this.setState({comments: value})
+    }
+
+    handleCretedBy = (value) => {
+        this.setState({createdBy: value})
+    }
+
+    handletransactionType = (value) => {
+        this.setState({trasanctionMode: value})
+    } 
 
     cancel() {
         this.props.navigation.goBack(null);
         return true;
     }
 
+    getCustomerDetails = () => {
+        NewSaleService.getMobileData("+91" + this.state.mobileNumber).then(res => {
+            if (res && res.data.result) {
+                this.setState({customerName: res.data.result.userName})
+            }
+        })
+    }
+
     render() {
         return (
             <View style={styles.mainContainer}>
-                {/* {this.state.loading &&
+                {this.state.loading &&
                     <Loader
                         loading={this.state.loading} />
-                } */}
-                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                    <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/backButton.png')} />
+                }
+                <View style={headerTitleContainer} >
+                    <View style={headerTitleSubContainer}>
+                    <TouchableOpacity style={backButton} onPress={() => this.handleBackButtonClick()}>
+                        <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                    <Text style={headerTitle}>
                         Add Credit Notes
                     </Text>
+                    </View>
                 </View>
+                <ScrollView>
                 <Text
                     style={{
                         color: "#ED1C24",
@@ -108,18 +117,9 @@ export default class AddCreditNotes extends Component {
                         margin: 15,
                     }}
                 >Credit information</Text>
+                <Text style={inputHeading}>Mobile Number</Text>
                 <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    underlineColorAndroid="transparent"
-                    placeholder="CUSTOMER NAME"
-                    placeholderTextColor="#6F6F6F"
-                    textAlignVertical="center"
-                    autoCapitalize="none"
-                    value={this.state.customerName}
-                    onChangeText={this.handleCustomerName}
-                />
-                <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    style={inputField}
                     underlineColorAndroid="transparent"
                     placeholder="MOBILE NUMBER"
                     placeholderTextColor="#6F6F6F"
@@ -127,99 +127,93 @@ export default class AddCreditNotes extends Component {
                     autoCapitalize="none"
                     value={this.state.mobileNumber}
                     onChangeText={this.handleMobileNumber}
+                    onBlur={this.getCustomerDetails}
                 />
+                <Text style={inputHeading}>Customer Name</Text>
                 <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    style={inputFieldDisabled}
                     underlineColorAndroid="transparent"
                     placeholder="CUSTOMER NAME"
-                    placeholderTextColor="#6F6F6F"
+                    editable={false}
+                    placeholderTextColor="#000000"
                     textAlignVertical="center"
                     autoCapitalize="none"
-                    value={this.state.empId}
-                    onChangeText={this.handleEmpId}
+                    value={this.state.customerName}
+                    onChangeText={this.handleCustomerName}
                 />
+                <Text style={inputHeading}>Credit Amount</Text>
                 <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    style={inputField}
                     underlineColorAndroid="transparent"
-                    placeholder="CUSTOMER NAME"
+                    placeholder="CREDIT AMOUNT"
                     placeholderTextColor="#6F6F6F"
                     textAlignVertical="center"
                     autoCapitalize="none"
                     value={this.state.creditAmmount}
                     onChangeText={this.handleCreditAmmount}
                 />
-                <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                <Text style={inputHeading}>Store</Text>
+                <TextInput
+                    style={inputField}
+                    underlineColorAndroid="transparent"
+                    placeholder="STORE"
+                    editable={false}
+                    placeholderTextColor="#6F6F6F"
+                    textAlignVertical="center"
+                    autoCapitalize="none"
+                    value={this.state.storeName}
+                    onChangeText={this.handleStore}
+                />
+                <Text style={inputHeading}>Created By</Text>
+                <TextInput
+                    style={inputField}
+                    underlineColorAndroid="transparent"
+                    placeholder="CREATED BY"
+                    editable={false}
+                    placeholderTextColor="#6F6F6F"
+                    textAlignVertical="center"
+                    autoCapitalize="none"
+                    value={this.state.createdBy}
+                    onChangeText={this.handleCretedBy}
+                />
+                <Text style={inputHeading}>Payment Type</Text>
+                <View style={rnPickerContainer}>
                     <RNPickerSelect
-                        style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
                         placeholder={{
-                            label: 'SELECT STORE'
+                            label: 'TAX Label',
+                            value: "",
                         }}
                         Icon={() => {
                             return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                         }}
-                        items={this.state.stores}
-                        onValueChange={this.handleSelectStore}
-                        style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                        value={this.state.selcetedStore}
+                        items={this.state.trasanctionTypes}
+                        onValueChange={this.handletransactionType}
+                        style={rnPicker}
+                        value={this.state.trasanctionMode}
                         useNativeAndroidPickerStyle={false}
                     />
                 </View>
-                <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                    <RNPickerSelect
-                        style={Device.isTablet ? styles.rnSelect_tablet : styles.rnSelect_mobile}
-                        placeholder={{
-                            label: 'APPROVED BY'
-                        }}
-                        Icon={() => {
-                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                        }}
-                        items={this.state.approves}
-                        onValueChange={this.handleApprovedBy}
-                        style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                        value={this.state.approvedBy}
-                        useNativeAndroidPickerStyle={false}
-                    />
-                </View>
-                <TouchableOpacity
-                    style={Device.isTablet ? styles.filterDateButton_tablet : styles.filterDateButton_mobile}
-                    testID="openModal"
-                    onPress={() => this.datepickerClicked()}
-                >
-                    <Text
-                        style={Device.isTablet ? styles.filterDateButtonText_tablet : styles.filterDateButtonText_mobile}
-                    >{this.state.createdDate == "" ? 'CREATED DATE' : this.state.createdDate}</Text>
-                    <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
-                </TouchableOpacity>
-                {
-                    this.state.datepickerOpen && (
-                        <View style={{ height: 280, width: deviceWidth, backgroundColor: '#ffffff' }}>
-                            <TouchableOpacity
-                                style={Device.isTablet ? styles.datePickerButton_tablet : styles.datePickerButton_mobile} onPress={() => this.datepickerCancelClicked()}
-                            >
-                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Cancel </Text>
-
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                style={Device.isTablet ? styles.datePickerEndButton_tablet : styles.datePickerEndButton_mobile} onPress={() => this.datepickerDoneClicked()}
-                            >
-                                <Text style={Device.isTablet ? styles.datePickerButtonText_tablet : styles.datePickerButtonText_mobile}  > Done </Text>
-
-                            </TouchableOpacity>
-                            <DatePicker style={{ width: deviceWidth, height: 200, marginTop: 50, }}
-                                date={this.state.date}
-                                mode={'date'}
-                                onDateChange={(date) => this.setState({ date })}
-                            />
-                        </View>
-                    )}
-                <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+                <Text style={inputHeading}>Comments</Text>
+                <TextInput
+                    style={inputArea}
+                    underlineColorAndroid="transparent"
+                    placeholder="COMMENTS"
+                    editable={false}
+                    placeholderTextColor="#6F6F6F"
+                    textAlignVertical="center"
+                    autoCapitalize="none"
+                    value={this.state.comments}
+                    onChangeText={this.handleComments}
+                />
+                <TouchableOpacity style={submitBtn}
                     onPress={() => this.saveCredit()}>
-                    <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                    <Text style={submitBtnText}>SAVE</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
+                <TouchableOpacity style={cancelBtn}
                     onPress={() => this.cancel()}>
-                    <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>CANCEL</Text>
+                    <Text style={cancelBtnText}>CANCEL</Text>
                 </TouchableOpacity>
+                </ScrollView>
             </View>
         );
     }

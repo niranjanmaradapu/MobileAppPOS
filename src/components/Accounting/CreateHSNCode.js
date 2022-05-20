@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import Modal from 'react-native-modal';
+import { deleteCloseBtn, deleteContainer, deleteHeader, deleteHeading, deleteText, filterCloseImage, filterHeading, filterMainContainer, filterSubContainer } from '../Styles/PopupStyles';
+import { buttonContainer, buttonImageStyle, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
 
 var deviceWidth = Dimensions.get("window").width;
 
@@ -41,28 +43,26 @@ export default class CreateHSNCode extends Component {
                     style={{ marginTop: 20 }}
                     scrollEnabled={true}
                     renderItem={({ item, index }) => (
-                        <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
-                            <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
-                                <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>HSN CODE: {index + 1}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>GOODS/SERVICES: { }</Text>
+                        <View style={flatListMainContainer} >
+                            <View style={flatlistSubContainer}>
+                                <View style={textContainer}>
+                                    <Text style={highText}>HSN CODE: {item.hsnCode}</Text>
                                 </View>
-                                <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>TAX APPLICABLE: { }</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>SLAB: { }</Text>
+                                <View style={textContainer}>
+                                    <Text style={textStyleMedium}>GOODS/SERVICES: {"\n"}{item.description}</Text>
+                                    <Text style={textStyleLight}>TAX APPLICABLE: {"\n"}{item.taxAppliesOn}</Text>
                                 </View>
-
-                                <View style={flats.buttons}>
+                                <View style={textContainer}>
+                                    <Text style={textStyleLight}>SLAB: {item.slabBased}</Text>
+                                <View style={buttonContainer}>
                                     <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handleeditHsn(item, index)}>
                                         <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/edit.png')} />
                                     </TouchableOpacity>
-
                                     <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handledeleteHsn(item, index)}>
                                         <Image style={{ alignSelf: 'center', top: 5, height: Device.isTablet ? 30 : 20, width: Device.isTablet ? 30 : 20 }} source={require('../assets/images/delete.png')} />
-
                                     </TouchableOpacity>
                                 </View>
-
+                                </View>
                             </View>
                         </View>
                     )}

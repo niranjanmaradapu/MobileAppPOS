@@ -8,13 +8,17 @@ var deviceWidth = Dimensions.get("window").width
 
 export const filterMainContainer = {
   backgroundColor: '#ffffff',
-  marginTop: Device.isTablet ? deviceHeight - RH(500) : deviceHeight - RH(400),
+  // marginTop: Device.isTablet ? deviceHeight - RH(500) : deviceHeight - RH(400),
   minHeight: Device.isTablet ? RH(500) : RH(400),
+  paddingBottom: Device.isTablet ? RH(20) : RH(10),
+  position: 'absolute',
+  bottom: 0
 }
 
 export const filterSubContainer = {
   flexDirection: 'row',
   justifyContent: 'space-between',
+  alignItems: 'center',
   marginTop: RH(5),
   height: Device.isTablet ? RH(60) : RH(50)
 }
@@ -26,9 +30,9 @@ export const filterHeading = {
 }
 
 export const filterCloseImage = {
-  width: Device.isTablet ? RW(60) : RW(50),
-  height: Device.isTablet ? RH(60) : RH(50),
-  marginTop: Device.isTablet ? RH(20) : RH(15),
+  width: Device.isTablet ? RW(70) : RW(50),
+  height: Device.isTablet ? RH(50) : RH(50),
+  marginTop: Device.isTablet ? RH(30) : RH(15),
 }
 
 export const deleteContainer = {
@@ -57,6 +61,9 @@ export const deleteHeader = {
   width: deviceWidth,
   flexDirection: 'row',
   justifyContent: 'space-between',
+  alignItems: 'center',
+  paddinRight: 10,
+  paddingHorizontal: Device.isTablet ? 30 : 10,
   height: Device.isTablet ? RH(60) : RH(50)
 }
 

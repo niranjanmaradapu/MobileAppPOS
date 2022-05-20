@@ -431,6 +431,7 @@ class GenerateInvoiceSlip extends Component {
         axios.get(CustomerService.getHsnDetails()).then((response) => {
             if (response) {
                 const details = response.data.result;
+                console.log(details)
                 let slabVos = [];
                 details.forEach(detail => {
                     if (detail.slabVos)
@@ -449,12 +450,12 @@ class GenerateInvoiceSlip extends Component {
                         this.setState({ centralGST: Math.ceil(central) });
                         slabCheck = true;
                         slabCheck = true;
-                        // this.setState({ stateGST: taxData[0].taxVo.cgst, centralGST: taxData[0].taxVo.cgst });
+                        this.setState({ stateGST: taxData[0].taxVo.cgst, centralGST: taxData[0].taxVo.cgst });
                     }
                 });
 
                 if (!slabCheck) {
-                    this.setState({ stateGST: 70, centralGST: 70 });
+                    // this.setState({ stateGST: 70, centralGST: 70 });
                     console.log("Checking the slab");
                 }
                 const grandTotal = this.state.netPayableAmount + this.state.centralGST * 2;
