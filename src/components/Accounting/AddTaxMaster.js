@@ -3,6 +3,9 @@ import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View 
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import AccountingService from '../services/AccountingService';
+import { cancelBtn, cancelBtnText, inputField, submitBtn, submitBtnText } from '../Styles/FormFields';
+import { backButton, backButtonImage, headerTitle, headerTitleContainer, headerTitleSubContainer } from '../Styles/Styles';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -16,8 +19,10 @@ export default class AddTaxMaster extends Component {
             sgst: "",
             igst: "",
             cess: "",
+            taxLabel: "",
             proiorities: [],
             priority: "",
+            isTaxEdit: false,
         };
     }
 
@@ -51,7 +56,25 @@ export default class AddTaxMaster extends Component {
     };
 
     saveTax() {
-        alert("you have Saved");
+        const { cess, cgst, igst, sgst, taxRate, isTaxEdit } = this.state
+        let obj = {
+            "cess": parseInt(cess),
+            "cgst": parseInt(cgst),
+            "sgst": parseInt(sgst),
+            "igst": parseInt(igst),
+            "taxLabel": taxRate
+        }
+        if (!isTaxEdit) {
+            AccountingService.saveMasterTax(obj).then(res => {
+                if (res) {
+                    console.log(res.data)
+                    alert("success")
+                    this.props.navigation.goBack()
+                }
+            }).catch(err => {
+                alert(err)
+            })
+        }
     }
 
     cancel() {
@@ -67,18 +90,20 @@ export default class AddTaxMaster extends Component {
                     <Loader
                         loading={this.state.loading} />
                 } */}
-                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                    <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/backButton.png')} />
+                <View style={headerTitleContainer} >
+                    <View style={headerTitleSubContainer}>
+                    <TouchableOpacity style={backButton} onPress={() => this.handleBackButtonClick()}>
+                        <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
+                    <Text style={headerTitle}>
                         Add Tax Master
                     </Text>
+                    </View>
                 </View>
                 <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    style={inputField}
                     underlineColorAndroid="transparent"
-                    placeholder="HSN CODE"
+                    placeholder="TAX RATE %"
                     placeholderTextColor="#6F6F6F"
                     textAlignVertical="center"
                     autoCapitalize="none"
@@ -86,7 +111,7 @@ export default class AddTaxMaster extends Component {
                     onChangeText={this.handleTaxRate}
                 />
                 <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    style={inputField}
                     underlineColorAndroid="transparent"
                     placeholder="CGST %"
                     placeholderTextColor="#6F6F6F"
@@ -96,7 +121,7 @@ export default class AddTaxMaster extends Component {
                     onChangeText={this.handleCgst}
                 />
                 <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    style={inputField}
                     underlineColorAndroid="transparent"
                     placeholder="SGST %"
                     placeholderTextColor="#6F6F6F"
@@ -106,7 +131,7 @@ export default class AddTaxMaster extends Component {
                     onChangeText={this.handleSgst}
                 />
                 <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    style={inputField}
                     underlineColorAndroid="transparent"
                     placeholder="IGST %"
                     placeholderTextColor="#6F6F6F"
@@ -116,7 +141,7 @@ export default class AddTaxMaster extends Component {
                     onChangeText={this.handleIgst}
                 />
                 <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    style={inputField}
                     underlineColorAndroid="transparent"
                     placeholder="CESS %"
                     placeholderTextColor="#6F6F6F"
@@ -125,28 +150,13 @@ export default class AddTaxMaster extends Component {
                     value={this.state.cess}
                     onChangeText={this.handleCess}
                 />
-                <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
-                    <RNPickerSelect
-                        placeholder={{
-                            label: 'SELECT PRIORITY'
-                        }}
-                        Icon={() => {
-                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                        }}
-                        items={this.state.proiorities}
-                        onValueChange={this.handlePriority}
-                        style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                        value={this.state.priority}
-                        useNativeAndroidPickerStyle={false}
-                    />
-                </View>
-                <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+                <TouchableOpacity style={submitBtn}
                     onPress={() => this.saveTax()}>
-                    <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                    <Text style={submitBtnText}>SAVE</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
+                <TouchableOpacity style={cancelBtn}
                     onPress={() => this.cancel()}>
-                    <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>CANCEL</Text>
+                    <Text style={cancelBtnText}>CANCEL</Text>
                 </TouchableOpacity>
             </View>
         );

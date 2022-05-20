@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import { Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ScrollView, Dimensions, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import AccountingService from '../services/AccountingService';
+import { backButton, backButtonImage, headerTitle, headerTitleContainer, headerTitleSubContainer } from '../Styles/Styles';
+import { cancelBtn, cancelBtnText, inputField, inputHeading, rnPicker, rnPickerContainer, rnPickerError, submitBtn, submitBtnText } from '../Styles/FormFields';
+
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -12,16 +16,93 @@ export default class AddHsnCode extends Component {
         super(props);
         this.state = {
             hsnCode: "",
-            applicables: [],
-            taxApplicable: "",
+            taxAppliesOn: "",
+            taxType: '',
             taxes: [],
-            taxRate: "",
-            slabs: [],
-            slabRate: "",
-            taxId: "",
             fromPrice: "",
             toPrice: "",
+            description: "",
+            taxId: "",
+            taxAppliedTypes: [
+                {label: 'Hsn Code', value: 'Hsncode'},
+                {label: 'Price Slab', value: 'Priceslab'}
+            ],
+            taxMasterArray: [],
+            taxList: [],
+            descriptionArray: [],
+            descriptionList: [],
+            taxAppliesArray: [],
+            taxAppliesList: [],
+            slabValues: [{ priceFrom: '', priceTo: '', taxId: '' }],
+            isEdit: false,
         };
+    }
+
+    componentDidMount() {
+        this.getAllTaxes()
+        this.getDescription()
+        this.getTaxAppliesOn()
+    }
+
+    getAllTaxes() {
+        let taxList = []
+        AccountingService.getAllMasterTax().then(res => {
+            if (res) {
+                console.log("Taxes",res.data)
+                let len = res.data.result.length
+                if (len > 0) {
+                    for (let i = 0; i < len; i++){
+                        let number = res.data.result[i]
+                        this.state.taxMasterArray.push({ name: number.taxLabel, id: number.id })
+                        taxList.push({
+                            value: this.state.taxMasterArray[i].name,
+                            label: this.state.taxMasterArray[i].name
+                        })
+                    }
+                    this.setState({taxList: taxList, taxMasterArray: this.state.taxMasterArray})
+                }
+            }
+        })
+    }
+
+    getDescription() {
+        let descriptionList = []
+        AccountingService.getDescrition().then(res => {
+            if (res) {
+                let len = res.data.result.length
+                if (len > 0) {
+                    for (let i = 0; i < len; i++){
+                        let number = res.data.result[i]
+                        this.state.descriptionArray.push({ name: number.name, id: number.id })
+                        descriptionList.push({
+                            value: this.state.descriptionArray[i].name,
+                            label: this.state.descriptionArray[i].name
+                        })
+                    }
+                    this.setState({descriptionList: descriptionList, descriptionArray: this.state.descriptionArray})
+                }
+            }
+        })
+    }
+
+    getTaxAppliesOn() {
+        let taxAppliesList = []
+        AccountingService.getTaxAppliesOn().then(res => {
+            if (res) {
+                let len = res.data.result.length
+                if (len > 0) {
+                    for (let i = 0; i < len; i++){
+                        let number = res.data.result[i]
+                        this.state.taxAppliesArray.push({ name: number.name, id: number.id })
+                        taxAppliesList.push({
+                            value: this.state.taxAppliesArray[i].name,
+                            label: this.state.taxAppliesArray[i].name
+                        })
+                    }
+                    this.setState({taxAppliesList: taxAppliesList, taxAppliesArray: this.state.taxAppliesArray})
+                }
+            }
+        })
     }
 
     handleBackButtonClick() {
@@ -33,12 +114,42 @@ export default class AddHsnCode extends Component {
         this.setState({ hsnCode: value });
     };
 
-    handleTaxRate = (value) => {
-        this.setState({ taxRate: value });
+    handleAppliesOn = (value) => {
+        this.setState({ taxAppliesOn: value });
     };
 
-    handleSlab = (value) => {
-        this.setState({ slabRate: value });
+    handleTaxLabel = (value) => {
+        if (value === "") {
+            this.setState({taxId: null})
+        } else {
+            for (let i = 0; i < this.state.taxMasterArray.length; i++){
+                if (this.state.taxMasterArray[i].name === value) {
+                    this.setState({taxId: this.state.taxMasterArray[i].id})
+                }
+            }
+        }
+    }
+
+    handleRoleChange = (value) => {
+        let slabValues = this.state.slabValues
+        if (value === "") {
+            slabValues["taxId"] = null
+        } else {
+            for (let i = 0; i < this.state.taxMasterArray.length; i++){
+                if (this.state.taxMasterArray[i].name === value) {
+                    // this.setState({taxId: this.state.taxMasterArray[i].id})
+                    slabValues["taxId"] = this.state.taxMasterArray[i].id
+                }
+            }
+        }
+    }
+
+    handleTaxApplicableType = (value) => {
+        this.setState({taxType: value})
+    }
+
+    handleDescription = (value) => {
+        this.setState({ description: value });
     };
 
     handleTaxId = (value) => {
@@ -47,14 +158,35 @@ export default class AddHsnCode extends Component {
 
     handlefromPrice = (value) => {
         this.setState({ fromPrice: value });
+        let slabValues = this.state.slabValues
+        slabValues["priceFrom"] = value
     };
 
     handleToPrice = (value) => {
         this.setState({ toPrice: value });
+        let slabValues = this.state.slabValues
+        slabValues["priceTo"] = value
     };
 
     saveHsnCode() {
-        alert("you have Saved");
+        const { taxAppliesOn, taxId, description, taxType, hsnCode, fromPrice, toPrice, isEdit } = this.state
+        const obj = {
+            description: description ? description : "",
+            hsnCode: hsnCode ? hsnCode : "",
+            taxAppliedType: taxType ? taxType : "",
+            taxAppliesOn: taxAppliesOn ? taxAppliesOn : "",
+            taxId: taxType === 'Hsncode' ? taxId : null,
+            slabs: taxType === 'Priceslab' ? [{ priceFrom: fromPrice, priceTo: toPrice, taxId : taxId}] : [],
+        }
+        console.log(obj)
+        if (!isEdit) {
+            AccountingService.saveHsnCode(obj).then(res => {
+                if (res) {
+                    alert(res.data.message)
+                    this.props.navigation.goBack()
+                }
+            })
+        }
     }
 
     cancel() {
@@ -70,40 +202,92 @@ export default class AddHsnCode extends Component {
                     <Loader
                         loading={this.state.loading} />
                 } */}
-                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile} >
-                    <TouchableOpacity style={Device.isTablet ? styles.backButton_tablet : styles.backButton_mobile} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/backButton.png')} />
+                <View style={headerTitleContainer} >
+                    <View style={headerTitleSubContainer}>
+                    <TouchableOpacity style={backButton} onPress={() => this.handleBackButtonClick()}>
+                        <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}>
-                        Add Tax Master
+                    <Text style={headerTitle}>
+                        Add HSN Code
                     </Text>
+                    </View>
                 </View>
+                <ScrollView>
+                <Text style={inputHeading}>HSN Code</Text>
                 <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
+                    style={inputField}
                     underlineColorAndroid="transparent"
-                    placeholder="TAX RATE %"
+                    placeholder="HSN Code"
                     placeholderTextColor="#6F6F6F"
                     textAlignVertical="center"
                     autoCapitalize="none"
                     value={this.state.hsnCode}
                     onChangeText={this.handleHsnCode}
                 />
-                <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                {this.state.taxType === 'Priceslab' ?
+                    <View>
+                        <Text style={inputHeading}>Tax Label</Text>
+                <View style={rnPickerContainer}>
                     <RNPickerSelect
                         placeholder={{
-                            label: 'TAX APPLICABLE'
+                            label: 'TAX Label',
+                            value: "",
                         }}
                         Icon={() => {
                             return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                         }}
-                        items={this.state.applicables}
-                        onValueChange={this.handleTaxApplicable}
-                        style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                        value={this.state.taxApplicable}
+                        items={this.state.taxList}
+                        onValueChange={this.handleTaxLabel}
+                        style={rnPicker}
+                        value={this.state.taxLabel}
+                        useNativeAndroidPickerStyle={false}
+                    />
+                        </View>
+                        <Text style={inputHeading}>From Price</Text>
+                <TextInput
+                    style={inputField}
+                    underlineColorAndroid="transparent"
+                    placeholder="From Price"
+                    placeholderTextColor="#6F6F6F"
+                    textAlignVertical="center"
+                    autoCapitalize="none"
+                    value={this.state.fromPrice}
+                    onChangeText={this.handlefromPrice}
+                        />
+                        <Text style={inputHeading}>To Price</Text>
+                <TextInput
+                    style={inputField}
+                    underlineColorAndroid="transparent"
+                    placeholder="To Price"
+                    placeholderTextColor="#6F6F6F"
+                    textAlignVertical="center"
+                    autoCapitalize="none"
+                    value={this.state.toPrice}
+                    onChangeText={this.handleToPrice}
+                />
+                    </View> : 
+                <View>
+                <Text style={inputHeading}>Tax Label</Text>
+                <View style={rnPickerContainer}>
+                    <RNPickerSelect
+                        placeholder={{
+                            label: 'TAX Label',
+                            value: "",
+                        }}
+                        Icon={() => {
+                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                        }}
+                        items={this.state.taxList}
+                        onValueChange={this.handleTaxLabel}
+                        style={rnPicker}
+                        value={this.state.taxLabel}
                         useNativeAndroidPickerStyle={false}
                     />
                 </View>
-                <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                </View>
+                }
+                <Text style={inputHeading}>Tax Applies On</Text>
+                <View style={rnPickerContainer}>
                     <RNPickerSelect
                         placeholder={{
                             label: 'TAX %'
@@ -111,66 +295,55 @@ export default class AddHsnCode extends Component {
                         Icon={() => {
                             return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                         }}
-                        items={this.state.taxes}
-                        onValueChange={this.handleTaxRate}
-                        style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                        value={this.state.taxRate}
+                        items={this.state.taxAppliesList}
+                        onValueChange={this.handleAppliesOn}
+                        style={rnPicker}
+                        value={this.state.taxAppliesOn}
                         useNativeAndroidPickerStyle={false}
                     />
                 </View>
-                <View style={Device.isTablet ? styles.rnSelectContainer_tablet : styles.rnSelectContainer_mobile}>
+                <Text style={inputHeading}>Description</Text>
+                <View style={rnPickerContainer}>
                     <RNPickerSelect
                         placeholder={{
-                            label: 'SLAB'
+                            label: 'DESCRIPTION'
                         }}
                         Icon={() => {
                             return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
                         }}
-                        items={this.state.slabs}
-                        onValueChange={this.handleSlab}
-                        style={Device.isTablet ? pickerSelectStyles_tablet : pickerSelectStyles_mobile}
-                        value={this.state.slabRate}
+                        items={this.state.descriptionList}
+                        onValueChange={this.handleDescription}
+                        style={rnPicker}
+                        value={this.state.description}
                         useNativeAndroidPickerStyle={false}
                     />
                 </View>
-                <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    underlineColorAndroid="transparent"
-                    placeholder="TAX ID"
-                    placeholderTextColor="#6F6F6F"
-                    textAlignVertical="center"
-                    autoCapitalize="none"
-                    value={this.state.taxId}
-                    onChangeText={this.handleTaxId}
-                />
-                <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    underlineColorAndroid="transparent"
-                    placeholder="FROM PRICE"
-                    placeholderTextColor="#6F6F6F"
-                    textAlignVertical="center"
-                    autoCapitalize="none"
-                    value={this.state.fromPrice}
-                    onChangeText={this.handlefromPrice}
-                />
-                <TextInput
-                    style={Device.isTablet ? styles.input_tablet : styles.input_mobile}
-                    underlineColorAndroid="transparent"
-                    placeholder="TO PRICE"
-                    placeholderTextColor="#6F6F6F"
-                    textAlignVertical="center"
-                    autoCapitalize="none"
-                    value={this.state.toPrice}
-                    onChangeText={this.handleToPrice}
-                />
-                <TouchableOpacity style={Device.isTablet ? styles.saveButton_tablet : styles.saveButton_mobile}
+
+                <Text style={inputHeading}>Tax Applied Type</Text>
+                <View style={rnPickerContainer}>
+                    <RNPickerSelect
+                        placeholder={{
+                            label: 'TAX TYPE'
+                        }}
+                        Icon={() => {
+                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
+                        }}
+                        items={this.state.taxAppliedTypes}
+                        onValueChange={this.handleTaxApplicableType}
+                        style={rnPicker}
+                        value={this.state.taxType}
+                        useNativeAndroidPickerStyle={false}
+                            />
+                </View>
+                <TouchableOpacity style={submitBtn}
                     onPress={() => this.saveHsnCode()}>
-                    <Text style={Device.isTablet ? styles.saveButtonText_tablet : styles.saveButtonText_mobile}>SAVE</Text>
+                    <Text style={submitBtnText}>SAVE</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={Device.isTablet ? styles.cancelButton_tablet : styles.cancelButton_mobile}
+                <TouchableOpacity style={cancelBtn}
                     onPress={() => this.cancel()}>
-                    <Text style={Device.isTablet ? styles.cancelButtonText_tablet : styles.cancelButtonText_mobile}>CANCEL</Text>
-                </TouchableOpacity>
+                    <Text style={cancelBtnText}>CANCEL</Text>
+                    </TouchableOpacity>
+                </ScrollView>
             </View>
         );
     }

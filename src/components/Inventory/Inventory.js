@@ -745,7 +745,7 @@ export default class Inventory extends Component {
                                 <View>
                                     <View style={deleteHeader}>
                                         <View>
-                                            <Text style={deleteHeader} > {I18n.t("Delete Barcode")} </Text>
+                                            <Text style={deleteHeading} > {I18n.t("Delete Barcode")} </Text>
                                         </View>
                                         <View>
                                             <TouchableOpacity style={deleteCloseBtn} onPress={() => this.modelCancel()}>

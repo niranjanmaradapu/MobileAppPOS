@@ -12,10 +12,11 @@ import AccountingDashboard from './AccountingDashboard';
 import { pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton,  headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2} from '../Styles/Styles';
 import CreateHSNCode from './CreateHSNCode';
 import CreateTaxMaster from './CreateTaxMaster';
-import { CreditNotes, FilterCreditNotes } from './CreditNotes';
-import { DebitNotes, FilterDebitNotes } from "./DebitNotes";
+import CreditNotes from './CreditNotes';
+import DebitNotes from "./DebitNotes";
 import Domain from './Domain.js';
 import { FilterStores, Stores } from './Stores.js';
+import AccountingService from '../services/AccountingService';
 
 
 var deviceWidth = Dimensions.get("window").width;
@@ -42,8 +43,8 @@ export default class AccountManagement extends Component {
             privilages: [],
             creditNotes: [],
             debitNotes: [],
-            taxMaster: [],
-            hsnCode: [],
+            taxList: [],
+            hsnList: [],
             stores: [],
             domains: [],
             storesDelete: false,
@@ -52,7 +53,8 @@ export default class AccountManagement extends Component {
             storeError: "",
             domainError: "",
             channelsList: [],
-            channelFull: false
+            channelFull: false,
+            clearFilter: false
         };
     }
 
@@ -223,89 +225,23 @@ export default class AccountManagement extends Component {
                 }).catch(() => {
                     this.setState({ loading: false });
                     console.log('There is error getting storeId');
-                    //  alert('There is error getting storeId');
                 });
             }
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting storeId');
-            // alert('There is error getting storeId');
         });
         // this.getDomainsList();
         // this.getStoresList();
+        const storeId = await AsyncStorage.getItem("storeId")
+        const userId = await AsyncStorage.getItem('custom:userId')
+        this.setState({storeId: storeId, userId: userId})
     }
 
 
-
-    async getDomainsList() {
-        this.setState({ domains: [] });
-        const clientId = await AsyncStorage.getItem("custom:clientId1");
-        this.setState({ loading: true });
-        axios.get(LoginService.getDomainsList() + clientId).then((res) => {
-            let len = res.data["result"].length;
-            if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                    let number = res.data.result[i];
-                    console.log('sfsdfdfsdfdsfsfsdfs' + number);
-                    console.log(number);
-                    this.setState({ loading: false });
-                    this.state.domains.push(number);
-                }
-                this.setState({ domains: this.state.domains, domainError: "" });
-                this.getChannelsList()
-            } else {
-                this.setState({domainError: "Records Not Found"})
-            }
-        }).catch(() => {
-            this.setState({ loading: false });
-            if (this.state.flagDomain === true) {
-                this.setState({domainError: "Records Not Found"})
-            //    alert("There is an Error while getting Domains");
-            }
-        });
-    }
-
-    async getStoresList() {
-        this.setState({ stores: [] });
-        const clientId = await AsyncStorage.getItem("custom:clientId1");
-        this.setState({ loading: true });
-        const params = {
-            "clientId": clientId
-        };
-        axios.get(UrmService.getAllStores(), { params }).then((res) => {
-            console.log('adsdsadsd' + res.data);
-            let len = res.data["result"].length;
-            if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                    let number = res.data.result[i];
-                    console.log('sfsdfdfsdfdsfsfsdfs' + number);
-                    console.log(number);
-                    this.setState({ loading: false });
-                    this.state.stores.push(number);
-                }
-                this.setState({ stores: this.state.stores, storeError: "" });
-            } else {
-                this.setState({storeError: "Records Not Found"})
-            }
-        }).catch(() => {
-            this.setState({ loading: false });
-            if (this.state.flagStore === true) {
-                this.setState({storeError: "Records Not Found"})
-                // alert("There is an Error while Getting Stores");
-            }
-        });
-    }
-
-
-    filterAction() {
-
-        if (this.state.flagStore === true) {
-            this.setState({ flagFilterStore: true });
-        }
-    }
+    // Navigation Functions
 
     topbarAction = (item, index) => {
-
         if (item.name === "Dashboard") {
             this.setState({ flagDashboard: true });
         } else {
@@ -313,20 +249,24 @@ export default class AccountManagement extends Component {
         }
         if (item.name === "Credit Notes") {
             this.setState({ flagCreditNotes: true });
+            this.getCreditNotes()
         } else {
             this.setState({ flagCreditNotes: false });
         }
         if (item.name === "Debit Notes") {
+            this.getDebitNotes()
             this.setState({ flagDebitNotes: true });
         } else {
             this.setState({ flagDebitNotes: false });
         }
         if (item.name === "Create Tax Master") {
+            this.getTaxMaster()
             this.setState({ flagTaxMaster: true });
         } else {
             this.setState({ flagTaxMaster: false });
         }
         if (item.name === "Create HSN Code") {
+            this.getAllHsnCode()
             this.setState({ flagHSNCode: true });
         } else {
             this.setState({ flagHSNCode: false });
@@ -344,10 +284,6 @@ export default class AccountManagement extends Component {
         else {
             this.setState({ flagStore: false });
         }
-
-
-
-
         if (this.state.privilages[index].bool === true) {
             this.state.privilages[index].bool = false;
         } else {
@@ -360,46 +296,8 @@ export default class AccountManagement extends Component {
             }
             this.setState({ privilages: this.state.privilages });
         }
-
+        this.setState({filterActive: false})
     };
-
-
-    getChannelsList() {
-        axios.get(LoginService.channelsList()).then(res => {
-            if (res) {
-                this.setState({ channelsList: res.data.result })
-                if (this.state.domains.length === this.state.channelsList.length) {
-                    this.setState({channelFull: true})
-                }
-            }
-        })
-    }
-
-
-
-
-    filterAction() {
-        if (this.state.flagCreditNotes === true) {
-            this.setState({ flagFilterCreditNotes: true });
-        } else {
-            this.setState({ flagFilterCreditNotes: false });
-        }
-        if (this.state.flagDebitNotes === true) {
-            this.setState({ flagFilterDebitNotes: true });
-        } else {
-            this.setState({ flagFilterDebitNotes: false });
-        }
-        if (this.state.flagStore === true) {
-            this.setState({ flagFilterStore: true });
-        } else {
-            this.setState({ flagFilterStore: false });
-        }
-        this.setState({ modalVisible: true });
-    }
-
-    modelCancel() {
-        this.setState({ modalVisible: false, flagFilterCreditNotes: false, flagFilterStore: false, flagFilterCreditNotes: false, flagFilterDebitNotes: false });
-    }
 
 
     getDomains() {
@@ -442,12 +340,33 @@ export default class AccountManagement extends Component {
         });
     }
 
-    modelClose = () => {
-        this.modelCancel();
-    };
-
     arrayDataAssign() {
         this.setState({ stores: false });
+    }
+
+    handelGetStore = () => {
+        this.getStoresList();
+    };
+
+ // Filter Functions
+
+    filterAction() {
+        if (this.state.flagCreditNotes === true) {
+            this.setState({ flagFilterCreditNotes: true});
+        } else {
+            this.setState({ flagFilterCreditNotes: false });
+        }
+        if (this.state.flagDebitNotes === true) {
+            this.setState({ flagFilterDebitNotes: true });
+        } else {
+            this.setState({ flagFilterDebitNotes: false });
+        }
+        if (this.state.flagStore === true) {
+            this.setState({ flagFilterStore: true });
+        } else {
+            this.setState({ flagFilterStore: false });
+        }
+        this.setState({ modalVisible: true });
     }
 
     filterStores = (data) => {
@@ -457,16 +376,182 @@ export default class AccountManagement extends Component {
         });
     };
 
-    clearFilterAction() {
-        this.getStoresList();
-        this.setState({ filterActive: false });
+    filterCredits = (data) => {
+        this.setState({ creditNotes: data }, () => {
+            this.setState({ filterActive: true })
+        })
     }
 
-    handelGetStore = () => {
-        this.getStoresList();
+    filterDebits = (data) => {
+        this.setState({ debitNotes: data }, () => {
+            this.setState({filterActive: true})
+        })
+    }
+
+    clearFilterAction() {
+        if (this.state.flagStore === true) {
+            this.getStoresList();
+            this.setState({ filterActive: false });
+        }
+        if (this.state.flagCreditNotes === true) {
+            this.getCreditNotes()
+            this.setState({ filterActive: false})
+            
+        }
+        if (this.state.flagDebitNotes === true) {
+            this.getDebitNotes()
+            this.setState({filterActive: false})
+        }
+    }
+
+    modelCancel() {
+        this.setState({ modalVisible: false, flagFilterCreditNotes: false, flagFilterStore: false, flagFilterCreditNotes: false, flagFilterDebitNotes: false });
+    }
+
+    modelClose = () => {
+        this.modelCancel();
     };
 
+    // Domian Functions
 
+    async getDomainsList() {
+        this.setState({ domains: [] });
+        const clientId = await AsyncStorage.getItem("custom:clientId1");
+        this.setState({ loading: true });
+        axios.get(LoginService.getDomainsList() + clientId).then((res) => {
+            let len = res.data["result"].length;
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    let number = res.data.result[i];
+                    console.log('sfsdfdfsdfdsfsfsdfs' + number);
+                    console.log(number);
+                    this.setState({ loading: false });
+                    this.state.domains.push(number);
+                }
+                this.setState({ domains: this.state.domains, domainError: "" });
+                this.getChannelsList()
+            } else {
+                this.setState({domainError: "Records Not Found"})
+            }
+        }).catch(() => {
+            this.setState({ loading: false });
+            if (this.state.flagDomain === true) {
+                this.setState({domainError: "Records Not Found"})
+            //    alert("There is an Error while getting Domains");
+            }
+        });
+    }
+
+        getChannelsList() {
+        axios.get(LoginService.channelsList()).then(res => {
+            if (res) {
+                this.setState({ channelsList: res.data.result })
+                if (this.state.domains.length === this.state.channelsList.length) {
+                    this.setState({channelFull: true})
+                }
+            }
+        })
+    }
+
+    // Stores Functions
+
+    async getStoresList() {
+        this.setState({ stores: [] });
+        const clientId = await AsyncStorage.getItem("custom:clientId1");
+        this.setState({ loading: true });
+        const params = {
+            "clientId": clientId
+        };
+        axios.get(UrmService.getAllStores(), { params }).then((res) => {
+            console.log('adsdsadsd' + res.data);
+            let len = res.data["result"].length;
+            if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                    let number = res.data.result[i];
+                    console.log('sfsdfdfsdfdsfsfsdfs' + number);
+                    console.log(number);
+                    this.setState({ loading: false });
+                    this.state.stores.push(number);
+                }
+                this.setState({ stores: this.state.stores, storeError: "" });
+            } else {
+                this.setState({storeError: "Records Not Found"})
+            }
+        }).catch(() => {
+            this.setState({ loading: false });
+            if (this.state.flagStore === true) {
+                this.setState({storeError: "Records Not Found"})
+                // alert("There is an Error while Getting Stores");
+            }
+        });
+    }
+
+    // CreditNotes Functions
+
+        async getCreditNotes() {
+        const accountType = 'CREDIT';
+        const { storeId } = this.state
+        console.log(storeId)
+        const reqOb = {
+            fromDate: null,
+            mobileNumber: null,
+            storeId: storeId,
+            toDate: null,
+            accountType: accountType,
+            customerId: null
+        }
+        AccountingService.getCreditNotes(reqOb).then(res => {
+                if (res) {
+                console.log(res.data.content)
+                this.setState({creditNotes: res.data.content})
+            }
+        })
+    }
+
+
+    // DebitNotes Functions
+
+    async getDebitNotes() {
+        const accountType = 'DEBIT';
+        const { storeId } = this.state
+        const reqOb = {
+            fromDate: null,
+            toDate: null,
+            storeId: storeId,
+            mobileNumber: null,
+            accountType: accountType,
+            customerId: null
+        }
+        AccountingService.getDebitNotes(reqOb).then(res => {
+            if (res) {
+                console.log(res.data.content)
+                this.setState({debitNotes: res.data.content})
+            }
+        })
+    }
+
+
+    // Create Tax Master Functions
+
+    async getTaxMaster() {
+        AccountingService.getAllMasterTax().then(res => {
+            if (res) {
+                console.log(res.data)
+                this.setState({taxList: res.data.result})
+            }
+        })
+    }
+
+    // Create HSN Code Functionality
+
+    async getAllHsnCode() {
+        AccountingService.getAllHsnCodes().then(res => {
+            if (res) {
+                console.log(res.data)
+                this.setState({hsnList: res.data.result})
+            }
+        })
+    }
 
     render() {
         return (
@@ -494,26 +579,24 @@ export default class AccountManagement extends Component {
                             </TouchableOpacity>
                         )}
 
-                        {this.state.flagCreditNotes && (
-                            <TouchableOpacity
-                                style={filterBtn}
-                                onPress={() => this.filterAction()} >
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
-                            </TouchableOpacity>
-                        )}
-
                         {this.state.flagDebitNotes && (
-                            <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAdDebitNotes()}>
-                                <Text style={headerNavigationBtnText}>Add Debit</Text>
-                            </TouchableOpacity>
-                        )}
-
-                        {this.state.flagDebitNotes && (
-                            <TouchableOpacity
-                                style={filterBtn}
-                                onPress={() => this.filterAction()} >
-                                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
-                            </TouchableOpacity>
+                            <View>
+                                    {!this.state.filterActive &&
+                                        <TouchableOpacity
+                                            style={filterBtn}
+                                            onPress={() => this.filterAction()} >
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                                        </TouchableOpacity>
+                                    
+                                    }
+                                    {this.state.filterActive &&
+                                        <TouchableOpacity
+                                            style={filterBtn}
+                                            onPress={() => this.clearFilterAction()} >
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+                                        </TouchableOpacity>
+                                    }
+                            </View>
                         )}
 
                         {this.state.flagHSNCode && (
@@ -538,6 +621,26 @@ export default class AccountManagement extends Component {
                             <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddDomain()}>
                                 <Text style={headerNavigationBtnText}>{I18n.t("Add Domain")}</Text>
                             </TouchableOpacity>
+                            )}
+                            
+                            {this.state.flagCreditNotes && (
+                                <View>
+                                    {!this.state.filterActive &&
+                                        <TouchableOpacity
+                                            style={filterBtn}
+                                            onPress={() => this.filterAction()} >
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                                        </TouchableOpacity>
+                                    
+                                    }
+                                    {this.state.filterActive &&
+                                        <TouchableOpacity
+                                            style={filterBtn}
+                                            onPress={() => this.clearFilterAction()} >
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+                                        </TouchableOpacity>
+                                    }
+                                </View>
                         )}
 
                         {this.state.flagStore && (
@@ -587,8 +690,12 @@ export default class AccountManagement extends Component {
 
                             {this.state.flagCreditNotes && (
                                 <CreditNotes
+                                    filterCreditNotes={this.state.flagFilterCreditNotes}
+                                    modalVisible={this.state.modalVisible}
                                     creditNotes={this.state.creditNotes}
                                     navigation={this.props.navigation}
+                                    modelCancelCallback={this.modelClose}
+                                    childParams={this.filterCredits}
                                 />
                             )}
 
@@ -596,19 +703,23 @@ export default class AccountManagement extends Component {
                                 <DebitNotes
                                     debitNotes={this.state.debitNotes}
                                     navigation={this.props.navigation}
+                                    filterDebitNotes={this.state.flagFilterDebitNotes}
+                                    modalVisible={this.state.modalVisible}
+                                    childParams={this.filterDebits}
+                                    modelCancelCallback={this.modelClose}
                                 />
                             )}
 
                             {this.state.flagTaxMaster && (
                                 <CreateTaxMaster
-                                    taxMaster={this.state.taxMaster}
+                                    taxMaster={this.state.taxList}
                                     navigation={this.props.navigation}
                                 />
                             )}
 
                             {this.state.flagHSNCode && (
                                 <CreateHSNCode
-                                    hsnCode={this.state.hsnCode}
+                                    hsnCode={this.state.hsnList}
                                     navigation={this.props.navigation}
                                 />
                             )}
@@ -628,20 +739,6 @@ export default class AccountManagement extends Component {
                                     navigation={this.props.navigation}
                                     domainError={this.state.domainError}
                                     channelFull={this.state.channelFull}
-                                />
-                            )}
-
-                            {this.state.flagFilterCreditNotes && (
-                                <FilterCreditNotes
-                                    modalVisible={this.state.modalVisible}
-                                    modelCancelCallback={this.modelClose}
-                                />
-                            )}
-
-                            {this.state.flagFilterDebitNotes && (
-                                <FilterDebitNotes
-                                    modalVisible={this.state.modalVisible}
-                                    modelCancelCallback={this.modelClose}
                                 />
                             )}
 

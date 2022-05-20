@@ -23,6 +23,23 @@ export const inputField = {
   fontSize: RF(14),
 }
 
+export const inputFieldDisabled = {
+  justifyContent: 'center',
+  marginLeft: RW(20),
+  marginRight: RW(20),
+  height: Device.isTablet ? RH(54) : RH(44),
+  marginTop: RH(5),
+  marginBottom: RH(10),
+  borderColor: '#8F9EB717',
+  borderRadius: 3,
+  backgroundColor: '#6f6f6f43',
+  borderWidth: 1,
+  fontFamily: 'regular',
+  paddingLeft: RW(15),
+  width: deviceWidth - RW(40),
+  fontSize: RF(14),
+}
+
 export const inputArea = {
   justifyContent: 'center',
   marginLeft: RW(20),
@@ -167,6 +184,7 @@ export const dateSelector = {
   marginLeft: RW(20),
   marginRight: RW(20),
   marginTop: RH(10),
+  marginBottom: RH(10),
   borderColor: '#8F9EB717',
   borderRadius: 3,
   height: RH(50),
