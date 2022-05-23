@@ -212,7 +212,7 @@ export const datePickerButton2 = {
 
 export const datePickerBtnText =  {
   // textAlign: 'center',
-  marginTop: Device.isTablet ? 0 : RH(5),
+  marginTop: RH(5),
   color: "#ffffff",
   fontSize: RF(14),
   fontFamily: "regular"

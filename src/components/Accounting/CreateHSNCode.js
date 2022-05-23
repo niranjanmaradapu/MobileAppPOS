@@ -4,7 +4,7 @@ import Device from 'react-native-device-detection';
 import Modal from 'react-native-modal';
 import { deleteCloseBtn, deleteContainer, deleteHeader, deleteHeading, deleteText, filterCloseImage, filterHeading, filterMainContainer, filterSubContainer } from '../Styles/PopupStyles';
 import { buttonContainer, buttonImageStyle, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
-
+import AccountingService from '../services/AccountingService';
 var deviceWidth = Dimensions.get("window").width;
 
 export default class CreateHSNCode extends Component {
@@ -13,8 +13,23 @@ export default class CreateHSNCode extends Component {
         super(props);
         this.state = {
             modalVisible: true,
-            deleteHsnCode: false
+            deleteHsnCode: false,
+            hsnList: [],
         };
+    }
+
+
+    componentDidMount() {
+        this.getAllHsnCode()
+    }
+
+    async getAllHsnCode() {
+        AccountingService.getAllHsnCodes().then(res => {
+            if (res) {
+                console.log(res.data)
+                this.setState({hsnList: res.data.result})
+            }
+        })
     }
 
     modelCancel() {
@@ -39,7 +54,7 @@ export default class CreateHSNCode extends Component {
         return (
             <View>
                 <FlatList
-                    data={this.props.hsnCode}
+                    data={this.state.hsnList}
                     style={{ marginTop: 20 }}
                     scrollEnabled={true}
                     renderItem={({ item, index }) => (

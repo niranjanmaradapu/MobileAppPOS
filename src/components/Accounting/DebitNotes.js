@@ -24,6 +24,7 @@ export default class DebitNotes extends Component {
             storeId: 0,
             userId: 0,
             filterDebitNotes: [],
+            debitNotes: [],
             fromDate: "",
             toDate: "",
             mobileNumber: "",
@@ -44,7 +45,8 @@ export default class DebitNotes extends Component {
     async componentDidMount() {
         const storeId = await AsyncStorage.getItem("storeId")
         const userId = await AsyncStorage.getItem('custom:userId')
-        this.setState({storeId: storeId, userId: userId})
+        this.setState({ storeId: storeId, userId: userId })
+        this.getDebitNotes()
     }
 
     
@@ -97,23 +99,29 @@ export default class DebitNotes extends Component {
 
 
     modelCancel() {
-        this.setState({ modalVisible: false });
+        this.props.modelCancelCallback();
     }
 
-    handledeleteDebit = (item, index) => {
-        this.setState({ modalVisible: true, deleteDebitNotes: true });
-    };
 
-    handleeditDebit = (item, index) => {
-        this.props.navigation.navigate('AddDebitNotes',
-            {
-                item: item, isEdit: true,
-            });
-    };
+        async getDebitNotes() {
+        const accountType = 'DEBIT';
+        const { storeId } = this.state
+        const reqOb = {
+            fromDate: null,
+            toDate: null,
+            storeId: storeId,
+            mobileNumber: null,
+            accountType: accountType,
+            customerId: null
+        }
+        AccountingService.getDebitNotes(reqOb).then(res => {
+            if (res) {
+                console.log(res.data.content)
+                this.setState({debitNotes: res.data.content})
+            }
+        })
+    }
 
-    deleteDebit = (item, index) => {
-
-    };
 
     applyDebitNotesFilter() {
         const accountType = 'DEBIT'
@@ -132,7 +140,7 @@ export default class DebitNotes extends Component {
             if (res) {
                 console.log(res.data)
                 this.setState({ filterDebitData: res.data.content })
-                this.props.childParams(this.state.filterDebitData)
+                this.props.childParams()
             }
             this.props.modelCancelCallback();
         }).catch(err => {
@@ -146,7 +154,7 @@ export default class DebitNotes extends Component {
         return (
             <View>
                 <FlatList
-                    data={this.props.debitNotes}
+                    data={this.props.filterActive ? this.state.filterDebitData :this.state.debitNotes}
                     style={{ marginTop: 20 }}
                     scrollEnabled={true}
                     renderItem={({ item, index }) => (
@@ -166,49 +174,11 @@ export default class DebitNotes extends Component {
                                 </View>
                                 <View style={textContainer}>
                                 <Text style={textStyleLight}>DATE: {"\n"}{item.lastModifiedDate}</Text>
-                                <View style={buttonContainer}>
-                                    <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditDebit(item, index)}>
-                                        <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
-                                    </TouchableOpacity>
-
-                                    <TouchableOpacity style={buttonStyle} onPress={() => this.handledeleteDebit(item, index)}>
-                                        <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
-                                    </TouchableOpacity>
-                                </View>
                                 </View>
                             </View>
                         </View>
                     )}
                 />
-                {this.state.deleteDebitNotes && (
-                    <View>
-                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
-                            <View style={deleteContainer}>
-                            <View style={deleteHeader}>
-                                <View>
-                                <Text style={deleteHeading}> Delete Debit Notes </Text>
-                                </View>
-                                <View>
-                                <TouchableOpacity style={deleteCloseBtn} onPress={() => this.modelCancel()}>
-                                    <Image style={{margin: 5}} source={require('../assets/images/modelcancel.png')} />
-                                </TouchableOpacity>
-                                </View>
-                            </View>
-                                <Text style={deleteText}> Are you sure want to delete debit's?  </Text>
-                                <TouchableOpacity
-                                    style={submitBtn} onPress={() => this.deleteDebit(item, index)}
-                                >
-                                    <Text style={submitBtnText}  > DELETE </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={cancelBtn} onPress={() => this.modelCancel()}
-                                >
-                                    <Text style={cancelBtnText}  > CANCEL </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </Modal>
-                    </View>
-                )}
                 {this.props.filterDebitNotes && (
                 <View>
                 <Modal isVisible={this.props.modalVisible} style={{margin: 0}}>
@@ -313,7 +283,7 @@ export default class DebitNotes extends Component {
                 </Modal>
             </View>
 
-                )}
+            )}
             </View>
         );
     }

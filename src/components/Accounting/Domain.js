@@ -4,6 +4,9 @@ import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 import { flatListMainContainer, flatlistSubContainer, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
 import { RH, RF, RW } from '../../Responsive';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoginService from '../services/LoginService';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceHeight = Dimensions.get("window").height;
@@ -13,14 +16,51 @@ export default class Domain extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            domainsList: [],
+            channelsList: [],
+            channelFull: false,
         }
     }
 
+    componentDidMount() {
+        this.getDomainsList()
+    }
+
+    
+    async getDomainsList() {
+        const clientId = await AsyncStorage.getItem("custom:clientId1");
+        this.setState({ loading: true });
+        axios.get(LoginService.getDomainsList() + clientId).then((res) => {
+            if (res) {
+                this.setState({ domainsList: res.data.result })
+                this.getChannelsList()
+            }
+        }).catch(() => {
+            this.setState({ loading: false });
+            if (this.state.flagDomain === true) {
+                this.setState({domainError: "Records Not Found"})
+            //    alert("There is an Error while getting Domains");
+            }
+        });
+    }
+
+        getChannelsList() {
+            axios.get(LoginService.channelsList()).then(res => {
+                if (res) {
+                    this.setState({ channelsList: res.data.result })
+                    if (this.state.domainsList.length === this.state.channelsList.length) {
+                        this.setState({channelFull: true})
+                    }
+            }
+        })
+    }
+
     render() {
+        const {channelFull} = this.state
         return (
             <View>
                 <FlatList
-                    data={this.props.domains}
+                    data={this.state.domainsList}
                     style={{ marginTop: 20, }}
                     scrollEnabled={true}
                     keyExtractor={(item,i) => i.toString()}
@@ -45,12 +85,9 @@ export default class Domain extends Component {
                         </View>
                     )}
                 />
-                {this.props.domains.length > 0 && this.props.channelFull && 
+                {channelFull &&
                     <Text style={domainFull}>user have all the domains</Text>
                 }
-                {/* {this.props.domainError.length !== 0 && 
-                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.props.domainError}</Text>
-                } */}
             </View>
         );
     }
