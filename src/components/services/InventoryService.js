@@ -1,7 +1,6 @@
 // import base from './Base';
 const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097';
 
-
 class InventoryService {
     //Retail
     createProduct() {
@@ -72,6 +71,10 @@ class InventoryService {
 
     getStoreNameById() {
         return REACT_NATIVE_APP_BASE_URL + "/user-management/store/storeList";
+    }
+
+    getProductCombo() {
+        return REACT_NATIVE_APP_BASE_URL + "/inventory/productBundle/all"
     }
 
 }

@@ -1,12 +1,15 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { Component } from 'react';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
+import AccountingService from '../services/AccountingService';
 import NewSaleService from '../services/NewSaleService';
 import { cancelBtn, cancelBtnText, inputFieldDisabled, inputArea, inputField, inputHeading, rnPicker, rnPickerContainer, submitBtn, submitBtnText } from '../Styles/FormFields';
 import { backButton, backButtonImage, headerTitle, headerTitleContainer, headerTitleSubContainer } from '../Styles/Styles';
+import RazorpayCheckout from 'react-native-razorpay';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -16,6 +19,7 @@ export default class AddCreditNotes extends Component {
         super(props);
         this.state = {
             customerName: "",
+            customerId: "",
             mobileNumber: "",
             empId: "",
             creditAmmount: "",
@@ -32,8 +36,26 @@ export default class AddCreditNotes extends Component {
                 {label: 'Card', value: 'Card'},
                 {label: 'Cash', value: 'Cash'}
             ],
-            trasanctionMode: '',
+            transanctionMode: '',
+            isEdit: false,
         };
+    }
+
+    async componentDidMount() {
+        const userName = await AsyncStorage.getItem("username")
+        const storeId = await AsyncStorage.getItem("storeId")
+        const storeName = await AsyncStorage.getItem("storeName")
+        this.setState({ createdBy: userName, storeId: storeId, storeName: storeName, isEdit: this.props.route.params.isEdit })
+        if (this.state.isEdit === true) {
+            this.setState({
+                isCredit: true,
+                isAddMore: true,
+                customerId: this.props.route.params.item.customerId,
+                storeId: this.props.route.params.item.storeId,
+                customerName: this.props.route.params.item.customerName,
+                mobileNumber: this.props.route.params.item.mobileNumber
+            })
+        }
     }
 
 
@@ -62,9 +84,6 @@ export default class AddCreditNotes extends Component {
         this.setState({ storeName: value });
     };
 
-    saveCredit() {
-        alert("you have saved")
-    }
 
     handleComments = (value) => {
         this.setState({comments: value})
@@ -75,7 +94,7 @@ export default class AddCreditNotes extends Component {
     }
 
     handletransactionType = (value) => {
-        this.setState({trasanctionMode: value})
+        this.setState({transanctionMode: value})
     } 
 
     cancel() {
@@ -86,8 +105,80 @@ export default class AddCreditNotes extends Component {
     getCustomerDetails = () => {
         NewSaleService.getMobileData("+91" + this.state.mobileNumber).then(res => {
             if (res && res.data.result) {
-                this.setState({customerName: res.data.result.userName})
+                this.setState({customerName: res.data.result.userName, customerId: res.data.result.userId})
             }
+        })
+    }
+
+    saveCredit() {
+        const { comment, storeId, creditAmmount, transanctionMode, customerId } = this.state
+        const obj = {
+            comments: comment ? comment : "",
+            amount: creditAmmount,
+            customerId: customerId,
+            storeId: storeId,
+            transactionType: "CREDIT",
+            accountType: "CREDIT",
+            paymentType: transanctionMode
+        }
+            console.log(obj)
+        AccountingService.saveCredit(obj).then(res => {
+            if (res) {
+                if (transanctionMode === "Card") {
+                    this.savePayment(res.data.amount, res.data.referenceNumber);
+                } else {
+                    this.props.route.params.onGoBack()
+                    this.props.navigation.goBack()
+                }
+                alert(res.data.message)
+            } else {
+                this.props.route.params.onGoBack()
+                this.props.navigation.goBack()
+            }
+            console.log(res)
+        }).catch(err => {
+            console.log(err)
+            this.props.route.params.onGoBack()
+            this.props.navigation.goBack()
+        })
+    }
+
+    savePayment = (cardAmount, referenceNumber) => {
+        const reqObj = {
+            amount: cardAmount,
+            type: "C",
+            referenceNumber: referenceNumber
+        }
+        AccountingService.creditDebitOrder(reqObj).then((res) => {
+            const options = {
+            // process.env.RAZORPAY_KEY_ID
+            key: "rzp_test_z8jVsg0bBgLQer",
+            currency:"INR",
+            amount: res.data.result.amount ,
+            name: "OTSI",
+            description: "Transaction",
+            image: 'https://i.imgur.com/3g7nmJC.png',
+            order_id: res.data.result.razorPayId,
+            handler: function (response) {
+            toast.success("Payment Done Successfully");
+            let status = true
+            const param = '?razorPayId=' + response.razorpay_order_id + '&payStatus=' + status;
+            const result = axios.post(BASE_URL + NEW_SALE_URL.saveSale + param, {});
+        },
+            prefill: {
+                name: "Kadali",
+                email: "kadali@gmail.com",
+                contact: "9999999999",
+            },
+    };
+            RazorpayCheckout.open(options).then((data) => {
+        this.setState({ tableData: [] });
+        alert(`Success: ${data.razorpay_payment_id}`);
+        this.props.navigation.goBack();
+            }).catch(err => {
+                console.log(err)
+                alert(`Error: ${JSON.stringify(err.code)} | ${JSON.stringify(err.description)}`);
+    })
         })
     }
 
@@ -124,6 +215,7 @@ export default class AddCreditNotes extends Component {
                     placeholder="MOBILE NUMBER"
                     placeholderTextColor="#6F6F6F"
                     textAlignVertical="center"
+                    maxLength={10}
                     autoCapitalize="none"
                     value={this.state.mobileNumber}
                     onChangeText={this.handleMobileNumber}
@@ -154,11 +246,11 @@ export default class AddCreditNotes extends Component {
                 />
                 <Text style={inputHeading}>Store</Text>
                 <TextInput
-                    style={inputField}
+                    style={inputFieldDisabled}
                     underlineColorAndroid="transparent"
                     placeholder="STORE"
                     editable={false}
-                    placeholderTextColor="#6F6F6F"
+                    placeholderTextColor="#000000"
                     textAlignVertical="center"
                     autoCapitalize="none"
                     value={this.state.storeName}
@@ -166,11 +258,11 @@ export default class AddCreditNotes extends Component {
                 />
                 <Text style={inputHeading}>Created By</Text>
                 <TextInput
-                    style={inputField}
+                    style={inputFieldDisabled}
                     underlineColorAndroid="transparent"
                     placeholder="CREATED BY"
                     editable={false}
-                    placeholderTextColor="#6F6F6F"
+                    placeholderTextColor="#000000"
                     textAlignVertical="center"
                     autoCapitalize="none"
                     value={this.state.createdBy}
@@ -180,7 +272,7 @@ export default class AddCreditNotes extends Component {
                 <View style={rnPickerContainer}>
                     <RNPickerSelect
                         placeholder={{
-                            label: 'TAX Label',
+                            label: 'Payment Type',
                             value: "",
                         }}
                         Icon={() => {
@@ -189,7 +281,7 @@ export default class AddCreditNotes extends Component {
                         items={this.state.trasanctionTypes}
                         onValueChange={this.handletransactionType}
                         style={rnPicker}
-                        value={this.state.trasanctionMode}
+                        value={this.state.transanctionMode}
                         useNativeAndroidPickerStyle={false}
                     />
                 </View>

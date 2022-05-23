@@ -37,7 +37,24 @@ class AccountingService {
 
  saveHsnCode(saveHsnObj) {
   return axios.post(BASE_URL+ACCOUNTING_PORTAL.saveHsnCode, saveHsnObj);
-}
+      }
+      
+      saveCredit(saveCredit) {
+        return axios.post(BASE_URL+ACCOUNTING_PORTAL.saveCredit, saveCredit);
+      }
+      
+      creditDebitOrder(reqObj) {
+            const URL = BASE_URL + '/paymentgateway/paymentgateway/create_creditdebit_order'
+            return axios.post(URL, reqObj, {
+                  headers: {
+                        'Content-Type': 'application/json'
+                  }
+            })
+      }
+
+      getAllLedgerLogs(obj) {
+        return axios.post(BASE_URL+ACCOUNTING_PORTAL.getAllLedgerLogs, obj);
+    }
 }
 
 export default new AccountingService()

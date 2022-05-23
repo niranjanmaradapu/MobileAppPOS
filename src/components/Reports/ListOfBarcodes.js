@@ -1089,7 +1089,7 @@ const styles = StyleSheet.create({
         height: Device.isTablet ? 2 : 1,
         width: deviceWidth,
         backgroundColor: 'lightgray',
-        margintop: RH(60),
+        marginTop: RH(60),
     },
     input_tablet: {
         justifyContent: 'center',
@@ -1250,7 +1250,7 @@ const flats = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        paddingleft: RW(10),
+        paddingLeft: RW(10),
         paddingRight: 10,
         alignItems: 'center',
         height: RH(140)
@@ -1303,8 +1303,8 @@ const flats = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        paddingleft: RW(20),
-        paddingright:RW (20),
+        paddingleLt: RW(20),
+        paddingRight:RW (20),
         alignItems: 'center',
         height: RH(160)
     },

@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { Component } from 'react';
-import { Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -22,6 +22,7 @@ export default class CreditNotes extends Component {
             deleteCreditNotes: false,
             modalVisible: true,
             filterCreditData: [],
+            creditNotes: [],
             storeId: 0,
             userId: 0,
             fromDate: "",
@@ -39,11 +40,45 @@ export default class CreditNotes extends Component {
             toDate: "",
             datepickerOpen: false,
             datepickerendOpen: false,
+            isShowAllTransactions: false,
+            transactionHistory: []
         };
     }
 
     modelCancel() {
         this.props.modelCancelCallback()
+    }
+    
+    modalViewCancel() {
+        this.setState({ modalVisible: false}) 
+    }
+
+    
+    async componentDidMount() {
+        const storeId = await AsyncStorage.getItem("storeId")
+        const userId = await AsyncStorage.getItem('custom:userId')
+        this.setState({ storeId: storeId, userId: userId })
+        this.getAllCreditNotes()
+    }
+
+        async getAllCreditNotes() {
+        const accountType = 'CREDIT';
+        const { storeId } = this.state
+        console.log(storeId)
+        const reqOb = {
+            fromDate: null,
+            mobileNumber: null,
+            storeId: storeId,
+            toDate: null,
+            accountType: accountType,
+            customerId: null
+        }
+        AccountingService.getCreditNotes(reqOb).then(res => {
+                if (res) {
+                console.log(res.data.content)
+                this.setState({creditNotes: res.data.content})
+            }
+        })
     }
 
     
@@ -63,7 +98,7 @@ export default class CreditNotes extends Component {
             if (res) {
                 // console.log(res.data)
                 this.setState({ filterCreditData: res.data.content })
-                this.props.childParams(this.state.filterCreditData)
+                this.props.childParams()
             }
             this.props.modelCancelCallback();
         }).catch(err => {
@@ -134,37 +169,41 @@ export default class CreditNotes extends Component {
         this.setState({ date: new Date(), enddate: new Date(), datepickerOpen: false, datepickerendOpen: false });
     }
 
-    async componentDidMount() {
-        const storeId = await AsyncStorage.getItem("storeId")
-        const userId = await AsyncStorage.getItem('custom:userId')
-        this.setState({storeId: storeId, userId: userId})
+
+    handleViewCredit(item, index) {
+        const reqOb = {
+            fromDate: null,
+            mobileNumber: null,
+            storeId: item.storeId,
+            toDate: null,
+            accountType: item.accountType,
+            customerId: item.customerId
+        }
+        AccountingService.getAllLedgerLogs(reqOb).then(res => {
+            if (res) {
+                this.setState({
+                    isShowAllTransactions: true,
+                    modalVisible: true,
+                    transactionHistory: res.data.content
+                })
+            }
+        })
     }
 
-    handledeleteCredit(item, index) {
-        this.setState({ modalVisible: true, deleteCreditNotes: true });
-    }
-
-    handleeditCredit(item, index) {
+    handleAddCredit(item, index) {
         this.props.navigation.navigate('AddCreditNotes', {
             item: item, isEdit: true,
+            onGoBack: () => this.getAllCreditNotes(),
         });
     }
 
-    deleteCredit = (item, index) => {
-
-    };
-
-    callCreditNotes() {
-        console.log("hellp")
-        // await this.getCreditNotes()
-    }
 
     render() {
-        this.props.clearFilter && this.callCreditNotes()
+        {console.log(this.props.filterActive)}
         return (
             <View>
                 <FlatList
-                    data={this.props.creditNotes}
+                    data={this.props.filterActive ? this.state.filterCreditData : this.state.creditNotes}
                     style={{ marginTop: 20 }}
                     scrollEnabled={true}
                     // ListEmptyComponent={<Text style={listEmptyMessage}>&#9888; Records Not Found</Text>}
@@ -186,12 +225,12 @@ export default class CreditNotes extends Component {
                                 <View style={textContainer}>
                                     <Text style={textStyleLight}>DATE: {"\n"}{item.createdDate}</Text>
                                     <View style={buttonContainer}>
-                                        <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditCredit(item, index)}>
-                                            <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
+                                        <TouchableOpacity style={buttonStyle1} onPress={() => this.handleViewCredit(item, index)}>
+                                            <Image style={buttonImageStyle} source={require('../assets/images/eye.png')} />
                                         </TouchableOpacity>
 
-                                        <TouchableOpacity style={buttonStyle} onPress={() => this.handledeleteCredit(item, index)}>
-                                            <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
+                                        <TouchableOpacity style={buttonStyle} onPress={() => this.handleAddCredit(item, index)}>
+                                            <Text style={{fontSize: RF(20), textAlign: 'center'}}>+</Text>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -199,35 +238,6 @@ export default class CreditNotes extends Component {
                         </View>
                     )}
                 />
-                {this.state.deleteCreditNotes && (
-                    <View>
-                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
-                            <View style={deleteContainer}>
-                            <View style={deleteHeader}>
-                                <View>
-                                <Text style={deleteHeading}> Delete Credit Notes </Text>
-                                </View>
-                                <View>
-                                <TouchableOpacity style={deleteCloseBtn} onPress={() => this.modelCancel()}>
-                                    <Image style={{margin: 5}} source={require('../assets/images/modelcancel.png')} />
-                                </TouchableOpacity>
-                                </View>
-                            </View>
-                                <Text style={deleteText}> Are you sure want to delete credit's?  </Text>
-                                <TouchableOpacity
-                                    style={submitBtn} onPress={() => this.deleteCredit(item, index)}
-                                >
-                                    <Text style={submitBtnText}  > DELETE </Text>
-                                </TouchableOpacity>
-                                <TouchableOpacity
-                                    style={cancelBtn} onPress={() => this.modelCancel()}
-                                >
-                                    <Text style={cancelBtnText}  > CANCEL </Text>
-                                </TouchableOpacity>
-                            </View>
-                        </Modal>
-                    </View>
-                )}
                 {this.props.filterCreditNotes && (
                 <View>
                 <Modal isVisible={this.props.modalVisible} style={{margin: 0}}>
@@ -335,6 +345,52 @@ export default class CreditNotes extends Component {
                     </View>
                 </Modal>
             </View>
+                )}
+                {this.state.isShowAllTransactions && (
+                    <View>
+                        <Modal style={{margin:0}} isVisible={this.state.modalVisible}>
+                            <View style={filterMainContainer}>
+                                <View>
+                                    <View style={filterSubContainer}>
+                                        <View>
+                                            <Text style={filterHeading}>Transaction History</Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={filterCloseImage} onPress={() => this.modalViewCancel()}>
+                                                <Image style={{ margin: RH(5) }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
+                                    </View>
+                                </View>
+                            <Text style={{width: deviceWidth, borderColor: '#000000', borderBottomWidth: Device.isTablet ? 2 : 1}}></Text>
+                                <ScrollView>
+                                    <FlatList 
+                                        data={this.state.transactionHistory}
+                                        style={{ marginTop: 20 }}
+                                        scrollEnabled={true}
+                                        renderItem={({ item, index }) => (
+                                            <View style={flatListMainContainer}>
+                                                <View style={flatlistSubContainer}>
+                                                    <View style={textContainer}>
+                                                        <Text style={highText}>#CRM ID: {item.customerId}</Text>
+                                                        <Text style={textStyleMedium}>STORE: {item.storeId}</Text>
+                                                    </View>
+                                                    <View style={textContainer}>
+                                                        <Text style={textStyleLight}>TRANSACTION TYPE: {"\n"}{item.transactionType}</Text>
+                                                        <Text style={textStyleLight}>ACCOUNT TYPE: {"\n"}{item.accountType}</Text>
+                                                    </View>
+                                                    <View style={textContainer}>
+                                                        <Text style={textStyleLight}>AMOUNT: {item.amount}</Text>
+                                                        <Text style={textStyleLight}>DATE: {item.createdDate}</Text>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        )}
+                                    />
+                                </ScrollView>
+                            </View>
+                        </Modal>
+                    </View>
                 )}
             </View>
         );

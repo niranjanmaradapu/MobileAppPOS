@@ -11,18 +11,37 @@ import UrmService from '../services/UrmService';
 import { buttonContainer, buttonStyle, buttonStyle1, filterBtn, flatListMainContainer, flatlistSubContainer, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, highText, buttonImageStyle, menuButton, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 var deviceWidth = Dimensions.get("window").width;
 var deviceHeight = Dimensions.get("window").height;
 
-export class Stores extends Component {
+export default class Stores extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             storesDelete: false,
             modalVisible: true,
+            storesList: [],
+            city: "",
+            storeName: "",
+            storeDistrict: "",
+            storeState: "",
+            modalFalse: false,
+            statesArray: [],
+            states: [],
+            stateId: 0,
+            statecode: '',
+            dictrictArray: [],
+            dictricts: [],
+            districtId: "",
+            filterStoresData: [],
         };
+    }
+
+    componentDidMount() {
+        this.getStoresList()
+        this.getMasterStatesList()
     }
 
     deleteStore() {
@@ -47,20 +66,140 @@ export class Stores extends Component {
             });
     }
 
-    updateStore() {
-        // alert("done");
-        this.props.getStoresList();
+        async getStoresList() {
+        const clientId = await AsyncStorage.getItem("custom:clientId1");
+        this.setState({ loading: true });
+        const params = {
+            "clientId": clientId
+        };
+        axios.get(UrmService.getAllStores(), { params }).then((res) => {
+            if (res) {
+                this.setState({storesList: res.data.result})
+            } else {
+                this.setState({storeError: "Records Not Found"})
+            }
+        }).catch(() => {
+            this.setState({ loading: false });
+            if (this.state.flagStore === true) {
+                this.setState({storeError: "Records Not Found"})
+                // alert("There is an Error while Getting Stores");
+            }
+        });
+    }
+
+        getMasterStatesList() {
+        this.setState({ loading: false });
+        var states = [];
+        axios.get(UrmService.getStates()).then((res) => {
+            if (res.data["result"]) {
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    this.state.statesArray.push({ name: res.data["result"][i].stateName, id: res.data["result"][i].stateId, code: res.data["result"][i].stateCode });
+                    states.push({
+                        value: this.state.statesArray[i].name,
+                        label: this.state.statesArray[i].name
+                    });
+                }
+                this.setState({
+                    states: states,
+                });
+                this.setState({ statesArray: this.state.statesArray });
+            }
+
+        });
+    }
+
+    handleStoreState = (value) => {
+        for (let i = 0; i < this.state.statesArray.length; i++) {
+            if (this.state.statesArray[i].name === value) {
+                this.setState({ stateId: this.state.statesArray[i].id });
+                this.setState({ statecode: this.state.statesArray[i].code });
+            }
+        }
+        this.setState({ storeState: value }, () => {
+            this.getMasterDistrictsList();
+        });
+    };
+
+
+    getMasterDistrictsList() {
+        this.setState({ loading: false });
+        var dictricts = [];
+        const params = {
+            "stateCode": this.state.statecode
+        };
+        axios.get(UrmService.getDistricts(), { params }).then((res) => {
+            if (res.data["result"]) {
+                console.log(res.data);
+                for (var i = 0; i < res.data["result"].length; i++) {
+                    this.state.dictrictArray.push({ name: res.data["result"][i].districtName, id: res.data["result"][i].districtId });
+                    dictricts.push({
+                        value: this.state.dictrictArray[i].name,
+                        label: this.state.dictrictArray[i].name
+                    });
+                }
+                this.setState({
+                    dictricts: dictricts,
+                });
+                this.setState({ dictrictArray: this.state.dictrictArray });
+            }
+        });
+    }
+
+    handleDistrict = (value) => {
+        for (let i = 0; i < this.state.dictrictArray.length; i++) {
+            if (this.state.dictrictArray[i].name === value) {
+                this.setState({ districtId: this.state.dictrictArray[i].id });
+            }
+        }
+        this.setState({ storeDistrict: value });
+    };
+
+
+    handleStoreName = (value) => {
+        this.setState({ storeName: value });
+    };
+
+    handleStore = (value) => {
+        this.setState({ storeState: value });
+    };
+
+
+    applyStoreFilter() {
+        const searchStore = {
+            "stateId": this.state.statecode ? this.state.statecode : 0,
+            "cityId": null,
+            "districtId": this.state.districtId ? this.state.districtId : 0,
+            "storeName": this.state.storeName ? this.state.storeName : null,
+        };
+        console.log('store search', searchStore);
+        axios.post(UrmService.getStoresBySearch(), searchStore).then((res) => {
+            if (res) {
+                if (res.data.isSuccess === "true") {
+                    this.setState({ filterStoresData: res.data.result });
+                    this.props.childParams(this.state.filterStores);
+                } else {
+                    // alert(res.data.message);
+                    this.setState({ filterStoresData: [] })
+                    this.props.childParams(this.state.filterStores)
+                }
+                console.log(res.data);
+                this.props.modelCancelCallback();
+            } else {
+                this.props.modelCancelCallback();
+            }
+        });
     }
 
     modelCancel() {
         this.props.modelCancelCallback();
     }
 
+
     render() {
         return (
             <View>
                 <FlatList
-                    data={this.props.stores}
+                    data={this.props.filterActive ? this.state.filterStoresData : this.state.storesList}
                     style={{ marginTop: 20, }}
                     scrollEnabled={true}
                     keyExtractor={(item,i) => i.toString()}
@@ -96,8 +235,6 @@ export class Stores extends Component {
                         </View>
                     )}
                 />
-                {/* {this.props.storeError.length !== 0 && 
-                } */}
                 {this.state.storesDelete && (
                     <View>
                         <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
@@ -140,158 +277,9 @@ export class Stores extends Component {
                         </Modal>
                     </View>
                 )}
-            </View>
-        );
-    }
-}
-
-
-export class FilterStores extends Component {
-
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            city: "",
-            storeName: "",
-            storeDistrict: "",
-            storeState: "",
-            modalFalse: false,
-            statesArray: [],
-            states: [],
-            stateId: 0,
-            statecode: '',
-            dictrictArray: [],
-            dictricts: [],
-            districtId: "",
-            filterStores: [],
-        };
-    }
-
-    async componentDidMount() {
-        this.getMasterStatesList();
-    }
-
-
-    getMasterStatesList() {
-        this.setState({ states: [] });
-        this.setState({ loading: false });
-        var states = [];
-        axios.get(UrmService.getStates()).then((res) => {
-            if (res.data["result"]) {
-                for (var i = 0; i < res.data["result"].length; i++) {
-                    this.state.statesArray.push({ name: res.data["result"][i].stateName, id: res.data["result"][i].stateId, code: res.data["result"][i].stateCode });
-                    states.push({
-                        value: this.state.statesArray[i].name,
-                        label: this.state.statesArray[i].name
-                    });
-                }
-                this.setState({
-                    states: states,
-                });
-                this.setState({ statesArray: this.state.statesArray });
-            }
-
-        });
-    }
-
-    handleStoreState = (value) => {
-        for (let i = 0; i < this.state.statesArray.length; i++) {
-            if (this.state.statesArray[i].name === value) {
-                this.setState({ stateId: this.state.statesArray[i].id });
-                this.setState({ statecode: this.state.statesArray[i].code });
-            }
-        }
-        this.setState({ storeState: value }, () => {
-            this.getMasterDistrictsList();
-        });
-    };
-
-
-    getMasterDistrictsList() {
-        this.setState({ dictricts: [] });
-        this.setState({ dictrictArray: [] });
-        this.setState({ loading: false });
-        var dictricts = [];
-        const params = {
-            "stateCode": this.state.statecode
-        };
-        axios.get(UrmService.getDistricts(), { params }).then((res) => {
-            if (res.data["result"]) {
-                console.log(res.data);
-                for (var i = 0; i < res.data["result"].length; i++) {
-                    this.state.dictrictArray.push({ name: res.data["result"][i].districtName, id: res.data["result"][i].districtId });
-                    dictricts.push({
-                        value: this.state.dictrictArray[i].name,
-                        label: this.state.dictrictArray[i].name
-                    });
-                }
-                this.setState({
-                    dictricts: dictricts,
-                });
-                this.setState({ dictrictArray: this.state.dictrictArray });
-            }
-
-        });
-    }
-
-    handleDistrict = (value) => {
-        for (let i = 0; i < this.state.dictrictArray.length; i++) {
-            if (this.state.dictrictArray[i].name === value) {
-                this.setState({ districtId: this.state.dictrictArray[i].id });
-            }
-        }
-        this.setState({ storeDistrict: value });
-    };
-
-
-    handleStoreName = (value) => {
-        this.setState({ storeName: value });
-    };
-
-    handleStore = (value) => {
-        this.setState({ storeState: value });
-    };
-
-
-    applyStoreFilter() {
-
-        const searchStore = {
-            "stateId": this.state.statecode ? this.state.statecode : null,
-            "cityId": null,
-            "districtId": this.state.districtId ? this.state.districtId : null,
-            "storeName": this.state.storeName ? this.state.storeName : null,
-        };
-
-        console.log('store search', searchStore);
-
-        axios.post(UrmService.getStoresBySearch(), searchStore).then((res) => {
-            if (res) {
-                if (res.data.isSuccess === "true") {
-                    this.setState({ filterStores: res.data.result });
-                    this.props.childParams(this.state.filterStores);
-                } else {
-                    // alert(res.data.message);
-                    this.setState({ filterStores: "" })
-                    this.props.childParams(this.state.filterStores)
-                }
-                console.log(res.data);
-                this.props.modelCancelCallback();
-            } else {
-                this.props.modelCancelCallback();
-            }
-
-        });
-    }
-
-    modelCancel() {
-        this.props.modelCancelCallback();
-    }
-
-    render() {
-        return (
-
-            <Modal isVisible={this.props.modalVisible} style={{ margin: 0 }}>
+                {this.props.filterStores && 
+                <View>
+                        <Modal isVisible={this.props.modalVisible} style={{ margin: 0 }}>
                 <View style={filterMainContainer} >
                     <View>
                         <View style={filterSubContainer}>
@@ -364,7 +352,9 @@ export class FilterStores extends Component {
                     </KeyboardAwareScrollView>
                 </View>
             </Modal>
-
+                </View>
+                }
+            </View>
         );
     }
 }

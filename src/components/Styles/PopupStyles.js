@@ -11,6 +11,7 @@ export const filterMainContainer = {
   // marginTop: Device.isTablet ? deviceHeight - RH(500) : deviceHeight - RH(400),
   minHeight: Device.isTablet ? RH(500) : RH(400),
   paddingBottom: Device.isTablet ? RH(20) : RH(10),
+  maxHeight: Device.isTablet ? RH(700) : RH(600),
   position: 'absolute',
   bottom: 0
 }

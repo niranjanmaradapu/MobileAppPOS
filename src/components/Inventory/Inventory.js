@@ -4,18 +4,20 @@ import React, { Component } from 'react';
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, ClipboardStatic } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
-import ThemedDialog from 'react-native-elements/dist/dialog/Dialog';
 import I18n from 'react-native-i18n';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
+import ThemedDialog from 'react-native-elements/dist/dialog/Dialog';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ActivityIndicator } from 'react-native-paper';
 import Loader from "../../commonUtils/loader";
 import InventoryService from '../services/InventoryService';
 import UrmService from '../services/UrmService';
 import { RH, RW, RF } from '../../Responsive';
-import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton,  headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer,  buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText} from '../Styles/Styles';
+import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
+import Barcode from './Barcode';
+import ProductCombo from './ProductCombo';
 
 
 var deviceWidth = Dimensions.get("window").width;
@@ -32,8 +34,8 @@ export default class Inventory extends Component {
             rebarcodeId: "",
             startDate: "",
             endDate: "",
-            flagone: false,
-            flagtwo: false,
+            flagBarcode: false,
+            flagRebarCode: false,
             inventoryDelete: false,
             flagFilterBarcodeOpen: false,
             flagFilterReBarcodeOpen: false,
@@ -70,7 +72,6 @@ export default class Inventory extends Component {
 
 
     componentDidMount() {
-        this.setState({ loading: true });
         var domainStringId = "";
         var storeStringId = "";
         var storeName = "";
@@ -133,8 +134,7 @@ export default class Inventory extends Component {
                                         }
                                         this.setState({ headerNames: this.state.headerNames }, () => {
                                             for (let j = 0; j < this.state.headerNames.length; j++) {
-                                                if (this.state.headerNames[j].name === "Product Combo") { }
-                                                else if (j === 0) {
+                                                if (j === 0) {
                                                     this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
                                                 }
                                                 else {
@@ -146,11 +146,10 @@ export default class Inventory extends Component {
                                     this.setState({ privilages: this.state.privilages }, () => {
                                         if (this.state.privilages.length > 0) {
                                             if (this.state.privilages[0].name === "Barcode List") {
-                                                this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
-                                                this.getAllBarcodes();
-                                                this.setState({ flagOne: true, flagTwo: false })
+                                                this.setState({ flagBarcode: true, flagRebarCode: false });
+                                                this.setState({ flagBarcode: true, flagRebarCode: false })
                                             } else if (this.state.privilages[0].name === "Re-Barcode List") {
-                                                this.setState({ flagOne: false, flagTwo: true })
+                                                this.setState({ flagBarcode: false, flagRebarCode: true })
                                                 this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
                                                 this.getbarcodeTexttileAdjustments();
                                             }
@@ -183,8 +182,7 @@ export default class Inventory extends Component {
                                             }
                                             this.setState({ headerNames: this.state.headerNames }, () => {
                                                 for (let j = 0; j < this.state.headerNames.length; j++) {
-                                                    if (this.state.headerNames[j].name === "Product Combo") { }
-                                                    else if (j === 0) {
+                                                    if (j === 0) {
                                                         this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
                                                     }
                                                     else {
@@ -195,11 +193,10 @@ export default class Inventory extends Component {
                                             this.setState({ privilages: this.state.privilages }, () => {
                                                 if (this.state.privilages.length > 0) {
                                                     if (this.state.privilages[0].name === "Barcode List") {
-                                                        this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "" });
-                                                        this.getAllBarcodes();
-                                                        this.setState({ flagOne: true, flagTwo: false })
+                                                        this.setState({ flagBarcode: true, flagRebarCode: false });
+                                                        this.setState({ flagBarcode: true, flagRebarCode: false })
                                                     } else if (this.state.privilages[0].name === "Re-Barcode List") {
-                                                        this.setState({ flagOne: false, flagTwo: true })
+                                                        this.setState({ flagBarcode: false, flagRebarCode: true })
                                                         this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
                                                         this.getbarcodeTexttileAdjustments();
                                                     }
@@ -222,35 +219,6 @@ export default class Inventory extends Component {
             this.setState({ loading: false });
             console.log('There is error getting sadasdsd');
         });
-
-    }
-
-    getAllBarcodes() {
-        // this.setState({ barcodesData: [] });
-        const params = {
-            "fromDate": "",
-            "toDate": "",
-            "barcode": "",
-            "storeId": this.state.storeId
-        };
-        
-        console.log(params);
-        axios.post(InventoryService.getTextileBarcodes() + '?page=' + parseInt(this.state.pageNo) + '&size=10', params).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-                if (res.data["result"]) {
-                    this.setState({ loading: false, barcodesData: this.state.barcodesData.concat(res.data.result.content), error: "" });
-                    this.setState({barcodesData: this.state.barcodesData.filter((v,i,a)=>a.findIndex(v2=>(JSON.stringify(v) === JSON.stringify(v2)))===i)})
-
-                    console.log(res.data.result);
-                    console.warn("BarList", this.state.barcodesData)
-                }
-                if (res.data.result.length === 0) {
-                    this.setState({ error: "Records Not Found" });
-                }
-            }
-        }).catch((err) => {
-            this.setState({ loading: false, error: 'Records not found' });
-        });
     }
 
 
@@ -268,7 +236,7 @@ export default class Inventory extends Component {
             if (res.data && res.data["isSuccess"] === "true") {
                 if (res.data["result"]) {
                     this.setState({ loading: false, reBarcodesData: res.data.result.content });
-                    console.log("rebarcodesData",this.state.reBarcodesData);
+                    console.log("rebarcodesData", this.state.reBarcodesData);
                 }
                 if (res.data.result.length === 0) {
                     this.setState({ error: "Records Not Found" });
@@ -281,28 +249,22 @@ export default class Inventory extends Component {
     }
 
 
-
-
     topbarAction1 = (item, index) => {
         if (item.name === "Barcode List") {
-            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: true, flagtwo: false, error: "", filterActive: false });
-            // this.getAllBarcodes();
-            this.setState({ flagOne: true, pageNo: 0, filterPageNo: 0 }, () => {
-                this.setState({ barcodesData: [], startDate: "", endDate: "", barCodeId: "", });
-                this.getAllBarcodes();
-            });
+            this.setState({ flagBarcode: true, filterActive: false });
         } else {
-            this.setState({ flagOne: false });
+            this.setState({ flagBarcode: false });
         }
         if (item.name === "Re-Barcode List") {
-            this.setState({ startDate: "", endDate: "", barCodeId: "", doneButtonClicked: false, enddoneButtonClicked: false, flagone: false, flagtwo: true, error: "", filterActive: false });
-            // this.getbarcodeTexttileAdjustments();
-            this.setState({ flagTwo: true, pageNo: 0, filterPageNo: 0 }, () => {
-                this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
-                this.getbarcodeTexttileAdjustments();
-            });
+            this.setState({ flagRebarCode: true, filterActive: false });
+            this.getbarcodeTexttileAdjustments()
         } else {
-            this.setState({ flagTwo: false });
+            this.setState({ flagRebarCode: false });
+        }
+        if (item.name === "Product Combo") {
+            this.setState({ flagProductCombo: true, filterActive: false })
+        } else {
+            this.setState({ flagProductCombo: false })
         }
 
 
@@ -328,24 +290,26 @@ export default class Inventory extends Component {
     navigateToAddBarcode() {
         this.props.navigation.navigate('AddBarcode', {
             isEdit: false,
-            onGoBack: () => this.getAllBarcodes(),
+            onGoBack: () => this.child.getAllBarcodes(),
         });
     }
 
-    // refteshBarcodes() {
-
-    // }
-
+    navigateToAddProductCombo() {
+        this.props.navigation.navigate('AddProduct', {
+            isEdit: false,
+            onGoBack: () => null
+        })
+    }
 
 
     filterAction() {
-        if (this.state.flagone === true) {
+        if (this.state.flagBarcode === true) {
             this.setState({ flagFilterBarcodeOpen: true });
         }
         else {
             this.setState({ flagFilterBarcodeOpen: false });
         }
-        if (this.state.flagtwo === true) {
+        if (this.state.flagRebarCode === true) {
             this.setState({ flagFilterReBarcodeOpen: true });
         }
         else {
@@ -412,40 +376,12 @@ export default class Inventory extends Component {
         this.setState({ barCodeId: value.trim() });
     };
 
-    applyBarcodeFilter() {
-        this.setState({loading: true})
-        let list = {};
-
-        list = {
-            fromDate: this.state.startDate,
-            toDate: this.state.endDate,
-            barcode: this.state.barCodeId,
-            storeId: this.state.storeId
-        };
-
-        console.log(list);
-        axios.post(InventoryService.getTextileBarcodes() + '?page=' + parseInt(this.state.filterPageNo) + '&size=10', list).then(res => {
-            console.log(res);
-            if (res.data && res.data["isSuccess"] === "true") {
-                if (res.data["result"]) {
-                    this.setState({ loading: false, filterBarcodesData: this.state.filterBarcodesData.concat(res.data.result.content), error: "", filterActive: true, loading: false });
-                    console.log("filtered Data",res.data.result);
-                    console.warn("BarList", this.state.filterBarcodesData)
-                }
-                if (res.data.result.length === 0) {
-                    this.setState({ error: "Records Not Found" });
-                }
-            }
-        }).catch((err) => {
-            this.setState({ loading: false });
-            this.setState({ barcodesData: [], filterActive: true });
-            console.log(err)
-        });
-        this.setState({ modalVisible: false });
+    filterBarcodes() {
+        this.setState({ filterActive: true })
     }
+
     applyReBarcodeFilter() {
         let list = {};
-
         list = {
             fromDate: this.state.startDate,
             toDate: this.state.endDate,
@@ -487,18 +423,10 @@ export default class Inventory extends Component {
     };
 
     clearFilterAction() {
-        if (this.state.flagone === true) {
-            this.setState({ filterActive: false, startDate: "", endDate: "", barCodeId: "", }, () => {
-                this.setState({ barcodesData: [] }, () => {
-                    this.getAllBarcodes();
-                });
-            });
+        if (this.state.flagBarcode === true) {
+            this.setState({ filterActive: false });
         } else {
-            this.setState({ filterActive: false, startDate: "", endDate: "", barCodeId: "", }, () => {
-                this.setState({ reBarcodesData: [] }, () => {
-                    this.getbarcodeTexttileAdjustments();
-                });
-            });
+            this.setState({ filterActive: false });
         }
     }
 
@@ -521,7 +449,7 @@ export default class Inventory extends Component {
                         this.props.navigation.navigate('ViewReBarcode'
                             , {
                                 item: res.data["result"], isEdit: true,
-                                onGoBack: () => this.updateBarcodes(),
+                                onGoBack: () => this.child.getAllBarcodes(),
                             });
 
                     }
@@ -549,7 +477,6 @@ export default class Inventory extends Component {
                 console.log(res.data.result);
                 this.setState({ inventoryDelete: false, modalVisible: false, barcodeTextileId: '' });
                 this.setState({ isAddBarcode: false });
-                this.getAllBarcodes();
             } else {
                 this.setState({ inventoryDelete: false, modalVisible: false, barcodeTextileId: '' });
                 console.log(res.data.message);
@@ -558,9 +485,7 @@ export default class Inventory extends Component {
         );
     };
 
-    updateBarcodes() {
-        this.getAllBarcodes();
-    }
+
 
     handleeditbarcode(item, index) {
         this.props.navigation.navigate('EditBarcode'
@@ -569,21 +494,9 @@ export default class Inventory extends Component {
                 onGoBack: () => this.updateBarcodes(),
             });
     }
-    loadMoreList = () => {
-        console.log("page0")
-        if (this.state.filterActive) {
-            this.setState({ filterPageNo: this.state.filterPageNo + 1 }, () => {
-                this.applyBarcodeFilter()
-            })
-        }
-        else {
-            this.setState({ pageNo: this.state.pageNo + 1 }, () => {
-                this.getAllBarcodes()
-            })
-        }
-    }
 
-    
+
+
 
     render() {
 
@@ -595,36 +508,42 @@ export default class Inventory extends Component {
                 }
                 <View style={headerTitleContainer} >
                     <View style={headerTitleSubContainer}>
-                    <TouchableOpacity style={menuButton} onPress={() => this.handleBackButtonClick()}>
-                        <Image source={require('../assets/images/menu.png')} />
-                    </TouchableOpacity>
-                    <Text style={headerTitle}>
-                        {I18n.t("Inventory Portal")}
-                    </Text>
+                        <TouchableOpacity style={menuButton} onPress={() => this.handleBackButtonClick()}>
+                            <Image source={require('../assets/images/menu.png')} />
+                        </TouchableOpacity>
+                        <Text style={headerTitle}>
+                            {I18n.t("Inventory Portal")}
+                        </Text>
                     </View>
                     <View style={headerTitleSubContainer2}>
-                    {this.state.flagone && (
-                        <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddBarcode()}>
-                            <Text style={headerNavigationBtnText}>{I18n.t("Add BarCode")}</Text>
-                        </TouchableOpacity>
-                    )}
-                    
-                    <View>
-                        {!this.state.filterActive &&
-                            <TouchableOpacity
-                                style={filterBtn}
-                                onPress={() => this.filterAction()} >
-                                <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/promofilter.png')} />
+                        {this.state.flagBarcode && (
+                            <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddBarcode()}>
+                                <Text style={headerNavigationBtnText}>{I18n.t("Add BarCode")}</Text>
                             </TouchableOpacity>
-                        }
-                        {this.state.filterActive &&
-                            <TouchableOpacity
-                                style={filterBtn}
-                                onPress={() => this.clearFilterAction()} >
-                                <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/clearFilterSearch.png')} />
+                        )}
+
+                        {this.state.flagProductCombo && (
+                            <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddProductCombo()}>
+                                <Text style={headerNavigationBtnText}>Product Combo</Text>
                             </TouchableOpacity>
-                        }
-                    </View>
+                        )}
+
+                        <View>
+                            {!this.state.filterActive &&
+                                <TouchableOpacity
+                                    style={filterBtn}
+                                    onPress={() => this.filterAction()} >
+                                    <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/promofilter.png')} />
+                                </TouchableOpacity>
+                            }
+                            {this.state.filterActive &&
+                                <TouchableOpacity
+                                    style={filterBtn}
+                                    onPress={() => this.clearFilterAction()} >
+                                    <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/clearFilterSearch.png')} />
+                                </TouchableOpacity>
+                            }
+                        </View>
                     </View>
                 </View>
 
@@ -643,7 +562,7 @@ export default class Inventory extends Component {
                                     borderColor: item.bool ? '#ED1C24' : '#858585',
                                 }]} onPress={() => this.topbarAction1(item, index)} >
 
-                                    <Text style={[pageNavigationBtnText, {color: item.bool ? "#FFFFFF" : '#858585',}]}>
+                                    <Text style={[pageNavigationBtnText, { color: item.bool ? "#FFFFFF" : '#858585', }]}>
                                         {item.name}
                                     </Text>
                                 </TouchableOpacity>
@@ -651,53 +570,18 @@ export default class Inventory extends Component {
                             ListFooterComponent={<View style={{ width: 15 }}></View>}
                         />
 
-
-    {this.state.flagone && (
-        <View>
-        <FlatList 
-          data={this.state.filterActive ? this.state.filterBarcodesData : this.state.barcodesData}
-          style={{ marginTop: 20 }}
-          scrollEnabled={true}
-          ListEmptyComponent={<Text style={listEmptyMessage}>&#9888; Records Not Found</Text>}
-          keyExtractor={(item, i) => i.toString()}
-          renderItem={({ item, index }) => (
-            <View style={{flex: 1}}>
-              <View style={flatListMainContainer}>
-                <View style={flatlistSubContainer}>
-                  <View style={textContainer}>
-                    <Text style={highText}>S.NO: { index + 1 }</Text>
-                  </View>
-                  <View style={textContainer}>
-                    <Text style={textStyleMedium} selectable={true}>{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
-                    <Text style={textStyleLight}>QTY:  {item.qty}</Text>
-                  </View>
-                  <View style={textContainer}>
-                    <Text style={textStyleLight}>{I18n.t("STORE")}: {this.state.storeName}</Text>
-                    <Text style={textStyleLight}>{I18n.t("VALUE")}: ₹{item.value}</Text>
-                  </View>
-                  <View style={textContainer}>
-                    <Text style={textStyleMedium}>{I18n.t("LIST PRICE")}: ₹{item.itemMrp}</Text>
-                    <View style={buttonContainer}>
-                      <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditbarcode(item, index)}>
-                        <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
-                      </TouchableOpacity>
-                      <TouchableOpacity style={buttonStyle} onPress={() => this.handlebarcodedeleteaction(item, index)}>
-                        <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </View>
-          )}
-          onEndReached={() => { this.loadMoreList() }}
-          onEndReachedThreshold={10}
-          ListFooterComponent={() => { return this.state.barcodesData.length > 10 || this.state.filterBarcodesData > 10 ? <ActivityIndicator size={"small"} /> : null }}
-        />
-      </View>
+                        {this.state.flagBarcode && (
+                            <Barcode
+                                flagFilterOpen={this.state.flagFilterBarcodeOpen}
+                                modalVisible={this.state.modalVisible}
+                                modelCancelCallback={() => { this.modelCancel() }}
+                                filterActive={this.state.filterActive}
+                                childParams={() => { this.filterBarcodes() }}
+                                ref={instance => { this.child = instance }}
+                            />
                         )}
 
-                        {this.state.flagtwo && (
+                        {this.state.flagRebarCode && (
                             <View>
                                 <FlatList
                                     data={this.state.reBarcodesData}
@@ -711,14 +595,14 @@ export default class Inventory extends Component {
                                         >
                                             <View style={flatlistSubContainer}>
                                                 <View style={textContainer}>
-                                                <Text style={highText} >{I18n.t("PARENT BARCODE")}: {item.toBeBarcodeId}</Text>
+                                                    <Text style={highText} >{I18n.t("PARENT BARCODE")}: {item.toBeBarcodeId}</Text>
                                                 </View>
                                                 <View style={textContainer}>
-                                                <Text style={textStyleMedium} selectable={true}>{I18n.t("CHILD BARCODE")}: {"\n"}{item.currentBarcodeId}</Text>
-                                                <Text style={textStyleLight}>{I18n.t("EMPLOYEE ID")}: {"\n"}{item.createdBy}</Text>
+                                                    <Text style={textStyleMedium} selectable={true}>{I18n.t("CHILD BARCODE")}: {"\n"}{item.currentBarcodeId}</Text>
+                                                    <Text style={textStyleLight}>{I18n.t("EMPLOYEE ID")}: {"\n"}{item.createdBy}</Text>
                                                 </View>
                                                 <View style={textContainer}>
-                                                <Text style={textStyleLight}>{I18n.t("DATE")}: {"\n"}{item.fromDate}</Text>
+                                                    <Text style={textStyleLight}>{I18n.t("DATE")}: {"\n"}{item.fromDate}</Text>
                                                     <View style={buttonContainer}>
                                                         <TouchableOpacity style={buttonStyle1} onPress={() => this.print(item, index)}>
                                                             <Image style={buttonImageStyle} source={require('../assets/images/print.png')} />
@@ -735,156 +619,14 @@ export default class Inventory extends Component {
                                 />
                             </View>
                         )}
+                        {this.state.flagProductCombo && (
+                            <ProductCombo />
+                        )}
                     </View>
                 </ScrollView>
 
-                {this.state.inventoryDelete && (
-                    <View>
-                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
-                            <View style={deleteContainer}>
-                                <View>
-                                    <View style={deleteHeader}>
-                                        <View>
-                                            <Text style={deleteHeading} > {I18n.t("Delete Barcode")} </Text>
-                                        </View>
-                                        <View>
-                                            <TouchableOpacity style={deleteCloseBtn} onPress={() => this.modelCancel()}>
-                                                <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                    <Text style={styles.spaceText}></Text>
-                                </View>
 
-                                <Text style={deleteText}> {I18n.t("Are you sure want to delete Barcode")} ?  </Text>
 
-                                <TouchableOpacity
-                                    style={[submitBtn]}
-                                    onPress={() => this.deleteInventory()}
-                                >
-                                    <Text style={submitBtnText}  > {I18n.t("DELETE")} </Text>
-
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    style={cancelBtn} onPress={() => this.modelCancel()}
-                                >
-                                    <Text style={cancelBtnText}  > {I18n.t("CANCEL")} </Text>
-
-                                </TouchableOpacity>
-                            </View>
-                        </Modal>
-                    </View>
-                )}
-                {this.state.flagFilterBarcodeOpen && (
-                    <View>
-                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
-                            <View style={filterMainContainer} >
-                                <View>
-                                    <View style={filterSubContainer}>
-                                        <View>
-                                            <Text style={filterHeading} > {I18n.t("Filter By")} </Text>
-                                        </View>
-                                        <View>
-                                            <TouchableOpacity style={filterCloseImage} onPress={() => this.modelCancel()}>
-                                                <Image style={{ margin: RH(5) }} source={require('../assets/images/modelcancel.png')} />
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                    <Text style={styles.spaceText}></Text>
-                                </View>
-                                <KeyboardAwareScrollView enableOnAndroid={true} >
-                                    <TouchableOpacity
-                                        style={dateSelector}
-                                        testID="openModal"
-                                        onPress={() => this.datepickerClicked()}
-                                    >
-                                        <Text
-                                            style={dateText}
-                                        >{this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate}</Text>
-                                        <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
-                                    </TouchableOpacity>
-                                    {this.state.datepickerOpen && this.state.flagone && (
-                                        <View style={styles.dateTopView}>
-                                            <View style={styles.dateTop2}>
-                                                <TouchableOpacity
-                                                    style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
-                                                >
-                                                    <Text style={datePickerBtnText}  > Cancel </Text>
-                                                </TouchableOpacity>
-                                                
-                                                <TouchableOpacity
-                                                    style={datePickerButton2} onPress={() => this.datepickerDoneClicked()}
-                                                >
-                                                    <Text style={datePickerBtnText}  > Done </Text>
-                                                </TouchableOpacity>
-                                            </View>
-                                            <DatePicker style={datePicker}
-                                                date={this.state.date}
-                                                mode={'date'}
-                                                onDateChange={(date) => this.setState({ date })}
-                                            />
-                                        </View>
-                                    )}
-                                    <TouchableOpacity
-                                        style={dateSelector}
-                                        testID="openModal"
-                                        onPress={() => this.enddatepickerClicked()}
-                                    >
-                                        <Text
-                                            style={dateText}
-                                        >{this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate}</Text>
-                                        <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
-                                    </TouchableOpacity>
-
-                                    {this.state.datepickerendOpen && this.state.flagone && (
-                                        <View style={styles.dateTopView}>
-                                            <View style={styles.dateTop2}>
-                                                <View>
-                                                    <TouchableOpacity
-                                                        style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
-                                                    >
-                                                        <Text style={datePickerBtnText}  > Cancel </Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                                <View>
-                                                    <TouchableOpacity
-                                                        style={datePickerButton2} onPress={() => this.datepickerendDoneClicked()}
-                                                    >
-                                                        <Text style={datePickerBtnText}  > Done </Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                            </View>
-                                            <DatePicker style={datePicker}
-                                                date={this.state.enddate}
-                                                mode={'date'}
-                                                onDateChange={(enddate) => this.setState({ enddate })}
-                                            />
-                                        </View>
-                                    )}
-                                    <TextInput
-                                        style={inputField}
-                                        underlineColorAndroid="transparent"
-                                        placeholder={I18n.t("BARCODE ID")}
-                                        placeholderTextColor="#6F6F6F"
-                                        textAlignVertical="center"
-                                        autoCapitalize="none"
-                                        value={this.state.barCodeId}
-                                        onChangeText={this.handlebarCodeId}
-                                    />
-                                    <TouchableOpacity style={submitBtn}
-                                        onPress={() => this.applyBarcodeFilter()}>
-                                        <Text style={submitBtnText} >{I18n.t("APPLY")}</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={cancelBtn}
-                                        onPress={() => this.modelCancel()}>
-                                        <Text style={cancelBtnText}>{I18n.t("CANCEL")}</Text>
-                                    </TouchableOpacity>
-                                </KeyboardAwareScrollView>
-                            </View>
-                        </Modal>
-                    </View>
-                )}
                 {this.state.flagFilterReBarcodeOpen && (
                     <View>
                         <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
@@ -924,7 +666,7 @@ export default class Inventory extends Component {
                                         >{this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate}</Text>
                                         <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
-                                    {this.state.datepickerOpen && this.state.flagtwo && (
+                                    {this.state.datepickerOpen && this.state.flagRebarCode && (
                                         <View style={styles.dateTopView}>
                                             <View style={styles.dateTop2}>
 
@@ -948,7 +690,7 @@ export default class Inventory extends Component {
                                             />
                                         </View>
                                     )}
-                                    {this.state.datepickerendOpen && this.state.flagtwo && (
+                                    {this.state.datepickerendOpen && this.state.flagRebarCode && (
                                         <View style={styles.dateTopView}>
                                             <View style={styles.dateTop2}>
                                                 <TouchableOpacity
@@ -995,43 +737,7 @@ export default class Inventory extends Component {
                         </Modal>
                     </View>
                 )}
-                {this.state.barcodeDelete && (
-                    <View>
-                        <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
 
-                            <View style={deleteContainer}>
-                                <View>
-                                    <View style={deleteHeader}>
-                                        <View>
-                                            <Text style={deleteHeading} > Delete Barcode Id </Text>
-                                        </View>
-                                        <View>
-                                            <TouchableOpacity style={deleteCloseBtn} onPress={() => this.modelCancel()}>
-                                                <Image style={{ margin: RH(5) }} source={require('../assets/images/modelcancel.png')} />
-                                            </TouchableOpacity>
-                                        </View>
-                                    </View>
-                                    <Text style={styles.spaceText}></Text>
-                                </View>
-
-                                <Text style={deleteText}> Are you sure want to delete Barcode?  </Text>
-                                <TouchableOpacity
-                                    style={submitBtn} onPress={() => this.deleteBarcodeId(item, index)}
-                                >
-                                    <Text style={submitBtnText}  > DELETE </Text>
-
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    style={cancelBtn} onPress={() => this.modelCancel()}
-                                >
-                                    <Text style={cancelBtnText}  > CANCEL </Text>
-
-                                </TouchableOpacity>
-                            </View>
-                        </Modal>
-                    </View>
-                )}
             </View>
         );
     }

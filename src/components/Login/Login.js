@@ -409,6 +409,12 @@ export default class Login extends Component {
                             console.log('There is error saving storeName');
                            // alert('There is error saving storeName');
                         });
+                        AsyncStorage.setItem("storeName", String(res.data.result[0].name)).then(() => {
+
+                        }).catch(() => {
+                            this.setState({ loading: false })
+                            console.log("store name not found")
+                        })
                         this.props.navigation.navigate('HomeNavigation');
                     }
                 }
