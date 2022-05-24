@@ -22,10 +22,18 @@ export default class AddTaxMaster extends Component {
             taxLabel: "",
             proiorities: [],
             priority: "",
+            id:'',
             isTaxEdit: false,
         };
     }
+componentDidMount(){
+   
 
+if(this.props.route.params){
+this.setState({cess:JSON.stringify(this.props.route.params.item.cess),cgst:JSON.stringify(this.props.route.params.item.cgst),igst:JSON.stringify(this.props.route.params.item.igst),sgst:JSON.stringify(this.props.route.params.item.sgst),taxRate:this.props.route.params.item.taxLabel,isTaxEdit:JSON.stringify(this.props.route.params.isEdit),id:JSON.stringify(this.props.route.params.item.id)})
+    console.log("oooo",this.props.route.params.item)
+}
+}
     handleBackButtonClick() {
         this.props.navigation.goBack(null);
         return true;
@@ -76,7 +84,30 @@ export default class AddTaxMaster extends Component {
             })
         }
     }
-
+    updateTax() {
+        const { cess, cgst, igst, sgst, taxRate, isTaxEdit ,id} = this.state
+        let obj = {
+            "cess": parseInt(cess),
+            "cgst": parseInt(cgst),
+            "sgst": parseInt(sgst),
+            "igst": parseInt(igst),
+            "taxLabel": taxRate,
+            "id":parseInt(id),
+        }
+        console.log("OBJ",obj)
+        if (isTaxEdit) {
+            AccountingService.updateMasterTax(obj).then(res => {
+                console.log("RESS",res)
+                if (res) {
+                    console.log(res.data)
+                    alert("success")
+                    this.props.navigation.goBack()
+                }
+            }).catch(err => {
+                alert("KKKK",err)
+            })
+        }
+    }
     cancel() {
         this.props.navigation.goBack(null);
         return true;
@@ -84,6 +115,8 @@ export default class AddTaxMaster extends Component {
 
 
     render() {
+        const { cess, cgst, igst, sgst, taxRate, isTaxEdit } = this.state
+        console.log("oooo",isTaxEdit)
         return (
             <View style={styles.mainContainer}>
                 {/* {this.state.loading &&
@@ -96,7 +129,7 @@ export default class AddTaxMaster extends Component {
                         <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
                     </TouchableOpacity>
                     <Text style={headerTitle}>
-                        Add Tax Master
+                    {isTaxEdit ? "Edit Tax Master" :"Add Tax Master"} 
                     </Text>
                     </View>
                 </View>
@@ -147,12 +180,12 @@ export default class AddTaxMaster extends Component {
                     placeholderTextColor="#6F6F6F"
                     textAlignVertical="center"
                     autoCapitalize="none"
-                    value={this.state.cess}
+                    value={cess}
                     onChangeText={this.handleCess}
                 />
                 <TouchableOpacity style={submitBtn}
-                    onPress={() => this.saveTax()}>
-                    <Text style={submitBtnText}>SAVE</Text>
+                    onPress={() =>isTaxEdit ?this.updateTax(): this.saveTax()}>
+                    <Text style={submitBtnText}>{isTaxEdit ? "Update" :"SAVE"}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={cancelBtn}
                     onPress={() => this.cancel()}>

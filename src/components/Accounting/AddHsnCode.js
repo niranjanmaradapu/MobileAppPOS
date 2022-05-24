@@ -37,8 +37,14 @@ export default class AddHsnCode extends Component {
             isEdit: false,
         };
     }
-
+   
     componentDidMount() {
+        if(this.props.route.params){
+            this.setState({isEdit:this.props.route.params.isEdit})
+            const { taxAppliesOn, taxId, description, taxType, hsnCode, fromPrice, toPrice,taxAppliedType,taxLabel,taxList } = this.props.route.params.item
+            this.setState({taxAppliesOn:taxAppliesOn,taxId:taxId,description:description,taxType:taxType,hsnCode:JSON.stringify(hsnCode),fromPrice:fromPrice,id:JSON.stringify(this.props.route.params.item.id),toPrice:toPrice,taxType:taxAppliedType})
+                console.log("oooo",this.props.route.params.item)
+            }
         this.getAllTaxes()
         this.getDescription()
         this.getTaxAppliesOn()
@@ -167,7 +173,27 @@ export default class AddHsnCode extends Component {
         let slabValues = this.state.slabValues
         slabValues["priceTo"] = value
     };
-
+    updateHsnCode() {
+        const { taxAppliesOn, taxId, description, taxType, hsnCode, fromPrice, toPrice, isEdit ,id} = this.state
+        const obj = {
+            description: description ? description : "",
+            hsnCode: hsnCode ? hsnCode : "",
+            taxAppliedType: taxType ? taxType : "",
+            taxAppliesOn: taxAppliesOn ? taxAppliesOn : "",
+            taxId: taxType === 'Hsncode' ? taxId : null,
+            slabs: taxType === 'Priceslab' ? [{ priceFrom: fromPrice, priceTo: toPrice, taxId : taxId}] : [],
+            id:parseInt(id)
+        }
+        console.log(obj)
+        if (!isEdit) {
+            AccountingService.updateHsnCode(obj).then(res => {
+                if (res) {
+                    alert(res.data.message)
+                    this.props.navigation.goBack()
+                }
+            })
+        }
+    }
     saveHsnCode() {
         const { taxAppliesOn, taxId, description, taxType, hsnCode, fromPrice, toPrice, isEdit } = this.state
         const obj = {

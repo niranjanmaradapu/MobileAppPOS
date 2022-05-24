@@ -22,7 +22,9 @@ class AccountingService {
   saveMasterTax(saveTax){
         return axios.post(BASE_URL+ACCOUNTING_PORTAL.saveMasterTax, saveTax);   
   }
-
+  updateMasterTax(saveTax){
+      return axios.put(BASE_URL+ACCOUNTING_PORTAL.updateTax, saveTax);   
+} 
   getAllMasterTax(){
         return axios.get(BASE_URL+ACCOUNTING_PORTAL.getAllTaxes);
   }
@@ -38,7 +40,9 @@ class AccountingService {
  saveHsnCode(saveHsnObj) {
   return axios.post(BASE_URL+ACCOUNTING_PORTAL.saveHsnCode, saveHsnObj);
       }
-      
+      updateHsnCode(updateHsnObj) {
+            return axios.post(BASE_URL+ACCOUNTING_PORTAL.updateHsnCode, updateHsnObj);
+                }
       saveCredit(saveCredit) {
         return axios.post(BASE_URL+ACCOUNTING_PORTAL.saveCredit, saveCredit);
       }
