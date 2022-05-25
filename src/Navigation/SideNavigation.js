@@ -52,7 +52,7 @@ export default class SideNavigation extends React.Component {
         } else if (global.previlage7 = 'URM Portal') {
             this.setState({ route: 'UrmNavigation' })
         }
-        
+
         this.setState({ loading: false });
     }
     async componentDidMount() {
@@ -249,7 +249,7 @@ export default class SideNavigation extends React.Component {
 
         ) : (
             <Drawer.Navigator
-                initialRouteName={this.state.route}
+                initialRouteName={global.previlage1 === 'Dashboard'? "Home": global.previlage2 === 'Billing Portal' ? "CustomerNavigation" :global.previlage3 === 'Inventory Portal'?"InventoryNavigation ":global.previlage4 === 'Promotions & Loyalty'? "PromoNavigation" :global.previlage5 === 'Accounting Portal'? "AccountingNaviagtion":global.previlage6 === 'Reports'?"ReportsNavigation":global.previlage7 === 'URM Portal'? "UrmNavigation" : "Home"}
                 screenOptions={{
                     drawerStyle: {
                         width: Device.isTablet ? 400 : 300,
