@@ -245,9 +245,9 @@ class AddBarcode extends Component {
         var hsncodes = [];
         axios.get(InventoryService.getAllHsnList()).then((res) => {
             if (res.data["result"]) {
-                for (var i = 0; i < res.data["result"].length; i++) {
-                    this.state.hsncodesArray.push({ name: res.data["result"][i].hsnCode, id: res.data["result"][i].id });
-                    console.log(res.data["result"]);
+                for (var i = 0; i < res.data.result.content.length; i++) {
+                    this.state.hsncodesArray.push({ name: res.data.result.content[i].hsnCode, id: res.data.result.content[i].id });
+                    console.log(res.data["result"].content);
                     hsncodes.push({
                         value: this.state.hsncodesArray[i].name,
                         label: this.state.hsncodesArray[i].name

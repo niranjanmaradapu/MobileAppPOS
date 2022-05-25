@@ -76,7 +76,7 @@ export default class Domain extends Component {
                                 </View>
                                 <View style={textContainer}>
                                     <Text style={textStyleMedium}>{I18n.t("CREATED BY")}: {item.createdBy}</Text>
-                                    <Text style={textStyleLight}>{I18n.t("CREATED DATE")}: {item.createdDate}  </Text>
+                                    <Text style={textStyleLight}>{I18n.t("CREATED DATE")}: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}  </Text>
                                 </View>
                                 <View style={textContainer}>
                                     <Text style={textStyleLight}>{I18n.t("DESCRIPTION")}: {item.discription}  </Text>

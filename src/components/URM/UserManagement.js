@@ -14,7 +14,7 @@ import Loader from "../../commonUtils/loader";
 import UrmService from '../services/UrmService';
 import UrmDashboard from './UrmDashboard';
 import EmptyList from '../Errors/EmptyList';
-import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton,  headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer,  buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText} from '../Styles/Styles';
+import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 
@@ -70,7 +70,7 @@ export default class UserManagement extends Component {
                     }
                 }
                 this.setState({ privilages: this.state.privilages }, () => {
-                    this.setState({flagTwo: true, flagOne: false, filterButton: true})
+                    this.setState({ flagTwo: true, flagOne: false, filterButton: true })
                 });
             }
             else {
@@ -99,38 +99,38 @@ export default class UserManagement extends Component {
                                                     // console.log(previlage.subPrivillages[i].parentPrivillageId);
                                                     if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
                                                         let subprivilage = previlage.subPrivillages[i];
-                                                        if (subprivilage.name === "Back Office"){
+                                                        if (subprivilage.name === "Back Office") {
                                                         }
-                                                        this.state.headerNames.push({name: subprivilage.name})
+                                                        this.state.headerNames.push({ name: subprivilage.name })
                                                     }
                                                 }
-                                                this.setState({headerNames: this.state.headerNames}, () => {
-                                                                console.error(this.state.headerNames)
-                                                                for (let j = 0; j < this.state.headerNames.length; j++){
-                                                                    if (j === 0) {
-                                                                    this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                                                                    }
-                                                                    else if (this.state.headerNames[j].name === "Back Office") { }
-                                                                    else {
-                                                                    this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
-                                                                }
-                                                                }
-                                                        })
+                                                this.setState({ headerNames: this.state.headerNames }, () => {
+                                                    console.error(this.state.headerNames)
+                                                    for (let j = 0; j < this.state.headerNames.length; j++) {
+                                                        if (j === 0) {
+                                                            this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
+                                                        }
+                                                        else if (this.state.headerNames[j].name === "Back Office") { }
+                                                        else {
+                                                            this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                                                        }
+                                                    }
+                                                })
                                                 this.setState({ privilages: this.state.privilages }, () => {
                                                     if (this.state.privilages.length > 0) {
-                                                            if(this.state.privilages[0].name === "Dashboard"){
-                                                                this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
-                                                            }else if(this.state.privilages[0].name === "Users") {
-                                                                this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
-                                                            }else if(this.state.privilages[0].name === "Roles") {
-                                                                this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
-                                                            }
-                                                            else {
-                                                                this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
-                                                                console.log("please update the privilages in Line.no: 118")
-                                                            }
+                                                        if (this.state.privilages[0].name === "Dashboard") {
+                                                            this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
+                                                        } else if (this.state.privilages[0].name === "Users") {
+                                                            this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
+                                                        } else if (this.state.privilages[0].name === "Roles") {
+                                                            this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
                                                         }
-                                                        });
+                                                        else {
+                                                            this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
+                                                            console.log("please update the privilages in Line.no: 118")
+                                                        }
+                                                    }
+                                                });
                                             }
                                         }
                                     }
@@ -152,15 +152,15 @@ export default class UserManagement extends Component {
                                                 if (length > - 1) {
                                                     for (let i = 0; i < length; i++) {
                                                         if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
-                                                        let subprivilage = res.data["result"].subPrivilages[i];
-                                                        if (subprivilage.name === "Back Office"){
+                                                            let subprivilage = res.data["result"].subPrivilages[i];
+                                                            if (subprivilage.name === "Back Office") {
+                                                            }
+                                                            this.state.headerNames.push({ name: subprivilage.name })
                                                         }
-                                                        this.state.headerNames.push({name: subprivilage.name})
                                                     }
-                                                }
-                                                this.setState({headerNames: this.state.headerNames}, () => {
+                                                    this.setState({ headerNames: this.state.headerNames }, () => {
                                                         console.error(this.state.headerNames)
-                                                        for (let j = 0; j < this.state.headerNames.length; j++){
+                                                        for (let j = 0; j < this.state.headerNames.length; j++) {
                                                             if (j === 0) {
                                                                 this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
                                                             }
@@ -169,22 +169,22 @@ export default class UserManagement extends Component {
                                                                 this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
                                                             }
                                                         }
-                                                })
-                                                this.setState({ privilages: this.state.privilages }, () => {
-                                                    // console.error(this.state.privilages.length)
-                                                    if (this.state.privilages.length > 0) {
-                                                    if(this.state.privilages[0].name === "Dashboard"){
-                                                        this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
-                                                    }else if(this.state.privilages[0].name === "Users") {
-                                                        this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false});
-                                                    }else if(this.state.privilages[0].name === "Roles") {
-                                                        this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
-                                                    } else {
-                                                        this.setState({ flagOne: false, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
-                                                        console.log("please update the privilages in Line.no: 161")
-                                                    }
-                                                }
-                                                });
+                                                    })
+                                                    this.setState({ privilages: this.state.privilages }, () => {
+                                                        // console.error(this.state.privilages.length)
+                                                        if (this.state.privilages.length > 0) {
+                                                            if (this.state.privilages[0].name === "Dashboard") {
+                                                                this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
+                                                            } else if (this.state.privilages[0].name === "Users") {
+                                                                this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
+                                                            } else if (this.state.privilages[0].name === "Roles") {
+                                                                this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
+                                                            } else {
+                                                                this.setState({ flagOne: false, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
+                                                                console.log("please update the privilages in Line.no: 161")
+                                                            }
+                                                        }
+                                                    });
                                                 }
                                             }
                                         }
@@ -230,7 +230,7 @@ export default class UserManagement extends Component {
                 }
                 this.setState({ rolesData: this.state.rolesData, rolesError: "" });
             } else {
-                this.setState({rolesError: "Records Not Found"})
+                this.setState({ rolesError: "Records Not Found" })
             }
         }).catch(() => {
             this.setState({ loading: false, rolesError: "Records Not Found" });
@@ -249,6 +249,8 @@ export default class UserManagement extends Component {
                 for (let i = 0; i < len; i++) {
                     let number = res.data.result[i];
                     console.log(number);
+                    let date = res.data.result[i].createdDate
+                    console.log(date)
                     this.setState({ loading: false });
 
                     // console.log('sadsddsad' + number.stores);
@@ -325,13 +327,13 @@ export default class UserManagement extends Component {
         if (this.state.flagOne === true) {
             this.setState({ filterActive: false }, () => {
                 this.getAllUsers();
-                this.setState({userType: "", role: "", branch: ""})
+                this.setState({ userType: "", role: "", branch: "" })
             });
         }
         else if (this.state.flagTwo === true) {
             this.setState({ filterActive: false }, () => {
                 this.getRolesList();
-                this.setState({role: "", createdBy: "", createdDate: ""})
+                this.setState({ role: "", createdBy: "", createdDate: "" })
             });
         }
     }
@@ -422,7 +424,7 @@ export default class UserManagement extends Component {
     };
 
     applyRoleFilter() {
-        console.log("creatBy",this.state.createdBy )
+        console.log("creatBy", this.state.createdBy)
         const searchRole = {
             "roleName": this.state.role ? this.state.role : null,
             "createdBy": this.state.createdBy ? this.state.createdBy : null,
@@ -430,7 +432,7 @@ export default class UserManagement extends Component {
         };
         console.log(searchRole);
         axios.post(UrmService.getRolesBySearch(), searchRole).then((res) => {
-            console.log("KKKKK",res)
+            console.log("KKKKK", res)
             if (res) {
                 if (res.data.isSuccess === "true") {
                     this.setState({ rolesData: res.data.result, modalVisible: false, flagFilterRoles: false, createdDate: "", role: "", createdBy: "" }, () => {
@@ -439,9 +441,9 @@ export default class UserManagement extends Component {
                 } else {
                     this.setState({ modalVisible: false, flagFilterRoles: false, userType: "", role: "", createdBy: "", rolesData: "" },
                         () => {
-                        this.setState({ filterActive: true, rolesError: "Records Not Found" })
-                    });
-                    console.log("ooooo",res.data);
+                            this.setState({ filterActive: true, rolesError: "Records Not Found" })
+                        });
+                    console.log("ooooo", res.data);
                 }
 
             } else {
@@ -451,7 +453,7 @@ export default class UserManagement extends Component {
             }
         }).catch((err) => {
             this.setState({ loading: false, rolesError: "Records Not Found", rolesData: "" });
-            console.warn(err ,"fkjnksjdf");
+            console.warn(err, "fkjnksjdf");
         });
     }
 
@@ -473,39 +475,39 @@ export default class UserManagement extends Component {
                 console.log("users Data", res.data.result);
                 if (res.data.isSuccess === "true") {
 
-            let len = res.data["result"].length;
-            if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                    let number = res.data.result[i];
-                    console.log(number);
-                    this.setState({ loading: false });
-
-                    // console.log('sadsddsad' + number.stores);
-                    let len = number.stores.length;
-                    number.storeName = "";
+                    let len = res.data["result"].length;
                     if (len > 0) {
                         for (let i = 0; i < len; i++) {
-                            if (number.storeName === "") {
-                                number.storeName = number.storeName + number.stores[i].name;
+                            let number = res.data.result[i];
+                            console.log(number);
+                            this.setState({ loading: false });
+
+                            // console.log('sadsddsad' + number.stores);
+                            let len = number.stores.length;
+                            number.storeName = "";
+                            if (len > 0) {
+                                for (let i = 0; i < len; i++) {
+                                    if (number.storeName === "") {
+                                        number.storeName = number.storeName + number.stores[i].name;
+                                    }
+                                    else {
+                                        number.storeName = number.storeName + "," + number.stores[i].name;
+                                    }
+                                }
                             }
-                            else {
-                                number.storeName = number.storeName + "," + number.stores[i].name;
-                            }
+                            this.state.usersData.push(number);
                         }
+                        this.setState({ usersData: this.state.usersData, modalVisible: false, userType: "", role: "", createdBy: "", branch: "" },
+                            () => {
+                                this.setState({ filterActive: true, usersError: "" });
+                            });
                     }
-                    this.state.usersData.push(number);
-                }
-                this.setState({ usersData: this.state.usersData, modalVisible: false, userType: "", role: "", createdBy: "", branch: "" },
-                    () => {
-                        this.setState({ filterActive: true, usersError: "" });
-                    });
-            }
                 } else {
                     this.setState({ modalVisible: false, userType: "", role: "", createdBy: "", branch: '', usersData: "" },
                         () => {
-                        this.setState({ filterActive: true, usersError: "Records Not Found" })
-                        console.log("records not found");
-                    });
+                            this.setState({ filterActive: true, usersError: "Records Not Found" })
+                            console.log("records not found");
+                        });
                 }
 
             } else {
@@ -581,42 +583,42 @@ export default class UserManagement extends Component {
                 <SafeAreaView style={styles.mainContainer}>
                     <View style={headerTitleContainer} >
                         <View style={headerTitleSubContainer}>
-                        <TouchableOpacity style={menuButton} onPress={() => this.handleBackButtonClick()}>
-                            <Image source={require('../assets/images/menu.png')} />
-                        </TouchableOpacity>
-                        <Text style={headerTitle}>
-                            {I18n.t("URM Portal")}
-                        </Text>
+                            <TouchableOpacity style={menuButton} onPress={() => this.handleBackButtonClick()}>
+                                <Image source={require('../assets/images/menu.png')} />
+                            </TouchableOpacity>
+                            <Text style={headerTitle}>
+                                {I18n.t("URM Portal")}
+                            </Text>
                         </View>
                         <View style={headerTitleSubContainer2}>
-                        {this.state.flagTwo && (
-                            <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToCreateRoles()}>
-                                <Text style={headerNavigationBtnText}>{I18n.t("Create Role")}</Text>
-                            </TouchableOpacity>
-                        )}
-                        {this.state.flagOne && (
-                            <TouchableOpacity style={[headerNavigationBtn, I18n.locale === "telugu" ? { height: 40 } : {}]} onPress={() => this.navigateToAddUsers()}>
-                                <Text style={headerNavigationBtnText}>{I18n.t("Add User")}</Text>
-                            </TouchableOpacity>
-                        )}
-                        {this.state.filterButton &&
-                            <View>
-                                {!this.state.filterActive &&
-                                    <TouchableOpacity
-                                        style={filterBtn}
-                                        onPress={() => this.filterAction()} >
-                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
-                                    </TouchableOpacity>
-                                }
-                                {this.state.filterActive &&
-                                    <TouchableOpacity
-                                        style={filterBtn}
-                                        onPress={() => this.clearFilterAction()} >
-                                        <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
-                                    </TouchableOpacity>
-                                }
-                            </View>
-                        }
+                            {this.state.flagTwo && (
+                                <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToCreateRoles()}>
+                                    <Text style={headerNavigationBtnText}>{I18n.t("Create Role")}</Text>
+                                </TouchableOpacity>
+                            )}
+                            {this.state.flagOne && (
+                                <TouchableOpacity style={[headerNavigationBtn, I18n.locale === "telugu" ? { height: 40 } : {}]} onPress={() => this.navigateToAddUsers()}>
+                                    <Text style={headerNavigationBtnText}>{I18n.t("Add User")}</Text>
+                                </TouchableOpacity>
+                            )}
+                            {this.state.filterButton &&
+                                <View>
+                                    {!this.state.filterActive &&
+                                        <TouchableOpacity
+                                            style={filterBtn}
+                                            onPress={() => this.filterAction()} >
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                                        </TouchableOpacity>
+                                    }
+                                    {this.state.filterActive &&
+                                        <TouchableOpacity
+                                            style={filterBtn}
+                                            onPress={() => this.clearFilterAction()} >
+                                            <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+                                        </TouchableOpacity>
+                                    }
+                                </View>
+                            }
                         </View>
                     </View>
 
@@ -626,63 +628,63 @@ export default class UserManagement extends Component {
                                 style={styles.flatList}
                                 horizontal
                                 data={this.state.privilages}
-                                ListEmptyComponent={ <EmptyList message={this.state.rolesError} />}
-                                    showsVerticalScrollIndicator={false}
-                                    showsHorizontalScrollIndicator={false}
-                                    renderItem={({ item, index }) => (
-                                    <TouchableOpacity style={[pageNavigationBtn, {backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF', borderColor: item.bool ? '#ED1C24' : '#858585',}]} onPress={() => this.topbarAction(item, index)} >
-                                            <Text style={[pageNavigationBtnText, {color: item.bool ? "#FFFFFF" : '#858585',}]}>
-                                                {item.name}
-                                            </Text>
-                                        </TouchableOpacity>
-                                    )}
-                                    ListFooterComponent={<View style={{ width: 15 }}></View>}
-                                />
+                                ListEmptyComponent={<EmptyList message={this.state.rolesError} />}
+                                showsVerticalScrollIndicator={false}
+                                showsHorizontalScrollIndicator={false}
+                                renderItem={({ item, index }) => (
+                                    <TouchableOpacity style={[pageNavigationBtn, { backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF', borderColor: item.bool ? '#ED1C24' : '#858585', }]} onPress={() => this.topbarAction(item, index)} >
+                                        <Text style={[pageNavigationBtnText, { color: item.bool ? "#FFFFFF" : '#858585', }]}>
+                                            {item.name}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )}
+                                ListFooterComponent={<View style={{ width: 15 }}></View>}
+                            />
 
-                                {console.log(this.state.privilages)}
+                            {console.log(this.state.privilages)}
 
                         </View>
-                                
+
 
                         {this.state.flagDashboard && (
                             <UrmDashboard />
                         )}
                         {this.state.flagTwo && (
                             <View>
-                            <FlatList
-                                data={this.state.rolesData}
-                                style={{ marginTop: 20, }}
-                                scrollEnabled={true}
-                                ListEmptyComponent={ <EmptyList message={this.state.rolesError} />}
-                                renderItem={({ item, index }) => (
-                                    <View style={flatListMainContainer}>
-                                        <View style={flatlistSubContainer}>
-                                            <View style={textContainer}>
-                                            <Text style={highText} >S.NO: {index + 1} </Text>
-                                            </View>
-                                            <View style={textContainer}>
-                                            <Text style={textStyleMedium}>{I18n.t("ROLE")}: {item.roleName}</Text>
-                                            <Text style={textStyleLight}>{I18n.t("DOMAIN")}: {item.clientDomainVo.domaiName}</Text>
-                                            </View>
-                                            <View style={textContainer}>
-                                            <Text style={textStyleMedium}>{I18n.t("CREATED BY")}: {item.createdBy}</Text>
-                                            <Text style={textStyleLight}>{I18n.t("USER COUNT")}: {item.usersCount}</Text>
-                                            </View>
-                                            <View style={textContainer}>
-                                            <Text style={textStyleLight}>{I18n.t("DESCRIPTION")}: {item.discription}</Text>
-                                            <View style={buttonContainer}>
-                                            <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditRole(item, index)}>
-                                                <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
-                                            </TouchableOpacity>
+                                <FlatList
+                                    data={this.state.rolesData}
+                                    style={{ marginTop: 20, }}
+                                    scrollEnabled={true}
+                                    ListEmptyComponent={<EmptyList message={this.state.rolesError} />}
+                                    renderItem={({ item, index }) => (
+                                        <View style={flatListMainContainer}>
+                                            <View style={flatlistSubContainer}>
+                                                <View style={textContainer}>
+                                                    <Text style={highText} >S.NO: {index + 1} </Text>
+                                                </View>
+                                                <View style={textContainer}>
+                                                    <Text style={textStyleMedium}>{I18n.t("ROLE")}: {item.roleName}</Text>
+                                                    <Text style={textStyleLight}>{I18n.t("DOMAIN")}: {item.clientDomainVo.domaiName}</Text>
+                                                </View>
+                                                <View style={textContainer}>
+                                                    <Text style={textStyleMedium}>{I18n.t("CREATED BY")}: {item.createdBy}</Text>
+                                                    <Text style={textStyleLight}>{I18n.t("USER COUNT")}: {item.usersCount}</Text>
+                                                </View>
+                                                <View style={textContainer}>
+                                                    <Text style={textStyleLight}>{I18n.t("DESCRIPTION")}: {item.discription}</Text>
+                                                    <View style={buttonContainer}>
+                                                        <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditRole(item, index)}>
+                                                            <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
+                                                        </TouchableOpacity>
 
-                                            <TouchableOpacity style={buttonStyle} onPress={() => this.handleRoledeleteaction(item, index)}>
-                                                <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
-                                            </TouchableOpacity>
+                                                        <TouchableOpacity style={buttonStyle} onPress={() => this.handleRoledeleteaction(item, index)}>
+                                                            <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                </View>
                                             </View>
                                         </View>
-                                    </View>
-                                </View>
-                                )}
+                                    )}
                                 />
                                 {/* {this.state.rolesData.length === 0 && this.state.rolesError.length > 0 && 
                                     <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.rolesError}</Text>
@@ -691,41 +693,41 @@ export default class UserManagement extends Component {
                         )}
                         {this.state.flagOne && (
                             <View>
-                            <FlatList
-                                data={this.state.usersData}
-                                style={{ marginTop: 20, }}
-                                scrollEnabled={true}
-                                renderItem={({ item, index }) => (
-                                    <View style={flatListMainContainer}>
-                                        <View style={flatlistSubContainer}>
-                                            <View style={textContainer}>
-                                            <Text style={highText} >{I18n.t("USER ID")}: {item.userId} </Text>
-                                            <Text style={textStyleLight}>{I18n.t("STATUS")}: {item.active ? "active" : "Inactive"}</Text>
-                                            </View>
-                                            <View style={textContainer}>
-                                            <Text style={textStyleMedium}>{I18n.t("USER NAME")}: {item.userName}</Text>
-                                            </View>
-                                            <View style={textContainer}>
-                                            <Text style={textStyleMedium}>{I18n.t("ROLE")}: {item.roleName} </Text>
-                                                <Text style={textStyleLight}>{I18n.t("STORE NAME")}: {"\n"}{item.storeName}</Text>
-                                            </View>
-                                            <View style={textContainer}>
-                                            <Text style={textStyleLight}>{I18n.t("CREATED DATE")}: {"\n"}{item.createdDate}</Text>
-                                            <View style={buttonContainer}>
-                                            <TouchableOpacity style={buttonStyle1} onPress={() => this.handleedituser(item, index)}>
-                                                <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={buttonStyle} onPress={() => this.handleuserdeleteaction(item, index)}>
-                                                <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
-                                            </TouchableOpacity>
-                                            </View>
+                                <FlatList
+                                    data={this.state.usersData}
+                                    style={{ marginTop: 20, }}
+                                    scrollEnabled={true}
+                                    renderItem={({ item, index }) => (
+                                        <View style={flatListMainContainer}>
+                                            <View style={flatlistSubContainer}>
+                                                <View style={textContainer}>
+                                                    <Text style={highText} >{I18n.t("USER ID")}: {item.userId} </Text>
+                                                    <Text style={textStyleLight}>{I18n.t("STATUS")}: {item.active ? "active" : "Inactive"}</Text>
+                                                </View>
+                                                <View style={textContainer}>
+                                                    <Text style={textStyleMedium}>{I18n.t("USER NAME")}: {item.userName}</Text>
+                                                </View>
+                                                <View style={textContainer}>
+                                                    <Text style={textStyleMedium}>{I18n.t("ROLE")}: {item.roleName} </Text>
+                                                    <Text style={textStyleLight}>{I18n.t("STORE NAME")}: {"\n"}{item.storeName}</Text>
+                                                </View>
+                                                <View style={textContainer}>
+                                                    <Text style={textStyleLight}>{I18n.t("CREATED DATE")}: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
+                                                    <View style={buttonContainer}>
+                                                        <TouchableOpacity style={buttonStyle1} onPress={() => this.handleedituser(item, index)}>
+                                                            <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
+                                                        </TouchableOpacity>
+                                                        <TouchableOpacity style={buttonStyle} onPress={() => this.handleuserdeleteaction(item, index)}>
+                                                            <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                </View>
                                             </View>
                                         </View>
-                                    </View>
-                                )}
+                                    )}
                                 />
-                                {this.state.usersData.length === 0 && this.state.usersError.length > 0 && 
-                                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.usersError}</Text>
+                                {this.state.usersData.length === 0 && this.state.usersError.length > 0 &&
+                                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight / 3 }}>&#9888; {this.state.usersError}</Text>
                                 }
                             </View>
                         )}

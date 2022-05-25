@@ -112,6 +112,12 @@ export default class Barcode extends Component {
     this.setState({ datepickerendOpen: true });
   }
 
+  modelCancel() {
+    this.setState({
+      modalVisible: false
+    })
+  }
+
   datepickerDoneClicked() {
     if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
       this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
@@ -125,8 +131,6 @@ export default class Barcode extends Component {
     else {
       this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
     }
-
-
     this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
   }
 
@@ -176,7 +180,7 @@ export default class Barcode extends Component {
           }
         }
       }
-      this.setState({loading: false})
+      this.setState({ loading: false })
       this.props.childParams()
       this.props.modelCancelCallback();
     }).catch((err) => {
@@ -202,6 +206,7 @@ export default class Barcode extends Component {
             scrollEnabled={true}
             ListEmptyComponent={<Text style={listEmptyMessage}>&#9888; Records Not Found</Text>}
             keyExtractor={(item, i) => i.toString()}
+            removeClippedSubviews={false}
             renderItem={({ item, index }) => (
               <View style={{ flex: 1 }}>
                 <ScrollView>
@@ -211,8 +216,8 @@ export default class Barcode extends Component {
                         <Text style={highText}>S.NO: {index + 1}</Text>
                       </View>
                       <View style={textContainer}>
-                        <Text style={textStyleMedium} selectable={true}>{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
-                        <Text style={textStyleLight}>QTY:  {item.qty}</Text>
+                        <Text style={textStyleMedium}>{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
+                        <Text style={textStyleLight}>QTY: {item.qty}</Text>
                       </View>
                       <View style={textContainer}>
                         <Text style={textStyleLight}>{I18n.t("STORE")}: {this.state.storeName}</Text>
