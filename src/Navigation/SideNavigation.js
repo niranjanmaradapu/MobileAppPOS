@@ -5,6 +5,7 @@ import PromoNavigation from './PromoNavigation';
 import InventoryNavigation from './InventoryNavigation';
 import { DrawerContent } from './DrawerContent';
 import UrmNavigation from './UrmNavigation';
+import UrmService from '../components/services/UrmService';
 import NewSaleNavigation from './NewSaleNavigation';
 import Home from '../components/Home/Home';
 import AccountingNaviagtion from './AccountingNavigation';
@@ -16,6 +17,7 @@ import Device from 'react-native-device-detection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator } from 'react-native-paper';
 import { View } from 'react-native';
+import axios from 'axios'
 
 global.previlage1 = '';
 global.previlage2 = '';
@@ -56,6 +58,7 @@ export default class SideNavigation extends React.Component {
         this.setState({ loading: false });
     }
     async componentDidMount() {
+        console.warn("Gloal", global.previlage1)
         this.setState({ loading: false })
         var storeStringId = "";
         var domainStringId = "";
@@ -133,6 +136,7 @@ export default class SideNavigation extends React.Component {
 
                         axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
                             if (res.data && res.data["isSuccess"] === "true") {
+                                alert("hey super user")
                                 console.log(res.data);
                                 let len = res.data["result"].length;
                                 console.log(len);
@@ -172,7 +176,6 @@ export default class SideNavigation extends React.Component {
                             global.userrole = value;
                             axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
                                 if (res.data && res.data["isSuccess"] === "true") {
-                                    console.log(res.data);
                                     let len = res.data["result"].parentPrivilages.length;
                                     // console.log(.name)
                                     if (len > 0) {
@@ -204,9 +207,9 @@ export default class SideNavigation extends React.Component {
                                     }
                                 }
                             });
-                        }).catch(() => {
+                        }).catch((err) => {
                             ////this.setState({ loading: false });
-                            console.log('There is error saving domainDataId');
+                            console.log(err);
                             // alert('There is error saving domainDataId');
                         });
 
@@ -239,9 +242,12 @@ export default class SideNavigation extends React.Component {
             this.setState({ domainId: 1 });
         }
         this.initialRouteName()
+        console.log("")
+
 
     }
     render() {
+        // alert(this.state.route)
         return this.state.loading ? (
             <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
                 <ActivityIndicator size={"large"} color={"red"} />
@@ -249,7 +255,7 @@ export default class SideNavigation extends React.Component {
 
         ) : (
             <Drawer.Navigator
-                initialRouteName={global.previlage1 === 'Dashboard'? "Home": global.previlage2 === 'Billing Portal' ? "CustomerNavigation" :global.previlage3 === 'Inventory Portal'?"InventoryNavigation ":global.previlage4 === 'Promotions & Loyalty'? "PromoNavigation" :global.previlage5 === 'Accounting Portal'? "AccountingNaviagtion":global.previlage6 === 'Reports'?"ReportsNavigation":global.previlage7 === 'URM Portal'? "UrmNavigation" : "Home"}
+                initialRouteName={global.previlage1 === 'Dashboard' ? "Home" : global.previlage2 === 'Billing Portal' ? "CustomerNavigation" : global.previlage3 === 'Inventory Portal' ? "InventoryNavigation " : global.previlage4 === 'Promotions & Loyalty' ? "PromoNavigation" : global.previlage5 === 'Accounting Portal' ? "AccountingNaviagtion" : global.previlage6 === 'Reports' ? "ReportsNavigation" : global.previlage7 === 'URM Portal' ? "UrmNavigation" : "Home"}
                 screenOptions={{
                     drawerStyle: {
                         width: Device.isTablet ? 400 : 300,

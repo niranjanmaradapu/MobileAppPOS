@@ -117,14 +117,7 @@ export default class DebitNotes extends Component {
         AccountingService.getDebitNotes(reqOb).then(res => {
             if (res) {
                 console.log(res.data.content)
-                this.setState({ debitNotes: res.data.content }, () => {
-                    // for (let i = 0; i < this.state.debitNotes.length; i++) {
-                    //     var debits = [...this.state.debitNotes]
-                    //     let date = debits[i].lastModifiedDate.split(/T/)
-                    //     debits[i].lastModifiedDate = date[0]
-                    // }
-                })
-
+                this.setState({ debitNotes: res.data.content })
             }
         })
     }
@@ -154,6 +147,11 @@ export default class DebitNotes extends Component {
             this.props.modelCancelCallback();
             console.log(err)
         })
+    }
+
+    had
+
+    handleAddDebit(item, index) {
 
     }
 
@@ -180,7 +178,16 @@ export default class DebitNotes extends Component {
                                     <Text style={textStyleLight}>APPROVED BY: {"\n"}{item.apporvedBy}</Text>
                                 </View>
                                 <View style={textContainer}>
-                                    <Text style={textStyleLight}>DATE: {item.lastModifiedDate.toString().split(/T/)[0]}</Text>
+                                    <Text style={textStyleLight}>DATE: {item.lastModifiedDate ? item.lastModifiedDate.toString().split(/T/)[0] : item.lastModifiedDate}</Text>
+                                    <View style={buttonContainer}>
+                                        <TouchableOpacity style={buttonStyle1} onPress={() => this.handleViewDebit(item, index)}>
+                                            <Image style={buttonImageStyle} source={require('../assets/images/eye.png')} />
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity style={buttonStyle} onPress={() => this.handleAddDebit(item, index)}>
+                                            <Text style={{ fontSize: RF(20), textAlign: 'center' }}>+</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             </View>
                         </View>
