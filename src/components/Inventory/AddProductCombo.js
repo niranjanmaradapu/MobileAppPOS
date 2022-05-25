@@ -5,6 +5,8 @@ import { cancelBtn, cancelBtnText, inputField, inputHeading, submitBtn, submitBt
 import axios from 'axios'
 import InventoryService from '../services/InventoryService'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import Message from '../Errors/Message'
+import {inventoryErrorMessages} from '../Errors/errors'
 
 export default class AddProductCombo extends Component {
 
@@ -18,7 +20,8 @@ export default class AddProductCombo extends Component {
       domainId: 0,
       selectedDomainId: 0,
       listOfProducts: [],
-      comboDescription: ""
+      comboDescription: "",
+      errors: {}
     }
   }
 
@@ -47,7 +50,30 @@ export default class AddProductCombo extends Component {
     this.setState({ comboQty: value })
   }
 
+  validationForm() {
+    let isValid = true
+    let errors = {}
+    const { listOfProducts, comboName, comboQty } = this.state
+    if(listOfProducts.length < 1) {
+      isValid = false
+      errors["product"] = inventoryErrorMessages.products
+    }
+    if(comboName.length < 1){
+      isValid = false
+      errors["comboName"] = inventoryErrorMessages.comboName
+      console.log("error")
+    }
+    if(comboQty.length < 1) {
+      isValid = false
+      errors["comboQty"] = inventoryErrorMessages.comboQty
+    }
+    this.setState({errors: errors})
+    return isValid
+  }
+
   saveProduct() {
+    const isValid = this.validationForm()
+    if(isValid){
     const { comboName, comboQty, barCodeId, selectedDomainId, storeId, listOfProducts, comboDescription } = this.state
     const comboProductList = listOfProducts.map((item) => {
       const obj = {}
@@ -66,7 +92,20 @@ export default class AddProductCombo extends Component {
       productTextiles: comboProductList
     }
 
-    
+    console.log(requestObj)
+    axios.post(InventoryService.addProductCombo(), requestObj).then(res => {
+      if (res && res.data.isSuccess === "true") {
+        alert(res.data.message)
+        this.setState({
+          comboName: "",
+          comboQty: "",
+          listOfProducts: [],
+        })
+      }else{
+        alert(res.data.message)
+      }
+    })
+  }
   }
 
   getBarcodeDetails() {
@@ -78,7 +117,7 @@ export default class AddProductCombo extends Component {
         const { barcode, name, itemMrp, qty, productTextileId } = res.data.result
         const obj = { barcode, name, itemMrp, qty, productTextileId }
         console.log(obj)
-        this.setState({ listOfProducts: [...this.state.listOfProducts, obj] })
+        this.setState({ listOfProducts: [...this.state.listOfProducts, obj], barCodeId: "" })
       }
       console.log(this.state.listOfProducts)
     })
@@ -99,6 +138,7 @@ export default class AddProductCombo extends Component {
   }
 
   render() {
+    const {errors} = this.state
     return (
       <View>
         <View style={headerTitleContainer}>
@@ -121,6 +161,7 @@ export default class AddProductCombo extends Component {
             value={this.state.comboName}
             onChangeText={this.handleComboName}
           />
+          <Message imp={false} message={errors["comboName"]} />
           <Text style={inputHeading}>Combo Qty</Text>
           <TextInput
             style={inputField}
@@ -132,6 +173,7 @@ export default class AddProductCombo extends Component {
             value={this.state.comboQty}
             onChangeText={this.handleComboQty}
           />
+          <Message imp={false} message={errors["comboQty"]} />
           <Text style={inputHeading}>Barcode</Text>
           <TextInput
             style={inputField}
@@ -144,6 +186,7 @@ export default class AddProductCombo extends Component {
             onChangeText={this.handleBarcodeId}
             onEndEditing={() => { this.getBarcodeDetails() }}
           />
+        <Message imp={false} message={errors["product"]} />
           <TouchableOpacity style={submitBtn} onPress={() => { this.saveProduct() }}>
             <Text style={submitBtnText}>Save</Text>
           </TouchableOpacity>
@@ -156,6 +199,7 @@ export default class AddProductCombo extends Component {
             data={this.state.listOfProducts}
             style={{ marginTop: 20 }}
             scrollEnabled={true}
+            ListEmptyComponent={<Text style={{textAlign:'center', color: '#cc241d', fontSize: 18}}>Products List is empty</Text>}
             renderItem={({ item, index }) => (
               <View style={flatListMainContainer}>
                 <View style={flatlistSubContainer}>

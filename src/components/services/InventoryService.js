@@ -77,5 +77,9 @@ class InventoryService {
         return REACT_NATIVE_APP_BASE_URL + "/inventory/productBundle/all"
     }
 
+    addProductCombo() {
+        return REACT_NATIVE_APP_BASE_URL + "/inventory/productBundle/add"
+    }
+
 }
 export default new InventoryService();

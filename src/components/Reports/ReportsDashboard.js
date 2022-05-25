@@ -241,20 +241,20 @@ export default class ReportsDashboard extends Component {
     render() {
         return (
             <View>
-                <View style={[styles.chartMaincontainer, { height: Device.isTablet ? 400 : RH(550) }]}>
+                <View style={[styles.chartMaincontainer, { height:RH(550) }]}>
                     <Text style={Device.isTablet ? styles.chartTitle_tablet : styles.chartTitle_mobile}>{I18n.t("Top 5 Sales")}</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: Device.isTablet ? deviceWidth - 260 : deviceWidth - RW(160) }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: deviceWidth - RW(160) }}>
                         <BarChart
                             style={{ paddingTop: 20 }}
                             data={this.state.topSalesChart}
-                            width={Device.isTablet ? deviceWidth - 120 : deviceWidth - RW(60)}
-                            height={Device.isTablet ? 300 : RH(450)}
+                            width={deviceWidth - RW(60)}
+                            height={RH(450)}
                             yLabelsOffset={20}
-                            xLabelsOffset={Device.isTablet ? 0 : -20}
+                            xLabelsOffset={-20}
                             yAxisLabel="₹"
                             fromZero
                             chartConfig={chartConfig}
-                            verticalLabelRotation={Device.isTablet ? 0 : 90}
+                            verticalLabelRotation={90}
                         />
                     </View>
                 </View>

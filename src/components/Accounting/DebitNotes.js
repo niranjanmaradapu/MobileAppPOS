@@ -49,7 +49,7 @@ export default class DebitNotes extends Component {
         this.getDebitNotes()
     }
 
-    
+
     datepickerClicked() {
         this.setState({ datepickerOpen: true });
     }
@@ -103,7 +103,7 @@ export default class DebitNotes extends Component {
     }
 
 
-        async getDebitNotes() {
+    async getDebitNotes() {
         const accountType = 'DEBIT';
         const { storeId } = this.state
         const reqOb = {
@@ -117,7 +117,14 @@ export default class DebitNotes extends Component {
         AccountingService.getDebitNotes(reqOb).then(res => {
             if (res) {
                 console.log(res.data.content)
-                this.setState({debitNotes: res.data.content})
+                this.setState({ debitNotes: res.data.content }, () => {
+                    // for (let i = 0; i < this.state.debitNotes.length; i++) {
+                    //     var debits = [...this.state.debitNotes]
+                    //     let date = debits[i].lastModifiedDate.split(/T/)
+                    //     debits[i].lastModifiedDate = date[0]
+                    // }
+                })
+
             }
         })
     }
@@ -154,7 +161,7 @@ export default class DebitNotes extends Component {
         return (
             <View>
                 <FlatList
-                    data={this.props.filterActive ? this.state.filterDebitData :this.state.debitNotes}
+                    data={this.props.filterActive ? this.state.filterDebitData : this.state.debitNotes}
                     style={{ marginTop: 20 }}
                     scrollEnabled={true}
                     renderItem={({ item, index }) => (
@@ -173,117 +180,117 @@ export default class DebitNotes extends Component {
                                     <Text style={textStyleLight}>APPROVED BY: {"\n"}{item.apporvedBy}</Text>
                                 </View>
                                 <View style={textContainer}>
-                                <Text style={textStyleLight}>DATE: {"\n"}{item.lastModifiedDate}</Text>
+                                    <Text style={textStyleLight}>DATE: {item.lastModifiedDate.toString().split(/T/)[0]}</Text>
                                 </View>
                             </View>
                         </View>
                     )}
                 />
                 {this.props.filterDebitNotes && (
-                <View>
-                <Modal isVisible={this.props.modalVisible} style={{margin: 0}}>
-                    <View style={filterMainContainer} >
-                        <KeyboardAwareScrollView enableOnAndroid={true} >
-                            <View style={filterSubContainer}>
-                            <View>
-                            <Text style={filterHeading} > Filter by </Text>
-                            </View>
-                            <View>
-                            <TouchableOpacity style={filterCloseImage} onPress={() => this.modelCancel()}>
-                                <Image style={{margin: RH(5)}} source={require('../assets/images/modelcancel.png')} />
-                            </TouchableOpacity>
-                            </View>
-                            </View>
-                            <Text style={{width: deviceWidth, borderColor: '#000000', borderBottomWidth: Device.isTablet ? 2 : 1}}></Text>
-                            <TouchableOpacity
-                                style={dateSelector}
-                                testID="openModal"
-                                onPress={() => this.datepickerClicked()}
-                            >
-                                <Text
-                                    style={dateText}
-                                >{this.state.startDate == "" ? 'START DATE' : this.state.startDate}</Text>
-                                <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
-                            </TouchableOpacity>
-                            {this.state.datepickerOpen && (
-                                    <View style={styles.dateTopView}>
-                                    <View style={styles.dateTop2}>
-                                    <TouchableOpacity
-                                        style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
-                                    >
-                                        <Text style={datePickerBtnText}  > Cancel </Text>
-
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        style={datePickerButton2} onPress={() => this.datepickerDoneClicked()}
-                                    >
-                                        <Text style={datePickerBtnText}  > Done </Text>
-                                    </TouchableOpacity>
+                    <View>
+                        <Modal isVisible={this.props.modalVisible} style={{ margin: 0 }}>
+                            <View style={filterMainContainer} >
+                                <KeyboardAwareScrollView enableOnAndroid={true} >
+                                    <View style={filterSubContainer}>
+                                        <View>
+                                            <Text style={filterHeading} > Filter by </Text>
+                                        </View>
+                                        <View>
+                                            <TouchableOpacity style={filterCloseImage} onPress={() => this.modelCancel()}>
+                                                <Image style={{ margin: RH(5) }} source={require('../assets/images/modelcancel.png')} />
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                    <DatePicker style={styles.date}
-                                        date={this.state.date}
-                                        mode={'date'}
-                                        onDateChange={(date) => this.setState({ date })}
-                                    />
-                                </View>
-                            )}
-                            <TouchableOpacity
-                                style={dateSelector}
-                                testID="openModal"
-                                onPress={() => this.enddatepickerClicked()}
-                            >
-                                <Text
-                                    style={dateText}
-                                >{this.state.endDate == "" ? 'END DATE' : this.state.endDate}</Text>
-                                <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
-                            </TouchableOpacity>
-                            {this.state.datepickerendOpen && (
-                                    <View style={styles.dateTopView}>
-                                    <View style={styles.dateTop2}>
+                                    <Text style={{ width: deviceWidth, borderColor: '#000000', borderBottomWidth: Device.isTablet ? 2 : 1 }}></Text>
                                     <TouchableOpacity
-                                        style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
+                                        style={dateSelector}
+                                        testID="openModal"
+                                        onPress={() => this.datepickerClicked()}
                                     >
-                                        <Text style={datePickerBtnText}  > Cancel </Text>
+                                        <Text
+                                            style={dateText}
+                                        >{this.state.startDate == "" ? 'START DATE' : this.state.startDate}</Text>
+                                        <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
+                                    {this.state.datepickerOpen && (
+                                        <View style={styles.dateTopView}>
+                                            <View style={styles.dateTop2}>
+                                                <TouchableOpacity
+                                                    style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
+                                                >
+                                                    <Text style={datePickerBtnText}  > Cancel </Text>
+
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={datePickerButton2} onPress={() => this.datepickerDoneClicked()}
+                                                >
+                                                    <Text style={datePickerBtnText}  > Done </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            <DatePicker style={styles.date}
+                                                date={this.state.date}
+                                                mode={'date'}
+                                                onDateChange={(date) => this.setState({ date })}
+                                            />
+                                        </View>
+                                    )}
                                     <TouchableOpacity
-                                        style={datePickerButton2} onPress={() => this.datepickerendDoneClicked()}
+                                        style={dateSelector}
+                                        testID="openModal"
+                                        onPress={() => this.enddatepickerClicked()}
                                     >
-                                        <Text style={datePickerBtnText}  > Done </Text>
+                                        <Text
+                                            style={dateText}
+                                        >{this.state.endDate == "" ? 'END DATE' : this.state.endDate}</Text>
+                                        <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
                                     </TouchableOpacity>
-                                    </View>
-                                    <DatePicker style={styles.date}
-                                        date={this.state.enddate}
-                                        mode={'date'}
-                                        onDateChange={(enddate) => this.setState({ enddate })}
+                                    {this.state.datepickerendOpen && (
+                                        <View style={styles.dateTopView}>
+                                            <View style={styles.dateTop2}>
+                                                <TouchableOpacity
+                                                    style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
+                                                >
+                                                    <Text style={datePickerBtnText}  > Cancel </Text>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity
+                                                    style={datePickerButton2} onPress={() => this.datepickerendDoneClicked()}
+                                                >
+                                                    <Text style={datePickerBtnText}  > Done </Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                            <DatePicker style={styles.date}
+                                                date={this.state.enddate}
+                                                mode={'date'}
+                                                onDateChange={(enddate) => this.setState({ enddate })}
+                                            />
+                                        </View>
+                                    )}
+                                    <TextInput
+                                        style={inputField}
+                                        underlineColorAndroid="transparent"
+                                        placeholder="MOBILE"
+                                        placeholderTextColor="#6F6F6F"
+                                        textAlignVertical="center"
+                                        autoCapitalize="none"
+                                        value={this.state.mobile}
+                                        onChangeText={this.handleMobile}
                                     />
-                                </View>
-                            )}
-                            <TextInput
-                                style={inputField}
-                                underlineColorAndroid="transparent"
-                                placeholder="MOBILE"
-                                placeholderTextColor="#6F6F6F"
-                                textAlignVertical="center"
-                                autoCapitalize="none"
-                                value={this.state.mobile}
-                                onChangeText={this.handleMobile}
-                            />
 
-                            <TouchableOpacity style={submitBtn}
-                                onPress={() => this.applyDebitNotesFilter()}>
-                                <Text style={submitBtnText} >APPLY</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={cancelBtn}
-                                onPress={() => this.modelCancel()}>
-                                <Text style={cancelBtnText}>CANCEL</Text>
-                            </TouchableOpacity>
+                                    <TouchableOpacity style={submitBtn}
+                                        onPress={() => this.applyDebitNotesFilter()}>
+                                        <Text style={submitBtnText} >APPLY</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity style={cancelBtn}
+                                        onPress={() => this.modelCancel()}>
+                                        <Text style={cancelBtnText}>CANCEL</Text>
+                                    </TouchableOpacity>
 
-                        </KeyboardAwareScrollView>
+                                </KeyboardAwareScrollView>
+                            </View>
+                        </Modal>
                     </View>
-                </Modal>
-            </View>
 
-            )}
+                )}
             </View>
         );
     }
@@ -296,13 +303,13 @@ const styles = StyleSheet.create({
         marginRight: Device.isTablet ? 30 : 20,
     },
 
-    
-        date: {
+
+    date: {
         width: deviceWidth,
         height: RH(200),
         marginTop: RH(50),
     },
-        calenderpng: {
+    calenderpng: {
         position: 'absolute',
         top: RH(10),
         right: 0,

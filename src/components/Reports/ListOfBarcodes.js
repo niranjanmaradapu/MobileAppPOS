@@ -1303,7 +1303,7 @@ const flats = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        paddingleLt: RW(20),
+        paddingletf: RW(20),
         paddingRight:RW (20),
         alignItems: 'center',
         height: RH(160)

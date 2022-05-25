@@ -122,9 +122,17 @@ export default class AccountManagement extends Component {
                                                         this.setState({ flagStore: true })
                                                     } else if (this.state.privilages[0].name === "Doamin") {
                                                         this.setState({ flagDomain: true })
+                                                    } else if (this.state.privilages[0].name === "Credit Notes") {
+                                                        this.setState({ flagCreditNotes: true })
+                                                    } else if (this.state.privilages[0].name === "Debit Notes") {
+                                                        this.setState({ flagDebitNotes: false })
+                                                    } else if (this.state.privilages[0].name === "Create Tax Master") {
+                                                        this.setState({ flagCreditNotes: true })
+                                                    } else if (this.state.privilages[0].name === "Create HSN Code") {
+                                                        this.setState({ flagHSNCode: true })
                                                     }
                                                     else {
-                                                        this.setState({ flagStore: false, flagDashboard: false, flagDomain: false })
+                                                        this.setState({ flagStore: false, flagDashboard: false, flagDomain: false, flagCreditNotes: false, flagDebitNotes: false, flagTaxMaster: false, flagHSNCode: false })
                                                     }
                                                 }
                                             });
@@ -181,14 +189,17 @@ export default class AccountManagement extends Component {
                                                                 this.setState({ flagStore: true })
                                                             } else if (this.state.privilages[0].name === "Doamin") {
                                                                 this.setState({ flagDomain: true })
-                                                            } else if (this.state.privilages[0].name === "Credit Notes"
-                                                                || this.state.privilages[0].name === "Debit Notes"
-                                                                || this.state.privilages[0].name === "Create Tax Master"
-                                                                || this.state.privilages[0].name === "Create HSN Code") {
-                                                                this.setState({ flagStore: true })
+                                                            } else if (this.state.privilages[0].name === "Credit Notes") {
+                                                                this.setState({ flagCreditNotes: true })
+                                                            } else if (this.state.privilages[0].name === "Debit Notes") {
+                                                                this.setState({ flagDebitNotes: false })
+                                                            } else if (this.state.privilages[0].name === "Create Tax Master") {
+                                                                this.setState({ flagCreditNotes: true })
+                                                            } else if (this.state.privilages[0].name === "Create HSN Code") {
+                                                                this.setState({ flagHSNCode: true })
                                                             }
                                                             else {
-                                                                this.setState({ flagStore: false, flagDashboard: false, flagDomain: false })
+                                                                this.setState({ flagStore: false, flagDashboard: false, flagDomain: false, flagCreditNotes: false, flagDebitNotes: false, flagTaxMaster: false, flagHSNCode: false })
                                                             }
                                                         });
                                                     } else {

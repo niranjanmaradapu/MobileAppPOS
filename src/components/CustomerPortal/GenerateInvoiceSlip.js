@@ -770,7 +770,7 @@ class GenerateInvoiceSlip extends Component {
 
                                 {(global.domainName === "Textile" &&
                                     <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between' }}>
-                                        <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.25 : deviceWidth / 1.4 }]}
+                                        <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.45 : deviceWidth / 1.6 }]}
                                             underlineColorAndroid="transparent"
                                             placeholder={I18n.t("Enter ES Number")}
                                             placeholderTextColor="#6F6F6F60"

@@ -12,9 +12,7 @@ import Modal from "react-native-modal";
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
-import { RF } from '../../Responsive';
 import CustomerService from '../services/CustomerService';
-import { inputField, rnPicker, rnPickerContainer } from '../Styles/FormFields';
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
@@ -97,14 +95,11 @@ class GenerateEstimationSlip extends Component {
             resultModel: false,
             resultData: "",
             resultDsNumber: "",
-            manualAmount: 0,
         };
     }
 
 
     async componentDidMount() {
-        const userId = await AsyncStorage.getItem("custom:userId")
-        this.setState({smnumber: userId})
         AsyncStorage.getItem("storeId").then((value) => {
             storeStringId = value;
             this.setState({ storeId: parseInt(storeStringId) });
@@ -114,6 +109,8 @@ class GenerateEstimationSlip extends Component {
             console.log('There is error getting storeId');
             // alert('There is error getting storeId');
         });
+        const userId = await AsyncStorage.getItem("custom:userId")
+        this.setState({ smnumber: userId })
     }
 
 
@@ -131,7 +128,7 @@ class GenerateEstimationSlip extends Component {
         this.setState({ modalVisible: true, lineItemDelete: true });
     };
 
-    deleteLineItem = (item, index) => {
+    deleteLineItem(item, index) {
         this.state.itemsList.splice(index, 1);
         this.setState({ barList: this.state.itemsList });
         this.calculateTotal();
@@ -226,35 +223,49 @@ class GenerateEstimationSlip extends Component {
         axios.get(CustomerService.getDeliverySlip(), { params }).then((res) => {
             if (res.data) {
                 // res.data.result.salesMan = this.state.smNumber;
-                this.state.itemsList.push(res.data.result);
+                let totalAmount = 0;
+                let totalqty = 0;
+                let count = false
                 RNBeep.beep();
-                if (this.state.itemsList.length > 1) {
-                    for (let i = 0; i < this.state.itemsList.length - 1; i++) {
+                if (this.state.itemsList.length === 0) {
+                    this.state.itemsList.push(res.data.result);
+                } else {
+                    for (let i = 0; i < this.state.itemsList.length; i++) {
                         if (
                             this.state.itemsList[i].barcode ===
-                            this.state.itemsList[i + 1].barcode
+                            res.data.result.barcode
                         ) {
-
-                            this.state.itemsList.splice(i, 1);
-                            alert("Barcode already entered");
-                            break;
+                            count = true
+                            var items = [...this.state.itemsList]
+                            if (parseInt(items[i].quantity) + 1 <= parseInt(items[i].qty)) {
+                                let addItem = parseInt(items[i].quantity) + 1;
+                                items[i].quantity = addItem.toString()
+                                let totalcostMrp = items[i].itemMrp * parseInt(items[i].quantity)
+                                items[i].totalMrp = totalcostMrp
+                                break;
+                            } else {
+                                alert("Barcode reached max")
+                                break;
+                            }
                         }
                     }
+                    if (!count) {
+                        this.state.itemsList.push(res.data.result)
+                    }
+
                 }
                 this.setState({ barList: this.state.itemsList }, () => {
                     this.state.barList.forEach((element) => {
                         if (element.quantity > 1) {
-                            console.log(element.quantity);
                         } else {
                             element.totalMrp = element.itemMrp;
-                            element.quantity = parseInt("1");
+                            element.quantity = parseInt(1);
                         }
 
                     });
                     this.calculateTotal();
                 });
-                this.setState({ barcodeId: "", uom: "", smnumber: "" });
-                this.state.barcodeId = "";
+                this.setState({ barcodeId: "", });
             } else {
                 alert(res.data.body);
             }
@@ -390,6 +401,7 @@ class GenerateEstimationSlip extends Component {
         }).catch(() => {
             this.setState({ loading: false });
             console.log('There is error getting token');
+            //alert('There is error getting token');
         });
 
         return (
@@ -404,20 +416,9 @@ class GenerateEstimationSlip extends Component {
                                 marginTop: 10,
                             }}>
                             <View>
-                                <View style={{ display: 'flex', flexDirection: 'column' }} >
-                                    <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <TextInput style={[inputField, {width: deviceWidth / 2}]}
-                                        underlineColorAndroid="transparent"
-                                        placeholder={I18n.t("ENTER BARCODE")}
-                                        placeholderTextColor="#6F6F6F60"
-                                        textAlignVertical="center"
-                                        autoCapitalize="none"
-                                        value={this.state.barcodeId}
-                                        onChangeText={this.handleBarCode}
-                                        onEndEditing={() => this.endEditing()}
-                                    />
-                                    <View style={[rnPickerContainer, {width: deviceWidth / 3}]}>
+                                <View style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : styles.rnSelectContainer_mobile_newsale}>
                                     <RNPickerSelect
+                                        // style={Device.isTablet ? styles.rnSelectContainer_tablet_newsale : styles.rnSelectContainer_mobile_newsale}
                                         placeholder={{
                                             label: 'SELECT UOM',
                                             value: "",
@@ -430,14 +431,27 @@ class GenerateEstimationSlip extends Component {
                                             { label: 'Meters', value: 'Meters' },
                                         ]}
                                         onValueChange={this.handleUOM}
-                                        style={[rnPicker]}
+                                        disabled={true}
+                                        style={pickerSelectStyles}
                                         value={this.state.uom}
                                         useNativeAndroidPickerStyle={false}
+
                                     />
-                                    </View>
-                                    </View>
-                                <View style={{ display: 'flex', flexDirection: 'row' }}>
-                                <TextInput style={[inputField, { width: Device.isTablet ? 130 : 80 }]}
+                                </View>
+
+                                <TextInput style={Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal}
+                                    underlineColorAndroid="transparent"
+                                    placeholder={I18n.t("ENTER BARCODE")}
+                                    placeholderTextColor="#6F6F6F60"
+                                    textAlignVertical="center"
+                                    autoCapitalize="none"
+                                    value={this.state.barcodeId}
+                                    // onEndEditing
+                                    onChangeText={this.handleBarCode}
+                                    onEndEditing={() => this.endEditing()}
+                                />
+
+                                <TextInput style={[Device.isTablet ? styles.input_tablet_normal_start : styles.input_mobile_normal_start, { width: Device.isTablet ? 150 : 100 }]}
                                     underlineColorAndroid="transparent"
                                     placeholder={I18n.t("SM Number")}
                                     placeholderTextColor="#6F6F6F60"
@@ -447,9 +461,11 @@ class GenerateEstimationSlip extends Component {
                                     value={this.state.smnumber}
                                     // onEndEditing
                                     onChangeText={(text) => this.handleSmCode(text)}
+                                // onEndEditing={() => this.endEditing()}
                                 />
+
                                 {this.state.uom === "Pieces" && (
-                                    <TextInput style={[inputField, { width: Device.isTablet ? 130 : 80 }]}
+                                    <TextInput style={[Device.isTablet ? styles.input_tablet_notedit : styles.input_mobile_notedit, { marginLeft: Device.isTablet ? deviceWidth / 2.4 : deviceWidth / 2.15, width: Device.isTablet ? 160 : 80 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         placeholderTextColor="#6F6F6F60"
@@ -461,7 +477,7 @@ class GenerateEstimationSlip extends Component {
                                 )}
 
                                 {this.state.uom === "Meters" && (
-                                    <TextInput style={[inputField, {width: Device.isTablet ? 130 : 80 }]}
+                                    <TextInput style={[Device.isTablet ? styles.input_tablet_normal : styles.input_mobile_normal, { marginLeft: Device.isTablet ? deviceWidth / 1.8 : deviceWidth / 2.15, width: Device.isTablet ? 200 : 80 }]}
                                         underlineColorAndroid="transparent"
                                         placeholder="QTY"
                                         keyboardType={'default'}
@@ -473,15 +489,15 @@ class GenerateEstimationSlip extends Component {
                                     />
                                 )}
 
+
                                 <TouchableOpacity
                                     style={
-                                        styles.input_mobilebutton
+                                        Device.isTablet ? styles.input_tabletbutton_normal : styles.input_mobilebutton_normal
                                     }
                                     onPress={() => this.navigateToScanCode()} >
-                                    <Text style={[styles.navButtonText]}> {I18n.t('SCAN')} </Text>
+                                    <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { marginTop: Device.isTablet ? 0 : 0, marginLeft: Device.isTablet ? -20 : -10 }]}> {I18n.t('SCAN')} </Text>
                                 </TouchableOpacity>
-                                    </View>
-                                </View>
+
                             </View>
                             {this.state.itemsList.length !== 0 && (
                                 <FlatList
@@ -602,8 +618,7 @@ class GenerateEstimationSlip extends Component {
                                                 borderTopWidth: 1,
                                                 borderLeftWidth: 1, paddingLeft: 10, marginLeft: 20,
                                             }}
-                                                onPress={() => this.decreamentForTable(item, index)}
-                                            >
+                                                onPress={() => this.decreamentForTable(item, index)}>
                                                 <Text style={{
                                                     alignSelf: 'center',
                                                     marginTop: 2,
@@ -634,9 +649,7 @@ class GenerateEstimationSlip extends Component {
                                                 placeholder="1"
                                                 placeholderTextColor="#8F9EB7"
                                                 value={item.quantity}
-                                                onChangeText={(text) => {
-                                                    this.updateQty(text, index, item)
-                                                }}
+                                                onChangeText={(text) => this.updateQty(text, index)}
                                             />
                                             <TouchableOpacity style={{
                                                 borderColor: '#ED1C24',
@@ -646,10 +659,8 @@ class GenerateEstimationSlip extends Component {
                                                 borderBottomWidth: 1,
                                                 borderTopWidth: 1,
                                                 borderRightWidth: 1
-
                                             }}
-                                                onPress={() => this.incrementForTable(item, index)}
-                                            >
+                                                onPress={() => this.incrementForTable(item, index)}>
                                                 <Text style={{
                                                     alignSelf: 'center',
                                                     marginTop: 2,
@@ -1136,7 +1147,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     imagealign: {
-        marginTop: Device.isTablet ? 10 : 5,
+        marginTop: Device.isTablet ? 25 : 20,
         marginRight: Device.isTablet ? 30 : 20,
     },
     itemscount: {
@@ -1473,26 +1484,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-        input_mobilebutton: {
-        justifyContent: 'center',
-        width: deviceWidth / 4,
-        height: 44,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 10,
-        backgroundColor: '#ED1C24',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 14,
-        marginTop: 10,
-    },
-        navButtonText: {
-        fontSize: RF(14),
-        fontFamily: 'regular',
-        color: '#ffffff',
-    },
-
 
 
     // Styles For Mobile
@@ -1520,8 +1511,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#353C40'
     },
-
-
     input_mobile: {
         justifyContent: 'center',
         marginLeft: deviceWidth / 2 + 30,
@@ -1568,7 +1557,21 @@ const styles = StyleSheet.create({
         paddingRight: 15,
         fontSize: 14,
     },
-
+    input_mobilebutton_normal: {
+        justifyContent: 'center',
+        marginLeft: deviceWidth - 120,
+        width: deviceWidth / 4 - 10,
+        height: 44,
+        marginTop: -55,
+        marginBottom: 10,
+        borderColor: '#8F9EB717',
+        borderRadius: 10,
+        backgroundColor: '#ED1C24',
+        borderWidth: 1,
+        fontFamily: 'regular',
+        paddingLeft: 15,
+        fontSize: 14,
+    },
 
     input_mobile_normal_start: {
         justifyContent: 'center',
@@ -1609,7 +1612,7 @@ const styles = StyleSheet.create({
         height: 44,
         marginTop: 5,
         marginBottom: 10,
-        width: deviceWidth / 4,
+        width: deviceWidth / 2,
         borderColor: '#8F9EB717',
         borderRadius: 3,
         backgroundColor: '#FBFBFB',
@@ -1759,10 +1762,10 @@ const styles = StyleSheet.create({
     input_tabletbutton_normal: {
         justifyContent: 'center',
         marginLeft: deviceWidth - 145,
-        width: deviceWidth / 4 - 100,
+        width: deviceWidth / 3 - 100,
         height: 55,
         borderRadius: 10,
-        marginTop: -70,
+        marginTop: -65,
         marginBottom: 10,
         borderColor: '#8F9EB717',
         backgroundColor: '#ED1C24',
@@ -1782,7 +1785,7 @@ const styles = StyleSheet.create({
     input_tablet_normal_start: {
         justifyContent: 'center',
         marginLeft: 20,
-        width: deviceWidth / 3,
+        width: deviceWidth / 4,
         height: 55,
         marginTop: 0,
         marginBottom: 10,
@@ -1817,6 +1820,7 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         height: 54,
         marginTop: 5,
+        width: deviceWidth / 2,
         marginBottom: 10,
         borderColor: '#8F9EB717',
         borderRadius: 3,
@@ -2032,6 +2036,14 @@ const styles = StyleSheet.create({
         marginTop: 8,
         alignSelf: 'center'
     },
+    navButtonText_mobile: {
+        fontSize: 17,
+        fontFamily: 'regular',
+        color: '#ffffff',
+        marginLeft: 10,
+        marginTop: 0,
+        alignSelf: 'center'
+    },
 
     // Styles For Tablet
     viewsWidth_tablet: {
@@ -2073,21 +2085,6 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         fontSize: 22,
     },
-    input_tablet_normal: {
-        justifyContent: 'center',
-        marginLeft: deviceWidth / 2 + 30,
-        width: deviceWidth / 2 - 50,
-        height: 55,
-        marginTop: -65,
-        marginBottom: 10,
-        borderColor: '#8F9EB717',
-        borderRadius: 3,
-        backgroundColor: '#FBFBFB',
-        borderWidth: 1,
-        fontFamily: 'regular',
-        paddingLeft: 15,
-        fontSize: 22,
-    },
     navButton_tablet: {
         position: 'absolute',
         right: 20, top: 27,
@@ -2096,21 +2093,7 @@ const styles = StyleSheet.create({
         width: 155,
         height: 42,
     },
-    // input_tablet_normal_start: {
-    //     justifyContent: 'center',
-    //     marginLeft: 20,
-    //     width: deviceWidth / 2,
-    //     height: 55,
-    //     marginTop: 0,
-    //     marginBottom: 10,
-    //     borderColor: '#8F9EB717',
-    //     borderRadius: 3,
-    //     backgroundColor: '#FBFBFB',
-    //     borderWidth: 1,
-    //     fontFamily: 'regular',
-    //     paddingLeft: 15,
-    //     fontSize: 22,
-    // },
+
     rnSelect_tablet: {
         color: '#8F9EB7',
         fontSize: 20
