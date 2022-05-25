@@ -16,12 +16,35 @@ import Device from 'react-native-device-detection';
 
 const Drawer = createDrawerNavigator();
 export default class SideNavigation extends React.Component {
+    state = {
+        route: ''
+    }
+    componentDidMount = () => {
+        if (global.previlage1 === 'Dashboard') {
+            this.setState({ route: 'Home' })
+        } else if (global.previlage2 = 'Billing Portal') {
+
+        } else if (global.previlage3 = 'Inventory Portal') {
+
+        } else if (global.previlage4 = 'Promotions & Loyalty') {
+
+        } else if (global.previlage5 = 'Accounting Portal') {
+
+        } else if (global.previlage6 = 'Reports') {
+
+        } else if (global.previlage7 = 'URM Portal') {
+
+        }
+    }
     render() {
         return (
-            <Drawer.Navigator screenOptions={{
+            <Drawer.Navigator
+            initialRouteName={this.state.route}
+            screenOptions={{
                 drawerStyle: {
-                width: Device.isTablet ? 400 : 300,
-            }}} drawerContent={props => <DrawerContent {...props} />}>
+                    width: Device.isTablet ? 400 : 300,
+                }  
+            }} drawerContent={props => <DrawerContent {...props} />}>
                 <Drawer.Screen name="Home" options={{ headerShown: false }} component={Home} />
                 <Drawer.Screen name="Settings" options={{ headerShown: false }} component={Settings} />
                 <Drawer.Screen name="PromoNavigation" options={{ headerShown: false }} component={PromoNavigation} />
