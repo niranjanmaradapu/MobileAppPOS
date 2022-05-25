@@ -38,11 +38,26 @@ export const filterCloseImage = {
 
 export const deleteContainer = {
   backgroundColor: '#ffffff',
-  marginTop: Device.isTablet ? deviceHeight - RH(300) : deviceHeight - RH(250),
-  height: Device.isTablet ? RH(300) : RH(250),
+  minHeight: Device.isTablet ? RH(300) : RH(250),
+  position: 'absolute',
+  bottom: 0,
+}
+
+export const viewContainer = {
+  backgroundColor: '#ffffff',
+  position: 'absolute',
+  bottom: 0,
+  minHeight: Device.isTablet ? RH(300) : RH(250),
 }
 
 export const deleteText = {
+  textAlign: 'center',
+  fontFamily: 'regular',
+  fontSize: RF(18),
+  color: '#353C40',
+}
+
+export const viewText = {
   textAlign: 'center',
   fontFamily: 'regular',
   fontSize: RF(18),

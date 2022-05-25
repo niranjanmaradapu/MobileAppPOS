@@ -12,6 +12,9 @@ import { Chevron } from 'react-native-shapes';
 import ReportsService from '../services/ReportsService';
 import { RH, RW,RF } from '../../Responsive';
 import { Row } from 'react-native-table-component';
+import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText } from '../Styles/Styles';
+import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
+import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -216,29 +219,31 @@ export class ListOfEstimationSlip extends Component {
                     keyExtractor={(item,i) => i.toString()}
                     ListEmptyComponent={<Text style={{ fontSize: Device.isTablet ? 21 : 17, fontFamily: 'bold', color: '#000000', textAlign: 'center', marginTop: deviceheight/3 }}>&#9888; {I18n.t("Results not loaded")}</Text>}
                     renderItem={({ item, index }) => (
-                        <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
-                            <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
-                                <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile} >S.NO: {index + 1} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}> {I18n.t("DS NUMBER")}: {"\n"} {item.dsNumber}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("DS DATE")}: {"\n"} {item.lastModified} </Text>
+                        <View style={flatListMainContainer} >
+                            <View style={flatlistSubContainer}>
+                                <View style={textContainer}>
+                                    <Text style={highText} >S.NO: {index + 1} </Text>
+                                    <Text style={textStyleLight} >{I18n.t("DS STATUS")}: {"\n"}{item.status} </Text>
                                 </View>
-                                <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >{I18n.t("DS STATUS")}: {"\n"}{item.status} </Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("GROSS AMOUNT")}: {"\n"} ₹{item.netAmount}</Text>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("PROMO DISC")}: {"\n"} {item.promoDisc} </Text>
+                                <View style={textContainer}>
+                                    <Text style={textStyleMedium}> {I18n.t("DS NUMBER")}: {"\n"} {item.dsNumber}</Text>
+                                    <Text style={textStyleLight}>{I18n.t("DS DATE")}: {"\n"} {item.lastModified} </Text>
                                 </View>
-                                <View style={flats.text}>
-                                    <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile} >{I18n.t("NET AMOUNT")}:{"\n"} ₹{item.netAmount} </Text>
-                                    <View style={flats.buttons}>
+                                <View style={textContainer}>
+                                    <Text style={textStyleLight}>{I18n.t("GROSS AMOUNT")}: {"\n"} ₹{item.netAmount}</Text>
+                                    <Text style={textStyleLight}>{I18n.t("PROMO DISC")}: {"\n"} {item.promoDisc} </Text>
+                                </View>
+                                <View style={textContainer}>
+                                    <Text style={textStyleLight} >{I18n.t("NET AMOUNT")}:{"\n"} ₹{item.netAmount} </Text>
+                                    <View style={buttonContainer}>
 
-                                        <TouchableOpacity style={Device.isTablet ? flats.editButton_tablet : flats.editButton_mobile} onPress={() => this.handledeleteEstimationSlip(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: RH(5), height: Device.isTablet ? RH(30) : RH(20), width: Device.isTablet ? RW(30) : RW(20) }} source={require('../assets/images/delete.png')} />
+                                        <TouchableOpacity style={buttonStyle1} onPress={() => this.handledeleteEstimationSlip(item, index)}>
+                                            <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
 
                                         </TouchableOpacity>
 
-                                        <TouchableOpacity style={Device.isTablet ? flats.deleteButton_tablet : flats.deleteButton_mobile} onPress={() => this.handleviewEstimationSlip(item, index)}>
-                                            <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/eye.png')} />
+                                        <TouchableOpacity style={buttonStyle1} onPress={() => this.handleviewEstimationSlip(item, index)}>
+                                            <Image style={buttonImageStyle} source={require('../assets/images/eye.png')} />
                                         </TouchableOpacity>
                                     </View>
                                 </View>

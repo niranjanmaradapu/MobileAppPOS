@@ -30,6 +30,9 @@ export const inventoryErrorMessages = {
   hsnCode: "/ Please select the HSN Code",
   empId: "/ Emp Id must be 3-10 characters long",
   qty: "/ Please enter the Qty",
+  products: "/ Please add atleast one barcode",
+  comboName: "/ Please enter a valid comboName",
+  comboQty: "/please enter a valid comboQty"
 }
 
 export const accountingErrorMessages = {
