@@ -125,14 +125,11 @@ class GenerateEstimationSlip extends Component {
 
 
     handlenewsaledeleteaction = (item, index) => {
-        this.setState({ modalVisible: true, lineItemDelete: true });
-    };
-
-    deleteLineItem(item, index) {
         this.state.itemsList.splice(index, 1);
         this.setState({ barList: this.state.itemsList });
         this.calculateTotal();
     };
+
 
     modelCancel() {
         this.setState({ modalVisible: false });
@@ -311,29 +308,49 @@ class GenerateEstimationSlip extends Component {
     };
 
     updateQty = (text, index, item) => {
+        const Qty = /^[0-9\b]+$/;
         const qtyarr = [...this.state.itemsList];
-        qtyarr[index].quantity = text === '' ? 1 : text;
+        console.log(qtyarr[index].quantity)
+        let addItem = ''
+        let value = text === '' ? 1 : text
+        if (value !== '' && Qty.test(value) === false) {
+            addItem = 1
+            qtyarr[index].quantity = addItem.toString()
+        } else {
+            if (parseInt(value) < parseInt(qtyarr[index].qty)) {
+                addItem = value;
+                qtyarr[index].quantity = addItem.toString()
+            } else {
+                addItem = qtyarr[index].qty
+                qtyarr[index].quantity = addItem.toString()
+            }
+        }
         let totalcostMrp = item.itemMrp * parseInt(qtyarr[index].quantity);
         item.totalMrp = totalcostMrp;
         this.setState({ itemsList: qtyarr });
-        console.error(text)
+        console.error("TEXT", value)
         let grandTotal = 0;
         let totalqty = 0;
         this.state.barList.forEach(bardata => {
             grandTotal = grandTotal + bardata.totalMrp;
             totalqty = totalqty + parseInt(bardata.quantity);
         });
-
         this.setState({ mrpAmount: grandTotal, totalQuantity: totalqty });
-
         this.state.totalQuantity = (parseInt(this.state.totalQuantity) + 1)
         // this.setState({ itemsList: qtyarr });
     };
 
     incrementForTable(item, index) {
         const qtyarr = [...this.state.itemsList];
-        var additem = parseInt(qtyarr[index].quantity) + 1;
-        qtyarr[index].quantity = additem.toString();
+        console.log(qtyarr[index].quantity)
+        if (parseInt(qtyarr[index].quantity) < parseInt(qtyarr[index].qty)) {
+            var additem = parseInt(qtyarr[index].quantity) + 1;
+            qtyarr[index].quantity = additem.toString();
+        } else {
+            var additem = parseInt(qtyarr[index].qty);
+            qtyarr[index].quantity = additem.toString();
+            alert(`only ${additem} items are in this barcode`)
+        }
         let totalcostMrp = item.itemMrp * parseInt(qtyarr[index].quantity);
         item.totalMrp = totalcostMrp;
         this.setState({ itemsList: qtyarr });
@@ -344,9 +361,7 @@ class GenerateEstimationSlip extends Component {
             grandTotal = grandTotal + bardata.totalMrp;
             totalqty = totalqty + parseInt(bardata.quantity);
         });
-
         this.setState({ mrpAmount: grandTotal, totalQuantity: totalqty });
-
         this.state.totalQuantity = (parseInt(this.state.totalQuantity) + 1);
     }
 
@@ -355,7 +370,6 @@ class GenerateEstimationSlip extends Component {
         if (qtyarr[index].quantity > 1) {
             var additem = parseInt(qtyarr[index].quantity) - 1;
             qtyarr[index].quantity = additem.toString();
-
             let totalcostMrp = item.itemMrp * parseInt(qtyarr[index].quantity);
             item.totalMrp = totalcostMrp;
             this.state.totalQuantity = (parseInt(this.state.totalQuantity) - 1);
@@ -365,10 +379,12 @@ class GenerateEstimationSlip extends Component {
                 grandTotal = grandTotal + bardata.totalMrp;
                 totalqty = totalqty + parseInt(bardata.quantity);
             });
-
             this.setState({ mrpAmount: grandTotal, totalQuantity: totalqty });
-
             this.setState({ itemsList: qtyarr });
+        } else {
+            this.state.itemsList.splice(index, 1);
+            this.setState({ barList: this.state.itemsList });
+            this.calculateTotal();
         }
     }
 
@@ -391,7 +407,7 @@ class GenerateEstimationSlip extends Component {
             this.setState({ dsNumber: "" });
             global.barcodeId = 'something';
         }
-        console.log('bar code is sadsadsdsadsds' + this.state.barcodeId);
+        console.log('bar code is' + this.state.barcodeId);
     }
 
     render() {
@@ -649,7 +665,7 @@ class GenerateEstimationSlip extends Component {
                                                 placeholder="1"
                                                 placeholderTextColor="#8F9EB7"
                                                 value={item.quantity}
-                                                onChangeText={(text) => this.updateQty(text, index)}
+                                                onChangeText={(text) => this.updateQty(text, index, item)}
                                             />
                                             <TouchableOpacity style={{
                                                 borderColor: '#ED1C24',
@@ -688,55 +704,6 @@ class GenerateEstimationSlip extends Component {
                                     </View>
                                 )}
                             />
-
-                            {this.state.lineItemDelete && (
-                                <View>
-                                    <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
-
-                                        <View style={[Device.isTablet ? styles.filterMainContainer_tablet : styles.filterMainContainer_mobile, { height: Device.isTablet ? 350 : 300, marginTop: Device.isTablet ? deviceHeight - 350 : deviceHeight - 300, backgroundColor: '#ED1C24' }]}>
-                                            <View>
-                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, height: Device.isTablet ? 60 : 50 }}>
-                                                    <View>
-                                                        <Text style={{ marginTop: 15, fontSize: Device.isTablet ? 22 : 17, marginLeft: 20, color: '#ffffff' }} > {I18n.t("Delete Item")} </Text>
-                                                    </View>
-                                                    <View>
-                                                        <TouchableOpacity style={{ width: Device.isTablet ? 60 : 50, height: Device.isTablet ? 60 : 50, marginTop: Device.isTablet ? 20 : 15, }} onPress={() => this.modelCancel()}>
-                                                            <Image style={{ width: Device.isTablet ? 20 : 15, height: Device.isTablet ? 20 : 15, margin: 5 }} source={require('../assets/images/modalCloseWhite.png')} />
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                </View>
-                                                <Text style={{
-                                                    height: Device.isTablet ? 2 : 1,
-                                                    width: deviceWidth,
-                                                    backgroundColor: 'lightgray',
-                                                }}></Text>
-                                            </View>
-                                            <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 300 : 250 }}>
-                                                <Text style={{
-                                                    textAlign: 'center',
-                                                    fontFamily: 'regular',
-                                                    fontSize: Device.isTablet ? 23 : 18,
-                                                    color: '#353C40',
-                                                    marginTop: 15,
-                                                }}> {I18n.t("Are you sure want to delete NewSale Item")} ?  </Text>
-                                                <TouchableOpacity
-                                                    style={[Device.isTablet ? styles.filterApplyButton_tablet : styles.filterApplyButton_mobile, { marginTop: Device.isTablet ? 75 : 55 }]}
-                                                    onPress={() => this.deleteLineItem(item, index)}
-                                                >
-                                                    <Text style={Device.isTablet ? styles.filterButtonText_tablet : styles.filterButtonText_mobile}  > {I18n.t("DELETE")} </Text>
-                                                </TouchableOpacity>
-
-                                                <TouchableOpacity
-                                                    style={[Device.isTablet ? styles.filterCancelButton_tablet : styles.filterCancelButton_mobile, { borderColor: '#ED1C24' }]}
-                                                    onPress={() => this.modelCancel()}
-                                                >
-                                                    <Text style={[Device.isTablet ? styles.filterButtonCancelText_tablet : styles.filterButtonCancelText_mobile, { color: '#ED1C24' }]}  > {I18n.t("CANCEL")} </Text>
-                                                </TouchableOpacity>
-                                            </View>
-                                        </View>
-                                    </Modal>
-                                </View>
-                            )}
 
 
                             {this.state.itemsList.length != 0 && (
