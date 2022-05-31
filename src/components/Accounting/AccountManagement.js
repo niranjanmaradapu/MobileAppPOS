@@ -501,7 +501,9 @@ export default class AccountManagement extends Component {
                                 ListFooterComponent={<View style={{ width: 15 }}></View>}
                             />
                             {this.state.flagDashboard && (
-                                <AccountingDashboard />
+                                <View>
+                                    {/* <AccountingDashboard /> */}
+                                </View>
                             )}
                             {this.state.flagCreditNotes && (
                                 <CreditNotes

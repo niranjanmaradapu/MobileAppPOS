@@ -33,6 +33,7 @@ export const inputFieldDisabled = {
   borderColor: '#8F9EB717',
   borderRadius: 3,
   backgroundColor: '#6f6f6f43',
+  color: "#000000",
   borderWidth: 1,
   fontFamily: 'regular',
   paddingLeft: RW(15),
@@ -82,60 +83,60 @@ export const rnPickerContainer = {
 
 export const rnPicker = {
   placeholder: {
-        color: "#6F6F6F",
-        fontFamily: "regular",
-        fontSize: RF(14),
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 52 : 42,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        fontSize: RF(14),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 52 : 42,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        fontSize: RF(14),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-    },
+    color: "#6F6F6F",
+    fontFamily: "regular",
+    fontSize: RF(14),
+  },
+  inputIOS: {
+    justifyContent: 'center',
+    height: Device.isTablet ? 52 : 42,
+    borderRadius: 3,
+    borderWidth: 1,
+    fontFamily: 'regular',
+    fontSize: RF(14),
+    borderColor: '#FBFBFB',
+    backgroundColor: '#FBFBFB',
+  },
+  inputAndroid: {
+    justifyContent: 'center',
+    height: Device.isTablet ? 52 : 42,
+    borderRadius: 3,
+    borderWidth: 1,
+    fontFamily: 'regular',
+    fontSize: RF(14),
+    borderColor: '#FBFBFB',
+    backgroundColor: '#FBFBFB',
+    color: '#001B4A',
+  },
 }
 
 export const rnPickerError = {
   placeholder: {
-        color: "#dd0000",
-        fontFamily: "regular",
-        fontSize: RF(14),
-    },
-    inputIOS: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 52 : 42,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        fontSize: RF(14),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-    },
-    inputAndroid: {
-        justifyContent: 'center',
-        height: Device.isTablet ? 52 : 42,
-        borderRadius: 3,
-        borderWidth: 1,
-        fontFamily: 'regular',
-        fontSize: RF(14),
-        borderColor: '#FBFBFB',
-        backgroundColor: '#FBFBFB',
-        color: '#001B4A',
-    },
+    color: "#dd0000",
+    fontFamily: "regular",
+    fontSize: RF(14),
+  },
+  inputIOS: {
+    justifyContent: 'center',
+    height: Device.isTablet ? 52 : 42,
+    borderRadius: 3,
+    borderWidth: 1,
+    fontFamily: 'regular',
+    fontSize: RF(14),
+    borderColor: '#FBFBFB',
+    backgroundColor: '#FBFBFB',
+  },
+  inputAndroid: {
+    justifyContent: 'center',
+    height: Device.isTablet ? 52 : 42,
+    borderRadius: 3,
+    borderWidth: 1,
+    fontFamily: 'regular',
+    fontSize: RF(14),
+    borderColor: '#FBFBFB',
+    backgroundColor: '#FBFBFB',
+    color: '#001B4A',
+  },
 }
 
 
@@ -210,13 +211,13 @@ export const datePickerButton2 = {
   borderRadius: 5,
 }
 
-export const datePickerBtnText =  {
+export const datePickerBtnText = {
   // textAlign: 'center',
   marginTop: RH(5),
   color: "#ffffff",
   fontSize: RF(14),
   fontFamily: "regular"
-  }
+}
 
 export const datePickerContainer = {
   height: RH(280),

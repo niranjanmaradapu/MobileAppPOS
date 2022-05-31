@@ -11,7 +11,7 @@ export const listEmptyMessage = {
   color: "#ff0000",
   textAlign: 'center',
   fontFamily: "bold",
-  marginTop: deviceheight/3,
+  marginTop: deviceheight / 3,
 }
 
 export const headerTitleContainer = {
@@ -112,7 +112,6 @@ export const flatListMainContainer = {
   padding: 10,
   justifyContent: 'space-between',
   alignItems: 'center'
-
 }
 
 export const flatlistSubContainer = {
@@ -181,4 +180,17 @@ export const buttonImageStyle = {
   marginTop: 4,
   height: Device.isTablet ? RH(30) : RH(20),
   width: Device.isTablet ? RW(30) : RW(20)
+}
+
+export const loadMoreBtn = {
+  width: RW(200),
+  height: RH(30),
+  marginLeft: deviceWidth / 2.5,
+  marginTop: RH(10),
+  marginBottom: RH(20),
+}
+
+export const loadmoreBtnText = {
+  fontSize: RF(12),
+  color: '#00000090',
 }

@@ -7,7 +7,7 @@ import Device from 'react-native-device-detection';
 import Modal from 'react-native-modal';
 import Loader from '../../commonUtils/loader';
 import InventoryService from '../services/InventoryService';
-import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText } from '../Styles/Styles';
+import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText, loadMoreBtn, loadmoreBtnText } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 import I18n from 'react-native-i18n';
@@ -43,6 +43,8 @@ export default class Barcode extends Component {
       datepickerendOpen: false,
       doneButtonClicked: false,
       enddoneButtonClicked: false,
+      loadMoreActive: false,
+      totalPages: 0,
     }
   }
 
@@ -54,6 +56,7 @@ export default class Barcode extends Component {
 
   // Getting Barcodes Functions
   getAllBarcodes() {
+    this.setState({ loading: true, loadMoreActive: false })
     const params = {
       "fromDate": "",
       "toDate": "",
@@ -64,10 +67,11 @@ export default class Barcode extends Component {
     axios.post(InventoryService.getTextileBarcodes() + '?page=' + parseInt(this.state.pageNo) + '&size=10', params).then((res) => {
       if (res.data && res.data["isSuccess"] === "true") {
         if (res.data.result.content) {
-          this.setState({ loading: false, barcodesList: this.state.barcodesList.concat(res.data.result.content), error: "" });
+          this.setState({ loading: false, barcodesList: this.state.barcodesList.concat(res.data.result.content), error: "", totalPages: res.data.result.totalPages });
           console.log(res.data.result);
           console.warn("BarList", this.state.barcodesList)
         }
+        this.continuePagination()
       }
     }).catch((err) => {
       this.setState({ loading: false, error: 'Records not found' });
@@ -113,9 +117,10 @@ export default class Barcode extends Component {
   }
 
   modelCancel() {
-    this.setState({
-      modalVisible: false
-    })
+    this.setState({ modalVisible: false })
+    if (this.props.flagFilterOpen) {
+      this.props.modelCancelCallback()
+    }
   }
 
   datepickerDoneClicked() {
@@ -161,7 +166,7 @@ export default class Barcode extends Component {
 
   applyBarcodeFilter() {
     console.log(this.props.filterActive, this.state.filterPageNo)
-    this.setState({ loading: true })
+    this.setState({ loading: true, loadMoreActive: false })
     let list = {};
     list = {
       fromDate: this.state.startDate,
@@ -175,8 +180,10 @@ export default class Barcode extends Component {
       if (res) {
         if (res.data && res.data["isSuccess"] === "true") {
           if (res.data.result) {
-            this.setState({ loading: false, filterBarcodesList: this.state.filterBarcodesList.concat(res.data.result.content), error: "", filterActive: true, loading: false });
+            this.setState({ loading: false, filterBarcodesList: this.state.filterBarcodesList.concat(res.data.result.content), error: "", filterActive: true, loading: false, totalPages: res.data.result.totalPages });
             console.log("filtered Data", res.data.result);
+            this.setState({ fromDate: "", toDate: "", barCodeId: "" })
+            this.continuePagination()
           }
         }
       }
@@ -189,6 +196,28 @@ export default class Barcode extends Component {
       this.props.modelCancelCallback();
     });
     this.setState({ modalVisible: false });
+  }
+
+  continuePagination() {
+    if (this.props.filterActive) {
+      if (this.state.totalPages > 2) {
+        this.setState({ loadMoreActive: true })
+      } else if (parseInt(this.state.totalPages) === parseInt(this.state.filterPageNo) + 1) {
+        this.setState({ loadMoreActive: false })
+      }
+      else {
+        this.setState({ loadMoreActive: false })
+      }
+    } else {
+      if (this.state.totalPages > 2) {
+        this.setState({ loadMoreActive: true })
+      } else if (parseInt(this.state.totalPages) === parseInt(this.state.pageNo) + 1) {
+        this.setState({ loadMoreActive: false })
+      }
+      else {
+        this.setState({ loadMoreActive: false })
+      }
+    }
   }
 
 
@@ -239,9 +268,10 @@ export default class Barcode extends Component {
                 </ScrollView>
               </View>
             )}
-            onEndReached={() => { this.loadMoreList() }}
-            onEndReachedThreshold={10}
-            ListFooterComponent={() => { return this.state.barcodesList.length > 10 || this.state.filterBarcodesList > 10 ? <ActivityIndicator size={"small"} /> : null }}
+            // onEndReached={() => { this.loadMoreList() }}
+            // onEndReachedThreshold={10}
+            // ListFooterComponent={() => { return this.state.barcodesList.length > 10 || this.state.filterBarcodesList > 10 ? <ActivityIndicator size={"small"} /> : null }}
+            ListFooterComponent={this.state.loadMoreActive && <TouchableOpacity style={loadMoreBtn} onPress={() => this.loadMoreList()}><Text style={loadmoreBtnText}>Load More ?</Text></TouchableOpacity>}
           />
         </View>
         {this.props.flagFilterOpen && (
@@ -427,5 +457,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
   },
+
 
 });

@@ -136,7 +136,7 @@ export default class SideNavigation extends React.Component {
 
                         axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
                             if (res.data && res.data["isSuccess"] === "true") {
-                                alert("hey super user")
+                                // alert("hey super user")
                                 console.log(res.data);
                                 let len = res.data["result"].length;
                                 console.log(len);

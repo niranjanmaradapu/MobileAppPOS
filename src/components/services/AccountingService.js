@@ -11,54 +11,58 @@ class AccountingService {
     return axios.post(BASE_URL + ACCOUNTING_PORTAL.getCreditNotes, obj);
   }
 
-  getAllMasterTax(){
-        return axios.get(BASE_URL+ACCOUNTING_PORTAL.getAllTaxes);
+  getAllMasterTax() {
+    return axios.get(BASE_URL + ACCOUNTING_PORTAL.getAllTaxes);
   }
 
-  getAllHsnCodes(){
-        return axios.get(BASE_URL+ACCOUNTING_PORTAL.getAllHsnCodesData);
+  getAllHsnCodes() {
+    return axios.get(BASE_URL + ACCOUNTING_PORTAL.getAllHsnCodesData);
   }
 
-  saveMasterTax(saveTax){
-        return axios.post(BASE_URL+ACCOUNTING_PORTAL.saveMasterTax, saveTax);   
+  saveMasterTax(saveTax) {
+    return axios.post(BASE_URL + ACCOUNTING_PORTAL.saveMasterTax, saveTax);
   }
-  updateMasterTax(saveTax){
-      return axios.put(BASE_URL+ACCOUNTING_PORTAL.updateTax, saveTax);   
-} 
-  getAllMasterTax(){
-        return axios.get(BASE_URL+ACCOUNTING_PORTAL.getAllTaxes);
+  updateMasterTax(saveTax) {
+    return axios.put(BASE_URL + ACCOUNTING_PORTAL.updateTax, saveTax);
   }
-
-  getDescrition(){
-        return axios.get(BASE_URL+ACCOUNTING_PORTAL.getDescritionData);
+  getAllMasterTax() {
+    return axios.get(BASE_URL + ACCOUNTING_PORTAL.getAllTaxes);
   }
 
-  getTaxAppliesOn(){
-      return axios.get(BASE_URL+ACCOUNTING_PORTAL.getTaxAppliesOnData);
+  getDescrition() {
+    return axios.get(BASE_URL + ACCOUNTING_PORTAL.getDescritionData);
+  }
+
+  getTaxAppliesOn() {
+    return axios.get(BASE_URL + ACCOUNTING_PORTAL.getTaxAppliesOnData);
+  }
+
+  saveHsnCode(saveHsnObj) {
+    return axios.post(BASE_URL + ACCOUNTING_PORTAL.saveHsnCode, saveHsnObj);
+  }
+  updateHsnCode(updateHsnObj) {
+    return axios.post(BASE_URL + ACCOUNTING_PORTAL.updateHsnCode, updateHsnObj);
+  }
+  saveCredit(saveCredit) {
+    return axios.post(BASE_URL + ACCOUNTING_PORTAL.saveCredit, saveCredit);
+  }
+
+  creditDebitOrder(reqObj) {
+    const URL = BASE_URL + '/paymentgateway/paymentgateway/create_creditdebit_order'
+    return axios.post(URL, reqObj, {
+      headers: {
+        'Content-Type': 'application/json'
       }
+    })
+  }
 
- saveHsnCode(saveHsnObj) {
-  return axios.post(BASE_URL+ACCOUNTING_PORTAL.saveHsnCode, saveHsnObj);
-      }
-      updateHsnCode(updateHsnObj) {
-            return axios.post(BASE_URL+ACCOUNTING_PORTAL.updateHsnCode, updateHsnObj);
-                }
-      saveCredit(saveCredit) {
-        return axios.post(BASE_URL+ACCOUNTING_PORTAL.saveCredit, saveCredit);
-      }
-      
-      creditDebitOrder(reqObj) {
-            const URL = BASE_URL + '/paymentgateway/paymentgateway/create_creditdebit_order'
-            return axios.post(URL, reqObj, {
-                  headers: {
-                        'Content-Type': 'application/json'
-                  }
-            })
-      }
+  getAllLedgerLogs(obj) {
+    return axios.post(BASE_URL + ACCOUNTING_PORTAL.getAllLedgerLogs, obj);
+  }
 
-      getAllLedgerLogs(obj) {
-        return axios.post(BASE_URL+ACCOUNTING_PORTAL.getAllLedgerLogs, obj);
-    }
+  saveDebit(obj) {
+    return axios.post(BASE_URL + ACCOUNTING_PORTAL.saveDebit, obj)
+  }
 }
 
 export default new AccountingService()
