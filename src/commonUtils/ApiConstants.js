@@ -20,3 +20,7 @@ export const GENERATE_RETURN_SLIPS_URL = {
 export const INVENTORY_PORTAL = {
   getAllBarcodes: "/inventory/inventoryTextile/getAllBarcodeTextiles",
 }
+
+export const BILLING_PORTAL = {
+  searchGiftVoucher: "/new-sale/newsale//gvSearching",
+}

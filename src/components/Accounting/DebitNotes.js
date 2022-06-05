@@ -7,9 +7,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import Modal from 'react-native-modal';
 import { RF, RH, RW } from '../../Responsive';
 import AccountingService from '../services/AccountingService';
-import { cancelBtn, cancelBtnText, datePickerBtnText, datePickerButton1, datePickerButton2, dateSelector, dateText, inputField, submitBtn, submitBtnText } from '../Styles/FormFields';
-import { filterCloseImage, filterHeading, filterMainContainer, filterSubContainer } from '../Styles/PopupStyles';
-import { buttonContainer, buttonImageStyle, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
+import { cancelBtn, cancelBtnText, datePickerBtnText, datePickerButton1, datePickerButton2, dateSelector, dateText, inputField, rnPicker, rnPickerContainer, submitBtn, submitBtnText } from '../Styles/FormFields';
+import { deleteCloseBtn, deleteContainer, deleteHeader, deleteHeading, deleteText, filterCloseImage, filterHeading, filterMainContainer, filterSubContainer } from '../Styles/PopupStyles';
+import { buttonContainer, buttonImageStyle, buttonStyle, buttonStyle1, filterBtn, flatListHeaderContainer, flatListMainContainer, flatlistSubContainer, flatListTitle, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
 var deviceWidth = Dimensions.get("window").width;
 import Loader from '../../commonUtils/loader';
 
@@ -40,7 +40,10 @@ export default class DebitNotes extends Component {
       datepickerendOpen: false,
       isShowAllTransactions: false,
       transactionHistory: [],
-      loading: false
+      loading: false,
+      flagFilterOpen: false,
+      modalVisible: true,
+      filterActive: false
     };
   }
 
@@ -101,7 +104,7 @@ export default class DebitNotes extends Component {
 
 
   modelCancel() {
-    this.props.modelCancelCallback();
+    this.setState({ modalVisible: false })
   }
 
 
@@ -166,15 +169,12 @@ export default class DebitNotes extends Component {
     AccountingService.getCreditNotes(reqOb).then(res => {
       if (res) {
         console.log(res.data)
-        this.setState({ filterDebitData: res.data.content })
-        this.props.childParams()
+        this.setState({ filterDebitData: res.data.content, filterActive: true })
       }
-      this.props.modelCancelCallback();
-      this.setState({ loading: false })
+      this.setState({ loading: false, modalVisible: false })
     }).catch(err => {
-      this.props.modelCancelCallback();
       console.log(err)
-      this.setState({ loading: false })
+      this.setState({ loading: false, modalVisible: false, filterActive: false })
     })
   }
 
@@ -189,6 +189,16 @@ export default class DebitNotes extends Component {
     })
   }
 
+  filterAction() {
+    this.setState({ flagFilterOpen: true, modalVisible: true })
+  }
+
+  clearFilterAction() {
+    this.setState({ filterActive: false })
+  }
+
+
+
   render() {
     return (
       <View>
@@ -197,9 +207,27 @@ export default class DebitNotes extends Component {
             loading={this.state.loading} />
         }
         <FlatList
-          data={this.props.filterActive ? this.state.filterDebitData : this.state.debitNotes}
+          data={this.state.filterActive ? this.state.filterDebitData : this.state.debitNotes}
           style={{ marginTop: 20 }}
           scrollEnabled={true}
+          ListHeaderComponent={<View style={flatListHeaderContainer}>
+            <Text style={flatListTitle}>Debit Notes</Text>
+            {!this.state.filterActive &&
+              <TouchableOpacity
+                style={filterBtn}
+                onPress={() => this.filterAction()} >
+                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+              </TouchableOpacity>
+
+            }
+            {this.state.filterActive &&
+              <TouchableOpacity
+                style={filterBtn}
+                onPress={() => this.clearFilterAction()} >
+                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+              </TouchableOpacity>
+            }
+          </View>}
           renderItem={({ item, index }) => (
             <View style={flatListMainContainer} >
               <View style={flatlistSubContainer}>
@@ -231,9 +259,9 @@ export default class DebitNotes extends Component {
             </View>
           )}
         />
-        {this.props.filterDebitNotes && (
+        {this.state.flagFilterOpen && (
           <View>
-            <Modal isVisible={this.props.modalVisible} style={{ margin: 0 }}>
+            <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
               <View style={filterMainContainer} >
                 <KeyboardAwareScrollView enableOnAndroid={true} >
                   <View style={filterSubContainer}>

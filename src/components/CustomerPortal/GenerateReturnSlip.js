@@ -8,6 +8,7 @@ import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import CustomerService from '../services/CustomerService';
+import { flatListMainContainer, flatlistSubContainer, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
 
 var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
@@ -17,7 +18,7 @@ export default class GenerateReturnSlip extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      invoiceNumber: "",
+      invoiceNumber: "KLM/20222/-143993029",
       mobileNumber: "",
       customerTagging: false,
       modelVisible: true,
@@ -37,15 +38,18 @@ export default class GenerateReturnSlip extends Component {
       netValueList: [],
       returnSlipTotal: 0,
       storeId: 0,
-      userId: "NA",
       customerNumber: "",
       resultModel: false,
       resultData: "",
+      userId: 0,
       itemsReturn: false,
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const userId = await AsyncStorage.getItem("custom:userId")
+    this.setState({ userId: userId })
+    console.log(userId, "userId")
     AsyncStorage.getItem("storeId").then((value) => {
       storeStringId = value;
       this.setState({ storeId: parseInt(storeStringId) });
@@ -74,6 +78,8 @@ export default class GenerateReturnSlip extends Component {
   }
 
   searchInvoice = () => {
+    let returnInvoiceArray = []
+    let resultData = []
     const obj = {
       invoiceNo: this.state.invoiceNumber.trim(),
       mobileNo: this.state.mobileNumber,
@@ -82,15 +88,18 @@ export default class GenerateReturnSlip extends Component {
     console.log(this.state.invoiceNumber);
     axios.post(CustomerService.getReturnSlip(), obj).then(res => {
       console.log(res.data.result);
-      this.setState({ returnInvoice: res.data.result }, () => {
+      let items = res.data.result
+      for (let i = 0; i < items.length; i++) {
+        returnInvoiceArray.push({ barCode: items[i].barcode, value: items[i].netValue, quantity: items[i].quantity, isSelected: false })
+      }
+      this.setState({ returnInvoice: returnInvoiceArray }, () => {
         let costprice = 0;
         let quantity = 0;
         this.state.returnInvoice.forEach(element => {
           costprice = costprice + element.netValue;
           quantity = quantity + element.quantity;
-          element.isChecked = false;
         });
-
+        console.log("Return Items", this.state.returnInvoice)
         this.setState({ netValue: costprice, quantity: quantity, isChecked: false, itemsReturn: true });
       });
     }).catch((err) => {
@@ -101,39 +110,30 @@ export default class GenerateReturnSlip extends Component {
   };
 
   itemSelected(e, index, item) {
-    if (this.state.itemClicked === true) {
-      this.setState({ itemClicked: false }, () => {
-        if (this.state.itemClicked === false) {
-          let index = this.state.netValueList.findIndex(ele => ele.barcode === item.barcode);
-          this.state.netValueList.splice(index, 1);
-        }
-      });
+    if (item.isSelected === true) {
+      item.isSelected = false
+      let index = this.state.netValueList.findIndex(ele => ele.barcode === item.barcode)
+      this.state.netValueList.splice(index, 1)
     }
     else {
-      this.setState({ itemClicked: true }, () => {
-        if (this.state.itemClicked === true) {
-          const obj = {
-            netValue: item.netValue,
-            barcode: item.barcode,
-            quantity: item.quantity
-          };
-          this.state.netValueList.push(obj);
-        }
-
-      });
-
+      item.isSelected = true
+      const obj = {
+        amount: item.value,
+        barCode: item.barCode,
+        qty: item.quantity
+      };
+      this.state.netValueList.push(obj);
     }
-
-    const netValueList = this.removeDuplicates(this.state.netValueList, "barcode");
+    // alert(itemPrice)
+    const netValueList = this.removeDuplicates(this.state.netValueList, "barCode");
     this.setState({ netValueList: netValueList }, () => {
       let returnSlipTotal = 0;
+      console.log("netvalueList", this.state.netValueList)
       this.state.netValueList.forEach(ele => {
-        returnSlipTotal = returnSlipTotal + ele.netValue;
+        returnSlipTotal = returnSlipTotal + ele.amount;
       });
       this.setState({ returnSlipTotal: returnSlipTotal });
     });
-
-    // alert(this.state.returnSlipTotal);
 
   }
 
@@ -143,32 +143,24 @@ export default class GenerateReturnSlip extends Component {
   }
 
   generateNewSlip() {
-    console.log(this.state.netValueList);
-    let barList = [];
-    this.state.netValueList.forEach(ele => {
-      const obj = {
-        barCode: ele.barcode
-      };
-      barList.push(obj);
-    });
-    console.warn(barList);
     console.log(this.state.storeId);
     const saveObj = {
-      barcodes: barList,
-      mobileNumber: this.state.mobileNumber,
+      barcodes: this.state.netValueList,
+      mobileNumber: this.state.mobileNumber ? this.state.mobileNumber : null,
       invoiceNumber: this.state.invoiceNumber,
       reason: this.state.reason,
       customerId: parseInt(this.state.userId),
       storeId: parseInt(this.state.storeId),
-      customerName: "",
       totalAmount: parseInt(this.state.returnSlipTotal),
       createdBy: 0,
-      comments: ""
+      comments: null
     };
+    console.log(saveObj, "params")
+    this.setState({ loading: true })
     axios.post(CustomerService.saveRetunSlip(), saveObj).then(res => {
       if (res) {
         // alert(res.data.result);
-        this.setState({ resultData: res.data.result }, () => {
+        this.setState({ resultData: res.data.result, }, () => {
           this.setState({ resultModel: true, modelVisible: true });
         });
         this.setState({
@@ -184,10 +176,12 @@ export default class GenerateReturnSlip extends Component {
           customerNumber: "",
         });
       }
+      this.setState({ returnModel: false, modelVisible: false, loading: false })
     }).catch((err) => {
       this.setState({ loading: false });
       console.log(err);
       alert("Unable to Save the Return Slip");
+      this.setState({ returnModel: false, modelVisible: false, loading: false })
     });
 
   }
@@ -246,7 +240,7 @@ export default class GenerateReturnSlip extends Component {
     return (
       <View>
         <View style={{ flexDirection: 'row', width: Device.isTablet ? deviceWidth - 20 : deviceWidth - 10, justifyContent: 'space-between', marginTop: 20 }}>
-          <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: Device.isTablet ? deviceWidth / 1.25 : deviceWidth / 1.5 }]}
+          <TextInput style={[Device.isTablet ? styles.input_tablet : styles.input_mobile, { width: deviceWidth / 1.5 }]}
             underlineColorAndroid="transparent"
             placeholder={I18n.t("INVOICE NUMBER")}
             placeholderTextColor="#6F6F6F"
@@ -381,7 +375,7 @@ export default class GenerateReturnSlip extends Component {
                         <TouchableOpacity onPress={(e) => this.itemSelected(e, index, item)} style={{ position: 'relative', top: 60, left: 10, width: 20, height: 20 }}>
                           <Image style={{ position: 'absolute', top: 0, left: 0, }} source={
                             //require('../assets/images/chargeunselect.png')}
-                            this.state.itemClicked ? require('../assets/images/selected.png') : require('../assets/images/langunselect.png')} />
+                            item.isSelected ? require('../assets/images/selected.png') : require('../assets/images/langunselect.png')} />
                         </TouchableOpacity>
                         <View style={{ marginLeft: 60 }}>
                           <Image source={require('../assets/images/default.jpeg')}
@@ -393,9 +387,9 @@ export default class GenerateReturnSlip extends Component {
                         </View>
                       </View>
                       <View style={[flats.text, { marginRight: Device.isTablet ? 20 : 0 }]}>
-                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {item.barcode}</Text>
+                        <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>BARCODE: {item.barCode}</Text>
                         <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>QTY: {item.quantity}</Text>
-                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {item.netValue}</Text>
+                        <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>PRICE: {item.value}</Text>
                       </View>
                     </View>
                   </View>
@@ -488,16 +482,12 @@ export default class GenerateReturnSlip extends Component {
                       data={this.state.netValueList}
                       scrollEnabled={true}
                       renderItem={({ item, index }) => (
-                        <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
-                          <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
-                            <View style={flats.text}>
-                              <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>SLIP NO: {item.barcode}</Text>
-                            </View>
-                            <View style={flats.text}>
-                              <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>ITEMS: {item.quantity}</Text>
-                            </View>
-                            <View style={flats.text}>
-                              <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>RETURN SLIP VALUE: {this.state.returnSlipTotal}</Text>
+                        <View style={flatListMainContainer} >
+                          <View style={flatlistSubContainer}>
+                            <View style={textContainer}>
+                              <Text style={textStyleMedium}>SLIP NO: {item.barCode}</Text>
+                              <Text style={textStyleLight}>ITEMS: {item.qty}</Text>
+                              <Text style={textStyleLight}>VALUE: {item.amount}</Text>
                             </View>
                           </View>
                         </View>

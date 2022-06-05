@@ -10,7 +10,7 @@ import { Chevron } from 'react-native-shapes';
 import AccountingService from '../services/AccountingService';
 import { cancelBtn, cancelBtnText, datePickerBtnText, datePickerButton1, datePickerButton2, dateSelector, dateText, inputField, rnPicker, rnPickerContainer, submitBtn, submitBtnText } from '../Styles/FormFields';
 import { deleteCloseBtn, deleteContainer, deleteHeader, deleteHeading, deleteText, filterCloseImage, filterHeading, filterMainContainer, filterSubContainer } from '../Styles/PopupStyles';
-import { buttonContainer, buttonImageStyle, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
+import { buttonContainer, buttonImageStyle, buttonStyle, buttonStyle1, filterBtn, flatListHeaderContainer, flatListMainContainer, flatlistSubContainer, flatListTitle, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
 var deviceWidth = Dimensions.get("window").width;
 import { RH, RF, RW } from '../../Responsive';
 import Loader from '../../commonUtils/loader';
@@ -43,16 +43,14 @@ export default class CreditNotes extends Component {
       datepickerendOpen: false,
       isShowAllTransactions: false,
       transactionHistory: [],
-      loading: false
+      loading: false,
+      filterActive: false,
+      flagFilterOpen: false,
     };
   }
 
   modelCancel() {
-    this.props.modelCancelCallback()
-  }
-
-  modalViewCancel() {
-    this.setState({ modalVisible: false })
+    this.setState({ modalVisible: false, flagFilterOpen: false })
   }
 
 
@@ -87,7 +85,7 @@ export default class CreditNotes extends Component {
 
 
   applyCreditNotesFilter() {
-    this.setState({loading: true})
+    this.setState({ loading: true })
     const accountType = 'CREDIT';
     const { storeId, startDate, endDate, mobileNumber } = this.state
     const reqOb = {
@@ -102,15 +100,12 @@ export default class CreditNotes extends Component {
     AccountingService.getCreditNotes(reqOb).then(res => {
       if (res) {
         // console.log(res.data)
-        this.setState({ filterCreditData: res.data.content })
-        this.props.childParams()
+        this.setState({ filterCreditData: res.data.content, filterActive: true })
       }
-      this.setState({ loading: false })
-      this.props.modelCancelCallback();
+      this.setState({ loading: false, modalVisible: false, flagFilterOpen: false })
     }).catch(err => {
-      this.props.modelCancelCallback();
       console.log(err)
-      this.setState({ loading: false })
+      this.setState({ loading: false, modalVisible: false, flagFilterOpen: false })
     })
   }
 
@@ -127,7 +122,7 @@ export default class CreditNotes extends Component {
   }
 
   handleMobile = (value) => {
-    this.setState({ mobile: value });
+    this.setState({ mobileNumber: value });
   };
 
   datepickerClicked() {
@@ -204,9 +199,18 @@ export default class CreditNotes extends Component {
     });
   }
 
+  // Filter Actions
+  filterAction() {
+    this.setState({ flagFilterOpen: true, modalVisible: true })
+  }
+
+  clearFilterAction() {
+    this.setState({ filterActive: false, mobileNumber: "", startDate: "", endDate: "", date: new Date(), enddate: new Date() })
+    this.getAllCreditNotes()
+  }
+
 
   render() {
-    { console.log(this.props.filterActive) }
     return (
       <View>
         {this.state.loading &&
@@ -214,7 +218,25 @@ export default class CreditNotes extends Component {
             loading={this.state.loading} />
         }
         <FlatList
-          data={this.props.filterActive ? this.state.filterCreditData : this.state.creditNotes}
+          ListHeaderComponent={<View style={flatListHeaderContainer}>
+            <Text style={flatListTitle}>Credit Notes</Text>
+            {!this.state.filterActive &&
+              <TouchableOpacity
+                style={filterBtn}
+                onPress={() => this.filterAction()} >
+                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+              </TouchableOpacity>
+
+            }
+            {this.state.filterActive &&
+              <TouchableOpacity
+                style={filterBtn}
+                onPress={() => this.clearFilterAction()} >
+                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+              </TouchableOpacity>
+            }
+          </View>}
+          data={this.state.filterActive ? this.state.filterCreditData : this.state.creditNotes}
           style={{ marginTop: 20 }}
           scrollEnabled={true}
           // ListEmptyComponent={<Text style={listEmptyMessage}>&#9888; Records Not Found</Text>}
@@ -223,7 +245,7 @@ export default class CreditNotes extends Component {
               <View style={flatlistSubContainer}>
                 <View style={textContainer}>
                   <Text style={highText}>#CRM ID: {item.customerId}</Text>
-                  <Text style={textStyleMedium}>Customer Name: {"\n"}{item.customerName}</Text>
+                  <Text style={textStyleLight}>DATE: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
                 </View>
                 <View style={textContainer}>
                   <Text style={textStyleMedium}>STORE: {item.storeId}</Text>
@@ -234,14 +256,14 @@ export default class CreditNotes extends Component {
                   <Text style={textStyleLight}>BALANCE: {item.amount}</Text>
                 </View>
                 <View style={textContainer}>
-                  <Text style={textStyleLight}>DATE: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
+                  <Text style={textStyleMedium}>Name: {item.customerName}</Text>
                   <View style={buttonContainer}>
                     <TouchableOpacity style={buttonStyle1} onPress={() => this.handleViewCredit(item, index)}>
                       <Image style={buttonImageStyle} source={require('../assets/images/eye.png')} />
                     </TouchableOpacity>
 
                     <TouchableOpacity style={buttonStyle} onPress={() => this.handleAddCredit(item, index)}>
-                      <Text style={{ fontSize: RF(20), textAlign: 'center' }}>+</Text>
+                      <Text style={{ fontSize: RF(20), textAlign: 'center', color: '#00000050' }}>+</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -249,9 +271,9 @@ export default class CreditNotes extends Component {
             </View>
           )}
         />
-        {this.props.filterCreditNotes && (
+        {this.state.flagFilterOpen && (
           <View>
-            <Modal isVisible={this.props.modalVisible} style={{ margin: 0 }}>
+            <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
               <View style={filterMainContainer} >
                 <KeyboardAwareScrollView enableOnAndroid={true} >
                   <View style={filterSubContainer}>
@@ -339,7 +361,7 @@ export default class CreditNotes extends Component {
                     placeholderTextColor="#6F6F6F"
                     textAlignVertical="center"
                     autoCapitalize="none"
-                    value={this.state.mobile}
+                    value={this.state.mobileNumber}
                     onChangeText={this.handleMobile}
                   />
 
@@ -367,7 +389,7 @@ export default class CreditNotes extends Component {
                       <Text style={filterHeading}>Transaction History</Text>
                     </View>
                     <View>
-                      <TouchableOpacity style={filterCloseImage} onPress={() => this.modalViewCancel()}>
+                      <TouchableOpacity style={filterCloseImage} onPress={() => this.modalCancel()}>
                         <Image style={{ margin: RH(5) }} source={require('../assets/images/modelcancel.png')} />
                       </TouchableOpacity>
                     </View>

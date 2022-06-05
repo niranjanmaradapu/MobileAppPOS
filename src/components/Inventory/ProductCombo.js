@@ -7,10 +7,11 @@ import React, { Component } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 import InventoryService from '../services/InventoryService'
-import { flatListMainContainer, flatlistSubContainer, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
-
+import { flatListHeaderContainer, flatListMainContainer, flatlistSubContainer, flatListTitle, headerTitle, headerTitleContainer, highText, listEmptyMessage, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
+import { RF, RW, RH } from '../../Responsive';
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
+import Loader from '../../commonUtils/loader';
 
 export default class ProductCombo extends Component {
 
@@ -22,39 +23,49 @@ export default class ProductCombo extends Component {
       fromDate: "",
       toDate: "",
       productComboList: [],
+      loading: false
     }
   }
 
   async componentDidMount() {
-    const domainId = await AsyncStorage.getItem("domainDataId")
-    console.log("doaminId",domainId)
+
     const storeId = await AsyncStorage.getItem("storeId")
-    this.setState({ storeId: parseInt(storeId), domainId: parseInt(domainId) })
+    this.setState({ storeId: parseInt(storeId), })
     this.getAllProductsCombo()
   }
 
   async getAllProductsCombo() {
+    this.setState({ loading: true })
     const { storeId } = this.state
     let params = '';
     params = '?storeId=' + storeId
     console.log(params)
-    axios.post(InventoryService.getProductCombo() + params).then(res => {
+    axios.get(InventoryService.getProductCombo() + params).then(res => {
       if (res) {
         this.setState({ productComboList: res.data.result })
         console.log("Products Combo List", this.state.productComboList)
       }
+      this.setState({ loading: false })
+    }).catch(err => {
+      this.setState({ loading: false })
     })
   }
 
   render() {
     return (
       <View>
+        {this.state.loading &&
+          <Loader
+            loading={this.state.loading} />
+        }
         <FlatList
+          ListHeaderComponent={<View style={flatListHeaderContainer}>
+            <Text style={flatListTitle}>Products Combo</Text>
+          </View>}
           data={this.state.productComboList}
-          style={{ marginTop: 20 }}
           scrollEnabled={true}
           keyExtractor={(item, i) => i.toString()}
-          ListEmptyComponent={<Text>&#9888; Records Not Found</Text>}
+          ListEmptyComponent={<Text style={listEmptyMessage}>&#9888; Records Not Found</Text>}
           renderItem={({ item, index }) => (
             <View style={flatListMainContainer}>
               <View style={flatlistSubContainer}>

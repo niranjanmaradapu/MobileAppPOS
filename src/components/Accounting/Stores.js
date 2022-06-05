@@ -8,7 +8,7 @@ import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import UrmService from '../services/UrmService';
-import { buttonContainer, buttonStyle, buttonStyle1, filterBtn, flatListMainContainer, flatlistSubContainer, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, highText, buttonImageStyle, menuButton, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
+import { buttonContainer, buttonStyle, buttonStyle1, filterBtn, flatListMainContainer, flatlistSubContainer, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, highText, buttonImageStyle, menuButton, textContainer, textStyleLight, textStyleMedium, flatListHeaderContainer, flatListTitle } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -37,7 +37,9 @@ export default class Stores extends Component {
       dictricts: [],
       districtId: "",
       filterStoresData: [],
-      loading: false
+      loading: false,
+      flagFilterOpen: false,
+      filterActive: false
     };
   }
 
@@ -185,25 +187,31 @@ export default class Stores extends Component {
     axios.post(UrmService.getStoresBySearch(), searchStore).then((res) => {
       if (res) {
         if (res.data.isSuccess === "true") {
-          this.setState({ filterStoresData: res.data.result });
-          this.props.childParams(this.state.filterStores);
+          this.setState({ filterStoresData: res.data.result, filterActive: true });
         } else {
-          // alert(res.data.message);
-          this.setState({ filterStoresData: [] })
-          this.props.childParams(this.state.filterStores)
+          this.setState({ filterStoresData: [], filterActive: true })
         }
         console.log(res.data);
-        this.props.modelCancelCallback();
-      } else {
-        this.props.modelCancelCallback();
       }
-    });
+      this.setState({ flagFilterOpen: false })
+    }).catch(err => {
+      this.setState({ flagFilterOpen: false, filterActive: false })
+    })
   }
 
   modelCancel() {
-    this.props.modelCancelCallback();
+    this.setState({ modalVisible: false, flagFilterOpen: false })
   }
 
+  // Filter Actions
+  filterAction() {
+    this.setState({ flagFilterOpen: true, modalVisible: true })
+  }
+
+  clearFilterAction() {
+    this.setState({ modalVisible: false })
+    this.getStoresList()
+  }
 
   render() {
     return (
@@ -213,7 +221,25 @@ export default class Stores extends Component {
             loading={this.state.loading} />
         }
         <FlatList
-          data={this.props.filterActive ? this.state.filterStoresData : this.state.storesList}
+          ListHeaderComponent={<View style={flatListHeaderContainer}>
+            <Text style={flatListTitle}>Stores</Text>
+            {!this.state.filterActive &&
+              <TouchableOpacity
+                style={filterBtn}
+                onPress={() => this.filterAction()} >
+                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+              </TouchableOpacity>
+
+            }
+            {this.state.filterActive &&
+              <TouchableOpacity
+                style={filterBtn}
+                onPress={() => this.clearFilterAction()} >
+                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+              </TouchableOpacity>
+            }
+          </View>}
+          data={this.state.filterActive ? this.state.filterStoresData : this.state.storesList}
           style={{ marginTop: 20, }}
           scrollEnabled={true}
           keyExtractor={(item, i) => i.toString()}
@@ -248,51 +274,9 @@ export default class Stores extends Component {
             </View>
           )}
         />
-        {this.state.storesDelete && (
+        {this.state.flagFilterOpen &&
           <View>
             <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
-
-              <View style={deleteContainer}>
-                <View>
-                  <View style={deleteHeader}>
-                    <View>
-                      <Text style={deleteHeading} > {I18n.t("Delete Store")} </Text>
-                    </View>
-                    <View>
-                      <TouchableOpacity style={filterCloseImage} onPress={() => this.storeModelCancel()}>
-                        <Image style={deleteCloseBtn} source={require('../assets/images/modalCloseWhite.png')} />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <Text style={{
-                    height: Device.isTablet ? 2 : 1,
-                    width: deviceWidth,
-                    backgroundColor: 'lightgray',
-                  }}></Text>
-                </View>
-                <View style={{ backgroundColor: '#ffffff', height: Device.isTablet ? 300 : 200, }}>
-                  <Text style={deleteText}> {I18n.t("Are you sure want to delete Store")} ?  </Text>
-                  <TouchableOpacity
-                    style={filterSubmitBtn} onPress={() => this.deleteStore()}
-                  >
-                    <Text style={filterApplyBtnText}  > {I18n.t("DELETE")} </Text>
-
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={filterCancelBtn} onPress={() => this.storeModelCancel()}
-                  >
-                    <Text style={filterCancelBtnText}  > {I18n.t("CANCEL")} </Text>
-
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </Modal>
-          </View>
-        )}
-        {this.props.filterStores &&
-          <View>
-            <Modal isVisible={this.props.modalVisible} style={{ margin: 0 }}>
               <View style={filterMainContainer} >
                 <View>
                   <View style={filterSubContainer}>

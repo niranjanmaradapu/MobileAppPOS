@@ -3,7 +3,7 @@ import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View }
 import Device from 'react-native-device-detection';
 import Modal from 'react-native-modal';
 import { deleteCloseBtn, deleteContainer, deleteHeader, deleteHeading, deleteText, filterCloseImage, filterHeading, filterMainContainer, filterSubContainer } from '../Styles/PopupStyles';
-import { buttonContainer, buttonImageStyle, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
+import { buttonContainer, buttonImageStyle, buttonStyle, buttonStyle1, flatListHeaderContainer, flatListMainContainer, flatlistSubContainer, flatListTitle, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
 import AccountingService from '../services/AccountingService';
 var deviceHeight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
@@ -66,6 +66,9 @@ export default class CreateTaxMaster extends Component {
             loading={this.state.loading} />
         }
         <FlatList
+          ListHeaderComponent={<View style={flatListHeaderContainer}>
+            <Text style={flatListTitle}>Create Tax Master</Text>
+          </View>}
           data={this.state.taxList}
           style={{ marginTop: 20 }}
           scrollEnabled={true}

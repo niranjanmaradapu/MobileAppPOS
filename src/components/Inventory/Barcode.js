@@ -7,7 +7,7 @@ import Device from 'react-native-device-detection';
 import Modal from 'react-native-modal';
 import Loader from '../../commonUtils/loader';
 import InventoryService from '../services/InventoryService';
-import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText, loadMoreBtn, loadmoreBtnText } from '../Styles/Styles';
+import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText, loadMoreBtn, loadmoreBtnText, flatListHeaderContainer, flatListTitle } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 import I18n from 'react-native-i18n';
@@ -45,12 +45,24 @@ export default class Barcode extends Component {
       enddoneButtonClicked: false,
       loadMoreActive: false,
       totalPages: 0,
+      filterActive: false,
+      flagFilterOpen: false
     }
   }
 
   async componentDidMount() {
     const storeId = await AsyncStorage.getItem("storeId");
     this.setState({ storeId: storeId })
+    this.getAllBarcodes()
+  }
+
+  // Filter Action
+  filterAction() {
+    this.setState({ flagFilterOpen: true, modalVisible: true })
+  }
+
+  clearFilterAction() {
+    this.setState({ flagFilterOpen: false, filterActive: false })
     this.getAllBarcodes()
   }
 
@@ -83,7 +95,7 @@ export default class Barcode extends Component {
     this.props.navigation.navigate('EditBarcode'
       , {
         item: item, isEdit: true,
-        onGoBack: () => this.updateBarcodes(),
+        onGoBack: () => this.getAllBarcodes(),
       });
   }
 
@@ -94,8 +106,7 @@ export default class Barcode extends Component {
 
   // Pagination Function
   loadMoreList = () => {
-    console.log("page0")
-    if (this.props.filterActive) {
+    if (this.state.filterActive) {
       this.setState({ filterPageNo: this.state.filterPageNo + 1 }, () => {
         this.applyBarcodeFilter()
       })
@@ -117,10 +128,7 @@ export default class Barcode extends Component {
   }
 
   modelCancel() {
-    this.setState({ modalVisible: false })
-    if (this.props.flagFilterOpen) {
-      this.props.modelCancelCallback()
-    }
+    this.setState({ modalVisible: false, flagFilterOpen: false })
   }
 
   datepickerDoneClicked() {
@@ -165,7 +173,7 @@ export default class Barcode extends Component {
   };
 
   applyBarcodeFilter() {
-    console.log(this.props.filterActive, this.state.filterPageNo)
+    console.log(this.state.filterActive, this.state.filterPageNo)
     this.setState({ loading: true, loadMoreActive: false })
     let list = {};
     list = {
@@ -187,19 +195,16 @@ export default class Barcode extends Component {
           }
         }
       }
-      this.setState({ loading: false })
-      this.props.childParams()
-      this.props.modelCancelCallback();
+      this.setState({ loading: false, filterActive: true })
     }).catch((err) => {
-      this.setState({ loading: false });
+      this.setState({ loading: false, filterActive: false });
       console.log(err)
-      this.props.modelCancelCallback();
     });
     this.setState({ modalVisible: false });
   }
 
   continuePagination() {
-    if (this.props.filterActive) {
+    if (this.state.filterActive) {
       if (this.state.totalPages > 2) {
         this.setState({ loadMoreActive: true })
       } else if (parseInt(this.state.totalPages) === parseInt(this.state.filterPageNo) + 1) {
@@ -230,8 +235,26 @@ export default class Barcode extends Component {
         }
         <View>
           <FlatList
-            data={this.props.filterActive ? this.state.filterBarcodesList : this.state.barcodesList}
-            style={{ marginTop: 20 }}
+            ListHeaderComponent={<View style={flatListHeaderContainer}>
+              <Text style={flatListTitle}>Barcode List</Text>
+              <View>
+                {!this.state.filterActive &&
+                  <TouchableOpacity
+                    style={filterBtn}
+                    onPress={() => this.filterAction()} >
+                    <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/promofilter.png')} />
+                  </TouchableOpacity>
+                }
+                {this.state.filterActive &&
+                  <TouchableOpacity
+                    style={filterBtn}
+                    onPress={() => this.clearFilterAction()} >
+                    <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/clearFilterSearch.png')} />
+                  </TouchableOpacity>
+                }
+              </View>
+            </View>}
+            data={this.state.filterActive ? this.state.filterBarcodesList : this.state.barcodesList}
             scrollEnabled={true}
             ListEmptyComponent={<Text style={listEmptyMessage}>&#9888; Records Not Found</Text>}
             keyExtractor={(item, i) => i.toString()}
@@ -245,15 +268,15 @@ export default class Barcode extends Component {
                         <Text style={highText}>S.NO: {index + 1}</Text>
                       </View>
                       <View style={textContainer}>
-                        <Text style={textStyleMedium}>{I18n.t("BARCODE")}: {"\n"}{item.barcode}</Text>
-                        <Text style={textStyleLight}>QTY: {item.qty}</Text>
-                      </View>
-                      <View style={textContainer}>
-                        <Text style={textStyleLight}>{I18n.t("STORE")}: {this.state.storeName}</Text>
+                        <Text style={textStyleMedium}>{I18n.t("STORE")}: {this.state.storeName}</Text>
                         <Text style={textStyleLight}>{I18n.t("VALUE")}: ₹{item.value}</Text>
                       </View>
                       <View style={textContainer}>
-                        <Text style={textStyleMedium}>{I18n.t("LIST PRICE")}: ₹{item.itemMrp}</Text>
+                        <Text style={textStyleLight}>{I18n.t("LIST PRICE")}: ₹{item.itemMrp}</Text>
+                        <Text style={textStyleLight}>QTY: {item.qty}</Text>
+                      </View>
+                      <View style={textContainer}>
+                        <Text style={[textStyleMedium]} selectable={true}>{item.barcode}</Text>
                         <View style={buttonContainer}>
                           <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditbarcode(item, index)}>
                             <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
@@ -274,9 +297,9 @@ export default class Barcode extends Component {
             ListFooterComponent={this.state.loadMoreActive && <TouchableOpacity style={loadMoreBtn} onPress={() => this.loadMoreList()}><Text style={loadmoreBtnText}>Load More ?</Text></TouchableOpacity>}
           />
         </View>
-        {this.props.flagFilterOpen && (
+        {this.state.flagFilterOpen && (
           <View>
-            <Modal style={{ margin: 0 }} isVisible={this.props.modalVisible}>
+            <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
               <View style={filterMainContainer} >
                 <View>
                   <View style={filterSubContainer}>

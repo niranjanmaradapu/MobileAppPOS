@@ -1,3 +1,7 @@
+import axios from "axios";
+import { BILLING_PORTAL } from "../../commonUtils/ApiConstants";
+import { BASE_URL } from "../../commonUtils/Base";
+
 const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097';
 
 
@@ -80,6 +84,10 @@ class CustomerService {
 
   addCustomer() {
     return REACT_NATIVE_APP_BASE_URL + "/user-management/auth/createUser";
+  }
+
+  searchGiftVoucher(obj) {
+    return axios.post(BASE_URL + BILLING_PORTAL.searchGiftVoucher, obj)
   }
 
 

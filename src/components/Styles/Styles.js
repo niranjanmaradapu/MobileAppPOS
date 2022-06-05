@@ -75,7 +75,7 @@ export const headerNavigationBtnText = {
 }
 
 export const filterBtn = {
-  backgroundColor: '#ffffff',
+  // backgroundColor: '#686868',
   borderRadius: 5,
   width: Device.isTablet ? RW(40) : RW(30),
   height: Device.isTablet ? RH(42) : RH(32),
@@ -104,14 +104,43 @@ export const pageNavigationBtnText = {
   fontFamily: 'regular'
 }
 
+export const pageNavigationBtnContainer = {
+  margin: Device.isTablet ? RH(15) : RH(10)
+}
+
+
+export const flatListHeaderContainer = {
+  // backgroundColor: '#686868',
+  display: 'flex',
+  flexDirection: 'row',
+  width: deviceWidth,
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  paddingLeft: RW(20),
+  paddingRight: RW(20)
+}
+
+export const flatListTitle = {
+  fontSize: RF(16),
+  fontFamily: 'medium',
+  color: '#00000090',
+  textAlign: 'center',
+  marginTop: Device.isTablet ? RH(15) : RH(10),
+  marginBottom: Device.isTablet ? RH(15) : RH(10)
+}
+
+
+
 export const flatListMainContainer = {
   backgroundColor: '#FBFBFB',
-  borderBottomWidth: Device.isTablet ? 2 : 1,
-  borderBottomColor: '#00000059',
+  borderWidth: Device.isTablet ? 2 : 1,
+  borderColor: '#00000010',
   flexDirection: 'row',
   padding: 10,
   justifyContent: 'space-between',
-  alignItems: 'center'
+  alignItems: 'center',
+  marginBottom: Device.isTablet ? RH(10) : RH(5),
+  borderRadius: Device.isTablet ? 10 : 5,
 }
 
 export const flatlistSubContainer = {
@@ -121,20 +150,20 @@ export const flatlistSubContainer = {
 }
 
 export const highText = {
-  fontSize: RF(16),
+  fontSize: RF(10),
   fontFamily: 'medium',
   color: '#ED1C24',
 }
 
 
 export const textStyleMedium = {
-  fontSize: RF(12),
+  fontSize: RF(10),
   fontFamily: 'medium',
   color: '#353C40'
 }
 
 export const textStyleLight = {
-  fontSize: RF(12),
+  fontSize: RF(10),
   fontFamily: 'normal',
   color: '#808080'
 }
@@ -145,16 +174,17 @@ export const textContainer = {
   justifyContent: 'space-between',
   alignItems: 'center',
   width: '100%',
-  paddingTop: Device.isTablet ? 6 : 3,
-  paddingRight: Device.isTablet ? 30 : 15,
-  paddingLeft: Device.isTablet ? 30 : 15,
+  paddingTop: 10,
+  paddingRight: 10,
+  paddingLeft: 10,
 }
 
 export const buttonContainer = {
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
-  alignItems: 'center',
+  // alignItems: 'flex-start',
+  marginBottom: 10
 }
 
 export const buttonStyle = {
@@ -163,7 +193,7 @@ export const buttonStyle = {
   borderBottomRightRadius: 5,
   borderTopRightRadius: 5,
   borderWidth: Device.isTablet ? 2 : 1,
-  borderColor: '#00000059',
+  borderColor: '#00000029',
 }
 
 export const buttonStyle1 = {
@@ -172,7 +202,7 @@ export const buttonStyle1 = {
   borderBottomLeftRadius: 5,
   borderTopLeftRadius: 5,
   borderWidth: Device.isTablet ? 2 : 1,
-  borderColor: '#00000059',
+  borderColor: '#00000029',
 }
 
 export const buttonImageStyle = {

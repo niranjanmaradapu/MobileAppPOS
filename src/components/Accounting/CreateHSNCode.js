@@ -3,7 +3,7 @@ import { Dimensions, FlatList, Image, StyleSheet, Text, TouchableOpacity, View }
 import Device from 'react-native-device-detection';
 import Modal from 'react-native-modal';
 import { deleteCloseBtn, deleteContainer, deleteHeader, deleteHeading, deleteText, filterCloseImage, filterHeading, filterMainContainer, filterSubContainer } from '../Styles/PopupStyles';
-import { buttonContainer, buttonImageStyle, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
+import { buttonContainer, buttonImageStyle, buttonStyle, buttonStyle1, flatListHeaderContainer, flatListMainContainer, flatlistSubContainer, flatListTitle, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
 import AccountingService from '../services/AccountingService';
 var deviceWidth = Dimensions.get("window").width;
 import Loader from '../../commonUtils/loader';
@@ -65,6 +65,9 @@ export default class CreateHSNCode extends Component {
             loading={this.state.loading} />
         }
         <FlatList
+          ListHeaderComponent={<View style={flatListHeaderContainer}>
+            <Text style={flatListTitle}>Create HSN Code</Text>
+          </View>}
           data={this.state.hsnList}
           style={{ marginTop: 20 }}
           scrollEnabled={true}

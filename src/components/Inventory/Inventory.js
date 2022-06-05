@@ -13,11 +13,12 @@ import Loader from "../../commonUtils/loader";
 import InventoryService from '../services/InventoryService';
 import UrmService from '../services/UrmService';
 import { RH, RW, RF } from '../../Responsive';
-import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText } from '../Styles/Styles';
+import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText, pageNavigationBtnContainer } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 import Barcode from './Barcode';
 import ProductCombo from './ProductCombo';
+import ReBarcode from './ReBarcode';
 
 
 var deviceWidth = Dimensions.get("window").width;
@@ -28,40 +29,12 @@ export default class Inventory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      doneButtonClicked: false,
-      enddoneButtonClicked: false,
-      barCodeId: "",
-      rebarcodeId: "",
-      startDate: "",
-      endDate: "",
-      flagBarcode: false,
-      flagRebarCode: false,
-      inventoryDelete: false,
-      flagFilterBarcodeOpen: false,
-      flagFilterReBarcodeOpen: false,
-      datepickerOpen: false,
-      datepickerendOpen: false,
-      modalVisible: true,
-      startDate: "",
-      endDate: "",
-      date: new Date(),
-      enddate: new Date(),
-      barcodesData: [],
-      filterBarcodesData: [],
-      reBarcodesData: [],
-      deleteBarcodeId: "",
-      deleteBarcoeIndex: "",
-      barcodeDelete: false,
       storeId: 1,
       storeName: "",
       privilages: [],
       subPrivilages: "",
-      barcodeTextileId: "",
-      filterActive: false,
       headerNames: [],
       error: '',
-      pageNo: 0,
-      filterPageNo: 0,
     };
     this.onEndReachedCalledDuringMomentum = true;
   }
@@ -222,33 +195,6 @@ export default class Inventory extends Component {
   }
 
 
-  getbarcodeTexttileAdjustments() {
-    this.setState({ reBarcodesData: [] });
-    const params = {
-      "fromDate": this.state.startDate,
-      "toDate": this.state.endDate,
-      "currentBarcodeId": this.state.barCodeId,
-      "storeId": this.state.storeId
-    };
-    console.log(params);
-    this.setState({ loading: true });
-    axios.post(InventoryService.getbarcodeTexttileAdjustments() + '?page=' + parseInt(this.state.pageNo) + '&size=10', params).then((res) => {
-      if (res.data && res.data["isSuccess"] === "true") {
-        if (res.data["result"]) {
-          this.setState({ loading: false, reBarcodesData: res.data.result.content });
-          console.log("rebarcodesData", this.state.reBarcodesData);
-        }
-        if (res.data.result.length === 0) {
-          this.setState({ error: "Records Not Found" });
-        }
-      }
-    }).catch(() => {
-      this.setState({ loading: false, error: "Records Not Found" });
-    });
-
-  }
-
-
   topbarAction1 = (item, index) => {
     if (item.name === "Barcode List") {
       this.setState({ flagBarcode: true, filterActive: false });
@@ -257,7 +203,6 @@ export default class Inventory extends Component {
     }
     if (item.name === "Re-Barcode List") {
       this.setState({ flagRebarCode: true, filterActive: false });
-      this.getbarcodeTexttileAdjustments()
     } else {
       this.setState({ flagRebarCode: false });
     }
@@ -266,7 +211,6 @@ export default class Inventory extends Component {
     } else {
       this.setState({ flagProductCombo: false })
     }
-
 
 
     if (this.state.privilages[index].bool === true) {
@@ -283,9 +227,6 @@ export default class Inventory extends Component {
     }
   };
 
-  topbarAction2() {
-
-  }
 
   navigateToAddBarcode() {
     this.props.navigation.navigate('AddBarcode', {
@@ -300,203 +241,6 @@ export default class Inventory extends Component {
       onGoBack: () => null
     })
   }
-
-
-  filterAction() {
-    if (this.state.flagBarcode === true) {
-      this.setState({ flagFilterBarcodeOpen: true });
-    }
-    else {
-      this.setState({ flagFilterBarcodeOpen: false });
-    }
-    if (this.state.flagRebarCode === true) {
-      this.setState({ flagFilterReBarcodeOpen: true });
-    }
-    else {
-      this.setState({ flagFilterReBarcodeOpen: false });
-    }
-    this.setState({ modalVisible: true });
-  }
-
-  modelCancel() {
-    this.setState({ inventoryDelete: false, flagFilterBarcodeOpen: false, flagFilterReBarcodeOpen: false, modalVisible: false });
-  }
-
-  datepickerClicked() {
-    this.setState({ datepickerOpen: true });
-  }
-
-  enddatepickerClicked() {
-    this.setState({ datepickerendOpen: true });
-  }
-
-  datepickerDoneClicked() {
-    if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
-      this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
-    }
-    else if (parseInt(this.state.date.getDate()) < 10) {
-      this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
-    }
-    else if (parseInt(this.state.date.getMonth()) < 10) {
-      this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
-    }
-    else {
-      this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
-    }
-
-
-    this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
-  }
-
-  datepickerendDoneClicked() {
-    if (parseInt(this.state.enddate.getDate()) < 10 && (parseInt(this.state.enddate.getMonth()) < 10)) {
-      this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
-    }
-    else if (parseInt(this.state.enddate.getDate()) < 10) {
-      this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + "0" + this.state.enddate.getDate() });
-    }
-    else if (parseInt(this.state.enddate.getMonth()) < 10) {
-      this.setState({ endDate: this.state.enddate.getFullYear() + "-0" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
-    }
-    else {
-      this.setState({ endDate: this.state.enddate.getFullYear() + "-" + (this.state.enddate.getMonth() + 1) + "-" + this.state.enddate.getDate() });
-    }
-    this.setState({ enddoneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
-  }
-
-
-
-
-
-  datepickerCancelClicked() {
-    this.setState({ date: new Date(), endDate: new Date(), datepickerOpen: false, datepickerendOpen: false });
-  }
-
-  handlebarCodeId = (value) => {
-    this.setState({ barCodeId: value.trim() });
-  };
-
-  filterBarcodes() {
-    this.setState({ filterActive: true })
-  }
-
-  applyReBarcodeFilter() {
-    let list = {};
-    list = {
-      fromDate: this.state.startDate,
-      toDate: this.state.endDate,
-      currentBarcodeId: this.state.barCodeId,
-      storeId: this.state.storeId
-    };
-
-    axios.post(InventoryService.getbarcodeTexttileAdjustments(), list).then(res => {
-      console.log(res.data);
-      console.log(res.data.result.length);
-
-      if (res.data && res.data.isSuccess === "true" && res.data.result.length > 0) {
-        this.setState({ reBarcodesData: [] });
-        for (var i = 0; i < res.data["result"].length; i++) {
-          this.state.reBarcodesData.push(res.data["result"][i]);
-        }
-        this.setState({ reBarcodesData: this.state.reBarcodesData, filterActive: true });
-      } else {
-        this.setState({ reBarcodesData: [], filterActive: true })
-        console.log("results not found");
-      }
-    }).catch((err) => {
-      this.setState({ loading: false });
-      console.log("no records found");
-      console.log(err);
-      this.setState({ reBarcodesData: [], filterActive: true })
-    });
-
-
-    this.setState({ modalVisible: false });
-  }
-
-  handlebarcodedeleteaction(item, index) {
-    this.setState({ inventoryDelete: true, modalVisible: true, barcodeTextileId: item.barcodeTextileId });
-  }
-
-  print = (item, index) => {
-
-  };
-
-  clearFilterAction() {
-    if (this.state.flagBarcode === true) {
-      this.setState({ filterActive: false });
-      this.child.getAllBarcodes()
-    } else {
-      this.setState({ filterActive: false });
-    }
-  }
-
-
-
-  seeDetails = (item, index) => {
-    this.setState({ barcodesData: [] });
-    const params = {
-      "barcode": item.currentBarcodeId,
-      "storeId": this.state.storeId
-    };
-    console.log("storeId" + this.state.storeId);
-    console.error("params", params,);
-    axios.get(InventoryService.getTextileBarcodesDetails(), { params }).then((res) => {
-      if (res) {
-        console.log("response edit", res);
-        if (res.data && res.data["isSuccess"] === "true") {
-          if (res.data["result"]) {
-            this.state.barcodesData.push(res.data["result"]);
-            this.props.navigation.navigate('ViewReBarcode'
-              , {
-                item: res.data["result"], isEdit: true,
-                onGoBack: () => this.child.getAllBarcodes(),
-              });
-
-          }
-          // }
-
-          console.log(res.data)
-          this.setState({ barcodesData: this.state.barcodesData });
-
-        }
-      }
-    }).catch(err => {
-      console.log(err);
-    });
-
-
-  };
-
-  deleteInventory() {
-    axios.delete(InventoryService.deleteTextileBarcode(), {
-      params: {
-        "barcodeTextileId": this.state.barcodeTextileId,
-      }
-    }).then((res) => {
-      if (res.data && res.data.isSuccess === "true") {
-        console.log(res.data.result);
-        this.setState({ inventoryDelete: false, modalVisible: false, barcodeTextileId: '' });
-        this.setState({ isAddBarcode: false });
-      } else {
-        this.setState({ inventoryDelete: false, modalVisible: false, barcodeTextileId: '' });
-        console.log(res.data.message);
-      }
-    }
-    );
-  };
-
-
-
-  handleeditbarcode(item, index) {
-    this.props.navigation.navigate('EditBarcode'
-      , {
-        item: item, isEdit: true,
-        onGoBack: () => this.updateBarcodes(),
-      });
-  }
-
-
 
 
   render() {
@@ -522,36 +266,18 @@ export default class Inventory extends Component {
                 <Text style={headerNavigationBtnText}>{I18n.t("Add BarCode")}</Text>
               </TouchableOpacity>
             )}
-
             {this.state.flagProductCombo && (
               <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddProductCombo()}>
                 <Text style={headerNavigationBtnText}>Product Combo</Text>
               </TouchableOpacity>
             )}
-
-            <View>
-              {!this.state.filterActive &&
-                <TouchableOpacity
-                  style={filterBtn}
-                  onPress={() => this.filterAction()} >
-                  <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/promofilter.png')} />
-                </TouchableOpacity>
-              }
-              {this.state.filterActive &&
-                <TouchableOpacity
-                  style={filterBtn}
-                  onPress={() => this.clearFilterAction()} >
-                  <Image style={{ alignSelf: 'center', top: RH(5) }} source={require('../assets/images/clearFilterSearch.png')} />
-                </TouchableOpacity>
-              }
-            </View>
           </View>
         </View>
 
         <ScrollView>
           <View style={styles.container}>
             <FlatList
-              style={styles.flatList}
+              style={pageNavigationBtnContainer}
               horizontal
               data={this.state.privilages}
               showsVerticalScrollIndicator={false}
@@ -568,177 +294,31 @@ export default class Inventory extends Component {
                   </Text>
                 </TouchableOpacity>
               )}
-              ListFooterComponent={<View style={{ width: 15 }}></View>}
             />
 
             {this.state.flagBarcode && (
               <Barcode
-                flagFilterOpen={this.state.flagFilterBarcodeOpen}
-                modalVisible={this.state.modalVisible}
-                modelCancelCallback={() => { this.modelCancel() }}
-                filterActive={this.state.filterActive}
-                childParams={() => { this.filterBarcodes() }}
                 ref={instance => { this.child = instance }}
+                navigation={this.props.navigation}
               />
             )}
 
             {this.state.flagRebarCode && (
               <View>
-                <FlatList
-                  data={this.state.reBarcodesData}
-                  style={{ marginTop: 20 }}
-                  scrollEnabled={true}
-                  ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : RF(17), marginTop: deviceheight / 3 }}>&#9888; Records Not Found</Text>}
-                  renderItem={({ item, index }) => (
-
-                    <View
-                      style={flatListMainContainer}
-                    >
-                      <View style={flatlistSubContainer}>
-                        <View style={textContainer}>
-                          <Text style={highText} >{I18n.t("PARENT BARCODE")}: {item.toBeBarcodeId}</Text>
-                        </View>
-                        <View style={textContainer}>
-                          <Text style={textStyleMedium} selectable={true}>{I18n.t("CHILD BARCODE")}: {"\n"}{item.currentBarcodeId}</Text>
-                          <Text style={textStyleLight}>{I18n.t("EMPLOYEE ID")}: {"\n"}{item.createdBy}</Text>
-                        </View>
-                        <View style={textContainer}>
-                          <Text style={textStyleLight}>{I18n.t("DATE")}: {"\n"}{item.fromDate}</Text>
-                          <View style={buttonContainer}>
-                            <TouchableOpacity style={buttonStyle1} onPress={() => this.print(item, index)}>
-                              <Image style={buttonImageStyle} source={require('../assets/images/print.png')} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={buttonStyle} onPress={() => this.seeDetails(item, index)}>
-                              <Image style={buttonImageStyle} source={require('../assets/images/eye.png')} />
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  )}
+                <ReBarcode
+                  ref={instance => { this.child = instance }}
+                  navigation={this.props.navigation}
                 />
               </View>
             )}
             {this.state.flagProductCombo && (
-              <ProductCombo />
+              <ProductCombo
+                ref={instance => { this.child = instance }}
+                navigation={this.props.navigation}
+              />
             )}
           </View>
         </ScrollView>
-
-
-
-        {this.state.flagFilterReBarcodeOpen && (
-          <View>
-            <Modal style={{ margin: 0 }} isVisible={this.state.modalVisible}>
-              <View style={filterMainContainer} >
-                <View>
-                  <View style={filterSubContainer}>
-                    <View>
-                      <Text style={filterHeading} > {I18n.t("Filter By")} </Text>
-                    </View>
-                    <View>
-                      <TouchableOpacity style={filterCloseImage} onPress={() => this.modelCancel()}>
-                        <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                  <Text style={styles.spaceText}></Text>
-                </View>
-                <KeyboardAwareScrollView enableOnAndroid={true} >
-
-                  <TouchableOpacity
-                    style={dateSelector}
-                    testID="openModal"
-                    onPress={() => this.datepickerClicked()}
-                  >
-                    <Text
-                      style={dateText}
-                    >{this.state.doneButtonClicked == false ? 'Start Date' : this.state.startDate}</Text>
-                    <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={dateSelector}
-                    testID="openModal"
-                    onPress={() => this.enddatepickerClicked()}
-                  >
-                    <Text
-                      style={dateText}
-                    >{this.state.enddoneButtonClicked == false ? 'End Date' : this.state.endDate}</Text>
-                    <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
-                  </TouchableOpacity>
-                  {this.state.datepickerOpen && this.state.flagRebarCode && (
-                    <View style={styles.dateTopView}>
-                      <View style={styles.dateTop2}>
-
-                        <TouchableOpacity
-                          style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
-                        >
-                          <Text style={datePickerBtnText}  > Cancel </Text>
-
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={datePickerButton2} onPress={() => this.datepickerDoneClicked()}
-                        >
-                          <Text style={datePickerBtnText}  > Done </Text>
-
-                        </TouchableOpacity>
-                      </View>
-                      <DatePicker style={styles.date}
-                        date={this.state.date}
-                        mode={'date'}
-                        onDateChange={(date) => this.setState({ date })}
-                      />
-                    </View>
-                  )}
-                  {this.state.datepickerendOpen && this.state.flagRebarCode && (
-                    <View style={styles.dateTopView}>
-                      <View style={styles.dateTop2}>
-                        <TouchableOpacity
-                          style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
-                        >
-                          <Text style={datePickerBtnText}  > Cancel </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          style={datePickerButton2} onPress={() => this.datepickerendDoneClicked()}
-                        >
-                          <Text style={datePickerBtnText}  > Done </Text>
-
-                        </TouchableOpacity>
-                      </View>
-                      <DatePicker style={styles.date}
-                        date={this.state.enddate}
-                        mode={'date'}
-                        onDateChange={(enddate) => this.setState({ enddate })}
-                      />
-                    </View>
-                  )}
-                  <TextInput
-                    style={inputField}
-                    underlineColorAndroid="transparent"
-                    placeholder={I18n.t("RE-BARCODE ID")}
-                    placeholderTextColor="#6F6F6F"
-                    textAlignVertical="center"
-                    autoCapitalize="none"
-                    value={this.state.barCodeId}
-                    onChangeText={this.handlebarCodeId}
-                  />
-                  <View>
-                    <TouchableOpacity style={submitBtn}
-                      onPress={() => this.applyReBarcodeFilter()}>
-                      <Text style={submitBtnText} >{I18n.t("APPLY")}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={cancelBtn}
-                      onPress={() => this.modelCancel()}>
-                      <Text style={cancelBtnText}>{I18n.t("CANCEL")}</Text>
-                    </TouchableOpacity>
-                  </View>
-                </KeyboardAwareScrollView>
-              </View>
-            </Modal>
-          </View>
-        )}
-
       </View>
     );
   }

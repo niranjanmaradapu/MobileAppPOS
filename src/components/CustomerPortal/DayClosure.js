@@ -8,7 +8,7 @@ var deviceheight = Dimensions.get('window').height;
 var deviceWidth = Dimensions.get("window").width;
 import { RF, RH, RW } from '../../Responsive';
 import CustomerService from '../services/CustomerService';
-import { flatListMainContainer, flatlistSubContainer, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
+import { flatListHeaderContainer, flatListMainContainer, flatlistSubContainer, flatListTitle, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
 import Loader from '../../commonUtils/loader';
 export default class DayClosure extends Component {
 
@@ -63,17 +63,18 @@ export default class DayClosure extends Component {
           <Loader
             loading={this.state.loading} />
         }
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>List of Pending Delivery slips</Text>
-          {this.state.enableButton && (
-            <TouchableOpacity style={styles.closeBtn} onPress={() => this.closeDay()}>
-              <Text style={styles.closeBtnText}>Day Closure</Text>
-            </TouchableOpacity>
-          )}
-        </View>
         <FlatList
+          ListHeaderComponent={<View style={flatListHeaderContainer}>
+            <Text style={flatListTitle}>List of Pending Delivery slips</Text>
+            {this.state.enableButton && (
+              <TouchableOpacity style={styles.closeBtn} onPress={() => this.closeDay()}>
+                <Text style={styles.closeBtnText}>Day Closure</Text>
+              </TouchableOpacity>
+            )}
+          </View>}
           data={this.state.dayClosureList}
           scrollEnabled={true}
+          style={{ marginTop: 20 }}
           ListEmptyComponent={<Text style={styles.emptyText}>No Pending Delivery Slips</Text>}
           renderItem={({ item, index }) => (
             <View style={flatListMainContainer}>
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
     borderRadius: Device.isTablet ? 10 : 5,
   },
   closeBtnText: {
-    color: '#00000099',
+    color: '#00000090',
     fontSize: RF(14),
     textAlign: 'center',
     fontFamily: 'medium',
