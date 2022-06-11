@@ -1,31 +1,30 @@
-const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097'
-
+import { BASE_URL } from "../../commonUtils/Base"
 class ReportsService {
 
     estimationSlips() {
-        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getlistofdeliveryslips"
+        return BASE_URL + "/new-sale/newsale/getlistofdeliveryslips"
     }
 
     newSaleReports() {
-        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getlistofsalebills"
+        return BASE_URL + "/new-sale/newsale/getlistofsalebills"
     }
 
     returnSlips(){
-        return REACT_NATIVE_APP_BASE_URL + "/customer/customer/getListOfReturnSlips"
+        return BASE_URL + "/customer/customer/getListOfReturnSlips"
     }
 
     saleReports() {
-        return REACT_NATIVE_APP_BASE_URL + "/new-sale/newsale/getsalereport";
+        return BASE_URL + "/new-sale/newsale/getsalereport";
     }
 
 
 
     getListOfBarcodes() {
-        return REACT_NATIVE_APP_BASE_URL + "/inventory/inventoryTextile/getAllBarcodeTextiles"
+        return BASE_URL + "/inventory/inventoryTextile/getAllBarcodeTextiles"
     }
 
     promotionsList() {
-        return REACT_NATIVE_APP_BASE_URL + "/connection-pool/promo/listOfPromotionsBySearch";
+        return BASE_URL + "/connection-pool/promo/listOfPromotionsBySearch";
     }
 
 }

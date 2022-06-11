@@ -58,159 +58,60 @@ export default class UserManagement extends Component {
   async componentDidMount() {
     const clientId = await AsyncStorage.getItem("custom:clientId1");
     this.setState({ clientId: clientId });
-    AsyncStorage.getItem("custom:isConfigUser").then((value) => {
-      if (value === "true") {
-        for (let i = 0; i < 2; i++) {
-          if (i === 0) {
-            this.state.privilages.push({ bool: false, name: "Users" });
-          }
-          else {
-            this.state.privilages.push({ bool: true, name: "Roles" });
+    AsyncStorage.getItem("rolename").then(value => {
+      console.log({ value })
+      axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
+        if (res) {
+          if (res.data) {
+            let len = res.data.parentPrivileges.length
+            for (let i = 0; i < len; i++) {
+              let privilege = res.data.parentPrivileges[i]
+              if (privilege.name === "URM Portal") {
+                let privilegeId = privilege.id
+                let sublen = res.data.subPrivileges.length
+                let subPrivileges = res.data.subPrivileges
+                for (let i = 0; i < sublen; i++) {
+                  if (privilegeId === subPrivileges[i].parentPrivilegeId) {
+                    let routes = subPrivileges[i].name
+                    this.state.headerNames.push({ name: routes })
+                    console.log("Header Names", this.state.headerNames)
+                  }
+                }
+                this.setState({ headerNames: this.state.headerNames }, () => {
+                  for (let j = 0; j < this.state.headerNames.length; j++) {
+                    if (j === 0) {
+                      this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name })
+                    } else {
+                      this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                    }
+                  }
+                })
+                this.initialNavigation()
+              }
+            }
           }
         }
-        this.setState({ privilages: this.state.privilages }, () => {
-          this.setState({ flagTwo: true, flagOne: false, filterButton: true })
-        });
+      })
+    })
+  }
+
+
+  initialNavigation() {
+    this.setState({ privilages: this.state.privilages }, () => {
+      // console.error(this.state.privilages.length)
+      if (this.state.privilages.length > 0) {
+        if (this.state.privilages[0].name === "Dashboard") {
+          this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
+        } else if (this.state.privilages[0].name === "Users") {
+          this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
+        } else if (this.state.privilages[0].name === "Roles") {
+          this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
+        } else {
+          this.setState({ flagOne: false, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
+          console.log("please update the privilages in Line.no: 161")
+        }
       }
-      else {
-        AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
-          if (value === "true") {
-            var domainId = "1";
-            if (global.domainName === "Textile") {
-              domainId = "1";
-            }
-            else if (global.domainName === "Retail") {
-              domainId = "2";
-            }
-            else if (global.domainName === "Electrical & Electronics") {
-              domainId = "3";
-            }
-
-            axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
-              if (res.data && res.data["isSuccess"] === "true") {
-                let len = res.data["result"].length;
-                if (len > 0) {
-                  if (len > 0) {
-                    for (let i = 0; i < len; i++) {
-                      let previlage = res.data["result"][i];
-                      if (previlage.name === "URM Portal") {
-                        for (let i = 0; i < previlage.subPrivillages.length; i++) {
-                          // console.log(previlage.subPrivillages[i].parentPrivillageId);
-                          if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
-                            let subprivilage = previlage.subPrivillages[i];
-                            if (subprivilage.name === "Back Office") {
-                            }
-                            this.state.headerNames.push({ name: subprivilage.name })
-                          }
-                        }
-                        this.setState({ headerNames: this.state.headerNames }, () => {
-                          console.error(this.state.headerNames)
-                          for (let j = 0; j < this.state.headerNames.length; j++) {
-                            if (j === 0) {
-                              this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                            }
-                            else if (this.state.headerNames[j].name === "Back Office") { }
-                            else {
-                              this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
-                            }
-                          }
-                        })
-                        this.setState({ privilages: this.state.privilages }, () => {
-                          if (this.state.privilages.length > 0) {
-                            if (this.state.privilages[0].name === "Dashboard") {
-                              this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
-                            } else if (this.state.privilages[0].name === "Users") {
-                              this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
-                            } else if (this.state.privilages[0].name === "Roles") {
-                              this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
-                            }
-                            else {
-                              this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
-                              console.log("please update the privilages in Line.no: 118")
-                            }
-                          }
-                        });
-                      }
-                    }
-                  }
-                }
-              }
-            });
-          }
-          else {
-            AsyncStorage.getItem("rolename").then((value) => {
-              axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
-                if (res.data && res.data["isSuccess"] === "true") {
-                  let len = res.data["result"].parentPrivilages.length;
-                  let length = res.data["result"].subPrivilages.length;
-                  // console.log(.name)
-                  if (len > 0) {
-                    for (let i = 0; i < len; i++) {
-                      let previlage = res.data["result"].parentPrivilages[i];
-                      if (previlage.name === "URM Portal") {
-                        if (length > - 1) {
-                          for (let i = 0; i < length; i++) {
-                            if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
-                              let subprivilage = res.data["result"].subPrivilages[i];
-                              if (subprivilage.name === "Back Office") {
-                              }
-                              this.state.headerNames.push({ name: subprivilage.name })
-                            }
-                          }
-                          this.setState({ headerNames: this.state.headerNames }, () => {
-                            console.error(this.state.headerNames)
-                            for (let j = 0; j < this.state.headerNames.length; j++) {
-                              if (j === 0) {
-                                this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                              }
-                              else if (this.state.headerNames[j].name === "Back Office") { }
-                              else {
-                                this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
-                              }
-                            }
-                          })
-                          this.setState({ privilages: this.state.privilages }, () => {
-                            // console.error(this.state.privilages.length)
-                            if (this.state.privilages.length > 0) {
-                              if (this.state.privilages[0].name === "Dashboard") {
-                                this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
-                              } else if (this.state.privilages[0].name === "Users") {
-                                this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
-                              } else if (this.state.privilages[0].name === "Roles") {
-                                this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
-                              } else {
-                                this.setState({ flagOne: false, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
-                                console.log("please update the privilages in Line.no: 161")
-                              }
-                            }
-                          });
-                        }
-                      }
-                    }
-                  }
-                }
-
-              });
-            }).catch(() => {
-              this.setState({ loading: false });
-              console.log('There is error saving domainDataId');
-              // console.log('There is error saving domainDataId');
-            });
-
-          }
-        }).catch(() => {
-          this.setState({ loading: false });
-          console.log('There is error getting storeId');
-          //  console.log('There is error getting storeId');
-        });
-      }
-    }).catch(() => {
-      this.setState({ loading: false });
-      console.log('There is error getting storeId');
-      //  console.log('There is error getting storeId');
     });
-    this.getAllUsers();
-    this.getRolesList();
   }
 
   getRolesList() {

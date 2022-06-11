@@ -1,17 +1,16 @@
-const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097';
-
+import { BASE_URL } from "../../../commonUtils/Base";
 class URMGraphsService {
-    getUsersByRole() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/reports/usersByRole";
-    }
+  getUsersByRole() {
+    return BASE_URL + "/user-management/reports/usersByRole";
+  }
 
-    getActiveUsers() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/reports/activeVsInactiveUsers";
-    }
+  getActiveUsers() {
+    return BASE_URL + "/user-management/reports/activeVsInactiveUsers";
+  }
 
-    getStoresVsEmployees() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/reports/storesVsEmployees";
-    }
+  getStoresVsEmployees() {
+    return BASE_URL + "/user-management/reports/storesVsEmployees";
+  }
 }
 
 export default new URMGraphsService();

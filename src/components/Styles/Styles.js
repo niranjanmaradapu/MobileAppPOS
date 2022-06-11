@@ -223,4 +223,5 @@ export const loadMoreBtn = {
 export const loadmoreBtnText = {
   fontSize: RF(12),
   color: '#00000090',
+  fontFamily: 'bold'
 }

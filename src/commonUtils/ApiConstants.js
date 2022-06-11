@@ -24,3 +24,11 @@ export const INVENTORY_PORTAL = {
 export const BILLING_PORTAL = {
   searchGiftVoucher: "/new-sale/newsale//gvSearching",
 }
+
+export const LOGIN_URL = {
+  getToken: '/user-management/auth/temporary-login',
+}
+
+export const USER_MANAGEMENT_URL = {
+  getAllStores: "/user-management/store/client/stores",
+}

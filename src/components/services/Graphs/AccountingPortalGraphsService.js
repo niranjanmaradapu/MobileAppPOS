@@ -1,13 +1,13 @@
-const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097';
+import { BASE_URL } from "../../../commonUtils/Base";
 
 class AccountingPortalGraphsService {
-    getDebitnNotesByStores() {
-        return REACT_NATIVE_APP_BASE_URL + "/hsn-details/reports/debitNotesByStores";
-    }
+  getDebitnNotesByStores() {
+    return BASE_URL + "/hsn-details/reports/debitNotesByStores";
+  }
 
-    getUsedBalancedAmmounts() {
-        return REACT_NATIVE_APP_BASE_URL + "/hsn-details/reports/usedAndBalancedAmountByStores";
-    }
+  getUsedBalancedAmmounts() {
+    return BASE_URL + "/hsn-details/reports/usedAndBalancedAmountByStores";
+  }
 
 }
 

@@ -1,113 +1,113 @@
-const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097'
+import { BASE_URL } from "../../commonUtils/Base"
 
 class UrmService {
     registerUser() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/client/createClient'
+        return BASE_URL + '/user-management/client/createClient'
     }
 
     saveUser() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/createUser'
+        return BASE_URL + '/user-management/auth/createUser'
     }
 
     changePassword() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/authResponce'
+        return BASE_URL + '/user-management/auth/authResponce'
     }
 
     getPrivillagesForDomain() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/roles/privillagesForDomian/'
+        return BASE_URL + '/user-management/roles/privillagesForDomian/'
     }
 
     getPrivillagesByRoleName() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/roles/privilagesByName/'
+        return BASE_URL + '/user-management/roles/privilagesByName/'
     }
 
     getDomainName() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/client/domian/'
+        return BASE_URL + '/user-management/client/domian/'
     }
 
     getDomains() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/client/getDomiansForClient/'
+        return BASE_URL + '/user-management/client/getDomiansForClient/'
     }
 
     getPrivilegesByName() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/roles/privilagesByName/"
+        return BASE_URL + "/user-management/roles/privilagesByName/"
     }
 
     getMasterDomains() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/client/getMasterDomains"
+        return BASE_URL + "/user-management/client/getMasterDomains"
     }
 
 
     saveDomain() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/client/assignDomianToClient"
+        return BASE_URL + "/user-management/client/assignDomianToClient"
     }
 
     saveStore() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/createStore"
+        return BASE_URL + "/user-management/store/createStore"
     }
 
     editStore() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/store"
+        return BASE_URL + "/user-management/store/store"
     }
 
     getAllStores() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/getClientStores/"
+        return BASE_URL + "/user-management/store/getClientStores/"
     }
 
     deleteStore() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/store/deleteStore'
+        return BASE_URL + '/user-management/store/deleteStore'
     }
 
     getStates() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/allStates"
+        return BASE_URL + "/user-management/store/allStates"
     }
 
     getDistricts() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/getDistrict"
+        return BASE_URL + "/user-management/store/getDistrict"
     }
 
     getStoresBySearch() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/getStoresWithFilter"
+        return BASE_URL + "/user-management/store/getStoresWithFilter"
     }
 
     getRolesByDomainId() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/roles//getRolesForDomian/"
+        return BASE_URL + "/user-management/roles//getRolesForDomian/"
     }
 
     getAllRoles() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/roles/getRolesForClient/"
+        return BASE_URL + "/user-management/roles/getRolesForClient/"
     }
 
     getAllUsers() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/user/getallUsers/"
+        return BASE_URL + "/user-management/user/getallUsers/"
     }
 
     getUserBySearch() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/user/getUser"
+        return BASE_URL + "/user-management/user/getUser"
     }
 
     getRolesBySearch() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/roles/rolesWithFilter"
+        return BASE_URL + "/user-management/roles/rolesWithFilter"
     }
 
     saveRole() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/roles/createRole"
+        return BASE_URL + "/user-management/roles/createRole"
     }
 
     editRole() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/roles/updateRole"
+        return BASE_URL + "/user-management/roles/updateRole"
     }
 
     saveUser() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/auth/createUser"
+        return BASE_URL + "/user-management/auth/createUser"
     }
 
     editUser() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/user/updateUser"
+        return BASE_URL + "/user-management/user/updateUser"
     }
 
     getGSTNumber() {
-        return REACT_NATIVE_APP_BASE_URL + "/user-management/store/getgstDetails"
+        return BASE_URL + "/user-management/store/getgstDetails"
     }
 }
 export default new UrmService()

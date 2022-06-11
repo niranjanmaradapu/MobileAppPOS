@@ -43,7 +43,7 @@ export default class AccountManagement extends Component {
       privilages: [],
       storesDelete: false,
       filterActive: false,
-      headerName: [],
+      headerNames: [],
       storeError: "",
       domainError: "",
       clearFilter: false
@@ -52,187 +52,68 @@ export default class AccountManagement extends Component {
 
 
   async componentDidMount() {
-    this.setState({ privilages: [] });
-    AsyncStorage.getItem("custom:isConfigUser").then((value) => {
-      if (value === "true") {
-        this.setState({ flagStore: false, flagDomain: true, flagDashboard: false });
-        for (let i = 0; i < 2; i++) {
-          if (i === 0) {
-            this.state.privilages.push({ bool: true, name: "Domain" });
-          }
-          else {
-            this.state.privilages.push({ bool: false, name: "Stores" });
+    AsyncStorage.getItem("rolename").then(value => {
+      console.log({ value })
+      axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
+        if (res) {
+          if (res.data) {
+            let len = res.data.parentPrivileges.length
+            for (let i = 0; i < len; i++) {
+              let privilege = res.data.parentPrivileges[i]
+              if (privilege.name === "Accounting Portal") {
+                let privilegeId = privilege.id
+                let sublen = res.data.subPrivileges.length
+                let subPrivileges = res.data.subPrivileges
+                for (let i = 0; i < sublen; i++) {
+                  if (privilegeId === subPrivileges[i].parentPrivilegeId) {
+                    let routes = subPrivileges[i].name
+                    this.state.headerNames.push({ name: routes })
+                    console.log("Header Names", this.state.headerNames)
+                  }
+                }
+                this.setState({ headerNames: this.state.headerNames }, () => {
+                  for (let j = 0; j < this.state.headerNames.length; j++) {
+                    if (j === 0) {
+                      this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name })
+                    } else {
+                      this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                    }
+                  }
+                })
+                this.initialNavigation()
+              }
+            }
           }
         }
-        this.setState({ privilages: this.state.privilages }, () => {
-          this.setState({ flagDomain: true })
-        });
-      }
-      else {
-        AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
-          if (value === "true") {
-            var domainId = "1";
-            if (global.domainName === "Textile") {
-              domainId = "1";
-            }
-            else if (global.domainName === "Retail") {
-              domainId = "2";
-            }
-            else if (global.domainName === "Electrical & Electronics") {
-              domainId = "3";
-            }
-
-            axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
-              if (res.data && res.data["isSuccess"] === "true") {
-                let len = res.data["result"].length;
-                if (len > 0) {
-                  for (let i = 0; i < len; i++) {
-                    let previlage = res.data["result"][i];
-                    if (previlage.name === "Accounting Portal") {
-                      for (let i = 0; i < previlage.subPrivillages.length; i++) {
-                        console.log(previlage.subPrivillages[i].parentPrivillageId);
-                        if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
-                          let subprivilage = previlage.subPrivillages[i];
-                          this.state.headerName.push({ name: subprivilage.name })
-                        }
-                      }
-                      this.setState({ headerName: this.state.headerName }, () => {
-                        console.log(this.state.headerName)
-                        for (let j = 0; j < this.state.headerName.length; j++) {
-                          if (j === 0) {
-                            this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
-                          } else if (this.state.headerName[0].name !== "Dashboard") {
-                            if (this.state.headerName[j].name === "Stores") {
-                              this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
-                            } else {
-                              this.state.privilages.push({ bool: false, name: this.state.headerName[j].name });
-                            }
-                          }
-                          else {
-                            this.state.privilages.push({ bool: false, name: this.state.headerName[j].name });
-                          }
-                        }
-                      })
-                      // if (this.state.privilages.length > 0) {
-                      this.setState({ privilages: this.state.privilages }, () => {
-                        if (this.state.privilages.length > 0) {
-                          if (this.state.privilages[0].name === "Dashboard") {
-                            this.setState({ flagDashboard: true })
-                          } else if (this.state.privilages[0].name === "Stores") {
-                            this.setState({ flagStore: true })
-                          } else if (this.state.privilages[0].name === "Doamin") {
-                            this.setState({ flagDomain: true })
-                          } else if (this.state.privilages[0].name === "Credit Notes") {
-                            this.setState({ flagCreditNotes: true })
-                          } else if (this.state.privilages[0].name === "Debit Notes") {
-                            this.setState({ flagDebitNotes: false })
-                          } else if (this.state.privilages[0].name === "Create Tax Master") {
-                            this.setState({ flagCreditNotes: true })
-                          } else if (this.state.privilages[0].name === "Create HSN Code") {
-                            this.setState({ flagHSNCode: true })
-                          }
-                          else {
-                            this.setState({ flagStore: false, flagDashboard: false, flagDomain: false, flagCreditNotes: false, flagDebitNotes: false, flagTaxMaster: false, flagHSNCode: false })
-                          }
-                        }
-                      });
-                      // }
-                    }
-                  }
-                }
-              }
-            });
-          }
-          else {
-            AsyncStorage.getItem("rolename").then((value) => {
-              axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
-                if (res.data && res.data["isSuccess"] === "true") {
-                  let len = res.data["result"].parentPrivilages.length;
-                  let length = res.data["result"].subPrivilages.length;
-                  // console.log(.name)
-                  if (len > 0) {
-                    for (let i = 0; i < len; i++) {
-                      let previlage = res.data["result"].parentPrivilages[i];
-                      if (previlage.name === "Accounting Portal") {
-
-                        if (length > 0) {
-                          for (let i = 0; i < length; i++) {
-                            if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
-                              let subprivilage = res.data["result"].subPrivilages[i];
-                              this.state.headerName.push({ name: subprivilage.name })
-                            }
-                          }
-                          this.setState({ headerName: this.state.headerName }, () => {
-                            console.log(this.state.headerName)
-                            for (let j = 0; j < this.state.headerName.length; j++) {
-                              if (j === 0) {
-                                this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
-                              } else if (this.state.headerName[0].name !== "Dashboard") {
-                                if (this.state.headerName[j].name === "Stores") {
-                                  this.state.privilages.push({ bool: true, name: this.state.headerName[j].name });
-                                } else {
-                                  this.state.privilages.push({ bool: false, name: this.state.headerName[j].name });
-                                }
-                              }
-                              else {
-                                this.state.privilages.push({ bool: false, name: this.state.headerName[j].name });
-                              }
-                            }
-
-                          })
-                          if (this.state.privilages.length > 0) {
-                            this.setState({ privilages: this.state.privilages }, () => {
-                              console.error(this.state.privilages)
-                              if (this.state.privilages[0].name === "Dashboard") {
-                                this.setState({ flagDashboard: true })
-                              } else if (this.state.privilages[0].name === "Stores") {
-                                this.setState({ flagStore: true })
-                              } else if (this.state.privilages[0].name === "Doamin") {
-                                this.setState({ flagDomain: true })
-                              } else if (this.state.privilages[0].name === "Credit Notes") {
-                                this.setState({ flagCreditNotes: true })
-                              } else if (this.state.privilages[0].name === "Debit Notes") {
-                                this.setState({ flagDebitNotes: false })
-                              } else if (this.state.privilages[0].name === "Create Tax Master") {
-                                this.setState({ flagCreditNotes: true })
-                              } else if (this.state.privilages[0].name === "Create HSN Code") {
-                                this.setState({ flagHSNCode: true })
-                              }
-                              else {
-                                this.setState({ flagStore: false, flagDashboard: false, flagDomain: false, flagCreditNotes: false, flagDebitNotes: false, flagTaxMaster: false, flagHSNCode: false })
-                              }
-                            });
-                          } else {
-
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-
-              });
-            }).catch(() => {
-              this.setState({ loading: false });
-              console.log('There is error saving domainDataId');
-              //  alert('There is error saving domainDataId');
-            });
-
-          }
-        }).catch(() => {
-          this.setState({ loading: false });
-          console.log('There is error getting storeId');
-        });
-      }
-    }).catch(() => {
-      this.setState({ loading: false });
-      console.log('There is error getting storeId');
-    });
-    const storeId = await AsyncStorage.getItem("storeId")
-    const userId = await AsyncStorage.getItem('custom:userId')
-    this.setState({ storeId: storeId, userId: userId })
+      })
+    })
   }
 
+  // Intial Routing
+  initialNavigation() {
+    if (this.state.privilages.length > 0) {
+      this.setState({ privilages: this.state.privilages }, () => {
+        if (this.state.privilages[0].name === "Dashboard") {
+          this.setState({ flagDashboard: true })
+        } else if (this.state.privilages[0].name === "Stores") {
+          this.setState({ flagStore: true })
+        } else if (this.state.privilages[0].name === "Doamin") {
+          this.setState({ flagDomain: true })
+        } else if (this.state.privilages[0].name === "Credit Notes") {
+          this.setState({ flagCreditNotes: true })
+        } else if (this.state.privilages[0].name === "Debit Notes") {
+          this.setState({ flagDebitNotes: false })
+        } else if (this.state.privilages[0].name === "Create Tax Master") {
+          this.setState({ flagCreditNotes: true })
+        } else if (this.state.privilages[0].name === "Create HSN Code") {
+          this.setState({ flagHSNCode: true })
+        }
+        else {
+          this.setState({ flagStore: false, flagDashboard: false, flagDomain: false, flagCreditNotes: false, flagDebitNotes: false, flagTaxMaster: false, flagHSNCode: false })
+        }
+      });
+    }
+  }
 
   // Navigation Functions
 

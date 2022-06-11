@@ -45,183 +45,78 @@ class NewSaleTextile extends Component {
 
 
   async componentDidMount() {
-    AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
-      if (value === "true") {
-        var domainId = "0";
-        if (global.domainName === "Textile") {
-          domainId = "1";
-          this.setState({ flagGenerateEstimationSlip: true });
-          this.setState({ flagGenerateInvoice: false });
-        }
-        else if (global.domainName === "Retail") {
-          domainId = "2";
-          // this.setState({ flagGenerateEstimationSlip: false });
-          // this.setState({ flagGenerateInvoice: true });
-        }
-        else if (global.domainName === "Electrical & Electronics") {
-          domainId = "3";
-        }
-        console.log('dfsdfdsf' + domainId);
-        axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
-          if (res.data && res.data["isSuccess"] === "true") {
-            let len = res.data["result"].length;
-            if (len > 0) {
-              if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                  let previlage = res.data["result"][i];
-                  if (previlage.name === "Billing Portal") {
-                    for (let i = 0; i < previlage.subPrivillages.length; i++) {
-                      console.log(previlage.subPrivillages[i].parentPrivillageId);
-                      if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
-                        let subprivilage = previlage.subPrivillages[i];
-                        this.state.headerNames.push({ name: subprivilage.name.trim() })
-                      }
-                    }
-                    this.setState({ headerNames: this.state.headerNames }, () => {
-                      for (let j = 0; j < this.state.headerNames.length; j++) {
-                        if (j === 0) {
-                          this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                        }
-                        else {
-                          this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
-                        }
-
-                      }
-                    })
-                    this.setState({ privilages: this.state.privilages }, () => {
-                      if (this.state.privilages.length > 0) {
-                        if (this.state.privilages[0].name === "Generate Estimation Slip") {
-                          this.setState({ flagGenerateEstimationSlip: true })
-                        } else {
-                          this.setState({ flagGenerateEstimationSlip: false })
-                        }
-                        if (this.state.privilages[0].name === "Generate Invoice") {
-                          this.setState({ flagGenerateInvoice: true })
-                        } else {
-                          this.setState({ flagGenerateInvoice: false })
-                        }
-                        if (this.state.privilages[0].name === "Generate Return Slip") {
-                          this.setState({ flagGenerateReturnSlip: true })
-                        } else {
-                          this.setState({ flagGenerateReturnSlip: false })
-                        }
-                        if (this.state.privilages[0].name === "Add Customer") {
-                          this.setState({ falgAddCustomer: true })
-                        } else {
-                          this.setState({ falgAddCustomer: false })
-                        }
-                        if (this.state.privilages[0].name === "Gift Voucher") {
-                          this.setState({ flagGiftVoucher: true })
-                        } else {
-                          this.setState({ flagGiftVoucher: false })
-                        }
-                        if (this.state.privilages[0].name === "Day Closure Activity") {
-                          this.setState({ flagDayClosure: true })
-                        } else {
-                          this.setState({ flagDayClosure: false })
-                        }
-                      }
-                    });
+    AsyncStorage.getItem("rolename").then(value => {
+      console.log({ value })
+      axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
+        if (res) {
+          if (res.data) {
+            let len = res.data.parentPrivileges.length
+            for (let i = 0; i < len; i++) {
+              let privilege = res.data.parentPrivileges[i]
+              if (privilege.name === "Billing Portal") {
+                let privilegeId = privilege.id
+                let sublen = res.data.subPrivileges.length
+                let subPrivileges = res.data.subPrivileges
+                for (let i = 0; i < sublen; i++) {
+                  if (privilegeId === subPrivileges[i].parentPrivilegeId) {
+                    let routes = subPrivileges[i].name
+                    this.state.headerNames.push({ name: routes })
+                    console.log("Header Names", this.state.headerNames)
                   }
                 }
+                this.setState({ headerNames: this.state.headerNames }, () => {
+                  for (let j = 0; j < this.state.headerNames.length; j++) {
+                    if (j === 0) {
+                      this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name })
+                    } else {
+                      this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                    }
+                  }
+                })
+                this.initialNavigation()
               }
             }
           }
-        });
-      }
-      else {
-        AsyncStorage.getItem("rolename").then((value) => {
-          axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-              let len = res.data["result"].parentPrivilages.length;
-              let length = res.data["result"].subPrivilages.length;
-              // console.log(.name)
-              if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                  let previlage = res.data["result"].parentPrivilages[i];
-                  if (previlage.name === "Billing Portal") {
+        }
+      })
+    })
+  }
 
-                    if (length > 0) {
-                      for (let i = 0; i < length; i++) {
-                        if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
-                          let subprivilage = res.data["result"].subPrivilages[i];
-                          this.state.headerNames.push({ name: subprivilage.name.trim() })
-                        }
-                      }
-                      this.setState({ headerNames: this.state.headerNames }, () => {
-                        if (global.domainName === "Retail") {
-                          for (let j = 1; j < this.state.headerNames.length; j++) {
-                            if (j === 1) {
-                              this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                            }
-                            else if (this.state.headerNames[j].name === "Generate Estimation Slip") { }
-                            else {
-                              this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
-                            }
-                          }
-                        } else if (global.domainName === "Textile") {
-                          for (let j = 0; j < this.state.headerNames.length; j++) {
-                            if (j === 0) {
-                              this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                            } else {
-                              this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
-                            }
-                          }
-                        }
-                      })
-                      this.setState({ privilages: this.state.privilages }, () => {
-                        if (this.state.privilages.length > 0) {
-                          if (this.state.privilages[0].name === "Generate Estimation Slip") {
-                            this.setState({ flagGenerateEstimationSlip: true })
-                          } else {
-                            this.setState({ flagGenerateEstimationSlip: false })
-                          }
-                          if (this.state.privilages[0].name === "Generate Invoice") {
-                            this.setState({ flagGenerateInvoice: true })
-                          } else {
-                            this.setState({ flagGenerateInvoice: false })
-                          }
-                          if (this.state.privilages[0].name === "Generate Return Slip") {
-                            this.setState({ flagGenerateReturnSlip: true })
-                          } else {
-                            this.setState({ flagGenerateReturnSlip: false })
-                          }
-                          if (this.state.privilages[0].name === "Add Customer") {
-                            this.setState({ falgAddCustomer: true })
-                          } else {
-                            this.setState({ falgAddCustomer: false })
-                          }
-                          if (this.state.privilages[0].name === "Gift Voucher") {
-                            this.setState({ flagGiftVoucher: true })
-                          } else {
-                            this.setState({ flagGiftVoucher: false })
-                          }
-                          if (this.state.privilages[0].name === "Day Closure Activity") {
-                            this.setState({ flagDayClosure: true })
-                          } else {
-                            this.setState({ flagDayClosure: false })
-                          }
-                        }
-                      });
-                    }
-                  }
-                }
-              }
-            }
-          });
-        }).catch(() => {
-          this.setState({ loading: false });
-          console.log('There is error saving domainDataId');
-          // alert('There is error saving domainDataId');
-        });
-
+  initialNavigation() {
+    this.setState({ privilages: this.state.privilages }, () => {
+      if (this.state.privilages.length > 0) {
+        if (this.state.privilages[0].name === "Generate Estimation Slip") {
+          this.setState({ flagGenerateEstimationSlip: true })
+        } else {
+          this.setState({ flagGenerateEstimationSlip: false })
+        }
+        if (this.state.privilages[0].name === "Generate Invoice") {
+          this.setState({ flagGenerateInvoice: true })
+        } else {
+          this.setState({ flagGenerateInvoice: false })
+        }
+        if (this.state.privilages[0].name === "Generate Return Slip") {
+          this.setState({ flagGenerateReturnSlip: true })
+        } else {
+          this.setState({ flagGenerateReturnSlip: false })
+        }
+        if (this.state.privilages[0].name === "Add Customer") {
+          this.setState({ falgAddCustomer: true })
+        } else {
+          this.setState({ falgAddCustomer: false })
+        }
+        if (this.state.privilages[0].name === "Gift Voucher") {
+          this.setState({ flagGiftVoucher: true })
+        } else {
+          this.setState({ flagGiftVoucher: false })
+        }
+        if (this.state.privilages[0].name === "Day Closure Activity") {
+          this.setState({ flagDayClosure: true })
+        } else {
+          this.setState({ flagDayClosure: false })
+        }
       }
-    }).catch(() => {
-      this.setState({ loading: false });
-      console.log('There is error getting storeId');
-      // alert('There is error getting storeId');
     });
-
   }
 
   topbarAction1 = (item, index) => {

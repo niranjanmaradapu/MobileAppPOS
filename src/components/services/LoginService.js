@@ -1,56 +1,54 @@
-// import base from './Base';
-const REACT_NATIVE_APP_BASE_URL = 'http://14.98.164.17:9097'
-
+import axios from "axios";
+import { LOGIN_URL, USER_MANAGEMENT_URL } from "../../commonUtils/ApiConstants";
+import { BASE_URL } from "../../commonUtils/Base"
 
 class LoginService {
-    getStores() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-store/stores/getstores';
-    }
-    getUserStoresForSuperAdmin() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/store/getClientDomianStores';
-    }
+  getStores() {
+    return BASE_URL + '/user-management/store/client/stores';
+  }
 
-    getUserStores() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/getUserStores/';
-    }
+  getUserStores(clientId) {
+    const param = '?clientId=' + clientId
+    return axios.get(BASE_URL + USER_MANAGEMENT_URL.getAllStores() + param);
+  }
 
-    getStoreIdWithStoreName() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/store/getStoresWithFilter';
-    }
+  getStoreIdWithStoreName() {
+    return BASE_URL + '/user-management/store/getStoresWithFilter';
+  }
 
-    getDomainsList(){
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/client/getDomiansForClient/';
-    }
+  getDomainsList() {
+    return BASE_URL + '/user-management/client/getDomiansForClient/';
+  }
 
 
-    channelsList() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/client/getMasterDomains';
-    }
+  channelsList() {
+    return BASE_URL + '/user-management/client/getMasterDomains';
+  }
 
 
-    createUser() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/createUser';
-    }
+  createUser() {
+    return BASE_URL + '/user-management/auth/createUser';
+  }
 
-    getUser() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/user/getUser';
-    }
+  getUser() {
+    return BASE_URL + '/user-management/user/getUser';
+  }
 
-    forgotPasswordCodeSent() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/forgetPassword';
-    }
+  forgotPasswordCodeSent() {
+    return BASE_URL + '/user-management/auth/forgetPassword';
+  }
 
-    forgotPassword() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/confirmforgetPassword';
-    }
+  forgotPassword() {
+    return BASE_URL + '/user-management/auth/confirmforgetPassword';
+  }
 
-    
-    sendVerificationCode(){
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/resetUserPassword/';
-    }
 
-    getAuth() {
-        return REACT_NATIVE_APP_BASE_URL + '/user-management/auth/loginWithTempPass';
-    }
+  sendVerificationCode() {
+    return BASE_URL + '/user-management/auth/resetUserPassword/';
+  }
+
+  getAuth(obj) {
+    return axios.post(BASE_URL + LOGIN_URL.getToken, obj)
+  }
 }
 export default new LoginService()

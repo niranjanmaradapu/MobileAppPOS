@@ -44,20 +44,9 @@ export default class Inventory extends Component {
   }
 
 
-  componentDidMount() {
-    var domainStringId = "";
+  async componentDidMount() {
     var storeStringId = "";
     var storeName = "";
-    AsyncStorage.getItem("domainDataId").then((value) => {
-      domainStringId = value;
-      this.setState({ domainId: parseInt(domainStringId) });
-      console.log("domain data id" + this.state.domainId);
-
-
-    }).catch(() => {
-      this.setState({ loading: false });
-      console.log('There is error getting domainDataId');
-    });
 
     AsyncStorage.getItem("storeId").then((value) => {
       storeStringId = value;
@@ -77,124 +66,62 @@ export default class Inventory extends Component {
       console.log('There is error getting storeId');
     });
 
-    AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
-      if (value === "true") {
-        var domainId = "1";
-        if (global.domainName === "Textile") {
-          domainId = "1";
-        }
-        else if (global.domainName === "Retail") {
-          domainId = "2";
-        }
-        else if (global.domainName === "Electrical & Electronics") {
-          domainId = "3";
-        }
-
-        axios.get(UrmService.getPrivillagesForDomain() + domainId).then((res) => {
-          if (res.data && res.data["isSuccess"] === "true") {
-            let len = res.data["result"].length;
-            if (len > 0) {
-              if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                  let previlage = res.data["result"][i];
-                  if (previlage.name === "Inventory Portal") {
-                    for (let i = 0; i < previlage.subPrivillages.length; i++) {
-                      console.log(previlage.subPrivillages[i].parentPrivillageId);
-                      if (previlage.id === previlage.subPrivillages[i].parentPrivillageId) {
-                        let subprivilage = previlage.subPrivillages[i];
-                        this.state.headerNames.push({ name: subprivilage.name })
-                      }
-                    }
-                    this.setState({ headerNames: this.state.headerNames }, () => {
-                      for (let j = 0; j < this.state.headerNames.length; j++) {
-                        if (j === 0) {
-                          this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                        }
-                        else {
-                          this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
-                        }
-                      }
-                    })
+    AsyncStorage.getItem("rolename").then(value => {
+      console.log({ value })
+      axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
+        if (res) {
+          if (res.data) {
+            let len = res.data.parentPrivileges.length
+            for (let i = 0; i < len; i++) {
+              let privilege = res.data.parentPrivileges[i]
+              if (privilege.name === "Inventory Portal") {
+                let privilegeId = privilege.id
+                let sublen = res.data.subPrivileges.length
+                let subPrivileges = res.data.subPrivileges
+                for (let i = 0; i < sublen; i++) {
+                  if (privilegeId === subPrivileges[i].parentPrivilegeId) {
+                    let routes = subPrivileges[i].name
+                    this.state.headerNames.push({ name: routes })
+                    console.log("Header Names", this.state.headerNames)
                   }
-                  this.setState({ privilages: this.state.privilages }, () => {
-                    if (this.state.privilages.length > 0) {
-                      if (this.state.privilages[0].name === "Barcode List") {
-                        this.setState({ flagBarcode: true, flagRebarCode: false });
-                        this.setState({ flagBarcode: true, flagRebarCode: false })
-                      } else if (this.state.privilages[0].name === "Re-Barcode List") {
-                        this.setState({ flagBarcode: false, flagRebarCode: true })
-                        this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
-                        this.getbarcodeTexttileAdjustments();
-                      }
-                    }
-                  });
                 }
+                this.setState({ headerNames: this.state.headerNames }, () => {
+                  for (let j = 0; j < this.state.headerNames.length; j++) {
+                    if (j === 0) {
+                      this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name })
+                    } else {
+                      this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                    }
+                  }
+                })
+                this.initialNavigation()
               }
             }
           }
-        });
-      }
-      else {
-        AsyncStorage.getItem("rolename").then((value) => {
-          axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
-            if (res.data && res.data["isSuccess"] === "true") {
-              let len = res.data["result"].parentPrivilages.length;
-              let length = res.data["result"].subPrivilages.length;
-              // console.log(.name)
-              if (len > 0) {
-                for (let i = 0; i < len; i++) {
-                  let previlage = res.data["result"].parentPrivilages[i];
-                  if (previlage.name === "Inventory Portal") {
-
-                    if (length > 0) {
-                      for (let i = 0; i < length; i++) {
-                        if (previlage.id === res.data["result"].subPrivilages[i].parentPrivillageId) {
-                          let subprivilage = res.data["result"].subPrivilages[i];
-                          this.state.headerNames.push({ name: subprivilage.name })
-                        }
-                      }
-                      this.setState({ headerNames: this.state.headerNames }, () => {
-                        for (let j = 0; j < this.state.headerNames.length; j++) {
-                          if (j === 0) {
-                            this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
-                          }
-                          else {
-                            this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
-                          }
-                        }
-                      })
-                      this.setState({ privilages: this.state.privilages }, () => {
-                        if (this.state.privilages.length > 0) {
-                          if (this.state.privilages[0].name === "Barcode List") {
-                            this.setState({ flagBarcode: true, flagRebarCode: false });
-                            this.setState({ flagBarcode: true, flagRebarCode: false })
-                          } else if (this.state.privilages[0].name === "Re-Barcode List") {
-                            this.setState({ flagBarcode: false, flagRebarCode: true })
-                            this.setState({ reBarcodesData: [], startDate: "", endDate: "", barCodeId: "", });
-                            this.getbarcodeTexttileAdjustments();
-                          }
-                        }
-                      });
-                    }
-                  }
-                }
-              }
-
-            }
-          });
-        }).catch(() => {
-          this.setState({ loading: false });
-          console.log('There is error saving domainDataId');
-        });
-
-      }
-    }).catch(() => {
-      this.setState({ loading: false });
-      console.log('There is error getting sadasdsd');
-    });
+        }
+      })
+    })
   }
 
+  // Initial Routing
+  initialNavigation() {
+    if (this.state.privilages.length > 0) {
+      this.setState({ privilages: this.state.privilages }, () => {
+        const { privilages } = this.state
+        if (privilages[0].name === "Barcode List") {
+          this.setState({ flagBarcode: true })
+        } else if (privilages[0].name === "Re-Barcode List") {
+          this.setState({ flagRebarCode: true })
+        } else if (privilages[0] === "Product Combo") {
+          this.setState({ flagProductCombo: true })
+        } else {
+          this.setState({ flagBarcode: false, flagRebarCode: false, flagProductCombo: true })
+        }
+      })
+    }
+  }
 
+  // Navigation Functions
   topbarAction1 = (item, index) => {
     if (item.name === "Barcode List") {
       this.setState({ flagBarcode: true, filterActive: false });

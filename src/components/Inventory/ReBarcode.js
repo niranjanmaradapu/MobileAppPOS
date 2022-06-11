@@ -236,7 +236,7 @@ export default class ReBarcode extends Component {
           </View>}
           data={this.state.filterActive ? this.state.filterRebarcodesData : this.state.reBarcodesData}
           scrollEnabled={true}
-          ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : RF(17), marginTop: deviceheight / 3 }}>&#9888; Records Not Found</Text>}
+          ListEmptyComponent={<Text style={listEmptyMessage}>&#9888; Records Not Found</Text>}
           renderItem={({ item, index }) => (
 
             <View
