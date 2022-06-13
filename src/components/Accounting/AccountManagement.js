@@ -54,40 +54,45 @@ export default class AccountManagement extends Component {
   async componentDidMount() {
     AsyncStorage.getItem("rolename").then(value => {
       console.log({ value })
-
-      axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
-        console.log(res.data)
-        if (res) {
-          if (res.data) {
-            let len = res.data.parentPrivileges.length
-            for (let i = 0; i < len; i++) {
-              let privilege = res.data.parentPrivileges[i]
-              if (privilege.name === "Accounting Portal") {
-                let privilegeId = privilege.id
-                let sublen = res.data.subPrivileges.length
-                let subPrivileges = res.data.subPrivileges
-                for (let i = 0; i < sublen; i++) {
-                  if (privilegeId === subPrivileges[i].parentPrivilegeId) {
-                    let routes = subPrivileges[i].name
-                    this.state.headerNames.push({ name: routes })
-                    console.log("Header Names", this.state.headerNames)
-                  }
-                }
-                this.setState({ headerNames: this.state.headerNames }, () => {
-                  for (let j = 0; j < this.state.headerNames.length; j++) {
-                    if (j === 0) {
-                      this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name })
-                    } else {
-                      this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+      if (value === "config_user") {
+        this.state.privilages.push({ bool: true, name: "Stores" })
+        this.setState({ flagStore: true })
+      } else if (value === "super_admin") { }
+      else {
+        axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
+          console.log(res.data)
+          if (res) {
+            if (res.data) {
+              let len = res.data.parentPrivileges.length
+              for (let i = 0; i < len; i++) {
+                let privilege = res.data.parentPrivileges[i]
+                if (privilege.name === "Accounting Portal") {
+                  let privilegeId = privilege.id
+                  let sublen = res.data.subPrivileges.length
+                  let subPrivileges = res.data.subPrivileges
+                  for (let i = 0; i < sublen; i++) {
+                    if (privilegeId === subPrivileges[i].parentPrivilegeId) {
+                      let routes = subPrivileges[i].name
+                      this.state.headerNames.push({ name: routes })
+                      console.log("Header Names", this.state.headerNames)
                     }
                   }
-                })
-                this.initialNavigation()
+                  this.setState({ headerNames: this.state.headerNames }, () => {
+                    for (let j = 0; j < this.state.headerNames.length; j++) {
+                      if (j === 0) {
+                        this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name })
+                      } else {
+                        this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                      }
+                    }
+                  })
+                  this.initialNavigation()
+                }
               }
             }
           }
-        }
-      })
+        })
+      }
     })
   }
 

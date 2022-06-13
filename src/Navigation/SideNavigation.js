@@ -74,14 +74,6 @@ export default class SideNavigation extends React.Component {
       // alert('There is error getting storeId');
     });
 
-    AsyncStorage.getItem("domainName").then((value) => {
-      global.domainName = value;
-    }).catch(() => {
-      ////this.setState({ loading: false });
-      console.log('There is error getting domainName');
-      //alert('There is error getting domainName');
-    });
-
     AsyncStorage.getItem("rolename").then((value) => {
       global.userrole = value;
     }).catch(() => {
@@ -89,6 +81,14 @@ export default class SideNavigation extends React.Component {
       console.log('There is error getting userrole');
       // alert('There is error getting userrole');
     });
+
+    AsyncStorage.getItem("username").then(value => {
+      global.username = value
+    })
+
+    AsyncStorage.getItem("storeName").then(value => {
+      global.storeName = value
+    })
 
     global.previlage1 = '';
     global.previlage2 = '';
@@ -98,71 +98,68 @@ export default class SideNavigation extends React.Component {
     global.previlage6 = '';
     global.previlage7 = '';
     global.previlage8 = '';
-    global.isSuperAdmin = '';
-    global.isConfigUser = '';
-    global.username = '';
 
-    AsyncStorage.getItem("custom:isConfigUser").then((value) => {
-      if (value === "true") {
-        global.previlage7 = 'URM Portal';
+    AsyncStorage.getItem("roleType").then((value) => {
+      if (value === "config_user") {
+        global.previlage1 = '';
+        global.previlage2 = '';
+        global.previlage3 = '';
+        global.previlage4 = '';
         global.previlage5 = 'Accounting Portal';
+        global.previlage6 = '';
+        global.previlage7 = 'URM Portal';
       }
-      else {
-        let roleType = AsyncStorage.getItem("roleType")
-        if (roleType === "super_admin") {
-          global.previlage1 = 'Dashboard';
-          global.previlage2 = 'Billing Portal';
-          global.previlage3 = 'Inventory Portal';
-          global.previlage4 = 'Promotions & Loyalty';
-          global.previlage5 = 'Accounting Portal';
-          global.previlage6 = 'Reports';
-          global.previlage7 = 'URM Portal';
-        } else {
-          AsyncStorage.getItem("rolename").then(value => {
-            console.log("role name", value)
-            global.userrole = value;
-            axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
-              console.log("Privileges", res.data)
-              if (res.data) {
-                let len = res.data.parentPrivileges.length;
-                // console.log(.name)
-                if (len > 0) {
-                  for (let i = 0; i < len; i++) {
-                    let previlage = res.data.parentPrivileges[i];
-                    if (previlage.name === "Dashboard") {
-                      global.previlage1 = 'Dashboard';
-                    }
-                    if (previlage.name === "Billing Portal") {
-                      global.previlage2 = 'Billing Portal';
-                    }
-                    if (previlage.name === "Inventory Portal") {
-                      global.previlage3 = 'Inventory Portal';
-                    }
-                    if (previlage.name === "Promotions & Loyalty") {
-                      global.previlage4 = 'Promotions & Loyalty';
-                    }
-                    if (previlage.name === "Accounting Portal") {
-                      global.previlage5 = 'Accounting Portal';
-                    }
-                    if (previlage.name === "Reports") {
-                      global.previlage6 = 'Reports';
-                    }
-                    if (previlage.name === "URM Portal") {
-                      global.previlage7 = 'URM Portal';
-                    }
+      else if (value === "super_admin") {
+        global.previlage1 = 'Dashboard';
+        global.previlage2 = 'Billing Portal';
+        global.previlage3 = 'Inventory Portal';
+        global.previlage4 = 'Promotions & Loyalty';
+        global.previlage5 = 'Accounting Portal';
+        global.previlage6 = 'Reports';
+        global.previlage7 = 'URM Portal';
+      } else {
+        AsyncStorage.getItem("rolename").then(value => {
+          console.log("role name", value)
+          global.userrole = value;
+          axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
+            console.log("Privileges", res.data)
+            if (res.data) {
+              let len = res.data.parentPrivileges.length;
+              // console.log(.name)
+              if (len > 0) {
+                for (let i = 0; i < len; i++) {
+                  let previlage = res.data.parentPrivileges[i];
+                  if (previlage.name === "Dashboard") {
+                    global.previlage1 = 'Dashboard';
                   }
-                  //this.setState({ loading: false });
+                  if (previlage.name === "Billing Portal") {
+                    global.previlage2 = 'Billing Portal';
+                  }
+                  if (previlage.name === "Inventory Portal") {
+                    global.previlage3 = 'Inventory Portal';
+                  }
+                  if (previlage.name === "Promotions & Loyalty") {
+                    global.previlage4 = 'Promotions & Loyalty';
+                  }
+                  if (previlage.name === "Accounting Portal") {
+                    global.previlage5 = 'Accounting Portal';
+                  }
+                  if (previlage.name === "Reports") {
+                    global.previlage6 = 'Reports';
+                  }
+                  if (previlage.name === "URM Portal") {
+                    global.previlage7 = 'URM Portal';
+                  }
                 }
+                //this.setState({ loading: false });
               }
-            });
-          }).catch((err) => {
-            console.log(err);
+            }
           });
-        }
+        }).catch((err) => {
+          console.log(err);
+        });
       }
-    }).catch(() => {
-      console.log('There is error getting storeId');
-    });
+    })
 
 
 
@@ -180,7 +177,7 @@ export default class SideNavigation extends React.Component {
 
     ) : (
       <Drawer.Navigator
-        // initialRouteName={global.previlage1 === 'Dashboard' ? "Home" : global.previlage2 === 'Billing Portal' ? "CustomerNavigation" : global.previlage3 === 'Inventory Portal' ? "InventoryNavigation " : global.previlage4 === 'Promotions & Loyalty' ? "PromoNavigation" : global.previlage5 === 'Accounting Portal' ? "AccountingNaviagtion" : global.previlage6 === 'Reports' ? "ReportsNavigation" : global.previlage7 === 'URM Portal' ? "UrmNavigation" : "Home"}
+        initialRouteName={global.previlage1 === 'Dashboard' ? "Home" : global.previlage2 === 'Billing Portal' ? "CustomerNavigation" : global.previlage3 === 'Inventory Portal' ? "InventoryNavigation " : global.previlage4 === 'Promotions & Loyalty' ? "PromoNavigation" : global.previlage5 === 'Accounting Portal' ? "AccountingNaviagtion" : global.previlage6 === 'Reports' ? "ReportsNavigation" : global.previlage7 === 'URM Portal' ? "UrmNavigation" : "Home"}
         screenOptions={{
           drawerStyle: {
             width: Device.isTablet ? 400 : 300,

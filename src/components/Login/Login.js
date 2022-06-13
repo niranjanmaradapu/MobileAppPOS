@@ -123,11 +123,11 @@ export default class Login extends Component {
       LoginService.getAuth(params).then((res) => {
         console.log("login", res)
         if (res && res.data && res.status === 200) {
-          AsyncStorage.setItem("username", userName)
           global.username = userName
           if (res.data.authenticationResult) {
             // Token
             const token = res.data.authenticationResult.idToken;
+            AsyncStorage.setItem("username", jwt_decode(token)["name"])
             console.log("Token", jwt_decode(token))
             AsyncStorage.setItem("tokenkey", JSON.stringify(token)).catch(err => { console.error("Token Error =>", err) })
             AsyncStorage.getItem("tokenkey").then((value) => {

@@ -60,38 +60,50 @@ export default class UserManagement extends Component {
     this.setState({ clientId: clientId });
     AsyncStorage.getItem("rolename").then(value => {
       console.log({ value })
-      axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
-        if (res) {
-          if (res.data) {
-            let len = res.data.parentPrivileges.length
-            for (let i = 0; i < len; i++) {
-              let privilege = res.data.parentPrivileges[i]
-              if (privilege.name === "URM Portal") {
-                let privilegeId = privilege.id
-                let sublen = res.data.subPrivileges.length
-                let subPrivileges = res.data.subPrivileges
-                for (let i = 0; i < sublen; i++) {
-                  if (privilegeId === subPrivileges[i].parentPrivilegeId) {
-                    let routes = subPrivileges[i].name
-                    this.state.headerNames.push({ name: routes })
-                    console.log("Header Names", this.state.headerNames)
-                  }
-                }
-                this.setState({ headerNames: this.state.headerNames }, () => {
-                  for (let j = 0; j < this.state.headerNames.length; j++) {
-                    if (j === 0) {
-                      this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name })
-                    } else {
-                      this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+      if (value === "config_user") {
+        for (let i = 0; i < 2; i++) {
+          if (i === 0) {
+            this.state.privilages.push({ bool: true, name: "Users" })
+            this.setState({ flagOne: true })
+            this.getAllUsers()
+          } else {
+            this.state.privilages.push({ bool: false, name: "Roles" })
+          }
+        }
+      } else {
+        axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
+          if (res) {
+            if (res.data) {
+              let len = res.data.parentPrivileges.length
+              for (let i = 0; i < len; i++) {
+                let privilege = res.data.parentPrivileges[i]
+                if (privilege.name === "URM Portal") {
+                  let privilegeId = privilege.id
+                  let sublen = res.data.subPrivileges.length
+                  let subPrivileges = res.data.subPrivileges
+                  for (let i = 0; i < sublen; i++) {
+                    if (privilegeId === subPrivileges[i].parentPrivilegeId) {
+                      let routes = subPrivileges[i].name
+                      this.state.headerNames.push({ name: routes })
+                      console.log("Header Names", this.state.headerNames)
                     }
                   }
-                })
-                this.initialNavigation()
+                  this.setState({ headerNames: this.state.headerNames }, () => {
+                    for (let j = 0; j < this.state.headerNames.length; j++) {
+                      if (j === 0) {
+                        this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name })
+                      } else {
+                        this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
+                      }
+                    }
+                  })
+                  this.initialNavigation()
+                }
               }
             }
           }
-        }
-      })
+        })
+      }
     })
   }
 

@@ -85,10 +85,10 @@ export default class Stores extends Component {
     };
     axios.get(UrmService.getAllStores(), { params }).then((res) => {
       if (res) {
-        this.setState({ storesList: res.data.result, loading: false })
-        console.log("Stores", res.data.result)
+        this.setState({ storesList: res.data, loading: false })
+        console.log("Stores", res.data)
       } else {
-        this.setState({ storeError: "Records Not Found" })
+        this.setState({ storeError: "Records Not Found", loading: false })
       }
     }).catch(() => {
       this.setState({ loading: false });
@@ -103,9 +103,9 @@ export default class Stores extends Component {
     this.setState({ loading: false });
     var states = [];
     axios.get(UrmService.getStates()).then((res) => {
-      if (res.data["result"]) {
-        for (var i = 0; i < res.data["result"].length; i++) {
-          this.state.statesArray.push({ name: res.data["result"][i].stateName, id: res.data["result"][i].stateId, code: res.data["result"][i].stateCode });
+      if (res.data) {
+        for (var i = 0; i < res.data.length; i++) {
+          this.state.statesArray.push({ name: res.data[i].stateName, id: res.data[i].stateId, code: res.data[i].stateCode });
           states.push({
             value: this.state.statesArray[i].name,
             label: this.state.statesArray[i].name
@@ -140,10 +140,10 @@ export default class Stores extends Component {
       "stateCode": this.state.statecode
     };
     axios.get(UrmService.getDistricts(), { params }).then((res) => {
-      if (res.data["result"]) {
+      if (res.data) {
         console.log(res.data);
-        for (var i = 0; i < res.data["result"].length; i++) {
-          this.state.dictrictArray.push({ name: res.data["result"][i].districtName, id: res.data["result"][i].districtId });
+        for (var i = 0; i < res.data.length; i++) {
+          this.state.dictrictArray.push({ name: res.data[i].districtName, id: res.data[i].districtId });
           dictricts.push({
             value: this.state.dictrictArray[i].name,
             label: this.state.dictrictArray[i].name
