@@ -77,11 +77,12 @@ export default class Barcode extends Component {
     };
     console.log("getBarcodes", params);
     axios.post(InventoryService.getTextileBarcodes() + '?page=' + parseInt(this.state.pageNo) + '&size=10', params).then((res) => {
-      if (res.data && res.data["isSuccess"] === "true") {
-        if (res.data.result.content) {
-          this.setState({ loading: false, barcodesList: this.state.barcodesList.concat(res.data.result.content), error: "", totalPages: res.data.result.totalPages });
-          console.log(res.data.result);
-          console.warn("BarList", this.state.barcodesList)
+      if (res.data) {
+        let response = res.data.content
+        console.log({ response })
+        this.setState({ barcodesList: this.state.barcodesList.concat(response), error: "", totalPages: res.data.totalPages, loading: false, });
+        console.warn("BarList", this.state.barcodesList)
+        if (response) {
         }
         this.continuePagination()
       }
@@ -186,13 +187,11 @@ export default class Barcode extends Component {
     axios.post(InventoryService.getTextileBarcodes() + '?page=' + parseInt(this.state.filterPageNo) + '&size=10', list).then(res => {
       console.log(res);
       if (res) {
-        if (res.data && res.data["isSuccess"] === "true") {
-          if (res.data.result) {
-            this.setState({ loading: false, filterBarcodesList: this.state.filterBarcodesList.concat(res.data.result.content), error: "", filterActive: true, loading: false, totalPages: res.data.result.totalPages });
-            console.log("filtered Data", res.data.result);
-            this.setState({ fromDate: "", toDate: "", barCodeId: "" })
-            this.continuePagination()
-          }
+        if (res.data) {
+          this.setState({ loading: false, filterBarcodesList: this.state.filterBarcodesList.concat(res.data.content), error: "", filterActive: true, loading: false, totalPages: res.data.result.totalPages });
+          console.log("filtered Data", res.data.content);
+          this.setState({ fromDate: "", toDate: "", barCodeId: "" })
+          this.continuePagination()
         }
       }
       this.setState({ loading: false, filterActive: true })
@@ -448,38 +447,3 @@ export default class Barcode extends Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  spaceText: {
-    height: Device.isTablet ? 2 : 1,
-    width: deviceWidth,
-    backgroundColor: 'lightgray',
-  },
-  date: {
-    width: deviceWidth,
-    height: RH(200),
-    marginTop: RH(50),
-  },
-  calenderpng: {
-    position: 'absolute',
-    top: RH(10),
-    right: 0,
-  },
-  dateTopView: {
-    height: RW(280),
-    width: deviceWidth,
-    backgroundColor: '#ffffff'
-  },
-  dateTop2: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: Device.isTablet ? 15 : RH(10),
-    marginLeft: Device.isTablet ? 20 : RW(10),
-    marginRight: Device.isTablet ? 20 : RW(10)
-  },
-  mainContainer: {
-    flex: 1,
-  },
-
-
-});

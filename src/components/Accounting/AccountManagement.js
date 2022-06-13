@@ -54,7 +54,9 @@ export default class AccountManagement extends Component {
   async componentDidMount() {
     AsyncStorage.getItem("rolename").then(value => {
       console.log({ value })
+
       axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
+        console.log(res.data)
         if (res) {
           if (res.data) {
             let len = res.data.parentPrivileges.length

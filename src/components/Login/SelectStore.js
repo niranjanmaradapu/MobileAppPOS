@@ -19,7 +19,7 @@ export default class SelectStore extends React.Component {
     this.state = {
       language: 'English',
       languages: [],
-      selectedItem: 0,
+      selectedItem: null,
       storeNames: [],
       storesData: [],
       isFromDomain: false
@@ -37,7 +37,6 @@ export default class SelectStore extends React.Component {
       this.getstores();
     } else {
       this.setState({ storesData: this.props.route.params.items }, () => console.log("stores Data", this.state.storesData))
-
     }
   }
 
@@ -48,23 +47,30 @@ export default class SelectStore extends React.Component {
   }
 
   letsGoButtonAction() {
-    this.props.navigation.navigate('HomeNavigation');
+    if (this.state.selectedItem === null) {
+      alert("Select Atleast one Store")
+    } else {
+      this.props.navigation.navigate('HomeNavigation');
+    }
   }
 
 
   selectStoreName = (item, index) => {
     this.setState({ selectedItem: index });
-    AsyncStorage.setItem("storeId", String(item.id)).then(() => {
+    AsyncStorage.setItem("storeId", String(item.id)).then((value) => {
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error saving storeId');
     });
+    global.storeId = String(item.id)
     global.storeName = String(item.name)
+    console.log("selected Store:", global.storeId, global.storeName)
     AsyncStorage.setItem("storeName", item.name).then(() => {
     }).catch(() => {
       this.setState({ loading: false });
       console.log('There is error saving token');
     });
+
   };
 
 
@@ -72,16 +78,14 @@ export default class SelectStore extends React.Component {
     return (
       <View style={styles.container}>
         <View>
-          {this.state.isFromDomain === true && (
-            <View style={headerTitleContainer}>
-              <View style={headerTitleSubContainer}>
-                <TouchableOpacity style={backButton} onPress={() => this.handleBackButtonClick()}>
-                  <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
-                </TouchableOpacity>
-                <Text style={headerTitle}> {I18n.t('Stores')} </Text>
-              </View>
+          <View style={headerTitleContainer}>
+            <View style={headerTitleSubContainer}>
+              <TouchableOpacity style={backButton} onPress={() => this.handleBackButtonClick()}>
+                <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
+              </TouchableOpacity>
+              <Text style={headerTitle}> {I18n.t('Stores')} </Text>
             </View>
-          )}
+          </View>
           <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t('Select the Store')} </Text>
           <FlatList
             style={{ width: deviceWidth, marginTop: RH(10) }}
@@ -103,7 +107,6 @@ export default class SelectStore extends React.Component {
                     </Text>
                     <Image source={this.state.selectedItem === index ? require('../assets/images/langselect.png') : require('../assets/images/langunselect.png')} style={{ position: 'absolute', right: 20, top: 30 }} />
                   </View>
-
                 </View>
               </TouchableOpacity>
             )}

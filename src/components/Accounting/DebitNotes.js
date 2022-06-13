@@ -122,7 +122,7 @@ export default class DebitNotes extends Component {
     }
     AccountingService.getDebitNotes(reqOb).then(res => {
       if (res) {
-        console.log(res.data.content)
+        console.log(res.data)
         this.setState({ debitNotes: res.data.content })
       }
       this.setState({ loading: false })

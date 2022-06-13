@@ -42,7 +42,7 @@ export default class ProductCombo extends Component {
     console.log(params)
     axios.get(InventoryService.getProductCombo() + params).then(res => {
       if (res) {
-        this.setState({ productComboList: res.data.result })
+        this.setState({ productComboList: res.data.result.content })
         console.log("Products Combo List", this.state.productComboList)
       }
       this.setState({ loading: false })

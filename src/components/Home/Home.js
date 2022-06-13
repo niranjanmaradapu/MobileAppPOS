@@ -57,11 +57,6 @@ global.previlage5 = '';
 global.previlage6 = '';
 global.previlage7 = '';
 global.previlage8 = '';
-global.isSuperAdmin = '';
-global.isConfigUser = '';
-global.username = '';
-global.userrole = '';
-global.domainName = '';
 
 class Home extends Component {
   constructor(props) {
@@ -143,7 +138,7 @@ class Home extends Component {
     global.isSuperAdmin = '';
     global.isConfigUser = '';
     global.storename = '';
-    global.username = '';
+
 
     AsyncStorage.getItem("custom:isConfigUser").then((value) => {
       if (value === "true") {

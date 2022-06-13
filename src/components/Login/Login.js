@@ -153,42 +153,46 @@ export default class Login extends Component {
               // alert('There is error saving domainDataId');
             });
             AsyncStorage.setItem("user", JSON.stringify(jwt_decode(token))).catch(err => { console.error("Error Getting User =>", err) })
-            AsyncStorage.setItem("roleType", JSON.stringify(jwt_decode(token)["cognito:groups"]))
+            AsyncStorage.setItem("roleType", jwt_decode(token)["custom:roleName"])
             let storesAssigned = jwt_decode(token)["custom:assignedStores"]
-            const table = storesAssigned.split(",").map(pair => pair.split(":"))
-            let store = []
-            table.forEach((ele, index) => {
-              if (ele[0], ele[1]) {
-                const obj = {
-                  name: ele[0],
-                  id: ele[1]
+
+
+            AsyncStorage.getItem("roleType").then(value => {
+              console.log("Roles", value)
+              if (value) {
+                if (value === "super_admin") {
+                  this.getAdminStores()
+                } else if (value === "config_user") {
+                  this.props.navigation.navigate('AccountingNaviagtion')
+                  global.previlage1 = '';
+                  global.previlage2 = '';
+                  global.previlage3 = '';
+                  global.previlage4 = '';
+                  global.previlage6 = '';
+                  global.previlage7 = 'URM Portal';
+                  global.previlage5 = 'Accounting Portal';
+                } else {
+                  const table = storesAssigned.split(",").map(pair => pair.split(":"))
+                  let store = []
+                  table.forEach((ele, index) => {
+                    if (ele[0], ele[1]) {
+                      const obj = {
+                        name: ele[0],
+                        id: ele[1]
+                      }
+                      store.push(obj)
+                    }
+                  })
+                  this.setState({ assignedStores: store }, () => {
+                    this.getStores()
+                  })
                 }
-                store.push(obj)
+              } else {
+                this.setState({ loading: false })
               }
             })
-            this.setState({ assignedStores: store })
-            let roleType = AsyncStorage.getItem("roleType")
-            const role = AsyncStorage.getItem("user")
-            if (roleType) {
-              if (roleType[0] === "super_admin") {
-                this.getAdminStores()
-              } else if (roleType[0] === "config_user") {
-                this.props.navigation.navigate('AccountingNaviagtion')
-                global.previlage1 = '';
-                global.previlage2 = '';
-                global.previlage3 = '';
-                global.previlage4 = '';
-                global.previlage6 = '';
-                global.previlage7 = 'URM Portal';
-                global.previlage5 = 'Accounting Portal';
-              } else {
-                this.getStores()
-              }
-            } else {
-              this.getStores()
-            }
-            this.setState({ loading: false })
-          } else {
+          }
+          else {
             if (res.data.result.challengeName === "NEW_PASSWORD_REQUIRED") {
               this.setState({ loading: false });
               const roleData = res.data.result

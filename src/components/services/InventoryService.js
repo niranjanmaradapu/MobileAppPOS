@@ -1,84 +1,84 @@
 import { BASE_URL } from "../../commonUtils/Base"
 
 class InventoryService {
-    //Retail
-    createProduct() {
-        return BASE_URL + '/inventory/inventoryRetail/createBarcode';
-    }
+  //Retail
+  createProduct() {
+    return BASE_URL + '/inventory/inventoryRetail/createBarcode';
+  }
 
-    deleteBarcode() {
-      return BASE_URL + '/inventory/inventoryTextile/deleteBarcode_Textile';
-    }
+  deleteBarcode() {
+    return BASE_URL + '/inventory/inventoryTextile/deleteBarcode_Textile';
+  }
 
-    updateBarcode() {
-        return BASE_URL + '/inventory/inventoryRetail/updateBarcode';
-    }
+  updateBarcode() {
+    return BASE_URL + '/inventory/inventoryRetail/updateBarcode';
+  }
 
-    getAllBarcodes() {
-        return BASE_URL + '/inventory/inventoryRetail/getAllBarcodes';
-    }
-    saveUOM() {
-        return BASE_URL + '/uom/saveUom';
-    }
-    getUOM() {
-        return BASE_URL + '/inventory/uom/getAllUom';
-    }
+  getAllBarcodes() {
+    return BASE_URL + '/inventory/inventoryRetail/getAllBarcodes';
+  }
+  saveUOM() {
+    return BASE_URL + '/uom/saveUom';
+  }
+  getUOM() {
+    return BASE_URL + '/inventory/uom/getAllUom';
+  }
 
-    //Texttile
-    getAllDivisions() {
-        return BASE_URL + '/inventory/catalog/ListOfDivisions';
-    }
+  //Texttile
+  getAllDivisions() {
+    return BASE_URL + '/inventory/catalog/ListOfDivisions';
+  }
 
-    getAllSections() {
-        return BASE_URL + '/inventory/catalog/getcategoriesByid';
-    }
+  getAllSections() {
+    return BASE_URL + '/inventory/catalog/getcategoriesByid';
+  }
 
-    getAllSubSections() {
-        return BASE_URL + '/inventory/catalog/getcategoriesByid';
-    }
-    getAllCategories() {
-        return BASE_URL + '/inventory/catalog/ListOfAllCategories';
-    }
+  getAllSubSections() {
+    return BASE_URL + '/inventory/catalog/getcategoriesByid';
+  }
+  getAllCategories() {
+    return BASE_URL + '/inventory/catalog/ListOfAllCategories';
+  }
 
-    getAllHsnList() {
-        return BASE_URL + '/hsn-details/hsn-details/getHsnDetails';
-    }
+  getAllHsnList() {
+    return BASE_URL + '/hsn-details/hsn-details/getHsnDetails';
+  }
 
-    addTextileBarcodes() {
-        return BASE_URL + "/inventory/inventoryTextile/addBarcode_Textile";
-    }
+  addTextileBarcodes() {
+    return BASE_URL + "/inventory/inventoryTextile/addBarcode_Textile";
+  }
 
-    updatTextileBarcodes() {
-        return BASE_URL + "/inventory/inventoryTextile/updateBarcode_Textile";
-    }
+  updatTextileBarcodes() {
+    return BASE_URL + "/inventory/inventoryTextile/updateBarcode_Textile";
+  }
 
-    getTextileBarcodes() {
-        return BASE_URL + "/inventory/inventoryTextile/getAllBarcodeTextiles";
-    }
+  getTextileBarcodes() {
+    return BASE_URL + "/inventory/inventory-management/barcodes/filter";
+  }
 
-    getTextileBarcodesDetails() {
-        return BASE_URL + "/inventory/inventoryTextile/getBarcodeTextile"
-    }
+  getTextileBarcodesDetails() {
+    return BASE_URL + "/inventory/inventoryTextile/getBarcodeTextile"
+  }
 
-    deleteTextileBarcode() {
-        return BASE_URL + "/inventory/inventoryTextile/deleteBarcode_Textile";
-    }
+  deleteTextileBarcode() {
+    return BASE_URL + "/inventory/inventoryTextile/deleteBarcode_Textile";
+  }
 
-    getbarcodeTexttileAdjustments() {
-        return BASE_URL + "/inventory/inventoryTextile/getAllAdjustments";
-    }
+  getbarcodeTexttileAdjustments() {
+    return BASE_URL + "/inventory/inventory-management/adjustments/filter";
+  }
 
-    getStoreNameById() {
-        return BASE_URL + "/user-management/store/storeList";
-    }
+  getStoreNameById() {
+    return BASE_URL + "/user-management/store/storeList";
+  }
 
-    getProductCombo() {
-        return BASE_URL + "/inventory/productBundle/all"
-    }
+  getProductCombo() {
+    return BASE_URL + "/inventory/productBundle/all"
+  }
 
-    addProductCombo() {
-        return BASE_URL + "/inventory/productBundle/add"
-    }
+  addProductCombo() {
+    return BASE_URL + "/inventory/productBundle/add"
+  }
 
 }
 export default new InventoryService();

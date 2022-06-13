@@ -56,12 +56,10 @@ export default class ReBarcode extends Component {
     this.setState({ loading: true });
     const request = '?page=' + parseInt(this.state.pageNo) + '&size=10'
     axios.post(InventoryService.getbarcodeTexttileAdjustments() + request, params).then((res) => {
-      if (res.data && res.data["isSuccess"] === "true") {
-        if (res.data["result"]) {
-          this.setState({ loading: false, reBarcodesData: this.state.reBarcodesData.concat(res.data.result.content) });
-          console.log("rebarcodesData", this.state.reBarcodesData);
-        }
-        if (res.data.result.length === 0) {
+      if (res.data) {
+        this.setState({ loading: false, reBarcodesData: this.state.reBarcodesData.concat(res.data.content) });
+        console.log("rebarcodesData", this.state.reBarcodesData);
+        if (res.data.length === 0) {
           this.setState({ error: "Records Not Found" });
         }
       }
