@@ -183,7 +183,7 @@ export const buttonContainer = {
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
-  // alignItems: 'flex-start',
+  alignItems: 'center',
   marginBottom: 10
 }
 

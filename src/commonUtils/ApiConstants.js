@@ -31,4 +31,7 @@ export const LOGIN_URL = {
 
 export const USER_MANAGEMENT_URL = {
   getAllStores: "/user-management/store/client/stores",
+  getAllUsers: "/user-management/user/users",
+  getAllRoles: "/user-management/roles/client",
+  saveUser: "/user-management/auth/create-user",
 }

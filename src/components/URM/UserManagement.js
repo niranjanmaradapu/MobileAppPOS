@@ -17,6 +17,9 @@ import EmptyList from '../Errors/EmptyList';
 import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
+import Users from './Users';
+import Roles from './Roles';
+import Stores from '../Accounting/Stores';
 
 var deviceheight = Dimensions.get("window").height;
 var deviceWidth = Dimensions.get("window").width;
@@ -27,8 +30,8 @@ export default class UserManagement extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      flagOne: false,
-      flagTwo: false,
+      flagUser: false,
+      flagRole: false,
       flagFilterRoles: false,
       flagFilterUsers: false,
       filterButton: false,
@@ -51,6 +54,7 @@ export default class UserManagement extends Component {
       filterActive: false,
       usersError: "",
       rolesError: "",
+      flagStore: false,
     };
   }
 
@@ -58,14 +62,15 @@ export default class UserManagement extends Component {
   async componentDidMount() {
     const clientId = await AsyncStorage.getItem("custom:clientId1");
     this.setState({ clientId: clientId });
+    console.log({ clientId })
     AsyncStorage.getItem("rolename").then(value => {
       console.log({ value })
       if (value === "config_user") {
         for (let i = 0; i < 2; i++) {
           if (i === 0) {
             this.state.privilages.push({ bool: true, name: "Users" })
-            this.setState({ flagOne: true })
-            this.getAllUsers()
+            this.setState({ flagUser: true })
+            // this.getAllUsers()
           } else {
             this.state.privilages.push({ bool: false, name: "Roles" })
           }
@@ -113,13 +118,16 @@ export default class UserManagement extends Component {
       // console.error(this.state.privilages.length)
       if (this.state.privilages.length > 0) {
         if (this.state.privilages[0].name === "Dashboard") {
-          this.setState({ flagOne: false, flagTwo: false, flagDashboard: true, filterButton: false });
+          this.setState({ flagUser: false, flagRole: false, flagDashboard: true, filterButton: false });
         } else if (this.state.privilages[0].name === "Users") {
-          this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
+          this.setState({ flagUser: true, flagRole: false, flagDashboard: false, filterButton: true, filterActive: false });
         } else if (this.state.privilages[0].name === "Roles") {
-          this.setState({ flagOne: false, flagTwo: true, flagDashboard: false, filterButton: true, filterActive: false });
-        } else {
-          this.setState({ flagOne: false, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false });
+          this.setState({ flagUser: false, flagRole: true, flagDashboard: false, filterButton: true, filterActive: false });
+        } else if (this.state.privilages[0].name === "Stores") {
+          this.setState({ flagStore: true })
+        }
+        else {
+          this.setState({ flagUser: false, flagRole: false, flagDashboard: false, filterButton: true, filterActive: false, flagStore: false });
           console.log("please update the privilages in Line.no: 161")
         }
       }
@@ -150,60 +158,25 @@ export default class UserManagement extends Component {
     });
   }
 
-  getAllUsers() {
-    this.setState({ usersData: [] });
-    this.setState({ loading: true });
-
-    axios.get(UrmService.getAllUsers() + this.state.clientId).then((res) => {
-      //console.log('sfsdfdfsdfdsfsfsdfs' + res.data);
-      let len = res.data["result"].length;
-      if (len > 0) {
-        for (let i = 0; i < len; i++) {
-          let number = res.data.result[i];
-          console.log(number);
-          let date = res.data.result[i].createdDate
-          console.log(date)
-          this.setState({ loading: false });
-
-          // console.log('sadsddsad' + number.stores);
-          let len = number.stores.length;
-          number.storeName = "";
-          if (len > 0) {
-            for (let i = 0; i < len; i++) {
-              if (number.storeName === "") {
-                number.storeName = number.storeName + number.stores[i].name;
-              }
-              else {
-                number.storeName = number.storeName + "," + number.stores[i].name;
-              }
-            }
-          }
-          this.state.usersData.push(number);
-        }
-        this.setState({ usersData: this.state.usersData, usersError: "", loading: false });
-      } else {
-        this.setState({ usersError: "Records Not Found", loading: false });
-      }
-    }).catch(() => {
-      this.setState({ loading: false, usersError: "Records Not Found" });
-      console.log("There is an Error Getting Users");
-    });
-  }
 
   topbarAction = (item, index) => {
     if (item.name === "Users") {
-      this.setState({ flagOne: true, flagTwo: false, flagDashboard: false, filterButton: true, filterActive: false }, () => {
-        this.getAllUsers();
+      this.setState({ flagUser: true, flagRole: false, flagDashboard: false, filterButton: true, filterActive: false, flagStore: false }, () => {
+        // this.getAllUsers();
       });
 
     }
     else if (item.name === "Roles") {
-      this.setState({ flagTwo: true, flagOne: false, flagDashboard: false, filterButton: true, filterActive: false }, () => {
+      this.setState({ flagRole: true, flagUser: false, flagDashboard: false, filterButton: true, flagStore: false, filterActive: false }, () => {
         this.getRolesList();
       });
     }
     else if (item.name === "Dashboard") {
-      this.setState({ flagTwo: false, flagOne: false, flagDashboard: true, filterButton: false });
+      this.setState({ flagRole: false, flagUser: false, flagDashboard: true, filterButton: false, flagStore: false });
+    }
+
+    else if (item.name === "Stores") {
+      this.setState({ flagRole: false, flagUser: false, flagDashboard: false, filterButton: false, flagStore: true });
     }
 
     if (this.state.privilages[index].bool === true) {
@@ -222,12 +195,12 @@ export default class UserManagement extends Component {
   };
 
   filterAction() {
-    if (this.state.flagTwo === true) {
+    if (this.state.flagRole === true) {
       this.setState({ flagFilterRoles: true, filterActive: false });
     } else {
       this.setState({ flagFilterRoles: false });
     }
-    if (this.state.flagOne === true) {
+    if (this.state.flagUser === true) {
       this.setState({ flagFilterUsers: true });
     } else {
       this.setState({ flagFilterUsers: false });
@@ -236,13 +209,13 @@ export default class UserManagement extends Component {
   }
 
   clearFilterAction() {
-    if (this.state.flagOne === true) {
+    if (this.state.flagUser === true) {
       this.setState({ filterActive: false }, () => {
-        this.getAllUsers();
+        // this.getAllUsers();
         this.setState({ userType: "", role: "", branch: "" })
       });
     }
-    else if (this.state.flagTwo === true) {
+    else if (this.state.flagRole === true) {
       this.setState({ filterActive: false }, () => {
         this.getRolesList();
         this.setState({ role: "", createdBy: "", createdDate: "" })
@@ -278,21 +251,19 @@ export default class UserManagement extends Component {
     });
   }
 
-  refreshUsers() {
-    this.getAllUsers();
-  }
+
 
 
 
   topbarAction1() {
-    this.getAllUsers();
-    this.setState({ flagOne: true, flagTwo: false });
-    // this.setState({ flagTwo: false })
+    // this.getAllUsers();
+    this.setState({ flagUser: true, flagRole: false });
+    // this.setState({ flagRole: false })
   }
 
   topbarAction2() {
     this.getRolesList();
-    this.setState({ flagTwo: true, flagOne: false });
+    this.setState({ flagRole: true, flagUser: false });
   }
 
   filterDatepickerClicked() {
@@ -503,14 +474,19 @@ export default class UserManagement extends Component {
               </Text>
             </View>
             <View style={headerTitleSubContainer2}>
-              {this.state.flagTwo && (
+              {this.state.flagRole && (
                 <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToCreateRoles()}>
                   <Text style={headerNavigationBtnText}>{I18n.t("Create Role")}</Text>
                 </TouchableOpacity>
               )}
-              {this.state.flagOne && (
+              {this.state.flagUser && (
                 <TouchableOpacity style={[headerNavigationBtn, I18n.locale === "telugu" ? { height: 40 } : {}]} onPress={() => this.navigateToAddUsers()}>
                   <Text style={headerNavigationBtnText}>{I18n.t("Add User")}</Text>
+                </TouchableOpacity>
+              )}
+              {this.state.flagStore && (
+                <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddStores()}>
+                  <Text style={headerNavigationBtnText}>{I18n.t("Add Store")}</Text>
                 </TouchableOpacity>
               )}
               {this.state.filterButton &&
@@ -561,89 +537,16 @@ export default class UserManagement extends Component {
             {this.state.flagDashboard && (
               <UrmDashboard />
             )}
-            {this.state.flagTwo && (
-              <View>
-                <FlatList
-                  data={this.state.rolesData}
-                  style={{ marginTop: 20, }}
-                  scrollEnabled={true}
-                  ListEmptyComponent={<EmptyList message={this.state.rolesError} />}
-                  renderItem={({ item, index }) => (
-                    <View style={flatListMainContainer}>
-                      <View style={flatlistSubContainer}>
-                        <View style={textContainer}>
-                          <Text style={highText} >S.NO: {index + 1} </Text>
-                        </View>
-                        <View style={textContainer}>
-                          <Text style={textStyleMedium}>{I18n.t("ROLE")}: {item.roleName}</Text>
-                          <Text style={textStyleLight}>{I18n.t("DOMAIN")}: {item.clientDomainVo.domaiName}</Text>
-                        </View>
-                        <View style={textContainer}>
-                          <Text style={textStyleMedium}>{I18n.t("CREATED BY")}: {item.createdBy}</Text>
-                          <Text style={textStyleLight}>{I18n.t("USER COUNT")}: {item.usersCount}</Text>
-                        </View>
-                        <View style={textContainer}>
-                          <Text style={textStyleLight}>{I18n.t("DESCRIPTION")}: {item.discription}</Text>
-                          <View style={buttonContainer}>
-                            <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditRole(item, index)}>
-                              <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
-                            </TouchableOpacity>
-
-                            <TouchableOpacity style={buttonStyle} onPress={() => this.handleRoledeleteaction(item, index)}>
-                              <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  )}
-                />
-                {/* {this.state.rolesData.length === 0 && this.state.rolesError.length > 0 && 
-                                    <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight/3 }}>&#9888; {this.state.rolesError}</Text>
-                                } */}
-              </View>
+            {this.state.flagRole && (
+              <Roles />
             )}
-            {this.state.flagOne && (
-              <View>
-                <FlatList
-                  data={this.state.usersData}
-                  style={{ marginTop: 20, }}
-                  scrollEnabled={true}
-                  renderItem={({ item, index }) => (
-                    <View style={flatListMainContainer}>
-                      <View style={flatlistSubContainer}>
-                        <View style={textContainer}>
-                          <Text style={highText} >{I18n.t("USER ID")}: {item.userId} </Text>
-                          <Text style={textStyleLight}>{I18n.t("STATUS")}: {item.active ? "active" : "Inactive"}</Text>
-                        </View>
-                        <View style={textContainer}>
-                          <Text style={textStyleMedium}>{I18n.t("USER NAME")}: {item.userName}</Text>
-                        </View>
-                        <View style={textContainer}>
-                          <Text style={textStyleMedium}>{I18n.t("ROLE")}: {item.roleName} </Text>
-                          <Text style={textStyleLight}>{I18n.t("STORE NAME")}: {"\n"}{item.storeName}</Text>
-                        </View>
-                        <View style={textContainer}>
-                          <Text style={textStyleLight}>{I18n.t("CREATED DATE")}: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
-                          <View style={buttonContainer}>
-                            <TouchableOpacity style={buttonStyle1} onPress={() => this.handleedituser(item, index)}>
-                              <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
-                            </TouchableOpacity>
-                            <TouchableOpacity style={buttonStyle} onPress={() => this.handleuserdeleteaction(item, index)}>
-                              <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </View>
-                    </View>
-                  )}
-                />
-                {this.state.usersData.length === 0 && this.state.usersError.length > 0 &&
-                  <Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceheight / 3 }}>&#9888; {this.state.usersError}</Text>
-                }
-              </View>
+            {this.state.flagUser && (
+              <Users />
             )}
-            {this.state.flagTwo && this.state.roleDelete && (
+            {this.state.flagStore && (
+              <Stores />
+            )}
+            {this.state.flagRole && this.state.roleDelete && (
               <View>
                 <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
                   <View style={deleteContainer}>
@@ -682,7 +585,7 @@ export default class UserManagement extends Component {
                 </Modal>
               </View>
             )}
-            {this.state.flagOne && this.state.userDelete && (
+            {this.state.flagUser && this.state.userDelete && (
               <View>
                 <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
                   <View style={deleteContainer}>

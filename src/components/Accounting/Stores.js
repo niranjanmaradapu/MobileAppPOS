@@ -39,7 +39,8 @@ export default class Stores extends Component {
       filterStoresData: [],
       loading: false,
       flagFilterOpen: false,
-      filterActive: false
+      filterActive: false,
+      pageNumber: 0
     };
   }
 
@@ -77,20 +78,24 @@ export default class Stores extends Component {
       });
   }
 
+
+
   async getStoresList() {
     const clientId = await AsyncStorage.getItem("custom:clientId1");
-    this.setState({ loading: true });
-    const params = {
-      "clientId": clientId
-    };
-    axios.get(UrmService.getAllStores(), { params }).then((res) => {
+    console.log({ clientId })
+    // this.setState({ loading: true });
+    const { pageNumber } = this.state
+    UrmService.getAllStores(clientId, pageNumber).then((res) => {
       if (res) {
-        this.setState({ storesList: res.data, loading: false })
-        console.log("Stores", res.data)
-      } else {
-        this.setState({ storeError: "Records Not Found", loading: false })
+        if (res.data) {
+          let response = res.data
+          console.log({ response })
+          this.setState({ storesList: this.state.storesList.concat(response) })
+        }
+
       }
-    }).catch(() => {
+    }).catch((err) => {
+      console.error({ err })
       this.setState({ loading: false });
       if (this.state.flagStore === true) {
         this.setState({ storeError: "Records Not Found" })
@@ -249,17 +254,14 @@ export default class Stores extends Component {
               <View style={flatlistSubContainer}>
                 <View style={textContainer}>
                   <Text style={highText} >{I18n.t("STORE ID")}: {item.id} </Text>
-                </View>
-                <View style={textContainer}>
-                  <Text style={textStyleMedium}>{I18n.t("STORE NAME")}: {"\n"} {item.name}</Text>
-                  <Text style={textStyleLight}>{I18n.t("DOMAIN")}: {"\n"} {item.id.domaiName} </Text>
+                  <Text style={textStyleMedium}>{I18n.t("NAME")}: {item.name}</Text>
                 </View>
                 <View style={textContainer}>
                   <Text style={textStyleLight}>{I18n.t("LOCATION")}: {item.cityId} </Text>
                   <Text style={textStyleLight}>{I18n.t("CREATED BY")}: {item.createdBy}</Text>
                 </View>
                 <View style={textContainer}>
-                  <Text style={textStyleLight}>{I18n.t("CREATED DATE")}: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate} </Text>
+                  <Text style={textStyleLight}>{I18n.t("DATE")}: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate} </Text>
                   <View style={buttonContainer}>
                     <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditStore(item, index)}>
                       <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />

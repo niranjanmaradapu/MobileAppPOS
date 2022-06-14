@@ -1,6 +1,9 @@
-import { Text, View } from 'react-native'
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
 import React, { Component } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import UrmService from '../services/UrmService'
+import EmptyList from '../Errors/EmptyList'
+import { buttonContainer, buttonImageStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles'
 
 export default class Roles extends Component {
   constructor(props) {
@@ -9,6 +12,7 @@ export default class Roles extends Component {
       clientId: "",
       rolesData: [],
       filterRolesData: [],
+      pageNumber: 0,
     }
   }
 
@@ -19,30 +23,47 @@ export default class Roles extends Component {
   }
 
   getRolesList() {
-    this.setState({ loading: true });
-    axios.get(UrmService.getAllRoles() + this.state.clientId).then((res) => {
-      let len = res.data["result"].length;
-      if (len > 0) {
-        for (let i = 0; i < len; i++) {
-          let number = res.data.result[i];
-          console.log(number);
-          this.setState({ loading: false });
-          this.state.rolesData.push(number);
-        }
-        this.setState({ rolesData: this.state.rolesData, rolesError: "", loading: false });
-      } else {
-        this.setState({ rolesError: "Records Not Found", loading: false })
+    const { clientId, pageNumber } = this.state
+    UrmService.getAllRoles(clientId, pageNumber).then(res => {
+      if (res) {
+        let response = res.data
+        console.log({ response })
+        this.setState({ rolesData: res.data })
       }
-    }).catch(() => {
-      this.setState({ loading: false, rolesError: "Records Not Found" });
-      console.log("There is an Error Getting Roles");
-    });
+    })
   }
 
   render() {
     return (
       <View>
-        <Text>Roles</Text>
+        <FlatList
+          data={this.state.rolesData}
+          style={{ marginTop: 20 }}
+          ListEmptyComponent={<EmptyList message={this.state.rolesError} />}
+          scrollEnabled={true}
+          renderItem={({ item, index }) => (
+            <View style={flatListMainContainer}>
+              <View style={flatlistSubContainer}>
+                <View style={textContainer}>
+                  <Text style={highText}>S.No {index + 1}</Text>
+                  <Text style={textStyleLight}>Date: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
+                </View>
+                <View style={textContainer}>
+                  <Text style={textStyleMedium}>Role: {item.roleName}</Text>
+                  <Text style={textStyleLight}>User Count: {item.usersCount}</Text>
+                </View>
+                <View style={textContainer}>
+                  <Text style={textStyleMedium}>Created By: {item.createdBy}</Text>
+                  <View style={buttonContainer}>
+                    <TouchableOpacity style={buttonStyle1} onPress={() => this.handleedituser(item, index)}>
+                      <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
+            </View>
+          )}
+        />
       </View>
     )
   }
