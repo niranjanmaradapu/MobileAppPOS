@@ -338,7 +338,7 @@ export default class AddUser extends Component {
 
     if (isFormValid) {
       if (this.state.isEdit === false) {
-        const clientDomain = this.state.domainId !== 0 ? this.state.domainId : this.state.clientId;
+        const clientDomain = this.state.domainId !== "" ? this.state.domainId : this.state.clientId;
         const saveObj = {
           "email": this.state.email,
           "phoneNumber": "+91".concat(this.state.mobile),

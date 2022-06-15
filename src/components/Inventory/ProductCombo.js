@@ -36,17 +36,16 @@ export default class ProductCombo extends Component {
 
   async getAllProductsCombo() {
     this.setState({ loading: true })
-    const { storeId } = this.state
-    let params = '';
-    params = '?storeId=' + storeId
-    console.log(params)
-    axios.get(InventoryService.getProductCombo() + params).then(res => {
-      if (res) {
-        this.setState({ productComboList: res.data.result.content })
-        console.log("Products Combo List", this.state.productComboList)
-      }
-      this.setState({ loading: false })
+    const { storeId, fromDate, toDate } = this.state
+    let params = `?storeId=${storeId}`
+    console.log({ params })
+    InventoryService.getProductCombo(params).then(res => {
+      console.log({ res })
+      let productComboList = res.data.result.content
+      console.log({ productComboList })
+      this.setState({ productComboList: productComboList, loading: false })
     }).catch(err => {
+      console.log({ err })
       this.setState({ loading: false })
     })
   }

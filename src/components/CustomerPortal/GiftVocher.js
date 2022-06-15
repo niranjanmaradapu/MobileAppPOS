@@ -10,7 +10,7 @@ import { filterCloseImage, filterHeading, filterMainContainer, filterSubContaine
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, dateSelector, dateText, inputField, inputHeading, submitBtn, submitBtnText } from '../Styles/FormFields';
 import { RH, RF, RW } from '../../Responsive';
-import { filterBtn, flatListHeaderContainer, flatListTitle } from '../Styles/Styles';
+import { filterBtn, flatListHeaderContainer, flatListMainContainer, flatlistSubContainer, flatListTitle, highText, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
 import Modal from 'react-native-modal'
 
 var deviceheight = Dimensions.get('window').height;
@@ -322,26 +322,27 @@ class GiftVocher extends Component {
               }
             </View>
           </View>}
-          style={{ marginTop: 20, marginBottom: 20 }}
           data={this.state.filterActive ? this.state.filterVouchersData : this.state.giftVochersList}
           scrollEnabled={true}
           renderItem={({ item, index }) => (
-            <View style={Device.isTablet ? flats.flatlistContainer_tablet : flats.flatlistContainer_mobile} >
-              <View style={Device.isTablet ? flats.flatlistSubContainer_tablet : flats.flatlistSubContainer_mobile}>
-                <View style={flats.text}>
-                  <Text style={Device.isTablet ? flats.flatlistTextAccent_tablet : flats.flatlistTextAccent_mobile}>S.NO: {index + 1}</Text>
-                  <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile} selectable={true}>GV NUMBER: {item.gvNumber}</Text>
+            <View style={flatListMainContainer} >
+              <View style={flatlistSubContainer}>
+                <View style={textContainer}>
+                  <Text style={highText}>S.NO: {index + 1}</Text>
+                  <Text style={textStyleMedium}>{I18n.t("VALUE")}: {item.value}</Text>
+                </View>
+                <View style={textContainer}>
+                  <Text style={textStyleMedium} selectable={true}>GV NUMBER: {item.gvNumber}</Text>
                   {item.isActivated &&
-                    <Text style={[Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile, { backgroundColor: '#009900', color: '#ffffff', padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: Device.isTablet ? 10 : 5, fontFamily: 'medium' }]}>{I18n.t("Active")} </Text>
+                    <Text style={[textStyleMedium, { backgroundColor: '#009900', color: '#ffffff', padding: 5, alignSelf: 'flex-start', borderRadius: Device.isTablet ? 10 : 5, fontFamily: 'medium' }]}>{I18n.t("Active")} </Text>
                   }
                   {!item.isActivated &&
-                    <Text style={[Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile, { backgroundColor: '#ee0000', color: '#ffffff', padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: 5, fontFamily: 'medium' }]}>{I18n.t("In-Active")}</Text>
+                    <Text style={[textStyleMedium, { backgroundColor: '#ee0000', color: '#ffffff', padding: 5, alignSelf: 'flex-start', borderRadius: 5, fontFamily: 'medium' }]}>{I18n.t("In-Active")}</Text>
                   }
                 </View>
-                <View style={flats.text}>
-                  <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("FROM DATE")}: {item.fromDate}</Text>
-                  <Text style={Device.isTablet ? flats.flatlistTextCommon_tablet : flats.flatlistTextCommon_mobile}>{I18n.t("TO DATE")}: {item.toDate}</Text>
-                  <Text style={Device.isTablet ? flats.flatlistText_tablet : flats.flatlistText_mobile}>{I18n.t("VALUE")}: {item.value}</Text>
+                <View style={textContainer}>
+                  <Text style={textStyleLight}>{I18n.t("FROM DATE")}: {item.fromDate}</Text>
+                  <Text style={textStyleLight}>{I18n.t("TO DATE")}: {item.toDate}</Text>
                 </View>
               </View>
             </View>

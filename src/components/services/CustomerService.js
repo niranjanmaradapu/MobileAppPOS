@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BILLING_PORTAL } from "../../commonUtils/ApiConstants";
+import { BILLING_PORTAL, NEW_SALE_URL } from "../../commonUtils/ApiConstants";
 import { BASE_URL } from "../../commonUtils/Base";
 
 class CustomerService {
@@ -7,12 +7,14 @@ class CustomerService {
     return BASE_URL + "/new-sale/newsale/createdeliveryslip";
   }
 
-  saveLineItems() {
-    return BASE_URL + "/new-sale/newsale/savelineitems/1";
+  saveLineItems(list, type) {
+    const param = '?enumName=' + type
+    return axios.post(BASE_URL + NEW_SALE_URL.createDeliverySlip + param, list)
   }
 
-  getDeliverySlip() {
-    return BASE_URL + "/inventory/inventoryTextile/getBarcodeTextile";
+  getDeliverySlip(barcodeId, storeId) {
+    const param = '?barcode=' + barcodeId + '&storeId=' + storeId
+    return axios.get(BASE_URL + NEW_SALE_URL.getDeliverySlip + param)
   }
 
   getAllDayClosure() {

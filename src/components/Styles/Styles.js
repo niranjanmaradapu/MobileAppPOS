@@ -21,7 +21,7 @@ export const headerTitleContainer = {
   alignItems: 'center',
   paddingLeft: RW(20),
   paddingRight: RW(20),
-  height: Device.isTablet ? RH(90) : RH(70),
+  height: Device.isTablet ? RH(60) : RH(40),
   backgroundColor: '#ffffff'
 }
 
@@ -88,7 +88,7 @@ export const headerTitle = {
 }
 
 export const pageNavigationBtn = {
-  height: Device.isTablet ? RH(46) : RH(36),
+  height: Device.isTablet ? RH(36) : RH(26),
   minWidth: Device.isTablet ? RW(250) : RW(200),
   borderWidth: Device.isTablet ? 2 : 1,
   borderRadius: Device.isTablet ? 10 : 5,
@@ -100,12 +100,11 @@ export const pageNavigationBtnText = {
   fontSize: RF(16),
   alignItems: 'center',
   alignSelf: 'center',
-  marginTop: RH(5),
   fontFamily: 'regular'
 }
 
 export const pageNavigationBtnContainer = {
-  margin: Device.isTablet ? RH(15) : RH(10)
+  margin: Device.isTablet ? RH(10) : RH(5)
 }
 
 
@@ -121,12 +120,10 @@ export const flatListHeaderContainer = {
 }
 
 export const flatListTitle = {
-  fontSize: RF(16),
+  fontSize: RF(15),
   fontFamily: 'medium',
   color: '#00000090',
   textAlign: 'center',
-  marginTop: Device.isTablet ? RH(15) : RH(10),
-  marginBottom: Device.isTablet ? RH(15) : RH(10)
 }
 
 
