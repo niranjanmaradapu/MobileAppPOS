@@ -8,7 +8,7 @@ import Modal from 'react-native-modal';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import UrmService from '../services/UrmService';
-import { buttonContainer, buttonStyle, buttonStyle1, filterBtn, flatListMainContainer, flatlistSubContainer, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, highText, buttonImageStyle, menuButton, textContainer, textStyleLight, textStyleMedium, flatListHeaderContainer, flatListTitle } from '../Styles/Styles';
+import { buttonContainer, buttonStyle, buttonStyle1, filterBtn, flatListMainContainer, flatlistSubContainer, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, highText, buttonImageStyle, menuButton, textContainer, textStyleLight, textStyleMedium, flatListHeaderContainer, flatListTitle, singleButtonStyle } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -263,12 +263,13 @@ export default class Stores extends Component {
                 <View style={textContainer}>
                   <Text style={textStyleLight}>{I18n.t("DATE")}: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate} </Text>
                   <View style={buttonContainer}>
-                    <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditStore(item, index)}>
+                    {item.isActive ?
+                      <Text style={[textStyleMedium, { backgroundColor: '#009900', color: '#ffffff', marginTop: 5, padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: Device.isTablet ? 10 : 5, fontFamily: 'medium' }]}>Active</Text>
+                      :
+                      <Text style={[textStyleMedium, { backgroundColor: '#ee0000', color: '#ffffff', marginTop: 5, padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: 5, fontFamily: 'medium' }]}>In-Active</Text>
+                    }
+                    <TouchableOpacity style={singleButtonStyle} onPress={() => this.handleeditStore(item, index)}>
                       <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={buttonStyle} onPress={() => this.handledeleteStore(item, index)}>
-                      <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
                     </TouchableOpacity>
                   </View>
                 </View>

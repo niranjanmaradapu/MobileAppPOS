@@ -9,7 +9,7 @@ import Loader from "../../commonUtils/loader";
 import LoginService from '../services/LoginService';
 import UrmService from '../services/UrmService';
 import AccountingDashboard from './AccountingDashboard';
-import { pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2 } from '../Styles/Styles';
+import { pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, pageNavigationBtnContainer } from '../Styles/Styles';
 import CreateHSNCode from './CreateHSNCode';
 import CreateTaxMaster from './CreateTaxMaster';
 import CreditNotes from './CreditNotes';
@@ -54,10 +54,7 @@ export default class AccountManagement extends Component {
   async componentDidMount() {
     AsyncStorage.getItem("rolename").then(value => {
       console.log({ value })
-      if (value === "config_user") {
-        this.state.privilages.push({ bool: true, name: "Stores" })
-        this.setState({ flagStore: true })
-      } else if (value === "super_admin") { }
+      if (value === "super_admin") { }
       else {
         axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
           console.log(res.data)
@@ -150,17 +147,6 @@ export default class AccountManagement extends Component {
     } else {
       this.setState({ flagHSNCode: false });
     }
-    if (item.name === "Domain") {
-      this.setState({ flagDomain: true });
-    } else {
-      this.setState({ flagDomain: false });
-    }
-    if (item.name === "Stores") {
-      this.setState({ flagStore: true });
-    }
-    else {
-      this.setState({ flagStore: false });
-    }
     if (this.state.privilages[index].bool === true) {
       this.state.privilages[index].bool = false;
     } else {
@@ -197,13 +183,6 @@ export default class AccountManagement extends Component {
 
   navigateToAddTax() {
     this.props.navigation.navigate('AddTaxMaster');
-  }
-
-  navigateToAddStores() {
-    this.props.navigation.navigate('AddStore', {
-      isEdit: false,
-      onGoBack: () => this.child.getStores(),
-    });
   }
 
   navigateToAddDomain() {
@@ -282,7 +261,7 @@ export default class AccountManagement extends Component {
                 <Image source={require('../assets/images/menu.png')} />
               </TouchableOpacity>
               <Text style={headerTitle}>
-                {I18n.t("Accounting")}
+                {I18n.t("Accounting Portal")}
               </Text>
             </View>
             <View style={headerTitleSubContainer2}>
@@ -302,23 +281,13 @@ export default class AccountManagement extends Component {
                   <Text style={headerNavigationBtnText}>Add Tax</Text>
                 </TouchableOpacity>
               )}
-              {this.state.flagStore && (
-                <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddStores()}>
-                  <Text style={headerNavigationBtnText}>{I18n.t("Add Store")}</Text>
-                </TouchableOpacity>
-              )}
-              {this.state.flagDomain && (
-                <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddDomain()}>
-                  <Text style={headerNavigationBtnText}>{I18n.t("Add Domain")}</Text>
-                </TouchableOpacity>
-              )}
 
             </View>
           </View>
           <ScrollView>
             <View style={styles.container}>
               <FlatList
-                style={styles.flatList}
+                style={pageNavigationBtnContainer}
                 horizontal
                 data={this.state.privilages}
                 showsVerticalScrollIndicator={false}
@@ -335,7 +304,7 @@ export default class AccountManagement extends Component {
               />
               {this.state.flagDashboard && (
                 <View>
-                  {/* <AccountingDashboard /> */}
+                  <AccountingDashboard />
                 </View>
               )}
               {this.state.flagCreditNotes && (
@@ -371,30 +340,6 @@ export default class AccountManagement extends Component {
               {this.state.flagHSNCode && (
                 <CreateHSNCode
                   navigation={this.props.navigation}
-                  ref={instance => { this.child = instance }}
-                />
-              )}
-
-              {this.state.flagStore && (
-                <Stores
-                  stores={this.state.stores}
-                  navigation={this.props.navigation}
-                  storeError={this.state.storeError}
-                  filterActive={this.state.filterActive}
-                  ref={instance => { this.child = instance }}
-                  childParams={this.filterStores}
-                  modelCancelCallback={this.modelClose}
-                  modalVisible={this.state.modalVisible}
-                  filterStores={this.state.flagFilterStore}
-                />
-              )}
-
-              {this.state.flagDomain && (
-                <Domain
-                  domains={this.state.domains}
-                  navigation={this.props.navigation}
-                  domainError={this.state.domainError}
-                  channelFull={this.state.channelFull}
                   ref={instance => { this.child = instance }}
                 />
               )}

@@ -1,6 +1,7 @@
 import { Dimensions } from "react-native";
 import Device from "react-native-device-detection";
 import { RH, RW, RF } from '../../Responsive';
+import { color } from "./colorStyles";
 
 
 var deviceHeight = Dimensions.get("window").height
@@ -21,6 +22,16 @@ export const filterSubContainer = {
   justifyContent: 'space-between',
   alignItems: 'center',
   marginTop: RH(5),
+  height: Device.isTablet ? RH(60) : RH(50)
+}
+
+export const viewSubContainer = {
+  backgroundColor: color.info,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginTop: RH(5),
+  paddingHorizontal: RW(20),
   height: Device.isTablet ? RH(60) : RH(50)
 }
 
@@ -118,9 +129,9 @@ export const sucessHeader = {
 }
 
 export const deleteCloseBtn = {
-  margin: 5,
-  height: Device.isTablet ? RH(20) : RH(15),
-  width: Device.isTablet ? RW(20) : RW(15)
+  // margin: 5,
+  height: RH(15),
+  width: RW(15)
 }
 
 export const sucessBtn = {
