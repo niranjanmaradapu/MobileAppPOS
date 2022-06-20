@@ -32,10 +32,14 @@ export default class SelectStore extends React.Component {
   }
 
   async componentDidMount() {
+    // this.getstores();
     let userType = AsyncStorage.getItem("roleType")
     if (userType[0] === "super_admin") {
       this.getstores();
     } else {
+      let storesList = await AsyncStorage.getItem("storesList")
+      console.log("hero",storesList)
+      // this.setState({ storesData: storesList })
       this.setState({ storesData: this.props.route.params.items }, () => console.log("stores Data", this.state.storesData))
     }
   }
@@ -43,6 +47,7 @@ export default class SelectStore extends React.Component {
   async getstores() {
     const role = JSON.parse(AsyncStorage.getItem("user"))
     let storesList = AsyncStorage.getItem("storesList")
+    console.log("",storesList)
     this.setState({ storesData: storesList })
   }
 
