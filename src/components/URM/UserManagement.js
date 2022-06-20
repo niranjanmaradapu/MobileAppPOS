@@ -14,7 +14,7 @@ import Loader from "../../commonUtils/loader";
 import UrmService from '../services/UrmService';
 import UrmDashboard from './UrmDashboard';
 import EmptyList from '../Errors/EmptyList';
-import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText } from '../Styles/Styles';
+import { listEmptyMessage, pageNavigationBtn, pageNavigationBtnText, filterBtn, menuButton, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, buttonContainer, buttonStyle, buttonStyle1, flatListMainContainer, flatlistSubContainer, buttonImageStyle, textContainer, textStyleLight, textStyleMedium, highText, pageNavigationBtnContainer } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 import Users from './users';
@@ -55,6 +55,7 @@ export default class UserManagement extends Component {
       usersError: "",
       rolesError: "",
       flagStore: false,
+      configHeaders: [{ name: 'Stores' }, { name: 'Roles' }, { name: 'Users' }]
     };
   }
 
@@ -66,13 +67,12 @@ export default class UserManagement extends Component {
     AsyncStorage.getItem("rolename").then(value => {
       console.log({ value })
       if (value === "config_user") {
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < this.state.configHeaders.length; i++) {
           if (i === 0) {
-            this.state.privilages.push({ bool: true, name: "Users" })
-            this.setState({ flagUser: true })
-            // this.getAllUsers()
+            this.state.privilages.push({ bool: true, name: this.state.configHeaders[i].name })
+            this.setState({ flagStore: true })
           } else {
-            this.state.privilages.push({ bool: false, name: "Roles" })
+            this.state.privilages.push({ bool: false, name: this.state.configHeaders[i].name })
           }
         }
       } else {
@@ -162,7 +162,6 @@ export default class UserManagement extends Component {
   topbarAction = (item, index) => {
     if (item.name === "Users") {
       this.setState({ flagUser: true, flagRole: false, flagDashboard: false, filterButton: true, filterActive: false, flagStore: false }, () => {
-        // this.getAllUsers();
       });
 
     }
@@ -211,7 +210,6 @@ export default class UserManagement extends Component {
   clearFilterAction() {
     if (this.state.flagUser === true) {
       this.setState({ filterActive: false }, () => {
-        // this.getAllUsers();
         this.setState({ userType: "", role: "", branch: "" })
       });
     }
@@ -247,18 +245,19 @@ export default class UserManagement extends Component {
   navigateToAddUsers() {
     this.props.navigation.navigate('AddUser', {
       isEdit: false,
-      onGoBack: () => this.refreshUsers(),
+      onGoBack: () => this.child.getAllUsers(),
     });
   }
 
-
-
-
+  navigateToAddStores() {
+    this.props.navigation.navigate('AddStore', {
+      isEdit: false,
+      onGoBack: () => this.child.getStoresList(),
+    });
+  }
 
   topbarAction1() {
-    // this.getAllUsers();
     this.setState({ flagUser: true, flagRole: false });
-    // this.setState({ flagRole: false })
   }
 
   topbarAction2() {
@@ -405,22 +404,6 @@ export default class UserManagement extends Component {
     });
   }
 
-  deleteUser(item, index) {
-    console.log("you have deleted the user");
-    this.setState({ modalVisible: false });
-  }
-
-  deleteRole(item, index) {
-    console.log("you have deleted the role");
-    this.setState({ modalVisible: false });
-  }
-
-  handleuserdeleteaction(item, index) {
-    this.setState({ modalVisible: true, userDelete: true, });
-  }
-  handleRoledeleteaction(item, index) {
-    this.setState({ modalVisible: true, roleDelete: true, });
-  }
 
 
 
@@ -428,15 +411,12 @@ export default class UserManagement extends Component {
     this.getAllRoles();
   }
 
-  updateUsers() {
-    this.getAllUsers();
-  }
 
   handleedituser(item, index) {
     this.props.navigation.navigate('AddUser',
       {
         item: item, isEdit: true,
-        onGoBack: () => this.updateUsers(),
+        onGoBack: () => this.child.getAllUsers(),
       });
   }
 
@@ -444,17 +424,11 @@ export default class UserManagement extends Component {
     this.props.navigation.navigate('CreateRole',
       {
         item: item, isEdit: true,
-        onGoBack: () => this.updateRoles(),
+        onGoBack: () => this.child.getRolesList(),
       });
   }
 
-  updateRoles() {
-    this.getRolesList();
-  }
-
-  handleRole(item, index) {
-    this.props.navigation.navigate('EditRole');
-  }
+  
 
   render() {
     return (
@@ -489,31 +463,13 @@ export default class UserManagement extends Component {
                   <Text style={headerNavigationBtnText}>{I18n.t("Add Store")}</Text>
                 </TouchableOpacity>
               )}
-              {this.state.filterButton &&
-                <View>
-                  {!this.state.filterActive &&
-                    <TouchableOpacity
-                      style={filterBtn}
-                      onPress={() => this.filterAction()} >
-                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
-                    </TouchableOpacity>
-                  }
-                  {this.state.filterActive &&
-                    <TouchableOpacity
-                      style={filterBtn}
-                      onPress={() => this.clearFilterAction()} >
-                      <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
-                    </TouchableOpacity>
-                  }
-                </View>
-              }
             </View>
           </View>
 
           <ScrollView>
             <View style={styles.container}>
               <FlatList
-                style={styles.flatList}
+                style={pageNavigationBtnContainer}
                 horizontal
                 data={this.state.privilages}
                 ListEmptyComponent={<EmptyList message={this.state.rolesError} />}
@@ -538,13 +494,22 @@ export default class UserManagement extends Component {
               <UrmDashboard />
             )}
             {this.state.flagRole && (
-              <Roles />
+              <Roles
+                ref={instance => { this.child = instance }}
+                navigation={this.props.navigation}
+              />
             )}
             {this.state.flagUser && (
-              <Users />
+              <Users
+                ref={instance => { this.child = instance }}
+                navigation={this.props.navigation}
+              />
             )}
             {this.state.flagStore && (
-              <Stores />
+              <Stores
+                ref={instance => { this.child = instance }}
+                navigation={this.props.navigation}
+              />
             )}
             {this.state.flagRole && this.state.roleDelete && (
               <View>
@@ -625,167 +590,8 @@ export default class UserManagement extends Component {
                 </Modal>
               </View>
             )}
-            {this.state.flagFilterRoles && (
-              <View>
-                <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
-                  <View style={filterMainContainer} >
-                    <View>
-                      <View style={filterSubContainer}>
-                        <View>
-                          <Text style={filterHeading} > {I18n.t("Filter By")} </Text>
-                        </View>
-                        <View>
-                          <TouchableOpacity style={filterCloseImage} onPress={() => this.modelCancel()}>
-                            <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                      <Text style={{
-                        height: Device.isTablet ? 2 : 1,
-                        width: deviceWidth,
-                        backgroundColor: 'lightgray',
-                      }}></Text>
-                    </View>
-                    <KeyboardAwareScrollView enableOnAndroid={true} >
-                      <TextInput
-                        style={inputField}
-                        underlineColorAndroid="transparent"
-                        placeholder={I18n.t("ROLE")}
-                        placeholderTextColor="#6F6F6F"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        value={this.state.role}
-                        onChangeText={this.handleRole}
-                      />
-                      <TextInput
-                        style={inputField}
-                        underlineColorAndroid="transparent"
-                        placeholder={I18n.t("CREATED BY")}
-                        placeholderTextColor="#6F6F6F"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        value={this.state.createdBy}
-                        onChangeText={this.handleCreatedBy}
-                      />
-                      <TouchableOpacity
-                        style={dateSelector} testID="openModal"
 
-                        onPress={() => this.filterDatepickerClicked()}
-                      >
-                        <Text style={dateText}  > {this.state.createdDate === "" ? 'CREATED DATE' : this.state.createdDate} </Text>
-                        <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
-                      </TouchableOpacity>
-                      {this.state.datepickerOpen && (
-                        <View style={datePickerContainer}>
-                          <TouchableOpacity
-                            style={datePickerButton1} onPress={() => this.filterDatepickerCancelClicked()}
-                          >
-                            <Text style={datePickerBtnText}  > Cancel </Text>
-
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            style={datePickerButton2} onPress={() => this.filterDatepickerDoneClicked()}
-                          >
-                            <Text style={datePickerBtnText}  > Done </Text>
-
-                          </TouchableOpacity>
-                          <DatePicker style={datePicker}
-                            date={this.state.date}
-                            mode={'date'}
-                            onDateChange={(date) => this.setState({ date })}
-                          />
-                        </View>
-                      )}
-
-                      <TouchableOpacity style={submitBtn}
-                        onPress={() => this.applyRoleFilter()}>
-                        <Text style={submitBtnText} >{I18n.t("APPLY")}</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={cancelBtn}
-                        onPress={() => this.modelCancel()}>
-                        <Text style={cancelBtnText}>{I18n.t("CANCEL")}</Text>
-                      </TouchableOpacity>
-                    </KeyboardAwareScrollView>
-                  </View>
-                </Modal>
-              </View>
-            )}
-
-            {this.state.flagFilterUsers && (
-              <View>
-                <Modal isVisible={this.state.modalVisible} style={{ margin: 0 }}>
-                  <View style={filterMainContainer} >
-                    <View>
-                      <View style={filterSubContainer}>
-                        <View>
-                          <Text style={filterHeading} > {I18n.t("Filter By")} </Text>
-                        </View>
-                        <View>
-                          <TouchableOpacity style={filterCloseImage} onPress={() => this.modelCancel()}>
-                            <Image style={{ margin: 5 }} source={require('../assets/images/modelcancel.png')} />
-                          </TouchableOpacity>
-                        </View>
-                      </View>
-                      <Text style={{
-                        height: Device.isTablet ? 2 : 1,
-                        width: deviceWidth,
-                        backgroundColor: 'lightgray',
-                      }}></Text>
-                    </View>
-                    <KeyboardAwareScrollView enableOnAndroid={true} >
-
-                      <View style={rnPickerContainer}>
-                        <RNPickerSelect
-                          placeholder={{
-                            label: 'USER TYPE'
-                          }}
-                          Icon={() => {
-                            return <Chevron style={styles.imagealign} size={1.5} color="gray" />;
-                          }}
-                          items={[
-                            { label: 'Active', value: 'Active' },
-                            { label: 'InActive', value: 'InActive' },
-                          ]}
-                          onValueChange={this.handleUSerType}
-                          style={rnPicker}
-                          value={this.state.userType}
-                          useNativeAndroidPickerStyle={false}
-                        />
-                      </View>
-                      <TextInput
-                        style={inputField}
-                        underlineColorAndroid="transparent"
-                        placeholder={I18n.t("ROLE")}
-                        placeholderTextColor="#6F6F6F"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        value={this.state.role}
-                        onChangeText={this.handleRole}
-                      />
-                      <TextInput
-                        style={inputField}
-                        underlineColorAndroid="transparent"
-                        placeholder={I18n.t("STORE/BRANCH")}
-                        placeholderTextColor="#6F6F6F"
-                        textAlignVertical="center"
-                        autoCapitalize="none"
-                        value={this.state.branch}
-                        onChangeText={this.handleBranch}
-                      />
-                      <TouchableOpacity style={submitBtn}
-                        onPress={() => this.applyUserFilter()}>
-                        <Text style={submitBtnText} >{I18n.t("APPLY")}</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={cancelBtn}
-                        onPress={() => this.modelCancel()}>
-                        <Text style={cancelBtnText}>{I18n.t("CANCEL")}</Text>
-                      </TouchableOpacity>
-                    </KeyboardAwareScrollView>
-                  </View>
-                </Modal>
-              </View>
-            )}
-          </ScrollView >
+          </ScrollView>
         </SafeAreaView>
       </View>
     );

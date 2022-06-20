@@ -1,22 +1,22 @@
 import axios from "axios"
-import { USER_MANAGEMENT_URL } from "../../commonUtils/ApiConstants"
+import { LOGIN_URL, USER_MANAGEMENT_URL } from "../../commonUtils/ApiConstants"
 import { BASE_URL } from "../../commonUtils/Base"
 
 class UrmService {
-  registerUser() {
-    return BASE_URL + '/user-management/client/createClient'
+  registerUser(obj) {
+    return axios.post(BASE_URL + LOGIN_URL.registerUser, obj)
   }
 
   saveUser(saveObj) {
     return axios.post(BASE_URL + USER_MANAGEMENT_URL.saveUser, saveObj)
   }
 
-  changePassword() {
-    return BASE_URL + '/user-management/auth/authResponce'
+  changePassword(obj) {
+    return axios.post(BASE_URL + LOGIN_URL.changePassword, obj)
   }
 
-  getPrivillagesForDomain() {
-    return BASE_URL + '/user-management/roles/privillagesForDomian/'
+  getAllPrivillages() {
+    return axios.get(BASE_URL + USER_MANAGEMENT_URL.getAllPrivileges)
   }
 
   getPrivillagesByRoleName() {
@@ -45,7 +45,7 @@ class UrmService {
   }
 
   saveStore() {
-    return BASE_URL + "/user-management/store/createStore"
+    return BASE_URL + "/user-management/store/create-store"
   }
 
   editStore() {
@@ -99,12 +99,12 @@ class UrmService {
     return BASE_URL + "/user-management/roles/rolesWithFilter"
   }
 
-  saveRole() {
-    return BASE_URL + "/user-management/roles/createRole"
+  saveRole(saveObj) {
+    return axios.post(BASE_URL + USER_MANAGEMENT_URL.saveRole, saveObj)
   }
 
-  editRole() {
-    return BASE_URL + "/user-management/roles/updateRole"
+  editRole(saveObj) {
+    return axios.post(BASE_URL + USER_MANAGEMENT_URL.editRole, saveObj)
   }
 
 

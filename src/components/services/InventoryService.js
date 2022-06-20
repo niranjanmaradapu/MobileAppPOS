@@ -1,3 +1,5 @@
+import axios from "axios";
+import { INVENTORY_PORTAL } from "../../commonUtils/ApiConstants";
 import { BASE_URL } from "../../commonUtils/Base"
 
 class InventoryService {
@@ -72,8 +74,8 @@ class InventoryService {
     return BASE_URL + "/user-management/store/storeList";
   }
 
-  getProductCombo() {
-    return BASE_URL + "/inventory/productBundle/all"
+  getProductCombo(params) {
+    return axios.post(BASE_URL + INVENTORY_PORTAL.getAllProductBundleList + params)
   }
 
   addProductCombo() {

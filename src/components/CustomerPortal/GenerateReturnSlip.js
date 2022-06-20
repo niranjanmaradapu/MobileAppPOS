@@ -18,7 +18,7 @@ export default class GenerateReturnSlip extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      invoiceNumber: "KLM/20222/-143993029",
+      invoiceNumber: "",
       mobileNumber: "",
       customerTagging: false,
       modelVisible: true,

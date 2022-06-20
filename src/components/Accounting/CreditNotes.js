@@ -50,7 +50,7 @@ export default class CreditNotes extends Component {
   }
 
   modelCancel() {
-    this.setState({ modalVisible: false, flagFilterOpen: false })
+    this.setState({ modalVisible: false, flagFilterOpen: false, isShowAllTransactions: false })
   }
 
 
@@ -237,7 +237,7 @@ export default class CreditNotes extends Component {
             }
           </View>}
           data={this.state.filterActive ? this.state.filterCreditData : this.state.creditNotes}
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 10 }}
           scrollEnabled={true}
           // ListEmptyComponent={<Text style={listEmptyMessage}>&#9888; Records Not Found</Text>}
           renderItem={({ item, index }) => (
@@ -389,17 +389,15 @@ export default class CreditNotes extends Component {
                       <Text style={filterHeading}>Transaction History</Text>
                     </View>
                     <View>
-                      <TouchableOpacity style={filterCloseImage} onPress={() => this.modalCancel()}>
+                      <TouchableOpacity style={filterCloseImage} onPress={() => this.modelCancel()}>
                         <Image style={{ margin: RH(5) }} source={require('../assets/images/modelcancel.png')} />
                       </TouchableOpacity>
                     </View>
                   </View>
                 </View>
-                <Text style={{ width: deviceWidth, borderColor: '#000000', borderBottomWidth: Device.isTablet ? 2 : 1 }}></Text>
                 <ScrollView>
                   <FlatList
                     data={this.state.transactionHistory}
-                    style={{ marginTop: 20 }}
                     scrollEnabled={true}
                     renderItem={({ item, index }) => (
                       <View style={flatListMainContainer}>
@@ -414,7 +412,7 @@ export default class CreditNotes extends Component {
                           </View>
                           <View style={textContainer}>
                             <Text style={textStyleLight}>AMOUNT: {item.amount}</Text>
-                            <Text style={textStyleLight}>DATE: {item.createdDate}</Text>
+                            <Text style={textStyleLight}>DATE: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
                           </View>
                         </View>
                       </View>

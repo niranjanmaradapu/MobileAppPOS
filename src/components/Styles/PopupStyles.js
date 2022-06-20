@@ -1,6 +1,7 @@
 import { Dimensions } from "react-native";
 import Device from "react-native-device-detection";
 import { RH, RW, RF } from '../../Responsive';
+import { color } from "./colorStyles";
 
 
 var deviceHeight = Dimensions.get("window").height
@@ -24,6 +25,16 @@ export const filterSubContainer = {
   height: Device.isTablet ? RH(60) : RH(50)
 }
 
+export const viewSubContainer = {
+  backgroundColor: color.info,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginTop: RH(5),
+  paddingHorizontal: RW(20),
+  height: Device.isTablet ? RH(60) : RH(50)
+}
+
 export const filterHeading = {
   marginTop: Device.isTablet ? RH(0) : RH(15),
   fontSize: RF(17),
@@ -36,25 +47,11 @@ export const filterCloseImage = {
   marginTop: Device.isTablet ? RH(30) : RH(15),
 }
 
-export const deleteContainer = {
-  backgroundColor: '#ffffff',
-  minHeight: Device.isTablet ? RH(300) : RH(250),
-  position: 'absolute',
-  bottom: 0,
-}
-
 export const viewContainer = {
   backgroundColor: '#ffffff',
   position: 'absolute',
   bottom: 0,
   minHeight: Device.isTablet ? RH(300) : RH(250),
-}
-
-export const deleteText = {
-  textAlign: 'center',
-  fontFamily: 'regular',
-  fontSize: RF(18),
-  color: '#353C40',
 }
 
 export const viewText = {
@@ -64,7 +61,44 @@ export const viewText = {
   color: '#353C40',
 }
 
+export const deleteContainer = {
+  backgroundColor: '#ffffff',
+  minHeight: Device.isTablet ? RH(300) : RH(250),
+  position: 'absolute',
+  bottom: 0,
+}
+
+export const sucessContainer = {
+  backgroundColor: '#FFFFFF',
+  minHeight: Device.isTablet ? RH(300) : RH(250),
+  position: 'absolute',
+  bottom: 0,
+}
+
+
+export const deleteText = {
+  textAlign: 'center',
+  fontFamily: 'regular',
+  fontSize: RF(18),
+  color: '#353C40',
+}
+
+export const sucessText = {
+  textAlign: 'center',
+  fontFamily: 'regular',
+  fontSize: RF(18),
+  color: '#00aa00',
+}
+
 export const deleteHeading = {
+  color: '#ffffff',
+  marginTop: Device.isTablet ? RH(5) : RH(15),
+  marginLeft: RW(20),
+  fontFamily: 'medium',
+  fontSize: RF(15)
+}
+
+export const sucessHeading = {
   color: '#ffffff',
   marginTop: Device.isTablet ? RH(5) : RH(15),
   marginLeft: RW(20),
@@ -83,8 +117,44 @@ export const deleteHeader = {
   height: Device.isTablet ? RH(60) : RH(50)
 }
 
+export const sucessHeader = {
+  backgroundColor: "#00aa00",
+  width: deviceWidth,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  paddinRight: 10,
+  paddingHorizontal: Device.isTablet ? 30 : 10,
+  height: Device.isTablet ? RH(60) : RH(50)
+}
+
 export const deleteCloseBtn = {
-  margin: 5,
-  height: Device.isTablet ? RH(20) : RH(15),
-  width: Device.isTablet ? RW(20) : RW(15) 
+  // margin: 5,
+  height: RH(15),
+  width: RW(15)
+}
+
+export const sucessBtn = {
+  width: deviceWidth - RW(40),
+  marginLeft: RW(20),
+  marginRight: RW(20),
+  marginTop: RH(20),
+  height: Device.isTablet ? RH(60) : RH(50),
+  backgroundColor: "#FFFFFF",
+  borderRadius: 5,
+  borderWidth: Device.isTablet ? 2 : 1,
+  borderColor: "#00aa00",
+}
+
+export const sucessBtnText = {
+  textAlign: 'center',
+  marginTop: RH(10),
+  color: "#00aa00",
+  fontSize: RF(15),
+  fontFamily: "regular"
+}
+
+export const sucessMainText = {
+  fontSize: RF(19),
+  fontFamily: 'medium', color: '#00aa00'
 }

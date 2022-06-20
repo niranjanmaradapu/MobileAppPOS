@@ -13,12 +13,15 @@ export const ACCOUNTING_PORTAL = {
   saveDebit: "/hsn-details/accounting/sale",
 }
 
-export const GENERATE_RETURN_SLIPS_URL = {
+export const NEW_SALE_URL = {
+  getDeliverySlip: "/inventory/inventory-management/barcode-details",
   getMobileData: "/user-management/user/customer/mobileNo",
+  createDeliverySlip: "/new-sale/newsale/createdeliveryslip",
 }
 
 export const INVENTORY_PORTAL = {
   getAllBarcodes: "/inventory/inventoryTextile/getAllBarcodeTextiles",
+  getAllProductBundleList: "/inventory/productBundle/all",
 }
 
 export const BILLING_PORTAL = {
@@ -27,6 +30,8 @@ export const BILLING_PORTAL = {
 
 export const LOGIN_URL = {
   getToken: '/user-management/auth/temporary-login',
+  registerUser: "/user-management/client/create-client",
+  changePassword: "/user-management/auth/auth-challenge",
 }
 
 export const USER_MANAGEMENT_URL = {
@@ -34,4 +39,7 @@ export const USER_MANAGEMENT_URL = {
   getAllUsers: "/user-management/user/users",
   getAllRoles: "/user-management/roles/client",
   saveUser: "/user-management/auth/create-user",
+  saveRole: "/user-management/roles/create-role",
+  getAllPrivileges: "/user-management/roles/getAllPrivilages",
+  editRole: "/user-management/roles/updateRole",
 }

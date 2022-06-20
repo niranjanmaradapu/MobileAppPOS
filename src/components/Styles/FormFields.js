@@ -1,7 +1,7 @@
 import { Dimensions } from "react-native";
 import Device from "react-native-device-detection";
 import { RH, RW, RF } from '../../Responsive';
-
+import { color } from "./colorStyles";
 
 var deviceheight = Dimensions.get("window").height
 var deviceWidth = Dimensions.get("window").width
@@ -13,9 +13,9 @@ export const inputField = {
   height: Device.isTablet ? RH(54) : RH(44),
   marginTop: RH(5),
   marginBottom: RH(10),
-  borderColor: '#8F9EB717',
+  borderColor: color.border,
   borderRadius: 3,
-  backgroundColor: '#FBFBFB',
+  backgroundColor: color.light,
   borderWidth: 1,
   fontFamily: 'regular',
   paddingLeft: RW(15),
@@ -30,10 +30,10 @@ export const inputFieldDisabled = {
   height: Device.isTablet ? RH(54) : RH(44),
   marginTop: RH(5),
   marginBottom: RH(10),
-  borderColor: '#8F9EB717',
+  borderColor: color.border,
   borderRadius: 3,
-  backgroundColor: '#6f6f6f43',
-  color: "#000000",
+  backgroundColor: color.dark,
+  color: color.black,
   borderWidth: 1,
   fontFamily: 'regular',
   paddingLeft: RW(15),
@@ -48,9 +48,9 @@ export const inputArea = {
   height: Device.isTablet ? RH(254) : RH(144),
   marginTop: RH(5),
   marginBottom: RH(10),
-  borderColor: '#8F9EB717',
+  borderColor: color.border,
   borderRadius: 3,
-  backgroundColor: '#FBFBFB',
+  backgroundColor: color.light,
   borderWidth: 1,
   fontFamily: 'regular',
   paddingLeft: RW(15),
@@ -59,7 +59,7 @@ export const inputArea = {
 
 export const inputHeading = {
   fontSize: RF(13),
-  color: '#000000',
+  color: color.black,
   marginLeft: RW(20),
   marginTop: RH(10),
   marginBottom: RH(10)
@@ -71,9 +71,9 @@ export const rnPickerContainer = {
   height: Device.isTablet ? RH(54) : RH(44),
   marginTop: RH(5),
   marginBottom: RH(10),
-  borderColor: '#8F9EB717',
+  borderColor: color.border,
   borderRadius: 3,
-  backgroundColor: '#FBFBFB',
+  backgroundColor: color.light,
   borderWidth: 1,
   fontFamily: 'regular',
   paddingLeft: RW(15),
@@ -83,7 +83,7 @@ export const rnPickerContainer = {
 
 export const rnPicker = {
   placeholder: {
-    color: "#6F6F6F",
+    color: color.grey,
     fontFamily: "regular",
     fontSize: RF(14),
   },
@@ -91,28 +91,28 @@ export const rnPicker = {
     justifyContent: 'center',
     height: Device.isTablet ? 52 : 42,
     borderRadius: 3,
-    borderWidth: 1,
+    // borderWidth: 1,
     fontFamily: 'regular',
     fontSize: RF(14),
-    borderColor: '#FBFBFB',
-    backgroundColor: '#FBFBFB',
+    borderColor: color.border,
+    backgroundColor: color.light,
   },
   inputAndroid: {
     justifyContent: 'center',
     height: Device.isTablet ? 52 : 42,
     borderRadius: 3,
-    borderWidth: 1,
+    // borderWidth: 1,
     fontFamily: 'regular',
     fontSize: RF(14),
-    borderColor: '#FBFBFB',
-    backgroundColor: '#FBFBFB',
-    color: '#001B4A',
+    borderColor: color.border,
+    backgroundColor: color.light,
+    color: color.blue,
   },
 }
 
 export const rnPickerError = {
   placeholder: {
-    color: "#dd0000",
+    color: color.accent,
     fontFamily: "regular",
     fontSize: RF(14),
   },
@@ -120,62 +120,60 @@ export const rnPickerError = {
     justifyContent: 'center',
     height: Device.isTablet ? 52 : 42,
     borderRadius: 3,
-    borderWidth: 1,
+    // borderWidth: 1,
     fontFamily: 'regular',
     fontSize: RF(14),
-    borderColor: '#FBFBFB',
-    backgroundColor: '#FBFBFB',
+    borderColor: color.border,
+    backgroundColor: color.light,
   },
   inputAndroid: {
     justifyContent: 'center',
     height: Device.isTablet ? 52 : 42,
     borderRadius: 3,
-    borderWidth: 1,
+    // borderWidth: 1,
     fontFamily: 'regular',
     fontSize: RF(14),
-    borderColor: '#FBFBFB',
-    backgroundColor: '#FBFBFB',
-    color: '#001B4A',
+    borderColor: color.border,
+    backgroundColor: color.light,
+    color: color.blue,
   },
 }
 
 
 export const submitBtn = {
   width: deviceWidth - RW(40),
-  marginLeft: RW(20),
-  marginRight: RW(20),
-  marginTop: RH(20),
+  marginHorizontal: RW(20),
+  marginVertical: RH(10),
   height: Device.isTablet ? RH(60) : RH(50),
-  backgroundColor: "#ED1C24",
+  backgroundColor: color.accent,
   borderRadius: 5,
   borderWidth: Device.isTablet ? 2 : 1,
-  borderColor: "#353C4050",
+  borderColor: color.accent,
 }
 
 export const submitBtnText = {
   textAlign: 'center',
   marginTop: RH(10),
-  color: "#ffffff",
+  color: color.white,
   fontSize: RF(15),
   fontFamily: "regular"
 }
 
 export const cancelBtn = {
   width: deviceWidth - RW(40),
-  marginLeft: RW(20),
-  marginRight: RW(20),
-  marginTop: RH(20),
+  marginHorizontal: RW(20),
+  marginVertical: RH(10),
   height: Device.isTablet ? RH(50) : RH(40),
-  backgroundColor: "#ffffff",
+  backgroundColor: color.white,
   borderRadius: 5,
   borderWidth: Device.isTablet ? 2 : 1,
-  borderColor: "#353C4050",
+  borderColor: color.border,
 }
 
 export const cancelBtnText = {
   textAlign: 'center',
   marginTop: Device.isTablet ? RH(5) : RH(10),
-  color: "#000000",
+  color: color.black,
   fontSize: RF(15),
   fontFamily: "regular"
 }

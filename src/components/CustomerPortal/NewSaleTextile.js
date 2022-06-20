@@ -7,7 +7,7 @@ import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TouchableOpa
 import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 import UrmService from '../services/UrmService';
-import { headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, menuButton } from '../Styles/Styles';
+import { headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, menuButton, pageNavigationBtn, pageNavigationBtnContainer, pageNavigationBtnText } from '../Styles/Styles';
 import AddCustomer from './AddCustomer';
 import DayClosure from './DayClosure';
 import GenerateEstimationSlip from './GenerateEstimationSlip';
@@ -59,7 +59,7 @@ class NewSaleTextile extends Component {
                 let subPrivileges = res.data.subPrivileges
                 for (let i = 0; i < sublen; i++) {
                   if (privilegeId === subPrivileges[i].parentPrivilegeId) {
-                    let routes = subPrivileges[i].name
+                    let routes = subPrivileges[i].name.trim()
                     this.state.headerNames.push({ name: routes })
                     console.log("Header Names", this.state.headerNames)
                   }
@@ -212,23 +212,17 @@ class NewSaleTextile extends Component {
           <View style={styles.container}>
 
             <FlatList
-              style={styles.flatList}
+              style={pageNavigationBtnContainer}
               horizontal
               data={this.state.privilages}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               renderItem={({ item, index }) => (
-                <TouchableOpacity style={{
-                  height: Device.isTablet ? 46 : 36,
-                  width: Device.isTablet ? 250 : 200,
-                  borderWidth: Device.isTablet ? 2 : 1,
+                <TouchableOpacity style={[pageNavigationBtn, {
                   backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
                   borderColor: item.bool ? '#ED1C24' : '#858585',
-                  borderRadius: Device.isTablet ? 10 : 5,
-                  marginLeft: 10,
-                }} onPress={() => this.topbarAction1(item, index)} >
-
-                  <Text style={{ fontSize: Device.isTablet ? 21 : 16, alignItems: 'center', alignSelf: 'center', marginTop: 5, color: item.bool ? "#FFFFFF" : '#858585', fontFamily: 'regular', }}>
+                }]} onPress={() => this.topbarAction1(item, index)} >
+                  <Text style={[pageNavigationBtnText, { color: item.bool ? "#FFFFFF" : '#858585', }]}>
                     {item.name}
                   </Text>
                 </TouchableOpacity>

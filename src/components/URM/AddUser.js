@@ -15,6 +15,7 @@ import Message from '../Errors/Message';
 import { cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, inputField, inputHeading, rnPicker, rnPickerContainer, rnPickerError, submitBtn, submitBtnText } from '../Styles/FormFields';
 import { RW, RF, RH } from '../../Responsive';
 import { headerTitle, headerTitleContainer, headerTitleSubContainer, menuButton } from '../Styles/Styles';
+import { color } from '../Styles/colorStyles';
 
 var deviceWidth = Dimensions.get('window').width;
 
@@ -68,7 +69,7 @@ export default class AddUser extends Component {
 
   async componentDidMount() {
     const clientId = await AsyncStorage.getItem("custom:clientId1");
-
+    const userId = await AsyncStorage.getItem("userId")
     this.setState({ isEdit: this.props.route.params.isEdit });
     if (this.state.isEdit === true) {
       this.setState({
@@ -91,9 +92,6 @@ export default class AddUser extends Component {
       this.setState({ navtext: 'Add User' });
     }
     this.setState({ clientId: clientId });
-
-
-    const userId = await AsyncStorage.getItem("custom:clientId1");
     this.setState({ userId: userId })
     this.getStores()
     this.getRoles()
@@ -246,21 +244,10 @@ export default class AddUser extends Component {
       this.setState({ isSuperAdmin: false });
     }
     else {
-      this.getPrivilegesByDomainId();
       this.setState({ isSuperAdmin: true });
     }
-
   }
 
-  getPrivilegesByDomainId() {
-    axios.get(UrmService.getPrivillagesForDomain() + 0).then((res) => {
-      if (res.data && res.data["isSuccess"] === "true") {
-        let len = res.data["result"].length;
-        this.setState({ adminRole: res.data.result[0].name });
-        console.log(this.state.adminRole);
-      }
-    });
-  }
 
   handleEmailValid = () => {
     const emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -338,7 +325,7 @@ export default class AddUser extends Component {
 
     if (isFormValid) {
       if (this.state.isEdit === false) {
-        const clientDomain = this.state.domainId !== 0 ? this.state.domainId : this.state.clientId;
+        const clientDomain = this.state.domainId !== "" ? this.state.domainId : this.state.clientId;
         const saveObj = {
           "email": this.state.email,
           "phoneNumber": "+91".concat(this.state.mobile),
@@ -346,9 +333,6 @@ export default class AddUser extends Component {
           "gender": this.state.gender,
           "name": this.state.name,
           "username": this.state.name,
-          // "assginedStores": "kphb",
-          // "parentId": "1",
-          // "domianId": this.state.domainId,
           "address": this.state.address,
           "role": {
             "roleName": this.state.isSuperAdmin ? this.state.adminRole : this.state.role,
@@ -362,12 +346,14 @@ export default class AddUser extends Component {
           "createdBy": parseInt(this.state.userId),
           "isActive": this.state.userStatus
         };
-        console.log('params are' + JSON.stringify(saveObj));
+        console.log({ saveObj });
         this.setState({ loading: true });
         UrmService.saveUser(saveObj).then((res) => {
           if (res) {
-            this.props.navigation.goBack()
+            console.log({ res })
+            alert("User Created Successfully")
           }
+          this.props.navigation.goBack()
         }).catch(err => {
           alert(err)
           this.props.navigation.goBack()
@@ -447,12 +433,12 @@ export default class AddUser extends Component {
           <Text style={inputHeading}>
             {I18n.t("User Details")}
           </Text>
-          <Text style={inputHeading}>{I18n.t("Name")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+          <Text style={inputHeading}>{I18n.t("Name")} <Text style={{ color: color.accent }}>*</Text> </Text>
           <TextInput
-            style={[inputField, { borderColor: nameValid ? "#6F6F6F" : "#dd0000" }]}
+            style={[inputField, { borderColor: nameValid ? color.border : color.accent }]}
             underlineColorAndroid="transparent"
             placeholder={I18n.t("Name")}
-            placeholderTextColor={nameValid ? "#6F6F6F" : "#dd0000"}
+            placeholderTextColor={nameValid ? color.border : color.accent}
             textAlignVertical="center"
             autoCapitalize="none"
             onBlur={this.handleNameValid}
@@ -480,14 +466,14 @@ export default class AddUser extends Component {
               useNativeAndroidPickerStyle={false}
             />
           </View>
-          <Text style={inputHeading}>Status <Text style={{ color: '#aa0000' }}>*</Text></Text>
-          <View style={[rnPickerContainer, { borderColor: statusValid ? '#8f9eb718' : '#dd0000' }]}>
+          <Text style={inputHeading}>Status <Text style={{ color: color.accent }}>*</Text></Text>
+          <View style={[rnPickerContainer, { borderColor: statusValid ? color.border : color.accent }]}>
             <RNPickerSelect
               placeholder={{
                 label: 'Status',
                 value: ''
               }} Icon={() => {
-                return <Chevron style={styles.imagealign} size={1.5} color={statusValid ? "gray" : "#dd0000"} />;
+                return <Chevron style={styles.imagealign} size={1.5} color={statusValid ? color.border : color.accent} />;
               }}
               items={[
                 { label: 'Active', value: true },
@@ -509,12 +495,12 @@ export default class AddUser extends Component {
             <Text style={dateText}  > {this.state.dob === '' ? 'DoB' : this.state.dob} </Text>
             <Image style={{ position: 'absolute', top: 10, right: 0, }} source={require('../assets/images/calender.png')} />
           </TouchableOpacity>
-          <Text style={inputHeading}>{I18n.t("Mobile")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+          <Text style={inputHeading}>{I18n.t("Mobile")} <Text style={{ color: color.accent }}>*</Text> </Text>
           <TextInput
-            style={[inputField, { borderColor: mobileValid ? "#6F6F6F" : "#dd0000" }]}
+            style={[inputField, { borderColor: mobileValid ? color.border : color.accent }]}
             underlineColorAndroid="transparent"
             placeholder={I18n.t("Mobile")}
-            placeholderTextColor={mobileValid ? "#6F6F6F" : "#dd0000"}
+            placeholderTextColor={mobileValid ? color.border : color.accent}
             textAlignVertical="center"
             onBlur={this.handleMobileValid}
             maxLength={10}
@@ -525,13 +511,13 @@ export default class AddUser extends Component {
             onChangeText={this.handleMobile}
           />
           {!mobileValid && <Message imp={true} message={this.state.errors["mobile"]} />}
-          <Text style={inputHeading}>{I18n.t("Email")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+          <Text style={inputHeading}>{I18n.t("Email")} <Text style={{ color: color.accent }}>*</Text> </Text>
           <TextInput
-            style={[inputField, { borderColor: emailValid ? "#6F6F6F" : "#dd0000" }]}
+            style={[inputField, { borderColor: emailValid ? color.border : color.accent }]}
             underlineColorAndroid="transparent"
             placeholder={I18n.t("Email")}
             onBlur={this.handleEmailValid}
-            placeholderTextColor={emailValid ? "#6F6F6F" : "#dd0000"}
+            placeholderTextColor={emailValid ? color.border : color.accent}
             keyboardType='email-address'
             textAlignVertical="center"
             autoCapitalize="none"
@@ -544,7 +530,7 @@ export default class AddUser extends Component {
             style={inputField}
             underlineColorAndroid="transparent"
             placeholder={I18n.t("Address")}
-            placeholderTextColor="#6F6F6F"
+            placeholderTextColor={color.border}
             textAlignVertical="center"
             autoCapitalize="none"
             value={this.state.address}
