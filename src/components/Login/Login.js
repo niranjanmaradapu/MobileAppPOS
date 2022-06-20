@@ -240,8 +240,14 @@ export default class Login extends Component {
 
   getStores() {
     const { assignedStores } = this.state
-    console.log(assignedStores)
+    console.log("OOOO",assignedStores)
+    AsyncStorage.setItem("storesList", assignedStores).catch(err => {
+        console.error({ err })
+      })
+    // AsyncStorage.setItem("storesList",assignedStores)
     if (assignedStores && assignedStores.length > 1) {
+
+        // AsyncStorage.setItem("storesList",assignedStores)
       this.props.navigation.navigate('SelectStore', { items: assignedStores })
     }
     else {

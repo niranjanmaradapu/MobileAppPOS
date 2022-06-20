@@ -187,7 +187,7 @@ export function DrawerContent(props) {
             </Drawer.Section> */}
 
       <Drawer.Section style={styles.bottomDrawerSection}>
-        <DrawerItem
+        {/* <DrawerItem
           labelStyle={{ fontSize: Device.isTablet ? 21 : 16 }}
           icon={({ color, size }) => (
             <Icon
@@ -198,6 +198,18 @@ export function DrawerContent(props) {
           )}
           label={I18n.t("Domain Switch")}
           onPress={() => { props.navigation.navigate('SelectDomain'); }}
+        /> */}
+         <DrawerItem
+          labelStyle={{ fontSize: Device.isTablet ? 21 : 16 }}
+          icon={({ color, size }) => (
+            <Icon
+              name="exit-to-app"
+              color={color}
+              size={size}
+            />
+          )}
+          label={I18n.t("Store Switch")}
+          onPress={() => { props.navigation.navigate('SelectStore'); }}
         />
         <DrawerItem
           labelStyle={{ fontSize: Device.isTablet ? 21 : 16 }}

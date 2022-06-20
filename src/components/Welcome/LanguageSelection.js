@@ -17,7 +17,9 @@ I18n.translations = {
   'telugu': require('../assets/translations/te'),
   'hindi': require('../assets/translations/hi'),
 };
-
+I18n.missingTranslation = (name)=>{
+  return name
+}
 export default class LanguageSelection extends React.Component {
   constructor(props) {
     super(props);
