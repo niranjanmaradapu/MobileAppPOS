@@ -14,7 +14,7 @@ import I18n from 'react-native-i18n';
 import { ActivityIndicator } from 'react-native-paper';
 import { RH, RF, RW } from '../../Responsive';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import headerStyles from '../../assets/styles/style.scss';
+import styles from '../../assets/styles/style.scss';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -55,7 +55,7 @@ export default class Barcode extends Component {
     const storeId = await AsyncStorage.getItem("storeId");
     this.setState({ storeId: storeId });
     this.getAllBarcodes();
-    console.log({ headerStyles });
+    console.log({ styles });
   }
 
   // Filter Action
@@ -236,7 +236,8 @@ export default class Barcode extends Component {
         }
         <View>
           <FlatList
-            ListHeaderComponent={<View style={headerStyles.boxContainer}>
+            style={styles.flatListBody}
+            ListHeaderComponent={<View style={styles.headerContainer}>
               <Text style={flatListTitle}>Barcode List</Text>
               <View>
                 {!this.state.filterActive &&
@@ -263,7 +264,7 @@ export default class Barcode extends Component {
             renderItem={({ item, index }) => (
               <View style={{ flex: 1 }}>
                 <ScrollView>
-                  <View style={flatListMainContainer}>
+                  <View style={styles.flatListContainer}>
                     <View style={flatlistSubContainer}>
                       <View style={textContainer}>
                         <Text style={highText}>S.NO: {index + 1}</Text>
@@ -278,6 +279,9 @@ export default class Barcode extends Component {
                       </View>
                       <View style={textContainer}>
                         <Text style={[textStyleMedium]} selectable={true}>{item.barcode}</Text>
+                      </View>
+                      <View style={styles.flatListFooter}>
+                        <Text>CreatedDate: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
                         <View style={buttonContainer}>
                           <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditbarcode(item, index)}>
                             <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
@@ -319,11 +323,11 @@ export default class Barcode extends Component {
                     <Text
                       style={dateText}
                     >{this.state.startDate === "" ? 'Start Date' : this.state.startDate}</Text>
-                    <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
+                    <Image style={filter.calenderpng} source={require('../assets/images/calender.png')} />
                   </TouchableOpacity>
                   {this.state.datepickerOpen && (
-                    <View style={styles.dateTopView}>
-                      <View style={styles.dateTop2}>
+                    <View style={filter.dateTopView}>
+                      <View style={filter.dateTop2}>
                         <TouchableOpacity
                           style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
                         >
@@ -351,12 +355,12 @@ export default class Barcode extends Component {
                     <Text
                       style={dateText}
                     >{this.state.endDate === '' ? 'End Date' : this.state.endDate}</Text>
-                    <Image style={styles.calenderpng} source={require('../assets/images/calender.png')} />
+                    <Image style={filter.calenderpng} source={require('../assets/images/calender.png')} />
                   </TouchableOpacity>
 
                   {this.state.datepickerendOpen && (
-                    <View style={styles.dateTopView}>
-                      <View style={styles.dateTop2}>
+                    <View style={filter.dateTopView}>
+                      <View style={filter.dateTop2}>
                         <View>
                           <TouchableOpacity
                             style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
@@ -417,7 +421,7 @@ export default class Barcode extends Component {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <Text style={styles.spaceText}></Text>
+                  <Text style={filter.spaceText}></Text>
                 </View>
 
                 <Text style={deleteText}> {I18n.t("Are you sure want to delete Barcode")} ?  </Text>
@@ -444,7 +448,7 @@ export default class Barcode extends Component {
     );
   }
 }
-const styles = StyleSheet.create({
+const filter = StyleSheet.create({
   spaceText: {
     height: Device.isTablet ? 2 : 1,
     width: deviceWidth,

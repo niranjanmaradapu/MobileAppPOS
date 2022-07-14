@@ -1,4 +1,46 @@
-.boxContainer{
-  background-color: #0000ff;
-  color: '#FFFFFF'
+.headerContainer {
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1% 5%;
+}
+
+.flatListBody {
+  background-color: #fff;
+}
+
+.flatListContainer {
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #aaaaaaaa;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  // padding: 10px;
+  width: 96%;
+  margin: 1% 2%;
+}
+
+.flatListInner {
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+
+.flatListFooter {
+  background: #aaaaaaaa;
+  height: 25%;
+  width: 100%;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 2%;
+  align-items: center;
 }
