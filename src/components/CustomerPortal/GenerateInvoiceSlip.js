@@ -71,7 +71,6 @@ class GenerateInvoiceSlip extends Component {
       discountAmount: '0',
       approvedBy: '',
       domainId: 1,
-      storeId: 1,
       tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
       tableData: [],
       privilages: [{ bool: true, name: "Tag Customer" }, { bool: false, name: "Bill Level Discount" }],
@@ -180,16 +179,9 @@ class GenerateInvoiceSlip extends Component {
     };
   }
 
-  componentDidMount() {
-    AsyncStorage.getItem("storeId").then((value) => {
-      storeStringId = value;
-      this.setState({ storeId: parseInt(storeStringId) });
-      console.log(this.state.storeId);
-    }).catch(() => {
-      this.setState({ loading: false });
-      console.log('There is error getting storeId');
-      // alert('There is error getting storeId');
-    });
+  async componentDidMount() {
+    const storeId = await AsyncStorage.getItem("storeId");
+    this.setState({ storeId: storeId });
     this.getDiscountReasons();
     this.getHsnDetails();
   }
@@ -266,7 +258,7 @@ class GenerateInvoiceSlip extends Component {
 
       if (item.name === "Tag Customer") {
         this.setState({ customerTagging: true, modalVisible: true, handleBillDiscount: false });
-        this.state.privilages[1].bool = false
+        this.state.privilages[1].bool = false;
         return;
       } else {
         this.setState({ customerTagging: false, modalVisible: false });
@@ -290,16 +282,16 @@ class GenerateInvoiceSlip extends Component {
     let costPrice = 0;
     let discount = 0;
     let total = 0;
-    this.setState({ discountAmount: 0, netPayableAmount: 0, totalAmount: 0, promoDiscount: 0 })
+    this.setState({ discountAmount: 0, netPayableAmount: 0, totalAmount: 0, promoDiscount: 0 });
     this.state.barCodeList = [];
     this.state.finalList = [];
     this.state.rBarCodeList = [];
     this.state.dsNumberList = [];
-    const params = {
-      "dsNumber": this.state.dsNumber,//KLM/202227/1983752684
-    };
-    this.state.dsNumberList.push(params);
-    axios.get(CustomerService.getDsSlip(), { params }).then((res) => {
+    let esNumber = this.state.dsNumber;
+    let flag = true;
+    const { storeId } = this.state;
+    CustomerService.getDsSlip(esNumber, flag, storeId).then((res) => {
+      console.log("getInvoiceSlip", { res });
       if (res.data) {
         console.log(res.data);
         this.state.dlslips.push(res.data.result);
@@ -352,7 +344,7 @@ class GenerateInvoiceSlip extends Component {
       }
     }).catch(() => {
       this.setState({ loading: false });
-      alert('Getting issue with the estimation slip lineitems');
+      // alert('Getting issue with the estimation slip lineitems');
     });
 
 
@@ -429,7 +421,7 @@ class GenerateInvoiceSlip extends Component {
     axios.get(CustomerService.getHsnDetails()).then((response) => {
       if (response) {
         const details = response.data.result;
-        console.log(details)
+        console.log(details);
         let slabVos = [];
         details.forEach(detail => {
           if (detail.slabVos)
@@ -483,9 +475,9 @@ class GenerateInvoiceSlip extends Component {
       customerGender: this.state.customerGender,
       totalQty: this.state.totalQty.toString(),
       onGoBack: () => this.invoiceUpdate(),
-    }
+    };
     this.props.navigation.navigate('TextilePayment', obj);
-    console.log({ obj })
+    console.log({ obj });
   }
 
   invoiceUpdate() {
@@ -494,17 +486,13 @@ class GenerateInvoiceSlip extends Component {
   }
 
   endEditing() {
-    if (global.domainName === "Textile") {
-      if (this.state.dsNumber === "") {
-        alert("Please enter ES Number");
-      }
-      else {
-        this.setState({ disableButton: false, })
-        this.getDeliverySlipDetails();
-      }
+    if (this.state.dsNumber === "") {
+      alert("Please enter ES Number");
     }
-
-
+    else {
+      this.setState({ disableButton: false });
+      this.getDeliverySlipDetails();
+    }
   }
 
   handleDsNumber = (text) => {
@@ -629,8 +617,8 @@ class GenerateInvoiceSlip extends Component {
 
       this.setState({ modalVisible: false },
         () => {
-          this.setState({ disableButton: true, reasonDiscount: "" })
-          this.state.privilages[1].bool = false
+          this.setState({ disableButton: true, reasonDiscount: "" });
+          this.state.privilages[1].bool = false;
 
         });
 
@@ -719,7 +707,7 @@ class GenerateInvoiceSlip extends Component {
                     <Text style={[Device.isTablet ? styles.navButtonText_tablet : styles.navButtonText_mobile, { paddingTop: Device.isTablet ? 5 : 5 }]}> {I18n.t('SCAN')} </Text>
                   </TouchableOpacity>
                 </View>
-                <TextInput style={inputField}
+                {/* <TextInput style={inputField}
                   underlineColorAndroid="transparent"
                   placeholder={I18n.t("Enter Barcode")}
                   placeholderTextColor="#6F6F6F60"
@@ -730,7 +718,7 @@ class GenerateInvoiceSlip extends Component {
                   // onEndEditing
                   onChangeText={(text) => this.handleBarcode(text)}
                   onEndEditing={() => this.endEditing()}
-                />
+                /> */}
               </View>
               {this.state.barCodeList.length !== 0 && (
                 <FlatList

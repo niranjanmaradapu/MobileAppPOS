@@ -48,16 +48,16 @@ export default class CreateRole extends Component {
     const clientId = await AsyncStorage.getItem("custom:clientId1");
     const userId = await AsyncStorage.getItem("userId")
     this.setState({ isEdit: this.props.route.params.isEdit, userId: userId });
+    let editItems = this.props.route.params
+    console.log({ editItems })
     if (this.state.isEdit === true) {
       this.setState({
-        description: this.props.route.params.item.discription,
+        description: this.props.route.params.item.description,
         role: this.props.route.params.item.roleName,
-        domain: this.props.route.params.item.clientDomainVo.domaiName,
-        roles: this.props.route.params.item.subPrivilageVo,
-        parentlist: this.props.route.params.item.parentPrivilageVo,
+        roles: this.props.route.params.item.subPrivilege,
+        parentlist: this.props.route.params.item.parentPrivilege,
         roleId: this.props.route.params.item.roleId
       });
-      console.log("sadadsdsad" + this.props.route.params.item.clientDomainVo.domaiName);
       this.setState({ navtext: 'Edit Role' });
     }
     else {

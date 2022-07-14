@@ -14,7 +14,7 @@ import { errorLength, urmErrorMessages } from '../Errors/errors';
 import Message from '../Errors/Message';
 import { cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, inputField, inputHeading, rnPicker, rnPickerContainer, rnPickerError, submitBtn, submitBtnText } from '../Styles/FormFields';
 import { RW, RF, RH } from '../../Responsive';
-import { headerTitle, headerTitleContainer, headerTitleSubContainer, menuButton } from '../Styles/Styles';
+import { backButton, backButtonImage, headerTitle, headerTitleContainer, headerTitleSubContainer, menuButton } from '../Styles/Styles';
 import { color } from '../Styles/colorStyles';
 
 var deviceWidth = Dimensions.get('window').width;
@@ -43,7 +43,7 @@ export default class AddUser extends Component {
       domainsArray: [],
       storesArray: [],
       storesTempArray: [],
-      selectededitStoresArray: [],
+      selectedEditStoresArray: [],
       selectedTempStoresArray: [],
       selectedStoresArray: [],
       selectedStoresFinalArray: [],
@@ -72,6 +72,11 @@ export default class AddUser extends Component {
     const userId = await AsyncStorage.getItem("userId")
     this.setState({ isEdit: this.props.route.params.isEdit });
     if (this.state.isEdit === true) {
+      let userDetails = this.props.route.params.item
+      console.log({ userDetails })
+      let newStoresArray = []
+      newStoresArray = userDetails.stores
+      console.log({ newStoresArray })
       this.setState({
         userId: this.props.route.params.item.userId,
         name: this.props.route.params.item.userName,
@@ -82,10 +87,11 @@ export default class AddUser extends Component {
         issuperAdmin: this.props.route.params.item.superAdmin,
         domainId: this.props.route.params.item.domian,
         role: this.props.route.params.item.roleName,
-        selectededitStoresArray: this.props.route.params.item.stores,
+        selectedEditStoresArray: newStoresArray,
+        mobile: userDetails.phoneNumber,
+        userStatus: userDetails.isActive,
+        role: userDetails.roleName
       });
-
-
       this.setState({ navtext: 'Edit User' });
     }
     else {
@@ -98,18 +104,54 @@ export default class AddUser extends Component {
   }
 
   async getStores() {
-    let clientId = await AsyncStorage.getItem("custom:clientId1");
+    const clientId = await AsyncStorage.getItem("custom:clientId1");
     console.log({ clientId })
-    UrmService.getAllStores(clientId).then(res => {
+    const { selectedEditStoresArray } = this.state
+    console.log({ selectedEditStoresArray })
+    let storesArray = [] // for normal push
+    let storesEditArray = [] // for Edited Stores Push
+    let cleanedStoresArray = [] // for removing the duplicates
+    const isActive = true
+    const pageNumber = 0
+    await UrmService.getAllStores(clientId, pageNumber, isActive).then(res => {
       if (res) {
         let response = res.data
-        let stores = []
+        console.log({ response })
         if (response.length > 0) {
           for (let i = 0; i < response.length; i++) {
-            this.state.storesArray.push({ name: response[i].name, id: response[i].id, selectedindex: 0 })
+            let stores = response[i]
+            let storeNames = stores.name
+            console.log({ stores })
+            for (let k = 0; k < selectedEditStoresArray.length; k++) {
+              if (selectedEditStoresArray[k].name === stores.name) {
+                if (selectedEditStoresArray.includes(stores.name)) { }
+                else {
+                  storesEditArray.push(stores.name)
+                }
+              }
+            }
+            console.log([{ storesEditArray }, {
+              storeNames
+            }])
+            if (storesEditArray.includes(stores.name)) {
+              for (let m = 0; m < selectedEditStoresArray.length; m++) {
+                if (stores.name === selectedEditStoresArray[m].name) {
+                  if (cleanedStoresArray.includes(selectedEditStoresArray[i].name)) { }
+                  else {
+                    storesArray.push({ name: selectedEditStoresArray[m].name, id: selectedEditStoresArray[m].id, selectedindex: 1 })
+                    cleanedStoresArray.push(selectedEditStoresArray[m].name)
+                    console.log({ cleanedStoresArray })
+                  }
+                }
+              }
+            } else { }
+            if (cleanedStoresArray.includes(stores.name)) { }
+            else {
+              storesArray.push({ name: stores.name, id: stores.id, selectedindex: 0 })
+            }
           }
+          this.setState({ storesArray: storesArray })
         }
-        this.setState({ storesArray: this.state.storesArray })
       }
     })
   }
@@ -196,6 +238,7 @@ export default class AddUser extends Component {
     if (item.selectedindex === 0) {
       item.selectedindex = 1;
       this.state.selectedStoresArray.push({ name: item.name, id: item.id, selectedindex: 1 });
+      console.log(this.state.selectedStoresArray)
     }
     else {
       console.log({ item })
@@ -421,8 +464,8 @@ export default class AddUser extends Component {
         }
         <View style={headerTitleContainer} >
           <View style={headerTitleSubContainer}>
-            <TouchableOpacity style={menuButton} onPress={() => this.handleBackButtonClick()}>
-              <Image style={{ marginTop: -5 }} source={require('../assets/images/backButton.png')} />
+            <TouchableOpacity style={backButton} onPress={() => this.handleBackButtonClick()}>
+              <Image style={backButtonImage} source={require('../assets/images/backButton.png')} />
             </TouchableOpacity>
             <Text style={headerTitle}>
               {this.state.navtext}

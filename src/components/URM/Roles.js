@@ -1,9 +1,26 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
-import React, { Component } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import UrmService from '../services/UrmService'
-import EmptyList from '../Errors/EmptyList'
-import { buttonContainer, buttonImageStyle, buttonStyle1, filterBtn, flatListHeaderContainer, flatListMainContainer, flatlistSubContainer, flatListTitle, highText, singleButtonStyle, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from 'react-native-modal';
+import RNPickerSelect from 'react-native-picker-select';
+import { Chevron } from 'react-native-shapes';
+import { RW, RF, RH } from '../../Responsive';
+import Loader from "../../commonUtils/loader";
+import UrmService from '../services/UrmService';
+import UrmDashboard from './UrmDashboard';
+import EmptyList from '../Errors/EmptyList';
+import { buttonContainer, buttonStyle, buttonStyle1, filterBtn, flatListMainContainer, flatlistSubContainer, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, highText, buttonImageStyle, menuButton, textContainer, textStyleLight, textStyleMedium, flatListHeaderContainer, flatListTitle, singleButtonStyle } from '../Styles/Styles';
+import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
+import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
+
+
+var deviceheight = Dimensions.get("window").height;
+var deviceWidth = Dimensions.get("window").width;
 
 export default class Roles extends Component {
   constructor(props) {
@@ -15,6 +32,7 @@ export default class Roles extends Component {
       pageNumber: 0,
       flagFilterOpen: false,
       modalVisible: true,
+      createdDate: "",
     }
   }
 
@@ -24,6 +42,7 @@ export default class Roles extends Component {
     this.getRolesList()
   }
 
+  // Getting Roles List
   getRolesList() {
     const { clientId, pageNumber } = this.state
     UrmService.getAllRoles(clientId, pageNumber).then(res => {
@@ -35,19 +54,84 @@ export default class Roles extends Component {
     })
   }
 
+  // Filter Section
   filterAction() {
     this.setState({ flagFilterOpen: true, modalVisible: true })
   }
 
-  handleRole(item, index) {
-    this.props.navigation.navigate('EditRole');
+  clearFilterAction() {
+    this.setState({filterActive: false})
+    this.getRolesList()
   }
 
-  handleeditrole() {
-
+    modelCancel() {
+    this.setState({ modalVisible: false })
   }
+
+  handleCreatedBy = (value) => {
+    this.setState({createdBy: value})
+  }
+
+  handleRole = (value) => {
+    this.setState({role: value})
+  }
+
+    datepickerClicked() {
+    this.setState({ datepickerOpen: true });
+  }
+
+    datepickerCancelClicked() {
+    this.setState({ date: new Date(), enddate: new Date(), datepickerOpen: false, datepickerendOpen: false });
+  }
+
+  datepickerDoneClicked() {
+    if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
+      this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
+    }
+    else if (parseInt(this.state.date.getDate()) < 10) {
+      this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
+    }
+    else if (parseInt(this.state.date.getMonth()) < 10) {
+      this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
+    }
+    else {
+      this.setState({ startDate: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
+    }
+    this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
+  }
+
+
+applyRoleFilter() {
+  const {role, createdBy, createdDate} = this.state
+  this.setState({loading: true})
+const searchRole = {
+  "roleName": role ?  role : null,
+  "createdBy": createdBy ? createdBy : null,
+  "createdDate": createdDate ? createdDate : null
+}
+UrmService.getRolesBySearch(searchRole).then(res => {
+  if(res) {
+    let rolesList = res.data.result
+    console.log({rolesList})
+    this.setState({filterRolesData: rolesList, filterActive: true})
+  }
+    this.setState({loading: false, modalVisible: false})
+})
+}
+
+
+
+  handleeditrole(item, index) {
+    this.props.navigation.navigate('CreateRole',
+      {
+      item: item, isEdit: true,
+      onGoBack: () => this.getRolesList()
+    })
+  }
+
 
   render() {
+    const {filterActive, rolesData, filterRolesData} = this.state
     return (
       <View>
         <FlatList
@@ -69,8 +153,7 @@ export default class Roles extends Component {
               </TouchableOpacity>
             }
           </View>}
-          data={this.state.rolesData}
-          style={{ marginTop: 20 }}
+          data={filterActive ? filterRolesData :rolesData}
           ListEmptyComponent={<EmptyList message={this.state.rolesError} />}
           scrollEnabled={true}
           renderItem={({ item, index }) => (

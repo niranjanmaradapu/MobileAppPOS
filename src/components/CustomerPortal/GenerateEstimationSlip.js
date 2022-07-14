@@ -30,7 +30,7 @@ class GenerateEstimationSlip extends Component {
     this.camera = null;
     this.barcodeCodes = [];
     this.state = {
-      barcodeId: "BAR-X03MMY",
+      barcodeId: "",
       mobileNumber: "",
       altMobileNo: "",
       name: "",
@@ -76,7 +76,7 @@ class GenerateEstimationSlip extends Component {
       domainId: 1,
       tableHead: ['S.No', 'Barcode', 'Product', 'Price Per Qty', 'Qty', 'Sales Rate'],
       // tableData: [],
-      privilages: [{ bool: true, name: "Check Promo Discount" }, { bool: false, name: "Clear Promotion" }],
+      privilages: [{ bool: true, name: "Check Promo Discount" }],
       inventoryDelete: false,
       lineItemDelete: false,
       uom: '',
@@ -103,9 +103,7 @@ class GenerateEstimationSlip extends Component {
 
   async componentDidMount() {
     const storeId = await AsyncStorage.getItem("storeId");
-    this.setState({ storeId: storeId })
-    const userId = await AsyncStorage.getItem("custom:userId")
-    this.setState({ smnumber: userId })
+    this.setState({ storeId: storeId });
   }
 
 
@@ -135,31 +133,67 @@ class GenerateEstimationSlip extends Component {
   }
 
   topbarAction1 = (item, index) => {
-    if (this.state.privilages[index].bool === true) {
-      this.state.privilages[index].bool = false;
-    }
-    else {
-      this.state.privilages[index].bool = true;
-    }
-    for (let i = 0; i < this.state.privilages.length; i++) {
-      if (index != i) {
-        this.state.privilages[i].bool = false;
-      }
-      this.setState({ privilages: this.state.privilages });
+    if (item.name === 'Check Promo Discount') {
+      this.checkPromo();
     }
   };
+
+  checkPromo() {
+    const { storeId, domainId, barList } = this.state;
+    CustomerService.getCheckPromoAmount(storeId, domainId, barList).then(res => {
+      let calculatedDisc = res.data.result.calculatedDiscountVo;
+      console.log({ calculatedDisc });
+      if (res?.data && res?.data?.result[0].calculatedDiscountVo) {
+        this.setState({ promoDisc: res?.data?.result });
+        this.state.barList.forEach(barcodeData => {
+          this.state.promoDisc.forEach(promo => {
+            if (barcodeData.barcode === promo.barcode) {
+              if (promo.calculatedDiscountVo) {
+                if (promo.calculatedDiscountVo.discountAvailable) {
+                  barcodeData.itemDiscount = parseInt(promo.calculatedDiscountVo.calculatedDiscount);
+                  barcodeData.totalMrp = barcodeData.totalMrp - barcodeData.itemDiscount;
+                }
+              } else {
+                barcodeData.itamDiscount = "No discount";
+              }
+            }
+          });
+        });
+        this.setState({ barList: this.state.barList });
+        this.calculateTotal();
+      } else {
+        alert("No Promo Available");
+      }
+    });
+  }
 
   generateEstimationSlip() {
     let lineItem = [];
     this.state.barList.forEach((element, index) => {
       const obj = {
-        "qty": parseInt(element.quantity),
-        "barcode": element.barcode,
+        "itemPrice": element.itemMrp,
+        "quantity": parseInt(element.quantity),
+        "discount": element?.discount,
+        "netValue": element.totalMrp,
+        "barCode": element.barcode,
+        "domainId": 1,
         "storeId": parseInt(this.state.storeId),
+        "section": element.section,
+        "subSection": element.subSection,
+        "division": element.division,
+        "userId": parseInt(element.salesMan),
+        "hsnCode": element.hsnCode,
+        "actualValue": element.itemMrp,
+        "taxValue": element.taxValue,
+        "cgst": element.cgst,
+        "sgst": element.sgst,
+        "discount": (isNaN(element.itamDiscount) ? 0 : (parseInt(element.itamDiscount)))
       };
       lineItem.push(obj);
     });
-    axios.post(CustomerService.saveLineItems(), lineItem).then((res) => {
+    console.log({ lineItem });
+    CustomerService.saveLineItems(lineItem, 1).then((res) => {
+      console.log({ res });
       if (res) {
         let lineItemsList = [];
         let dataResult = JSON.parse(res.data.result);
@@ -172,14 +206,15 @@ class GenerateEstimationSlip extends Component {
         this.setState({ lineItemsList: lineItemsList });
       }
       const createObj = {
-        "salesMan": parseInt(this.state.smnumber),
-        "lineItems": this.state.lineItemsList,
-        "storeId": this.state.storeId,
+        salesMan: parseInt(this.state.smnumber),
+        lineItems: this.state.lineItemsList,
+        storeId: this.state.storeId,
+        barcode: this.state.barList
       };
-      axios.post(CustomerService.createDeliverySlip(), createObj).then((res) => {
+      CustomerService.createDeliverySlip(createObj).then((res) => {
         if (res) {
           console.log(res.data);
-          this.setState({ resultModel: true, resultData: res.data.message, modalVisible: true, resultDsNumber: res.data.result });
+          this.setState({ resultModel: true, resultData: res.data, modalVisible: true, resultDsNumber: res.data });
           // alert(res.data.message);
           this.setState({
             barList: [],
@@ -203,30 +238,31 @@ class GenerateEstimationSlip extends Component {
   }
 
   getLineItems() {
-    const { barcodeId, storeId } = this.state
-    console.log({ barcodeId, storeId })
-    CustomerService.getDeliverySlip(barcodeId, storeId).then(res => {
-      console.log({ res })
+    const { barcodeId, storeId, smnumber } = this.state;
+    console.log({ barcodeId, storeId, smnumber });
+    let lineItem = [];
+    CustomerService.getDeliverySlip(barcodeId.trim(), storeId, smnumber).then(res => {
+      console.log({ res });
       if (res.data) {
         let totalAmount = 0;
         let totalQty = 0;
         let count = false;
-        RNBeep.beep()
+        RNBeep.beep();
         if (this.state.itemsList.length === 0) {
-          this.state.itemsList.push(res.data)
+          this.state.itemsList.push(res.data);
         } else {
           for (let i = 0; i < this.state.itemsList.length; i++) {
             if (this.state.itemsList[i].barcode === res.data.barcode) {
-              count = true
-              var items = [...this.state.itemsList]
+              count = true;
+              var items = [...this.state.itemsList];
               if (parseInt(items[i].quantity) + 1 <= parseInt(items[i].qty)) {
                 let addItem = parseInt(items[i].quantity) + 1;
-                items[i].quantity = addItem.toString()
-                let totalcostMrp = items[i].itemMrp * parseInt(items[i].quantity)
-                items[i].totalMrp = totalcostMrp
+                items[i].quantity = addItem.toString();
+                let totalcostMrp = items[i].itemMrp * parseInt(items[i].quantity);
+                items[i].totalMrp = totalcostMrp;
                 break;
               } else {
-                alert("Barcode reached max")
+                alert("Barcode reached max");
                 break;
               }
             }
@@ -234,23 +270,29 @@ class GenerateEstimationSlip extends Component {
         }
         this.setState({ barList: this.state.itemsList }, () => {
           this.state.barList.forEach(element => {
+            element.itemDiscount = 0;
+            if (element.taxValues) {
+              element.cgst = element.taxValues.cgstValue;
+              element.sgst = element.taxValues.sgstValue;
+              element.taxValue = element.taxValues.cgstValue + element.taxValues.sgstValue;
+            }
             if (element.quantity > 1) {
             } else {
-              element.totalMrp = element.itemMrp
-              element.quantity = parseInt(1)
+              element.totalMrp = element.itemMrp;
+              element.quantity = parseInt(1);
             }
           });
           this.calculateTotal();
         });
-        this.setState({ barcodeId: "" })
+        this.setState({ barcodeId: "" });
       } else {
-        alert(res.data.body)
+        alert(res.data.body);
       }
     }).catch((err) => {
-      console.log({ err })
-      this.setState({ loading: false })
-      alert("please enter a valid Barcode / smNumber")
-    })
+      console.log({ err });
+      this.setState({ loading: false });
+      alert("please enter a valid Barcode / smNumber");
+    });
   }
 
   calculateTotal() {
@@ -260,11 +302,8 @@ class GenerateEstimationSlip extends Component {
       totalAmount = totalAmount + barCode.totalMrp;
       totalqty = totalqty + parseInt(barCode.quantity);
     });
-
     this.setState({ mrpAmount: totalAmount, totalQuantity: totalqty }
     );
-
-
   }
 
   refresh() {
@@ -291,25 +330,25 @@ class GenerateEstimationSlip extends Component {
   updateQty = (text, index, item) => {
     const Qty = /^[0-9\b]+$/;
     const qtyarr = [...this.state.itemsList];
-    console.log(qtyarr[index].quantity)
-    let addItem = ''
-    let value = text === '' ? 1 : text
+    console.log(qtyarr[index].quantity);
+    let addItem = '';
+    let value = text === '' ? 1 : text;
     if (value !== '' && Qty.test(value) === false) {
-      addItem = 1
-      qtyarr[index].quantity = addItem.toString()
+      addItem = 1;
+      qtyarr[index].quantity = addItem.toString();
     } else {
       if (parseInt(value) < parseInt(qtyarr[index].qty)) {
         addItem = value;
-        qtyarr[index].quantity = addItem.toString()
+        qtyarr[index].quantity = addItem.toString();
       } else {
-        addItem = qtyarr[index].qty
-        qtyarr[index].quantity = addItem.toString()
+        addItem = qtyarr[index].qty;
+        qtyarr[index].quantity = addItem.toString();
       }
     }
     let totalcostMrp = item.itemMrp * parseInt(qtyarr[index].quantity);
     item.totalMrp = totalcostMrp;
     this.setState({ itemsList: qtyarr });
-    console.error("TEXT", value)
+    console.error("TEXT", value);
     let grandTotal = 0;
     let totalqty = 0;
     this.state.barList.forEach(bardata => {
@@ -317,20 +356,20 @@ class GenerateEstimationSlip extends Component {
       totalqty = totalqty + parseInt(bardata.quantity);
     });
     this.setState({ mrpAmount: grandTotal, totalQuantity: totalqty });
-    this.state.totalQuantity = (parseInt(this.state.totalQuantity) + 1)
+    this.state.totalQuantity = (parseInt(this.state.totalQuantity) + 1);
     // this.setState({ itemsList: qtyarr });
   };
 
   incrementForTable(item, index) {
     const qtyarr = [...this.state.itemsList];
-    console.log(qtyarr[index].quantity)
+    console.log(qtyarr[index].quantity);
     if (parseInt(qtyarr[index].quantity) < parseInt(qtyarr[index].qty)) {
       var additem = parseInt(qtyarr[index].quantity) + 1;
       qtyarr[index].quantity = additem.toString();
     } else {
       var additem = parseInt(qtyarr[index].qty);
       qtyarr[index].quantity = additem.toString();
-      alert(`only ${additem} items are in this barcode`)
+      alert(`only ${additem} items are in this barcode`);
     }
     let totalcostMrp = item.itemMrp * parseInt(qtyarr[index].quantity);
     item.totalMrp = totalcostMrp;
@@ -429,7 +468,7 @@ class GenerateEstimationSlip extends Component {
                     ]}
                     onValueChange={this.handleUOM}
                     disabled={true}
-                    style={pickerSelectStyles}
+                    // style={pickerSelectStyles}
                     value={this.state.uom}
                     useNativeAndroidPickerStyle={false}
 
@@ -443,8 +482,8 @@ class GenerateEstimationSlip extends Component {
                   textAlignVertical="center"
                   autoCapitalize="none"
                   value={this.state.barcodeId}
-                  // onEndEditing
                   onChangeText={this.handleBarCode}
+                  // onEndEditing
                   onEndEditing={() => this.endEditing()}
                 />
 
@@ -454,11 +493,10 @@ class GenerateEstimationSlip extends Component {
                   placeholderTextColor="#6F6F6F60"
                   textAlignVertical="center"
                   keyboardType={'default'}
+                  maxLength={4}
                   autoCapitalize="none"
                   value={this.state.smnumber}
-                  // onEndEditing
                   onChangeText={(text) => this.handleSmCode(text)}
-                // onEndEditing={() => this.endEditing()}
                 />
 
                 {this.state.uom === "Pieces" && (
@@ -529,13 +567,13 @@ class GenerateEstimationSlip extends Component {
                 ref={(ref) => { this.listRef = ref; }}
                 renderItem={({ item, index }) => (
                   <View style={{
-                    height: Device.isTablet ? 240 : 140,
+                    height: Device.isTablet ? 240 : 190,
                     backgroundColor: '#FFFFFF',
                     borderBottomWidth: 5,
                     borderBottomColor: '#FBFBFB',
                     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'
                   }}>
-                    <View style={{ flexDirection: 'row', width: deviceWidth, justifyContent: 'space-around', alignItems: 'center', height: Device.isTablet ? 220 : 120, }}>
+                    <View style={{ flexDirection: 'row', width: deviceWidth, justifyContent: 'space-around', alignItems: 'center', height: Device.isTablet ? 220 : 170, }}>
                       <View>
                         <Image source={require('../assets/images/default.jpeg')}
                           //source={{ uri: item.image }}
@@ -715,7 +753,7 @@ class GenerateEstimationSlip extends Component {
                   <View>
                     <View style={sucessHeader}>
                       <View>
-                        <Text style={sucessHeading} > DS Number </Text>
+                        <Text style={sucessHeading} > ES Number </Text>
                       </View>
                       <View>
                         <TouchableOpacity style={deleteCloseBtn} onPress={() => this.modelCancel()}>
@@ -726,7 +764,8 @@ class GenerateEstimationSlip extends Component {
                   </View>
                   <View>
                     <View style={{ alignItems: 'center', marginTop: 20 }}>
-                      <Text style={sucessMainText}>{this.state.resultData}</Text>
+                      <Text>Es Number:</Text>
+                      <Text></Text>
                       <Text selectable={true} style={sucessText}>{this.state.resultDsNumber}</Text>
                     </View>
                     <TouchableOpacity
@@ -750,47 +789,6 @@ class GenerateEstimationSlip extends Component {
 export default GenerateEstimationSlip;
 
 
-const pickerSelectStyles = StyleSheet.create({
-  placeholder: {
-    color: "#6F6F6F",
-    fontFamily: "regular",
-    fontSize: Device.isTablet ? 20 : 15,
-  },
-  inputIOS: {
-    justifyContent: 'center',
-    height: Device.isTablet ? 52 : 42,
-    borderRadius: 3,
-    borderWidth: 1,
-    fontFamily: 'regular',
-    //paddingLeft: -20,
-    fontSize: Device.isTablet ? 20 : 15,
-    borderColor: '#FBFBFB',
-    backgroundColor: '#FBFBFB',
-  },
-  inputAndroid: {
-    justifyContent: 'center',
-    height: Device.isTablet ? 52 : 42,
-    borderRadius: 3,
-    borderWidth: 1,
-    fontFamily: 'regular',
-    //paddingLeft: -20,
-    fontSize: Device.isTablet ? 20 : 15,
-    borderColor: '#FBFBFB',
-    backgroundColor: '#FBFBFB',
-    color: '#001B4A',
-
-    // marginLeft: 20,
-    // marginRight: 20,
-    // marginTop: 10,
-    // height: 40,
-    // backgroundColor: '#ffffff',
-    // borderBottomColor: '#456CAF55',
-    // color: '#001B4A',
-    // fontFamily: "bold",
-    // fontSize: 16,
-    // borderRadius: 3,
-  },
-});
 
 const styles = StyleSheet.create({
   safeArea: {

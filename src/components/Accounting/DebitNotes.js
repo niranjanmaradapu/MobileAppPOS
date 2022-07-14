@@ -274,7 +274,6 @@ export default class DebitNotes extends Component {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <Text style={{ width: deviceWidth, borderColor: '#000000', borderBottomWidth: Device.isTablet ? 2 : 1 }}></Text>
                   <TouchableOpacity
                     style={dateSelector}
                     testID="openModal"
@@ -380,7 +379,6 @@ export default class DebitNotes extends Component {
                     </View>
                   </View>
                 </View>
-                <Text style={{ width: deviceWidth, borderColor: '#000000', borderBottomWidth: Device.isTablet ? 2 : 1 }}></Text>
                 <ScrollView>
                   <FlatList
                     data={this.state.transactionHistory}

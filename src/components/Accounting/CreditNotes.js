@@ -286,7 +286,6 @@ export default class CreditNotes extends Component {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <Text style={{ width: deviceWidth, borderColor: '#000000', borderBottomWidth: Device.isTablet ? 2 : 1 }}></Text>
                   <TouchableOpacity
                     style={dateSelector}
                     testID="openModal"

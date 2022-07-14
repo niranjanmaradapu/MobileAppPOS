@@ -278,7 +278,6 @@ export default class ReBarcode extends Component {
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <Text style={styles.spaceText}></Text>
                 </View>
                 <KeyboardAwareScrollView enableOnAndroid={true} >
 

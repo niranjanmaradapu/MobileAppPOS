@@ -184,10 +184,11 @@ export const dateSelector = {
   marginRight: RW(20),
   marginTop: RH(10),
   marginBottom: RH(10),
-  borderColor: '#8F9EB717',
-  borderRadius: 3,
+  borderWidth: RW(1),
+  borderColor: color.border,
   height: RH(50),
-  backgroundColor: "#F6F6F6", borderRadius: 5,
+  backgroundColor: color.light,
+  borderRadius: 5,
   justifyContent: 'center'
 }
 
@@ -196,7 +197,7 @@ export const datePickerButton1 = {
   left: RW(20),
   top: RH(10),
   height: Device.isTablet ? RH(50) : RH(30),
-  backgroundColor: "#ED1C24",
+  backgroundColor: color.accent,
   borderRadius: 5,
 }
 
@@ -205,14 +206,14 @@ export const datePickerButton2 = {
   right: RW(20),
   top: RH(10),
   height: Device.isTablet ? RH(50) : RH(30),
-  backgroundColor: "#ED1C24",
+  backgroundColor: color.accent,
   borderRadius: 5,
 }
 
 export const datePickerBtnText = {
   // textAlign: 'center',
   marginTop: RH(5),
-  color: "#ffffff",
+  color: color.light,
   fontSize: RF(14),
   fontFamily: "regular"
 }
@@ -220,7 +221,7 @@ export const datePickerBtnText = {
 export const datePickerContainer = {
   height: RH(280),
   width: deviceWidth,
-  backgroundColor: '#ffffff'
+  backgroundColor: color.light
 }
 
 export const datePicker = {
@@ -232,7 +233,7 @@ export const datePicker = {
 export const dateText = {
   marginLeft: RW(16),
   // marginTop: Device.isTablet ? 0 : RW(10),
-  color: "#6F6F6F",
+  color: color.grey,
   fontSize: RF(15),
   fontFamily: "regular"
 }

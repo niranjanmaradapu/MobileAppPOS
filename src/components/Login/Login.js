@@ -66,9 +66,9 @@ export default class Login extends Component {
 
   handleEmailValid = () => {
     if (this.state.userName.length >= errorLength.name) {
-      this.setState({ userValid: true })
+      this.setState({ userValid: true });
     }
-  }
+  };
 
   handlePassword = (text) => {
     this.setState({ password: text });
@@ -76,9 +76,9 @@ export default class Login extends Component {
 
   handlePasswordValid = () => {
     if (this.state.password.length >= errorLength.password) {
-      this.setState({ passwordValid: true })
+      this.setState({ passwordValid: true });
     }
-  }
+  };
 
   handleStore = (value) => {
     this.setState({ store: value });
@@ -91,48 +91,48 @@ export default class Login extends Component {
 
 
   validationForm() {
-    let isFormValid = true
-    let errors = {}
+    let isFormValid = true;
+    let errors = {};
 
     if (this.state.userName.length < 1) {
-      isFormValid = false
-      errors["userName"] = urmErrorMessages.loginUserName
-      this.setState({ userValid: false })
+      isFormValid = false;
+      errors["userName"] = urmErrorMessages.loginUserName;
+      this.setState({ userValid: false });
     }
     if (this.state.password.length < 1) {
-      isFormValid = false
-      errors["password"] = urmErrorMessages.password
-      this.setState({ passwordValid: false })
+      isFormValid = false;
+      errors["password"] = urmErrorMessages.password;
+      this.setState({ passwordValid: false });
     }
 
-    this.setState({ errors: errors })
-    return isFormValid
+    this.setState({ errors: errors });
+    return isFormValid;
   }
 
   login() {
     AsyncStorage.removeItem('tokenkey');
-    const isFormValid = this.validationForm()
-    const { userName, password } = this.state
+    const isFormValid = this.validationForm();
+    const { userName, password } = this.state;
     if (isFormValid) {
       const params = {
-        email: userName,
+        email: userName.trim(),
         password: password,
       };
-      console.log(params)
+      console.log({ params });
       this.setState({ loading: true });
       LoginService.getAuth(params).then((res) => {
-        console.log("login", res)
+        console.log("login", res);
         if (res && res.data && res.status === 200) {
-          global.username = userName
+          global.username = userName;
           if (res.data.authenticationResult) {
             // Token
             const token = res.data.authenticationResult.idToken;
-            AsyncStorage.setItem("username", jwt_decode(token)["name"])
-            console.log("Token", jwt_decode(token))
-            AsyncStorage.setItem("tokenkey", JSON.stringify(token)).catch(err => { console.error("Token Error =>", err) })
+            AsyncStorage.setItem("username", jwt_decode(token)["name"]);
+            console.log("Token", jwt_decode(token));
+            AsyncStorage.setItem("tokenkey", JSON.stringify(token)).catch(err => { console.error("Token Error =>", err); });
             AsyncStorage.getItem("tokenkey").then((value) => {
               var finalToken = value.replace('"', '');
-              console.log(finalToken);
+              console.log({ finalToken });
               axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken };
             });
             AsyncStorage.setItem("rolename", jwt_decode(token)["custom:roleName"]).then(() => {
@@ -152,45 +152,45 @@ export default class Login extends Component {
               console.log('There is error saving domainDataId');
               // alert('There is error saving domainDataId');
             });
-            AsyncStorage.setItem("user", JSON.stringify(jwt_decode(token))).catch(err => { console.error("Error Getting User =>", err) })
-            AsyncStorage.setItem("roleType", jwt_decode(token)["custom:roleName"])
-            let storesAssigned = jwt_decode(token)["custom:assignedStores"]
+            AsyncStorage.setItem("user", JSON.stringify(jwt_decode(token))).catch(err => { console.error("Error Getting User =>", err); });
+            AsyncStorage.setItem("roleType", jwt_decode(token)["custom:roleName"]);
+            let storesAssigned = jwt_decode(token)["custom:assignedStores"];
 
 
             AsyncStorage.getItem("roleType").then(value => {
-              console.log("Roles", value)
+              console.log("Roles", value);
               if (value) {
                 if (value === "super_admin") {
-                  this.getAdminStores()
+                  this.getAdminStores();
                 } else if (value === "config_user") {
-                  this.props.navigation.navigate('AccountingNaviagtion')
+                  this.props.navigation.navigate('AccountingNaviagtion');
                   global.previlage1 = '';
                   global.previlage2 = '';
                   global.previlage3 = '';
                   global.previlage4 = '';
                   global.previlage6 = '';
+                  global.previlage5 = '';
                   global.previlage7 = 'URM Portal';
-                  global.previlage5 = 'Accounting Portal';
                 } else {
-                  const table = storesAssigned.split(",").map(pair => pair.split(":"))
-                  let store = []
+                  const table = storesAssigned.split(",").map(pair => pair.split(":"));
+                  let store = [];
                   table.forEach((ele, index) => {
                     if (ele[0], ele[1]) {
                       const obj = {
                         name: ele[0],
                         id: ele[1]
-                      }
-                      store.push(obj)
+                      };
+                      store.push(obj);
                     }
-                  })
+                  });
                   this.setState({ assignedStores: store }, () => {
-                    this.getStores()
-                  })
+                    this.getStores();
+                  });
                 }
               } else {
-                this.setState({ loading: false })
+                this.setState({ loading: false });
               }
-            })
+            });
           }
           else {
             if (res.data.result.challengeName === "NEW_PASSWORD_REQUIRED") {
@@ -209,56 +209,54 @@ export default class Login extends Component {
             }
           }
         } else {
-          this.setState({ loading: false, userName: "", password: "" })
-          alert(res.data.message)
+          this.setState({ loading: false, userName: "", password: "" });
+          alert(res.data.message);
         }
       }).catch(err => {
-        console.error(err)
-        this.setState({ loading: false })
-      })
+        console.error(err);
+        this.setState({ loading: false });
+      });
     }
   }
 
   getAdminStores() {
     LoginService.getUserStores().then(res => {
-      console.log("getting Stores", res)
+      console.log("getting Stores", res);
       if (res.data.length > 1) {
-        this.props.navigation.navigate('SelectStore')
+        this.props.navigation.navigate('SelectStore');
       }
       else {
         AsyncStorage.setItem("storeId", String(res.data[0].id)).catch(err => {
-          console.error({ err })
-        })
-        global.storeName = String(res.data[0].name)
+        });
+        global.storeName = String(res.data[0].name);
         AsyncStorage.setItem("storeName", String(res.data[0].name)).catch(err => {
-          console.error({ err })
-        })
-        this.props.navigation.navigate('HomeNavigation')
+        });
+        this.props.navigation.navigate('HomeNavigation');
       }
-    })
+    });
   }
 
-  getStores() {
-    const { assignedStores } = this.state
-    console.log("OOOO",assignedStores)
-    AsyncStorage.setItem("storesList", assignedStores).catch(err => {
-        console.error({ err })
-      })
+  async getStores() {
+    const { assignedStores } = this.state;
+    console.log({ assignedStores });
+    await AsyncStorage.setItem("storesList", assignedStores).catch(err => {
+      console.error({ err });
+    });
     // AsyncStorage.setItem("storesList",assignedStores)
     if (assignedStores && assignedStores.length > 1) {
 
-        // AsyncStorage.setItem("storesList",assignedStores)
-      this.props.navigation.navigate('SelectStore', { items: assignedStores })
+      // AsyncStorage.setItem("storesList",assignedStores)
+      this.props.navigation.navigate('SelectStore', { items: assignedStores });
     }
     else {
       AsyncStorage.setItem("storeId", String(assignedStores[0].storeId)).catch(err => {
-        console.error({ err })
-      })
-      global.storeName = String(res.data[0].name)
+        console.error({ err });
+      });
+      global.storeName = String(res.data[0].name);
       AsyncStorage.setItem("storeName", String(assignedStores[0].storeName)).catch(err => {
-        console.error({ err })
-      })
-      this.props.navigation.navigate('HomeNavigation')
+        console.error({ err });
+      });
+      this.props.navigation.navigate('HomeNavigation');
     }
   }
 
@@ -274,8 +272,8 @@ export default class Login extends Component {
 
 
   render() {
-    const userValid = this.state.userValid
-    const passValid = this.state.passwordValid
+    const userValid = this.state.userValid;
+    const passValid = this.state.passwordValid;
     return (
       <KeyboardAwareScrollView KeyboardAwareScrollView
         enableOnAndroid={true}>

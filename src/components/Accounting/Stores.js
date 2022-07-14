@@ -47,6 +47,7 @@ export default class Stores extends Component {
   componentDidMount() {
     this.getStoresList()
     this.getMasterStatesList()
+    this.getMasterDistrictsList()
   }
 
   deleteStore() {
@@ -83,17 +84,18 @@ export default class Stores extends Component {
   async getStoresList() {
     const clientId = await AsyncStorage.getItem("custom:clientId1");
     console.log({ clientId })
-    // this.setState({ loading: true });
+    this.setState({ loading: true });
     const { pageNumber } = this.state
-    UrmService.getAllStores(clientId, pageNumber).then((res) => {
+    const isActive = false
+    UrmService.getAllStores(clientId, pageNumber, isActive).then((res) => {
       if (res) {
         if (res.data) {
           let response = res.data
           console.log({ response })
           this.setState({ storesList: this.state.storesList.concat(response) })
         }
-
       }
+      this.setState({ loading: false });
     }).catch((err) => {
       console.error({ err })
       this.setState({ loading: false });
@@ -104,26 +106,6 @@ export default class Stores extends Component {
     });
   }
 
-  getMasterStatesList() {
-    this.setState({ loading: false });
-    var states = [];
-    axios.get(UrmService.getStates()).then((res) => {
-      if (res.data) {
-        for (var i = 0; i < res.data.length; i++) {
-          this.state.statesArray.push({ name: res.data[i].stateName, id: res.data[i].stateId, code: res.data[i].stateCode });
-          states.push({
-            value: this.state.statesArray[i].name,
-            label: this.state.statesArray[i].name
-          });
-        }
-        this.setState({
-          states: states,
-        });
-        this.setState({ statesArray: this.state.statesArray });
-      }
-
-    });
-  }
 
   handleStoreState = (value) => {
     for (let i = 0; i < this.state.statesArray.length; i++) {
@@ -138,29 +120,72 @@ export default class Stores extends Component {
   };
 
 
-  getMasterDistrictsList() {
+  getMasterStatesList() {
+    this.setState({ states: [] });
     this.setState({ loading: false });
-    var dictricts = [];
+    var states = [];
+    axios.get(UrmService.getStates()).then((res) => {
+      if (res.data["result"]) {
+
+        for (var i = 0; i < res.data["result"].length; i++) {
+
+
+          this.state.statesArray.push({ name: res.data["result"][i].stateName, id: res.data["result"][i].stateId, code: res.data["result"][i].stateCode });
+          states.push({
+            value: this.state.statesArray[i].name,
+            label: this.state.statesArray[i].name
+          });
+
+          if (res.data["result"][i].stateId === this.state.stateId) {
+            console.log('stateId is' + this.state.statesArray[i].name);
+            this.setState({ storeState: this.state.statesArray[i].name });
+            this.getMasterDistrictsList();
+            this.getGSTNumber();
+          }
+        }
+        this.setState({
+          states: states,
+        });
+        this.setState({ statesArray: this.state.statesArray });
+      }
+
+    });
+  }
+
+
+  getMasterDistrictsList() {
+
+    this.setState({ loading: false, dictricts: [], dictrictArray: [] });
     const params = {
       "stateCode": this.state.statecode
     };
+    console.log(params);
     axios.get(UrmService.getDistricts(), { params }).then((res) => {
-      if (res.data) {
-        console.log(res.data);
-        for (var i = 0; i < res.data.length; i++) {
-          this.state.dictrictArray.push({ name: res.data[i].districtName, id: res.data[i].districtId });
+      if (res.data["result"]) {
+        this.setState({ loading: false });
+        let dictricts = [];
+        // this.setState({  });
+        // this.setState({ dictrictArray: [] });
+        for (var i = 0; i < res.data["result"].length; i++) {
+          this.state.dictrictArray.push({ name: res.data["result"][i].districtName, id: res.data["result"][i].districtId });
           dictricts.push({
             value: this.state.dictrictArray[i].name,
             label: this.state.dictrictArray[i].name
           });
+          this.setState({
+            dictricts: dictricts,
+          });
+          this.setState({ dictrictArray: this.state.dictrictArray });
+          if (this.state.dictrictArray[i].id === this.state.districtId) {
+            console.log('district name  is' + this.state.dictrictArray[i].name);
+            this.setState({ storeDistrict: this.state.dictrictArray[i].name });
+          }
         }
-        this.setState({
-          dictricts: dictricts,
-        });
-        this.setState({ dictrictArray: this.state.dictrictArray });
       }
+
     });
   }
+
 
   handleDistrict = (value) => {
     for (let i = 0; i < this.state.dictrictArray.length; i++) {
@@ -183,7 +208,7 @@ export default class Stores extends Component {
 
   applyStoreFilter() {
     const searchStore = {
-      "stateId": this.state.statecode ? this.state.statecode : 0,
+      "stateId": this.state.statecode,
       "cityId": null,
       "districtId": this.state.districtId ? this.state.districtId : 0,
       "storeName": this.state.storeName ? this.state.storeName : null,
@@ -214,7 +239,7 @@ export default class Stores extends Component {
   }
 
   clearFilterAction() {
-    this.setState({ modalVisible: false })
+    this.setState({ filterActive: false })
     this.getStoresList()
   }
 
@@ -245,7 +270,6 @@ export default class Stores extends Component {
             }
           </View>}
           data={this.state.filterActive ? this.state.filterStoresData : this.state.storesList}
-          style={{ marginTop: 20, }}
           scrollEnabled={true}
           keyExtractor={(item, i) => i.toString()}
           ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceHeight / 3 }}>&#9888; Records Not Found</Text>}

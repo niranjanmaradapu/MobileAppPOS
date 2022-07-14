@@ -52,8 +52,9 @@ class UrmService {
     return BASE_URL + "/user-management/store/store"
   }
 
-  getAllStores(clientId, pageNumber) {
-    const param = '?clientId=' + clientId
+  getAllStores(clientId, pageNumber, isActive) {
+    const param = '?clientId=' + clientId + '&isActive=' + isActive
+    console.log({ param })
     const pages = '?page=' + pageNumber + '&size=10'
     return axios.get(BASE_URL + USER_MANAGEMENT_URL.getAllStores + param)
   }
@@ -95,8 +96,9 @@ class UrmService {
     return BASE_URL + "/user-management/user/getUser"
   }
 
-  getRolesBySearch() {
-    return BASE_URL + "/user-management/roles/rolesWithFilter"
+  getRolesBySearch(searchRole) {
+    console.log({searchRole})
+    return axios.post(BASE_URL + USER_MANAGEMENT_URL.getRolesBySearch, searchRole)
   }
 
   saveRole(saveObj) {
@@ -114,6 +116,11 @@ class UrmService {
 
   getGSTNumber() {
     return BASE_URL + "/user-management/store/getgstDetails"
+  }
+
+  getUserDetails(user, pageNumber = 0) {
+    const param = '?page=' + pageNumber + '&size=10'
+    return axios.post(BASE_URL + USER_MANAGEMENT_URL.getUserBySearch + param, user)
   }
 }
 export default new UrmService()

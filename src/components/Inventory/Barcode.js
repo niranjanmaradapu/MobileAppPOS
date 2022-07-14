@@ -120,6 +120,11 @@ export default class Barcode extends Component {
   }
 
   // Filter Functions
+
+  modelCancel() {
+    this.setState({ modalVisible: false, flagFilterOpen: false })
+  }
+
   datepickerClicked() {
     this.setState({ datepickerOpen: true });
   }
@@ -127,11 +132,6 @@ export default class Barcode extends Component {
   enddatepickerClicked() {
     this.setState({ datepickerendOpen: true });
   }
-
-  modelCancel() {
-    this.setState({ modalVisible: false, flagFilterOpen: false })
-  }
-
   datepickerDoneClicked() {
     if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
       this.setState({ startDate: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
@@ -302,16 +302,11 @@ export default class Barcode extends Component {
               <View style={filterMainContainer} >
                 <View>
                   <View style={filterSubContainer}>
-                    <View>
-                      <Text style={filterHeading} > {I18n.t("Filter By")} </Text>
-                    </View>
-                    <View>
-                      <TouchableOpacity style={filterCloseImage} onPress={() => this.modelCancel()}>
-                        <Image style={{ margin: RH(5) }} source={require('../assets/images/modelcancel.png')} />
-                      </TouchableOpacity>
-                    </View>
+                    <Text style={filterHeading} > {I18n.t("Filter By")} </Text>
+                    <TouchableOpacity style={filterCloseImage} onPress={() => this.modelCancel()}>
+                      <Image style={{ margin: RH(5) }} source={require('../assets/images/modelcancel.png')} />
+                    </TouchableOpacity>
                   </View>
-                  <Text style={styles.spaceText}></Text>
                 </View>
                 <KeyboardAwareScrollView enableOnAndroid={true} >
                   <TouchableOpacity
@@ -447,3 +442,36 @@ export default class Barcode extends Component {
     )
   }
 }
+const styles = StyleSheet.create({
+  spaceText: {
+    height: Device.isTablet ? 2 : 1,
+    width: deviceWidth,
+    backgroundColor: 'lightgray',
+  },
+  date: {
+    width: deviceWidth,
+    height: RH(200),
+    marginTop: RH(50),
+  },
+  calenderpng: {
+    position: 'absolute',
+    top: RH(10),
+    right: 0,
+  },
+  dateTopView: {
+    height: RW(280),
+    width: deviceWidth,
+    backgroundColor: '#ffffff'
+  },
+  dateTop2: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: Device.isTablet ? 15 : RH(10),
+    marginLeft: Device.isTablet ? 20 : RW(10),
+    marginRight: Device.isTablet ? 20 : RW(10)
+  },
+  mainContainer: {
+    flex: 1,
+  },
+
+});

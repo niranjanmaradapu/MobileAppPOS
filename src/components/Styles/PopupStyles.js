@@ -22,7 +22,9 @@ export const filterSubContainer = {
   justifyContent: 'space-between',
   alignItems: 'center',
   marginTop: RH(5),
-  height: Device.isTablet ? RH(60) : RH(50)
+  height: Device.isTablet ? RH(60) : RH(50),
+  borderBottomWidth: RH(1),
+  borderColor: color.border,
 }
 
 export const viewSubContainer = {
@@ -32,11 +34,12 @@ export const viewSubContainer = {
   alignItems: 'center',
   marginTop: RH(5),
   paddingHorizontal: RW(20),
-  height: Device.isTablet ? RH(60) : RH(50)
+  height: Device.isTablet ? RH(60) : RH(50),
+  marginBottom: RH(5),
 }
 
 export const filterHeading = {
-  marginTop: Device.isTablet ? RH(0) : RH(15),
+  marginTop: RH(0),
   fontSize: RF(17),
   marginLeft: RW(20)
 }
@@ -44,7 +47,7 @@ export const filterHeading = {
 export const filterCloseImage = {
   width: Device.isTablet ? RW(70) : RW(50),
   height: Device.isTablet ? RH(50) : RH(50),
-  marginTop: Device.isTablet ? RH(30) : RH(15),
+  marginTop: Device.isTablet ? RH(30) : RH(25),
 }
 
 export const viewContainer = {
@@ -74,7 +77,6 @@ export const sucessContainer = {
   position: 'absolute',
   bottom: 0,
 }
-
 
 export const deleteText = {
   textAlign: 'center',

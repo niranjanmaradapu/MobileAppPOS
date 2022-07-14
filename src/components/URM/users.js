@@ -1,11 +1,26 @@
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native'
-import React, { Component } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import UrmService from '../services/UrmService'
-import EmptyList from '../Errors/EmptyList'
-import { buttonContainer, buttonImageStyle, buttonStyle1, filterBtn, flatListHeaderContainer, flatListMainContainer, flatlistSubContainer, flatListTitle, highText, singleButtonStyle, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles'
-import Device from 'react-native-device-detection'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import React, { Component } from 'react';
+import { Dimensions, FlatList, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DatePicker from 'react-native-date-picker';
+import Device from 'react-native-device-detection';
+import I18n from 'react-native-i18n';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import Modal from 'react-native-modal';
+import RNPickerSelect from 'react-native-picker-select';
+import { Chevron } from 'react-native-shapes';
+import { RW, RF, RH } from '../../Responsive';
+import Loader from "../../commonUtils/loader";
+import UrmService from '../services/UrmService';
+import UrmDashboard from './UrmDashboard';
+import EmptyList from '../Errors/EmptyList';
+import { buttonContainer, buttonStyle, buttonStyle1, filterBtn, flatListMainContainer, flatlistSubContainer, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, highText, buttonImageStyle, menuButton, textContainer, textStyleLight, textStyleMedium, flatListHeaderContainer, flatListTitle, singleButtonStyle } from '../Styles/Styles';
+import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
+import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 
+
+var deviceheight = Dimensions.get("window").height;
+var deviceWidth = Dimensions.get("window").width;
 export default class Users extends Component {
   constructor(props) {
     super(props)
@@ -13,10 +28,14 @@ export default class Users extends Component {
       clientId: 0,
       pageNumber: 0,
       usersList: [],
+      filterUserList: [],
       totalPages: 0,
       filterActive: false,
       modalVisible: true,
       flagFilterOpen: false,
+      role: "",
+      branch: "",
+      userType: "",
     }
   }
 
@@ -32,22 +51,70 @@ export default class Users extends Component {
   getAllUsers() {
     const { clientId, pageNumber } = this.state
     UrmService.getAllUsers(clientId, pageNumber).then(res => {
-      let response = res.data.content
-      console.log({ response })
+      let userResponse = res.data.content
+      console.log({ userResponse })
       if (res) {
         if (res.data) {
-          this.setState({ usersList: this.state.usersList.concat(response), totalPages: res.data.totalPages })
+          this.setState({ usersList: this.state.usersList.concat(userResponse), totalPages: res.data.totalPages })
         }
       }
     })
   }
 
-  filterAction() {
-    this.setState({ flagFilerOpen: true, modalVisible: true })
+  // Filter Actions
+    applyUserFilter(){
+    const {userType, role, branch, clientId, pageNumber} = this.state
+    const searchUser = {
+      "id": 0,
+      "phoneNo": null,
+      "name": null,
+      "active": userType === "Active" ? "True" : "False",
+      "inActive": userType === "InActive" ? "True" : "False",
+      "roleName": role ? role.trim() : null,
+      "storeName": branch ? branch.trim() : null,
+      "clientId": clientId
+    }
+
+    UrmService.getUserDetails(searchUser, pageNumber).then(res => {
+      if(res){
+        let filteredUserRes = res.data.result.content
+        console.log({filteredUserRes})
+        this.setState({modalVisible: false, filterActive: true, filterUserList: filteredUserRes})
+      }
+    })
   }
 
-  handleedituser() {
+  handleUSerType = (value) => {
+    this.setState({userType: value})
+  }
 
+  handleRole = (value) => {
+    this.setState({role: value})
+  }
+
+  handleBranch = (value) => {
+    this.setState({branch: value})
+  }
+
+  filterAction() {
+    this.setState({ flagFilterOpen: true, modalVisible: true })
+  }
+
+  modelCancel() {
+    this.setState({ modalVisible: false })
+  }
+
+  clearFilterAction() {
+    this.setState({filterActive: false})
+  }
+
+  // Edit User Navigation
+    handleedituser(item, index) {
+    this.props.navigation.navigate('AddUser',
+      {
+        item: item, isEdit: true,
+        onGoBack: () => this.child.getAllUsers(),
+      });
   }
 
   render() {
@@ -72,8 +139,7 @@ export default class Users extends Component {
               </TouchableOpacity>
             }
           </View>}
-          data={this.state.usersList}
-          style={{ marginTop: 20 }}
+          data={this.state.filterActive ? this.state.filterUserList : this.state.usersList}
           ListEmptyComponent={<EmptyList message={this.state.rolesError} />}
           scrollEnabled={true}
           keyExtractor={(item, index) => index.toString()}
@@ -184,3 +250,20 @@ export default class Users extends Component {
     )
   }
 }
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
+  imagealign: {
+    marginTop: Device.isTablet ? 25 : 20,
+    marginRight: Device.isTablet ? 30 : 20,
+  },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    // backgroundColor: '#FAFAFF'
+  },
+  flatList: {
+    marginTop: 20
+  },
+});

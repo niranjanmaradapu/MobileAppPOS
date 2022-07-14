@@ -21,17 +21,6 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export function DrawerContent(props) {
 
-  useEffect(() => {
-    const username = AsyncStorage.getItem("username");
-    axios.get(ProfileService.getUser() + username).then((res) => {
-      if (res.data && res.data) {
-        global.username = res.data["result"].userName;
-      }
-    }).catch((err) => {
-      console.log({ err })
-    });
-  })
-
   return (
     <View style={{ flex: 1 }}>
       <DrawerContentScrollView {...props} >
@@ -199,7 +188,7 @@ export function DrawerContent(props) {
           label={I18n.t("Domain Switch")}
           onPress={() => { props.navigation.navigate('SelectDomain'); }}
         /> */}
-         <DrawerItem
+        <DrawerItem
           labelStyle={{ fontSize: Device.isTablet ? 21 : 16 }}
           icon={({ color, size }) => (
             <Icon

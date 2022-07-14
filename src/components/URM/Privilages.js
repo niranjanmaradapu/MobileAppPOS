@@ -47,14 +47,15 @@ export default class Privilages extends Component {
           let privilegesRes = res.data.result.mobilePrivileges
           console.log({ privilegesRes })
           let len = privilegesRes.length;
+          console.log({ len })
           if (len > 0) {
             this.setState({ loading: false })
             for (let i = 0; i < len; i++) {
               let privilege = privilegesRes[i]
               let previlagename = privilegesRes[i].name
               console.log({ privilege })
-              if (privilege.subPrivileges !== null) {
-                let subPrivilegeRes = privilege.subPrivileges
+              if (privilege.subPrivilege !== null) {
+                let subPrivilegeRes = privilege.subPrivilege
                 let subLen = subPrivilegeRes.length
                 console.log({ subPrivilegeRes })
                 var subprivilagesArray = [];

@@ -112,7 +112,7 @@ export default class GenerateReturnSlip extends Component {
   itemSelected(e, index, item) {
     if (item.isSelected === true) {
       item.isSelected = false
-      let index = this.state.netValueList.findIndex(ele => ele.barcode === item.barcode)
+      let index = this.state.netValueList.findIndex(ele => ele.barCode === item.barCode)
       this.state.netValueList.splice(index, 1)
     }
     else {
@@ -134,7 +134,6 @@ export default class GenerateReturnSlip extends Component {
       });
       this.setState({ returnSlipTotal: returnSlipTotal });
     });
-
   }
 
   removeDuplicates(array, key) {

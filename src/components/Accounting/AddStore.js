@@ -65,6 +65,8 @@ export default class AddStore extends Component {
     console.log(userId)
     this.setState({ clientId: clientId, userId: userId });
     this.setState({ isEdit: this.props.route.params.isEdit });
+    const storeItem = this.props.route.params.item
+    console.log({ storeItem })
     if (this.state.isEdit === true) {
       this.setState({
         stateId: this.props.route.params.item.stateId,
@@ -77,6 +79,7 @@ export default class AddStore extends Component {
         domainId: this.props.route.params.item.id.domaiName,
         storeName: this.props.route.params.item.name,
         storeId: this.props.route.params.item.id,
+        gstNumber: this.props.route.params.item.gstNumber,
         storeStatus: this.props.route.params.item.isActive,
       });
       console.log(this.props.route.params.item);
@@ -143,6 +146,26 @@ export default class AddStore extends Component {
 
 
 
+  handleStoreState = (value) => {
+    if (value === "") {
+      this.setState({ stateId: "", storeState: "" })
+    } else {
+      for (let i = 0; i < this.state.statesArray.length; i++) {
+        if (this.state.statesArray[i].name === value) {
+          this.setState({ stateId: this.state.statesArray[i].id, statecode: this.state.statesArray[i].code });
+        }
+      }
+      this.setState({ storeState: value }, () => {
+        this.getGSTNumber();
+        this.getMasterDistrictsList();
+      });
+      if (this.state.storeState !== "" && this.state.storeState !== undefined) {
+        this.setState({ stateValid: true })
+      }
+    }
+  };
+
+
   getMasterStatesList() {
     this.setState({ states: [] });
     this.setState({ loading: false });
@@ -175,24 +198,6 @@ export default class AddStore extends Component {
     });
   }
 
-  handleStoreState = (value) => {
-    if (value === "") {
-      this.setState({ stateId: "", storeState: "" })
-    } else {
-      for (let i = 0; i < this.state.statesArray.length; i++) {
-        if (this.state.statesArray[i].name === value) {
-          this.setState({ stateId: this.state.statesArray[i].id, statecode: this.state.statesArray[i].code });
-        }
-      }
-      this.setState({ storeState: value }, () => {
-        this.getGSTNumber();
-        this.getMasterDistrictsList();
-      });
-      if (this.state.storeState !== "" && this.state.storeState !== undefined) {
-        this.setState({ stateValid: true })
-      }
-    }
-  };
 
   getMasterDistrictsList() {
 

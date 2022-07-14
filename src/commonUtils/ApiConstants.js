@@ -11,28 +11,33 @@ export const ACCOUNTING_PORTAL = {
   saveCredit: "/hsn-details/accounting/save",
   getAllLedgerLogs: "/hsn-details/accounting/ledger-logs",
   saveDebit: "/hsn-details/accounting/sale",
-}
+};
 
 export const NEW_SALE_URL = {
   getDeliverySlip: "/inventory/inventory-management/barcode-details",
   getMobileData: "/user-management/user/customer/mobileNo",
   createDeliverySlip: "/new-sale/newsale/createdeliveryslip",
-}
+  saveDelivery: "/new-sale/newsale/createdeliveryslip",
+  getLineItems: "/new-sale/newsale/savelineitems",
+  getPromoDiscount: "/connection-pool/promo/checkPromtionTextile",
+  getDslipData: "/new-sale/newsale/getdeliveryslip",
+  getDsAsbarcode: "/inventory/inventory-management/scan-barcode",
+};
 
 export const INVENTORY_PORTAL = {
   getAllBarcodes: "/inventory/inventoryTextile/getAllBarcodeTextiles",
   getAllProductBundleList: "/inventory/productBundle/all",
-}
+};
 
 export const BILLING_PORTAL = {
   searchGiftVoucher: "/new-sale/newsale//gvSearching",
-}
+};
 
 export const LOGIN_URL = {
   getToken: '/user-management/auth/temporary-login',
   registerUser: "/user-management/client/create-client",
   changePassword: "/user-management/auth/auth-challenge",
-}
+};
 
 export const USER_MANAGEMENT_URL = {
   getAllStores: "/user-management/store/client/stores",
@@ -42,4 +47,10 @@ export const USER_MANAGEMENT_URL = {
   saveRole: "/user-management/roles/create-role",
   getAllPrivileges: "/user-management/roles/getAllPrivilages",
   editRole: "/user-management/roles/updateRole",
-}
+  getUserBySearch: "/user-management/user/getUser",
+  getRolesBySearch: "/user-management/roles/rolesWithFilter",
+};
+
+export const CREATE_DELEVIRY_SLIP_URL = {
+  addCustomer: "/user-management/auth/create-user",
+};

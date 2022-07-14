@@ -113,7 +113,7 @@ class Reports extends Component {
         } else {
           this.setState({ filterButton: true, flagDashboard: false })
         }
-        if (this.state.privilages[0].name === "List Of Estimation Slip") {
+        if (this.state.privilages[0].name === "List of Estimation Slips") {
           this.setState({ flagEstimationSlip: true, filterActive: false, estimationSlip: [] })
         } else {
           this.setState({ flagEstimationSlip: false })
@@ -138,6 +138,11 @@ class Reports extends Component {
         } else {
           this.setState({ flagListBarcodes: false })
         }
+        if (this.state.privilages[0].name === "List of Promotions") {
+          this.setState({ listPromotions: [], flagListPromotions: true, filterActive: false })
+        } else {
+          this.setState({ flagListPromotions: false })
+        }
       }
     });
   }
@@ -148,7 +153,7 @@ class Reports extends Component {
     } else {
       this.setState({ filterButton: true, flagDashboard: false });
     }
-    if (item.name === "List Of Estimation Slip") {
+    if (item.name === "List of Estimation Slips") {
       this.setState({ estimationSlip: [], flagEstimationSlip: true, filterActive: false });
     } else {
       this.setState({ flagEstimationSlip: false });

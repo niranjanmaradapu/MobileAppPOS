@@ -19,10 +19,10 @@ export const headerTitleContainer = {
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
-  paddingLeft: RW(10),
-  paddingRight: RW(10),
-  height: Device.isTablet ? RH(60) : RH(40),
-  backgroundColor: color.white
+  paddingHorizontal: RW(10),
+  height: Device.isTablet ? RH(60) : RH(50),
+  backgroundColor: color.white,
+  marginBottom: RH(5)
 }
 
 export const headerTitleSubContainer = {
@@ -46,8 +46,8 @@ export const menuButton = {
 }
 
 export const backButton = {
-  width: Device.isTablet ? RW(50) : RW(40),
-  height: Device.isTablet ? RH(40) : RH(30),
+  width: Device.isTablet ? RW(40) : RW(30),
+  height: Device.isTablet ? RH(40) : RH(20),
   marginRight: RW(20),
   marginTop: -RH(10)
 }
@@ -58,7 +58,7 @@ export const backButtonImage = {
 
 export const headerNavigationBtn = {
   backgroundColor: color.accent,
-  borderRadius: 10,
+  borderRadius: 5,
   minWidth: Device.isTablet ? RW(160) : RW(110),
   height: Device.isTablet ? RH(40) : RH(30),
   paddingHorizontal: RW(10),
@@ -90,10 +90,10 @@ export const headerTitle = {
 
 export const pageNavigationBtn = {
   height: Device.isTablet ? RH(40) : RH(30),
-  minWidth: Device.isTablet ? RW(200) : RW(200),
+  minWidth: RW(100),
   borderWidth: Device.isTablet ? 2 : 1,
   borderRadius: 5,
-  paddingHorizontal: RW(10),
+  paddingHorizontal: RW(20),
   marginLeft: RW(10),
 }
 
@@ -144,7 +144,9 @@ export const flatListHeaderContainer = {
   justifyContent: 'space-between',
   alignItems: 'center',
   paddingLeft: RW(20),
-  paddingRight: RW(20)
+  paddingRight: RW(20),
+  paddingVertical: RH(5),
+  height: RH(30)
 }
 
 export const flatListTitle = {
@@ -164,6 +166,8 @@ export const flatListMainContainer = {
   alignItems: 'center',
   marginBottom: Device.isTablet ? RH(10) : RH(5),
   borderRadius: Device.isTablet ? 10 : 5,
+  width: deviceWidth - RW(10),
+  marginHorizontal: RW(5)
 }
 
 export const flatlistSubContainer = {
@@ -197,16 +201,16 @@ export const textContainer = {
   justifyContent: 'space-between',
   alignItems: 'center',
   width: '100%',
-  paddingTop: 10,
-  paddingRight: 10,
-  paddingLeft: 10,
+  paddingTop: RH(10),
+  paddingHorizontal: RW(5),
 }
 
 export const buttonContainer = {
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
-  marginBottom: 10
+  alignContent: 'center',
+  // marginBottom: 10
 }
 
 export const buttonStyle = {

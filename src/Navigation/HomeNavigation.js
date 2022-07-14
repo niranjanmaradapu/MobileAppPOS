@@ -19,7 +19,6 @@ export default class HomeNavigation extends React.Component {
                 <Stack.Screen name="SideNavigation" options={{ headerShown: false }} component={SideNavigation} />
                 <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
                 <Stack.Screen name="LoginAfterLanguageSelect" options={{ headerShown: false }} component={LoginAfterLanguageSelect} />
-                <Stack.Screen name="SelectDomain" options={{ headerShown: false }} component={SelectDomain} />
                 <Stack.Screen name="SelectStore" options={{ headerShown: false }} component={SelectStore} />
                 <Stack.Screen name="ForgotPassword" options={{ headerShown: false }} component={ForgotPassword} />
                 <Stack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />

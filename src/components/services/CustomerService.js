@@ -3,26 +3,31 @@ import { BILLING_PORTAL, NEW_SALE_URL } from "../../commonUtils/ApiConstants";
 import { BASE_URL } from "../../commonUtils/Base";
 
 class CustomerService {
-  createDeliverySlip() {
-    return BASE_URL + "/new-sale/newsale/createdeliveryslip";
+  createDeliverySlip(createObj) {
+    return axios.post(BASE_URL + NEW_SALE_URL.saveDelivery, createObj);
   }
 
-  saveLineItems(list, type) {
-    const param = '?enumName=' + type
-    return axios.post(BASE_URL + NEW_SALE_URL.createDeliverySlip + param, list)
+  saveLineItems(lineItem, domainId) {
+    const param = '/' + domainId;
+    return axios.post(BASE_URL + NEW_SALE_URL.getLineItems + param, lineItem);
   }
 
-  getDeliverySlip(barcodeId, storeId) {
-    const param = '?barcode=' + barcodeId + '&storeId=' + storeId
-    return axios.get(BASE_URL + NEW_SALE_URL.getDeliverySlip + param)
+  getCheckPromoAmount(storeId, domainId, reqObj) {
+    const param = '?storeId=' + storeId + '&domainId=' + domainId;
+    return axios.post(BASE_URL + NEW_SALE_URL.getPromoDiscount + param, reqObj);
+  }
+
+  getDeliverySlip(barcodeId, storeId, smnumber) {
+    const param = '?barcode=' + barcodeId + '&storeId=' + storeId;
+    return axios.get(BASE_URL + NEW_SALE_URL.getDeliverySlip + param);
   }
 
   getAllDayClosure() {
-    return BASE_URL + "/new-sale/newsale/getPendingDeliverySlips"
+    return BASE_URL + "/new-sale/newsale/getPendingDeliverySlips";
   }
 
   dayCloseActivity() {
-    return BASE_URL + "/new-sale/newsale/closePendingDeliverySlips"
+    return BASE_URL + "/new-sale/newsale/closePendingDeliverySlips";
   }
 
   getHsnDetails() {
@@ -33,8 +38,16 @@ class CustomerService {
     return BASE_URL + "/new-sale/newsale/sale";
   }
 
-  getDsSlip() {
-    return BASE_URL + "/new-sale/newsale/getdeliveryslip";
+  getDsSlip(esnumber, flag, storeId) {
+    let params = esnumber + flag + storeId;
+    console.log({ params });
+    if (flag) {
+      const param = '?dsNumber=' + esnumber;
+      return axios.get(BASE_URL + NEW_SALE_URL.getDslipData + param);
+    } else {
+      const param = '?barcode=' + obj + '&storeId=' + storeId;
+      return axios.get(BASE_URL + NEW_SALE_URL.getDsAsbarcode + param);
+    }
   }
 
   getMobileData() {
@@ -86,7 +99,7 @@ class CustomerService {
   }
 
   searchGiftVoucher(obj) {
-    return axios.post(BASE_URL + BILLING_PORTAL.searchGiftVoucher, obj)
+    return axios.post(BASE_URL + BILLING_PORTAL.searchGiftVoucher, obj);
   }
 
 

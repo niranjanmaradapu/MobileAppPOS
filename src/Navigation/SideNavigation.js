@@ -69,24 +69,20 @@ export default class SideNavigation extends React.Component {
       console.log(this.state.storeId);
       console.log("cssafsfs " + this.state.storeId);
     }).catch(() => {
-      ////this.setState({ loading: false });
       console.log('There is error getting storeId');
-      // alert('There is error getting storeId');
     });
 
-    AsyncStorage.getItem("rolename").then((value) => {
+    await AsyncStorage.getItem("rolename").then((value) => {
       global.userrole = value;
     }).catch(() => {
-      ////this.setState({ loading: false });
       console.log('There is error getting userrole');
-      // alert('There is error getting userrole');
     });
 
-    AsyncStorage.getItem("username").then(value => {
+    await AsyncStorage.getItem("username").then(value => {
       global.username = value
     })
 
-    AsyncStorage.getItem("storeName").then(value => {
+    await AsyncStorage.getItem("storeName").then(value => {
       global.storeName = value
     })
 
@@ -98,14 +94,19 @@ export default class SideNavigation extends React.Component {
     global.previlage6 = '';
     global.previlage7 = '';
     global.previlage8 = '';
+    this.initialRouteName()
+    this.getPrivileges()
+    console.log("")
+  }
 
-    AsyncStorage.getItem("roleType").then((value) => {
+  async getPrivileges() {
+    await AsyncStorage.getItem("roleType").then((value) => {
       if (value === "config_user") {
         global.previlage1 = '';
         global.previlage2 = '';
         global.previlage3 = '';
         global.previlage4 = '';
-        global.previlage5 = 'Accounting Portal';
+        global.previlage5 = '';
         global.previlage6 = '';
         global.previlage7 = 'URM Portal';
       }
@@ -161,13 +162,8 @@ export default class SideNavigation extends React.Component {
       }
     })
 
-
-
-    this.initialRouteName()
-    console.log("")
-
-
   }
+
   render() {
     // alert(this.state.route)
     return this.state.loading ? (
@@ -177,7 +173,7 @@ export default class SideNavigation extends React.Component {
 
     ) : (
       <Drawer.Navigator
-        initialRouteName={global.previlage1 === 'Dashboard' ? "Home" : global.previlage2 === 'Billing Portal' ? "CustomerNavigation" : global.previlage3 === 'Inventory Portal' ? "InventoryNavigation " : global.previlage4 === 'Promotions & Loyalty' ? "PromoNavigation" : global.previlage5 === 'Accounting Portal' ? "AccountingNaviagtion" : global.previlage6 === 'Reports' ? "ReportsNavigation" : global.previlage7 === 'URM Portal' ? "UrmNavigation" : "Home"}
+        initialRouteName={global.previlage1 === 'Dashboard' ? "Home" : global.previlage2 === 'Billing Portal' ? "CustomerNavigation" : global.previlage3 === 'Inventory Portal' ? "InventoryNavigation " : global.previlage4 === 'Promotions & Loyalty' ? "PromoNavigation" : global.previlage5 === 'Accounting Portal' ? "AccountingNaviagtion" : global.previlage6 === 'Reports' ? "ReportsNavigation" : global.previlage7 === 'URM Portal' ? "UrmNavigation" : this.getPrivileges()}
         screenOptions={{
           drawerStyle: {
             width: Device.isTablet ? 400 : 300,

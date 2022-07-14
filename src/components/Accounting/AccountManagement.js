@@ -53,44 +53,45 @@ export default class AccountManagement extends Component {
 
   async componentDidMount() {
     AsyncStorage.getItem("rolename").then(value => {
-      console.log({ value })
+      console.log({ value });
       if (value === "super_admin") { }
       else {
         axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
-          console.log(res.data)
+          console.log(res.data);
           if (res) {
             if (res.data) {
-              let len = res.data.parentPrivileges.length
+              let len = res.data.parentPrivileges.length;
               for (let i = 0; i < len; i++) {
-                let privilege = res.data.parentPrivileges[i]
+                let privilege = res.data.parentPrivileges[i];
                 if (privilege.name === "Accounting Portal") {
-                  let privilegeId = privilege.id
-                  let sublen = res.data.subPrivileges.length
-                  let subPrivileges = res.data.subPrivileges
+                  let privilegeId = privilege.id;
+                  let sublen = res.data.subPrivileges.length;
+                  let subPrivileges = res.data.subPrivileges;
                   for (let i = 0; i < sublen; i++) {
                     if (privilegeId === subPrivileges[i].parentPrivilegeId) {
-                      let routes = subPrivileges[i].name
-                      this.state.headerNames.push({ name: routes })
-                      console.log("Header Names", this.state.headerNames)
+                      let routes = subPrivileges[i].name;
+                      console.log({ routes });
+                      this.state.headerNames.push({ name: routes });
+                      console.log("Header Names", this.state.headerNames);
                     }
                   }
                   this.setState({ headerNames: this.state.headerNames }, () => {
                     for (let j = 0; j < this.state.headerNames.length; j++) {
                       if (j === 0) {
-                        this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name })
+                        this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
                       } else {
                         this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
                       }
                     }
-                  })
-                  this.initialNavigation()
+                  });
+                  this.initialNavigation();
                 }
               }
             }
           }
-        })
+        });
       }
-    })
+    });
   }
 
   // Intial Routing
@@ -98,22 +99,22 @@ export default class AccountManagement extends Component {
     if (this.state.privilages.length > 0) {
       this.setState({ privilages: this.state.privilages }, () => {
         if (this.state.privilages[0].name === "Dashboard") {
-          this.setState({ flagDashboard: true })
+          this.setState({ flagDashboard: true });
         } else if (this.state.privilages[0].name === "Stores") {
-          this.setState({ flagStore: true })
+          this.setState({ flagStore: true });
         } else if (this.state.privilages[0].name === "Doamin") {
-          this.setState({ flagDomain: true })
+          this.setState({ flagDomain: true });
         } else if (this.state.privilages[0].name === "Credit Notes") {
-          this.setState({ flagCreditNotes: true })
+          this.setState({ flagCreditNotes: true });
         } else if (this.state.privilages[0].name === "Debit Notes") {
-          this.setState({ flagDebitNotes: false })
+          this.setState({ flagDebitNotes: false });
         } else if (this.state.privilages[0].name === "Create Tax Master") {
-          this.setState({ flagCreditNotes: true })
+          this.setState({ flagCreditNotes: true });
         } else if (this.state.privilages[0].name === "Create HSN Code") {
-          this.setState({ flagHSNCode: true })
+          this.setState({ flagHSNCode: true });
         }
         else {
-          this.setState({ flagStore: false, flagDashboard: false, flagDomain: false, flagCreditNotes: false, flagDebitNotes: false, flagTaxMaster: false, flagHSNCode: false })
+          this.setState({ flagStore: false, flagDashboard: false, flagDomain: false, flagCreditNotes: false, flagDebitNotes: false, flagTaxMaster: false, flagHSNCode: false });
         }
       });
     }
@@ -159,7 +160,7 @@ export default class AccountManagement extends Component {
       }
       this.setState({ privilages: this.state.privilages });
     }
-    this.setState({ filterActive: false })
+    this.setState({ filterActive: false });
   };
 
   handlemenuButtonClick() {
@@ -217,24 +218,24 @@ export default class AccountManagement extends Component {
   };
 
   filterCredits = () => {
-    this.setState({ filterActive: true })
-    console.log("filters")
-  }
+    this.setState({ filterActive: true });
+    console.log("filters");
+  };
 
   filterDebits = () => {
-    this.setState({ filterActive: true })
-  }
+    this.setState({ filterActive: true });
+  };
 
   clearFilterAction() {
     if (this.state.flagStore === true) {
       this.setState({ filterActive: false });
     }
     if (this.state.flagCreditNotes === true) {
-      this.setState({ filterActive: false })
+      this.setState({ filterActive: false });
 
     }
     if (this.state.flagDebitNotes === true) {
-      this.setState({ filterActive: false })
+      this.setState({ filterActive: false });
     }
   }
 
@@ -315,7 +316,7 @@ export default class AccountManagement extends Component {
                   modelCancelCallback={this.modelClose}
                   filterActive={this.state.filterActive}
                   childParams={this.filterCredits}
-                  ref={instance => { this.child = instance }}
+                  ref={instance => { this.child = instance; }}
                 />
               )}
               {this.state.flagDebitNotes && (
@@ -326,21 +327,21 @@ export default class AccountManagement extends Component {
                   childParams={this.filterDebits}
                   filterActive={this.state.filterActive}
                   modelCancelCallback={this.modelClose}
-                  ref={instance => { this.child = instance }}
+                  ref={instance => { this.child = instance; }}
                 />
               )}
 
               {this.state.flagTaxMaster && (
                 <CreateTaxMaster
                   navigation={this.props.navigation}
-                  ref={instance => { this.child = instance }}
+                  ref={instance => { this.child = instance; }}
                 />
               )}
 
               {this.state.flagHSNCode && (
                 <CreateHSNCode
                   navigation={this.props.navigation}
-                  ref={instance => { this.child = instance }}
+                  ref={instance => { this.child = instance; }}
                 />
               )}
 
