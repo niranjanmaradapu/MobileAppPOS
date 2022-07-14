@@ -1,5 +1,5 @@
 import { Dimensions, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, ClipboardStatic } from 'react-native';
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import DatePicker from 'react-native-date-picker';
@@ -14,6 +14,7 @@ import I18n from 'react-native-i18n';
 import { ActivityIndicator } from 'react-native-paper';
 import { RH, RF, RW } from '../../Responsive';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import headerStyles from '../../assets/styles/style.scss';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -21,7 +22,7 @@ var deviceheight = Dimensions.get("window").height;
 export default class Barcode extends Component {
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       storeId: 0,
       storeName: "",
@@ -47,28 +48,29 @@ export default class Barcode extends Component {
       totalPages: 0,
       filterActive: false,
       flagFilterOpen: false
-    }
+    };
   }
 
   async componentDidMount() {
     const storeId = await AsyncStorage.getItem("storeId");
-    this.setState({ storeId: storeId })
-    this.getAllBarcodes()
+    this.setState({ storeId: storeId });
+    this.getAllBarcodes();
+    console.log({ headerStyles });
   }
 
   // Filter Action
   filterAction() {
-    this.setState({ flagFilterOpen: true, modalVisible: true })
+    this.setState({ flagFilterOpen: true, modalVisible: true });
   }
 
   clearFilterAction() {
-    this.setState({ flagFilterOpen: false, filterActive: false })
-    this.getAllBarcodes()
+    this.setState({ flagFilterOpen: false, filterActive: false });
+    this.getAllBarcodes();
   }
 
   // Getting Barcodes Functions
   getAllBarcodes() {
-    this.setState({ loading: true, loadMoreActive: false })
+    this.setState({ loading: true, loadMoreActive: false });
     const params = {
       "fromDate": "",
       "toDate": "",
@@ -78,13 +80,13 @@ export default class Barcode extends Component {
     console.log("getBarcodes", params);
     axios.post(InventoryService.getTextileBarcodes() + '?page=' + parseInt(this.state.pageNo) + '&size=10', params).then((res) => {
       if (res.data) {
-        let response = res.data.content
-        console.log({ response })
+        let response = res.data.content;
+        console.log({ response });
         this.setState({ barcodesList: this.state.barcodesList.concat(response), error: "", totalPages: res.data.totalPages, loading: false, });
-        console.warn("BarList", this.state.barcodesList)
+        console.warn("BarList", this.state.barcodesList);
         if (response) {
         }
-        this.continuePagination()
+        this.continuePagination();
       }
     }).catch((err) => {
       this.setState({ loading: false, error: 'Records not found' });
@@ -109,20 +111,20 @@ export default class Barcode extends Component {
   loadMoreList = () => {
     if (this.state.filterActive) {
       this.setState({ filterPageNo: this.state.filterPageNo + 1 }, () => {
-        this.applyBarcodeFilter()
-      })
+        this.applyBarcodeFilter();
+      });
     }
     else {
       this.setState({ pageNo: this.state.pageNo + 1 }, () => {
-        this.getAllBarcodes()
-      })
+        this.getAllBarcodes();
+      });
     }
-  }
+  };
 
   // Filter Functions
 
   modelCancel() {
-    this.setState({ modalVisible: false, flagFilterOpen: false })
+    this.setState({ modalVisible: false, flagFilterOpen: false });
   }
 
   datepickerClicked() {
@@ -174,8 +176,8 @@ export default class Barcode extends Component {
   };
 
   applyBarcodeFilter() {
-    console.log(this.state.filterActive, this.state.filterPageNo)
-    this.setState({ loading: true, loadMoreActive: false })
+    console.log(this.state.filterActive, this.state.filterPageNo);
+    this.setState({ loading: true, loadMoreActive: false });
     let list = {};
     list = {
       fromDate: this.state.startDate,
@@ -190,14 +192,14 @@ export default class Barcode extends Component {
         if (res.data) {
           this.setState({ loading: false, filterBarcodesList: this.state.filterBarcodesList.concat(res.data.content), error: "", filterActive: true, loading: false, totalPages: res.data.result.totalPages });
           console.log("filtered Data", res.data.content);
-          this.setState({ fromDate: "", toDate: "", barCodeId: "" })
-          this.continuePagination()
+          this.setState({ fromDate: "", toDate: "", barCodeId: "" });
+          this.continuePagination();
         }
       }
-      this.setState({ loading: false, filterActive: true })
+      this.setState({ loading: false, filterActive: true });
     }).catch((err) => {
       this.setState({ loading: false, filterActive: false });
-      console.log(err)
+      console.log(err);
     });
     this.setState({ modalVisible: false });
   }
@@ -205,21 +207,21 @@ export default class Barcode extends Component {
   continuePagination() {
     if (this.state.filterActive) {
       if (this.state.totalPages > 2) {
-        this.setState({ loadMoreActive: true })
+        this.setState({ loadMoreActive: true });
       } else if (parseInt(this.state.totalPages) === parseInt(this.state.filterPageNo) + 1) {
-        this.setState({ loadMoreActive: false })
+        this.setState({ loadMoreActive: false });
       }
       else {
-        this.setState({ loadMoreActive: false })
+        this.setState({ loadMoreActive: false });
       }
     } else {
       if (this.state.totalPages > 2) {
-        this.setState({ loadMoreActive: true })
+        this.setState({ loadMoreActive: true });
       } else if (parseInt(this.state.totalPages) === parseInt(this.state.pageNo) + 1) {
-        this.setState({ loadMoreActive: false })
+        this.setState({ loadMoreActive: false });
       }
       else {
-        this.setState({ loadMoreActive: false })
+        this.setState({ loadMoreActive: false });
       }
     }
   }
@@ -234,7 +236,7 @@ export default class Barcode extends Component {
         }
         <View>
           <FlatList
-            ListHeaderComponent={<View style={flatListHeaderContainer}>
+            ListHeaderComponent={<View style={headerStyles.boxContainer}>
               <Text style={flatListTitle}>Barcode List</Text>
               <View>
                 {!this.state.filterActive &&
@@ -439,7 +441,7 @@ export default class Barcode extends Component {
           </View>
         )}
       </View>
-    )
+    );
   }
 }
 const styles = StyleSheet.create({
