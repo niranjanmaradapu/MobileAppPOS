@@ -110,7 +110,7 @@ class GenerateInvoiceSlip extends Component {
       },
       dlslips: [],
       finalList: [],
-      barCodeList: [],
+      barCodeList: [1],
       mobilenumber: "",
       customerName: "",
       gender: "",

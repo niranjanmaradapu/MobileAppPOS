@@ -23,8 +23,8 @@ export default class GenerateReturnSlip extends Component {
       customerTagging: false,
       modelVisible: true,
       promotions: false,
-      returnInvoice: [],
-      returnedItems: [0],
+      returnInvoice: [1],
+      returnedItems: [1],
       reason: "",
       invoiceNo: "",
       reasonDesc: "",
@@ -35,7 +35,7 @@ export default class GenerateReturnSlip extends Component {
       itemClicked: false,
       qty: 0,
       values: 0,
-      netValueList: [],
+      netValueList: [1],
       returnSlipTotal: 0,
       storeId: 0,
       customerNumber: "",
@@ -47,9 +47,9 @@ export default class GenerateReturnSlip extends Component {
   }
 
   async componentDidMount() {
-    const userId = await AsyncStorage.getItem("custom:userId")
-    this.setState({ userId: userId })
-    console.log(userId, "userId")
+    const userId = await AsyncStorage.getItem("custom:userId");
+    this.setState({ userId: userId });
+    console.log(userId, "userId");
     AsyncStorage.getItem("storeId").then((value) => {
       storeStringId = value;
       this.setState({ storeId: parseInt(storeStringId) });
@@ -78,8 +78,8 @@ export default class GenerateReturnSlip extends Component {
   }
 
   searchInvoice = () => {
-    let returnInvoiceArray = []
-    let resultData = []
+    let returnInvoiceArray = [];
+    let resultData = [];
     const obj = {
       invoiceNo: this.state.invoiceNumber.trim(),
       mobileNo: this.state.mobileNumber,
@@ -88,9 +88,9 @@ export default class GenerateReturnSlip extends Component {
     console.log(this.state.invoiceNumber);
     axios.post(CustomerService.getReturnSlip(), obj).then(res => {
       console.log(res.data.result);
-      let items = res.data.result
+      let items = res.data.result;
       for (let i = 0; i < items.length; i++) {
-        returnInvoiceArray.push({ barCode: items[i].barcode, value: items[i].netValue, quantity: items[i].quantity, isSelected: false })
+        returnInvoiceArray.push({ barCode: items[i].barcode, value: items[i].netValue, quantity: items[i].quantity, isSelected: false });
       }
       this.setState({ returnInvoice: returnInvoiceArray }, () => {
         let costprice = 0;
@@ -99,7 +99,7 @@ export default class GenerateReturnSlip extends Component {
           costprice = costprice + element.netValue;
           quantity = quantity + element.quantity;
         });
-        console.log("Return Items", this.state.returnInvoice)
+        console.log("Return Items", this.state.returnInvoice);
         this.setState({ netValue: costprice, quantity: quantity, isChecked: false, itemsReturn: true });
       });
     }).catch((err) => {
@@ -111,12 +111,12 @@ export default class GenerateReturnSlip extends Component {
 
   itemSelected(e, index, item) {
     if (item.isSelected === true) {
-      item.isSelected = false
-      let index = this.state.netValueList.findIndex(ele => ele.barCode === item.barCode)
-      this.state.netValueList.splice(index, 1)
+      item.isSelected = false;
+      let index = this.state.netValueList.findIndex(ele => ele.barCode === item.barCode);
+      this.state.netValueList.splice(index, 1);
     }
     else {
-      item.isSelected = true
+      item.isSelected = true;
       const obj = {
         amount: item.value,
         barCode: item.barCode,
@@ -128,7 +128,7 @@ export default class GenerateReturnSlip extends Component {
     const netValueList = this.removeDuplicates(this.state.netValueList, "barCode");
     this.setState({ netValueList: netValueList }, () => {
       let returnSlipTotal = 0;
-      console.log("netvalueList", this.state.netValueList)
+      console.log("netvalueList", this.state.netValueList);
       this.state.netValueList.forEach(ele => {
         returnSlipTotal = returnSlipTotal + ele.amount;
       });
@@ -154,8 +154,8 @@ export default class GenerateReturnSlip extends Component {
       createdBy: 0,
       comments: null
     };
-    console.log(saveObj, "params")
-    this.setState({ loading: true })
+    console.log(saveObj, "params");
+    this.setState({ loading: true });
     axios.post(CustomerService.saveRetunSlip(), saveObj).then(res => {
       if (res) {
         // alert(res.data.result);
@@ -175,12 +175,12 @@ export default class GenerateReturnSlip extends Component {
           customerNumber: "",
         });
       }
-      this.setState({ returnModel: false, modelVisible: false, loading: false })
+      this.setState({ returnModel: false, modelVisible: false, loading: false });
     }).catch((err) => {
       this.setState({ loading: false });
       console.log(err);
       alert("Unable to Save the Return Slip");
-      this.setState({ returnModel: false, modelVisible: false, loading: false })
+      this.setState({ returnModel: false, modelVisible: false, loading: false });
     });
 
   }
@@ -359,7 +359,7 @@ export default class GenerateReturnSlip extends Component {
             </Modal>
           </View>
         )}
-        {this.state.itemsReturn && (
+        {!this.state.itemsReturn && (
           <View>
             <Text style={Device.isTablet ? styles.headerText_tablet : styles.hederText_mobile}>{I18n.t("List Of Items For Return")}</Text>
             <FlatList

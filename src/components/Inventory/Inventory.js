@@ -19,7 +19,8 @@ import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, canc
 import Barcode from './Barcode';
 import ProductCombo from './ProductCombo';
 import ReBarcode from './ReBarcode';
-
+import TopBar from '../../Navigation/TopBar';
+import style from '../../assets/styles/HeaderStyles.scss';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -35,6 +36,7 @@ export default class Inventory extends Component {
       subPrivilages: "",
       headerNames: [],
       error: '',
+      openModel: false,
     };
     this.onEndReachedCalledDuringMomentum = true;
   }
@@ -67,57 +69,57 @@ export default class Inventory extends Component {
     });
 
     AsyncStorage.getItem("rolename").then(value => {
-      console.log({ value })
+      console.log({ value });
       axios.get(UrmService.getPrivillagesByRoleName() + value).then(res => {
         if (res) {
           if (res.data) {
-            let len = res.data.parentPrivileges.length
+            let len = res.data.parentPrivileges.length;
             for (let i = 0; i < len; i++) {
-              let privilege = res.data.parentPrivileges[i]
+              let privilege = res.data.parentPrivileges[i];
               if (privilege.name === "Inventory Portal") {
-                let privilegeId = privilege.id
-                let sublen = res.data.subPrivileges.length
-                let subPrivileges = res.data.subPrivileges
+                let privilegeId = privilege.id;
+                let sublen = res.data.subPrivileges.length;
+                let subPrivileges = res.data.subPrivileges;
                 for (let i = 0; i < sublen; i++) {
                   if (privilegeId === subPrivileges[i].parentPrivilegeId) {
-                    let routes = subPrivileges[i].name
-                    this.state.headerNames.push({ name: routes })
-                    console.log("Header Names", this.state.headerNames)
+                    let routes = subPrivileges[i].name;
+                    this.state.headerNames.push({ name: routes });
+                    console.log("Header Names", this.state.headerNames);
                   }
                 }
                 this.setState({ headerNames: this.state.headerNames }, () => {
                   for (let j = 0; j < this.state.headerNames.length; j++) {
                     if (j === 0) {
-                      this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name })
+                      this.state.privilages.push({ bool: true, name: this.state.headerNames[j].name });
                     } else {
                       this.state.privilages.push({ bool: false, name: this.state.headerNames[j].name });
                     }
                   }
-                })
-                this.initialNavigation()
+                });
+                this.initialNavigation();
               }
             }
           }
         }
-      })
-    })
+      });
+    });
   }
 
   // Initial Routing
   initialNavigation() {
     if (this.state.privilages.length > 0) {
       this.setState({ privilages: this.state.privilages }, () => {
-        const { privilages } = this.state
+        const { privilages } = this.state;
         if (privilages[0].name === "Barcode List") {
-          this.setState({ flagBarcode: true })
+          this.setState({ flagBarcode: true });
         } else if (privilages[0].name === "Re-Barcode List") {
-          this.setState({ flagRebarCode: true })
+          this.setState({ flagRebarCode: true });
         } else if (privilages[0] === "Product Combo") {
-          this.setState({ flagProductCombo: true })
+          this.setState({ flagProductCombo: true });
         } else {
-          this.setState({ flagBarcode: false, flagRebarCode: false, flagProductCombo: true })
+          this.setState({ flagBarcode: false, flagRebarCode: false, flagProductCombo: true });
         }
-      })
+      });
     }
   }
 
@@ -134,9 +136,9 @@ export default class Inventory extends Component {
       this.setState({ flagRebarCode: false });
     }
     if (item.name === "Product Combo") {
-      this.setState({ flagProductCombo: true, filterActive: false })
+      this.setState({ flagProductCombo: true, filterActive: false });
     } else {
-      this.setState({ flagProductCombo: false })
+      this.setState({ flagProductCombo: false });
     }
 
 
@@ -166,7 +168,11 @@ export default class Inventory extends Component {
     this.props.navigation.navigate('AddProduct', {
       isEdit: false,
       onGoBack: () => null
-    })
+    });
+  }
+
+  handleOpenMenu() {
+    this.setState({ openModel: true });
   }
 
 
@@ -178,15 +184,22 @@ export default class Inventory extends Component {
           <Loader
             loading={this.state.loading} />
         }
-        <View style={headerTitleContainer} >
-          <View style={headerTitleSubContainer}>
-            <TouchableOpacity style={menuButton} onPress={() => this.handleBackButtonClick()}>
-              <Image source={require('../assets/images/menu.png')} />
-            </TouchableOpacity>
-            <Text style={headerTitle}>
+        <View style={style.headerContainer} >
+          <View>
+            <Image
+              style={styles.logoimage}
+              // source={require('../components/assets/images/easy_retail_logo.png')}
+              source={require('../assets/images/easy_retail_logo.png')}
+            ></Image>
+          </View>
+          {this.state.openModel && <TopBar active={this.state.openModel} />}
+          <View>
+            <Text style={headerTitle} onPress={() => this.handleOpenMenu()}>
               {I18n.t("Inventory Portal")}
             </Text>
           </View>
+        </View>
+        {/* {this.state.openModel && <TopBar active={this.state.openModel} />}
           <View style={headerTitleSubContainer2}>
             {this.state.flagBarcode && (
               <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddBarcode()}>
@@ -198,8 +211,7 @@ export default class Inventory extends Component {
                 <Text style={headerNavigationBtnText}>Product Combo</Text>
               </TouchableOpacity>
             )}
-          </View>
-        </View>
+          </View> */}
 
         <ScrollView>
           <View style={styles.container}>
@@ -225,7 +237,7 @@ export default class Inventory extends Component {
 
             {this.state.flagBarcode && (
               <Barcode
-                ref={instance => { this.child = instance }}
+                ref={instance => { this.child = instance; }}
                 navigation={this.props.navigation}
               />
             )}
@@ -233,20 +245,20 @@ export default class Inventory extends Component {
             {this.state.flagRebarCode && (
               <View>
                 <ReBarcode
-                  ref={instance => { this.child = instance }}
+                  ref={instance => { this.child = instance; }}
                   navigation={this.props.navigation}
                 />
               </View>
             )}
             {this.state.flagProductCombo && (
               <ProductCombo
-                ref={instance => { this.child = instance }}
+                ref={instance => { this.child = instance; }}
                 navigation={this.props.navigation}
               />
             )}
           </View>
         </ScrollView>
-      </View>
+      </View >
     );
   }
 }

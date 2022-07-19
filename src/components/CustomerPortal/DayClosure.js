@@ -16,44 +16,44 @@ export default class DayClosure extends Component {
     super(props);
     this.state = {
       storeId: "",
-      dayClosureList: [],
+      dayClosureList: [1, 2],
       enableButton: false,
       loading: false
     };
   }
 
   async componentDidMount() {
-    const storeId = await AsyncStorage.getItem("storeId")
-    this.setState({ storeId: storeId })
-    this.getAllDayCloser()
+    const storeId = await AsyncStorage.getItem("storeId");
+    this.setState({ storeId: storeId });
+    this.getAllDayCloser();
   }
 
   getAllDayCloser() {
-    this.setState({ loading: true })
-    const param = "?storeId=" + this.state.storeId
+    this.setState({ loading: true });
+    const param = "?storeId=" + this.state.storeId;
     axios.get(CustomerService.getAllDayClosure() + param).then(res => {
       if (res) {
-        console.log(res.data)
-        this.setState({ dayClosureList: res.data.result })
+        console.log(res.data);
+        this.setState({ dayClosureList: res.data.result });
         if (this.state.dayClosureList.length > 0) {
-          this.setState({ enableButton: true })
+          this.setState({ enableButton: true });
         }
       }
-      this.setState({ loading: false })
+      this.setState({ loading: false });
     }).catch(err => {
-      this.setState({ loading: false })
-      console.log(err)
-    })
+      this.setState({ loading: false });
+      console.log(err);
+    });
   }
 
   closeDay() {
-    const param = "?storeId=" + this.state.storeId
+    const param = "?storeId=" + this.state.storeId;
     axios.put(CustomerService.dayCloseActivity() + param).then(res => {
       if (res) {
-        alert(res.data.result)
-        this.getAllDayCloser()
+        alert(res.data.result);
+        this.getAllDayCloser();
       }
-    })
+    });
   }
 
   render() {
@@ -65,8 +65,8 @@ export default class DayClosure extends Component {
         }
         <FlatList
           ListHeaderComponent={<View style={flatListHeaderContainer}>
-            <Text style={flatListTitle}>List of Pending Delivery slips</Text>
-            {this.state.enableButton && (
+            <Text style={flatListTitle}>List of Pending Dl slips</Text>
+            {!this.state.enableButton && (
               <TouchableOpacity style={styles.closeBtn} onPress={() => this.closeDay()}>
                 <Text style={styles.closeBtnText}>Day Closure</Text>
               </TouchableOpacity>
@@ -137,4 +137,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#009d1d'
   }
-})
+});

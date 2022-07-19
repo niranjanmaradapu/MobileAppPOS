@@ -17,7 +17,7 @@ import Device from 'react-native-device-detection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ActivityIndicator } from 'react-native-paper';
 import { View } from 'react-native';
-import axios from 'axios'
+import axios from 'axios';
 
 global.previlage1 = '';
 global.previlage2 = '';
@@ -35,31 +35,33 @@ export default class SideNavigation extends React.Component {
   state = {
     route: '',
     loading: false,
-    domainId: ''
-  }
+    domainId: '',
+    firstRoute: '',
+    firstRoutePath:''
+  };
   initialRouteName = () => {
     if (global.previlage1 === 'Dashboard') {
-      this.setState({ route: 'Home' })
+      this.setState({ route: 'Home' });
     } else if (global.previlage2 = 'Billing Portal') {
-      this.setState({ route: 'CustomerNavigation' })
+      this.setState({ route: 'CustomerNavigation' });
     } else if (global.previlage3 = 'Inventory Portal') {
-      this.setState({ route: 'InventoryNavigation' })
+      this.setState({ route: 'InventoryNavigation' });
     } else if (global.previlage4 = 'Promotions & Loyalty') {
-      this.setState({ route: 'PromoNavigation' })
+      this.setState({ route: 'PromoNavigation' });
     }
     else if (global.previlage5 = 'Accounting Portal') {
-      this.setState({ route: 'AccountingNaviagtion' })
+      this.setState({ route: 'AccountingNaviagtion' });
     } else if (global.previlage6 = 'Reports') {
-      this.setState({ route: 'ReportsNavigation' })
+      this.setState({ route: 'ReportsNavigation' });
     } else if (global.previlage7 = 'URM Portal') {
-      this.setState({ route: 'UrmNavigation' })
+      this.setState({ route: 'UrmNavigation' });
     }
 
     this.setState({ loading: false });
-  }
-  async componentDidMount() {
-    console.warn("Gloal", global.previlage1)
-    this.setState({ loading: false })
+  };
+  async componentWillMount() {
+    console.warn("Gloal", global.previlage1);
+    this.setState({ loading: false });
     var storeStringId = "";
     var domainStringId = "";
 
@@ -79,12 +81,12 @@ export default class SideNavigation extends React.Component {
     });
 
     await AsyncStorage.getItem("username").then(value => {
-      global.username = value
-    })
+      global.username = value;
+    });
 
     await AsyncStorage.getItem("storeName").then(value => {
-      global.storeName = value
-    })
+      global.storeName = value;
+    });
 
     global.previlage1 = '';
     global.previlage2 = '';
@@ -94,9 +96,9 @@ export default class SideNavigation extends React.Component {
     global.previlage6 = '';
     global.previlage7 = '';
     global.previlage8 = '';
-    this.initialRouteName()
-    this.getPrivileges()
-    console.log("")
+    this.initialRouteName();
+    this.getPrivileges();
+    console.log("");
   }
 
   async getPrivileges() {
@@ -120,14 +122,17 @@ export default class SideNavigation extends React.Component {
         global.previlage7 = 'URM Portal';
       } else {
         AsyncStorage.getItem("rolename").then(value => {
-          console.log("role name", value)
+          console.log("role name", value);
           global.userrole = value;
           axios.get(UrmService.getPrivillagesByRoleName() + value).then((res) => {
-            console.log("Privileges", res.data)
+            console.log("Privileges", res.data);
             if (res.data) {
               let len = res.data.parentPrivileges.length;
               // console.log(.name)
               if (len > 0) {
+                this.setState({ firstRoute: res.data.parentPrivileges[0].name });
+                const firstRoute = this.state.firstRoute;
+                console.log({ firstRoute });
                 for (let i = 0; i < len; i++) {
                   let previlage = res.data.parentPrivileges[i];
                   if (previlage.name === "Dashboard") {
@@ -152,18 +157,43 @@ export default class SideNavigation extends React.Component {
                     global.previlage7 = 'URM Portal';
                   }
                 }
+                // this.props.navigation.navigate('CustomerNavigation');
                 //this.setState({ loading: false });
               }
+              this.getData()
             }
           });
         }).catch((err) => {
           console.log(err);
         });
       }
-    })
+    });
 
   }
-
+  async getData() {
+    console.error("calling");
+    const { firstRoute } = this.state;
+    if (firstRoute === "Dashboard") {
+      this.setState({firstRoutePath :'Home'})
+    }
+    else if (firstRoute === "Billing Portal") {
+      // return 'CustomerNavigation';
+      this.setState({ firstRoutePath: 'CustomerNavigation' })
+    }
+    else if (firstRoute === "Promotions & Loyalty") {
+      // return 'PromoNavigation';
+      this.setState({ firstRoutePath: 'PromoNavigation' })
+    }
+    else if (firstRoute === "Accounting Portal") {
+      // return 'AccountingNaviagtion';
+      this.setState({ firstRoutePath: 'AccountingNaviagtion' })
+    }
+    else if (firstRoute === "URM Portal") {
+      // return 'UrmNavigation';
+      this.setState({ firstRoutePath: 'UrmNavigation' })
+    }
+    console.log(this.state.firstRoutePath);
+  };
   render() {
     // alert(this.state.route)
     return this.state.loading ? (
@@ -173,7 +203,9 @@ export default class SideNavigation extends React.Component {
 
     ) : (
       <Drawer.Navigator
-        initialRouteName={global.previlage1 === 'Dashboard' ? "Home" : global.previlage2 === 'Billing Portal' ? "CustomerNavigation" : global.previlage3 === 'Inventory Portal' ? "InventoryNavigation " : global.previlage4 === 'Promotions & Loyalty' ? "PromoNavigation" : global.previlage5 === 'Accounting Portal' ? "AccountingNaviagtion" : global.previlage6 === 'Reports' ? "ReportsNavigation" : global.previlage7 === 'URM Portal' ? "UrmNavigation" : this.getPrivileges()}
+        drawerPosition={'top'}
+        // initialRouteName={firstRoute === 'Dashboard' ? "Home" : firstRoute === 'Billing Portal' ? "CustomerNavigation" : firstRoute === 'Inventory Portal' ? "InventoryNavigation " : firstRoute === 'Promotions & Loyalty' ? "PromoNavigation" : firstRoute === 'Accounting Portal' ? "AccountingNaviagtion" : firstRoute === 'Reports' ? "ReportsNavigation" : firstRoute === 'URM Portal' ? "UrmNavigation" : 'Settings'}
+          initialRouteName={this.state.firstRoutePath}
         screenOptions={{
           drawerStyle: {
             width: Device.isTablet ? 400 : 300,
