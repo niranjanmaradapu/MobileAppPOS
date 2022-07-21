@@ -39,8 +39,6 @@ export default class Login extends Component {
       userValid: true,
       passwordValid: true,
       assignedStores: []
-
-
     };
   }
 
@@ -163,7 +161,7 @@ export default class Login extends Component {
                 if (value === "super_admin") {
                   this.getAdminStores();
                 } else if (value === "config_user") {
-                  this.props.navigation.navigate('AccountingNaviagtion');
+                  this.props.navigation.navigate('UrmNaviagtion');
                   global.previlage1 = '';
                   global.previlage2 = '';
                   global.previlage3 = '';
@@ -193,13 +191,13 @@ export default class Login extends Component {
             });
           }
           else {
-            if (res.data.result.challengeName === "NEW_PASSWORD_REQUIRED") {
+            if (res.data.challengeName === "NEW_PASSWORD_REQUIRED") {
               this.setState({ loading: false });
               const roleData = res.data.result
-                ? JSON.parse(res.data.result.challengeParameters.userAttributes)
+                ? JSON.parse(res.data.challengeParameters.userAttributes)
                 : "";
               this.props.navigation.navigate('ManagePassword', {
-                session: res.data.result.session,
+                session: res.data.session,
                 roleName: roleData["custom:roleName"],
                 userName: this.state.userName,
                 password: this.state.password,
@@ -240,21 +238,15 @@ export default class Login extends Component {
     const { assignedStores } = this.state;
     console.log({ assignedStores });
     await AsyncStorage.setItem("storesList", assignedStores).catch(err => {
-      console.error({ err });
     });
-    // AsyncStorage.setItem("storesList",assignedStores)
     if (assignedStores && assignedStores.length > 1) {
-
-      // AsyncStorage.setItem("storesList",assignedStores)
       this.props.navigation.navigate('SelectStore', { items: assignedStores });
     }
     else {
       AsyncStorage.setItem("storeId", String(assignedStores[0].storeId)).catch(err => {
-        console.error({ err });
       });
-      global.storeName = String(res.data[0].name);
+      global.storeName = String(assignedStores[0].storeName);
       AsyncStorage.setItem("storeName", String(assignedStores[0].storeName)).catch(err => {
-        console.error({ err });
       });
       this.props.navigation.navigate('HomeNavigation');
     }

@@ -194,7 +194,7 @@ export default class Inventory extends Component {
           </View>
           {this.state.openModel && <TopBar active={this.state.openModel} />}
           <View>
-            <Text style={headerTitle} onPress={() => this.handleOpenMenu()}>
+            <Text style={headerTitle} onPress={() => this.handleBackButtonClick()}>
               {I18n.t("Inventory Portal")}
             </Text>
           </View>
