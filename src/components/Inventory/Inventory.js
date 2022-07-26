@@ -187,36 +187,6 @@ export default class Inventory extends Component {
           <Loader
             loading={this.state.loading} />
         }
-        <View style={scss.headerContainer} >
-          <View>
-            <Image
-              style={styles.logoimage}
-              // source={require('../components/assets/images/easy_retail_logo.png')}
-              source={require('../assets/images/easy_retail_logo.png')}
-            ></Image>
-          </View>
-          {/* {this.state.openModel && <TopBar active={this.state.openModel} />}
-          <ModalDropdown options={['option 1', 'option 2']}>
-          <View>
-            <Text style={headerTitle} onPress={() => this.handleBackButtonClick()}>
-              {I18n.t("Inventory Portal")}
-            </Text>
-          </View>
-        </View> */}
-        {/* {this.state.openModel && <TopBar active={this.state.openModel} />}
-          <View style={headerTitleSubContainer2}>
-            {this.state.flagBarcode && (
-              <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddBarcode()}>
-                <Text style={headerNavigationBtnText}>{I18n.t("Add BarCode")}</Text>
-              </TouchableOpacity>
-            )}
-            {this.state.flagProductCombo && (
-              <TouchableOpacity style={headerNavigationBtn} onPress={() => this.navigateToAddProductCombo()}>
-                <Text style={headerNavigationBtnText}>Product Combo</Text>
-              </TouchableOpacity>
-            )}
-          </View> */}
-
         <ScrollView>
           <View style={styles.container}>
             <FlatList
