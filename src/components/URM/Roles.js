@@ -17,14 +17,14 @@ import EmptyList from '../Errors/EmptyList';
 import { buttonContainer, buttonStyle, buttonStyle1, filterBtn, flatListMainContainer, flatlistSubContainer, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, highText, buttonImageStyle, menuButton, textContainer, textStyleLight, textStyleMedium, flatListHeaderContainer, flatListTitle, singleButtonStyle } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
-
+import scss from '../../assets/styles/style.scss';
 
 var deviceheight = Dimensions.get("window").height;
 var deviceWidth = Dimensions.get("window").width;
 
 export default class Roles extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       clientId: "",
       rolesData: [],
@@ -33,54 +33,54 @@ export default class Roles extends Component {
       flagFilterOpen: false,
       modalVisible: true,
       createdDate: "",
-    }
+    };
   }
 
   async componentDidMount() {
     const clientId = await AsyncStorage.getItem("custom:clientId1");
     this.setState({ clientId: clientId });
-    this.getRolesList()
+    this.getRolesList();
   }
 
   // Getting Roles List
   getRolesList() {
-    const { clientId, pageNumber } = this.state
+    const { clientId, pageNumber } = this.state;
     UrmService.getAllRoles(clientId, pageNumber).then(res => {
       if (res) {
-        let response = res.data
-        console.log({ response })
-        this.setState({ rolesData: res.data })
+        let response = res.data;
+        console.log({ response });
+        this.setState({ rolesData: res.data });
       }
-    })
+    });
   }
 
   // Filter Section
   filterAction() {
-    this.setState({ flagFilterOpen: true, modalVisible: true })
+    this.setState({ flagFilterOpen: true, modalVisible: true });
   }
 
   clearFilterAction() {
-    this.setState({filterActive: false})
-    this.getRolesList()
+    this.setState({ filterActive: false });
+    this.getRolesList();
   }
 
-    modelCancel() {
-    this.setState({ modalVisible: false })
+  modelCancel() {
+    this.setState({ modalVisible: false });
   }
 
   handleCreatedBy = (value) => {
-    this.setState({createdBy: value})
-  }
+    this.setState({ createdBy: value });
+  };
 
   handleRole = (value) => {
-    this.setState({role: value})
-  }
+    this.setState({ role: value });
+  };
 
-    datepickerClicked() {
+  datepickerClicked() {
     this.setState({ datepickerOpen: true });
   }
 
-    datepickerCancelClicked() {
+  datepickerCancelClicked() {
     this.setState({ date: new Date(), enddate: new Date(), datepickerOpen: false, datepickerendOpen: false });
   }
 
@@ -101,40 +101,41 @@ export default class Roles extends Component {
   }
 
 
-applyRoleFilter() {
-  const {role, createdBy, createdDate} = this.state
-  this.setState({loading: true})
-const searchRole = {
-  "roleName": role ?  role : null,
-  "createdBy": createdBy ? createdBy : null,
-  "createdDate": createdDate ? createdDate : null
-}
-UrmService.getRolesBySearch(searchRole).then(res => {
-  if(res) {
-    let rolesList = res.data.result
-    console.log({rolesList})
-    this.setState({filterRolesData: rolesList, filterActive: true})
+  applyRoleFilter() {
+    const { role, createdBy, createdDate } = this.state;
+    this.setState({ loading: true });
+    const searchRole = {
+      "roleName": role ? role : null,
+      "createdBy": createdBy ? createdBy : null,
+      "createdDate": createdDate ? createdDate : null
+    };
+    UrmService.getRolesBySearch(searchRole).then(res => {
+      if (res) {
+        let rolesList = res.data.result;
+        console.log({ rolesList });
+        this.setState({ filterRolesData: rolesList, filterActive: true });
+      }
+      this.setState({ loading: false, modalVisible: false });
+    });
   }
-    this.setState({loading: false, modalVisible: false})
-})
-}
 
 
 
   handleeditrole(item, index) {
     this.props.navigation.navigate('CreateRole',
       {
-      item: item, isEdit: true,
-      onGoBack: () => this.getRolesList()
-    })
+        item: item, isEdit: true,
+        onGoBack: () => this.getRolesList()
+      });
   }
 
 
   render() {
-    const {filterActive, rolesData, filterRolesData} = this.state
+    const { filterActive, rolesData, filterRolesData } = this.state;
     return (
       <View>
         <FlatList
+          style={scss.flatListBody}
           ListHeaderComponent={<View style={flatListHeaderContainer}>
             <Text style={flatListTitle}>Roles</Text>
             {!this.state.filterActive &&
@@ -153,29 +154,33 @@ UrmService.getRolesBySearch(searchRole).then(res => {
               </TouchableOpacity>
             }
           </View>}
-          data={filterActive ? filterRolesData :rolesData}
+          data={filterActive ? filterRolesData : rolesData}
           ListEmptyComponent={<EmptyList message={this.state.rolesError} />}
           scrollEnabled={true}
           renderItem={({ item, index }) => (
-            <View style={flatListMainContainer}>
-              <View style={flatlistSubContainer}>
-                <View style={textContainer}>
-                  <Text style={highText}>S.No {index + 1}</Text>
-                  <Text style={textStyleLight}>Date: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
-                </View>
-                <View style={textContainer}>
-                  <Text style={textStyleMedium}>Role: {item.roleName}</Text>
-                  <Text style={textStyleLight}>User Count: {item.usersCount}</Text>
-                </View>
-                <View style={textContainer}>
-                  <Text style={textStyleMedium}>Created By: {item.createdBy}</Text>
-                  <View style={buttonContainer}>
-                    <TouchableOpacity style={singleButtonStyle} onPress={() => this.handleeditrole(item, index)}>
-                      <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
-                    </TouchableOpacity>
+            <View>
+              <ScrollView>
+                <View style={scss.flatListContainer}>
+                  <View style={scss.flatListSubContainer}>
+                    <View style={scss.textContainer}>
+                      <Text style={scss.highText}>S.No {index + 1}</Text>
+                    </View>
+                    <View style={scss.textContainer}>
+                      <Text style={scss.textStyleMedium}>Role: {item.roleName}</Text>
+                      <Text style={scss.textStyleLight}>User Count: {item.usersCount}</Text>
+                    </View>
+                    <View style={scss.textContainer}>
+                      <Text style={scss.textStyleMedium}>Created By: {item.createdBy}</Text>
+                    </View>
+                    <View style={scss.flatListFooter}>
+                      <Text style={scss.footerText}>Date: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
+                      <TouchableOpacity style={scss.footerSingleBtn} onPress={() => this.handleeditrole(item, index)}>
+                        <Image style={scss.footerBtnImg} source={require('../assets/images/edit.png')} />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-              </View>
+              </ScrollView>
             </View>
           )}
         />
@@ -266,6 +271,6 @@ UrmService.getRolesBySearch(searchRole).then(res => {
         )}
 
       </View>
-    )
+    );
   }
 }

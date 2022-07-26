@@ -14,7 +14,7 @@ import I18n from 'react-native-i18n';
 import { ActivityIndicator } from 'react-native-paper';
 import { RH, RF, RW } from '../../Responsive';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import styles from '../../assets/styles/style.scss';
+import scss from '../../assets/styles/style.scss';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -53,9 +53,12 @@ export default class Barcode extends Component {
 
   async componentDidMount() {
     const storeId = await AsyncStorage.getItem("storeId");
-    this.setState({ storeId: storeId });
+    const newstoreId = await AsyncStorage.getItem("newstoreId");
+    console.log({ newstoreId });
+    console.log({ storeId });
+    this.setState({ storeId: newstoreId });
     this.getAllBarcodes();
-    console.log({ styles });
+    console.log({ scss });
   }
 
   // Filter Action
@@ -122,7 +125,6 @@ export default class Barcode extends Component {
   };
 
   // Filter Functions
-
   modelCancel() {
     this.setState({ modalVisible: false, flagFilterOpen: false });
   }
@@ -130,7 +132,6 @@ export default class Barcode extends Component {
   datepickerClicked() {
     this.setState({ datepickerOpen: true });
   }
-
   enddatepickerClicked() {
     this.setState({ datepickerendOpen: true });
   }
@@ -226,6 +227,13 @@ export default class Barcode extends Component {
     }
   }
 
+  handleAddBarcode() {
+    this.props.navigation.navigate('AddBarcode', {
+      isEdit: false,
+      onGoBack: () => this.child.getAllBarcodes(),
+    });
+  }
+
 
   render() {
     return (
@@ -236,10 +244,11 @@ export default class Barcode extends Component {
         }
         <View>
           <FlatList
-            style={styles.flatListBody}
-            ListHeaderComponent={<View style={styles.headerContainer}>
+            style={scss.flatListBody}
+            ListHeaderComponent={<View style={scss.headerContainer}>
               <Text style={flatListTitle}>Barcode List</Text>
-              <View>
+              <View style={scss.headerContainer}>
+                <TouchableOpacity style={filterBtn} onPress={() => this.handleAddBarcode()}><Text style={{ fontSize: 20 }}>+</Text></TouchableOpacity>
                 {!this.state.filterActive &&
                   <TouchableOpacity
                     style={filterBtn}
@@ -264,30 +273,30 @@ export default class Barcode extends Component {
             renderItem={({ item, index }) => (
               <View style={{ flex: 1 }}>
                 <ScrollView>
-                  <View style={styles.flatListContainer}>
-                    <View style={flatlistSubContainer}>
-                      <View style={textContainer}>
-                        <Text style={highText}>S.NO: {index + 1}</Text>
+                  <View style={scss.flatListContainer}>
+                    <View style={scss.flatListSubContainer}>
+                      <View style={scss.textContainer}>
+                        <Text style={scss.highText}>S.NO: {index + 1}</Text>
                       </View>
-                      <View style={textContainer}>
-                        <Text style={textStyleMedium}>{I18n.t("STORE")}: {this.state.storeName}</Text>
-                        <Text style={textStyleLight}>{I18n.t("VALUE")}: ₹{item.value}</Text>
+                      <View style={scss.textContainer}>
+                        <Text style={scss.textStyleMedium}>{I18n.t("STORE")}: {this.state.storeName}</Text>
+                        <Text style={scss.textStyleLight}>{I18n.t("VALUE")}: ₹{item.value}</Text>
                       </View>
-                      <View style={textContainer}>
-                        <Text style={textStyleLight}>{I18n.t("LIST PRICE")}: ₹{item.itemMrp}</Text>
-                        <Text style={textStyleLight}>QTY: {item.qty}</Text>
+                      <View style={scss.textContainer}>
+                        <Text style={scss.textStyleLight}>{I18n.t("LIST PRICE")}: ₹{item.itemMrp}</Text>
+                        <Text style={scss.textStyleLight}>QTY: {item.qty}</Text>
                       </View>
-                      <View style={textContainer}>
-                        <Text style={[textStyleMedium]} selectable={true}>{item.barcode}</Text>
+                      <View style={scss.textContainer}>
+                        <Text style={scss.textStyleMedium} selectable={true}>{item.barcode}</Text>
                       </View>
-                      <View style={styles.flatListFooter}>
-                        <Text>CreatedDate: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
-                        <View style={buttonContainer}>
-                          <TouchableOpacity style={buttonStyle1} onPress={() => this.handleeditbarcode(item, index)}>
-                            <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
+                      <View style={scss.flatListFooter}>
+                        <Text style={scss.footerText}>CreatedDate: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
+                        <View style={scss.buttonContainer}>
+                          <TouchableOpacity style={scss.footerButton1} onPress={() => this.handleeditbarcode(item, index)}>
+                            <Image style={scss.footerBtnImg} source={require('../assets/images/edit.png')} />
                           </TouchableOpacity>
-                          <TouchableOpacity style={buttonStyle} onPress={() => this.handlebarcodedeleteaction(item, index)}>
-                            <Image style={buttonImageStyle} source={require('../assets/images/delete.png')} />
+                          <TouchableOpacity style={scss.footerButton2} onPress={() => this.handlebarcodedeleteaction(item, index)}>
+                            <Image style={scss.footerBtnImg} source={require('../assets/images/delete.png')} />
                           </TouchableOpacity>
                         </View>
                       </View>

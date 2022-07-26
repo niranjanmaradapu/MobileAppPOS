@@ -181,6 +181,7 @@ export default class Login extends Component {
                       store.push(obj);
                     }
                   });
+                  console.log({ store });
                   this.setState({ assignedStores: store }, () => {
                     this.getStores();
                   });
@@ -236,19 +237,22 @@ export default class Login extends Component {
 
   async getStores() {
     const { assignedStores } = this.state;
-    console.log({ assignedStores });
+    console.log({ assignedStores }, assignedStores.length);
     await AsyncStorage.setItem("storesList", assignedStores).catch(err => {
     });
     if (assignedStores && assignedStores.length > 1) {
       this.props.navigation.navigate('SelectStore', { items: assignedStores });
     }
     else {
-      AsyncStorage.setItem("storeId", String(assignedStores[0].storeId)).catch(err => {
+      let storeName = String(assignedStores[0].name);
+      let storeId = String(assignedStores[0].id);
+      console.log({ storeName });
+      console.log({ storeId });
+      AsyncStorage.setItem("storeId", storeId);
+      global.storeName = storeName;
+      AsyncStorage.setItem("storeName", storeName).then(() => {
+        this.props.navigation.navigate('HomeNavigation');
       });
-      global.storeName = String(assignedStores[0].storeName);
-      AsyncStorage.setItem("storeName", String(assignedStores[0].storeName)).catch(err => {
-      });
-      this.props.navigation.navigate('HomeNavigation');
     }
   }
 

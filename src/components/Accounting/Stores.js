@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../commonUtils/loader';
 var deviceWidth = Dimensions.get("window").width;
 var deviceHeight = Dimensions.get("window").height;
+import scss from '../../assets/styles/style.scss';
 
 export default class Stores extends Component {
 
@@ -45,9 +46,9 @@ export default class Stores extends Component {
   }
 
   componentDidMount() {
-    this.getStoresList()
-    this.getMasterStatesList()
-    this.getMasterDistrictsList()
+    this.getStoresList();
+    this.getMasterStatesList();
+    this.getMasterDistrictsList();
   }
 
   deleteStore() {
@@ -60,14 +61,14 @@ export default class Stores extends Component {
   }
 
   handledeleteStore(item, index) {
-    let param = '?id=' + item.id
+    let param = '?id=' + item.id;
     axios.delete(UrmService.deleteStore() + param).then(res => {
-      console.log(res.data)
-      this.getStoresList()
-      alert(res.data.result)
+      console.log(res.data);
+      this.getStoresList();
+      alert(res.data.result);
     }).catch(err => {
-      alert(err)
-    })
+      alert(err);
+    });
   }
 
   handleeditStore(item, index) {
@@ -83,24 +84,24 @@ export default class Stores extends Component {
 
   async getStoresList() {
     const clientId = await AsyncStorage.getItem("custom:clientId1");
-    console.log({ clientId })
+    console.log({ clientId });
     this.setState({ loading: true });
-    const { pageNumber } = this.state
-    const isActive = false
+    const { pageNumber } = this.state;
+    const isActive = false;
     UrmService.getAllStores(clientId, pageNumber, isActive).then((res) => {
       if (res) {
         if (res.data) {
-          let response = res.data
-          console.log({ response })
-          this.setState({ storesList: this.state.storesList.concat(response) })
+          let response = res.data;
+          console.log({ response });
+          this.setState({ storesList: this.state.storesList.concat(response) });
         }
       }
       this.setState({ loading: false });
     }).catch((err) => {
-      console.error({ err })
+      console.error({ err });
       this.setState({ loading: false });
       if (this.state.flagStore === true) {
-        this.setState({ storeError: "Records Not Found" })
+        this.setState({ storeError: "Records Not Found" });
         // alert("There is an Error while Getting Stores");
       }
     });
@@ -219,28 +220,28 @@ export default class Stores extends Component {
         if (res.data.isSuccess === "true") {
           this.setState({ filterStoresData: res.data.result, filterActive: true });
         } else {
-          this.setState({ filterStoresData: [], filterActive: true })
+          this.setState({ filterStoresData: [], filterActive: true });
         }
         console.log(res.data);
       }
-      this.setState({ flagFilterOpen: false })
+      this.setState({ flagFilterOpen: false });
     }).catch(err => {
-      this.setState({ flagFilterOpen: false, filterActive: false })
-    })
+      this.setState({ flagFilterOpen: false, filterActive: false });
+    });
   }
 
   modelCancel() {
-    this.setState({ modalVisible: false, flagFilterOpen: false })
+    this.setState({ modalVisible: false, flagFilterOpen: false });
   }
 
   // Filter Actions
   filterAction() {
-    this.setState({ flagFilterOpen: true, modalVisible: true })
+    this.setState({ flagFilterOpen: true, modalVisible: true });
   }
 
   clearFilterAction() {
-    this.setState({ filterActive: false })
-    this.getStoresList()
+    this.setState({ filterActive: false });
+    this.getStoresList();
   }
 
   render() {
@@ -272,30 +273,33 @@ export default class Stores extends Component {
           data={this.state.filterActive ? this.state.filterStoresData : this.state.storesList}
           scrollEnabled={true}
           keyExtractor={(item, i) => i.toString()}
+          style={scss.flatListBody}
           ListEmptyComponent={<Text style={{ color: '#cc241d', textAlign: "center", fontFamily: "bold", fontSize: Device.isTablet ? 21 : 17, marginTop: deviceHeight / 3 }}>&#9888; Records Not Found</Text>}
           renderItem={({ item, index }) => (
-            <View style={flatListMainContainer} >
-              <View style={flatlistSubContainer}>
-                <View style={textContainer}>
-                  <Text style={highText} >{I18n.t("STORE ID")}: {item.id} </Text>
-                  <Text style={textStyleMedium}>{I18n.t("NAME")}: {item.name}</Text>
+            <View style={scss.flatListContainer} >
+              <View style={scss.flatListSubContainer}>
+                <View style={scss.textContainer}>
+                  <Text style={scss.highText} >{I18n.t("STORE ID")}: {item.id} </Text>
                 </View>
-                <View style={textContainer}>
-                  <Text style={textStyleLight}>{I18n.t("LOCATION")}: {item.cityId} </Text>
-                  <Text style={textStyleLight}>{I18n.t("CREATED BY")}: {item.createdBy}</Text>
-                </View>
-                <View style={textContainer}>
-                  <Text style={textStyleLight}>{I18n.t("DATE")}: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate} </Text>
-                  <View style={buttonContainer}>
+                <View style={scss.textContainer}>
+                  <Text style={scss.textStyleMedium}>{I18n.t("NAME")}: {item.name}</Text>
+                  <View style={scss.buttonContainer}>
                     {item.isActive ?
-                      <Text style={[textStyleMedium, { backgroundColor: '#009900', color: '#ffffff', marginTop: 5, padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: Device.isTablet ? 10 : 5, fontFamily: 'medium' }]}>Active</Text>
+                      <Text style={[scss.textStyleMedium, { backgroundColor: '#009900', color: '#ffffff', marginTop: 5, padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: Device.isTablet ? 10 : 5, fontFamily: 'medium' }]}>Active</Text>
                       :
-                      <Text style={[textStyleMedium, { backgroundColor: '#ee0000', color: '#ffffff', marginTop: 5, padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: 5, fontFamily: 'medium' }]}>In-Active</Text>
+                      <Text style={[scss.textStyleMedium, { backgroundColor: '#ee0000', color: '#ffffff', marginTop: 5, padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: 5, fontFamily: 'medium' }]}>In-Active</Text>
                     }
-                    <TouchableOpacity style={singleButtonStyle} onPress={() => this.handleeditStore(item, index)}>
-                      <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
-                    </TouchableOpacity>
                   </View>
+                </View>
+                <View style={scss.textContainer}>
+                  <Text style={scss.textStyleLight}>{I18n.t("LOCATION")}: {item.cityId} </Text>
+                  <Text style={scss.textStyleLight}>{I18n.t("CREATED BY")}: {item.createdBy}</Text>
+                </View>
+                <View style={scss.flatListFooter}>
+                  <Text style={scss.footerText}>{I18n.t("DATE")}: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate} </Text>
+                  <TouchableOpacity style={scss.footerSingleBtn} onPress={() => this.handleeditStore(item, index)}>
+                    <Image style={scss.footerBtnImg} source={require('../assets/images/edit.png')} />
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
