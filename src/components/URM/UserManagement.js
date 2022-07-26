@@ -438,7 +438,7 @@ export default class UserManagement extends Component {
             loading={this.state.loading} />
         }
         <SafeAreaView style={styles.mainContainer}>
-          <View style={headerTitleContainer} >
+          {/* <View style={headerTitleContainer} >
             <View style={headerTitleSubContainer}>
               <TouchableOpacity style={menuButton} onPress={() => this.handleBackButtonClick()}>
                 <Image source={require('../assets/images/menu.png')} />
@@ -464,7 +464,7 @@ export default class UserManagement extends Component {
                 </TouchableOpacity>
               )}
             </View>
-          </View>
+          </View> */}
 
           <ScrollView>
             <View style={styles.container}>

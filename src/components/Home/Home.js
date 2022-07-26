@@ -17,6 +17,8 @@ import UrmService from '../services/UrmService';
 import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { headerTitle, headerTitleContainer, headerTitleSubContainer, menuButton } from '../Styles/Styles';
+import TopBar from '../../Navigation/TopBar';
+import BottomTabNav from '../../Navigation/BottomTabNav';
 
 var deviceWidth = Dimensions.get('window').width;
 const data = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }];
@@ -397,15 +399,15 @@ class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={headerTitleContainer}>
+        {/* <View style={headerTitleContainer}>
           <View style={headerTitleSubContainer}>
             <TouchableOpacity style={menuButton} onPress={() => this.handleMenuButtonClick()}>
               <Image source={require('../assets/images/menu.png')} />
             </TouchableOpacity>
             <Text style={headerTitle}> {I18n.t("Home")} </Text>
           </View>
-        </View>
-
+        </View> */}
+        <TopBar {...this.props}/>
         <ScrollView>
           <View style={styles.container}>
             {/* <Image
@@ -622,6 +624,7 @@ class Home extends Component {
             </View>
           </View>
         </ScrollView>
+        <BottomTabNav {...this.props}/>
       </View>
     );
   }

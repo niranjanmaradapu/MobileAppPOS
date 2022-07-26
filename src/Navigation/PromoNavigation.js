@@ -8,10 +8,14 @@ import AddLoyalty from '../components/Promotions/AddLoyalty';
 import Pramotions from '../components/Promotions/promotions';
 import ListOfPromo from '../components/Promotions/listOfPromotions';
 import ManagePromo from '../components/Promotions/managePromo'
+import TopBar from './TopBar';
+import BottomTabNav from './BottomTabNav';
 const Stack = createStackNavigator();
 export default class ProductsNavigation extends React.Component {
     render() {
         return (
+            <>
+            <TopBar {...this.props}/>
             <Stack.Navigator>
                 <Stack.Screen name="Pramotions" options={{ headerShown: false }} component={Pramotions} />
                 <Stack.Screen name="ListOfPromo" options={{ headerShown: false }} component={ListOfPromo} />
@@ -23,7 +27,8 @@ export default class ProductsNavigation extends React.Component {
                 <Stack.Screen name="AddPromo" options={{ headerShown: false }} component={AddPromo} />
                 <Stack.Screen name="AddLoyalty" options={{ headerShown: false }} component={AddLoyalty} />
             </Stack.Navigator>
-
+            <BottomTabNav {...this.props}/>
+            </>
         );
     }
 

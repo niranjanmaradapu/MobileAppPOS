@@ -9,19 +9,18 @@ import ForgotPassword from '../components/Login/ForgotPassword';
 import RegisterClient from '../components/URM/RegisterClient';
 import ManagePassword from '../components/URM/ManagePassword';
 import UpdateNewpassword from '../components/Login/UpdateNewpassword';
-
+import TopBarNavigation from './TopBarNavigation';
 
 const Stack = createStackNavigator();
 export default class HomeNavigation extends React.Component {
   render() {
     return (
       <Stack.Navigator>
-        <Stack.Screen name="SideNavigation" options={{ headerShown: false }} component={SideNavigation} />
+        <Stack.Screen name="TopBarNavigation" options={{ headerShown: false }} component={TopBarNavigation} />
         <Stack.Screen name="Login" options={{ headerShown: false }} component={Login} />
         <Stack.Screen name="LoginAfterLanguageSelect" options={{ headerShown: false }} component={LoginAfterLanguageSelect} />
         <Stack.Screen name="SelectStore" options={{ headerShown: false }} component={SelectStore} />
         <Stack.Screen name="ForgotPassword" options={{ headerShown: false }} component={ForgotPassword} />
-        <Stack.Screen name="HomeNavigation" options={{ headerShown: false }} component={HomeNavigation} />
         <Stack.Screen name="RegisterClient" options={{ headerShown: false }} component={RegisterClient} />
         <Stack.Screen name="UpdateNewpassword" options={{ headerShown: false }} component={UpdateNewpassword} />
         <Stack.Screen name="ManagePassword" options={{ headerShown: false }} component={ManagePassword} />

@@ -23,11 +23,11 @@ export default class App extends React.Component {
   async componentDidMount() {
     AsyncStorage.getItem("tokenkey").then((value) => {
       var finalToken = value.replace('"', '');
-     // console.log(finalToken);
+      // console.log(finalToken);
       axios.defaults.headers.common = { 'Authorization': 'Bearer' + ' ' + finalToken }
-     // console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
-  })
-   
+      // console.log("Request to server:::::::::::::::::::" + 'Bearer' + ' ' + finalToken);
+    })
+
     Font.loadAsync({
       bold: require("./assets/fonts/ProductSans-Bold.ttf"),
       regular: require("./assets/fonts/ProductSans-Regular.ttf"),
@@ -42,7 +42,6 @@ export default class App extends React.Component {
     )
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {

@@ -21,6 +21,8 @@ import ProductCombo from './ProductCombo';
 import ReBarcode from './ReBarcode';
 import TopBar from '../../Navigation/TopBar';
 import style from '../../assets/styles/HeaderStyles.scss';
+import ModalDropdown from 'react-native-modal-dropdown';
+
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -184,7 +186,7 @@ export default class Inventory extends Component {
           <Loader
             loading={this.state.loading} />
         }
-        <View style={style.headerContainer} >
+        {/* <View style={style.headerContainer} >
           <View>
             <Image
               style={styles.logoimage}
@@ -193,12 +195,8 @@ export default class Inventory extends Component {
             ></Image>
           </View>
           {this.state.openModel && <TopBar active={this.state.openModel} />}
-          <View>
-            <Text style={headerTitle} onPress={() => this.handleBackButtonClick()}>
-              {I18n.t("Inventory Portal")}
-            </Text>
-          </View>
-        </View>
+          {/* <ModalDropdown options={['option 1', 'option 2']}> */}
+          {/* <View>s */}
         {/* {this.state.openModel && <TopBar active={this.state.openModel} />}
           <View style={headerTitleSubContainer2}>
             {this.state.flagBarcode && (
