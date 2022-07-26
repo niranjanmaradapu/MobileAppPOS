@@ -344,7 +344,7 @@ class Reports extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
+        {/* <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
           <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
             <Image source={require('../assets/images/menu.png')} />
           </TouchableOpacity>
@@ -367,7 +367,7 @@ class Reports extends Component {
               }
             </View>
           }
-        </View>
+        </View> */}
         <ScrollView>
           <View style={styles.container}>
 

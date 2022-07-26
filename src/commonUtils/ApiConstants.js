@@ -27,6 +27,17 @@ export const NEW_SALE_URL = {
 export const INVENTORY_PORTAL = {
   getAllBarcodes: "/inventory/inventoryTextile/getAllBarcodeTextiles",
   getAllProductBundleList: "/inventory/productBundle/all",
+  getAllDivisions: "/inventory/catalog/divisions",
+  getAllUOMs: "/inventory/uom/list",
+  getAllSections: "/inventory/catalog/category",
+  getAllCategories: "/inventory/catalog/categories",
+  getAllHsnList: "/hsn-details/hsn-details/getHsnDetails",
+  getStoreNamesByIds: '/user-management/store/storeList',
+  updateBarcodes: "/inventory/inventoryRetail/updateBarcode",
+  addBarcodes: "/inventory/inventoryRetail/createBarcode",
+  updatTextileBarcodes: "/inventory/inventory-management/product",
+  addTextileBarcodes: "/inventory/inventory-management/product",
+  updateBarcodesQuntity: "/inventory/inventory-management/product-qty",
 };
 
 export const BILLING_PORTAL = {

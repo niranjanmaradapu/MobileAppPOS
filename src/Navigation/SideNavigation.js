@@ -98,7 +98,6 @@ export default class SideNavigation extends React.Component {
     global.previlage8 = '';
     this.initialRouteName();
     this.getPrivileges();
-    console.log("");
   }
 
   async getPrivileges() {

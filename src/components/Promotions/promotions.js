@@ -172,7 +172,7 @@ export default class Promotions extends Component {
   render() {
 
     return (<View>
-      <View style={styles.viewsWidth_tablet}>
+      {/* <View style={styles.viewsWidth_tablet}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <TouchableOpacity style={styles.menuButton_mobile} onPress={() => this.handleBackButtonClick()}>
             <Image source={require('../assets/images/menu.png')} />
@@ -184,7 +184,7 @@ export default class Promotions extends Component {
           onPress={() => this.filterAction()} >
           <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
         </TouchableOpacity>
-      </View>
+      </View> */}
       <ScrollView>
         <View style={styles.container}>
           <FlatList

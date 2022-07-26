@@ -7,13 +7,15 @@ import ImageScanner from '../components/Newsale/ImageScanner';
 import ProductEdit from '../components/Newsale/ProductEdit';
 import Payment from '../components/Newsale/Payment';
 import InventoryRetail from '../components/Inventory/InventoryRetail';
+import TopBar from './TopBar';
 
 
 const Stack = createStackNavigator();
 export default class InventoryRetailNavigation extends React.Component {
     render() {
         return (
-
+            <>
+            <TopBar {...this.props}/>
             <Stack.Navigator>
                 <Stack.Screen name="InventoryRetail" options={{ headerShown: false }} component={InventoryRetail} />
                 <Stack.Screen name="NewSale" options={{ headerShown: false }} component={NewSale} />
@@ -23,7 +25,7 @@ export default class InventoryRetailNavigation extends React.Component {
                 <Stack.Screen name="ProductEdit" options={{ headerShown: false }} component={ProductEdit} />
                 <Stack.Screen name="Payment" options={{ headerShown: false }} component={Payment} />
             </Stack.Navigator>
-
+            </>
         );
     }
 

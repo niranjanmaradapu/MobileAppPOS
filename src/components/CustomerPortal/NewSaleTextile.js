@@ -192,7 +192,7 @@ class NewSaleTextile extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={headerTitleContainer}>
+        {/* <View style={headerTitleContainer}>
           <View style={headerTitleSubContainer}>
             <TouchableOpacity style={menuButton} onPress={() => this.handleMenuButtonClick()}>
               <Image source={require('../assets/images/menu.png')} />
@@ -206,7 +206,7 @@ class NewSaleTextile extends Component {
               </TouchableOpacity>
             )}
           </View>
-        </View>
+        </View> */}
 
         <ScrollView>
           <View style={styles.container}>

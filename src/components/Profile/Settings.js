@@ -11,6 +11,8 @@ import RNPickerSelect from 'react-native-picker-select';
 import { Chevron } from 'react-native-shapes';
 import { openDatabase } from 'react-native-sqlite-storage';
 import Loader from '../../commonUtils/loader';
+import BottomTabNav from '../../Navigation/BottomTabNav';
+import TopBar from '../../Navigation/TopBar';
 import ProfileService from '../services/ProfileService';
 import UrmService from '../services/UrmService';
 
@@ -420,20 +422,26 @@ class Settings extends Component {
         return (
 
             <View style={{ flex: 1 }}>
-                <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}>
+                {/* <View style={Device.isTablet ? styles.viewsWidth_tablet : styles.viewsWidth_mobile}> */}
 
-                    <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
+                {/* <TouchableOpacity style={Device.isTablet ? styles.menuButton_tablet : styles.menuButton_mobile} onPress={() => this.handleMenuButtonClick()}>
                         <Image source={require('../assets/images/menu.png')} />
                     </TouchableOpacity>
-                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t("Settings")} </Text>
-                    {/* <TouchableOpacity
+                    <Text style={Device.isTablet ? styles.headerTitle_tablet : styles.headerTitle_mobile}> {I18n.t("Settings")} </Text> */}
+                {/* <TouchableOpacity
                         style={{ position: 'absolute', right: 20, top: 47, backgroundColor: '#ffffff', borderRadius: 5, width: 30, height: 32, }}
                         onPress={() => this.signOut()} >
                         <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/applogout.png')} />
                     </TouchableOpacity> */}
 
+                {/* </View> */}
+                <TopBar {...this.props} />
+                <View>
+                    <TouchableOpacity
+                        onPress={() => { this.props.navigation.navigate('Login'); }}>
+                        <Text> {I18n.t("Sign Out")}</Text>
+                    </TouchableOpacity>
                 </View>
-
                 <KeyboardAwareScrollView KeyboardAwareScrollView
                     enableOnAndroid={true}>
                     <View>
@@ -727,6 +735,7 @@ class Settings extends Component {
                         />
                     </View>
                 )}
+                <BottomTabNav {...this.props} />
             </View>
         );
     }
