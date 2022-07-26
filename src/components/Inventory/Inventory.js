@@ -23,6 +23,7 @@ import TopBar from '../../Navigation/TopBar';
 import style from '../../assets/styles/HeaderStyles.scss';
 import ModalDropdown from 'react-native-modal-dropdown';
 
+import scss from '../../assets/styles/HeaderStyles.scss';
 
 var deviceWidth = Dimensions.get("window").width;
 var deviceheight = Dimensions.get("window").height;
@@ -186,7 +187,7 @@ export default class Inventory extends Component {
           <Loader
             loading={this.state.loading} />
         }
-        {/* <View style={style.headerContainer} >
+        <View style={scss.headerContainer} >
           <View>
             <Image
               style={styles.logoimage}
@@ -194,9 +195,14 @@ export default class Inventory extends Component {
               source={require('../assets/images/easy_retail_logo.png')}
             ></Image>
           </View>
-          {this.state.openModel && <TopBar active={this.state.openModel} />}
-          {/* <ModalDropdown options={['option 1', 'option 2']}> */}
-          {/* <View>s */}
+          {/* {this.state.openModel && <TopBar active={this.state.openModel} />}
+          <ModalDropdown options={['option 1', 'option 2']}>
+          <View>
+            <Text style={headerTitle} onPress={() => this.handleBackButtonClick()}>
+              {I18n.t("Inventory Portal")}
+            </Text>
+          </View>
+        </View> */}
         {/* {this.state.openModel && <TopBar active={this.state.openModel} />}
           <View style={headerTitleSubContainer2}>
             {this.state.flagBarcode && (
@@ -214,19 +220,18 @@ export default class Inventory extends Component {
         <ScrollView>
           <View style={styles.container}>
             <FlatList
-              style={pageNavigationBtnContainer}
+              style={scss.pageNavigationContainer}
               horizontal
               data={this.state.privilages}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
               keyExtractor={(item, i) => i.toString()}
               renderItem={({ item, index }) => (
-                <TouchableOpacity style={[pageNavigationBtn, {
-                  backgroundColor: item.bool ? '#ED1C24' : '#FFFFFF',
-                  borderColor: item.bool ? '#ED1C24' : '#858585',
+                <TouchableOpacity style={[scss.pageNavigationBtn, {
+                  borderColor: item.bool ? '#ED1C24' : '#d7d7d7',
                 }]} onPress={() => this.topbarAction1(item, index)} >
 
-                  <Text style={[pageNavigationBtnText, { color: item.bool ? "#FFFFFF" : '#858585', }]}>
+                  <Text style={[pageNavigationBtnText, { color: item.bool ? "#ED1C24" : '#00000073', }]}>
                     {item.name}
                   </Text>
                 </TouchableOpacity>

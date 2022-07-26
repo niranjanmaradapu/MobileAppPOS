@@ -12,7 +12,7 @@ export const listEmptyMessage = {
   textAlign: 'center',
   fontFamily: "bold",
   marginTop: deviceheight / 3,
-}
+};
 
 export const headerTitleContainer = {
   display: 'flex',
@@ -23,38 +23,38 @@ export const headerTitleContainer = {
   height: Device.isTablet ? RH(60) : RH(50),
   backgroundColor: color.white,
   marginBottom: RH(5)
-}
+};
 
 export const headerTitleSubContainer = {
   display: "flex",
   flexDirection: 'row',
   justifyContent: 'flex-start',
   alignItems: 'center'
-}
+};
 
 export const headerTitleSubContainer2 = {
   display: "flex",
   flexDirection: 'row',
   justifyContent: 'flex-end',
   alignItems: 'center'
-}
+};
 
 export const menuButton = {
   width: Device.isTablet ? RW(50) : RW(40),
   height: Device.isTablet ? RH(40) : RH(30),
   marginRight: RW(10),
-}
+};
 
 export const backButton = {
   width: Device.isTablet ? RW(40) : RW(30),
   height: Device.isTablet ? RH(40) : RH(20),
   marginRight: RW(20),
   marginTop: -RH(10)
-}
+};
 
 export const backButtonImage = {
   marginTop: Device.isTablet ? 0 : RH(-10)
-}
+};
 
 export const headerNavigationBtn = {
   backgroundColor: color.accent,
@@ -64,7 +64,7 @@ export const headerNavigationBtn = {
   paddingHorizontal: RW(10),
   textAlign: 'center',
   // marginRight: RW(10),
-}
+};
 
 export const headerNavigationBtnText = {
   fontSize: RF(12),
@@ -73,20 +73,20 @@ export const headerNavigationBtnText = {
   color: color.white,
   textAlign: 'center',
   alignSelf: 'center'
-}
+};
 
 export const filterBtn = {
   // backgroundColor: '#686868',
   borderRadius: 5,
   width: Device.isTablet ? RW(40) : RW(30),
   height: Device.isTablet ? RH(42) : RH(32),
-}
+};
 
 export const headerTitle = {
   fontFamily: 'bold',
   fontSize: RF(18),
   color: color.dark
-}
+};
 
 export const pageNavigationBtn = {
   height: Device.isTablet ? RH(40) : RH(30),
@@ -95,7 +95,7 @@ export const pageNavigationBtn = {
   borderRadius: 5,
   paddingHorizontal: RW(20),
   marginLeft: RW(10),
-}
+};
 
 export const pageNavigationBtnText = {
   fontSize: RF(13),
@@ -103,11 +103,11 @@ export const pageNavigationBtnText = {
   textAlignVertical: 'center',
   paddingTop: 5,
   fontFamily: 'regular'
-}
+};
 
 export const pageNavigationBtnContainer = {
   // margin: Device.isTablet ? RH(10) : RH(5)
-}
+};
 
 export const sectionListHeader = {
   paddingVertical: RH(2),
@@ -115,7 +115,7 @@ export const sectionListHeader = {
   fontSize: RF(16),
   fontFamily: 'medium',
   color: color.lightBlack,
-}
+};
 
 export const sectionListBtnContainer = {
   display: 'flex',
@@ -124,7 +124,7 @@ export const sectionListBtnContainer = {
   alignItems: 'center',
   paddingVertical: 10,
   paddingHorizontal: 20,
-}
+};
 
 export const sectionListBtn = {
   height: 44,
@@ -134,7 +134,7 @@ export const sectionListBtn = {
   borderColor: color.border,
   marginVertical: 2,
   borderRadius: 5,
-}
+};
 
 export const flatListHeaderContainer = {
   // backgroundColor: '#686868',
@@ -147,14 +147,14 @@ export const flatListHeaderContainer = {
   paddingRight: RW(20),
   paddingVertical: RH(5),
   height: RH(30)
-}
+};
 
 export const flatListTitle = {
   fontSize: RF(15),
   fontFamily: 'medium',
   color: color.lightBlack,
   textAlign: 'center',
-}
+};
 
 export const flatListMainContainer = {
   backgroundColor: color.light,
@@ -168,32 +168,32 @@ export const flatListMainContainer = {
   borderRadius: Device.isTablet ? 10 : 5,
   width: deviceWidth - RW(10),
   marginHorizontal: RW(5)
-}
+};
 
 export const flatlistSubContainer = {
   flexDirection: 'column',
   width: '100%',
   gap: 10,
-}
+};
 
 export const highText = {
   fontSize: RF(10),
   fontFamily: 'medium',
   color: color.accent,
-}
+};
 
 
 export const textStyleMedium = {
   fontSize: RF(10),
   fontFamily: 'medium',
   color: color.dark
-}
+};
 
 export const textStyleLight = {
   fontSize: RF(10),
   fontFamily: 'normal',
   color: color.lightDark
-}
+};
 
 export const textContainer = {
   display: 'flex',
@@ -203,7 +203,7 @@ export const textContainer = {
   width: '100%',
   paddingTop: RH(10),
   paddingHorizontal: RW(5),
-}
+};
 
 export const buttonContainer = {
   flexDirection: 'row',
@@ -211,7 +211,7 @@ export const buttonContainer = {
   alignItems: 'center',
   alignContent: 'center',
   // marginBottom: 10
-}
+};
 
 export const buttonStyle = {
   width: Device.isTablet ? RW(50) : RW(30),
@@ -220,7 +220,7 @@ export const buttonStyle = {
   borderTopRightRadius: 5,
   borderWidth: Device.isTablet ? 2 : 1,
   borderColor: color.lightBorder,
-}
+};
 
 export const buttonStyle1 = {
   width: Device.isTablet ? RW(50) : RW(30),
@@ -229,7 +229,7 @@ export const buttonStyle1 = {
   borderTopLeftRadius: 5,
   borderWidth: Device.isTablet ? 2 : 1,
   borderColor: color.lightBorder,
-}
+};
 
 export const singleButtonStyle = {
   width: Device.isTablet ? RW(40) : RW(30),
@@ -238,14 +238,14 @@ export const singleButtonStyle = {
   marginLeft: 5,
   borderWidth: Device.isTablet ? 2 : 1,
   borderColor: color.lightBorder,
-}
+};
 
 export const buttonImageStyle = {
   alignSelf: 'center',
   marginTop: 4,
   height: Device.isTablet ? RH(25) : RH(20),
   width: Device.isTablet ? RW(25) : RW(20)
-}
+};
 
 export const loadMoreBtn = {
   width: RW(200),
@@ -253,10 +253,10 @@ export const loadMoreBtn = {
   marginLeft: deviceWidth / 2.5,
   marginTop: RH(10),
   marginBottom: RH(20),
-}
+};
 
 export const loadmoreBtnText = {
   fontSize: RF(12),
   color: color.lightBlack,
   fontFamily: 'bold'
-}
+};

@@ -2,6 +2,20 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   padding: 0 10px;
   height: 8%;
+}
+.pageNavigationContainer {
+  width: 100%;
+  background-color: #d7d7d7;
+  height: 30px;
+}
+
+.pageNavigationBtn {
+  font-size: 25px;
+  color: #000;
+  margin: 0 10px;
+  padding: 0 5px;
+  border-bottom-width: 3px;
 }

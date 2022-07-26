@@ -17,13 +17,13 @@ import EmptyList from '../Errors/EmptyList';
 import { buttonContainer, buttonStyle, buttonStyle1, filterBtn, flatListMainContainer, flatlistSubContainer, headerNavigationBtn, headerNavigationBtnText, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, highText, buttonImageStyle, menuButton, textContainer, textStyleLight, textStyleMedium, flatListHeaderContainer, flatListTitle, singleButtonStyle } from '../Styles/Styles';
 import { filterMainContainer, filterSubContainer, filterHeading, filterCloseImage, deleteText, deleteHeading, deleteHeader, deleteContainer, deleteCloseBtn } from '../Styles/PopupStyles';
 import { inputField, rnPickerContainer, rnPicker, submitBtn, submitBtnText, cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
-
+import scss from '../../assets/styles/style.scss';
 
 var deviceheight = Dimensions.get("window").height;
 var deviceWidth = Dimensions.get("window").width;
 export default class Users extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       clientId: 0,
       pageNumber: 0,
@@ -36,34 +36,34 @@ export default class Users extends Component {
       role: "",
       branch: "",
       userType: "",
-    }
+    };
   }
 
 
 
   async componentDidMount() {
     const clientId = await AsyncStorage.getItem("custom:clientId1");
-    this.setState({ clientId: clientId })
-    console.log({ clientId })
-    this.getAllUsers()
+    this.setState({ clientId: clientId });
+    console.log({ clientId });
+    this.getAllUsers();
   }
 
   getAllUsers() {
-    const { clientId, pageNumber } = this.state
+    const { clientId, pageNumber } = this.state;
     UrmService.getAllUsers(clientId, pageNumber).then(res => {
-      let userResponse = res.data.content
-      console.log({ userResponse })
+      let userResponse = res.data.content;
+      console.log({ userResponse });
       if (res) {
         if (res.data) {
-          this.setState({ usersList: this.state.usersList.concat(userResponse), totalPages: res.data.totalPages })
+          this.setState({ usersList: this.state.usersList.concat(userResponse), totalPages: res.data.totalPages });
         }
       }
-    })
+    });
   }
 
   // Filter Actions
-    applyUserFilter(){
-    const {userType, role, branch, clientId, pageNumber} = this.state
+  applyUserFilter() {
+    const { userType, role, branch, clientId, pageNumber } = this.state;
     const searchUser = {
       "id": 0,
       "phoneNo": null,
@@ -73,43 +73,43 @@ export default class Users extends Component {
       "roleName": role ? role.trim() : null,
       "storeName": branch ? branch.trim() : null,
       "clientId": clientId
-    }
+    };
 
     UrmService.getUserDetails(searchUser, pageNumber).then(res => {
-      if(res){
-        let filteredUserRes = res.data.result.content
-        console.log({filteredUserRes})
-        this.setState({modalVisible: false, filterActive: true, filterUserList: filteredUserRes})
+      if (res) {
+        let filteredUserRes = res.data.result.content;
+        console.log({ filteredUserRes });
+        this.setState({ modalVisible: false, filterActive: true, filterUserList: filteredUserRes });
       }
-    })
+    });
   }
 
   handleUSerType = (value) => {
-    this.setState({userType: value})
-  }
+    this.setState({ userType: value });
+  };
 
   handleRole = (value) => {
-    this.setState({role: value})
-  }
+    this.setState({ role: value });
+  };
 
   handleBranch = (value) => {
-    this.setState({branch: value})
-  }
+    this.setState({ branch: value });
+  };
 
   filterAction() {
-    this.setState({ flagFilterOpen: true, modalVisible: true })
+    this.setState({ flagFilterOpen: true, modalVisible: true });
   }
 
   modelCancel() {
-    this.setState({ modalVisible: false })
+    this.setState({ modalVisible: false });
   }
 
   clearFilterAction() {
-    this.setState({filterActive: false})
+    this.setState({ filterActive: false });
   }
 
   // Edit User Navigation
-    handleedituser(item, index) {
+  handleedituser(item, index) {
     this.props.navigation.navigate('AddUser',
       {
         item: item, isEdit: true,
@@ -121,6 +121,7 @@ export default class Users extends Component {
     return (
       <View>
         <FlatList
+          style={scss.flatListBody}
           ListHeaderComponent={<View style={flatListHeaderContainer}>
             <Text style={flatListTitle}>Users</Text>
             {!this.state.filterActive &&
@@ -144,31 +145,37 @@ export default class Users extends Component {
           scrollEnabled={true}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
-            <View style={flatListMainContainer}>
-              <View style={flatlistSubContainer}>
-                <View style={textContainer}>
-                  <Text style={highText}>UserId: {item.id}</Text>
-                  <Text style={textStyleLight}>Date: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
-                </View>
-                <View style={textContainer}>
-                  <Text style={textStyleMedium}>UserName: {item.userName}</Text>
-                  <View style={buttonContainer}>
-                    {item.isActive ?
-                      <Text style={[textStyleMedium, { backgroundColor: '#009900', color: '#ffffff', marginTop: 5, padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: Device.isTablet ? 10 : 5, fontFamily: 'medium' }]}>Active</Text>
-                      :
-                      <Text style={[textStyleMedium, { backgroundColor: '#ee0000', color: '#ffffff', marginTop: 5, padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: 5, fontFamily: 'medium' }]}>In-Active</Text>
-                    }
-                    <TouchableOpacity style={singleButtonStyle} onPress={() => this.handleedituser(item, index)}>
-                      <Image style={buttonImageStyle} source={require('../assets/images/edit.png')} />
-                    </TouchableOpacity>
+            <View>
+              <ScrollView>
+                <View style={scss.flatListContainer}>
+                  <View style={scss.flatListSubContainer}>
+                    <View style={scss.textContainer}>
+                      <Text style={scss.highText}>UserId: {item.id}</Text>
+                    </View>
+                    <View style={scss.textContainer}>
+                      <Text style={scss.textStyleMedium}>UserName: {item.userName}</Text>
+                      <View style={scss.buttonContainer}>
+                        {item.isActive ?
+                          <Text style={[scss.textStyleMedium, { backgroundColor: '#009900', color: '#ffffff', marginTop: 5, padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: Device.isTablet ? 10 : 5, fontFamily: 'medium' }]}>Active</Text>
+                          :
+                          <Text style={[scss.textStyleMedium, { backgroundColor: '#ee0000', color: '#ffffff', marginTop: 5, padding: Device.isTablet ? 10 : 5, alignSelf: 'flex-start', borderRadius: 5, fontFamily: 'medium' }]}>In-Active</Text>
+                        }
+                      </View>
+                    </View>
+                    <View style={scss.textContainer}>
+                      <Text style={scss.textStyleMedium}>Stores: {item.stores.map((store, index) => {
+                        return <Text>{store.name}, </Text>;
+                      })}</Text>
+                    </View>
+                    <View style={scss.flatListFooter}>
+                      <Text style={scss.footerText}>Date: {item.createdDate ? item.createdDate.toString().split(/T/)[0] : item.createdDate}</Text>
+                      <TouchableOpacity style={scss.footerSingleBtn} onPress={() => this.handleedituser(item, index)}>
+                        <Image style={scss.footerBtnImg} source={require('../assets/images/edit.png')} />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
-                <View style={textContainer}>
-                  <Text style={textStyleMedium}>Stores: {item.stores.map((store, index) => {
-                    return <Text>{store.name}, </Text>
-                  })}</Text>
-                </View>
-              </View>
+              </ScrollView>
             </View>
           )}
         />
@@ -247,7 +254,7 @@ export default class Users extends Component {
           </View>
         )}
       </View>
-    )
+    );
   }
 }
 const styles = StyleSheet.create({

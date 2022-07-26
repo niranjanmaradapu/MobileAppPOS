@@ -3,10 +3,10 @@ import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 import Modal from 'react-native-modal';
-import React, { Component } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import axios from 'axios'
-import InventoryService from '../services/InventoryService'
+import React, { Component } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import InventoryService from '../services/InventoryService';
 import { filterBtn, flatListHeaderContainer, flatListMainContainer, flatlistSubContainer, flatListTitle, headerTitle, headerTitleContainer, highText, listEmptyMessage, textContainer, textStyleLight, textStyleMedium } from '../Styles/Styles';
 import { RF, RW, RH } from '../../Responsive';
 var deviceWidth = Dimensions.get("window").width;
@@ -15,12 +15,12 @@ import Loader from '../../commonUtils/loader';
 import { cancelBtn, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, dateSelector, dateText, submitBtn, submitBtnText } from '../Styles/FormFields';
 import { filterCloseImage, filterHeading, filterMainContainer, filterSubContainer } from '../Styles/PopupStyles';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import scss from '../../assets/styles/style.scss';
 
 export default class ProductCombo extends Component {
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       domainId: 0,
       storeId: 0,
@@ -35,42 +35,42 @@ export default class ProductCombo extends Component {
       endDate: "",
       date: new Date(),
       enddate: new Date(),
-    }
+    };
   }
 
   async componentDidMount() {
 
-    const storeId = await AsyncStorage.getItem("storeId")
-    this.setState({ storeId: parseInt(storeId), })
-    this.getAllProductsCombo()
+    const storeId = await AsyncStorage.getItem("storeId");
+    this.setState({ storeId: parseInt(storeId), });
+    this.getAllProductsCombo();
   }
 
   async getAllProductsCombo() {
-    this.setState({ loading: true })
-    const { storeId, fromDate, toDate } = this.state
-    let params = `?storeId=${storeId}`
-    console.log({ params })
+    this.setState({ loading: true });
+    const { storeId, fromDate, toDate } = this.state;
+    let params = `?storeId=${storeId}`;
+    console.log({ params });
     InventoryService.getProductCombo(params).then(res => {
-      console.log({ res })
-      let productComboList = res.data.result.content
-      console.log({ productComboList })
-      this.setState({ productComboList: productComboList, loading: false })
+      console.log({ res });
+      let productComboList = res.data.result.content;
+      console.log({ productComboList });
+      this.setState({ productComboList: productComboList, loading: false });
     }).catch(err => {
-      console.log({ err })
-      this.setState({ loading: false })
-    })
+      console.log({ err });
+      this.setState({ loading: false });
+    });
   }
 
   filterAction() {
-    this.setState({ flagFilterOpen: true, modalVisible: true })
+    this.setState({ flagFilterOpen: true, modalVisible: true });
   }
 
   clearFilterAction() {
-    this.setState({ filterActive: false, })
+    this.setState({ filterActive: false, });
   }
 
   modelCancel() {
-    this.setState({ modalVisible: false })
+    this.setState({ modalVisible: false });
   }
 
   // Date Actions
@@ -118,6 +118,13 @@ export default class ProductCombo extends Component {
     this.setState({ date: new Date(), enddate: new Date(), datepickerOpen: false, datepickerendOpen: false });
   }
 
+  handleAddProductCombo() {
+    this.props.navigation.navigate('AddProduct', {
+      isEdit: false,
+      onGoBack: () => null
+    });
+  }
+
 
   render() {
     return (
@@ -127,23 +134,26 @@ export default class ProductCombo extends Component {
             loading={this.state.loading} />
         }
         <FlatList
-          ListHeaderComponent={<View style={flatListHeaderContainer}>
+          style={scss.flatListBody}
+          ListHeaderComponent={<View style={scss.headerContainer}>
             <Text style={flatListTitle}>Products Combo</Text>
-            {!this.state.filterActive &&
-              <TouchableOpacity
-                style={filterBtn}
-                onPress={() => this.filterAction()} >
-                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
-              </TouchableOpacity>
-
-            }
-            {this.state.filterActive &&
-              <TouchableOpacity
-                style={filterBtn}
-                onPress={() => this.clearFilterAction()} >
-                <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
-              </TouchableOpacity>
-            }
+            <View style={scss.headerContainer}>
+              <TouchableOpacity style={filterBtn} onPress={() => this.handleAddProductCombo()}><Text style={{ fontSize: 20 }}>+</Text></TouchableOpacity>
+              {!this.state.filterActive &&
+                <TouchableOpacity
+                  style={filterBtn}
+                  onPress={() => this.filterAction()} >
+                  <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/promofilter.png')} />
+                </TouchableOpacity>
+              }
+              {this.state.filterActive &&
+                <TouchableOpacity
+                  style={filterBtn}
+                  onPress={() => this.clearFilterAction()} >
+                  <Image style={{ alignSelf: 'center', top: 5 }} source={require('../assets/images/clearFilterSearch.png')} />
+                </TouchableOpacity>
+              }
+            </View>
           </View>}
           data={this.state.productComboList}
           scrollEnabled={true}
@@ -266,7 +276,7 @@ export default class ProductCombo extends Component {
           </View>
         )}
       </View>
-    )
+    );
   }
 }
 

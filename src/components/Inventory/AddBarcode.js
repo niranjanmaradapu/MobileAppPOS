@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import React, { Component } from 'react';
 import { Dimensions, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import DatePicker from 'react-native-date-picker';
 import Device from 'react-native-device-detection';
 import I18n from 'react-native-i18n';
 import RNPickerSelect from 'react-native-picker-select';
@@ -12,18 +13,31 @@ import InventoryService from '../services/InventoryService';
 import LoginService from '../services/LoginService';
 import Message from '../Errors/Message';
 import { RH, RW, RF } from '../../Responsive';
-import { cancelBtn, cancelBtnText, inputField, inputHeading, rnPicker, rnPickerContainer, rnPickerError, submitBtn, submitBtnText } from '../Styles/FormFields';
 import { backButton, backButtonImage, headerTitle, headerTitleContainer, headerTitleSubContainer, headerTitleSubContainer2, menuButton } from '../Styles/Styles';
+import { inputField, rnPickerContainer, rnPicker, inputHeading, submitBtn, submitBtnText, cancelBtn, rnPickerError, cancelBtnText, datePicker, datePickerBtnText, datePickerButton1, datePickerButton2, datePickerContainer, dateSelector, dateText, } from '../Styles/FormFields';
 
 var deviceWidth = Dimensions.get('window').width;
 var deviceHeight = Dimensions.get('window').height;
+
+// For Domains
+const data1 = [
+  { value: "Textile", label: "Textile" },
+  { value: "Retail", label: "Retail" },
+  { value: "Electronics", label: "Electronics" }
+];
+
+// For Retail Status
+const status1 = [
+  { value: "YES", label: "YES" },
+  { value: "NO", label: "NO" }
+];
 
 class AddBarcode extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      division: "",
+      selectedDivision: "",
       section: "",
       subSection: "",
       category: "",
@@ -37,25 +51,25 @@ class AddBarcode extends Component {
       empId: "",
       quantity: "",
       divisionArray: [],
-      divisions: [],
+      divisionsList: [],
       secionArray: [],
-      secions: [],
+      sectionsList: [],
       divisionId: null,
       sectionId: null,
       subsectionId: null,
       catogirieId: null,
       subsecionArray: [],
-      subsecions: [],
+      subSectionsList: [],
       catogiriesArray: [],
-      catogiries: [],
-      uom: [],
+      categoriesList: [],
+      uomList: [],
       uomArray: [],
-      hsncodes: [],
+      hsnCodesList: [],
       hsncodesArray: [],
       uomId: null,
       hsnId: null,
       storeNamesArray: [],
-      storeNames: [],
+      storesList: [],
       name: "",
       storeId: "",
       domainId: 1,
@@ -75,24 +89,22 @@ class AddBarcode extends Component {
       empValid: true,
       storeValid: true,
       qtyValid: true,
+      selectedDomain: "",
+      clientId: "",
+      selectedStatus: "",
+      productValidity: "",
+      date: new Date(),
+      datepickerOpen: false,
+      doneButtonClicked: false,
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     var domainStringId = "";
     var storeStringId = "";
     this.setState({ isEdit: this.props.route.params.isEdit });
-    AsyncStorage.getItem("domainDataId").then((value) => {
-      domainStringId = value;
-      this.setState({ domainId: parseInt(domainStringId) });
-      console.log("domain data id" + this.state.domainId);
-      this.getAllpools();
-
-    }).catch((err) => {
-      this.setState({ loading: false });
-      console.log(err);
-      // alert('There is error getting domainDataId');
-    });
+    const clientId = await AsyncStorage.getItem("custom:clientId1");
+    this.setState({ clientId: clientId });
 
     AsyncStorage.getItem("storeId").then((value) => {
       storeStringId = value;
@@ -105,255 +117,118 @@ class AddBarcode extends Component {
       console.log('There is error getting storeId');
       // alert('There is error getting storeId');
     });
-    this.getAllDivisions();
-    this.getAllCatogiries();
-    this.getAllUOM();
-    this.getAllHSNCodes();
     this.getAllstores();
+    this.getAllHSNCodes();
   }
 
-
-  getAllDivisions() {
-    var divisions = [];
-    axios.get(InventoryService.getAllDivisions(),).then((res) => {
-      if (res.data["result"]) {
-        for (var i = 0; i < res.data["result"].length; i++) {
-
-          this.state.divisionArray.push({ name: res.data["result"][i].name, id: res.data["result"][i].id });
-
-          divisions.push({
-            value: this.state.divisionArray[i].name,
-            label: this.state.divisionArray[i].name
-          });
-          console.log(this.state.divisionArray);
-
-        }
-        this.setState({
-          divisions: divisions,
-        });
-
-        this.setState({ divisionArray: this.state.divisionArray });
-      }
-
-    });
-  }
-
-
-  getAllSections() {
-    const params = {
-      "id": this.state.divisionId
-    };
-    var secions = [];
-    axios.get(InventoryService.getAllSections(), { params }).then((res) => {
-      if (res.data["result"]) {
-        for (var i = 0; i < res.data["result"].length; i++) {
-
-          this.state.secionArray.push({ name: res.data["result"][i].name, id: res.data["result"][i].id });
-
-          secions.push({
-            value: this.state.secionArray[i].name,
-            label: this.state.secionArray[i].name
-          });
-        }
-        this.setState({
-          secions: secions,
-        });
-
-        this.setState({ secionArray: this.state.secionArray });
-      }
-
-    });
-  }
-
-  getAllSubsections() {
-    const params = {
-      "id": this.state.sectionId
-    };
-    var subsecions = [];
-    axios.get(InventoryService.getAllSections(), { params }).then((res) => {
-      if (res.data["result"]) {
-        for (var i = 0; i < res.data["result"].length; i++) {
-
-          this.state.subsecionArray.push({ name: res.data["result"][i].name, id: res.data["result"][i].id });
-
-          subsecions.push({
-            value: this.state.subsecionArray[i].name,
-            label: this.state.subsecionArray[i].name
-          });
-          console.log(this.state.subsecionArray);
-
-        }
-        this.setState({
-          subsecions: subsecions,
-        });
-
-        this.setState({ subsecionArray: this.state.subsecionArray });
-      }
-
-    });
-  }
-
-  getAllCatogiries() {
-    var catogiries = [];
-    axios.get(InventoryService.getAllCategories()).then((res) => {
-      if (res.data["result"]) {
-        for (var i = 0; i < res.data["result"].length; i++) {
-
-          this.state.catogiriesArray.push({ name: res.data["result"][i].name, id: res.data["result"][i].id });
-
-          catogiries.push({
-            value: this.state.catogiriesArray[i].name,
-            label: this.state.catogiriesArray[i].name
-          });
-
-
-        }
-        this.setState({
-          catogiries: catogiries,
-        });
-
-        this.setState({ catogiriesArray: this.state.catogiriesArray });
-      }
-
-    });
-
-  }
-
-  getAllUOM() {
-    var uom = [];
-    axios.get(InventoryService.getUOM()).then((res) => {
-      if (res.data["result"]) {
-        for (var i = 0; i < res.data["result"].length; i++) {
-          this.state.uomArray.push({ name: res.data["result"][i].uomName, id: res.data["result"][i].id });
-          console.log(this.state.uomArray);
-          uom.push({
-            value: this.state.uomArray[i].name,
-            label: this.state.uomArray[i].name
-          });
-        }
-        this.setState({
-          uom: uom,
-        });
-
-        this.setState({ uomArray: this.state.uomArray });
-      }
-
-    });
-  }
-
-  getAllHSNCodes() {
-    var hsncodes = [];
-    axios.get(InventoryService.getAllHsnList()).then((res) => {
-      if (res.data["result"]) {
-        for (var i = 0; i < res.data.result.content.length; i++) {
-          this.state.hsncodesArray.push({ name: res.data.result.content[i].hsnCode, id: res.data.result.content[i].id });
-          console.log(res.data["result"].content);
-          hsncodes.push({
-            value: this.state.hsncodesArray[i].name,
-            label: this.state.hsncodesArray[i].name
-          });
-        }
-        this.setState({
-          hsncodes: hsncodes,
-        });
-
-        this.setState({ hsncodesArray: this.state.hsncodesArray });
-      }
-
-    });
-  }
-
-  async getAllstores() {
-    const username = await AsyncStorage.getItem("username");
-    AsyncStorage.getItem("custom:isSuperAdmin").then((value) => {
-
-      if (value === "true") {
-        const params = {
-          "clientDomianId": this.state.domainId
-        };
-        var storeNames = [];
-        axios.get(LoginService.getUserStoresForSuperAdmin(), { params }).then((res) => {
-          let len = res.data["result"].length;
-          if (len > 0) {
-            for (let i = 0; i < len; i++) {
-              let number = res.data.result[i];
-              // this.state.storeData.push(number)
-              console.log(this.state.storeData);
-              storeNames.push({
-                value: number.name,
-                label: number.name
-              });
-              this.state.storeNamesArray.push({ name: number.name, id: number.id });
-            }
-            this.setState({
-              storeNames: storeNames,
-            });
-
-            this.setState({ storeNamesArray: this.state.storeNamesArray });
-
-            this.setState({ storeData: this.state.storeData });
-          }
-        });
-
-      }
-      else {
-        var storeNames = [];
-        axios.get(LoginService.getUserStores() + username).then((res) => {
-          if (res.data["result"]) {
-            for (var i = 0; i < res.data["result"].length; i++) {
-              let number = res.data.result[i];
-              const myArray = [];
-              myArray = number.split(":");
-              this.state.storeNamesArray.push({ name: myArray[0], id: myArray[1] });
-              console.log(this.state.storeNamesArray);
-              storeNames.push({
-                value: this.state.storeNamesArray[i].name,
-                label: this.state.storeNamesArray[i].name
-              });
-            }
-            this.setState({
-              storeNames: storeNames,
-            });
-
-            this.setState({ storeNamesArray: this.state.storeNamesArray });
-
-          }
-        });
-      }
-    });
-  }
-
+  // Go Back Actions
   handleBackButtonClick() {
     this.props.navigation.goBack(null);
     return true;
   }
 
+  // Domain Actions
+  handleDomain = (value) => {
+    this.setState({ selectedDomain: value },
+      () => {
+        console.log({ value });
+        const { selectedDomain } = this.state;
+        if (this.state.selectedDomain === "Textile") {
+          this.getAllDivisions(selectedDomain);
+          this.getAllCatogiries(selectedDomain);
+        }
+        this.getAllHSNCodes(selectedDomain);
+        this.getAllUOM();
+      });
+  };
+
+  // Status Actions
+  handleStatus = (value) => {
+    console.log({ value });
+    this.setState({ selectedStatus: value });
+  };
+
+  // Division Actions
+  getAllDivisions(data) {
+    InventoryService.getAllDivisions(data).then((res) => {
+      if (res?.data) {
+        res.data.forEach((ele, index) => {
+          console.log({ ele });
+          const divisionObj = {
+            id: ele.id,
+            value: ele.name,
+            label: ele.name
+          };
+          console.log({ divisionObj });
+          this.state.divisionsList.push(divisionObj);
+        });
+        this.setState({ divisionsList: this.state.divisionsList, divisionArray: this.state.divisionsList });
+      }
+    });
+  }
   handleDivision = (value) => {
     for (let i = 0; i < this.state.divisionArray.length; i++) {
       if (this.state.divisionArray[i].name === value) {
-        this.setState({ divisionId: this.state.divisionArray[i].id });
+        this.setState({ divisionId: this.state.divisionArray[i].id, subSectionsList: [], subSectionId: "" });
+        this.getAllSections(this.state.divisionId, this.state.selectedDomain);
       }
     }
-    this.getAllSections();
-    this.setState({ division: value });
+    this.setState({ selectedDivision: value });
     if (this.state.divisionId !== null) {
-      this.setState({ divisionValid: true })
+      this.setState({ divisionValid: true });
     }
   };
 
+
+  // Section Actions
+  getAllSections(id, data) {
+    this.setState({ sectionsList: [] });
+    InventoryService.getAllSections(id, data).then(res => {
+      if (res?.data) {
+        res.data.forEach((ele, index) => {
+          const sectionsObj = {
+            id: ele.id,
+            value: ele.name,
+            label: ele.name
+          };
+          console.log({ sectionsObj });
+          this.state.sectionsList.push(sectionsObj);
+        });
+        this.setState({ sectionsList: this.state.sectionsList, secionArray: this.state.sectionsList });
+      }
+    });
+  }
   handleSection = (value) => {
     for (let i = 0; i < this.state.secionArray.length; i++) {
       if (this.state.secionArray[i].name === value) {
         this.setState({ sectionId: this.state.secionArray[i].id });
       }
     }
-    this.getAllSubsections();
     this.setState({ section: value });
     if (this.state.sectionId !== null) {
-      this.setState({ sectionValid: true })
+      this.setState({ sectionValid: true });
     }
+    this.getAllSubsections(this.state.sectionId, this.state.selectedDomain);
   };
 
+  // SubSection Actions
+  getAllSubsections(id, data) {
+    this.setState({ subSectionsList: [] });
+    InventoryService.getAllSections(id, data).then(res => {
+      if (res?.data) {
+        res.data.forEach((ele, index) => {
+          const subSectionObj = {
+            id: ele.id,
+            value: ele.name,
+            label: ele.name
+          };
+          console.log({ subSectionObj });
+          this.state.subSectionsList.push(subSectionObj);
+        });
+        this.setState({ subSectionsList: this.state.subSectionsList, subsecionArray: this.state.subSectionsList });
+      }
+    });
+  }
   handleSubSection = (value) => {
     for (let i = 0; i < this.state.subsecionArray.length; i++) {
       if (this.state.subsecionArray[i].name === value) {
@@ -362,9 +237,28 @@ class AddBarcode extends Component {
     }
     this.setState({ subSection: value });
     if (this.state.subsectionId !== null) {
-      this.setState({ subSectionValid: true })
+      this.setState({ subSectionValid: true });
     }
   };
+
+  // Category Actions
+  getAllCatogiries(data) {
+    this.setState({ categoriesList: [] });
+    InventoryService.getAllCategories(data).then(res => {
+      if (res?.data) {
+        res.data.forEach((ele, index) => {
+          const categoryObj = {
+            id: ele.id,
+            value: ele.name,
+            label: ele.name
+          };
+          console.log({ categoryObj });
+          this.state.categoriesList.push(categoryObj);
+        });
+        this.setState({ categoriesList: this.state.categoriesList, catogiriesArray: this.state.categoriesList });
+      }
+    });
+  }
   handleCateory = (value) => {
     for (let i = 0; i < this.state.catogiriesArray.length; i++) {
       if (this.state.catogiriesArray[i].name === value) {
@@ -373,10 +267,26 @@ class AddBarcode extends Component {
     }
     this.setState({ category: value });
     if (this.state.catogirieId !== null) {
-      this.setState({ categoryValid: true })
+      this.setState({ categoryValid: true });
     }
   };
 
+  // UOM Actions
+  getAllUOM() {
+    this.setState({ uomList: [] });
+    InventoryService.getUOM().then(res => {
+      res?.data.forEach((ele, index) => {
+        const uomObj = {
+          id: ele.id,
+          value: ele.uomName,
+          label: ele.uomName
+        };
+        console.log({ uomObj });
+        this.state.uomList.push(uomObj);
+      });
+      this.setState({ uomList: this.state.uomList, uomArray: this.state.uomList });
+    });
+  }
   handleUOM = (value) => {
     for (let i = 0; i < this.state.uomArray.length; i++) {
       if (this.state.uomArray[i].name === value) {
@@ -385,10 +295,29 @@ class AddBarcode extends Component {
     }
     this.setState({ uomName: value });
     if (this.state.uomId !== null) {
-      this.setState({ uomValid: true })
+      this.setState({ uomValid: true });
     }
   };
 
+  // HSNCodes Actions
+  getAllHSNCodes() {
+    this.setState({ hsnCodesList: [] });
+    const { hsnCodesList } = this.state;
+    InventoryService.getAllHsnList().then(res => {
+      if (res?.data) {
+        res.data.result.forEach((ele, index) => {
+          const hsnObj = {
+            id: ele.id,
+            value: ele.hsnCode,
+            label: ele.hsnCode,
+          };
+          console.log({ hsnObj });
+          hsnCodesList.push(hsnObj);
+        });
+        this.setState({ hsnCodesList: hsnCodesList, hsncodesArray: hsnCodesList });
+      }
+    });
+  }
   handleHSNCode = (value) => {
     for (let i = 0; i < this.state.hsncodesArray.length; i++) {
       if (this.state.hsncodesArray[i].name === value) {
@@ -397,61 +326,29 @@ class AddBarcode extends Component {
     }
     this.setState({ hsnCode: value });
     if (this.state.hsnId !== null) {
-      this.setState({ hsnValid: true })
+      this.setState({ hsnValid: true });
     }
   };
 
-  handleColour = (value) => {
-    this.setState({ colour: value });
-  };
-
-  handleColourValid = () => {
-    if (this.state.colour.length >= errorLength.colour) {
-      this.setState({ colorValid: true })
-    }
+  // Store Actions
+  async getAllstores() {
+    this.setState({ storesList: [] });
+    const { clientId } = this.state;
+    InventoryService.getAllStores(clientId).then(res => {
+      if (res?.data) {
+        res.data.forEach((ele, index) => {
+          const storeObj = {
+            id: ele.id,
+            value: ele.name,
+            label: ele.name
+          };
+          this.state.storesList.push(storeObj);
+        });
+        console.log({ storeObj });
+        this.setState({ storesList: this.state.storesList });
+      }
+    });
   }
-
-  handleName = (value) => {
-    this.setState({ name: value });
-  };
-
-  handleNameValid = () => {
-    if (this.state.name.length >= errorLength.name) {
-      this.setState({ nameValid: true })
-    }
-  }
-
-  handleBatchNo = (value) => {
-    this.setState({ batchNo: value });
-  };
-
-  handleBatchNoValid = () => {
-    if (this.state.batchNo.length > 0) {
-      this.setState({ batchNoValid: true })
-    }
-  }
-
-  handleCostPrice = (value) => {
-    this.setState({ costPrice: value });
-  };
-
-  handleCostPriceValid = () => {
-    if (this.state.costPrice.length > 0) {
-      this.setState({ costPriceValid: true })
-    }
-  }
-
-  handleListPrice = (value) => {
-    this.setState({ listPrice: value });
-  };
-
-  handleListPriceValid = () => {
-    if (this.state.listPrice.length > 0) {
-      this.setState({ listPriceValid: true })
-    }
-  }
-
-
   handleStore = (value) => {
     console.log("value", this.state.storeNamesArray);
     for (let i = 0; i < this.state.storeNamesArray.length; i++) {
@@ -460,117 +357,192 @@ class AddBarcode extends Component {
       }
     }
     console.log(this.state.selectedstoreId);
-
     this.setState({ store: value });
   };
 
+
+  // Colour Actions
+  handleColour = (value) => {
+    this.setState({ colour: value });
+  };
+  handleColourValid = () => {
+    if (this.state.colour.length >= errorLength.colour) {
+      this.setState({ colorValid: true });
+    }
+  };
+
+  // Name Actions
+  handleName = (value) => {
+    this.setState({ name: value });
+  };
+  handleNameValid = () => {
+    if (this.state.name.length >= errorLength.name) {
+      this.setState({ nameValid: true });
+    }
+  };
+
+  // BatchNo Actions
+  handleBatchNo = (value) => {
+    this.setState({ batchNo: value });
+  };
+  handleBatchNoValid = () => {
+    if (this.state.batchNo.length > 0) {
+      this.setState({ batchNoValid: true });
+    }
+  };
+
+  // Cost Price Actions
+  handleCostPrice = (value) => {
+    this.setState({ costPrice: value });
+  };
+  handleCostPriceValid = () => {
+    if (this.state.costPrice.length > 0) {
+      this.setState({ costPriceValid: true });
+    }
+  };
+
+  // List Price Actions
+  handleListPrice = (value) => {
+    this.setState({ listPrice: value });
+  };
+  handleListPriceValid = () => {
+    if (this.state.listPrice.length > 0) {
+      this.setState({ listPriceValid: true });
+    }
+  };
+
+  // Emp Actions
   handleEMPId = (value) => {
     this.setState({ empId: value });
   };
-
   handleEMPIdValid = () => {
     if (this.state.empId >= 3) {
-      this.setState({ empValid: true })
+      this.setState({ empValid: true });
     }
-  }
+  };
 
+  // Qty Actions
   handleQuantity = (value) => {
     this.setState({ quantity: value });
   };
-
   handleQuantityValid = () => {
     if (this.state.quantity.length > 0) {
-      this.setState({ qtyValid: true })
+      this.setState({ qtyValid: true });
     }
+  };
+
+  // Date Actions
+  datepickerClicked() {
+    this.setState({ datepickerOpen: true });
+  }
+  datepickerDoneClicked() {
+    if (parseInt(this.state.date.getDate()) < 10 && (parseInt(this.state.date.getMonth()) < 10)) {
+      this.setState({ productValidity: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
+    }
+    else if (parseInt(this.state.date.getDate()) < 10) {
+      this.setState({ productValidity: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + "0" + this.state.date.getDate() });
+    }
+    else if (parseInt(this.state.date.getMonth()) < 10) {
+      this.setState({ productValidity: this.state.date.getFullYear() + "-0" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
+    }
+    else {
+      this.setState({ productValidity: this.state.date.getFullYear() + "-" + (this.state.date.getMonth() + 1) + "-" + this.state.date.getDate() });
+    }
+    this.setState({ doneButtonClicked: true, datepickerOpen: false, datepickerendOpen: false });
+  }
+  datepickerCancelClicked() {
+    this.setState({ date: new Date(), datepickerOpen: false, datepickerendOpen: false });
   }
 
+  // Validations For Barcode Fields
   validationForm() {
-
-    let isFormValid = true
-    let errors = {}
-
-
+    let isFormValid = true;
+    let errors = {};
     if (this.state.name.length < errorLength.name) {
-      isFormValid = false
-      errors["name"] = inventoryErrorMessages.name
-      this.setState({ nameValid: false })
+      isFormValid = false;
+      errors["name"] = inventoryErrorMessages.name;
+      this.setState({ nameValid: false });
     }
-
     if (this.state.divisionId === null) {
-      isFormValid = false
-      errors["divison"] = inventoryErrorMessages.divisionId
-      this.setState({ divisionValid: false })
+      isFormValid = false;
+      errors["divison"] = inventoryErrorMessages.divisionId;
+      this.setState({ divisionValid: false });
     }
     if (this.state.sectionId === null) {
-      isFormValid = false
-      errors["section"] = inventoryErrorMessages.sectionId
-      this.setState({ sectionValid: false })
+      isFormValid = false;
+      errors["section"] = inventoryErrorMessages.sectionId;
+      this.setState({ sectionValid: false });
     }
     if (this.state.subsectionId === null) {
-      isFormValid = false
-      errors["subSection"] = inventoryErrorMessages.subSectionId
-      this.setState({ subSectionValid: false })
+      isFormValid = false;
+      errors["subSection"] = inventoryErrorMessages.subSectionId;
+      this.setState({ subSectionValid: false });
     }
     if (this.state.catogirieId === null) {
-      isFormValid = false
-      errors["category"] = inventoryErrorMessages.category
-      this.setState({ categoryValid: false })
+      isFormValid = false;
+      errors["category"] = inventoryErrorMessages.category;
+      this.setState({ categoryValid: false });
     }
     if (String(this.state.colour).length < errorLength.colour) {
-      isFormValid = false
-      errors["color"] = inventoryErrorMessages.colour
-      this.setState({ colorValid: false })
+      isFormValid = false;
+      errors["color"] = inventoryErrorMessages.colour;
+      this.setState({ colorValid: false });
     }
     if (String(this.state.batchNo).length === 0) {
-      isFormValid = false
-      errors["batchNo"] = inventoryErrorMessages.batchNo
-      this.setState({ batchNoValid: false })
+      isFormValid = false;
+      errors["batchNo"] = inventoryErrorMessages.batchNo;
+      this.setState({ batchNoValid: false });
     }
     if (this.state.costPrice === null) {
-      isFormValid = false
-      errors["costPrice"] = inventoryErrorMessages.costPrice
-      this.setState({ costPriceValid: false })
+      isFormValid = false;
+      errors["costPrice"] = inventoryErrorMessages.costPrice;
+      this.setState({ costPriceValid: false });
     }
     if (this.state.listPrice === null) {
-      isFormValid = false
-      errors["listPrice"] = inventoryErrorMessages.listPrice
-      this.setState({ listPriceValid: false })
+      isFormValid = false;
+      errors["listPrice"] = inventoryErrorMessages.listPrice;
+      this.setState({ listPriceValid: false });
     }
     if (this.state.uomId === null) {
-      isFormValid = false
-      errors["uom"] = inventoryErrorMessages.uom
-      this.setState({ uomValid: false })
+      isFormValid = false;
+      errors["uom"] = inventoryErrorMessages.uom;
+      this.setState({ uomValid: false });
     }
     if (this.state.hsnId === null) {
-      isFormValid = false
-      errors["hsn"] = inventoryErrorMessages.hsnCode
-      this.setState({ hsnValid: false })
+      isFormValid = false;
+      errors["hsn"] = inventoryErrorMessages.hsnCode;
+      this.setState({ hsnValid: false });
     }
     if (String(this.state.empId).length < errorLength.empId) {
-      isFormValid = false
-      errors["emp"] = inventoryErrorMessages.empId
-      this.setState({ empValid: false })
+      isFormValid = false;
+      errors["emp"] = inventoryErrorMessages.empId;
+      this.setState({ empValid: false });
     }
     if (this.state.store === undefined) {
-      isFormValid = false
-      errors["store"] = accountingErrorMessages.store
-      this.setState({ storeValid: false })
+      isFormValid = false;
+      errors["store"] = accountingErrorMessages.store;
+      this.setState({ storeValid: false });
     }
     if (String(this.state.quantity).length === 0) {
-      isFormValid = false
-      errors["qty"] = inventoryErrorMessages.qty
-      this.setState({ qtyValid: false })
+      isFormValid = false;
+      errors["qty"] = inventoryErrorMessages.qty;
+      this.setState({ qtyValid: false });
     }
-
-    this.setState({ errors: errors })
-    return isFormValid
+    this.setState({ errors: errors });
+    return isFormValid;
   }
 
+  // Saving Barcode
   saveBarcode() {
     console.log(this.state.store);
-    const isFormValid = this.validationForm()
-    if (isFormValid) {
+    this.setState({ loading: true });
+    const { selectedDomain, isEdit } = this.state;
+    const isFormValid = this.validationForm();
+    if (isFormValid) { // Checking for validations
       const params = {
+        "status": (selectedDomain === "Retail") ? this.state.status : null,
+        "productValidity": (selectedDomain === "Retail") ? this.state.productValidity : null,
+        "isBarcode": (selectedDomain === "Retail") ? false : null,
         "division": parseInt(this.state.divisionId),
         "section": parseInt(this.state.sectionId),
         "subSection": parseInt(this.state.subsectionId),
@@ -588,33 +560,35 @@ class AddBarcode extends Component {
         "uom": this.state.uomName,
       };
       this.setState({ loading: true });
-      console.log('params are' + JSON.stringify(params));
-      axios.post(InventoryService.addTextileBarcodes(), params).then((res) => {
-        if (res.data && res.data["isSuccess"] === "true") {
-          console.log("Adding Barcode", res.data);
+      console.log({ params });
+      InventoryService.saveBarCode(
+        params,
+        selectedDomain,
+        isEdit
+      ).then(res => {
+        if (res?.data) {
+          let response = res.data;
+          console.log({ response });
           this.props.route.params.onGoBack();
           this.props.navigation.goBack();
         }
-        else {
-          this.setState({ loading: false });
-          alert("duplicate record already exists");
-        }
-      }
-      ).catch((err) => {
+        alert(response.message);
         this.setState({ loading: false });
+      }).catch((err) => {
         this.setState({ loading: false });
         alert(err);
       });
     }
   }
 
+  // Cancel Add Barcode
   cancel() {
     this.props.navigation.goBack(null);
   }
 
 
   render() {
-    const { divisionValid, sectionValid, subSectionValid, categoryValid, colorValid, nameValid, batchNoValid, costPriceValid, listPriceValid, uomValid, hsnValid, empValid, storeValid, qtyValid } = this.state
+    const { divisionValid, sectionValid, subSectionValid, categoryValid, colorValid, nameValid, batchNoValid, costPriceValid, listPriceValid, uomValid, hsnValid, empValid, storeValid, qtyValid } = this.state;
     return (
       <View style={styles.mainContainer}>
         {this.state.loading &&
@@ -630,74 +604,150 @@ class AddBarcode extends Component {
           </View>
         </View>
         <ScrollView>
-          <Text style={inputHeading}>{I18n.t("Division")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+          <Text style={inputHeading}>{I18n.t("Domian")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
           <View style={[rnPickerContainer, { borderColor: divisionValid ? '#8F9EB718' : '#dd0000' }]}>
             <RNPickerSelect
               placeholder={{
-                label: 'Division'
+                label: 'Domain'
               }}
               Icon={() => {
                 return <Chevron style={styles.imagealign} size={1.5} color={divisionValid ? "gray" : "#dd0000"} />;
               }}
-              items={this.state.divisions}
-              onValueChange={this.handleDivision}
+              items={data1}
+              onValueChange={this.handleDomain}
+              on
+              onChangeText={() => { this.getAllDivisions(this.state.selectedDomain); }}
               style={divisionValid ? rnPicker : rnPickerError}
-              value={this.state.division}
+              value={this.state.selectedDomain}
               useNativeAndroidPickerStyle={false}
             />
           </View>
-          {!divisionValid && <Message imp={true} message={this.state.errors["divison"]} />}
-          <Text style={inputHeading}>{I18n.t("Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-          <View style={[rnPickerContainer, { borderColor: sectionValid ? '#8F9EB718' : '#dd0000' }]}>
-            <RNPickerSelect
-              placeholder={{
-                label: 'Section'
-              }}
-              Icon={() => {
-                return <Chevron style={styles.imagealign} size={1.5} color={sectionValid ? "gray" : "#dd0000"} />;
-              }}
-              items={this.state.secions}
-              onValueChange={this.handleSection}
-              style={sectionValid ? rnPicker : rnPickerError}
-              value={this.state.section}
-              useNativeAndroidPickerStyle={false}
-            />
-          </View>
-          {!sectionValid && <Message imp={true} message={this.state.errors["section"]} />}
-          <Text style={inputHeading}>{I18n.t("Sub Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-          <View style={[rnPickerContainer, { borderColor: subSectionValid ? '#8F9EB718' : '#dd0000' }]}>
-            <RNPickerSelect
-              placeholder={{
-                label: 'Sub Section'
-              }}
-              Icon={() => {
-                return <Chevron style={styles.imagealign} size={1.5} color={subSectionValid ? "gray" : "#dd0000"} />;
-              }}
-              items={this.state.subsecions}
-              onValueChange={this.handleSubSection}
-              style={subSectionValid ? rnPicker : rnPickerError}
-              value={this.state.subSection}
-              useNativeAndroidPickerStyle={false}
-            />
-          </View>
-          {!subSectionValid && <Message imp={true} message={this.state.errors["subSection"]} />}
-          <Text style={inputHeading}>{I18n.t("Category")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
-          <View style={[rnPickerContainer, { borderColor: categoryValid ? '#8F9EB718' : '#dd0000' }]}>
-            <RNPickerSelect
-              placeholder={{
-                label: 'Category'
-              }}
-              Icon={() => {
-                return <Chevron style={styles.imagealign} size={1.5} color={categoryValid ? "gray" : "#dd0000"} />;
-              }}
-              items={this.state.catogiries}
-              onValueChange={this.handleCateory}
-              style={categoryValid ? rnPicker : rnPickerError}
-              value={this.state.category}
-              useNativeAndroidPickerStyle={false}
-            />
-          </View>
-          {!categoryValid && <Message imp={true} message={this.state.errors["category"]} />}
+          {this.state.selectedDomain === "Textile" && ( // For Textile Domain only
+            <View>
+              <Text style={inputHeading}>{I18n.t("Division")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+              <View style={[rnPickerContainer, { borderColor: divisionValid ? '#8F9EB718' : '#dd0000' }]}>
+                <RNPickerSelect
+                  placeholder={{
+                    label: 'Division'
+                  }}
+                  Icon={() => {
+                    return <Chevron style={styles.imagealign} size={1.5} color={divisionValid ? "gray" : "#dd0000"} />;
+                  }}
+                  items={this.state.divisionsList}
+                  onValueChange={this.handleDivision}
+                  style={divisionValid ? rnPicker : rnPickerError}
+                  value={this.state.selectedDivision}
+                  useNativeAndroidPickerStyle={false}
+                />
+              </View>
+              {!divisionValid && <Message imp={true} message={this.state.errors["divison"]} />}
+              <Text style={inputHeading}>{I18n.t("Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+              <View style={[rnPickerContainer, { borderColor: sectionValid ? '#8F9EB718' : '#dd0000' }]}>
+                <RNPickerSelect
+                  placeholder={{
+                    label: 'Section'
+                  }}
+                  Icon={() => {
+                    return <Chevron style={styles.imagealign} size={1.5} color={sectionValid ? "gray" : "#dd0000"} />;
+                  }}
+                  items={this.state.sectionsList}
+                  onValueChange={this.handleSection}
+                  style={sectionValid ? rnPicker : rnPickerError}
+                  value={this.state.section}
+                  useNativeAndroidPickerStyle={false}
+                />
+              </View>
+              {!sectionValid && <Message imp={true} message={this.state.errors["section"]} />}
+              <Text style={inputHeading}>{I18n.t("Sub Section")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+              <View style={[rnPickerContainer, { borderColor: subSectionValid ? '#8F9EB718' : '#dd0000' }]}>
+                <RNPickerSelect
+                  placeholder={{
+                    label: 'Sub Section'
+                  }}
+                  Icon={() => {
+                    return <Chevron style={styles.imagealign} size={1.5} color={subSectionValid ? "gray" : "#dd0000"} />;
+                  }}
+                  items={this.state.subSectionsList}
+                  onValueChange={this.handleSubSection}
+                  style={subSectionValid ? rnPicker : rnPickerError}
+                  value={this.state.subSection}
+                  useNativeAndroidPickerStyle={false}
+                />
+              </View>
+              {!subSectionValid && <Message imp={true} message={this.state.errors["subSection"]} />}
+              <Text style={inputHeading}>{I18n.t("Category")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+              <View style={[rnPickerContainer, { borderColor: categoryValid ? '#8F9EB718' : '#dd0000' }]}>
+                <RNPickerSelect
+                  placeholder={{
+                    label: 'Category'
+                  }}
+                  Icon={() => {
+                    return <Chevron style={styles.imagealign} size={1.5} color={categoryValid ? "gray" : "#dd0000"} />;
+                  }}
+                  items={this.state.categoriesList}
+                  onValueChange={this.handleCateory}
+                  style={categoryValid ? rnPicker : rnPickerError}
+                  value={this.state.category}
+                  useNativeAndroidPickerStyle={false}
+                />
+              </View>
+              {!categoryValid && <Message imp={true} message={this.state.errors["category"]} />}
+            </View>
+          )}
+          {this.state.selectedDomain === "Retail" && ( // For Retail Domain only
+            <View>
+              <Text style={inputHeading}>{I18n.t("status")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+              <View style={[rnPickerContainer, { borderColor: divisionValid ? '#8F9EB718' : '#dd0000' }]}>
+                <RNPickerSelect
+                  placeholder={{
+                    label: 'Division'
+                  }}
+                  Icon={() => {
+                    return <Chevron style={styles.imagealign} size={1.5} color={divisionValid ? "gray" : "#dd0000"} />;
+                  }}
+                  items={status1}
+                  onValueChange={this.handleStatus}
+                  style={divisionValid ? rnPicker : rnPickerError}
+                  value={this.state.selectedStatus}
+                  useNativeAndroidPickerStyle={false}
+                />
+              </View>
+              <Text style={inputHeading}>Product Validaty <Text style={{ color: '#aa0000' }}>*</Text> </Text>
+              <TouchableOpacity
+                style={dateSelector}
+                testID="openModal"
+                onPress={() => this.datepickerClicked()}
+              >
+                <Text
+                  style={dateText}
+                >{this.state.productValidity === "" ? 'Validity Date' : this.state.productValidity}</Text>
+                <Image style={filter.calenderpng} source={require('../assets/images/calender.png')} />
+              </TouchableOpacity>
+              {this.state.datepickerOpen && (
+                <View style={filter.dateTopView}>
+                  <View style={filter.dateTop2}>
+                    <TouchableOpacity
+                      style={datePickerButton1} onPress={() => this.datepickerCancelClicked()}
+                    >
+                      <Text style={datePickerBtnText}  > Cancel </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={datePickerButton2} onPress={() => this.datepickerDoneClicked()}
+                    >
+                      <Text style={datePickerBtnText}  > Done </Text>
+                    </TouchableOpacity>
+                  </View>
+                  <DatePicker style={datePicker}
+                    date={this.state.date}
+                    mode={'date'}
+                    onDateChange={(date) => this.setState({ date })}
+                  />
+                </View>
+              )}
+
+            </View>
+          )}
           <Text style={inputHeading}> {I18n.t("Colour")} <Text style={{ color: '#aa0000' }}>*</Text> </Text>
           <TextInput
             style={[inputField, { borderColor: colorValid ? '#8F9EB718' : '#dd0000' }]}
@@ -781,7 +831,7 @@ class AddBarcode extends Component {
               Icon={() => {
                 return <Chevron style={styles.imagealign} size={1.5} color={uomValid ? "gray" : "#dd0000"} />;
               }}
-              items={this.state.uom}
+              items={this.state.uomList}
               onValueChange={this.handleUOM}
               style={uomValid ? rnPicker : rnPickerError}
               value={this.state.uomName}
@@ -798,7 +848,7 @@ class AddBarcode extends Component {
               Icon={() => {
                 return <Chevron style={styles.imagealign} size={1.5} color={hsnValid ? "gray" : "#dd0000"} />;
               }}
-              items={this.state.hsncodes}
+              items={this.state.hsnCodesList}
               onValueChange={this.handleHSNCode}
               style={hsnValid ? rnPicker : rnPickerError}
               value={this.state.hsnCode}
@@ -829,7 +879,7 @@ class AddBarcode extends Component {
               Icon={() => {
                 return <Chevron style={styles.imagealign} size={1.5} color={storeValid ? "gray" : "#dd0000"} />;
               }}
-              items={this.state.storeNames}
+              items={this.state.storesList}
               onValueChange={this.handleStore}
               style={storeValid ? rnPicker : rnPickerError}
               value={this.state.store}
@@ -1116,4 +1166,38 @@ const styles = StyleSheet.create({
     fontSize: RF(20),
     fontFamily: "regular"
   },
+});
+
+const filter = StyleSheet.create({
+  spaceText: {
+    height: Device.isTablet ? 2 : 1,
+    width: deviceWidth,
+    backgroundColor: 'lightgray',
+  },
+  date: {
+    width: deviceWidth,
+    height: RH(200),
+    marginTop: RH(50),
+  },
+  calenderpng: {
+    position: 'absolute',
+    top: RH(10),
+    right: 0,
+  },
+  dateTopView: {
+    height: RW(280),
+    width: deviceWidth,
+    backgroundColor: '#ffffff'
+  },
+  dateTop2: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: Device.isTablet ? 15 : RH(10),
+    marginLeft: Device.isTablet ? 20 : RW(10),
+    marginRight: Device.isTablet ? 20 : RW(10)
+  },
+  mainContainer: {
+    flex: 1,
+  },
+
 });
